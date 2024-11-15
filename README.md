@@ -1,13 +1,13 @@
-#Lotte Harper
+# Lotte Harper
 __Powerful, automated full stack python software with a purpose.__
 
-##About
+## About
 This is a full stack web app focused on data visualization, machine learning, computer vision, facial recognition, biometrics, security, payment processing, marketing, ease of use, and more.
 
-###Visit
+### Visit
 Online at https://lotteh.com
 
-###To deploy
+### To deploy
 You will need a web server, a VPS with Linux support and at least 8GB of RAM to run this software. Start by creating a web server and follow the instructions below to copy data to it. I reccomend https://linode.com for a web server, although there are others, including https://ionos.com, https://kamatera.com, and more, depending on your needs in particular, that all support this project and cost under $100, or even under $50 to run each month.
 To deploy, begin with an Ubuntu server connected to the internet and add an A record pointing to the server in the DNS configuration of the domain you want to use. Run the unix-setup script from my other repository (https://github.com/daisycamber/unix-setup) first, titled "initialize", and paste in your SSH key before you run it in the key here section. Then, clone and move the repository to a new directory with a memorable name within home. Create config/apis.json and config/config.json as well as config/etc_dovecot_passwd as per the example (-example) replacing PASSWORDHERE with a memorable password also in the config json, and update both json files with keys as per the settings.py. 
 Generate API keys for Google recaptcha, maps, NowPayments (use my link - https://account.nowpayments.io/create-account?link_id=3423046394&utm_source=affiliate_lk&utm_medium=referral ) and all other desired APIs.
@@ -67,10 +67,10 @@ sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"`
 
 __Simply run the script in any Debian-like Bash shell, I recommend Ubuntu. Make sure to edit the names in the end and beginning of this file according to what you would like to call your deployment of this app..__
 
-###Support
+### Support
 I develop this software without compensation, so any support is appreciated! Please share this project with your friends, coworkers and community. You may also hire me, buy/read my book (also on Amazon below), buy my photos, audio (I am a violinist :) and videos, subscribe to my blog, an ID scanning plan, or custom services on my website above.
 
-###Links
+### Links
 **Amazon book** (Often on sale, and under development):
 https://www.amazon.com/Practical-Based-Learning-Security-Example-ebook/dp/B0CJQZBDWK/ref=sr_1_1?crid=1L18HU0FLY875&dib=eyJ2IjoiMSJ9.Y18HxfGbnpOjl4_dNL5gdg.YQu4Z_qh8dKCi4DZfQV6b-sMRZz8c8s0RfQD_VGbGSc&dib_tag=se&keywords=Practical+web+based+deep+security+and+learning+by+example&qid=1730351216&sprefix=practical+web+based+deep+security+and+learning+by+example
 
@@ -83,7 +83,7 @@ https://www.instagram.com/charlotte.grace.harper/profilecard/?igsh=aW5jazJ2bTQ0b
 **Twitter** (X):
 https://twitter.com/teamfemmebabe
 
-###DNS
+### DNS config
 __Sample DNS configuration:__
 ;; QUESTION SECTION:
 ;lotteh.com.			IN	TXT
@@ -102,7 +102,7 @@ As well as A and AAAA record matching the SPF record above.
 
 Note: This repo is automatically published by the software within every 12 hours and is usually in good shape to build at that time. If it's not working for you, consider pulling the repo again in a day or two to get a working copy of the app.
 
-###Thank you!
+### Thank you!
 __Thank you for visiting, and for your interest in my project!__
 - Charlotte Harper (Daisy)
 
