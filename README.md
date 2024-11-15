@@ -16,7 +16,8 @@ I recommend also setting a user password and a root password, with `sudo passwd 
 If you want to change names of anything in the future, you can always run scripts/convert again, just make sure to switch the names you used last with the current names and update the old names with new names (in the variables in the beginning of the file).
 
 To deploy, scripts/init looks like this:
-`#!/bin/bash
+```
+#!/bin/bash
 # This script will build the project from source according to custom names and the public repository by default (it is the counterpart of a private script that simply builds my deployment of the app, you can make it do a similar thing by adding your fork of the repo in the GIT url)
 # Use your SSH key
 SSH_KEY='<SSH key here>'
@@ -63,7 +64,8 @@ sudo su team -c "mv /home/$USER_NAME/$GIT_PROJ /home/$USER_NAME/$PROJECT_NAME"
 sudo su team -c "mv /home/$USER_NAME/$PROJECT_NAME/lotteh /home/$USER_NAME/$PROJECT_NAME/$PROJECT_NAME"
 sudo su team -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
 sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com"
-sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"`
+sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
+```
 
 __Simply run the script in any Debian-like Bash shell, I recommend Ubuntu. Make sure to edit the names in the end and beginning of this file according to what you would like to call your deployment of this app..__
 
