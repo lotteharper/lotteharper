@@ -23,10 +23,10 @@ To deploy, scripts/init looks like this:
 SSH_KEY='<SSH key here>'
 # Use the git repo from the project
 GIT_REPO='https://github.com/daisycamber/lotteharper'
-GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev`
 # Add your project name and username here
 PROJECT_NAME="yourproject"
 USER_NAME="team"
+GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev`
 sudo apt-add-repository universe
 sudo apt install -y nano git expect
 wget https://daisycamber.github.io/unix-config/sshd_config
@@ -59,11 +59,11 @@ set timeout -1
 #send "<git otp here>\n"
 #expect eof
 #EOD
-# Convert the software to use the name Makeup Girl, domain mupgirl.com, mupgirl directory and settings (must be the same as above two lines), and the name Daisy with (for example) with your email
+# Convert the software to use the name Makeup Girl, domain mupgirl.com, mupgirl directory and settings (must be the same as above two lines), and the name Daisy with (for example) with your email and a good mail name for your project user (i'm using team, above)
 sudo su team -c "mv /home/$USER_NAME/$GIT_PROJ /home/$USER_NAME/$PROJECT_NAME"
 sudo su team -c "mv /home/$USER_NAME/$PROJECT_NAME/lotteh /home/$USER_NAME/$PROJECT_NAME/$PROJECT_NAME"
 sudo su team -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
-sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com"
+sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com" $USER_NAME
 sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
 ```
 

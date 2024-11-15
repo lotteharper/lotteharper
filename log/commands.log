@@ -1179,3 +1179,63 @@
 2024-11-15T03:14:09.705073+00:00 lotteh team: team [16530]: nano README.md 
 2024-11-15T03:18:58.768421+00:00 lotteh team: team [16717]: sudo backup
 2024-11-15T03:20:08.550727+00:00 lotteh team: team [16717]: nano README.md 
+2024-11-15T03:24:32.359324+00:00 lotteh team: team [1745]: python last_logins.py
+2024-11-15T03:24:58.836072+00:00 lotteh team: team [1745]: python last_logins.py
+2024-11-15T03:25:05.032128+00:00 lotteh team: team [1745]: ps -aux | grep backup
+2024-11-15T03:25:14.910631+00:00 lotteh team: team [1745]: python last_logins.py
+2024-11-15T03:25:17.621113+00:00 lotteh team: team [1745]: python last_logins.py
+2024-11-15T03:25:36.094364+00:00 lotteh team: team [1745]: python last_logins.py
+2024-11-15T03:25:48.927940+00:00 lotteh team: team [16717]: sudo backup
+2024-11-15T03:25:51.048000+00:00 lotteh team: team [1745]: python approve_login.py 1
+2024-11-15T03:25:57.071207+00:00 lotteh team: message repeated 3 times: [ team [1745]: python approve_login.py 1]
+2024-11-15T03:25:57.438694+00:00 lotteh team: team [23726]: nano scripts/loadtables 
+2024-11-15T03:25:59.128831+00:00 lotteh team: team [1745]: python approve_login.py 1
+2024-11-15T03:26:00.247868+00:00 lotteh team: team [23776]: nano scripts/loadtables 
+2024-11-15T03:26:00.248221+00:00 lotteh team: team [23773]: nano scripts/loadtables 
+2024-11-15T03:26:01.137653+00:00 lotteh team: team [1745]: python approve_login.py 1
+2024-11-15T03:26:03.411257+00:00 lotteh team: team [23845]: nano scripts/loadtables 
+2024-11-15T03:26:08.649429+00:00 lotteh team: team [23845]: ps -aux | grep backup
+2024-11-15T04:52:28.342585+00:00 lotteh team: team [31103]: nano scripts/loadtables 
+2024-11-15T04:52:31.141709+00:00 lotteh team: team [31124]: nano scripts/loadtables 
+2024-11-15T04:52:39.626359+00:00 lotteh team: team [31124]: nao web/generate.py 
+2024-11-15T04:53:15.928158+00:00 lotteh team: team [31124]: nano web/generate.py 
+2024-11-15T04:53:49.665385+00:00 lotteh team: team [31232]: nano scripts/loadtables 
+2024-11-15T04:55:35.971522+00:00 lotteh team: team [31474]: nano scripts/loadtables 
+2024-11-15T04:55:42.813214+00:00 lotteh team: team [31489]: nano scripts/loadtables 
+2024-11-15T04:56:08.432266+00:00 lotteh team: team [31489]: ps -aux | grep pushweb
+2024-11-15T04:56:22.020363+00:00 lotteh team: team [31489]: ps -aux | grep pushweb
+2024-11-15T04:56:39.576775+00:00 lotteh team: team [31489]: ps -aux | grep git
+2024-11-15T04:57:22.969725+00:00 lotteh team: team [31489]: sudo ascript pushweb
+2024-11-15T04:57:32.868076+00:00 lotteh team: team [31489]: ps -aux | grep git
+2024-11-15T04:57:43.612604+00:00 lotteh team: team [31489]: ps -aux | grep git
+2024-11-15T04:58:04.041659+00:00 lotteh team: team [31489]: watch ps -aux | grep git
+2024-11-15T04:58:31.219351+00:00 lotteh team: team [31232]: sudo pushweb
+2024-11-15T04:58:45.461044+00:00 lotteh team: team [31489]: watch sh -c "ps -aux | grep git"
+2024-11-15T05:00:34.902891+00:00 lotteh team: team [31489]: ps -aux | grep git
+2024-11-15T05:04:53.694913+00:00 lotteh team: team [31474]: venv
+2024-11-15T05:29:13.136845+00:00 lotteh team: team [16345]: venv
+2024-11-15T05:37:57.456477+00:00 lotteh team: team [16275]: venv
+2024-11-15T05:38:02.613700+00:00 lotteh team: team [23726]: venv
+2024-11-15T05:43:30.431120+00:00 lotteh team: team [35401]: ps -aux | grep backup
+2024-11-15T05:43:30.946639+00:00 lotteh team: team [35419]: ps -aux | grep backup
+2024-11-15T05:43:32.921336+00:00 lotteh team: team [35401]: vevn
+2024-11-15T05:43:33.863297+00:00 lotteh team: team [35449]: ps -aux | grep backup
+2024-11-15T05:43:36.568803+00:00 lotteh team: team [35466]: ps -aux | grep backup
+2024-11-15T05:46:12.940433+00:00 lotteh team: team [35449]: nano install.yml 
+2024-11-15T05:46:48.705706+00:00 lotteh team: team [35449]: nano scripts/convert
+2024-11-15T05:48:21.871575+00:00 lotteh team: team [35449]: nano scripts/init
+2024-11-15T05:48:40.837794+00:00 lotteh team: team [35449]: nano scripts/initialize 
+2024-11-15T05:51:00.726400+00:00 lotteh team: team [35449]: cat scripts/init
+2024-11-15T05:51:28.145786+00:00 lotteh team: team [35466]: nano README.md 
+2024-11-15T05:57:03.177762+00:00 lotteh team: team [35466]: cat install.yml 
+2024-11-15T06:01:34.311049+00:00 lotteh team: team [35466]: mkdir .github
+2024-11-15T06:01:46.991052+00:00 lotteh team: team [35466]: mkdir .github/workflows
+2024-11-15T06:02:09.350731+00:00 lotteh team: team [35449]: cat scripts/init
+2024-11-15T06:02:21.645500+00:00 lotteh team: team [35449]: cat install.yml 
+2024-11-15T06:03:16.546497+00:00 lotteh team: team [35466]: nano .github/workflows/django.yml
+2024-11-15T06:03:41.840584+00:00 lotteh team: team [35449]: nano install.yml 
+2024-11-15T06:03:43.035853+00:00 lotteh team: team [35449]: cat install.yml 
+2024-11-15T06:04:04.516457+00:00 lotteh team: team [35466]: nano .github/workflows/django.yml
+2024-11-15T06:04:33.527870+00:00 lotteh team: message repeated 2 times: [ team [35466]: nano .github/workflows/django.yml]
+2024-11-15T06:04:39.224558+00:00 lotteh team: team [35466]: gitbackup
+2024-11-15T06:05:41.727075+00:00 lotteh team: team [35449]: cat install.yml 

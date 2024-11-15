@@ -1,4 +1,4 @@
-overwrite = False
+overwrite = True
 PRIV_POSTS = 24
 import os, pytz
 from datetime import datetime

@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="Professional entertainment, photos, videos, audio, livestreaming and casual gameplay, as well as ID scanning, web development and surrogacy services.">
     <meta name="author" content="Charlotte Grace Harper">
     <link rel="icon" href="/media/favicon.ico">
     <title>A woman laying on a bed with a red blanket. - Glam Girl X</title>
@@ -39,12 +39,6 @@
   </head>
   <body>
     <header>
-        
-            <div id="vote-banner" class="hide mt-5 p-3 pt-5" style="height: 220px; width: 100%; background-color: lightblue;">
-<p><legend><img class="mt-4 p-1" height="80px" width="auto" alt="The American Flag - Vote for Kamala Harris" src="/media/static/american-flag.png">Remember to register to vote, and vote for VP Kamala Harris - <a href="https://vote.gov" title="Register to vote or update your registration">Vote</a> - <button class="btn btn-sm btn-outline-danger" title="Hide this banner" onclick="setCookie('hidevotebanner', 'yes', 14); document.getElementById('vote-banner').classList.add('fade-hidden');">Hide</button></legend>
-</p>
-</div>
-
         
       <nav id="glam-navbar" class="navbar fixed-top navbar-expand-lg navbar-light p-2" style="background-color: #e3f2fd;">
         <a style="position: relative; z-index: 1;" class="navbar-brand" href="/" title="The homepage">
@@ -177,6 +171,7 @@
 <div>Professional entertainment, photos, videos, audio, livestreaming and casual gameplay, as well as ID scanning, web development and surrogacy services.</div>
 </div>
 
+        <p><i>Leave me a tip in Bitcoin using this address:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2024</span></p>
@@ -196,11 +191,6 @@
 
         $(document).ready(function() {
             
-            
-            var hideVoteCookie = getCookie("hidevotebanner") != '';
-            if(document.getElementById('vote-banner') && hideVoteCookie) { document.getElementById('vote-banner').classList.add('fade-hidden'); }
-            else if(document.getElementById('vote-banner')) { document.getElementById('vote-banner').classList.remove('fade-hidden');
-            document.getElementById('vote-banner').classList.remove('hide'); }
             
             $(document.getElementById("glam-navbar")).autoHidingNavbar();
             
@@ -321,10 +311,10 @@ if(document.getElementById("dynamicClockContainer")) {
 		updateClock();
 	}, 1000);
 }
-var hrs = ["TWELVE", "one", "two", "three", "four", "Five", "SIX", "Seven", "eight", "nine", "at", "The student"];
-var digits = ["","one", "two", "three", "four", "Five", "SIX", "Seven", "eight", "nine", "at", "The student"];
-var teens = ["The student", "TWELVE", "thirteen", "fourteen", "Fifteen", "Sixteen", "Seventeen", "eighteen", "ninete"];
-var tens = ["the&#x27;","at","twenty","thirty","forty","Fifty"];
+var hrs = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven"];
+var digits = ["","one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven"];
+var teens = ["eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+var tens = ["o'","ten","twenty","thirty","forty","fifty"];
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -392,6 +382,19 @@ if(document.getElementById("current-time")) {
             qrdiv.onclick = downloadQr;
         });
     </script>
+    <script async type="application/javascript"
+        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+<script>
+  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+    basicSubscriptions.init({
+      type: "NewsArticle",
+      isPartOfType: ["Product"],
+      isPartOfProductId: "CAowktDYCw:openaccess",
+      clientOptions: { theme: "light", lang: "en" },
+    });
+  });
+</script>
+
     <script>
         if (navigator.serviceWorker) {
             navigator.serviceWorker.register (

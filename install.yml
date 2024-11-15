@@ -21,9 +21,9 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Convert to Administrated Specifications (please supply app name, domain, project name with no spaces and your email)
+    - name: Convert to Administrated Specifications (please supply app name, domain, project name with no spaces, your email and a good mail name)
       run: |
-        ./scripts/convert "Awesome App" "yourdomainhere.com" "theproject" "youremail@gmail.com"
+        ./scripts/convert "Awesome App" "yourdomainhere.com" "theproject" "Your Name" "youremail@gmail.com" "team"
     - name: Install Dependencies
       run: |
         ./scripts/setup
