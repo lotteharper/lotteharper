@@ -2,9 +2,8 @@
 # This script will build the project from source according to custom names and the public repository by default (it is the counterpart of a private script that simply builds my deployment of the app, you can make it do a similar thing by adding your fork of the repo in the GIT url)
 # Use your SSH key
 SSH_KEY='<SSH key here>'
-SSH_KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTh455aUI3LjcB3/+Mnw6SaDwR+fNY562Cog8C/sUjBDPfxFYsE+nqUowu+ud/6Dn5sGaNs7wSqO1W6Pnss79L37DVJyL3GWs9lxO>
 # Use the git repo from the project
-GIT_REPO='https://github.com/daisycamber/femmebabe-2024/'
+GIT_REPO='https://github.com/daisycamber/lotteharper'
 GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev`
 # Add your project name and username here
 PROJECT_NAME="yourproject"

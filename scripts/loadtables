@@ -14,5 +14,13 @@ python manage.py loaddata data/payments.json
 python manage.py loaddata data/vendors.json
 python manage.py loaddata data/barcode.json
 python manage.py loaddata data/webauth.json
+python manage.py loaddata data/voice.json
+python manage.py loaddata data/tts.json
+python manage.py loaddata data/audio.json
+python manage.py loaddata data/live.json
+python manage.py loaddata data/contact.json
+python manage.py loaddata data/payments.json
+python manage.py loaddata data/chat.json
+python manage.py loaddata data/birthcontrol.json
 rm data/security.json
 rm data/users-new.json

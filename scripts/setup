@@ -356,7 +356,7 @@ sudo sh -c "cat config/sudoers >> /etc/sudoers"
 #sudo sed -i '' -e '$ d' /etc/pam.d/sshd
 #sudo sed -i '' -e '$ d' /etc/profile
 echo "session required pam_exec.so seteuid /home/team/lotteh/pam.sh" | sudo tee -a /etc/pam.d/sshd
-#echo "session required pam_exec.so seteuid /home/team/lotteh/logout.sh" | sudo tee -a /etc/pam.d/sshd
+echo "session required pam_exec.so seteuid /home/team/lotteh/logout.sh" | sudo tee -a /etc/pam.d/sshd
 sudo mkdir /var/log/jump
 sudo chown team:users /var/log/jump
 echo "ForceCommand /usr/bin/jump" | sudo tee -a /etc/ssh/sshd_config

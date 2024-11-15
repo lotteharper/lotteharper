@@ -50,7 +50,7 @@ def send_retargeting_emails():
         })
         send_html_email(user, 'Come back to {}, {}'.format(settings.SITE_NAME, user.username), html_message)
     days = 7
-    for user in User.objects.filter(profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
+    for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
         html_message = render_to_string('retargeting/retargeting_email_2.html', {
             'site_name': settings.SITE_NAME,
             'user': user,
@@ -60,15 +60,15 @@ def send_retargeting_emails():
         })
         send_html_email(user, 'It\'s been a while, {}. Visit {}'.format(user.username, settings.SITE_NAME), html_message)
     days = 14
-    for user in User.objects.filter(profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
+    for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
         if user.profile.phone_number:
             send_user_text(user, 'Hey {}, do you have some time to visit {}? Spend some time with me and consider subscribing, buying a photo, or leaving a tip. I\'ll be waiting! Visit {}'.format(user.username, settings.SITE_NAME, settings.BASE_URL))
     days = 21
-    for user in User.objects.filter(profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
+    for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
         if user.profile.phone_number:
             send_user_text(user, 'Hey {}, it\'s been three weeks since you joined me on {}. Want to come back and see what\'s new? Visit {}'.format(user.username, settings.SITE_NAME, settings.BASE_URL))
     days = 30
-    for user in User.objects.filter(profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
+    for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
         html_message = render_to_string('retargeting/retargeting_email_3.html', {
             'site_name': settings.SITE_NAME,
             'user': user,

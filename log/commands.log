@@ -1099,3 +1099,75 @@
 2024-11-15T00:31:29.331383+00:00 lotteh team: team [6438]: wc -l requirements.txt 
 2024-11-15T00:33:40.012530+00:00 lotteh team: team [2714]: sudo backup
 2024-11-15T00:38:37.198645+00:00 lotteh team: team [6438]: nano README.md 
+2024-11-15T00:39:31.780570+00:00 lotteh team: team [2714]: sudo crontab -e
+2024-11-15T00:42:27.000159+00:00 lotteh team: team [2714]: sudo systemctl status apache2
+2024-11-15T00:42:28.919762+00:00 lotteh team: team [2714]: sudo systemctl status apache2
+2024-11-15T00:42:34.235383+00:00 lotteh team: team [2714]: sudo systemctl status apache2
+2024-11-15T00:42:35.706063+00:00 lotteh team: team [2714]: sudo systemctl status apache2
+2024-11-15T00:42:54.723820+00:00 lotteh team: team [9387]: sudo safereboot
+2024-11-15T00:42:58.117590+00:00 lotteh team: team [9387]: sudo safereboot
+2024-11-15T00:43:00.578371+00:00 lotteh team: team [9387]: sudo safereboot
+2024-11-15T00:43:03.835307+00:00 lotteh team: team [9387]: ls
+2024-11-15T00:43:13.305430+00:00 lotteh team: team [9387]: cd lotteh
+2024-11-15T00:43:15.305744+00:00 lotteh team: team [9575]: sudo safereboot
+2024-11-15T00:43:22.023192+00:00 lotteh team: team [9575]: python manage.py check
+2024-11-15T00:43:31.347755+00:00 lotteh team: team [9575]: loga
+2024-11-15T00:43:33.350178+00:00 lotteh team: team [9575]: logs
+2024-11-15T00:44:10.232468+00:00 lotteh team: team [6438]: sudo backup
+2024-11-15T00:47:32.574705+00:00 lotteh team: team [9387]: venv
+2024-11-15T00:47:35.930129+00:00 lotteh team: team [10092]: logs
+2024-11-15T00:47:39.660591+00:00 lotteh team: team [10092]: ls
+2024-11-15T00:47:48.414909+00:00 lotteh team: team [10092]: cd lotteh
+2024-11-15T00:47:50.908870+00:00 lotteh team: team [10130]: logs
+2024-11-15T00:47:55.091564+00:00 lotteh team: team [10130]: loga
+2024-11-15T00:47:59.413955+00:00 lotteh team: team [10130]: logs
+2024-11-15T00:48:04.695059+00:00 lotteh team: team [10130]: cmds
+2024-11-15T00:48:32.287925+00:00 lotteh team: team [10092]: venv
+2024-11-15T00:52:11.949665+00:00 lotteh team: team [6438]: nano scripts/dumptables 
+2024-11-15T00:52:22.719790+00:00 lotteh team: team [6438]: nano scripts/dumptables 
+2024-11-15T00:52:51.032950+00:00 lotteh team: team [6438]: nano scripts/dumptables 
+2024-11-15T00:53:01.660948+00:00 lotteh team: team [6438]: ls
+2024-11-15T00:56:35.228822+00:00 lotteh team: team [2714]: nano scripts/loadtables 
+2024-11-15T00:56:38.562206+00:00 lotteh team: team [6438]: nano scripts/dumptables 
+2024-11-15T02:27:38.367667+00:00 lotteh team: team [16275]: cmds
+2024-11-15T02:27:46.757675+00:00 lotteh team: team [16345]: cmds
+2024-11-15T02:28:09.794879+00:00 lotteh team: team [16275]: cd lotteh
+2024-11-15T02:29:28.152061+00:00 lotteh team: team [16275]: sudo ascript setup
+2024-11-15T02:29:29.730861+00:00 lotteh team: team [16275]: echo "session required pam_exec.so seteuid /home/team/lotteh/logout.sh" | sudo tee -a /etc/pam.d/sshd
+2024-11-15T02:29:40.232807+00:00 lotteh team: team [16275]: sudo nano /etc/pam.d/sshd 
+2024-11-15T02:29:58.557147+00:00 lotteh team: team [16530]: cmds
+2024-11-15T02:31:18.672132+00:00 lotteh team: team [16275]: nano README.md 
+2024-11-15T02:31:38.483191+00:00 lotteh team: team [16275]: python test_mail.py test-d70htmjhc@srv1.mail-tester.com
+2024-11-15T02:31:42.569414+00:00 lotteh team: team [16275]: * python test_mail.py test-d70htmjhc@srv1.mail-tester.comv
+2024-11-15T02:31:44.042142+00:00 lotteh team: team [16717]: cmds
+2024-11-15T02:31:50.259995+00:00 lotteh team: team [16717]: python test_mail.py test-d70htmjhc@srv1.mail-tester.com
+2024-11-15T02:32:27.432370+00:00 lotteh team: team [16717]: cat */email.py
+2024-11-15T02:33:07.913884+00:00 lotteh team: team [16717]: cat */email.py
+2024-11-15T02:34:48.648190+00:00 lotteh team: team [16717]: nano retargeting/email.py 
+2024-11-15T02:34:56.193879+00:00 lotteh team: team [16717]: sudo sytemctl restart celery
+2024-11-15T02:35:09.549161+00:00 lotteh team: team [16717]: sudo systemctl restart celery
+2024-11-15T02:42:12.351836+00:00 lotteh team: team [16717]: nano templates/base.html
+2024-11-15T02:42:35.893455+00:00 lotteh team: team [16717]: nano web/templates/web/base.html 
+2024-11-15T02:42:40.438612+00:00 lotteh team: team [16717]: nano templates/rrm.html 
+2024-11-15T02:42:45.111803+00:00 lotteh team: team [16717]: nano web/templates/web/base.html 
+2024-11-15T02:53:27.244768+00:00 lotteh team: team [16717]: cd
+2024-11-15T02:53:27.751379+00:00 lotteh team: team [16717]: ls
+2024-11-15T02:53:29.942029+00:00 lotteh team: team [16717]: cd femmebabe-backup-open/
+2024-11-15T02:53:32.249854+00:00 lotteh team: team [16717]: git remote -v
+2024-11-15T02:53:46.872123+00:00 lotteh team: team [16717]: ls config/
+2024-11-15T02:54:05.820419+00:00 lotteh team: team [16717]: cat config/apis.json 
+2024-11-15T02:54:24.057064+00:00 lotteh team: team [16717]: sudo rm -r data/apis.json
+2024-11-15T02:54:31.351268+00:00 lotteh team: team [16717]: sudo rm -r data/apis.json
+2024-11-15T02:54:47.809570+00:00 lotteh team: team [16717]: nano .gitignore 
+2024-11-15T02:55:15.276232+00:00 lotteh team: team [16717]: clear
+2024-11-15T02:57:04.610709+00:00 lotteh team: team [16530]: nano scripts/init
+2024-11-15T02:57:13.995800+00:00 lotteh team: team [16717]: git remote 0v
+2024-11-15T02:57:15.283234+00:00 lotteh team: team [16717]: git remote -v
+2024-11-15T02:57:22.918521+00:00 lotteh team: team [16717]: git remote remove originhub
+2024-11-15T02:57:25.921948+00:00 lotteh team: team [16717]: sudo git remote remove originhub
+2024-11-15T02:57:37.472128+00:00 lotteh team: team [16717]: git remote add originhub git@github.com:daisycamber/lotteharper.git
+2024-11-15T02:57:47.177223+00:00 lotteh team: team [16717]: sudo git remote add originhub git@github.com:daisycamber/lotteharper.git
+2024-11-15T02:59:07.112076+00:00 lotteh team: team [16717]: cd
+2024-11-15T02:59:09.330992+00:00 lotteh team: team [16717]: cd lotteh
+2024-11-15T03:04:32.238274+00:00 lotteh team: team [16530]: cat scripts/init
+2024-11-15T03:07:00.769661+00:00 lotteh team: team [16717]: nano README.md 
