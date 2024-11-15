@@ -1239,3 +1239,57 @@
 2024-11-15T06:04:33.527870+00:00 lotteh team: message repeated 2 times: [ team [35466]: nano .github/workflows/django.yml]
 2024-11-15T06:04:39.224558+00:00 lotteh team: team [35466]: gitbackup
 2024-11-15T06:05:41.727075+00:00 lotteh team: team [35449]: cat install.yml 
+2024-11-15T06:11:32.960094+00:00 lotteh team: team [35449]: sudo backup
+2024-11-15T06:13:50.937260+00:00 lotteh team: team [35449]: nano go/views.py 
+2024-11-15T06:15:20.862388+00:00 lotteh team: team [35449]: nano go/templates/go/go.html
+2024-11-15T06:15:34.590733+00:00 lotteh team: team [35449]: nano go/templates/go/go.html
+2024-11-15T06:15:37.135672+00:00 lotteh team: team [35449]: sudo doreload
+2024-11-15T06:15:37.912221+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:16:17.734044+00:00 lotteh team: team [35449]: watchlogs
+2024-11-15T06:16:20.819197+00:00 lotteh team: team [35449]: nano go/templates/go/go.html
+2024-11-15T06:17:44.388622+00:00 lotteh team: team [35449]: nano go/views.py 
+2024-11-15T06:17:53.853669+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:18:59.156023+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:19:02.450564+00:00 lotteh team: team [35449]: sudo doreload
+2024-11-15T06:19:17.300936+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:20:18.847158+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:21:24.748664+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:21:26.524448+00:00 lotteh team: team [35449]: sudo doreload
+2024-11-15T06:22:18.932482+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:22:19.973243+00:00 lotteh team: team [35449]: sudo doreload
+2024-11-15T06:22:23.297212+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:22:24.177523+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:22:25.062175+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:22:26.064579+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:22:41.383822+00:00 lotteh team: team [35449]: watchlogs
+2024-11-15T06:22:43.331323+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:23:00.852448+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:23:55.357417+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:23:58.014255+00:00 lotteh team: team [35449]: sudo doreload
+2024-11-15T06:23:59.555603+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:24:16.727391+00:00 lotteh team: team [35449]: watchlogs
+2024-11-15T06:24:24.150967+00:00 lotteh team: team [35449]: watchlogs
+2024-11-15T06:24:26.195753+00:00 lotteh team: team [35449]: watchlogs
+2024-11-15T06:24:38.451073+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:24:39.605110+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:24:40.929547+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:24:42.263050+00:00 lotteh team: team [35449]: logs
+2024-11-15T06:25:18.829993+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:25:30.866832+00:00 lotteh team: team [35449]: nano go/templates/go/go.html
+2024-11-15T06:26:45.623598+00:00 lotteh team: team [35449]: nano go/views.py 
+2024-11-15T06:26:48.350653+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:26:50.252464+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:26:55.746463+00:00 lotteh team: team [35449]: nano go/templates/go/go.html
+2024-11-15T06:26:58.772165+00:00 lotteh team: team [35449]: nano feed/templatetags/app_filters.py
+2024-11-15T06:27:00.563356+00:00 lotteh team: team [35449]: nano go/templates/go/go.html
+2024-11-15T06:27:40.181344+00:00 lotteh team: team [35449]: nano go/views.py 
+2024-11-15T06:27:45.774509+00:00 lotteh team: team [35449]: sudo doreload
+2024-11-15T06:38:07.399888+00:00 lotteh team: team [43188]: ps -aux | grep backup
+2024-11-15T06:38:18.093448+00:00 lotteh team: team [43188]: ls
+2024-11-15T06:38:20.176826+00:00 lotteh team: team [43218]: ps -aux | grep backup
+2024-11-15T06:38:35.272684+00:00 lotteh team: message repeated 2 times: [ team [43218]: ps -aux | grep backup]
+2024-11-15T07:33:00.324171+00:00 lotteh team: team [43188]: venv
+2024-11-15T07:55:38.429877+00:00 lotteh team: team [35449]: nano scripts/initialize 
+2024-11-15T07:56:44.535483+00:00 lotteh team: team [35449]: nano scripts/init
+2024-11-15T07:57:23.405173+00:00 lotteh team: team [35449]: cat scripts/init
+2024-11-15T07:57:48.147923+00:00 lotteh team: team [35466]: nano README.md 

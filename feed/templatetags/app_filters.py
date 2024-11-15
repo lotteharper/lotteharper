@@ -323,7 +323,9 @@ def nts(number):
 @register.filter('nonts')
 def nonts(number):
     from .nts import nts as number_to_string
-    if int(number) == 0: return 'none'
+    if number == '': return 'none'
+    if number == None: return 'none'
+    if (not (isinstance(number, int) or isinstance(number, str))) or int(number) == 0: return 'none'
     try:
        return number_to_string(int(number))
     except:

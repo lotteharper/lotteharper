@@ -60,11 +60,11 @@ set timeout -1
 #expect eof
 #EOD
 # Convert the software to use the name Makeup Girl, domain mupgirl.com, mupgirl directory and settings (must be the same as above two lines), and the name Daisy with (for example) with your email and a good mail name for your project user (i'm using team, above)
-sudo su team -c "mv /home/$USER_NAME/$GIT_PROJ /home/$USER_NAME/$PROJECT_NAME"
-sudo su team -c "mv /home/$USER_NAME/$PROJECT_NAME/lotteh /home/$USER_NAME/$PROJECT_NAME/$PROJECT_NAME"
-sudo su team -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
-sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com" $USER_NAME
-sudo su team -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
+sudo su $USER_NAME -c "mv /home/$USER_NAME/$GIT_PROJ /home/$USER_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "mv /home/$USER_NAME/$PROJECT_NAME/lotteh /home/$USER_NAME/$PROJECT_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com" $USER_NAME
+sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
 ```
 
 __Simply run the script in any Debian-like Bash shell, I recommend Ubuntu. Make sure to edit the names in the end and beginning of this file according to what you would like to call your deployment of this app..__
