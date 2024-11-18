@@ -1,0 +1,28 @@
+#!/bin/bash
+cd /home/team/lotteh
+source venv/bin/activate
+python manage.py makemigrations
+python manage.py migrate --run-syncdb
+cat data/security.json.?? > data/security.json
+cat data/users-new.json.?? > data/users-new.json
+python manage.py loaddata data/users-dj.json
+python manage.py loaddata data/address.json
+python manage.py loaddata data/users-new.json
+python manage.py loaddata data/feed-post.json
+python manage.py loaddata data/chat.json
+python manage.py loaddata data/verify.json
+python manage.py loaddata data/security.json
+python manage.py loaddata data/payments.json
+python manage.py loaddata data/vendors.json
+python manage.py loaddata data/barcode.json
+python manage.py loaddata data/webauth.json
+python manage.py loaddata data/voice.json
+python manage.py loaddata data/tts.json
+python manage.py loaddata data/audio.json
+python manage.py loaddata data/live.json
+python manage.py loaddata data/contact.json
+python manage.py loaddata data/payments.json
+python manage.py loaddata data/chat.json
+python manage.py loaddata data/birthcontrol.json
+rm data/security.json
+rm data/users-new.json

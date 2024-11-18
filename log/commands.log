@@ -1,0 +1,1225 @@
+2024-11-17T04:24:05.606656+00:00 lotteh team: team [132335]: nano web/templates/web/recovery.html 
+2024-11-17T04:24:09.839590+00:00 lotteh team: team [132335]: cat web/templates/web/recovery.html 
+2024-11-17T04:33:35.767423+00:00 lotteh team: team [132335]: nano web/templates/web/private.html 
+2024-11-17T04:34:58.920204+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T04:35:15.249255+00:00 lotteh team: team [132335]: nano web/templates/web/private.html 
+2024-11-17T04:35:35.168723+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T04:35:40.581732+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T04:36:05.050934+00:00 lotteh team: team [132335]: sudo nano /etc/config.json 
+2024-11-17T04:36:11.127318+00:00 lotteh team: team [132335]: sudo nano /etc/config.json 
+2024-11-17T04:36:33.754424+00:00 lotteh team: team [132335]: sudo nano /etc/apis.json 
+2024-11-17T04:36:43.505034+00:00 lotteh team: team [132335]: sudo pushweb
+2024-11-17T04:36:47.015144+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T04:36:59.319407+00:00 lotteh team: team [132335]: sudo pushweb
+2024-11-17T04:37:10.729480+00:00 lotteh team: team [132335]: nano web/templates/web/private.html 
+2024-11-17T04:37:39.721950+00:00 lotteh team: team [132335]: sudo pushweb
+2024-11-17T04:41:58.805178+00:00 lotteh team: team [35449]: nano web/templates/web/private.html 
+2024-11-17T05:10:24.938761+00:00 lotteh team: team [136355]: nano voice/views.py 
+2024-11-17T05:37:57.413028+00:00 lotteh team: team [277193]: logs
+2024-11-17T05:38:06.446199+00:00 lotteh team: team [277193]: pip3 install websocket-client
+2024-11-17T05:59:08.260555+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T05:59:15.696239+00:00 lotteh team: team [136355]: nano CryptoNoter.conf 
+2024-11-17T05:59:23.451206+00:00 lotteh team: message repeated 2 times: [ team [136355]: nano CryptoNoter.conf ]
+2024-11-17T06:05:13.938069+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:06:16.703616+00:00 lotteh team: team [136355]: nano lotteh/routing.py 
+2024-11-17T06:06:37.753533+00:00 lotteh team: team [136355]: nano lotteh/routing.py 
+2024-11-17T06:06:38.359880+00:00 lotteh team: team [136355]: cd
+2024-11-17T06:06:41.040902+00:00 lotteh team: team [136355]: git clone https://github.com/JayWalker512/CryptoNoter.git
+2024-11-17T06:07:44.233704+00:00 lotteh team: team [136355]: cd lotteh
+2024-11-17T06:09:01.171751+00:00 lotteh team: team [136355]: nano templates/miner.html 
+2024-11-17T06:09:05.074382+00:00 lotteh team: team [136355]: nano templates/miner.html 
+2024-11-17T06:09:06.903583+00:00 lotteh team: team [136355]: ls static
+2024-11-17T06:09:19.271390+00:00 lotteh team: team [136355]: ls static/js
+2024-11-17T06:09:27.261887+00:00 lotteh team: team [136355]: mkdir static/crypto
+2024-11-17T06:10:00.048743+00:00 lotteh team: team [136355]: mkdir static/crypto
+2024-11-17T06:10:19.051661+00:00 lotteh team: team [136355]: cp ../CryptoNoter/web/ static/crypto
+2024-11-17T06:10:21.871542+00:00 lotteh team: team [136355]: cp -r ../CryptoNoter/web/ static/crypto
+2024-11-17T06:10:25.181046+00:00 lotteh team: team [136355]: ls static/crypto
+2024-11-17T06:10:31.768226+00:00 lotteh team: team [136355]: cp -r ../CryptoNoter/web/* static/crypto
+2024-11-17T06:10:32.837618+00:00 lotteh team: team [136355]: ls static/crypto
+2024-11-17T06:10:43.737934+00:00 lotteh team: team [136355]: nano static/crypto/lib/
+2024-11-17T06:12:04.680327+00:00 lotteh team: team [136355]: nano static/crypto/lib/cryptonight-asmjs.min.js
+2024-11-17T06:12:22.810406+00:00 lotteh team: team [136355]: nano static/crypto/lib/cryptonight.wasm 
+2024-11-17T06:14:03.652300+00:00 lotteh team: team [136355]: nano static/crypto/processor.js 
+2024-11-17T06:15:05.736143+00:00 lotteh team: team [136355]: nano static/crypto/worker.js 
+2024-11-17T06:15:19.693985+00:00 lotteh team: team [136355]: nano static/crypto/worker.js 
+2024-11-17T06:15:38.627187+00:00 lotteh team: team [136355]: nano templates/miner.html 
+2024-11-17T06:15:41.081985+00:00 lotteh team: team [136355]: ls static/crypto
+2024-11-17T06:16:18.974632+00:00 lotteh team: team [136355]: nano templates/base.html
+2024-11-17T06:16:39.357023+00:00 lotteh team: team [136355]: nano feed/context_processors.py 
+2024-11-17T06:16:55.258623+00:00 lotteh team: team [136355]: nano lotteh/settings.py 
+2024-11-17T06:16:56.838350+00:00 lotteh team: team [136355]: sudo doreload
+2024-11-17T06:18:31.486181+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T06:18:39.355072+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:18:55.657334+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:18:58.857851+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:19:15.534855+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:19:18.472951+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:19:45.737893+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:19:48.608687+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:19:52.999567+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:20:03.614163+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:20:06.761946+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:20:23.794412+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:20:27.070227+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:20:48.776919+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:20:51.567598+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:20:58.994945+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T06:21:09.250386+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:21:09.464891+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:21:31.189362+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:21:37.803766+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:22:40.969635+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:22:51.909498+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:23:00.026222+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:23:35.977094+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:23:42.965785+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:24:32.667320+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:24:38.424721+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:25:08.149019+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:25:49.226953+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:25:55.533145+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:26:42.493711+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:26:51.007413+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:28:07.541351+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:28:14.167562+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:29:04.415527+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:30:11.033517+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:30:14.093449+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:30:19.137949+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T06:30:24.610544+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:31:30.608747+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:32:09.431110+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:32:20.081116+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:32:34.823391+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:33:04.389379+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:33:19.972436+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:34:10.381570+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:35:59.034184+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:36:59.971660+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:37:08.160174+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:38:13.199305+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:38:41.659351+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:38:41.840610+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:39:54.237008+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:39:59.170571+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:40:34.941859+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:40:37.596975+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:40:44.620436+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T06:40:45.210922+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T06:40:52.025088+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:41:16.567970+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:41:27.319123+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:41:33.790694+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:42:03.313159+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:42:12.883860+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:42:20.005776+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:42:31.684474+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:42:32.290157+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:45:31.565505+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:45:37.957750+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:45:51.915467+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:46:06.474722+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:46:20.813289+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:46:27.566692+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:47:02.306833+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:47:17.763197+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:47:34.524518+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:47:44.483801+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:48:45.885623+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:49:26.189628+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:49:26.527419+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:49:38.827705+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:49:52.793498+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:49:53.238513+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:50:07.499530+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T06:50:10.100327+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T06:50:16.953198+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T06:50:24.837051+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:00:25.885949+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:00:29.356846+00:00 lotteh team: team [136355]: sudo systemctl stop daphne
+2024-11-17T07:00:43.137779+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:01:05.137257+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:01:18.758477+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:01:40.127123+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:01:56.022781+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:02:09.298866+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:02:19.307960+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:02:29.225134+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:03:05.283425+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:03:40.619016+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:03:46.482842+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:04:00.243738+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:04:23.315866+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:04:35.096181+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:04:40.166503+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:04:54.441224+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:05:20.117835+00:00 lotteh team: team [136355]: nano crypto/consumers.py 
+2024-11-17T07:06:21.775914+00:00 lotteh team: team [132335]: sudo killall daphne
+2024-11-17T07:06:26.317837+00:00 lotteh team: team [132335]: ps -aux | grep daphne
+2024-11-17T07:06:31.037055+00:00 lotteh team: team [132335]: kill 290393
+2024-11-17T07:06:34.163768+00:00 lotteh team: team [132335]: kill 290363
+2024-11-17T07:06:35.823851+00:00 lotteh team: team [132335]: ps -aux | grep daphne
+2024-11-17T07:06:41.121125+00:00 lotteh team: team [132335]: kill 290363
+2024-11-17T07:06:42.712308+00:00 lotteh team: team [132335]: sudo kill 290363
+2024-11-17T07:06:43.556464+00:00 lotteh team: team [132335]: kill 290363
+2024-11-17T07:06:45.377248+00:00 lotteh team: team [132335]: ps -aux | grep daphne
+2024-11-17T07:06:52.231116+00:00 lotteh team: team [132335]: sudo systemctl restart daphne
+2024-11-17T07:07:07.819215+00:00 lotteh team: team [132335]: sudo systemctl restart daphne
+2024-11-17T07:07:17.863041+00:00 lotteh team: team [132335]: nano lotteh/settings.py 
+2024-11-17T07:07:39.003441+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T07:08:18.669493+00:00 lotteh team: team [132335]: nano web/templates/web/base.html 
+2024-11-17T07:08:23.429159+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T07:08:27.257893+00:00 lotteh team: team [132335]: nano web/generate.py 
+2024-11-17T07:09:11.794365+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:09:15.466786+00:00 lotteh team: team [132335]: sudo daphnereload
+2024-11-17T07:10:04.328896+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:05.246468+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:08.468234+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:10.056048+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:10.856033+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:14.707489+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:34.036486+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:34.899442+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:35.879831+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:36.855919+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:37.809159+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:38.802794+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:39.596702+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:40.695237+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:10:42.523233+00:00 lotteh team: team [132335]: cmds
+2024-11-17T07:10:43.665327+00:00 lotteh team: team [132335]: cmds
+2024-11-17T07:10:44.873564+00:00 lotteh team: team [132335]: cmds
+2024-11-17T07:10:45.824851+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:10:46.800841+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:10:49.788786+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:50.901969+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:10:51.808766+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:11:47.987537+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:11:49.141251+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:11:53.323015+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:11:54.487418+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:01.877901+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:03.322218+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:04.528269+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:05.557144+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:21.182102+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:22.716325+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:12:56.854237+00:00 lotteh team: team [132335]: sudo systemctl stop daphne
+2024-11-17T07:12:58.827409+00:00 lotteh team: team [132335]: sudo systemctl stop daphne &
+2024-11-17T07:13:23.270080+00:00 lotteh team: team [277193]: ps -aux | grep daphne
+2024-11-17T07:13:44.632001+00:00 lotteh team: team [277193]: kill -9 290363
+2024-11-17T07:13:44.647946+00:00 lotteh team: team [136355]: ./scripts/daphnetest.sh 
+2024-11-17T07:13:50.012333+00:00 lotteh team: team [277193]: kill -9 291417
+2024-11-17T07:13:54.647753+00:00 lotteh team: team [277193]: ps -aux | grep daphne
+2024-11-17T07:14:00.738833+00:00 lotteh team: team [277193]: kill -9 291754
+2024-11-17T07:14:00.755758+00:00 lotteh team: team [132335]: ./scripts/daphnetest.sh 
+2024-11-17T07:14:07.050079+00:00 lotteh team: team [132335]: sudo daphnereload
+2024-11-17T07:19:44.351138+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:19:45.778833+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:19:52.174045+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:19:54.258566+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:19:55.211482+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:20:12.850866+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:14.938805+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:16.339013+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:17.614764+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:18.874728+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:20.119077+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:21.350735+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:22.474879+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:23.468542+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:27.688976+00:00 lotteh team: team [132335]: sudo systemctl reload daphne
+2024-11-17T07:20:38.330122+00:00 lotteh team: team [132335]: sudo daphnereload
+2024-11-17T07:20:46.060508+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:47.159927+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:48.315480+00:00 lotteh team: team [132335]: log
+2024-11-17T07:20:49.246687+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:50.899136+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:20:52.161702+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:21:07.902906+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:21:20.244305+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:21:26.415578+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:21:51.132870+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:21:52.210411+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:21:53.112593+00:00 lotteh team: team [132335]: sudo systemctl status daphne
+2024-11-17T07:22:26.725392+00:00 lotteh team: team [132335]: watch sudo systemctl status daphne
+2024-11-17T07:22:37.623576+00:00 lotteh team: team [132335]: tail /tmp/daphne-error.log 
+2024-11-17T07:22:39.203754+00:00 lotteh team: team [132335]: tail /tmp/daphne-error.log 
+2024-11-17T07:22:41.303180+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:42.557459+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:43.539347+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:51.067914+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:52.221291+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:53.505481+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:54.806931+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:56.166562+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:57.602672+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:22:58.839356+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:00.189597+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:01.447135+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:02.893998+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:04.420179+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:05.812846+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:07.383432+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:08.728057+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:10.405611+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:11.756598+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:19.731072+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:21.373053+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:22.792331+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:23.898940+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:25.102200+00:00 lotteh team: team [132335]: logs
+2024-11-17T07:23:28.010378+00:00 lotteh team: team [132335]: sudo reboot
+2024-11-17T07:26:33.658718+00:00 lotteh team: team [2170]: venv
+2024-11-17T07:26:42.640472+00:00 lotteh team: team [2170]: sudo passwd root
+2024-11-17T07:26:42.915440+00:00 lotteh team: message repeated 2 times: [ team [2170]: sudo passwd root]
+2024-11-17T07:26:53.873914+00:00 lotteh team: team [2170]: sudo passwd team
+2024-11-17T07:26:58.455063+00:00 lotteh team: team [2170]: venv
+2024-11-17T07:27:01.966960+00:00 lotteh team: team [2170]: cd lotteh
+2024-11-17T07:27:06.669589+00:00 lotteh team: team [2170]: python approve_login.py 
+2024-11-17T07:27:09.066092+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:10.302629+00:00 lotteh team: team [2377]: venv
+2024-11-17T07:27:10.702950+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:12.286263+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:13.599504+00:00 lotteh team: team [2425]: venv
+2024-11-17T07:27:13.994431+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:14.712122+00:00 lotteh team: team [2453]: venv
+2024-11-17T07:27:15.574626+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:16.139404+00:00 lotteh team: team [2486]: venv
+2024-11-17T07:27:17.213962+00:00 lotteh team: team [2526]: venv
+2024-11-17T07:27:17.240295+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:18.157961+00:00 lotteh team: team [2562]: venv
+2024-11-17T07:27:18.693633+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:20.429987+00:00 lotteh team: team [2170]: python approve_login.py 1
+2024-11-17T07:27:21.651503+00:00 lotteh team: team [2625]: venv
+2024-11-17T07:27:22.355073+00:00 lotteh team: team [2170]: python approve_login.py 
+2024-11-17T07:27:24.113879+00:00 lotteh team: team [2661]: venv
+2024-11-17T07:27:24.201196+00:00 lotteh team: team [2170]: python approve_login.py 
+2024-11-17T07:27:24.924357+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:27:26.284761+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:27:28.103038+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:27:38.037834+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:28:15.110168+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:28:18.732172+00:00 lotteh team: team [2661]: sudo daphnereload
+2024-11-17T07:28:26.780472+00:00 lotteh team: team [2661]: cat /usr/bin/daphnereload
+2024-11-17T07:29:02.747733+00:00 lotteh team: team [2661]: cat /usr/bin/daphnereload
+2024-11-17T07:29:04.252260+00:00 lotteh team: team [2661]: sudo daphnereload
+2024-11-17T07:29:06.642706+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:29:07.542239+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:29:08.290073+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:29:09.810552+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:29:14.367502+00:00 lotteh team: team [2661]: ps -aux | grep dapbne
+2024-11-17T07:29:17.691468+00:00 lotteh team: team [2661]: ps -aux | grep daphne
+2024-11-17T07:29:21.781015+00:00 lotteh team: team [2661]: kill 2996
+2024-11-17T07:29:23.862303+00:00 lotteh team: team [2661]: sudo kill 2996
+2024-11-17T07:29:26.000851+00:00 lotteh team: team [2661]: ps -aux | grep daphne
+2024-11-17T07:29:38.749172+00:00 lotteh team: team [2661]: sudo kill 2814
+2024-11-17T07:29:40.030823+00:00 lotteh team: team [2661]: ps -aux | grep daphne
+2024-11-17T07:29:47.313401+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:29:48.482420+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:30:16.864273+00:00 lotteh team: team [2661]: watch sudo systemctl status daphne
+2024-11-17T07:30:18.002827+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:19.348543+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:20.971522+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:22.164656+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:23.209982+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:24.230425+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:25.279132+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:30:54.320592+00:00 lotteh team: team [2661]: nano security/templates/security/session_injection.js 
+2024-11-17T07:31:15.932080+00:00 lotteh team: team [2661]: sudo systemctl stop daphne
+2024-11-17T07:31:17.411080+00:00 lotteh team: team [2661]: sudo systemctl stop daphne &
+2024-11-17T07:31:22.635478+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:23.566772+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:25.361411+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:26.442799+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:27.530949+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:28.852307+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:29.885512+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:30.957960+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:32.159621+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:33.132107+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:34.020061+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:34.946645+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:36.149977+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:31:37.831853+00:00 lotteh team: team [2661]: sudo systemctl status daphne
+2024-11-17T07:32:00.560943+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:32:10.243264+00:00 lotteh team: team [2625]: kill -9 3788\
+2024-11-17T07:32:10.966035+00:00 lotteh team: team [2625]: kill -9 3788
+2024-11-17T07:32:10.984793+00:00 lotteh team: team [2661]: ./scripts/daphnetest.sh 
+2024-11-17T07:32:33.106775+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:32:38.915822+00:00 lotteh team: message repeated 5 times: [ team [2625]: ps -aux | grep daphne]
+2024-11-17T07:32:43.935564+00:00 lotteh team: team [2661]: sudo systemctl start daphne
+2024-11-17T07:32:44.520682+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:32:46.662543+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:32:50.991617+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:32:53.818775+00:00 lotteh team: message repeated 3 times: [ team [2625]: ps -aux | grep daphne]
+2024-11-17T07:32:56.208586+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:32:58.162075+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:32:59.334918+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:33:34.148344+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:33:43.953545+00:00 lotteh team: message repeated 8 times: [ team [2625]: ps -aux | grep daphne]
+2024-11-17T07:34:55.036734+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:34:56.292804+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:35:04.212763+00:00 lotteh team: team [2661]: sudo systemctl restart daphne
+2024-11-17T07:35:06.409387+00:00 lotteh team: team [2661]: sudo systemctl restart daphne
+2024-11-17T07:35:08.478086+00:00 lotteh team: team [2661]: sudo systemctl restart daphne &
+2024-11-17T07:35:12.534859+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:35:13.676924+00:00 lotteh team: team [2661]: logs
+2024-11-17T07:35:17.095446+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:35:18.540529+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:35:19.272083+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:35:21.042264+00:00 lotteh team: message repeated 2 times: [ team [2625]: ps -aux | grep daphne]
+2024-11-17T07:35:21.373712+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:35:23.163441+00:00 lotteh team: message repeated 3 times: [ team [2625]: ps -aux | grep daphne]
+2024-11-17T07:35:23.426366+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:35:25.325021+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:35:27.019686+00:00 lotteh team: message repeated 3 times: [ team [2625]: ps -aux | grep daphne]
+2024-11-17T07:35:35.816982+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:36.897124+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:38.027008+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:38.847224+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:42.775703+00:00 lotteh team: team [2661]: watchlogs
+2024-11-17T07:35:44.681794+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:45.816208+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:46.882613+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:49.393570+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:50.582122+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:52.774060+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:56.700632+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:58.013503+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:35:59.477654+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:01.360253+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:03.972964+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:09.203081+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:10.735399+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:13.493311+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:17.883254+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:19.032352+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:20.012813+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:21.123434+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:22.014964+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:24.717120+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:26.593342+00:00 lotteh team: team [2170]: python approve_login.py 
+2024-11-17T07:36:33.693980+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:36:46.715389+00:00 lotteh team: team [2661]: watchlogs
+2024-11-17T07:36:53.697244+00:00 lotteh team: team [2661]: watchlogs
+2024-11-17T07:36:57.581089+00:00 lotteh team: team [2661]: watchlogs
+2024-11-17T07:37:13.370162+00:00 lotteh team: team [2625]: sudo systemctl restart apache2
+2024-11-17T07:37:16.272051+00:00 lotteh team: team [2625]: sudo systemctl restart apache2 &
+2024-11-17T07:37:18.142706+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:21.083753+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:22.307769+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:23.599106+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:24.527470+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:27.652960+00:00 lotteh team: team [2625]: watchlogs
+2024-11-17T07:37:28.934565+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:30.688589+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:31.932960+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:37.204242+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:37:40.673363+00:00 lotteh team: team [2625]: watchlogs
+2024-11-17T07:37:44.380285+00:00 lotteh team: team [2625]: watchlogs
+2024-11-17T07:37:49.009692+00:00 lotteh team: team [2625]: sudo systemctl status daphne
+2024-11-17T07:37:54.815170+00:00 lotteh team: team [2625]: sudo systemctl status apache2
+2024-11-17T07:37:55.981363+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:37:59.296310+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:00.949373+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:02.163980+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:03.253409+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:04.302964+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:05.576680+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:06.862408+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:07.879543+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:08.872213+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:38:12.726474+00:00 lotteh team: team [2625]: sudo daphnereload
+2024-11-17T07:39:46.447638+00:00 lotteh team: team [2625]: sudo safereboot
+2024-11-17T07:43:36.442961+00:00 lotteh team: team [1833]: python approve_login.py 
+2024-11-17T07:43:38.294794+00:00 lotteh team: team [1833]: logs
+2024-11-17T07:43:39.690652+00:00 lotteh team: team [1833]: venv
+2024-11-17T07:43:42.177517+00:00 lotteh team: team [1877]: python approve_login.py 
+2024-11-17T07:43:45.611442+00:00 lotteh team: team [1833]: venv
+2024-11-17T07:43:47.699278+00:00 lotteh team: team [1833]: cd lotteh/
+2024-11-17T07:43:53.961430+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:43:58.962297+00:00 lotteh team: team [1833]: python last_logins.py 
+2024-11-17T07:44:15.834456+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:17.415629+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:18.733176+00:00 lotteh team: team [2486]: python approve_login.py 
+2024-11-17T07:44:18.958611+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:20.364105+00:00 lotteh team: team [2521]: python approve_login.py 
+2024-11-17T07:44:20.430951+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:21.809180+00:00 lotteh team: team [2554]: python approve_login.py 
+2024-11-17T07:44:22.002091+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:23.568049+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:24.357414+00:00 lotteh team: team [2594]: python approve_login.py 
+2024-11-17T07:44:25.318456+00:00 lotteh team: team [1833]: python approve_login.py 1
+2024-11-17T07:44:25.406512+00:00 lotteh team: team [2625]: python approve_login.py 
+2024-11-17T07:44:26.954786+00:00 lotteh team: team [2644]: python approve_login.py 
+2024-11-17T07:44:27.416891+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:44:28.815390+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:44:29.320094+00:00 lotteh team: team [2681]: python approve_login.py 
+2024-11-17T07:44:29.869248+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:44:59.683155+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:45:00.614821+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:45:07.286250+00:00 lotteh team: team [2486]: sudo systemctl status apache2
+2024-11-17T07:45:15.578620+00:00 lotteh team: team [2486]: sudo systemctl status daphne
+2024-11-17T07:45:30.837393+00:00 lotteh team: team [2594]: cd lotteh
+2024-11-17T07:45:31.829972+00:00 lotteh team: team [2832]: python approve_login.py 
+2024-11-17T07:45:34.366629+00:00 lotteh team: team [2844]: python approve_login.py 
+2024-11-17T07:48:05.982379+00:00 lotteh team: team [2844]: nano crypto/consumers.py 
+2024-11-17T07:48:08.364800+00:00 lotteh team: team [2844]: python approve_login.py 
+2024-11-17T07:48:10.597338+00:00 lotteh team: team [2844]: python approve_login.py 
+2024-11-17T07:48:13.591408+00:00 lotteh team: team [2844]: sudo daphnereload
+2024-11-17T07:48:17.729021+00:00 lotteh team: team [2844]: nano lotteh/cons
+2024-11-17T07:48:37.209082+00:00 lotteh team: team [2844]: nano lotteh/routing.py 
+2024-11-17T07:48:50.281122+00:00 lotteh team: team [2844]: nano crypto/consumers.py 
+2024-11-17T07:48:59.671329+00:00 lotteh team: team [2844]: python manage.py check
+2024-11-17T07:49:02.841275+00:00 lotteh team: team [2844]: daphnereload
+2024-11-17T07:49:08.372853+00:00 lotteh team: team [2844]: sudo daphnereload
+2024-11-17T07:49:09.974058+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:11.415073+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:12.651610+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:16.727148+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:17.923692+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:19.658959+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:21.652958+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:23.865112+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:25.539996+00:00 lotteh team: team [2844]: logs
+2024-11-17T07:49:31.513727+00:00 lotteh team: team [2844]: sudo systemctl status daphne
+2024-11-17T07:49:32.672444+00:00 lotteh team: team [2844]: sudo systemctl status daphne
+2024-11-17T07:50:14.616487+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T07:50:15.878464+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T07:50:18.829907+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T07:50:27.957982+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T07:50:52.572102+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T07:50:53.754458+00:00 lotteh team: team [2644]: compinfo
+2024-11-17T07:50:54.733070+00:00 lotteh team: team [2644]: logs
+2024-11-17T07:51:01.472606+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:03.058954+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:04.354456+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:05.403842+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:23.293696+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:25.035090+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:26.781439+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:34.978579+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:36.304800+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:37.855085+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:51:44.643667+00:00 lotteh team: team [2625]: netstat -plant | grep LISTEN
+2024-11-17T07:51:47.990525+00:00 lotteh team: team [2625]: netstat -plant | grep LISTEN
+2024-11-17T07:51:59.601089+00:00 lotteh team: team [2625]: cat lotteh/scripts/daphne
+2024-11-17T07:52:00.787105+00:00 lotteh team: team [2625]: cat lotteh/scripts/daphnetest.sh 
+2024-11-17T07:52:32.009213+00:00 lotteh team: team [2832]: sudo nano /etc/systemd/system/daphne.service 
+2024-11-17T07:52:38.281905+00:00 lotteh team: team [2625]: netstat -plant | grep LISTEN
+2024-11-17T07:53:03.415369+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:53:13.503633+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:53:54.652775+00:00 lotteh team: team [2486]: sudo systemctl status daphne
+2024-11-17T07:53:55.463798+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:54:04.401602+00:00 lotteh team: team [2486]: compinfo
+2024-11-17T07:54:17.201048+00:00 lotteh team: team [2486]: compinfo
+2024-11-17T07:54:18.078711+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:54:20.957831+00:00 lotteh team: team [2486]: sudo daphnereload
+2024-11-17T07:54:32.044994+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:54:33.614513+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:54:44.218274+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:55:04.196301+00:00 lotteh team: team [2625]: logs
+2024-11-17T07:55:05.836962+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:55:09.673899+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T07:55:22.103061+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:55:27.688039+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:55:28.980045+00:00 lotteh team: team [2486]: logs
+2024-11-17T07:55:38.813962+00:00 lotteh team: team [2486]: sudo systemctl stop daphne
+2024-11-17T07:55:40.430355+00:00 lotteh team: team [2486]: sudo systemctl stop daphne &
+2024-11-17T07:55:45.055774+00:00 lotteh team: team [2486]: sudo systemctl stop daphne &
+2024-11-17T07:55:45.826944+00:00 lotteh team: team [4977]: python approve_login.py 
+2024-11-17T07:57:00.533154+00:00 lotteh team: team [5055]: python approve_login.py 
+2024-11-17T07:57:04.586206+00:00 lotteh team: team [5055]: ps -aux | grep daphne
+2024-11-17T07:57:09.870698+00:00 lotteh team: team [5055]: kill -9 4989
+2024-11-17T07:57:09.881664+00:00 lotteh team: team [4977]: ./scripts/daphnetest.sh 
+2024-11-17T07:57:11.445706+00:00 lotteh team: team [5055]: ps -aux | grep daphne
+2024-11-17T07:57:20.479362+00:00 lotteh team: team [5132]: python approve_login.py 
+2024-11-17T07:58:27.611508+00:00 lotteh team: team [2832]: ps -aux | grep daphne
+2024-11-17T07:58:32.882485+00:00 lotteh team: team [2832]: kill -9 5144
+2024-11-17T07:58:32.896415+00:00 lotteh team: team [5132]: ./scripts/daphnetest.sh 
+2024-11-17T07:58:40.624891+00:00 lotteh team: team [5132]: ./scripts/daphnetest.sh 
+2024-11-17T07:58:48.434740+00:00 lotteh team: team [2832]: kill -9 5144
+2024-11-17T07:59:23.542829+00:00 lotteh team: team [2832]: nano lotteh/routing.py 
+2024-11-17T07:59:25.987470+00:00 lotteh team: team [2832]: nano lotteh/routing.py 
+2024-11-17T07:59:28.135119+00:00 lotteh team: team [2832]: sudo daphnereload
+2024-11-17T07:59:40.752206+00:00 lotteh team: team [5916]: python approve_login.py 
+2024-11-17T07:59:59.299888+00:00 lotteh team: team [2832]: sudo daphnereload
+2024-11-17T08:00:03.843575+00:00 lotteh team: team [2832]: sudo systemctl status daphne
+2024-11-17T08:00:20.669700+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T08:00:27.924891+00:00 lotteh team: team [2844]: nano lotteh/routing.py 
+2024-11-17T08:00:30.027636+00:00 lotteh team: team [2844]: sudo daphnereload
+2024-11-17T08:00:42.046492+00:00 lotteh team: team [2832]: logs
+2024-11-17T08:00:43.610763+00:00 lotteh team: team [2832]: logs
+2024-11-17T08:00:49.935562+00:00 lotteh team: team [2844]: sudo systemctl status daphne
+2024-11-17T08:00:51.134163+00:00 lotteh team: team [2844]: sudo systemctl status daphne
+2024-11-17T08:01:20.428063+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T08:01:29.533842+00:00 lotteh team: team [2832]: logs
+2024-11-17T08:01:33.272743+00:00 lotteh team: team [2625]: ps -aux | grep daphne
+2024-11-17T08:01:34.078447+00:00 lotteh team: team [6645]: python approve_login.py 
+2024-11-17T08:01:35.294973+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:01:36.223550+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:01:37.083793+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:01:39.928140+00:00 lotteh team: team [6645]: cmcds
+2024-11-17T08:01:40.952511+00:00 lotteh team: team [6645]: cmds
+2024-11-17T08:01:44.615817+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:01:48.121105+00:00 lotteh team: team [2644]: logs
+2024-11-17T08:01:49.474017+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T08:01:52.256214+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:01:53.819631+00:00 lotteh team: team [6645]: cmds
+2024-11-17T08:02:24.478809+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T08:02:26.431354+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T08:03:15.354775+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:03:21.050421+00:00 lotteh team: team [6645]: logs
+2024-11-17T08:03:45.148743+00:00 lotteh team: team [2832]: sudo systemctl stop daphne
+2024-11-17T08:03:46.245971+00:00 lotteh team: team [2832]: sudo systemctl stop daphne &
+2024-11-17T08:05:00.159060+00:00 lotteh team: team [2832]: sudo systemctl stop daphne &
+2024-11-17T08:05:02.381944+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T08:05:10.610726+00:00 lotteh team: team [2832]: ps -aux | grep daphne
+2024-11-17T08:05:16.159190+00:00 lotteh team: team [2832]: kill -9 7357
+2024-11-17T08:05:16.168111+00:00 lotteh team: team [6645]: ./scripts/daphnetest.sh 
+2024-11-17T08:05:40.617378+00:00 lotteh team: team [6645]: ./scripts/daphnetest.sh 
+2024-11-17T08:06:27.997553+00:00 lotteh team: team [6645]: nano crypto/consumers.py 
+2024-11-17T08:07:16.463371+00:00 lotteh team: team [2832]: ps -aux | grep daphne
+2024-11-17T08:07:19.671291+00:00 lotteh team: team [2832]: kill -9 7701
+2024-11-17T08:07:19.681011+00:00 lotteh team: team [6645]: ./scripts/daphnetest.sh 
+2024-11-17T08:07:32.211573+00:00 lotteh team: team [6645]: nano crypto/consumers.py 
+2024-11-17T08:08:05.591514+00:00 lotteh team: team [2832]: kill -9 7701
+2024-11-17T08:08:08.780279+00:00 lotteh team: team [2832]: kill -9 7701
+2024-11-17T08:08:15.625378+00:00 lotteh team: team [2832]: nano lotteh/routing.py 
+2024-11-17T08:08:17.520156+00:00 lotteh team: team [2832]: kill -9 7701
+2024-11-17T08:08:22.350777+00:00 lotteh team: team [2832]: ps -aux | grep daphne
+2024-11-17T08:08:29.914596+00:00 lotteh team: team [2832]: kill -9 7817
+2024-11-17T08:08:29.927963+00:00 lotteh team: team [6645]: ./scripts/daphnetest.sh 
+2024-11-17T08:08:47.463718+00:00 lotteh team: team [8054]: python approve_login.py 
+2024-11-17T08:26:47.886668+00:00 lotteh team: team [8054]: logs
+2024-11-17T08:26:55.528116+00:00 lotteh team: team [8054]: logs
+2024-11-17T08:26:59.279479+00:00 lotteh team: team [8054]: logs
+2024-11-17T08:27:01.204148+00:00 lotteh team: team [8054]: clear
+2024-11-17T08:27:02.401615+00:00 lotteh team: team [8054]: ls
+2024-11-17T08:27:03.897528+00:00 lotteh team: team [8054]: clear
+2024-11-17T08:27:25.020455+00:00 lotteh team: team [8054]: sudo rm -r CryptoNoter/
+2024-11-17T08:31:03.837726+00:00 lotteh team: team [8054]: s
+2024-11-17T08:31:05.967692+00:00 lotteh team: team [8054]: ls
+2024-11-17T08:34:55.412882+00:00 lotteh team: team [5132]: nano lotteh/settings.py 
+2024-11-17T08:35:01.111717+00:00 lotteh team: team [2832]: ps -aux | grep daphne
+2024-11-17T08:35:06.350443+00:00 lotteh team: team [2832]: kill -9 7953
+2024-11-17T08:35:06.367590+00:00 lotteh team: team [6645]: ./scripts/daphnetest.sh 
+2024-11-17T08:35:14.063775+00:00 lotteh team: team [5132]: sudo daphnereload
+2024-11-17T08:57:44.198422+00:00 lotteh team: team [5132]: sudo daphnereload
+2024-11-17T08:58:25.676581+00:00 lotteh team: team [5132]: nano lotteh/routing.py 
+2024-11-17T08:58:33.427075+00:00 lotteh team: team [5132]: sudo daphnereload
+2024-11-17T08:58:44.167247+00:00 lotteh team: team [5132]: logs
+2024-11-17T08:58:49.031903+00:00 lotteh team: team [5132]: sudo systemctl status apache2
+2024-11-17T08:58:52.388803+00:00 lotteh team: team [5132]: sudo systemctl status daphne
+2024-11-17T08:58:53.356012+00:00 lotteh team: team [5132]: sudo systemctl status daphne
+2024-11-17T08:58:54.336056+00:00 lotteh team: team [5132]: sudo systemctl status daphne
+2024-11-17T08:59:26.857141+00:00 lotteh team: team [5132]: sudo systemctl status daphne
+2024-11-17T08:59:29.301163+00:00 lotteh team: team [5132]: sudo systemctl status daphne
+2024-11-17T08:59:40.285471+00:00 lotteh team: team [5132]: nano lotteh/settings.py 
+2024-11-17T08:59:59.005705+00:00 lotteh team: team [5132]: nano lotteh/routing.py 
+2024-11-17T09:00:22.168868+00:00 lotteh team: team [5132]: sudo daphnereload
+2024-11-17T09:01:03.684934+00:00 lotteh team: team [5132]: nano lotteh/routing.py 
+2024-11-17T09:01:09.583850+00:00 lotteh team: team [5132]: sudo daphnereload
+2024-11-17T09:03:06.239978+00:00 lotteh team: team [6645]: nano crypto/consumers.py 
+2024-11-17T09:03:17.187954+00:00 lotteh team: team [6645]: sudo systemctl status daphne
+2024-11-17T09:14:19.574452+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T09:47:06.030435+00:00 lotteh team: team [4977]: nano scripts/setup
+2024-11-17T09:50:34.563942+00:00 lotteh team: team [5055]: ps -aux | grep daphne
+2024-11-17T09:50:53.909467+00:00 lotteh team: team [5055]: cp .github/workflows/django.yml .github/workflows/alibabacloud.yml
+2024-11-17T09:51:27.291884+00:00 lotteh team: team [5055]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T09:56:50.207473+00:00 lotteh team: team [5055]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T09:56:59.615663+00:00 lotteh team: team [5055]: rm .github/workflows/django.yml 
+2024-11-17T09:57:16.035590+00:00 lotteh team: team [5055]: sudo gitbackup
+2024-11-17T10:01:58.617199+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:02:03.776307+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:02:07.740666+00:00 lotteh team: team [2832]: watch ps -aux | grep dump
+2024-11-17T10:02:11.484790+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:02:15.185299+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:02:34.097308+00:00 lotteh team: message repeated 3 times: [ team [2832]: ps -aux | grep dump]
+2024-11-17T10:05:55.005602+00:00 lotteh team: team [6645]: watch du -sh data/security.json
+2024-11-17T10:05:58.676703+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:06:04.641899+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:06:06.866352+00:00 lotteh team: team [2832]: ps -aux | grep dump
+2024-11-17T10:06:09.827785+00:00 lotteh team: team [2832]: ps -aux | grep backup
+2024-11-17T10:06:11.667728+00:00 lotteh team: team [2832]: ps -aux | grep backup
+2024-11-17T10:06:13.961215+00:00 lotteh team: team [2832]: ps -aux | grep git
+2024-11-17T10:06:23.014413+00:00 lotteh team: message repeated 8 times: [ team [2832]: ps -aux | grep git]
+2024-11-17T10:06:49.521395+00:00 lotteh team: team [2832]: sudo sh -c "ps -aux | grep git"
+2024-11-17T10:06:57.982275+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T10:06:59.396622+00:00 lotteh team: team [2832]: watch sudo sh -c "ps -aux | grep git"
+2024-11-17T10:07:03.322238+00:00 lotteh team: team [2832]: watch sudo sh -c "ps -aux | grep git" team
+2024-11-17T10:07:14.877561+00:00 lotteh team: team [2832]: watch sudo bash -c "ps -aux | grep git" team
+2024-11-17T10:07:17.317388+00:00 lotteh team: team [2832]: watch sudo bash -c "ps -aux | grep git"
+2024-11-17T10:07:26.388611+00:00 lotteh team: team [2832]: ps -aux | grep git
+2024-11-17T10:08:27.761452+00:00 lotteh team: team [6645]: cp scripts/init scripts/begin
+2024-11-17T10:08:37.202282+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T10:08:58.422883+00:00 lotteh team: team [6645]: sudo ascript backup
+2024-11-17T10:09:02.933357+00:00 lotteh team: team [6645]: sudo ascript backup
+2024-11-17T10:09:32.134000+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T10:13:15.246182+00:00 lotteh team: team [6645]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T10:13:48.847438+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T10:13:56.520770+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T10:14:20.365980+00:00 lotteh team: team [6645]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T10:14:24.404031+00:00 lotteh team: team [6645]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T10:14:29.206726+00:00 lotteh team: team [5132]: nano scripts/dumptables 
+2024-11-17T10:14:38.807812+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T10:15:44.534153+00:00 lotteh team: team [2832]: ps -aux | grep git
+2024-11-17T10:20:12.956512+00:00 lotteh team: team [6645]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T10:23:06.711760+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml
+2024-11-17T10:23:40.446694+00:00 lotteh team: team [6645]: nano .github/workflows/alibabacloud.yml 
+2024-11-17T10:24:19.650169+00:00 lotteh team: team [5132]: curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin"
+2024-11-17T10:24:54.173544+00:00 lotteh team: team [5132]: curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin" | bash /dev/stdin
+2024-11-17T10:24:54.832526+00:00 lotteh team: message repeated 17 times: [ team [5132]: curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin" | bash /dev/stdin]
+2024-11-17T10:26:18.566473+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml
+2024-11-17T10:26:24.780042+00:00 lotteh team: team [6645]: rm .github/workflows/alibabacloud.yml 
+2024-11-17T10:26:42.814280+00:00 lotteh team: team [2832]: ls sshd_config 
+2024-11-17T10:26:47.658958+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T10:26:49.502164+00:00 lotteh team: team [2832]: rm sshd_config 
+2024-11-17T10:29:19.044681+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml
+2024-11-17T10:34:07.582189+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml
+2024-11-17T10:34:23.325690+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T10:36:01.933331+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml
+2024-11-17T10:36:58.858476+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml
+2024-11-17T10:37:11.957335+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T10:38:11.256062+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T10:38:58.982597+00:00 lotteh team: team [6645]: ls .github/workflows
+2024-11-17T10:41:54.049226+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml 
+2024-11-17T10:42:08.066686+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T10:43:13.491429+00:00 lotteh team: team [5055]: rm .github/workflows/django.yml 
+2024-11-17T10:43:18.515098+00:00 lotteh team: team [5055]: rm .github/workflows/django.yml 
+2024-11-17T10:43:26.539223+00:00 lotteh team: team [5055]: nano .github/workflows/google-cloudrun-source.yml 
+2024-11-17T10:48:05.559849+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T10:48:28.440830+00:00 lotteh team: team [5055]: nano .github/workflows/google-cloudrun-source.yml 
+2024-11-17T10:48:55.605928+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T10:49:11.279425+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T10:53:19.495115+00:00 lotteh team: team [6645]: nano .github/workflows/django.yml 
+2024-11-17T10:53:31.441406+00:00 lotteh team: team [6645]: nano .github/workflows/google-cloudrun-source.yml 
+2024-11-17T10:54:46.917666+00:00 lotteh team: team [6645]: nano .github/workflows/django.yml 
+2024-11-17T10:55:00.794205+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T10:59:46.845618+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:00:01.725840+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T11:00:20.911256+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:00:36.137550+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:01:45.018689+00:00 lotteh team: team [6645]: nano .github/workflows/django.yml 
+2024-11-17T11:02:12.573882+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:02:27.270591+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:08:13.068236+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:08:27.249951+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:10:14.422423+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:10:27.775581+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:12:42.037449+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:12:56.129214+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:14:37.136686+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:14:50.830764+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:15:18.039764+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:15:31.423584+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:16:08.237703+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:16:21.866347+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:17:25.878764+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:17:42.309785+00:00 lotteh team: team [6645]: nano test.sh 
+2024-11-17T11:17:45.948811+00:00 lotteh team: team [6645]: ./test.sh 
+2024-11-17T11:18:31.016170+00:00 lotteh team: team [6645]: nano test.sh 
+2024-11-17T11:18:31.829972+00:00 lotteh team: team [6645]: ./test.sh 
+2024-11-17T11:18:44.934221+00:00 lotteh team: team [6645]: nano test.sh 
+2024-11-17T11:18:46.218227+00:00 lotteh team: team [6645]: ./test.sh 
+2024-11-17T11:18:55.541330+00:00 lotteh team: team [6645]: nano test.sh 
+2024-11-17T11:18:56.276223+00:00 lotteh team: team [6645]: ./test.sh 
+2024-11-17T11:18:58.836739+00:00 lotteh team: team [6645]: ./test.sh 
+2024-11-17T11:19:07.198345+00:00 lotteh team: team [6645]: nano test.sh 
+2024-11-17T11:19:08.053244+00:00 lotteh team: team [6645]: ./test.sh 
+2024-11-17T11:19:17.568495+00:00 lotteh team: team [6645]: nano test.sh 
+2024-11-17T11:19:30.530189+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:19:35.526304+00:00 lotteh team: team [6645]: nano scripts/setup
+2024-11-17T11:19:49.671130+00:00 lotteh team: team [6645]: nano scripts/init
+2024-11-17T11:20:12.227375+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:21:21.493752+00:00 lotteh team: team [6645]: nano scripts/init
+2024-11-17T11:21:44.741346+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:21:49.450738+00:00 lotteh team: team [6645]: export GIT_REPO='https://github.com/daisycamber/lotteharper.git'
+2024-11-17T11:21:50.576540+00:00 lotteh team: team [6645]: cd
+2024-11-17T11:21:54.861068+00:00 lotteh team: team [6645]: $GIT_REPO
+2024-11-17T11:22:06.302105+00:00 lotteh team: team [6645]: git clone "$GIT_REPO"
+2024-11-17T11:22:14.614885+00:00 lotteh team: team [6645]: git clone $GIT_REPO
+2024-11-17T11:22:29.917954+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:22:32.204379+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:22:34.472664+00:00 lotteh team: team [6645]: cd lotteh
+2024-11-17T11:22:50.318584+00:00 lotteh team: team [6645]: nano scripts/begin 
+2024-11-17T11:23:22.671324+00:00 lotteh team: team [6645]: sudo backup
+2024-11-17T11:23:52.935288+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:25:07.853929+00:00 lotteh team: team [2844]: watch sudo systemctl status daphne
+2024-11-17T11:26:30.142344+00:00 lotteh team: team [2844]: nano scripts/begin 
+2024-11-17T11:26:32.283776+00:00 lotteh team: team [2844]: nano scripts/begin 
+2024-11-17T11:26:48.036895+00:00 lotteh team: team [2844]: sudo backup
+2024-11-17T11:28:58.921525+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:29:01.079381+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:29:58.879558+00:00 lotteh team: team [5132]: nano scripts/begin 
+2024-11-17T11:30:14.178875+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T11:33:37.568390+00:00 lotteh team: team [2844]: nano scripts/begin 
+2024-11-17T11:33:52.620292+00:00 lotteh team: team [2844]: sudo backup
+2024-11-17T11:35:10.857004+00:00 lotteh team: team [2844]: nano scripts/begin 
+2024-11-17T11:35:26.416812+00:00 lotteh team: team [5132]: nano scripts/begin 
+2024-11-17T11:35:52.999210+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:36:10.107195+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T11:37:18.844678+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:37:28.652658+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:37:30.314157+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:37:44.162462+00:00 lotteh team: team [5132]: nano scripts/begin 
+2024-11-17T11:37:58.508281+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T11:39:39.533352+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:40:48.459899+00:00 lotteh team: team [5132]: nano scripts/begin 
+2024-11-17T11:41:14.812687+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:41:30.186058+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T11:43:15.557638+00:00 lotteh team: team [5132]: nano .github/workflows/django.yml 
+2024-11-17T11:43:42.212706+00:00 lotteh team: team [5132]: nano scripts/begin 
+2024-11-17T11:43:56.463590+00:00 lotteh team: team [5132]: sudo backup
+2024-11-17T11:45:29.019536+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:46:08.001264+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:46:21.536728+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:48:08.228711+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:48:56.440419+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T11:49:09.647149+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:49:17.098750+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T11:49:48.679352+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T11:50:03.892454+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:52:12.579163+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:52:14.082973+00:00 lotteh team: team [5055]: pwd
+2024-11-17T11:52:15.001630+00:00 lotteh team: team [5055]: ls
+2024-11-17T11:52:31.930402+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T11:54:08.074303+00:00 lotteh team: team [5055]: /home/team/lotteh/dumptables
+2024-11-17T11:54:21.508932+00:00 lotteh team: team [5055]: /home/team/lotteh/scripts/dumptables
+2024-11-17T11:54:29.170610+00:00 lotteh team: team [5055]: nano scripts/begin 
+2024-11-17T11:54:51.907432+00:00 lotteh team: team [5055]: nano .github/workflows/django.yml
+2024-11-17T11:55:12.001284+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T12:02:38.646962+00:00 lotteh team: team [5055]: nano README.md 
+2024-11-17T12:02:52.561834+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T12:25:09.884962+00:00 lotteh team: team [5055]: nano README.md 
+2024-11-17T12:25:23.920730+00:00 lotteh team: team [5055]: sudo backup
+2024-11-17T13:20:43.567350+00:00 lotteh team: team [54629]: ls
+2024-11-17T22:45:04.087054+00:00 lotteh team: team [92958]: ls
+2024-11-17T22:49:55.868682+00:00 lotteh team: team [5055]: nano feed/templates/feed/profile_butt
+2024-11-17T22:50:04.203318+00:00 lotteh team: team [5055]: nano feed/templates/feed/_profile_buttons.html 
+2024-11-17T22:50:58.815242+00:00 lotteh team: team [5055]: nano feed/templates/feed/login_register_buttons.html 
+2024-11-17T22:51:31.004859+00:00 lotteh team: team [5055]: nano vendors/urls.py 
+2024-11-17T22:51:52.364017+00:00 lotteh team: team [5055]: nano feed/templates/feed/login_register_buttons.html 
+2024-11-17T22:53:16.219754+00:00 lotteh team: team [5055]: nano vendors/views.py 
+2024-11-17T22:53:19.191604+00:00 lotteh team: team [5055]: nano vendors/models.py 
+2024-11-17T22:53:21.369298+00:00 lotteh team: message repeated 2 times: [ team [5055]: nano vendors/models.py ]
+2024-11-17T22:53:23.434302+00:00 lotteh team: team [5055]: nano vendors/views.py 
+2024-11-17T22:53:35.874227+00:00 lotteh team: team [5055]: nano vendors/models.py 
+2024-11-17T22:54:10.041984+00:00 lotteh team: team [5055]: nano vendors/forms.py 
+2024-11-17T22:54:33.810743+00:00 lotteh team: team [5055]: nano feed/context_processors.py 
+2024-11-17T22:54:51.126133+00:00 lotteh team: team [5055]: nano lotteh/settings.py 
+2024-11-17T22:56:46.672832+00:00 lotteh team: team [5055]: nano feed/templates/feed/login_register_buttons.html 
+2024-11-17T22:56:49.402303+00:00 lotteh team: team [5055]: nano feed/templates/feed/login_register_buttons.html 
+2024-11-17T22:56:54.720241+00:00 lotteh team: team [5055]: python manage.py check
+2024-11-17T22:58:24.821209+00:00 lotteh team: team [5055]: python manage.py makemigrations && python manage.py migrate
+2024-11-17T22:58:33.399679+00:00 lotteh team: team [6645]: logs
+2024-11-17T22:58:44.070349+00:00 lotteh team: team [6645]: sudo doreload
+2024-11-17T22:58:45.433266+00:00 lotteh team: team [6645]: logs
+2024-11-17T22:58:47.882747+00:00 lotteh team: team [6645]: logs
+2024-11-17T22:58:50.266669+00:00 lotteh team: team [6645]: logs
+2024-11-17T22:58:51.330755+00:00 lotteh team: team [6645]: logs
+2024-11-17T22:59:12.474853+00:00 lotteh team: team [94496]: ls
+2024-11-17T23:00:14.542186+00:00 lotteh team: team [94792]: ls
+2024-11-17T23:25:57.169450+00:00 lotteh team: team [94792]: ls
+2024-11-17T23:26:02.251400+00:00 lotteh team: team [94792]: ls
+2024-11-17T23:26:05.449285+00:00 lotteh team: team [94792]: cd lotteh
+2024-11-17T23:26:07.919850+00:00 lotteh team: team [94792]: logs
+2024-11-17T23:26:13.618212+00:00 lotteh team: team [94792]: logs
+2024-11-17T23:26:17.536091+00:00 lotteh team: team [96553]: ls
+2024-11-18T01:05:27.501947+00:00 lotteh team: team [94792]: venv
+2024-11-18T02:43:14.774237+00:00 lotteh team: team [114298]: ls
+2024-11-18T02:43:16.012047+00:00 lotteh team: team [114323]: ls
+2024-11-18T02:43:17.712774+00:00 lotteh team: team [114350]: ls
+2024-11-18T02:43:19.966645+00:00 lotteh team: team [114372]: ls
+2024-11-18T02:43:24.056599+00:00 lotteh team: team [114394]: ls
+2024-11-18T02:43:34.212208+00:00 lotteh team: team [114409]: ls
+2024-11-18T02:44:19.049784+00:00 lotteh team: team [114409]: nano chat/video_consumers.py 
+2024-11-18T02:44:39.990989+00:00 lotteh team: team [114409]: nano chat/models.py 
+2024-11-18T02:45:39.881333+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:45:47.431246+00:00 lotteh team: team [114409]: nano users/mof
+2024-11-18T02:45:49.894252+00:00 lotteh team: team [114409]: nano users/mfa
+2024-11-18T02:45:51.603354+00:00 lotteh team: team [114409]: nano users/mfa.
+2024-11-18T02:46:40.972281+00:00 lotteh team: team [114409]: nano users/tfa.py 
+2024-11-18T02:46:46.287680+00:00 lotteh team: team [114409]: nano users/tfa.py 
+2024-11-18T02:47:53.365416+00:00 lotteh team: team [114409]: nano security/models.py
+2024-11-18T02:48:02.132512+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:48:55.639696+00:00 lotteh team: team [114409]: nano security/models.py
+2024-11-18T02:48:58.207310+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:49:09.922554+00:00 lotteh team: team [114409]: nano chat/models.py 
+2024-11-18T02:49:38.566285+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:50:36.780943+00:00 lotteh team: team [114409]: nano security/models.py
+2024-11-18T02:50:43.202966+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:52:25.560365+00:00 lotteh team: team [114409]: nano security/views.py 
+2024-11-18T02:52:42.639887+00:00 lotteh team: team [114409]: python manage.py makemigrations && python manage.py migrate
+2024-11-18T02:52:42.930738+00:00 lotteh team: team [114409]: python manage.py makemigrations && python manage.py migrate
+2024-11-18T02:52:59.033803+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:53:18.581813+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:53:25.288275+00:00 lotteh team: team [114409]: python manage.py makemigrations && python manage.py migrate
+2024-11-18T02:54:34.192016+00:00 lotteh team: team [114409]: python manage.py shell
+2024-11-18T02:54:52.489639+00:00 lotteh team: team [114409]: nano security/models.py
+2024-11-18T02:55:02.069831+00:00 lotteh team: team [114409]: nano users/models.py 
+2024-11-18T02:55:33.313191+00:00 lotteh team: team [114409]: python manage.py shell
+2024-11-18T02:55:33.888084+00:00 lotteh team: team [114409]: clear
+2024-11-18T03:11:29.346705+00:00 lotteh team: team [114409]: nano vibe/templates/vibe/vibe.html
+2024-11-18T03:18:30.692260+00:00 lotteh team: team [2486]: venv
+2024-11-18T03:18:30.792351+00:00 lotteh team: team [2625]: venv
+2024-11-18T03:18:30.816826+00:00 lotteh team: team [2554]: venv
+2024-11-18T03:18:30.892386+00:00 lotteh team: team [2521]: venv
+2024-11-18T03:25:03.291274+00:00 lotteh team: team [114409]: nano live/urls.py 
+2024-11-18T03:25:10.516270+00:00 lotteh team: team [114409]: python manage.py check
+2024-11-18T03:25:19.824865+00:00 lotteh team: team [114409]: sudo daphnereload
+2024-11-18T03:46:50.283458+00:00 lotteh team: team [114409]: nano vibe/templates/vibe/vibe.html
+2024-11-18T03:48:02.879228+00:00 lotteh team: team [114409]: nano vibe/templates/vibe/vibe.html
+2024-11-18T03:53:01.990709+00:00 lotteh team: team [114394]: ls /var/log/jump
+2024-11-18T03:53:18.448688+00:00 lotteh team: team [114394]: du -sh /var/log/jump
+2024-11-18T04:04:23.761462+00:00 lotteh team: team [2158]: venv
+2024-11-18T04:04:24.778849+00:00 lotteh team: team [2186]: venv
+2024-11-18T04:04:24.807684+00:00 lotteh team: team [2198]: venv
+2024-11-18T04:04:25.526239+00:00 lotteh team: team [2210]: venv
+2024-11-18T04:04:58.516949+00:00 lotteh team: team [2198]: nano lotteh/routing.py 
+2024-11-18T04:05:04.782252+00:00 lotteh team: team [2198]: sudo daphnereload
+2024-11-18T04:05:26.981196+00:00 lotteh team: team [2198]: sudo systemctl status daphne
+2024-11-18T04:05:28.071254+00:00 lotteh team: team [2198]: sudo systemctl status daphne
+2024-11-18T04:05:29.523462+00:00 lotteh team: team [2198]: sudo systemctl status daphne
+2024-11-18T04:05:30.796474+00:00 lotteh team: team [2198]: sudo systemctl status daphne
+2024-11-18T04:05:31.863485+00:00 lotteh team: team [2198]: sudo systemctl status daphne
+2024-11-18T04:05:33.689971+00:00 lotteh team: team [2198]: sudo systemctl status daphne
+2024-11-18T05:31:48.601534+00:00 lotteh team: team [25810]: venv
+2024-11-18T05:31:57.091063+00:00 lotteh team: team [25883]: venv
+2024-11-18T05:32:00.523293+00:00 lotteh team: team [25916]: venv
+2024-11-18T05:32:32.930240+00:00 lotteh team: team [25916]: nano users/tfa.py 
+2024-11-18T05:32:48.877061+00:00 lotteh team: team [25916]: rm CryptoNoter.conf 
+2024-11-18T05:32:50.780410+00:00 lotteh team: team [25916]: ls
+2024-11-18T05:32:59.171974+00:00 lotteh team: team [25916]: ls
+2024-11-18T05:33:01.180274+00:00 lotteh team: team [25916]: clear
+2024-11-18T05:42:14.885324+00:00 lotteh team: team [25916]: nano lotteh/routing.py 
+2024-11-18T05:43:05.897266+00:00 lotteh team: team [25916]: nano crypto/consumers.py 
+2024-11-18T05:43:10.506929+00:00 lotteh team: team [25916]: sudo systemctl stop daphne
+2024-11-18T05:43:15.930353+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T05:43:40.939078+00:00 lotteh team: team [25916]: nano lotteh/routing.py 
+2024-11-18T05:44:01.921841+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T05:44:02.431365+00:00 lotteh team: message repeated 2 times: [ team [25916]: ./scripts/daphnetest.sh ]
+2024-11-18T05:44:12.336847+00:00 lotteh team: team [25916]: nano lotteh/settings.py 
+2024-11-18T05:44:35.175835+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T05:44:41.479555+00:00 lotteh team: team [25916]: sudo doreload
+2024-11-18T05:47:47.416749+00:00 lotteh team: team [29977]: venv
+2024-11-18T05:47:52.998908+00:00 lotteh team: team [29977]: ps -aux | grep daphne
+2024-11-18T05:47:58.975036+00:00 lotteh team: team [29977]: kill -9 29555
+2024-11-18T05:47:58.989667+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T05:54:22.075248+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T05:54:39.223832+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T05:55:11.689904+00:00 lotteh team: team [25916]: sudo systemctl stop daphne
+2024-11-18T05:55:13.845196+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T05:55:34.112129+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T05:56:07.542052+00:00 lotteh team: team [25916]: pip3 install websockets
+2024-11-18T05:56:43.007645+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T05:56:50.587901+00:00 lotteh team: message repeated 2 times: [ team [25916]: ./scripts/daphnetest.sh ]
+2024-11-18T05:56:51.492215+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T05:57:07.977106+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T05:58:58.130980+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T05:58:59.043149+00:00 lotteh team: team [29977]: kill -9 29555
+2024-11-18T05:59:02.355876+00:00 lotteh team: team [25916]: pip3 install websockets
+2024-11-18T05:59:12.509534+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:01:53.804130+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:01:58.846634+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:02:02.304737+00:00 lotteh team: team [29977]: kill -9 29555
+2024-11-18T06:02:06.083881+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T06:02:15.945392+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:02:16.078817+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:02:35.944804+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:02:50.726863+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:06:47.617243+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:06:58.351371+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:07:11.670670+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:07:17.062452+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:08:53.881521+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:08:57.565526+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:09:10.671477+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:11:36.818114+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:11:39.465920+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:11:40.454054+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:11:42.690717+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T06:11:51.097035+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:12:47.625468+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:12:47.795904+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:13:04.951268+00:00 lotteh team: team [25916]: nano shell/consumers.py 
+2024-11-18T06:13:55.200311+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:13:56.224423+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:15:08.491238+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:17:09.073126+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:17:10.378685+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:17:39.765046+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:17:39.831158+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:17:42.587868+00:00 lotteh team: team [25916]: nano shell/consumers.py 
+2024-11-18T06:18:03.939973+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:18:04.805001+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:19:04.370462+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:19:15.288546+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:22:23.790087+00:00 lotteh team: team [25916]: nano shell/consumers.py 
+2024-11-18T06:22:50.963105+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:22:55.126034+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:22:55.528805+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:22:59.663230+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T06:23:19.680761+00:00 lotteh team: team [2158]: venv
+2024-11-18T06:23:19.702881+00:00 lotteh team: team [2186]: venv
+2024-11-18T06:23:30.852436+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:28:15.607099+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:28:16.526857+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:28:18.888946+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T06:28:25.359391+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:28:25.578373+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:28:38.013001+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:28:38.864275+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:29:13.531892+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:35:04.500388+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T06:35:39.389731+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:35:43.515578+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:36:15.166426+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:36:25.868955+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:36:27.100547+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:36:52.021553+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:36:52.250212+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:38:04.864311+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:38:06.064470+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:38:12.958098+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:38:18.128220+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:38:43.310560+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:38:44.487279+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:38:47.881051+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:38:56.461325+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:39:05.473770+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:40:20.248951+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:40:21.232592+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:40:36.135145+00:00 lotteh team: team [29977]: ps -aux | grep daphne
+2024-11-18T06:40:46.989715+00:00 lotteh team: team [29977]: kill -9 36442
+2024-11-18T06:40:47.003724+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:40:51.913301+00:00 lotteh team: team [29977]: kill -9 36484
+2024-11-18T06:40:55.751224+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:40:58.815096+00:00 lotteh team: team [25916]: sudo systemctl stop daphne &
+2024-11-18T06:41:34.176202+00:00 lotteh team: team [29977]: nano crypto/consumers.py 
+2024-11-18T06:41:39.687663+00:00 lotteh team: team [29977]: ps -aux | grep daphne
+2024-11-18T06:41:49.745586+00:00 lotteh team: team [29977]: kill -9 36800
+2024-11-18T06:41:49.758520+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:41:55.203236+00:00 lotteh team: team [29977]: sudo doreload
+2024-11-18T06:43:17.709599+00:00 lotteh team: team [29977]: ps -aux | grep daphne
+2024-11-18T06:43:24.619059+00:00 lotteh team: team [29977]: kill -9 37078
+2024-11-18T06:43:24.639578+00:00 lotteh team: team [25916]: ./scripts/daphnetest.sh 
+2024-11-18T06:43:41.798745+00:00 lotteh team: team [29977]: sudo ascript backup
+2024-11-18T06:43:46.351368+00:00 lotteh team: team [29977]: ps-aux
+2024-11-18T06:43:56.180420+00:00 lotteh team: team [29977]: ps -aux |grep backup
+2024-11-18T06:43:59.723720+00:00 lotteh team: message repeated 2 times: [ team [29977]: ps -aux |grep backup]
+2024-11-18T09:15:19.930831+00:00 lotteh team: team [51736]: 
+2024-11-18T09:15:26.004319+00:00 lotteh team: team [51835]: 
+2024-11-18T09:15:29.548442+00:00 lotteh team: team [51898]: 
+2024-11-18T09:15:35.545952+00:00 lotteh team: team [51961]: 
+2024-11-18T09:15:38.642524+00:00 lotteh team: team [52024]: 
+2024-11-18T09:15:42.267057+00:00 lotteh team: team [51736]: venv
+2024-11-18T09:15:45.146038+00:00 lotteh team: team [51736]: cd lotteh
+2024-11-18T09:15:59.640724+00:00 lotteh team: team [51736]: nano scripts/initialize 
+2024-11-18T09:16:07.341958+00:00 lotteh team: team [51736]: ls
+2024-11-18T09:16:14.537942+00:00 lotteh team: team [51736]: rm test.b64 
+2024-11-18T09:16:36.521245+00:00 lotteh team: team [51736]: clear
+2024-11-18T09:16:39.728902+00:00 lotteh team: team [51736]: du -sh ./
+2024-11-18T09:25:00.894329+00:00 lotteh team: team [51736]: watch du -sh ./
+2024-11-18T09:25:06.453803+00:00 lotteh team: team [51835]: venv
+2024-11-18T09:25:08.339510+00:00 lotteh team: team [51835]: cd lotteh
+2024-11-18T09:25:19.183783+00:00 lotteh team: team [51835]: cat requirements.txt | grep TA-
+2024-11-18T09:25:22.211342+00:00 lotteh team: team [51835]: cat requirements.txt | grep ta-
+2024-11-18T09:25:36.245176+00:00 lotteh team: team [51898]: venv
+2024-11-18T09:25:39.353795+00:00 lotteh team: team [51835]: pip3 install TA-Lib
+2024-11-18T09:26:00.167960+00:00 lotteh team: team [51898]: sudo ascript setup
+2024-11-18T09:27:31.478661+00:00 lotteh team: team [51835]: pip3 install TA-Lib
+2024-11-18T09:28:38.889176+00:00 lotteh team: team [51835]: nano requirements.txt 
+2024-11-18T09:36:29.701721+00:00 lotteh team: team [51835]: python manage.py check
+2024-11-18T09:36:39.843183+00:00 lotteh team: team [51835]: python manage.py check
+2024-11-18T09:36:51.814393+00:00 lotteh team: team [51835]: nano scripts/loadtables 
+2024-11-18T09:37:28.003731+00:00 lotteh team: team [51736]: watch du -sh ./
+2024-11-18T09:37:38.539856+00:00 lotteh team: team [51736]: ./scripts/loadtables 
+2024-11-18T09:37:55.236565+00:00 lotteh team: team [51736]: nano scripts/pgsetup
+2024-11-18T09:39:10.902520+00:00 lotteh team: team [51736]: sudo ascript setup
+2024-11-18T09:39:12.750252+00:00 lotteh team: team [51736]: sudo ascript setup
+2024-11-18T09:39:21.015176+00:00 lotteh team: team [51736]: nano scripts/loadtables 
+2024-11-18T09:39:32.622548+00:00 lotteh team: team [51736]: ./scripts/loadtables 
+2024-11-18T09:39:59.364107+00:00 lotteh team: team [51736]: sudo ascript setup
+2024-11-18T09:40:12.858162+00:00 lotteh team: team [51736]: nano scripts/pgsetup
+2024-11-18T09:40:16.125391+00:00 lotteh team: team [51736]: nano scripts/pgsetup
+2024-11-18T09:40:48.768960+00:00 lotteh team: team [51736]: sudo ascript setup
+2024-11-18T09:40:57.714125+00:00 lotteh team: team [51736]: sudo ascript setup
+2024-11-18T09:41:03.583556+00:00 lotteh team: team [51736]: nano scripts/pgsetup
+2024-11-18T09:41:06.057822+00:00 lotteh team: team [51736]: nano scripts/pgsetup
+2024-11-18T09:41:09.078407+00:00 lotteh team: team [51736]: nano scripts/pgsetup
+2024-11-18T09:41:50.409145+00:00 lotteh team: team [51835]: git remote -v
+2024-11-18T09:42:01.754001+00:00 lotteh team: team [51835]: git remote remove origin
+2024-11-18T09:42:08.207433+00:00 lotteh team: team [51835]: git remote add originlab https://gitlab.com/jasperholton/lotteh2024-17.git
+2024-11-18T09:42:11.883783+00:00 lotteh team: team [51835]: ls web/site
+2024-11-18T09:42:15.169224+00:00 lotteh team: team [51835]: cd web/site
+2024-11-18T09:42:17.022807+00:00 lotteh team: team [51835]: ls
+2024-11-18T09:42:20.394719+00:00 lotteh team: team [51835]: git init
+2024-11-18T09:42:30.129210+00:00 lotteh team: team [51835]: sudo rm -r .git
+2024-11-18T09:42:36.412909+00:00 lotteh team: team [51835]: git init --initial-branch=main
+2024-11-18T09:43:07.413309+00:00 lotteh team: team [51835]: git clone https://github.com/daisycamber/lotteharper.git
+2024-11-18T09:43:20.745364+00:00 lotteh team: team [51835]: ls lotteh
+2024-11-18T09:43:31.482762+00:00 lotteh team: team [51835]: git remote add origin
+2024-11-18T09:43:34.377486+00:00 lotteh team: team [51835]: git remote add origin https://github.com/daisycamber/glamgirlx.git
+2024-11-18T09:43:59.844565+00:00 lotteh team: team [51835]: git pull origin main
+2024-11-18T09:44:58.237969+00:00 lotteh team: team [51898]: sudo ascript setup
+2024-11-18T09:45:26.536083+00:00 lotteh team: team [51835]: git pull -u origin main
+2024-11-18T09:45:38.573560+00:00 lotteh team: team [51835]: git pull origin main
+2024-11-18T09:46:04.072294+00:00 lotteh team: team [51835]: git pull origin main
+2024-11-18T09:46:47.553595+00:00 lotteh team: team [51898]: sudo ascript setup
+2024-11-18T09:46:58.331265+00:00 lotteh team: team [51898]: git clone https://github.com/daisycamber/glamgirlx.git web/site
+2024-11-18T09:47:01.801904+00:00 lotteh team: team [51835]: cd ..
+2024-11-18T09:47:02.361034+00:00 lotteh team: team [51835]: cd ..
+2024-11-18T09:47:03.892818+00:00 lotteh team: team [51835]: git clone https://github.com/daisycamber/glamgirlx.git web/site
+2024-11-18T09:47:07.593324+00:00 lotteh team: team [51835]: git clone https://github.com/daisycamber/glamgirlx.git web/site
+2024-11-18T09:47:10.274459+00:00 lotteh team: team [51835]: rm web/site
+2024-11-18T09:47:14.888140+00:00 lotteh team: team [51835]: sudo rm -r web/site
+2024-11-18T09:47:37.032165+00:00 lotteh team: team [51835]: git clone https://github.com/daisycamber/glamgirlx.git web/site
+2024-11-18T09:47:43.788726+00:00 lotteh team: team [51898]: sudo ascript setup
+2024-11-18T09:48:09.951427+00:00 lotteh team: team [51835]: git clone https://github.com/daisycamber/glamgirlx.git web/site
+2024-11-18T09:48:14.472842+00:00 lotteh team: team [51835]: git clone https://github.com/daisycamber/glamgirlx.git/ web/site
+2024-11-18T09:48:54.530383+00:00 lotteh team: team [51835]: git clone git@github.com:daisycamber/glamgirlx.git web/site
+2024-11-18T09:48:55.162244+00:00 lotteh team: team [51898]: ping github.com
+2024-11-18T09:48:59.631164+00:00 lotteh team: message repeated 3 times: [ team [51898]: ping github.com]
+2024-11-18T10:25:35.914622+00:00 lotteh team: team [51736]: ./scripts/pgsetup
+2024-11-18T10:55:10.274824+00:00 lotteh team: team [51736]: sudo systemctl status apache2
+2024-11-18T10:55:13.286437+00:00 lotteh team: team [51736]: opendkimkey
+2024-11-18T10:55:17.653796+00:00 lotteh team: team [51736]: logs
+2024-11-18T10:55:21.041438+00:00 lotteh team: team [51736]: opendkimkey
+2024-11-18T10:56:35.829567+00:00 lotteh team: team [51835]: sudo daphnereload
+2024-11-18T10:56:36.917126+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:38.225426+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:39.505100+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:40.833088+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:42.165187+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:43.528435+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:44.782162+00:00 lotteh team: team [51835]: logs
+2024-11-18T10:56:50.990660+00:00 lotteh team: team [51835]: sudo systemctl stop daphne
+2024-11-18T10:57:24.530988+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:57:35.475336+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:57:36.894815+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:57:38.256241+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:57:39.450401+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:57:44.277523+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:57:45.591346+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:02.990797+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:05.029267+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:09.498742+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:11.023349+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:12.366762+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:13.651230+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:15.088120+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:16.385228+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:20.612035+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:22.244017+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:23.703307+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:29.130346+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:30.655917+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:32.017984+00:00 lotteh team: team [51898]: cmds
+2024-11-18T10:58:33.484268+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:34.716241+00:00 lotteh team: team [51898]: cmds
+2024-11-18T10:58:36.407464+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:50.405185+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:58:51.893888+00:00 lotteh team: team [51898]: logs
+2024-11-18T10:59:03.449233+00:00 lotteh team: team [51898]: sudo systemctl status apache3
+2024-11-18T10:59:05.737201+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T10:59:58.531997+00:00 lotteh team: team [51898]: sudo systemctl status daphne
+2024-11-18T11:00:05.039762+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:00:09.918668+00:00 lotteh team: team [51835]: ./scripts/daphnetest.sh 
+2024-11-18T11:00:10.214179+00:00 lotteh team: message repeated 2 times: [ team [51835]: ./scripts/daphnetest.sh ]
+2024-11-18T11:00:13.781172+00:00 lotteh team: team [51898]: sudo doreload
+2024-11-18T11:00:17.146161+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:00:18.334092+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:00:44.825550+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:00:46.110703+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:01:20.673551+00:00 lotteh team: team [51835]: ./scripts/daphnetest.sh 
+2024-11-18T11:02:09.072109+00:00 lotteh team: team [51835]: ./scripts/daphnetest.sh 
+2024-11-18T11:02:11.876110+00:00 lotteh team: team [51835]: sudo daphnereload
+2024-11-18T11:02:15.992675+00:00 lotteh team: team [51835]: logs
+2024-11-18T11:02:17.095600+00:00 lotteh team: team [51835]: logs
+2024-11-18T11:02:20.684709+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:02:21.788816+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:02:23.199592+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:02:24.852432+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:02:27.218741+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:02:28.716861+00:00 lotteh team: team [51898]: sudo systemctl status apache2
+2024-11-18T11:02:33.779292+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:02:35.217005+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:02:40.560269+00:00 lotteh team: team [51898]: logs
+2024-11-18T11:02:51.630510+00:00 lotteh team: team [51835]: logs
+2024-11-18T11:02:53.389872+00:00 lotteh team: team [51835]: llogs
+2024-11-18T11:02:54.614000+00:00 lotteh team: team [51835]: logs
+2024-11-18T11:03:06.400800+00:00 lotteh team: team [51835]: sudo systemctl status daphne
+2024-11-18T11:03:18.377503+00:00 lotteh team: team [51835]: sudo systemctl status daphne
+2024-11-18T11:03:22.698863+00:00 lotteh team: team [51835]: sudo systemctl stop daphne
+2024-11-18T11:04:38.405943+00:00 lotteh team: team [51835]: sudo reboot
+2024-11-18T11:09:27.826551+00:00 lotteh team: team [1808]: logs
+2024-11-18T11:09:29.669046+00:00 lotteh team: team [1808]: venv
+2024-11-18T11:10:16.436215+00:00 lotteh team: team [1808]: sudo systemctl status daphne
+2024-11-18T11:10:58.875303+00:00 lotteh team: team [1808]: cd lotteh
+2024-11-18T11:11:03.841610+00:00 lotteh team: team [1808]: python approve_login.py 1
+2024-11-18T11:11:06.919578+00:00 lotteh team: team [1808]: python approve_login.py 3
+2024-11-18T11:11:09.638296+00:00 lotteh team: team [1808]: python approve_login.py 33
+2024-11-18T11:11:10.213887+00:00 lotteh team: team [2542]: logs
+2024-11-18T11:11:12.500740+00:00 lotteh team: team [1808]: python approve_login.py 2
+2024-11-18T11:11:15.096877+00:00 lotteh team: team [1808]: python approve_login.py 23
+2024-11-18T11:11:18.013247+00:00 lotteh team: team [1808]: python approve_login.py 3
+2024-11-18T11:11:20.495014+00:00 lotteh team: team [1808]: python approve_login.py 2
+2024-11-18T11:11:22.827080+00:00 lotteh team: team [2651]: logs
+2024-11-18T11:11:22.861924+00:00 lotteh team: team [1808]: python approve_login.py 2
+2024-11-18T11:11:25.131342+00:00 lotteh team: team [2675]: logs
+2024-11-18T11:11:27.766023+00:00 lotteh team: team [2701]: logs
+2024-11-18T11:11:31.376523+00:00 lotteh team: team [2716]: logs
+2024-11-18T11:23:21.207978+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:23:30.737433+00:00 lotteh team: team [2716]: sudo systemctl stop apache2
+2024-11-18T11:23:34.927267+00:00 lotteh team: team [2716]: sudo systemctl start apache2
+2024-11-18T11:23:36.396803+00:00 lotteh team: team [2716]: sudo systemctl start apache2 &
+2024-11-18T11:23:42.570110+00:00 lotteh team: team [2716]: sudo systemctl stop daphne
+2024-11-18T11:23:43.660812+00:00 lotteh team: team [2716]: sudo systemctl stop daphne &
+2024-11-18T11:23:49.783283+00:00 lotteh team: team [3290]: logs
+2024-11-18T11:24:10.330104+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:24:10.498479+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:25:06.685107+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:25:37.790435+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:28:13.256499+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:28:37.792524+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:29:23.411413+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:29:49.979663+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:31:11.946269+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:31:28.552596+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:31:40.650956+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:31:43.480478+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:31:47.575217+00:00 lotteh team: team [2716]: sudo systemctl stop daphne
+2024-11-18T11:32:23.092050+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:33:41.910129+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:34:21.168315+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:34:21.304038+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:34:39.288445+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:34:56.942685+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:35:37.456194+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:36:37.638308+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:36:40.662769+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:37:05.523238+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:37:08.824986+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:37:17.153119+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:37:55.416600+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:38:29.276995+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:39:08.280062+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:41:27.094836+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:41:47.029134+00:00 lotteh team: team [3290]: nano crypto/consumers.py 
+2024-11-18T11:42:04.162474+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:42:04.459005+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:42:26.329823+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:42:32.971457+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:42:33.233286+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:45:38.701583+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:48:20.776913+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:48:29.869230+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:49:12.184464+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:53:44.769647+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
+2024-11-18T11:53:47.827997+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:53:53.648004+00:00 lotteh team: team [2716]: sudo systemctl stop daphne
+2024-11-18T11:54:59.616671+00:00 lotteh team: team [2716]: ./scripts/daphnetest.sh 
+2024-11-18T11:55:32.693180+00:00 lotteh team: team [2716]: nano crypto/consumers.py 
