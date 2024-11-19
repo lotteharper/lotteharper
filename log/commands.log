@@ -1417,3 +1417,165 @@
 2024-11-19T04:48:04.087810+00:00 lotteh team: team [3290]: sudo pushweb
 2024-11-19T04:48:05.174537+00:00 lotteh team: team [126076]: logs
 2024-11-19T04:50:07.356565+00:00 lotteh team: team [126076]: nano templates/miner.html 
+2024-11-19T04:55:49.130078+00:00 lotteh team: team [126076]: sudo backup
+2024-11-19T05:38:14.043491+00:00 lotteh team: team [126076]: nano users/tfa.py 
+2024-11-19T05:38:21.645711+00:00 lotteh team: team [126076]: nano users/models.py 
+2024-11-19T05:38:50.979941+00:00 lotteh team: team [126076]: nano security/views.py 
+2024-11-19T05:39:07.965029+00:00 lotteh team: team [126076]: nano users/tfa.py 
+2024-11-19T05:39:11.093739+00:00 lotteh team: team [126076]: nano users/tfa.py 
+2024-11-19T05:39:12.878220+00:00 lotteh team: team [126076]: sudo doreload
+2024-11-19T05:39:20.666809+00:00 lotteh team: team [126076]: logs
+2024-11-19T05:39:21.843085+00:00 lotteh team: team [126076]: logs
+2024-11-19T05:39:23.179485+00:00 lotteh team: team [126076]: logs
+2024-11-19T05:39:25.801318+00:00 lotteh team: team [126076]: logs
+2024-11-19T05:39:27.400414+00:00 lotteh team: team [126076]: logs
+2024-11-19T05:39:28.695814+00:00 lotteh team: team [126076]: logs
+2024-11-19T05:39:34.019692+00:00 lotteh team: team [126076]: logslogs
+2024-11-19T05:45:51.964357+00:00 lotteh team: team [126076]: nano users/tfa.py 
+2024-11-19T05:46:11.396587+00:00 lotteh team: team [126076]: nano feed/models.py
+2024-11-19T05:46:47.485051+00:00 lotteh team: team [126076]: nano feed/models.py
+2024-11-19T05:47:02.954189+00:00 lotteh team: team [126076]: nano feed/books.py 
+2024-11-19T05:47:34.889914+00:00 lotteh team: team [126076]: nano feed/models.py
+2024-11-19T05:47:50.024594+00:00 lotteh team: team [126076]: nano feed/templates/feed/_post.html
+2024-11-19T05:48:01.541374+00:00 lotteh team: team [126076]: cat feed/templatetags/app_filters.py | grep CHARCOUNT
+2024-11-19T05:48:04.836110+00:00 lotteh team: team [126076]: cat feed/templatetags/app_filters.py | grep charcount
+2024-11-19T05:48:06.889920+00:00 lotteh team: team [126076]: cat feed/templatetags/app_filters.py | grep charcount -nH
+2024-11-19T05:48:11.615822+00:00 lotteh team: team [126076]: nano feed/templatetags/app_filters.py
+2024-11-19T05:49:44.357288+00:00 lotteh team: team [126076]: nano feed/models.py
+2024-11-19T05:49:57.331807+00:00 lotteh team: team [126076]: nano feed/templatetags/app_filters.py
+2024-11-19T05:50:05.129242+00:00 lotteh team: team [126076]: cat feed/templatetags/app_filters.py | grep -nH content_comp
+2024-11-19T05:50:08.545836+00:00 lotteh team: team [126076]: cat feed/templatetags/app_filters.py | grep -nH compiled
+2024-11-19T05:50:14.318173+00:00 lotteh team: team [126076]: cat feed/templatetags/app_filters.py | grep -nH compile
+2024-11-19T05:50:28.030029+00:00 lotteh team: message repeated 2 times: [ team [126076]: cat feed/templatetags/app_filters.py | grep -nH compile]
+2024-11-19T05:50:36.002755+00:00 lotteh team: team [126076]: nano feed/templates/feed/_post.html
+2024-11-19T05:50:44.251982+00:00 lotteh team: team [126076]: nano templates/reader.
+2024-11-19T05:50:52.858046+00:00 lotteh team: team [126076]: nano templates/reader.html 
+2024-11-19T05:50:59.635676+00:00 lotteh team: team [126076]: cat feed/models.py | grep compile
+2024-11-19T05:51:11.288674+00:00 lotteh team: team [126076]: nano feed/compile.py 
+2024-11-19T05:53:51.484746+00:00 lotteh team: team [126076]: nano templates/compile.html 
+2024-11-19T05:55:37.199586+00:00 lotteh team: team [126076]: nano feed/books.py 
+2024-11-19T05:55:41.642045+00:00 lotteh team: team [126076]: python manage.py check
+2024-11-19T05:56:44.404317+00:00 lotteh team: team [126076]: python manage.py shell
+2024-11-19T05:56:56.224668+00:00 lotteh team: team [126076]: sudo doreload
+2024-11-19T05:58:52.942259+00:00 lotteh team: team [126076]: nano feed/books.py 
+2024-11-19T06:00:11.915627+00:00 lotteh team: team [123531]: cat feed/books.py 
+2024-11-19T06:00:51.438606+00:00 lotteh team: team [123531]: pip3 install docx
+2024-11-19T06:01:07.630915+00:00 lotteh team: team [123531]: pip3 install exceptions
+2024-11-19T06:01:26.173065+00:00 lotteh team: team [123531]: pip remove docx
+2024-11-19T06:01:36.990208+00:00 lotteh team: team [123531]: pip uninstall docx
+2024-11-19T06:01:43.086450+00:00 lotteh team: team [123531]: pip install python-docx
+2024-11-19T06:02:00.065956+00:00 lotteh team: team [123531]: sudo ascript setup
+2024-11-19T06:02:07.221703+00:00 lotteh team: team [123531]: sudo ascript setup
+2024-11-19T06:02:15.016315+00:00 lotteh team: team [123531]: pip3 install htmldocx
+2024-11-19T06:02:22.928705+00:00 lotteh team: team [2542]: logs
+2024-11-19T06:02:23.574022+00:00 lotteh team: team [135505]: logs
+2024-11-19T06:02:31.400976+00:00 lotteh team: team [123531]: sudo ascript setup
+2024-11-19T06:03:36.471289+00:00 lotteh team: team [123531]: sudo ascript setup
+2024-11-19T06:03:49.717709+00:00 lotteh team: team [123531]: nano feed/email.py 
+2024-11-19T06:06:01.623254+00:00 lotteh team: team [135505]: sudo systemctl status daphne
+2024-11-19T06:06:20.367257+00:00 lotteh team: team [135505]: nano feed/books.py 
+2024-11-19T06:07:13.962054+00:00 lotteh team: team [135505]: nano feed/models.py
+2024-11-19T06:07:30.520693+00:00 lotteh team: team [135505]: nano feed/books.py 
+2024-11-19T06:07:47.924163+00:00 lotteh team: team [135505]: nano lotteh/celery.py 
+2024-11-19T06:07:55.521557+00:00 lotteh team: team [123531]: python manage.py shell
+2024-11-19T06:09:54.896997+00:00 lotteh team: team [135505]: nano feed/books.py 
+2024-11-19T06:11:07.920268+00:00 lotteh team: team [135505]: nano feed/books.py 
+2024-11-19T06:11:21.255674+00:00 lotteh team: team [135505]: pip3 install --upgrade Pillow
+2024-11-19T06:11:58.878643+00:00 lotteh team: team [136260]: logs
+2024-11-19T06:12:05.383432+00:00 lotteh team: team [136260]: pip install Pillow
+2024-11-19T06:12:15.528375+00:00 lotteh team: team [123531]: python manage.py shell
+2024-11-19T06:13:16.512059+00:00 lotteh team: team [136260]: sudo ascript setup
+2024-11-19T06:14:20.085538+00:00 lotteh team: team [136260]: nano feed/models.py
+2024-11-19T06:14:37.934599+00:00 lotteh team: team [123531]: python manage.py shell
+2024-11-19T06:16:06.159625+00:00 lotteh team: team [126076]: python manage.py shell
+2024-11-19T06:17:44.959862+00:00 lotteh team: team [136260]: nano feed/mdo
+2024-11-19T06:17:46.321351+00:00 lotteh team: team [136260]: nano feed/mdoe
+2024-11-19T06:19:18.445733+00:00 lotteh team: team [136260]: nano feed/models.py
+2024-11-19T06:19:20.081804+00:00 lotteh team: team [136260]: nano feed/models.py
+2024-11-19T06:20:23.979936+00:00 lotteh team: team [136260]: nano feed/models.py
+2024-11-19T06:20:31.055751+00:00 lotteh team: team [136260]: nano feed/upload.py 
+2024-11-19T06:20:52.745094+00:00 lotteh team: team [136260]: nano enhance/image.py 
+2024-11-19T06:21:02.163487+00:00 lotteh team: team [136260]: nano enhance/image.py 
+2024-11-19T06:21:13.747659+00:00 lotteh team: team [136260]: nano lotteh/celery.py 
+2024-11-19T06:23:35.670990+00:00 lotteh team: team [123531]: python manage.py shell
+2024-11-19T06:23:41.301156+00:00 lotteh team: team [123531]: sudo purgecache
+2024-11-19T06:23:47.369106+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T06:24:05.507400+00:00 lotteh team: team [123531]: sudo systemctl restart celery
+2024-11-19T06:47:14.411051+00:00 lotteh team: team [123531]: sudo systemctl restart celery
+2024-11-19T06:47:15.473621+00:00 lotteh team: team [123531]: sudo systemctl restart celery
+2024-11-19T06:47:45.035303+00:00 lotteh team: team [123531]: nano static/main.js 
+2024-11-19T06:49:34.635412+00:00 lotteh team: team [136260]: nano lotteh/celery.py 
+2024-11-19T06:50:00.312518+00:00 lotteh team: team [123531]: nano static/main.js 
+2024-11-19T07:51:32.683299+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T07:52:31.618194+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T07:53:00.280475+00:00 lotteh team: team [123531]: nano static/crypto/worker.js 
+2024-11-19T07:54:19.161456+00:00 lotteh team: team [123531]: nano static/crypto/worker.js 
+2024-11-19T07:54:22.823764+00:00 lotteh team: team [123531]: nano static/crypto/worker.js 
+2024-11-19T07:54:27.855094+00:00 lotteh team: team [123531]: nano crypto/urls.py 
+2024-11-19T07:54:47.679057+00:00 lotteh team: team [123531]: nano crypto/urls.py 
+2024-11-19T07:55:32.766884+00:00 lotteh team: team [123531]: nano crypto/views.py 
+2024-11-19T07:57:25.150824+00:00 lotteh team: team [123531]: nano crypto/templates/crypto/miner.html
+2024-11-19T07:57:28.779057+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T07:57:36.419794+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:37.595569+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:38.853794+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:40.012149+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:41.176287+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:42.418293+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:43.553636+00:00 lotteh team: team [123531]: logs
+2024-11-19T07:57:48.353007+00:00 lotteh team: team [123531]: nano crypto/templates/crypto/miner.html
+2024-11-19T07:58:07.973113+00:00 lotteh team: team [123531]: nano crypto/views.py 
+2024-11-19T07:58:09.274130+00:00 lotteh team: team [123531]: nano crypto/templates/crypto/miner.html
+2024-11-19T07:58:10.820153+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T08:00:05.136365+00:00 lotteh team: team [123531]: watchlogs
+2024-11-19T08:01:47.133471+00:00 lotteh team: team [123531]: nano crypto/templates/crypto/miner.html
+2024-11-19T08:01:49.513371+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T08:03:36.581809+00:00 lotteh team: team [123531]: nano crypto/templates/crypto/miner.html
+2024-11-19T08:03:37.676955+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T08:04:21.212782+00:00 lotteh team: team [123531]: nano crypto/templates/crypto/miner.html
+2024-11-19T08:04:42.460642+00:00 lotteh team: team [123531]: nano templates/base.html
+2024-11-19T08:04:44.184176+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T08:08:25.629450+00:00 lotteh team: team [123531]: sudo systemctl stop celery
+2024-11-19T08:08:29.547302+00:00 lotteh team: team [123531]: sudo systemctl start celery
+2024-11-19T08:08:30.790283+00:00 lotteh team: team [123531]: sudo systemctl start celery &
+2024-11-19T08:08:37.114421+00:00 lotteh team: team [123531]: sudo systemctl stop daphne
+2024-11-19T08:08:37.286811+00:00 lotteh team: team [123531]: sudo systemctl stop daphne
+2024-11-19T08:09:52.855069+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:09:56.612302+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:10:06.459985+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T08:10:09.564294+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:10:13.680287+00:00 lotteh team: team [123531]: sudo systemctl stop daphne
+2024-11-19T08:11:38.026751+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T08:11:44.643386+00:00 lotteh team: team [136260]: kill -9 152612
+2024-11-19T08:11:44.659522+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:11:55.053041+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T08:15:44.208803+00:00 lotteh team: team [136260]: nano templates/base.html
+2024-11-19T08:16:17.399363+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-19T08:16:19.338037+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-19T08:16:22.057235+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-19T08:16:41.039355+00:00 lotteh team: team [136260]: logs
+2024-11-19T08:16:42.227242+00:00 lotteh team: team [136260]: logs
+2024-11-19T08:18:27.555151+00:00 lotteh team: team [136260]: logs
+2024-11-19T08:28:54.769186+00:00 lotteh team: team [136260]: logs
+2024-11-19T08:31:23.757189+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T08:31:32.287993+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T08:31:35.159871+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:31:39.071176+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-19T08:32:40.001788+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:33:44.642379+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:33:54.032637+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T08:35:57.533627+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T08:37:49.338155+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T08:37:53.664307+00:00 lotteh team: team [123531]: sudo daphnereload
+2024-11-19T08:37:56.602267+00:00 lotteh team: team [126076]: python manage.py shell
+2024-11-19T09:58:03.520849+00:00 lotteh team: team [126076]: python manage.py shell
+2024-11-19T09:58:17.710035+00:00 lotteh team: team [126076]: nano static/crypto/web/lib/
+2024-11-19T09:58:23.498579+00:00 lotteh team: team [126076]: nano static/crypto/web/lib/cryptonight.wasm 
+2024-11-19T10:00:08.137471+00:00 lotteh team: team [126076]: nano static/crypto/web/lib/cryptonight-asmjs.min.js
+2024-11-19T10:00:11.583569+00:00 lotteh team: team [126076]: nano static/crypto/web/lib/cryptonight-asmjs.min.js.mem 
+2024-11-19T10:00:18.900911+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T10:01:03.637267+00:00 lotteh team: team [126076]: nano static/crypto/web/lib/cryptonight-asmjs.min.js
+2024-11-19T10:01:50.693835+00:00 lotteh team: team [126076]: cat static/crypto/web/lib/cryptonight-asmjs.min.js
+2024-11-19T10:03:45.758053+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T10:03:46.865835+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-19T10:04:55.143415+00:00 lotteh team: team [123531]: sudo purgecache

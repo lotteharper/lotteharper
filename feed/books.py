@@ -12,6 +12,7 @@ def generate_code_book(value):
     op = []
     title = value.split('\n')[0]
     v = value.replace('‘','\'').replace('’','\'').split('***')
+    from django.utils.html import strip_tags
     for t in v:
         split = re.split('\*[\w\.]+\*', t)
         language = '\n'
@@ -21,10 +22,10 @@ def generate_code_book(value):
         if language == 'html': language = 'markup'
         code = split[1] if len(split) > 1 else False
         if code:
-            op = op + [{'text': split[0], 'lang': language, 'code': html.escape(code) if language != 'markup' else '<!-- {} -->'.format(code)}]
+            op = op + [{'text': strip_tags(split[0]), 'lang': language, 'code': html.escape(code) if language != 'markup' else '<!-- {} -->'.format(code)}]
 #            op = op + [language,]'<pre><code class="language-{}">'.format(language if language != 'html' else 'markup') + '{% autoescape on %}' + code + '{% endautoescape %}</code></pre>'
         else:
-            op = op + [{'text': split[0]}]
+            op = op + [{'text': strip_tags(split[0])}]
     from django.template.loader import render_to_string
     return render_to_string('feed/book.html', {'value': op}), title
 
@@ -51,7 +52,7 @@ def generate_book(text, out_path_docx):
         text = re.sub('(?P<get>\\.|!|;|:)[ \t]+(?P<put>\\w)', '\\g<get> \\g<put>', text)
         return text
     from docx import Document
-    from htmldocx import HtmlToDocx
+#    from htmldocx import HtmlToDocx
     document = Document()
     import uuid, os
     from django.conf import settings

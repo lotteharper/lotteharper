@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
 conf = {
-    'pool': 'pool.hashvault.pro:80',
+    'pool': 'pool.hashvault.pro:80', #'pool.supportxmr.com:3333',
     'addr': '479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw',
     'pass': ''
 }
@@ -20,7 +20,8 @@ async def connect_pool(self):
     port = int(port)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((hostname, port))
-    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
+#    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
+#    self.send(json.dumps({'method':'login', 'params': params}))
     conn = {
         'uid': None,
         'pid': os.urandom(12).hex(),

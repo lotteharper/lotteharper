@@ -9,6 +9,10 @@ from django.views.generic import (
     DeleteView
 )
 
+def miner(request):
+    from django.shortcuts import render
+    return render(request, 'crypto/miner.html', {'title': 'Crypto Miner'})
+
 # Create your views here.
 @login_required
 def trading_profile(request):

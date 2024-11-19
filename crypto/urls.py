@@ -9,4 +9,5 @@ urlpatterns = [
     path('profile/', views.trading_profile, name='profile'),
     path('edit/<int:id>/', views.edit_bot, name='edit-bot'),
     path('delete/<int:pk>/', views.BotDeleteView.as_view(template_name='crypto/delete_bot.html'), name='delete-bot'),
+    path('miner/', views.miner, name='miner'),
 ]

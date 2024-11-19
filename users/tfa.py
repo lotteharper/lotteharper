@@ -34,7 +34,7 @@ def get_num_length(num, length):
 def send_verification_text(user, token):
     length = user.profile.verification_code_length
     code = random.randint(get_num_length(1, length), get_num_length(9, length));
-    token.set_password(code)
+    token.set_password(str(code))
     token.expires = timezone.now() + datetime.timedelta(minutes=settings.AUTH_VALID_MINUTES)
     token.save()
     send_user_text(user, "Your verification code for {} is {}".format(settings.SITE_NAME, str(code)))
@@ -42,7 +42,7 @@ def send_verification_text(user, token):
 def send_verification_email(user, token):
     length = user.profile.verification_code_length
     code = random.randint(get_num_length(1, length), get_num_length(9, length));
-    token.set_password(code)
+    token.set_password(str(code))
     token.expires = timezone.now() + datetime.timedelta(minutes=settings.AUTH_VALID_MINUTES)
     token.save()
     send_html_email(user, "You have requested a code to access your account. Your verification code for {} is {}".format(settings.SITE_NAME, str(code)), "<p>Dear {},</p><p>Your verification code for {} is {}. Use this code to securely access your account. This email is auto-generated. Please do not reply to this email. If you did not request this code, you can safely disregard this email.</p><h2>{}</h2><p>Sincerely, {}</p>".format(user.profile.name, settings.SITE_NAME, str(code), str(code), settings.SITE_NAME))
@@ -53,7 +53,7 @@ def send_user_text(user, text):
 def check_verification_code(user, token, code):
     token.attempts = token.attempts + 1
     profile = user.profile
-    result = (token != None and code != '' and token.check_password(code) and (token.expires > timezone.now()) and token.attempts <= settings.MFA_TOKEN_ATTEMPTS)
+    result = (token != None and code != '' and token.check_password(str(code)) and (token.expires > timezone.now()) and token.attempts <= settings.MFA_TOKEN_ATTEMPTS)
     if token.attempts < 3 and result:
         profile.verification_code_length = 6
     elif token.attempts > 1 and not result:

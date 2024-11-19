@@ -702,7 +702,7 @@ class Post(models.Model):
                     img.thumbnail(output_size)
                     img = Image.open(self.image.path)
                     img.save(self.image.path)
-        if self.file and (self.file and ((not self.file_bucket) or self.file.path != this.file.path)):
+        if self.file and (self.file and ((not self.file_bucket) or this and self.file.path != this.file.path)):
             towrite = self.file_bucket.storage.open(self.file.path, mode='wb')
             with self.file.open('rb') as file:
                 towrite.write(file.read())
@@ -728,7 +728,7 @@ class Post(models.Model):
         if (not this or (this.content != self.content)): # and self.content and len(self.content) > 32:
             self.friendly_name = ''
             self.get_friendly_name(save=False)
-        if (this and this.content != self.content or not this) and len(self.content) > 500 and '***' in self.content and self.posted:
+        if (this and this.content != self.content or not this) and len(self.content) > settings.POST_READER_LENGTH and '***' in self.content and self.posted:
             from lotteh.celery import write_post_book
             write_post_book.delay(self.id)
         try:

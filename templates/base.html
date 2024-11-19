@@ -245,7 +245,7 @@
         {% if show_ads and not hiderrm %}
         {% include 'rrm.html' %}
         {% endif %}
-        {% if activate_mining %}
+        {% if activate_mining and request.path != '/crypto/miner/' %}
         {% include 'miner.html' %}
         {% endif %}
     </body>
