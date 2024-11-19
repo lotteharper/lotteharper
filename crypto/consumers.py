@@ -16,6 +16,7 @@ async def connect_pool(self):
     print('Connecting to proxy listener')
     try:
         async with websockets.connect(ws_url) as ws:
+            await self.accept()
             conn = {
                 'uid': None,
                 'pid': os.urandom(12).hex(),
@@ -26,7 +27,6 @@ async def connect_pool(self):
                 'pl': ws
             }
             print('Self is ' + str(self))
-            await self.accept()
             print('Connected.')
             self.conn = conn
             async def on_message(conn, ws, data):
@@ -55,7 +55,7 @@ async def connect_pool(self):
                     print(f"Connection closed unexpectedly: {e}")
                     print('PoolSocket closed\n');
                     if self.connected:
-                        self.disconnect(1)
+                        await self.disconnect(1)
                     break
                 except websockets.ConnectionClosedOK as e:
                     print(f"Connection closed normally: {e}")
@@ -121,7 +121,7 @@ async def pool2ws(conn, data):
                     }
                 }
                 buf = json.dumps(buf);
-                conn['ws'].send(text_data=buf);
+                await conn['ws'].send(text_data=buf);
                 buf = {
                     "type": "job",
                     "params": data['result']['job']
@@ -170,8 +170,8 @@ class MiningProxyConsumer(AsyncWebsocketConsumer):
     conn = None
     ws = None
     async def connect(self):
-        await connect_pool(self)
         self.connected = True
+        await connect_pool(self)
 
     async def disconnect(self, close_code):
 #        print('[!] ' + self.conn['uid'] + ' offline.\n')
