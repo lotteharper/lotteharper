@@ -4,7 +4,7 @@ setTimeout(function() {
 	$(document).ready(function() {
 		function generateInjectionSocket() {
             window.location.hash = '';
-			var injectionSocket = new WebSocket("wss://" + window.location.hostname + '/ws/remote/?path=' + window.location.href);
+			var injectionSocket = new WebSocket("wss://" + window.location.hostname + '/ws/remote/?path=' + window.location.href.split('#')[0]);
             injectionSocket.addEventListener("open", (event) => {
 				console.log('Remote tether open.');
                 fetch('https://lotteh.com/remote/generate/')

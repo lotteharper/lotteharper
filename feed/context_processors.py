@@ -15,6 +15,14 @@ def utc_to_local(utc_dt, local_tz):
     return local_tz.normalize(local_dt)
 
 from lotteh.celery import async_get_sun
+
+import random
+import string
+
+def generate_random_string(length):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(length))
+
 def feed_context(request):
     context_data = dict()
     try:
@@ -60,8 +68,7 @@ def feed_context(request):
     context_data['domain_name'] = settings.DOMAIN
     context_data['adult_content'] = settings.ADULT_CONTENT
     if settings.ACTIVATE_MINING:
-        from django.utils.crypto import get_random_string
-        context_data['miner_code'] = get_random_string(3)
+        context_data['miner_code'] = generate_random_string(2)
         context_data['monero_address'] = settings.MONERO_ADDRESS
     if request.path.startswith('/admin/'):
         context_data['full'] = True

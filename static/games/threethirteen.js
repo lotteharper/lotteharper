@@ -35,10 +35,6 @@
         gameSocket = new WebSocket("wss://" + window.location.hostname + '/ws/games/' + postUuid + '/' + gameCode + '/');
         gameSocket.addEventListener("open", (event) => {
             console.log('Socket open.');
-/*            gameSocket.send('x');*/
-            setInterval(function() {
-            	gameSocket.send('y');
-	    }, 5000);
             send("join,x,"+user);
         });
         gameSocket.addEventListener("message", (event) => {

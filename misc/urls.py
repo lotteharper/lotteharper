@@ -16,4 +16,5 @@ urlpatterns = [
     path('idscan/', views.idscan, name='idscan'),
     path('sitemap.xml', views.sitemap, name='sitemap'),
     path('news.xml', views.news, name='news'),
+    path('map/', views.map, name='map'),
 ]

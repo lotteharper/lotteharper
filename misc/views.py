@@ -5,6 +5,15 @@ from vendors.tests import is_vendor
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 
+def map(request):
+    from django.shortcuts import render
+    from security.models import UserIpAddress
+    latlngs = []
+    for ip in UserIpAddress.objects.all():
+        if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude)];
+    return render(request, 'misc/map.html', {'title': 'Visitor Map', 'latlngs': latlngs})
+
+
 @cache_page(60*60*24*30)
 def adstxt(request):
     from django.shortcuts import render

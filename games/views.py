@@ -63,4 +63,4 @@ def play(request, id, code):
     if not game:
         game = Game.objects.filter(post=post, uid=code, time__gte=timezone.now() - datetime.timedelta(hours=48)).last()
         player = True
-    return render(request, 'games/game.html', {'hidenavbar': True, 'title': 'Play Game', 'post': post, 'game': game, 'player': player, 'full': True})
+    return render(request, 'games/game.html', {'hidenavbar': True, 'title': 'Play Game', 'post': post, 'game': game, 'player': player, 'full': True, 'game_code': code})

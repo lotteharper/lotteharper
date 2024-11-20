@@ -1743,3 +1743,264 @@
 2024-11-20T01:29:07.332322+00:00 lotteh team: team [123531]: sudo pushweb
 2024-11-20T01:35:09.005517+00:00 lotteh team: team [136260]: sudo purgecache
 2024-11-20T01:35:22.692960+00:00 lotteh team: team [136260]: nano scripts/begin 
+2024-11-20T01:40:54.271922+00:00 lotteh team: team [136260]: sudo backup
+2024-11-20T02:10:44.423777+00:00 lotteh team: team [136260]: sudo backup
+2024-11-20T02:11:11.895827+00:00 lotteh team: team [136260]: nano crypto/templates/crypto/miner.html 
+2024-11-20T02:11:16.377735+00:00 lotteh team: team [136260]: sudo systemctl stop daphne
+2024-11-20T02:11:25.050984+00:00 lotteh team: team [126076]: cat crypto/consumers.py 
+2024-11-20T02:12:31.694539+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T02:12:33.905281+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T02:12:35.631931+00:00 lotteh team: team [136260]: ./scripts/daphnetest.sh 
+2024-11-20T02:13:37.962409+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T02:13:48.043956+00:00 lotteh team: team [136260]: ./scripts/daphnetest.sh 
+2024-11-20T02:16:52.842718+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T02:16:55.147324+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T02:16:58.227783+00:00 lotteh team: team [123531]: sudo systemctl stop daphne
+2024-11-20T02:20:22.136641+00:00 lotteh team: team [136260]: ./scripts/daphnetest.sh 
+2024-11-20T02:22:56.552558+00:00 lotteh team: team [136260]: ./scripts/daphnetest.sh 
+2024-11-20T02:22:59.396884+00:00 lotteh team: team [136260]: ./scripts/daphnetest.sh 
+2024-11-20T02:23:07.154352+00:00 lotteh team: team [136260]: nano templates/crypto.js
+2024-11-20T02:24:06.079074+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T02:24:07.878077+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-20T02:24:09.901356+00:00 lotteh team: team [136260]: sudo purgecache
+2024-11-20T02:31:49.429930+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T02:31:57.950372+00:00 lotteh team: message repeated 2 times: [ team [136260]: nano templates/miner.html ]
+2024-11-20T02:32:00.733773+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-20T02:32:14.937827+00:00 lotteh team: team [136260]: nano web/templates/web/miner.html 
+2024-11-20T02:32:47.791929+00:00 lotteh team: team [136260]: sudo pushweb
+2024-11-20T02:33:55.008721+00:00 lotteh team: team [136260]: sudo purgecache
+2024-11-20T02:37:28.495883+00:00 lotteh team: team [136260]: python manage.py shell
+2024-11-20T02:37:39.327929+00:00 lotteh team: team [126076]: cat crypto/consumers.py 
+2024-11-20T02:37:42.120704+00:00 lotteh team: team [126076]: cat crypto/consumers.py 
+2024-11-20T02:38:26.794448+00:00 lotteh team: team [126076]: nano feed/context_processors.py 
+2024-11-20T02:39:21.571401+00:00 lotteh team: team [126076]: sudo doreload
+2024-11-20T02:40:36.307791+00:00 lotteh team: team [126076]: cat crypto/consumers.py 
+2024-11-20T02:44:04.256320+00:00 lotteh team: team [126076]: nano templates/miner.html 
+2024-11-20T02:56:29.684971+00:00 lotteh team: team [126076]: nano templates/miner.html 
+2024-11-20T02:56:33.354201+00:00 lotteh team: team [126076]: nano templates/miner.html 
+2024-11-20T02:58:05.305769+00:00 lotteh team: team [126076]: nano feed/context_processors.py 
+2024-11-20T02:58:08.359355+00:00 lotteh team: team [126076]: sudo doreload
+2024-11-20T02:58:13.332459+00:00 lotteh team: team [126076]: sudo purgecache
+2024-11-20T02:58:32.275143+00:00 lotteh team: team [126076]: nano templates/serviceworker.js 
+2024-11-20T03:01:28.336931+00:00 lotteh team: team [126076]: nano web/templates/web/miner.html 
+2024-11-20T03:01:51.399757+00:00 lotteh team: team [126076]: nano templates/miner.html 
+2024-11-20T03:01:53.698309+00:00 lotteh team: team [126076]: sudo doreload
+2024-11-20T03:01:58.883342+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T03:01:59.131618+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T03:02:01.863717+00:00 lotteh team: team [123531]: sudo purgecache
+2024-11-20T03:02:03.926994+00:00 lotteh team: team [123531]: sudo daphnereload
+2024-11-20T03:02:20.286603+00:00 lotteh team: team [126076]: sudo pushweb
+2024-11-20T03:15:34.158690+00:00 lotteh team: team [126076]: sudo pushweb
+2024-11-20T03:15:34.257478+00:00 lotteh team: team [126076]: sudo pushweb
+2024-11-20T03:16:34.217647+00:00 lotteh team: team [248656]: logs
+2024-11-20T03:16:39.756369+00:00 lotteh team: team [248675]: logs
+2024-11-20T03:16:41.157649+00:00 lotteh team: team [248703]: logs
+2024-11-20T03:16:41.189143+00:00 lotteh team: team [248720]: logs
+2024-11-20T03:16:53.041724+00:00 lotteh team: team [248675]: sudo systemctl stop daphne
+2024-11-20T03:16:57.255418+00:00 lotteh team: team [248675]: sudo systemctl stop daphne
+2024-11-20T03:16:58.066931+00:00 lotteh team: team [248769]: logs
+2024-11-20T03:17:27.284187+00:00 lotteh team: team [248891]: logs
+2024-11-20T03:17:45.197613+00:00 lotteh team: team [248891]: nano crypto/consumers.py 
+2024-11-20T03:17:58.179119+00:00 lotteh team: team [248891]: nano crypto/consumers.py 
+2024-11-20T03:18:13.164478+00:00 lotteh team: team [248891]: nano crypto/consumers.py 
+2024-11-20T03:18:17.142103+00:00 lotteh team: team [248891]: nano crypto/consumers.py 
+2024-11-20T03:18:20.704751+00:00 lotteh team: team [248891]: cat crypto/consumers.py 
+2024-11-20T03:18:51.377645+00:00 lotteh team: team [248891]: nano crypto/templates/crypto/miner.html 
+2024-11-20T03:18:56.725885+00:00 lotteh team: team [248891]: nano crypto/templates/crypto/miner.html 
+2024-11-20T03:18:58.365802+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T03:19:20.533520+00:00 lotteh team: team [248891]: sudo purgecache
+2024-11-20T03:20:16.694838+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T03:20:25.810635+00:00 lotteh team: message repeated 2 times: [ team [248769]: ./scripts/daphnetest.sh ]
+2024-11-20T03:20:35.869738+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T03:23:22.732801+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T03:23:25.690722+00:00 lotteh team: team [248769]: sudo daphnereload
+2024-11-20T03:36:54.927514+00:00 lotteh team: team [3290]: venv
+2024-11-20T03:37:11.426807+00:00 lotteh team: team [136260]: python manage.py shell
+2024-11-20T03:53:29.024891+00:00 lotteh team: team [248891]: nano crypto/consumers.py 
+2024-11-20T03:53:37.696172+00:00 lotteh team: team [248891]: nano crypto/consumers.py 
+2024-11-20T03:54:07.991679+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T03:56:11.359938+00:00 lotteh team: team [248656]: logs
+2024-11-20T03:56:13.629625+00:00 lotteh team: team [252347]: sudo pushweb
+2024-11-20T03:58:54.542748+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T03:58:56.575479+00:00 lotteh team: team [248891]: sudo daphnerelaod
+2024-11-20T03:59:00.822971+00:00 lotteh team: team [248891]: sudo daphnereload
+2024-11-20T04:03:55.689395+00:00 lotteh team: team [252347]: nano games/models.py 
+2024-11-20T04:04:24.806068+00:00 lotteh team: team [248769]: sudo systemctl stop daphne
+2024-11-20T04:05:13.684791+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:05:18.508627+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T04:05:54.328791+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:05:56.352149+00:00 lotteh team: team [248891]: sudo daphnereload
+2024-11-20T04:07:22.405016+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:07:26.831784+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:07:31.918375+00:00 lotteh team: team [248769]: sudo systemctl stop daphne
+2024-11-20T04:10:27.933388+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:10:30.633264+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:10:35.197642+00:00 lotteh team: team [248891]: nano static/games/threethirteen
+2024-11-20T04:11:08.737558+00:00 lotteh team: team [248891]: nano static/games/threethirteen.js 
+2024-11-20T04:11:10.438579+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T04:16:36.621682+00:00 lotteh team: team [248891]: nano static/games/threethirteen.js 
+2024-11-20T04:17:56.695330+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:18:41.271319+00:00 lotteh team: team [248891]: nano static/games/threethirteen.js 
+2024-11-20T04:21:14.233690+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:21:15.575494+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:21:18.028213+00:00 lotteh team: team [248769]: sudo doreload
+2024-11-20T04:22:37.623705+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:22:43.643868+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:23:29.597726+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:23:33.974363+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:23:35.456618+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T04:23:39.385636+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:23:42.863117+00:00 lotteh team: team [248769]: sudo systemctl stop daphne
+2024-11-20T04:25:06.317095+00:00 lotteh team: team [248891]: nano web/templates/web/base.html 
+2024-11-20T04:25:15.239503+00:00 lotteh team: team [248891]: nano templates/base.html
+2024-11-20T04:25:17.549735+00:00 lotteh team: team [248891]: nano templates/base.html
+2024-11-20T04:25:28.289627+00:00 lotteh team: team [248891]: nano security/templates/security/session_injection.js 
+2024-11-20T04:30:54.734173+00:00 lotteh team: team [252347]: nano games/models.py 
+2024-11-20T04:31:23.709819+00:00 lotteh team: team [252347]: nano games/consumers.py 
+2024-11-20T04:31:31.644822+00:00 lotteh team: team [252347]: nano games/templates/games/game.html 
+2024-11-20T04:32:18.976446+00:00 lotteh team: team [252347]: nano games/views.py 
+2024-11-20T04:32:22.428102+00:00 lotteh team: team [252347]: nano games/templates/games/game.html 
+2024-11-20T04:32:34.540853+00:00 lotteh team: team [252347]: nano games/templates/games/game.html 
+2024-11-20T04:32:42.939874+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:32:45.124234+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T04:32:46.962211+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:32:51.761001+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:32:52.741373+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:32:53.685539+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:33:11.685671+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:33:23.154957+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:33:24.456405+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:33:25.891189+00:00 lotteh team: team [248891]: logs
+2024-11-20T04:34:51.509109+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:35:55.901409+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:38:47.580535+00:00 lotteh team: team [248891]: nano games/consumers.py 
+2024-11-20T04:38:51.824959+00:00 lotteh team: team [248891]: nano games/templates/games/pl
+2024-11-20T04:39:08.210352+00:00 lotteh team: team [248891]: nano games/templates/games/game.html 
+2024-11-20T04:39:13.326520+00:00 lotteh team: team [248891]: nano games/templates/games/pl
+2024-11-20T04:39:16.094121+00:00 lotteh team: team [248891]: nano games/templates/games/pl
+2024-11-20T04:39:36.745461+00:00 lotteh team: team [248891]: nano games/views.py 
+2024-11-20T04:39:38.322685+00:00 lotteh team: team [248891]: nano games/templates/games/pl
+2024-11-20T04:39:41.991235+00:00 lotteh team: team [248891]: nano games/views.py 
+2024-11-20T04:39:47.687645+00:00 lotteh team: team [248891]: nano games/templates/games/game.html 
+2024-11-20T04:39:49.662011+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T04:39:51.544775+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T04:39:54.764294+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:39:57.548604+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T04:40:04.537112+00:00 lotteh team: team [252347]: nano games/templates/games/game.html 
+2024-11-20T04:41:52.619135+00:00 lotteh team: team [252347]: nano games/consumers.py 
+2024-11-20T04:41:56.366059+00:00 lotteh team: team [248769]: sudo systemctl stop daphne
+2024-11-20T05:42:03.196537+00:00 lotteh team: team [248891]: nano misc/templates/misc/map.html
+2024-11-20T05:42:59.026347+00:00 lotteh team: team [248891]: nano misc/views.py 
+2024-11-20T05:43:05.183555+00:00 lotteh team: team [248891]: nano misc/views.py 
+2024-11-20T05:43:30.202509+00:00 lotteh team: team [248891]: nano misc/urls.py 
+2024-11-20T05:43:32.204532+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T05:43:41.935285+00:00 lotteh team: team [248891]: nano misc/urls.py 
+2024-11-20T05:44:57.229124+00:00 lotteh team: team [248891]: nano misc/views.py 
+2024-11-20T05:44:58.986465+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T05:46:26.567434+00:00 lotteh team: team [252347]: nano games/consumers.py 
+2024-11-20T05:46:35.159052+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:46:36.692979+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:46:39.666912+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T05:47:48.837280+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:47:52.343363+00:00 lotteh team: team [248891]: sudo doreload
+2024-11-20T05:48:36.456966+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:48:41.337048+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T05:50:24.673929+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:50:26.479654+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T05:51:07.796877+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T05:52:18.093215+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:52:22.926126+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T05:52:24.171314+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T05:57:31.798570+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:01:43.373953+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:01:45.275624+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:01:47.858992+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:02:14.855441+00:00 lotteh team: team [252347]: watchlogs
+2024-11-20T06:02:32.405145+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:02:34.314094+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:03:02.948415+00:00 lotteh team: team [252347]: sudo purgecache
+2024-11-20T06:03:59.888784+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:04:01.988411+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:04:03.594887+00:00 lotteh team: team [252347]: sudo purgecache
+2024-11-20T06:04:14.247444+00:00 lotteh team: team [252347]: logs
+2024-11-20T06:04:39.234151+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:04:41.603480+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:04:59.353223+00:00 lotteh team: team [252347]: logs
+2024-11-20T06:05:01.024871+00:00 lotteh team: team [252347]: logs
+2024-11-20T06:06:41.222254+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:06:42.691479+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:07:58.443086+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:08:01.073126+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:08:52.058422+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:08:52.747885+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:12:29.698825+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:12:30.880944+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:14:24.122893+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:14:25.822427+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:15:36.493550+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:15:38.399345+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:15:46.493064+00:00 lotteh team: team [252347]: logs
+2024-11-20T06:23:52.685079+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:23:56.456249+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:24:43.162310+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:24:44.446282+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:25:56.394416+00:00 lotteh team: team [252347]: nano misc/views.py 
+2024-11-20T06:26:03.107415+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:26:06.074274+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:26:56.806326+00:00 lotteh team: team [252347]: nano misc/templates/misc/map.html 
+2024-11-20T06:27:02.273402+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T06:28:40.749943+00:00 lotteh team: team [252347]: nano misc/views.py 
+2024-11-20T06:28:41.837474+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T07:29:25.154008+00:00 lotteh team: team [285235]: sudo pushweb
+2024-11-20T07:29:32.992025+00:00 lotteh team: team [285324]: sudo pushweb
+2024-11-20T07:29:59.956367+00:00 lotteh team: team [285324]: logas
+2024-11-20T07:30:02.118346+00:00 lotteh team: team [285324]: logs
+2024-11-20T07:30:04.415513+00:00 lotteh team: team [285324]: cmds
+2024-11-20T07:30:10.525333+00:00 lotteh team: team [285324]: ca 
+2024-11-20T07:30:16.270990+00:00 lotteh team: team [285506]: sudo pushweb
+2024-11-20T07:30:18.368620+00:00 lotteh team: team [285506]: ls
+2024-11-20T07:33:19.191853+00:00 lotteh team: team [285506]: logs
+2024-11-20T07:33:37.454635+00:00 lotteh team: team [285324]: venv
+2024-11-20T08:17:24.833998+00:00 lotteh team: team [288871]: logs
+2024-11-20T09:55:12.472557+00:00 lotteh team: team [252347]: nano crypto/consumers.py 
+2024-11-20T09:55:13.580700+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T09:55:16.373330+00:00 lotteh team: team [252347]: sudo doreload
+2024-11-20T09:55:18.844733+00:00 lotteh team: team [252347]: logs
+2024-11-20T09:55:25.794266+00:00 lotteh team: team [252347]: sudo systemctl stop daphne
+2024-11-20T09:55:41.115377+00:00 lotteh team: team [252347]: ps -aux  | grep daphne
+2024-11-20T09:55:48.596655+00:00 lotteh team: team [252347]: kill -9 260064
+2024-11-20T09:55:48.621373+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T09:57:00.435526+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T09:57:00.797490+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T09:57:04.528131+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T09:57:09.727755+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T09:57:29.875199+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T09:57:44.455202+00:00 lotteh team: message repeated 2 times: [ team [248769]: nano crypto/consumers.py ]
+2024-11-20T09:58:30.051497+00:00 lotteh team: team [248769]: nano crypto/templates/crypto/miner.html 
+2024-11-20T09:58:33.870838+00:00 lotteh team: team [248769]: sudo doreload
+2024-11-20T09:58:37.912992+00:00 lotteh team: team [248769]: sudo doreload
+2024-11-20T09:58:56.842126+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T09:58:57.967125+00:00 lotteh team: team [248769]: sudo doreload
+2024-11-20T10:00:49.915284+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:01:02.683430+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:01:16.997471+00:00 lotteh team: team [248769]: cp crypto/consumers.py crypto/consumers_old.py
+2024-11-20T10:01:23.909833+00:00 lotteh team: team [248769]: nano crypto/consumers
+2024-11-20T10:06:08.082003+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:06:16.662543+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:06:54.857857+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:07:24.845300+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:07:41.976737+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:08:21.877422+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:08:43.620866+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:08:54.950329+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:11:03.736253+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:11:12.293215+00:00 lotteh team: team [248769]: sudo systemctl stop daphne
+2024-11-20T10:11:52.970626+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:12:02.193695+00:00 lotteh team: team [248769]: nano crypto/consumers
+2024-11-20T10:12:29.379811+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:13:33.251765+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:13:41.042998+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:13:46.997712+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:14:04.300358+00:00 lotteh team: team [248769]: nano crypto/consumers.py 
+2024-11-20T10:14:15.955219+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-20T10:14:54.793568+00:00 lotteh team: team [248769]: nano crypto/consumers.py 

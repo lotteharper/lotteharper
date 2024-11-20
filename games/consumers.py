@@ -38,6 +38,8 @@ def get_user(user_id):
     print(user_id)
     return User.objects.get(id=user_id)
 
+game_sockets = {}
+
 class GameConsumer(AsyncWebsocketConsumer):
     id = None
     code = None
@@ -52,6 +54,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         else:
             return
         await self.send(text_data=game.turns)
+        global game_sockets
+        game_sockets[self.code] = self
 
     async def disconnect(self, close_code):
         game = await get_game(self.id, self.code)
@@ -66,6 +70,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         if text_data == 'y':
             await self.send(text_data=game.turn)
             return
+        global game_sockets
+        print(text_data)
+        print(game_sockets)
+        if game.code == self.code and game.uid in game_sockets: await game_sockets[game.uid].send(text_data=text_data)
+        if game.uid == self.code and game.code in game_sockets: await game_sockets[game.code].send(text_data=text_data)
         await set_game(self.id, self.code, text_data)
         pass
     pass
