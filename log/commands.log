@@ -1579,3 +1579,67 @@
 2024-11-19T10:03:45.758053+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
 2024-11-19T10:03:46.865835+00:00 lotteh team: team [123531]: sudo doreload
 2024-11-19T10:04:55.143415+00:00 lotteh team: team [123531]: sudo purgecache
+2024-11-19T23:34:34.828768+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:39:10.007961+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:39:13.942181+00:00 lotteh team: team [123531]: sudo systemctl stop daphne
+2024-11-19T23:39:20.422347+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:39:26.021450+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:39:33.004967+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:41:07.182979+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:41:12.987058+00:00 lotteh team: team [136260]: kill -9 221826
+2024-11-19T23:41:13.005565+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:41:15.758789+00:00 lotteh team: team [126076]: cat static/crypto/web/lib/cryptonight-asmjs.min.js
+2024-11-19T23:41:46.174931+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:41:52.614562+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:41:56.759299+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:42:49.159110+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:43:11.124544+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:43:15.773337+00:00 lotteh team: team [136260]: kill -9 222242
+2024-11-19T23:43:15.788376+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:43:49.550081+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:44:02.049390+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:44:06.172370+00:00 lotteh team: team [136260]: kill -9 222333
+2024-11-19T23:44:06.192265+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:44:53.846714+00:00 lotteh team: team [136260]: nano remote/consumers.py 
+2024-11-19T23:45:27.084298+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T23:45:32.105503+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T23:46:04.624704+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T23:46:19.537962+00:00 lotteh team: team [136260]: nano security/consumers.py 
+2024-11-19T23:47:57.273810+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:49:00.261609+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T23:49:12.938306+00:00 lotteh team: team [136260]: nano crypto/consumers.py 
+2024-11-19T23:49:14.558197+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-19T23:49:17.347744+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:49:21.189473+00:00 lotteh team: team [136260]: kill -9 222810
+2024-11-19T23:49:21.206452+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:49:30.464022+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:49:34.956272+00:00 lotteh team: team [136260]: kill -9 223000
+2024-11-19T23:49:34.970151+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:50:00.838853+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:50:06.420348+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:50:14.986437+00:00 lotteh team: team [123531]: sudo systemctl stop daphne
+2024-11-19T23:50:16.100691+00:00 lotteh team: team [123531]: sudo systemctl stop daphne &
+2024-11-19T23:50:19.113287+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:50:22.922843+00:00 lotteh team: team [136260]: kill -9 233071
+2024-11-19T23:50:25.391416+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:50:29.228859+00:00 lotteh team: team [136260]: kill -9 223071
+2024-11-19T23:51:00.287286+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:51:04.827603+00:00 lotteh team: team [136260]: kill -9 223336
+2024-11-19T23:51:23.695457+00:00 lotteh team: team [136260]: kill -9 223336
+2024-11-19T23:51:24.732335+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:51:35.969122+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-19T23:52:45.047984+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:55:08.524783+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:55:52.252609+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:55:56.207921+00:00 lotteh team: team [136260]: kill -9 224002
+2024-11-19T23:55:56.225947+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:56:17.101002+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:56:24.193424+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:56:51.991626+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:56:59.950403+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:57:17.974440+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-19T23:58:46.345113+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-19T23:58:50.306429+00:00 lotteh team: team [136260]: kill -9 224263
+2024-11-19T23:58:50.306875+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-19T23:58:57.537056+00:00 lotteh team: team [136260]: kill -9 224264
+2024-11-19T23:59:30.730054+00:00 lotteh team: team [123531]: nano crypto/consumers.py 

