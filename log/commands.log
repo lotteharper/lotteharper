@@ -1691,3 +1691,55 @@
 2024-11-20T01:00:39.547887+00:00 lotteh team: team [136260]: rm .github/workflows/google-cloudrun-source.yml 
 2024-11-20T01:00:51.570935+00:00 lotteh team: team [136260]: nano .github/workflows/django.yml 
 2024-11-20T01:00:58.589620+00:00 lotteh team: team [136260]: nano scripts/githubsetup 
+2024-11-20T01:04:38.419141+00:00 lotteh team: team [123531]: sudo systemctl restart daphne
+2024-11-20T01:04:54.074508+00:00 lotteh team: team [123531]: nano nano templates/miner.html 
+2024-11-20T01:04:55.387585+00:00 lotteh team: team [123531]: nano nano templates/miner.html 
+2024-11-20T01:05:15.195261+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:06:20.801704+00:00 lotteh team: team [136260]: sudo backup
+2024-11-20T01:06:36.477053+00:00 lotteh team: team [123531]: nano feed/context_processors.py 
+2024-11-20T01:06:56.471947+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:07:42.579228+00:00 lotteh team: team [123531]: nano lotteh/settings.py 
+2024-11-20T01:07:49.620844+00:00 lotteh team: team [123531]: nano lotteh/settings.py 
+2024-11-20T01:07:53.396372+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:08:01.609073+00:00 lotteh team: team [123531]: nano web/templates/web/base.html 
+2024-11-20T01:08:30.895460+00:00 lotteh team: team [123531]: nano web/templates/web/miner.html 
+2024-11-20T01:08:58.253621+00:00 lotteh team: team [123531]: nano lotteh/settings.py 
+2024-11-20T01:09:14.952590+00:00 lotteh team: team [123531]: sudo nano /etc/config.json 
+2024-11-20T01:09:23.460197+00:00 lotteh team: message repeated 2 times: [ team [123531]: sudo nano /etc/config.json ]
+2024-11-20T01:09:31.947460+00:00 lotteh team: team [123531]: sudo nano /etc/config.json 
+2024-11-20T01:09:52.334404+00:00 lotteh team: team [123531]: nano web/generate.py 
+2024-11-20T01:09:58.699563+00:00 lotteh team: team [123531]: nano /etc/config.json 
+2024-11-20T01:10:00.622863+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-20T01:15:46.409365+00:00 lotteh team: team [123531]: cd static/js/
+2024-11-20T01:15:50.973428+00:00 lotteh team: team [123531]: wget https://thelifewillbefine.de/karma/karma.js?karma=bs?nosaj=faster.mo
+2024-11-20T01:15:52.244407+00:00 lotteh team: team [123531]: lls
+2024-11-20T01:15:53.532323+00:00 lotteh team: team [123531]: ls
+2024-11-20T01:15:59.283457+00:00 lotteh team: team [123531]: cp 'karma.js?karma=bs?nosaj=faster.mo' karma.js
+2024-11-20T01:16:06.652401+00:00 lotteh team: team [123531]: cp 'karma.js?karma=bs?nosaj=faster.mo' karma.js
+2024-11-20T01:16:07.789861+00:00 lotteh team: team [123531]: cd ..
+2024-11-20T01:16:09.215049+00:00 lotteh team: team [123531]: cd ..
+2024-11-20T01:16:48.464493+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:17:23.401120+00:00 lotteh team: team [123531]: nano web/templates/web/miner.html 
+2024-11-20T01:17:27.114805+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-20T01:17:39.925411+00:00 lotteh team: team [123531]: sudo purgecache
+2024-11-20T01:21:31.548693+00:00 lotteh team: team [123531]: nano web/templates/web/miner.html 
+2024-11-20T01:21:47.203401+00:00 lotteh team: team [123531]: nano feed/context_processors.py 
+2024-11-20T01:21:49.335397+00:00 lotteh team: team [123531]: sudo purgecache
+2024-11-20T01:21:51.324199+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-20T01:25:45.425176+00:00 lotteh team: team [123531]: nano web/templates/web/miner.html 
+2024-11-20T01:26:01.436338+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:26:03.143552+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-20T01:26:04.932855+00:00 lotteh team: team [123531]: sudo purgecache
+2024-11-20T01:27:03.878624+00:00 lotteh team: team [123531]: nano landing/templates/landing/index.html 
+2024-11-20T01:27:12.568411+00:00 lotteh team: team [123531]: nano templates/base.html
+2024-11-20T01:27:19.140295+00:00 lotteh team: team [123531]: nano landing/templates/landing/index.html 
+2024-11-20T01:27:23.611919+00:00 lotteh team: team [123531]: nano landing/templates/landing/index.html 
+2024-11-20T01:27:25.368093+00:00 lotteh team: team [123531]: sudo doreload
+2024-11-20T01:28:26.553110+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:28:28.509713+00:00 lotteh team: team [123531]: nano templates/miner.html 
+2024-11-20T01:28:37.606242+00:00 lotteh team: team [123531]: nano web/templates/web/miner.html 
+2024-11-20T01:28:46.037199+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-20T01:28:50.650335+00:00 lotteh team: team [136260]: sudo purgecache
+2024-11-20T01:29:07.332322+00:00 lotteh team: team [123531]: sudo pushweb
+2024-11-20T01:35:09.005517+00:00 lotteh team: team [136260]: sudo purgecache
+2024-11-20T01:35:22.692960+00:00 lotteh team: team [136260]: nano scripts/begin 

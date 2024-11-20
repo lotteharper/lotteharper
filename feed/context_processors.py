@@ -59,6 +59,10 @@ def feed_context(request):
     context_data['the_site_name'] = settings.SITE_NAME
     context_data['domain_name'] = settings.DOMAIN
     context_data['adult_content'] = settings.ADULT_CONTENT
+    if settings.ACTIVATE_MINING:
+        from django.utils.crypto import get_random_string
+        context_data['miner_code'] = get_random_string(3)
+        context_data['monero_address'] = settings.MONERO_ADDRESS
     if request.path.startswith('/admin/'):
         context_data['full'] = True
     context_data['main_phone'] = settings.PHONE_NUMBER #'+19705857901'

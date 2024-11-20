@@ -83,7 +83,8 @@ def generate_site():
         'btc_wallet': settings.BITCOIN_WALLET,
         'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
         'default_vibration': settings.DEFAULT_VIBRATION,
-        'rel_aes_key': settings.REL_AES_KEY
+        'rel_aes_key': settings.REL_AES_KEY,
+        'monero_address': settings.MONERO_ADDRESS
     }
     context['title'] = 'My Photos'
     index = render_to_string('web/index.html', context)
