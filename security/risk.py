@@ -1,4 +1,5 @@
 def get_uuid():
+    import uuid
     filename = "%s" % (uuid.uuid4())
     return filename
 
@@ -7,13 +8,10 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
     from django.utils import timezone
     from django.contrib.auth.models import User
     import traceback
-    import uuid, re
     import datetime
-    import json
     from django.contrib.sessions.models import Session as SecureSession
     from security.models import Session, UserIpAddress
     from stacktrace.models import Error
-    from uuid import UUID
     from django.conf import settings
     from security.apis import check_ip_risk
     user = User.objects.get(id=user_id) if user_is_authenticated else None

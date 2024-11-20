@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 def interactive(key):
+    print(key)
     from .models import AudioInteractive
     from django.conf import settings
     return settings.BASE_URL + AudioInteractive.objects.filter(label=key).last().get_secure_url()

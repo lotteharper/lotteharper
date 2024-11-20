@@ -40,6 +40,7 @@ django-webauth
 dnspython
 email_validator
 facexlib
+ffmpeg
 filelock
 filterpy
 flatbuffers
@@ -49,7 +50,6 @@ fsspec
 ftfy
 future
 gast
-# Editable Git install with no remote (gfpgan
 gitdb
 GitPython
 google-api-core
@@ -150,6 +150,7 @@ pycares
 pycparser
 pycryptodome
 pydeck
+pydub
 Pygments
 pyheif
 PyJWT
@@ -185,6 +186,7 @@ sniffio
 soundfile
 soupsieve
 soxr
+SpeechRecognition
 sqlparse
 streamlit
 stripe

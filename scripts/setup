@@ -23,6 +23,7 @@ echo "/var/log/commands.log {}" | sudo tee -a /etc/logrotate.d/syslog
 echo "local6.*    /var/log/commands.log" | sudo tee -a "/etc/rsyslog.d/bash.conf"
 sudo service rsyslog restart
 sudo cp $DIR/config/ascripts /etc/ascripts
+sudo timedatectl set-timezone "America/Los_Angeles"
 cd $DIR
 # Set hostname
 sudo hostnamectl set-hostname lotteh.com
@@ -249,7 +250,7 @@ pip3 install torchvision==0.17.0
 pip3 install tensorflow[and-cuda]
 pip3 install googletrans==4.0.0-rc1
 pip3 install --pre torch-tensorrt --index-url https://download.pytorch.org/whl/nightly/cu124
-pip3 install --upgrade transformers torch torchvision torchaudio TA-Lib python-docx Pillow
+pip3 install --upgrade transformers torch torchvision torchaudio TA-Lib python-docx Pillow SpeechRecognition pydub ffmpeg sewar
 # Install certbot
 echo "Installing certificates"
 sudo snap install core; sudo snap refresh core

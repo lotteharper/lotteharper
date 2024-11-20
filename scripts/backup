@@ -1,5 +1,5 @@
 #!/bin/bash
-GIT_URL="git@gitlab.com:jasperholton/lotteh2024-17.git"
+GIT_URL="git@gitlab.com:jasperholton/lotteh2024-11-20.git"
 U="team"
 DIR="lotteh"
 PYTHON_VERSION="3.12"
@@ -108,6 +108,7 @@ sed -i '/torch_tensorrt/d' requirements.txt
 sed -i '/jpype1/d' requirements.txt
 sed -i '/twilio/d' requirements.txt
 sed -i '/setuptools/d' requirements.txt
+sed -i '/Flask/d' requirements.txt
 sed -i '/aiohappyeyeballs/d' requirements.txt
 #sed -i '//d' requirements.txt
 echo "setuptools==58.2.0" | tee -a requirements.txt

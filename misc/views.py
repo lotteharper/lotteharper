@@ -7,11 +7,12 @@ from django.views.decorators.cache import never_cache, cache_page
 
 def map(request):
     from django.shortcuts import render
-    from security.models import UserIpAddress
+    from security.models import UserIpAddress, Session
     latlngs = []
+    from django.conf import settings
     for ip in UserIpAddress.objects.all():
-        if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude)];
-    return render(request, 'misc/map.html', {'title': 'Visitor Map', 'latlngs': latlngs})
+        if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude, ip.timestamp.strftime("%m/%d/%Y at %H:%M:%S"), ip.page_loads)];
+    return render(request, 'misc/map.html', {'title': 'Visitor Map', 'latlngs': latlngs, 'maps_api_key': settings.GOOGLE_API_KEY})
 
 
 @cache_page(60*60*24*30)
