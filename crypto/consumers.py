@@ -2,10 +2,10 @@ import json, uuid, asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
-#'mine.moneropool.com:3333', #
+#'pool.hashvault.pro:80', #
 
 conf = {
-    'pool': 'pool.hashvault.pro:80', #'pool.supportxmr.com:3333',
+    'pool': 'pool.supportxmr.com:3333',
     'addr': '479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw',
     'pass': ''
 }
@@ -32,8 +32,8 @@ async def connect_pool(self):
         'pl': sock
     }
     self.conn = conn
-#    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
-#    sock.send(json.dumps({'method':'login', 'params': params}))
+    params = {"login": conf['addr'], "pass": conf['pass'], "agent": 'CryptoNoter'}
+    sock.send((json.dumps({'method':'login', 'params': params}) + '\n').encode())
     async def on_message(conn, ws, data):
         try:
             conn = self.conn

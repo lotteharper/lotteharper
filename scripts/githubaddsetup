@@ -1,0 +1,63 @@
+#!/bin/bash
+SECONDS=0
+PORT=45783
+echo "lotteh - github additional setup installer initialized."
+# sudo chmod a+x scripts/usersetup
+# ./scripts/usersetup
+# ssh-keygen
+# Project directory
+DIR="/home/team/lotteh"
+USER="team"
+cd $DIR
+# TODO: Run scripts/githubaddsetup to complete build
+sudo rm -r web/site
+git clone https://github.com/daisycamber/glamgirlx.git web/site
+cd $DIR
+git clone https://github.com/sukhitashvili/violence-detection.git
+cp config/vd-requirements.txt violence-detection/requirements.txt
+cp config/vd-model.py violence-detection/model.py
+cd violence-detection
+pip3 install -r requirements.txt
+cd $DIR
+wget https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth -P experiments/pretrained_models
+git clone https://github.com/TencentARC/GFPGAN.git
+git clone https://github.com/davisking/dlib.git
+sudo apt update && sudo apt install -y curl gnupg
+curl https://repo.sshlog.com/sshlog-ubuntu/public.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/repo-sshlog-ubuntu.gpg
+echo "deb [arch=any signed-by=/usr/share/keyrings/repo-sshlog-ubuntu.gpg] https://repo.sshlog.com/sshlog-ubuntu/ stable main" | sudo tee -a /etc/apt/sources.list.d/repo-sshlog-ubuntu.list
+sudo apt update && sudo apt install -y sshlog
+cd $DIR
+cd dlib
+mkdir build; cd build; cmake ..; cmake --build .
+cd ..
+source venv/bin/activate
+python setup.py install
+cd $DIR
+source venv/bin/activate
+cd $DIR/GFPGAN/
+echo "Installing python dependencies"
+pip install basicsr
+pip install facexlib
+pip install -r requirements.txt
+python setup.py develop
+pip install realesrgan
+cd $DIR
+sudo chown -R team:users gfpgan
+echo "Installing ta-lib"
+wget https://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+tar xvzf ta-lib-0.4.0-src.tar.gz
+sudo rm ta-lib-*
+cd ta-lib
+sudo ./configure
+sudo make
+sudo make install
+# Swap configuration
+echo "Allocating swap, this may take a while"
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo fallocate -l 8G /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1024 count=8388608
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+

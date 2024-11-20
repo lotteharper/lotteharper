@@ -1643,3 +1643,51 @@
 2024-11-19T23:58:50.306875+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
 2024-11-19T23:58:57.537056+00:00 lotteh team: team [136260]: kill -9 224264
 2024-11-19T23:59:30.730054+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T00:00:34.703082+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:01:22.712249+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-20T00:01:25.654952+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-20T00:02:14.927879+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:02:48.591440+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T00:05:08.359317+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:05:15.713960+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T00:05:32.533749+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:05:53.349057+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T00:08:54.703499+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:08:54.853937+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:09:08.229474+00:00 lotteh team: team [123531]: nano crypto/consumers.py 
+2024-11-20T00:09:49.359845+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-20T00:10:21.794010+00:00 lotteh team: team [126076]: nano crypto/consumers.py 
+2024-11-20T00:10:22.499048+00:00 lotteh team: team [126076]: cat static/crypto/web/lib/cryptonight-asmjs.min.js
+2024-11-20T00:10:27.163799+00:00 lotteh team: team [136260]: ps -aux | grep daphne
+2024-11-20T00:10:33.161179+00:00 lotteh team: team [136260]: kill -9 227461
+2024-11-20T00:10:33.173611+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:11:49.369999+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:11:49.610275+00:00 lotteh team: team [123531]: ./scripts/daphnetest.sh 
+2024-11-20T00:11:54.184220+00:00 lotteh team: team [123531]: sudo systemctl restart daphne
+2024-11-20T00:19:09.689641+00:00 lotteh team: team [136260]: kill -9 227461
+2024-11-20T00:19:25.682250+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:23:02.189041+00:00 lotteh team: team [126076]: cat crypto/consumers.py 
+2024-11-20T00:23:14.484006+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:23:38.372890+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:23:42.296064+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-20T00:29:52.286391+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:31:03.712290+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:34:52.233925+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:35:18.693211+00:00 lotteh team: team [136260]: sudo pushweb
+2024-11-20T00:47:57.619012+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:48:00.069049+00:00 lotteh team: team [136260]: sudo doreload
+2024-11-20T00:48:12.341522+00:00 lotteh team: team [136260]: nano templates/miner.html 
+2024-11-20T00:48:36.261785+00:00 lotteh team: team [136260]: nano web/templates/web/miner.html
+2024-11-20T00:48:42.661142+00:00 lotteh team: team [136260]: nano web/templates/web/miner.html
+2024-11-20T00:48:54.504086+00:00 lotteh team: team [136260]: nano web/templates/web/base.html 
+2024-11-20T00:49:18.953629+00:00 lotteh team: team [136260]: sudo pushweb
+2024-11-20T00:56:21.562138+00:00 lotteh team: team [136260]: sudo pushweb
+2024-11-20T00:56:30.483186+00:00 lotteh team: team [136260]: cp scripts/setup scripts/githubsetup
+2024-11-20T00:58:41.895983+00:00 lotteh team: team [136260]: nano scripts/githubsetup
+2024-11-20T00:58:59.225087+00:00 lotteh team: team [136260]: cp scripts/githubsetup scripts/githubaddsetup
+2024-11-20T01:00:01.924720+00:00 lotteh team: team [136260]: nano scripts/githubaddsetup 
+2024-11-20T01:00:23.720324+00:00 lotteh team: team [136260]: nano scripts/githubsetup 
+2024-11-20T01:00:34.280057+00:00 lotteh team: team [136260]: nano .github/workflows/django.yml 
+2024-11-20T01:00:39.547887+00:00 lotteh team: team [136260]: rm .github/workflows/google-cloudrun-source.yml 
+2024-11-20T01:00:51.570935+00:00 lotteh team: team [136260]: nano .github/workflows/django.yml 
+2024-11-20T01:00:58.589620+00:00 lotteh team: team [136260]: nano scripts/githubsetup 

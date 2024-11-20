@@ -26,7 +26,7 @@ jobs:
         echo "Hello World"
         curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin" | bash /dev/stdin
         /home/team/lotteharper/scripts/convert "Awesome App" "yourdomainhere.com" "lotteharper" "Your Name" "youremail@gmail.com" "team"
-        /home/team/lotteharper/scripts/setup
+        /home/team/lotteharper/scripts/githubsetup
     - name: Configure
       run: |
         python manage.py shell
