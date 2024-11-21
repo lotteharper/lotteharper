@@ -51,6 +51,10 @@ cd ta-lib
 sudo ./configure
 sudo make
 sudo make install
+cd $DIR
+source venv/bin/activate
+pip3 install -U "celery[redis]"
+pip3 install -r requirements.txt --use-deprecated=legacy-resolver --use-pep517
 # Swap configuration
 echo "Allocating swap, this may take a while"
 sudo swapoff /swapfile

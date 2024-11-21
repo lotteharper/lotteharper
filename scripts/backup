@@ -125,9 +125,11 @@ echo "webauthn" | tee -a requirements.txt
 #echo "pydantic" | tee -a requirements.txt
 #echo "python-utils" | tee -a requirements.txt
 #echo "tensorflow" | tee -a requirements.txt
-./scripts/fixreq.sh
-#python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
-./scripts/dumptables
+if [ $# -eq 0 ]; then
+	./scripts/fixreq.sh
+	#python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
+	./scripts/dumptables
+fi
 sudo rm -r db.json.*
 split -b99M db.json db.json.
 #python manage.py dumpdata auth.user --exclude auth.permission --exclude contenttypes > data/users.json
@@ -180,6 +182,6 @@ sudo chown -R :users ./*
 sudo git init --initial-branch=main
 sudo git add --all
 sudo git commit -m "open source"
-sudo git remote add originhub git@github.com:daisycamber/femmebabe-2024.git
-sudo git push -u -f originhub main
+sudo git remote add originhub git@github.com:daisycamber/lotteharper.git
+sudo git push -u originhub main
 cd $"/home/$U"
