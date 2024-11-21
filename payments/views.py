@@ -75,7 +75,7 @@ def cart_card(request):
             return redirect(reverse('payments:cart-crypto'))
         messages.warning(request, 'Your cart is currently empty. Please add a some items to your cart before continuing.')
         return redirect(reverse('/'))
-    r = render(request, 'payments/cart_card.html', {'title': 'Shopping Cart', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'fee': cart_cost if 'cart' in request.COOKIES else 0, 'cart_contents': get_cart(request.COOKIES), 'vendor': vendor, 'default_crypto': settings.DEFAULT_CRYPTO, 'load_timeout': None, 'preload': False, 'payment_processor': 'stripe', 'cart': request.COOKIES.get('cart', '').replace(',','+')})
+    r = render(request, 'payments/cart_card.html', {'title': 'Shopping Cart', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'fee': cart_cost if 'cart' in request.COOKIES else 0, 'cart_contents': get_cart(request.COOKIES), 'vendor': vendor, 'default_crypto': settings.DEFAULT_CRYPTO, 'load_timeout': None, 'preload': False, 'payment_processor': 'stripe', 'cart': request.COOKIES.get('cart', '').replace(',','+'), 'cart_cookie': request.COOKIES.get('cart', '')})
     if request.GET.get('cart', False):
         set_cart(r, combine_cart(request.COOKIES.get('cart', ''), request.GET.get('cart', '').replace('+',',').replace(' ', ',')))
     if request.user.is_authenticated: patch_cache_control(r, private=True)
@@ -903,22 +903,50 @@ def monthly_checkout_profile(request):
     if request.method == "GET":
         domain_url = settings.BASE_URL
         stripe.api_key = settings.STRIPE_API_KEY
+        cus_user = User.objects.filter(email=request.GET.get('email', None)).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+        if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
+            from email_validator import validate_email
+            e = form.cleaned_data.get('email', None)
+            if e:
+                try:
+                    from security.apis import check_raw_ip_risk
+                    from security.models import SecurityProfile
+                    from users.models import Profile
+                    from users.email import send_verification_email, sendwelcomeemail
+                    from users.views import send_registration_push
+                    valid = validate_email(e, check_deliverability=True)
+                    us = User.objects.filter(email=e).last()
+                    safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
+                    if valid and not us and safe:
+                        cus_user = User.objects.create(email=e, username=get_random_username(), password=get_random_string(length=8))
+                        if not hasattr(cus_user, 'profile'):
+                            profile = Profile.objects.create(user=cus_user)
+                            profile.finished_signup = False
+                            profile.save()
+                            security_profile = SecurityProfile.objects.create(user=cus_user)
+                            security_profile.save()
+                        messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+                        send_verification_email(cus_user)
+                        send_registration_push(cus_user)
+                        sendwelcomeemail(cus_user)
+                except: pass
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
+                customer_email = request.GET.get('email', None),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
                 payment_method_types= ["card", "us_bank_account"],
                 mode = "subscription",
                 line_items=[
                     {
-                        "price_data": {"currency": settings.CURRENCY, "unit_amount": plan * 100, "product": PROFILE_MEMBERSHIP, "recurring": {"interval": "month"}},
+                        "price_data": {"currency": settings.CURRENCY, "unit_amount": int(plan * 100), "product": PROFILE_MEMBERSHIP, "recurring": {"interval": "month"}},
                         "quantity": 1
                     }
                 ],
                 allow_promotion_codes=True,
                 subscription_data={
-                    "trial_period_days": int(vendor.vendor_profile.free_trial),
+                    "trial_period_days": int(vendor.vendor_profile.free_trial) if int(vendor.vendor_profile.free_trial) > 0 else None,
                     "application_fee_percent": settings.APPLICATION_FEE,
                     "transfer_data": {"destination": request.GET.get('vendor', None)},
                 } if request.GET.get('vendor', None) else None,
@@ -944,9 +972,37 @@ def monthly_checkout(request):
     if request.method == "GET":
         domain_url = settings.BASE_URL
         stripe.api_key = settings.STRIPE_API_KEY
+        cus_user = User.objects.filter(email=request.GET.get('email', None)).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+        if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
+            from email_validator import validate_email
+            e = form.cleaned_data.get('email', None)
+            if e:
+                try:
+                    from security.apis import check_raw_ip_risk
+                    from security.models import SecurityProfile
+                    from users.models import Profile
+                    from users.email import send_verification_email, sendwelcomeemail
+                    from users.views import send_registration_push
+                    valid = validate_email(e, check_deliverability=True)
+                    us = User.objects.filter(email=e).last()
+                    safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
+                    if valid and not us and safe:
+                        cus_user = User.objects.create(email=e, username=get_random_username(), password=get_random_string(length=8))
+                        if not hasattr(cus_user, 'profile'):
+                            profile = Profile.objects.create(user=cus_user)
+                            profile.finished_signup = False
+                            profile.save()
+                            security_profile = SecurityProfile.objects.create(user=cus_user)
+                            security_profile.save()
+                        messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+                        send_verification_email(cus_user)
+                        send_registration_push(cus_user)
+                        sendwelcomeemail(cus_user)
+                except: pass
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
+                customer_email = request.GET.get('email', None),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
                 payment_method_types= ["card", "us_bank_account"],
@@ -983,17 +1039,45 @@ def onetime_checkout_photo(request):
     if request.method == "GET":
         domain_url = settings.BASE_URL
         stripe.api_key = settings.STRIPE_API_KEY
+        cus_user = User.objects.filter(email=request.GET.get('email', None)).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+        if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
+            from email_validator import validate_email
+            e = form.cleaned_data.get('email', None)
+            if e:
+                try:
+                    from security.apis import check_raw_ip_risk
+                    from security.models import SecurityProfile
+                    from users.models import Profile
+                    from users.email import send_verification_email, sendwelcomeemail
+                    from users.views import send_registration_push
+                    valid = validate_email(e, check_deliverability=True)
+                    us = User.objects.filter(email=e).last()
+                    safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
+                    if valid and not us and safe:
+                        cus_user = User.objects.create(email=e, username=get_random_username(), password=get_random_string(length=8))
+                        if not hasattr(cus_user, 'profile'):
+                            profile = Profile.objects.create(user=cus_user)
+                            profile.finished_signup = False
+                            profile.save()
+                            security_profile = SecurityProfile.objects.create(user=cus_user)
+                            security_profile.save()
+                        messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+                        send_verification_email(cus_user)
+                        send_registration_push(cus_user)
+                        sendwelcomeemail(cus_user)
+                except: pass
         try:
             from payments.stripe import PHOTO_PRICE
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
+                customer_email = request.GET.get('email', None),
                 payment_method_types= ["card", "us_bank_account"],
                 mode = "payment",
                 line_items=[
                     {
-                        "price_data": {"currency": settings.CURRENCY, "unit_amount": float(Post.objects.filter(id=str(photo)).first().price) * 100, "product": PHOTO_PRICE},
+                        "price_data": {"currency": settings.CURRENCY, "unit_amount": int(float(Post.objects.filter(id=str(photo)).first().price) * 100), "product": PHOTO_PRICE},
                         "quantity": 1
                     }
                 ],
@@ -1019,23 +1103,52 @@ def onetime_checkout_cart(request):
     from feed.models import Post
     import random
     from payments.cart import get_cart_cost
-    total = get_cart_cost(request.COOKIES['cart']) if 'cart' in request.COOKIES else 0
+    cart_cookie = dict(request.headers.items())['Cart']
+    total = get_cart_cost(cart_cookie, private=False) if 'Cart' in request.headers.keys() else 0
     vendor = User.objects.get(id=settings.MY_ID)
     pid = random.randint(111111, 999999)
     if request.method == "GET":
         domain_url = settings.BASE_URL
         stripe.api_key = settings.STRIPE_API_KEY
+        cus_user = User.objects.filter(email=request.GET.get('email', None)).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+        if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
+            from email_validator import validate_email
+            e = form.cleaned_data.get('email', None)
+            if e:
+                try:
+                    from security.apis import check_raw_ip_risk
+                    from security.models import SecurityProfile
+                    from users.models import Profile
+                    from users.email import send_verification_email, sendwelcomeemail
+                    from users.views import send_registration_push
+                    valid = validate_email(e, check_deliverability=True)
+                    us = User.objects.filter(email=e).last()
+                    safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
+                    if valid and not us and safe:
+                        cus_user = User.objects.create(email=e, username=get_random_username(), password=get_random_string(length=8))
+                        if not hasattr(cus_user, 'profile'):
+                            profile = Profile.objects.create(user=cus_user)
+                            profile.finished_signup = False
+                            profile.save()
+                            security_profile = SecurityProfile.objects.create(user=cus_user)
+                            security_profile.save()
+                        messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+                        send_verification_email(cus_user)
+                        send_registration_push(cus_user)
+                        sendwelcomeemail(cus_user)
+                except: pass
         try:
             from payments.stripe import CART_ID
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
-                success_url=domain_url + "/payments/success/?{}session_id={CHECKOUT_SESSION_ID}".format('cart=t&'),
+                success_url=domain_url + "/payments/success/?{}".format('cart=t&'),
                 cancel_url=domain_url + "/payments/cancel/",
                 payment_method_types= ["card", "us_bank_account"],
+                customer_email = request.GET.get('email', None),
                 mode = "payment",
                 line_items=[
                     {
-                        "price_data": {"currency": settings.CURRENCY, "unit_amount": float(total) * 100, "product": CART_ID},
+                        "price_data": {"currency": settings.CURRENCY, "unit_amount": int(float(total) * 100), "product": CART_ID},
                         "quantity": 1
                     }
                 ],
@@ -1046,12 +1159,11 @@ def onetime_checkout_cart(request):
                     "transfer_data": {"destination": vendor.profile.stripe_id},
                 },
             )
-            print(checkout_session)
             from django.utils.crypto import get_random_string
             token = get_random_string(length=8)
             from payments.models import Invoice
             number = ''
-            Invoice.objects.create(token=token, user=request.user if request.user.is_authenticated else user, vendor=User.objects.get(id=int(vendor.id)), number=id, product='cart', processor='stripe', price=total, pid=pid, cart=request.COOKIES['cart'] if 'cart' in request.COOKIES else None)
+            Invoice.objects.create(token=token, user=request.user if request.user.is_authenticated else cus_user, vendor=User.objects.get(id=int(vendor.id)), number=id, product='cart', processor='stripe', price=total, pid=pid, cart=request.COOKIES['cart'] if 'cart' in request.COOKIES else None)
             return JsonResponse({"sessionId": checkout_session["id"]})
         except Exception as e:
             print(str(e))
@@ -1073,9 +1185,37 @@ def onetime_checkout(request):
     if request.method == "GET":
         domain_url = settings.BASE_URL
         stripe.api_key = settings.STRIPE_API_KEY
+        cus_user = User.objects.filter(email=request.GET.get('email', None)).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+        if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
+            from email_validator import validate_email
+            e = form.cleaned_data.get('email', None)
+            if e:
+                try:
+                    from security.apis import check_raw_ip_risk
+                    from security.models import SecurityProfile
+                    from users.models import Profile
+                    from users.email import send_verification_email, sendwelcomeemail
+                    from users.views import send_registration_push
+                    valid = validate_email(e, check_deliverability=True)
+                    us = User.objects.filter(email=e).last()
+                    safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
+                    if valid and not us and safe:
+                        cus_user = User.objects.create(email=e, username=get_random_username(), password=get_random_string(length=8))
+                        if not hasattr(cus_user, 'profile'):
+                            profile = Profile.objects.create(user=cus_user)
+                            profile.finished_signup = False
+                            profile.save()
+                            security_profile = SecurityProfile.objects.create(user=cus_user)
+                            security_profile.save()
+                        messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+                        send_verification_email(cus_user)
+                        send_registration_push(cus_user)
+                        sendwelcomeemail(cus_user)
+                except: pass
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
+                customer_email = request.GET.get('email', None),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
                 payment_method_types= ["card", "us_bank_account"],
@@ -1114,6 +1254,7 @@ def onetime_checkout_surrogacy(request):
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
+                customer_email = request.GET.get('email', None),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
                 payment_method_types= ["card", "us_bank_account"],

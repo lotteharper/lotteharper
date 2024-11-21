@@ -75,7 +75,7 @@ def get_lightning_status(payment_id):
     output = requests.get('https://api.opennode.com/v2/charge/{}'.format(payment_id), headers=headers)
     data = output.json()
 #    print(output.text)
-    return float(data['data']['fee'])/100000000.0 if data['data']['status'] == 'paid' else 0
+    return float(data['data']['fee'])/1000000.0 if data['data']['status'] == 'paid' else 0
 
 def get_payment_status(payment_id):
     headers = {'x-api-key': settings.NOWPAYMENTS_KEY}

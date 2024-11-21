@@ -28,8 +28,9 @@ def process_cart_purchase(user, cart, private=False):
 def get_cart_cost(cookies, private=False):
     from feed.models import Post
     items = ''
-    try: items = cookies['cart'].split(',') if 'cart' in cookies else []
+    try: items = cookies['cart'].split(',') if 'cart' in cookies else cookies.split(',')
     except: items = cookies.split(',') if cookies else []
+    if not items: items = cookies.split(',')
     price = 0
     if len(items) < 1: return 0
     from django.conf import settings
@@ -42,8 +43,8 @@ def get_cart_cost(cookies, private=False):
         except: quant = 1
         p = Post.objects.filter(uuid=uid).first()
         if p:
-            if (not p.private) or p.private and private:
-                price = price + ((float(p.price) * (quant if settings.ALLOW_MULTIPLE_SALES else 1)) if (p and (not p.private)) or (p.private and private) else 0)
+            if (not p.private) or (p.private and private):
+                price = price + ((float(p.price) * (quant if settings.ALLOW_MULTIPLE_SALES else 1)) if ((p and (not p.private)) or (p.private and private)) else 0)
     return price
 
 def get_cart(cookies, private=False):

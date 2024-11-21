@@ -149,7 +149,8 @@ function validateResponse(eventMessage) {
 {% elif payment_processor == 'stripe' %}
 var stripe = Stripe('{{ stripe_pubkey }}');
 function payFee(){
-	var url = "/payments/webdev/checkout/?plan=" + price;
+    var email = document.getElementById('id_email').value;
+	var url = "/payments/webdev/checkout/?plan=" + price + "&email=" + email;
 	if(check.checked) url = url + "&monthly=t";
         fetch(url)
           .then((result) => {

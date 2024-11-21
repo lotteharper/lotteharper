@@ -34,6 +34,7 @@
 <button onclick="fireKey('\x03');term.focus();" class="btn btn-sm btn-outline-secondary">^C</button>
 <button onclick="fireKey('\x18');term.focus();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-circle-fill"></i></button>
 <button onclick="startCopy();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-clipboard-fill"></i></button>
+{% include 'shell/reload.html' %}
 </div>
 </div>
 <hr>
@@ -132,6 +133,35 @@
 </div>
 {% endblock %}
 {% block javascript %}
+{% load feed_filters %}
+function publishForm() {
+    let btns = document.querySelectorAll('#publishForm');
+    for (i of btns) {
+      if(!$(i).hasClass('init')) {
+            $(i).addClass('init');
+        $(i).attr('last-action', new String(new Date().getTime()));
+        $(i).on('submit', function(e) {
+        if(parseInt($(i).prop('last-action')) - new Date().getTime() > -1000) { e.preventDefault(); return; };
+        $(i).attr('last-action', new String(new Date().getTime()));
+        e.preventDefault();
+            $(this).find(':submit').html('<i class="bi bi-cloud-snow-fill"></i>');
+            $.ajax({
+                url: $(this).attr('action') || window.location.pathname,
+                type: "POST",
+                button: $(this).find(':submit'),
+                data: $(this).serialize(),
+                success: function(data) {
+                    this.button.html(data);
+                },
+                error: function(xhr, response, error) {
+                    alert("{% blocktrans %}Please connect to the internet to interact.{% endblocktrans %}");
+                }
+            });
+        });
+      }
+    }
+}
+publishForm();
 const ROWS_CONSTANT = 31;
 const ROWS_CONSTANT_EXP = 21;
 const COLS_CONSTANT = 18.5;

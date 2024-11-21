@@ -127,7 +127,11 @@ function validateResponse(eventMessage) {
 {% elif payment_processor == 'stripe' %}
 var stripe = Stripe('{{ stripe_pubkey }}');
 function payFee(){
-        fetch("/payments/cart/checkout/")
+    var email = document.getElementById('id_email').value;
+        fetch("/payments/cart/checkout/?email=" + email, {
+          method: "GET",
+          headers: { "cart": "{{ cart_cookie }}" },
+        })
           .then((result) => {
             return result.json();
           })

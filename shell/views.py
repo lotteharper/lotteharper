@@ -148,6 +148,7 @@ def read(request, id):
     except: pass
     return HttpResponse(content)
 
+@csrf_exempt
 @login_required
 @user_passes_test(is_superuser_or_vendor)
 def reload(request):
@@ -172,7 +173,7 @@ def reload(request):
     from shell.models import ShellLogin
     if request.method == 'POST':
         safe_reload()
-    return HttpResponse(200)
+    return HttpResponse('<i class="bi bi-arrow-up"></i>')
 
 @login_required
 @user_passes_test(is_superuser_or_vendor)

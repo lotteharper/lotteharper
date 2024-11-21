@@ -31,6 +31,7 @@ def create_connected_account(user_id):
             email=user.email,
             capabilities={
                 "transfers": {"requested": True},
+                "card_payments": {"requested": True},
             },
         )
         user.profile.stripe_id = account.id
