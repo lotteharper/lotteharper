@@ -222,7 +222,7 @@
         	}, 100);
                 var qrdiv = document.getElementById("shareqrcode");
         	if(!qrdiv) return;
-        	var qr = new QRCode(qrdiv, "{{ base_url }}{{ request.path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}");
+        	var qr = new QRCode(qrdiv, "{{ base_url }}{{ request.path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value|replspace}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}");
         	var image = qrdiv.querySelector('img');
                 image.style.width = "100%";
                 image.style.height = "100%";

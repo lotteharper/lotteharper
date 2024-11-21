@@ -2419,3 +2419,163 @@
 2024-11-20T20:16:57.571765-08:00 lotteh team: team [4107]: nano reqfix.txt 
 2024-11-20T20:17:07.737708-08:00 lotteh team: team [4107]: pip freeze | wc -l
 2024-11-20T20:17:33.419739-08:00 lotteh team: team [4107]: sudo backup
+2024-11-20T20:17:50.785782-08:00 lotteh team: team [4107]: sudo backup nodb
+2024-11-20T20:18:28.297287-08:00 lotteh team: team [2274]: pip3 install zxing pitch-detectors
+2024-11-20T20:19:13.702078-08:00 lotteh team: team [4107]: wc -l requirements.txt 
+2024-11-20T20:29:09.075191-08:00 lotteh team: team [4107]: nano payments/templates/payments/subscribe_card.html 
+2024-11-20T20:31:29.616242-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T20:31:35.096663-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T20:32:25.096037-08:00 lotteh team: team [4107]: nano payments/forms.py 
+2024-11-20T20:32:29.235711-08:00 lotteh team: team [4107]: nano payments/forms.py 
+2024-11-20T20:32:30.221654-08:00 lotteh team: team [4107]: nano payments/forms.py 
+2024-11-20T20:32:35.975999-08:00 lotteh team: team [4107]: cat lotteh/settings.py | grep PAYMENT
+2024-11-20T20:32:40.356410-08:00 lotteh team: team [4107]: nano payments/forms.py 
+2024-11-20T20:32:48.906699-08:00 lotteh team: team [4107]: nano payments/forms.py 
+2024-11-20T20:33:44.560744-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T20:34:00.422089-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T20:34:29.536757-08:00 lotteh team: team [4107]: nano users/templates/users/profile.html
+2024-11-20T20:34:41.724618-08:00 lotteh team: team [4107]: nano vendors/templates/vendors/vendor_preferences.html 
+2024-11-20T21:01:21.539743-08:00 lotteh team: team [23021]: venv
+2024-11-20T21:05:47.821380-08:00 lotteh team: team [23021]: nano payments/stripe.py 
+2024-11-20T21:05:58.513508-08:00 lotteh team: team [23021]: nano payments/stripe.py 
+2024-11-20T21:10:30.183049-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T21:11:51.814756-08:00 lotteh team: team [23021]: nano payments/stripe.py 
+2024-11-20T21:11:57.684653-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T21:17:50.951001-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T21:19:31.623103-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T21:20:10.376556-08:00 lotteh team: team [23021]: sudo purgecache
+2024-11-20T21:20:28.861047-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:20:30.899831-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:21:07.198396-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:21:20.738566-08:00 lotteh team: team [23021]: nano vendors/templates/vendors/vendor_preferences.html 
+2024-11-20T21:21:23.451661-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T21:21:27.728731-08:00 lotteh team: team [23021]: sudo purgecache
+2024-11-20T21:21:34.427719-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:22:59.598218-08:00 lotteh team: team [23021]: sudo nano /etc/config.json 
+2024-11-20T21:23:02.714084-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T21:46:02.200244-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T21:47:56.698726-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T21:51:30.111478-08:00 lotteh team: team [4107]: nano payments/views.py 
+2024-11-20T21:51:35.407857-08:00 lotteh team: message repeated 2 times: [ team [4107]: nano payments/views.py ]
+2024-11-20T21:51:40.363631-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_c
+2024-11-20T21:53:47.724859-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_card.html 
+2024-11-20T21:53:53.876514-08:00 lotteh team: team [4107]: cat payments/templates/payments/cart_crypto.html 
+2024-11-20T21:54:03.750362-08:00 lotteh team: team [4107]: cat payments/templates/payments/cart_card.html 
+2024-11-20T21:55:09.522054-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T21:55:20.994320-08:00 lotteh team: team [4107]: nano feed/context_processors.py 
+2024-11-20T21:55:22.838678-08:00 lotteh team: team [4107]: sudo doreload
+2024-11-20T21:55:34.812281-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:55:36.900291-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:55:37.929810-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:55:39.124769-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:55:40.141399-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:55:42.827495-08:00 lotteh team: team [23021]: logs
+2024-11-20T21:56:37.791534-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T21:56:41.070075-08:00 lotteh team: team [4107]: cat payments/templates/payments/cart_card.html 
+2024-11-20T21:57:45.923267-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_card.html 
+2024-11-20T21:58:25.164567-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T21:58:28.721926-08:00 lotteh team: team [4107]: sudo doreload
+2024-11-20T21:59:32.861200-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:00:33.454399-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_card.html 
+2024-11-20T22:01:13.417115-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T22:01:15.020745-08:00 lotteh team: team [4107]: sudo doreload
+2024-11-20T22:02:49.982403-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:02:54.446099-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:06:41.934793-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:06:43.548768-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:07:09.659982-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:07:11.227709-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:07:24.995010-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:07:38.175756-08:00 lotteh team: team [23021]: python manage.py shell
+2024-11-20T22:07:41.346469-08:00 lotteh team: team [23021]: python manage.py shell
+2024-11-20T22:08:05.869039-08:00 lotteh team: team [23021]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T22:08:18.537871-08:00 lotteh team: team [23021]: nano payments/templates/payments/cart_card.html 
+2024-11-20T22:08:21.863759-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:09:08.116195-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:09:09.267060-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:09:25.860990-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:09:27.322294-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:09:28.537162-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:11:05.656517-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:15:34.989328-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:15:37.426941-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:17:58.859690-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:17:59.725029-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:18:46.921811-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:18:47.694157-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:20:37.099301-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T22:21:10.955048-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:21:12.417373-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:22:16.221130-08:00 lotteh team: team [4107]: nano payments/templates/payments/cart_crypto.html 
+2024-11-20T22:23:31.656772-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:23:40.611172-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:23:41.518883-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:25:11.702594-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:25:13.461284-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:26:32.786812-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:30:06.886772-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:30:58.904369-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:31:03.754870-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:34:00.506941-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:34:03.927216-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:34:05.275653-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:35:46.986126-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:35:49.079696-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:39:01.881200-08:00 lotteh team: team [23021]: nano payments/views.py 
+2024-11-20T22:39:04.685547-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:39:06.020413-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:39:21.710565-08:00 lotteh team: team [23021]: logs
+2024-11-20T22:40:15.230909-08:00 lotteh team: team [23021]: nano templates/base.html
+2024-11-20T22:40:56.607536-08:00 lotteh team: team [23021]: nano feed/templatetags/app_filters.py
+2024-11-20T22:40:58.500211-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:41:25.750347-08:00 lotteh team: team [23021]: sudo purgecache
+2024-11-20T22:41:42.593254-08:00 lotteh team: team [23021]: nano feed/templatetags/app_filters.py
+2024-11-20T22:41:46.889695-08:00 lotteh team: team [23021]: nano feed/templatetags/app_filters.py
+2024-11-20T22:42:01.378328-08:00 lotteh team: team [23021]: nano templates/base.html
+2024-11-20T22:42:19.750497-08:00 lotteh team: team [23021]: nano templates/social.html 
+2024-11-20T22:42:21.365065-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:44:02.899642-08:00 lotteh team: team [23021]: nano templates/social.html 
+2024-11-20T22:44:05.469709-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:55:00.706016-08:00 lotteh team: team [23021]: nano templates/social
+2024-11-20T22:55:03.850755-08:00 lotteh team: team [23021]: nano templates/social
+2024-11-20T22:55:10.911781-08:00 lotteh team: team [23021]: nano feed/templatetags/app_filters.py
+2024-11-20T22:57:22.619036-08:00 lotteh team: team [23021]: nano templates/social.html 
+2024-11-20T22:57:24.678022-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T22:57:25.204071-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T23:13:02.707392-08:00 lotteh team: team [23021]: wc -l requirements.txt 
+2024-11-20T23:13:31.460495-08:00 lotteh team: team [23021]: pip freeze | wc -l
+2024-11-20T23:13:49.679184-08:00 lotteh team: team [23021]: ls 
+2024-11-20T23:13:57.456469-08:00 lotteh team: team [23021]: ls violence-detection/requirements.txt 
+2024-11-20T23:14:02.010720-08:00 lotteh team: team [23021]: cat violence-detection/requirements.txt 
+2024-11-20T23:21:56.622780-08:00 lotteh team: team [23021]: sudo systemctl status daphne
+2024-11-20T23:21:57.784323-08:00 lotteh team: team [23021]: logs
+2024-11-20T23:21:59.383247-08:00 lotteh team: team [23021]: logs
+2024-11-20T23:30:05.596571-08:00 lotteh team: team [92822]: venv
+2024-11-20T23:38:12.368799-08:00 lotteh team: team [23021]: cat scripts/setup
+2024-11-20T23:38:23.628804-08:00 lotteh team: message repeated 2 times: [ team [23021]: cat scripts/setup]
+2024-11-20T23:38:56.817699-08:00 lotteh team: team [23021]: sudo ascript resetvenv
+2024-11-20T23:39:23.030616-08:00 lotteh team: team [23021]: nano scripts/patchvenv
+2024-11-20T23:39:30.348577-08:00 lotteh team: team [23021]: sudo chmod a+x scripts/patchvenv
+2024-11-20T23:39:33.281863-08:00 lotteh team: team [23021]: ./scripts/patchvenv 
+2024-11-20T23:39:39.827800-08:00 lotteh team: team [23021]: sudo doreload
+2024-11-20T23:39:45.122308-08:00 lotteh team: team [23021]: sudo daphnereload
+2024-11-20T23:39:57.625120-08:00 lotteh team: team [23021]: watchlogs
+2024-11-20T23:42:55.581381-08:00 lotteh team: team [4107]: nano scripts/webauth_views.py
+2024-11-20T23:43:28.301967-08:00 lotteh team: team [4107]: nano scripts/serializers_json_lowmem.py
+2024-11-20T23:43:51.589746-08:00 lotteh team: team [4107]: nano scripts/pwa_webpush_forms.py 
+2024-11-20T23:44:20.587942-08:00 lotteh team: team [4107]: nano scripts/pwa_webpush_forms.py 
+2024-11-20T23:44:32.812427-08:00 lotteh team: team [4107]: ./scripts/patchvenv 
+2024-11-20T23:44:38.821794-08:00 lotteh team: team [4107]: sudo doreload
+2024-11-20T23:52:37.277814-08:00 lotteh team: team [4107]: sudo ascript backup
+2024-11-20T23:53:03.873749-08:00 lotteh team: team [4107]: cp scripts/json.py venv/lib/python3.12/site-packages/django/core/serializers/json.py 
+2024-11-20T23:53:08.272972-08:00 lotteh team: team [4107]: sudo doreload
+2024-11-20T23:53:11.707002-08:00 lotteh team: team [4107]: sudo daphnereload
+2024-11-20T23:53:13.022000-08:00 lotteh team: team [4107]: logs
+2024-11-20T23:53:20.392905-08:00 lotteh team: team [4107]: sudo systemctl status apache2
+2024-11-20T23:53:22.200234-08:00 lotteh team: team [4107]: sudo systemctl status apache2
+2024-11-20T23:53:35.954813-08:00 lotteh team: team [4107]: watch sudo systemctl status apache2
+2024-11-20T23:53:36.778488-08:00 lotteh team: team [4107]: logs
+2024-11-20T23:53:40.322873-08:00 lotteh team: team [4107]: logs
+2024-11-20T23:53:41.535102-08:00 lotteh team: team [4107]: logs
+2024-11-20T23:53:43.354273-08:00 lotteh team: team [4107]: logs
+2024-11-20T23:53:44.493574-08:00 lotteh team: team [4107]: logs

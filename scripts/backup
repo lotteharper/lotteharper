@@ -42,7 +42,7 @@ sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pyxb/bind
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pwa_webpush/forms.py scripts/pwa_webpush_forms.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/webauth/views.py scripts/webauth_views.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/json.py
-sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/serializers_json_lowmem.py
+#sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/serializers_json_lowmem.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/googletrans/client.py scripts/client.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/nude.py scripts/nude.py
 sudo cp /home/team/lotteh/violence-detection/requirements.txt config/vd-requirements.txt

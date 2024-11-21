@@ -27,8 +27,9 @@
 </div>
 </div>
 <p style="text-align: center;"><button class="btn btn-sm btn-outline-danger" title="Clear cart" onclick="setCookie('cart', '', 30); window.location.reload();">Clear</button></p>
-<p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="Refresh cart" onclick="window.location.reload();">Update Cart</button></p>
 </div>
+<p class="hide" id="copy-cart">{{ base_url }}/payments/cart/crypto/?cart={{ cart }}</p>
+<p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="Refresh cart" onclick="window.location.reload();">Update Cart</button> - <button class="btn btn-sm btn-outline-primary" title="Copy cart" onclick="copyToClipboard('copy-cart');">Copy Cart</button></p>
 <b>Items:</b>
 <ul>
 {% autoescape off %}

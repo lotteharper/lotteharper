@@ -794,3 +794,7 @@ class LinebreaklessNode(Node):
 def cryptoformat(amount):
     from django.conf import settings
     return format(float(amount), '.{}f'.format(settings.BITCOIN_DECIMALS))
+
+@register.filter('replspace')
+def replspace(text):
+    return text.replace(' ', '+')

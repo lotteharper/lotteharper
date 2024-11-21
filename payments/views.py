@@ -9,6 +9,7 @@ from django.views.decorators.vary import vary_on_cookie
 from .forms import CardPaymentForm
 
 def clear_cart(response):
+    import datetime
     days_expire = 30
     max_age = days_expire * 24 * 60 * 60
     expires = datetime.datetime.strftime(
@@ -22,6 +23,36 @@ def clear_cart(response):
         expires=expires,
     )
 
+def set_cart(response, cart):
+    import datetime
+    days_expire = 30
+    max_age = days_expire * 24 * 60 * 60
+    expires = datetime.datetime.strftime(
+        datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age),
+        "%a, %d-%b-%Y %H:%M:%S GMT",
+    )
+    response.set_cookie(
+        'cart',
+        cart,
+        max_age=max_age,
+        expires=expires,
+    )
+
+def combine_cart(cart1, cart2):
+    items = {}
+    for item in cart1.replace(' ', ',').replace('+', ',').split(','):
+        s = item.split('=')
+        if not s: continue
+        items[s[0]] = ((items[s[0]] + int(s[1])) if s[0] in items else int(s[1])) if len(s) > 1 else 1
+    for item in cart2.replace(' ', ',').replace('+', ',').split(','):
+        s = item.split('=')
+        if not s: continue
+        items[s[0]] = ((items[s[0]] + int(s[1])) if s[0] in items else int(s[1])) if len(s) > 1 else 1
+    cart = ''
+    for key, val in items.items():
+        cart = cart + '{}={},'.format(key, val)
+    return cart
+
 def cart_card(request):
     from django.conf import settings
     from django.shortcuts import render
@@ -34,7 +65,7 @@ def cart_card(request):
     from payments.cart import get_cart_cost
     from payments.cart import get_cart
     cart_cost = get_cart_cost(request.COOKIES, private=False) if 'cart' in request.COOKIES else 0
-    if cart_cost == 0:
+    if cart_cost == 0 and not request.GET.get('cart', None):
         from django.contrib import messages
         from django.shortcuts import redirect
         from django.urls import reverse
@@ -44,7 +75,9 @@ def cart_card(request):
             return redirect(reverse('payments:cart-crypto'))
         messages.warning(request, 'Your cart is currently empty. Please add a some items to your cart before continuing.')
         return redirect(reverse('/'))
-    r = render(request, 'payments/cart_card.html', {'title': 'Shopping Cart', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'fee': cart_cost if 'cart' in request.COOKIES else 0, 'cart_contents': get_cart(request.COOKIES), 'vendor': vendor, 'default_crypto': settings.DEFAULT_CRYPTO, 'load_timeout': None, 'preload': False})
+    r = render(request, 'payments/cart_card.html', {'title': 'Shopping Cart', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'fee': cart_cost if 'cart' in request.COOKIES else 0, 'cart_contents': get_cart(request.COOKIES), 'vendor': vendor, 'default_crypto': settings.DEFAULT_CRYPTO, 'load_timeout': None, 'preload': False, 'payment_processor': 'stripe', 'cart': request.COOKIES.get('cart', '').replace(',','+')})
+    if request.GET.get('cart', False):
+        set_cart(r, combine_cart(request.COOKIES.get('cart', ''), request.GET.get('cart', '').replace('+',',').replace(' ', ',')))
     if request.user.is_authenticated: patch_cache_control(r, private=True)
     else: patch_cache_control(r, public=True)
     return r
@@ -118,7 +151,7 @@ def cart_crypto(request):
     cart_cost = get_cart_cost(request.COOKIES, private=True) if 'cart' in request.COOKIES else 0
     from django.shortcuts import render
     usd_fee = float(cart_cost)
-    if usd_fee == 0:
+    if usd_fee == 0 and not request.GET.get('cart', None):
         from django.contrib import messages
         from django.shortcuts import redirect
         from django.urls import reverse
@@ -140,7 +173,9 @@ def cart_crypto(request):
         from lotteh.celery import validate_cart_payment
         cart_cookie = request.COOKIES.get('cart') if 'cart' in request.COOKIES else None
         validate_cart_payment.apply_async(timeout=60*15, args=(request.user.id, user.id, float(fee_reduced) if float(fee_reduced) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced),transaction_id,cart_cookie,crypto,network),)
-    r = render(request, 'payments/cart_crypto.html', {'title': 'Checkout with Crypto', 'crypto_address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'cart_contents': get_cart(request.COOKIES, private=True), 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False})
+    r = render(request, 'payments/cart_crypto.html', {'title': 'Checkout with Crypto', 'crypto_address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'cart_contents': get_cart(request.COOKIES, private=True), 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False, 'cart': request.COOKIES.get('cart', '').replace(',','+')})
+    if request.GET.get('cart', False):
+        set_cart(r, combine_cart(request.COOKIES.get('cart', ''), request.GET.get('cart', '').replace('+',',').replace(' ', ',')))
     return r
 
 
@@ -1184,7 +1219,7 @@ def subscribe_card(request, username):
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     from django.shortcuts import render
-    r = render(request, 'payments/subscribe_card.html', {'title': 'Subscribe', 'username': username, 'profile': profile, 'fee': fee, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'model': user.profile, 'post': post, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm()})
+    r = render(request, 'payments/subscribe_card.html', {'title': 'Subscribe', 'username': username, 'profile': profile, 'fee': fee, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'model': user.profile, 'post': post, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'payment_processor': 'stripe'})
     if request.user.is_authenticated: patch_cache_control(r, private=True)
     else: patch_cache_control(r, public=True)
     return r
@@ -1469,7 +1504,7 @@ def buy_photo_card(request, username):
     from django.shortcuts import render
     from django.conf import settings
     from .forms import CardPaymentForm
-    r = render(request, 'payments/buy_photo_card.html', {'title': 'Buy this photo with Credit or Debit Card', 'username': username, 'profile': profile, 'fee': post.price, 'post': post, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'load_timeout': None})
+    r = render(request, 'payments/buy_photo_card.html', {'title': 'Buy this photo with Credit or Debit Card', 'username': username, 'profile': profile, 'fee': post.price, 'post': post, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'load_timeout': None, 'payment_processor': 'stripe'})
     if request.user.is_authenticated: patch_cache_control(r, private=True)
     else: patch_cache_control(r, public=True)
     return r

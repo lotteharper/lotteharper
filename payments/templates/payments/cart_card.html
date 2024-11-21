@@ -24,7 +24,8 @@
 <div style="text-align: center;">
 	<img alt="Accepting Visa and Mastercard" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
 </div>
-<p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="Refresh cart" onclick="window.location.reload();">Update Cart</button></p>
+<p class="hide" id="copy-cart">{{ base_url }}/payments/cart/?cart={{ cart }}</p>
+<p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="Refresh cart" onclick="window.location.reload();">Update Cart</button> - <button class="btn btn-sm btn-outline-primary" title="Copy cart" onclick="copyToClipboard('copy-cart');">Copy Cart</button></p>
 <b>Items:</b>
 {% autoescape off %}
 {% if cart_contents %}

@@ -84,7 +84,8 @@ class CardPaymentForm(forms.Form):
         super(CardPaymentForm, self).__init__(*args, **kwargs)
         from feed.middleware import get_current_request
         request = get_current_request()
-        if request.user.is_authenticated:
+        from django.conf import settings
+        if request.user.is_authenticated or settings.PAYMENT_PROCESSOR == 'stripe':
             self.fields['email'].widget = forms.HiddenInput()
             self.fields['email'].required = False
 

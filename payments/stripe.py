@@ -3,8 +3,8 @@ WEBDEV_PRICE_IDS = ["price_1NqS9SDNUMHo0j8JM4dCImE0", "price_1NqS9SDNUMHo0j8JW1M
 WEBDEV_MONTHLY_PRICE_IDS = ["price_1ObFDTDNUMHo0j8JKmX3FKsW", "price_1ObFDcDNUMHo0j8J1ft3uhf8", "price_1ObFDlDNUMHo0j8JAK5B0GgL", "price_1ObFDsDNUMHo0j8JqS5IeNxK", "price_1ObFDzDNUMHo0j8JqHKhtuNM", "price_1ObFEBDNUMHo0j8JZbhoKEst"]
 #"price_1Koi4MDNUMHo0j8JUjVdK5ZA", "price_1KoVXmDNUMHo0j8JMyudvUja", "price_1Nqp3VDNUMHo0j8JY6soNnfk", "price_1Koi4VDNUMHo0j8JsLO8HabI", "price_1NqgdRDNUMHo0j8JAmUB03Kv", "price_1Koi4MDNUMHo0j8JUjVdK5ZA", "price_1KoVXmDNUMHo0j8JMyudvUja",
 PROFILE_MEMBERSHIP_PRICE_IDS = ["price_1Koi4MDNUMHo0j8JUjVdK5ZA", "price_1KoVXmDNUMHo0j8JMyudvUja", "price_1Nqp3VDNUMHo0j8JY6soNnfk", "price_1Koi4VDNUMHo0j8JsLO8HabI", "price_1NqgdRDNUMHo0j8JAmUB03Kv", "price_1Koi4bDNUMHo0j8JauWHhYQA", "price_1NqgdgDNUMHo0j8JdknpoCgx", "price_1Koi4iDNUMHo0j8Js6rMAm3K", "price_1NqgfHDNUMHo0j8JyRky2t3w", "price_1NqgfMDNUMHo0j8JpWmXfSOh", "price_1NqgfTDNUMHo0j8Jc1UsGaHo", "price_1NqgfaDNUMHo0j8JMllYt5sL"]
-PROFILE_MEMBERSHIP = "prod_LVWaXfmwmUQUg6"
-PHOTO_PRICE = "prod_OdjZX8kiImqMHs"
+PROFILE_MEMBERSHIP = "prod_RFyWOX5WwZ7Asq"
+PHOTO_PRICE = "prod_RFyUZ2TFWuHb5E"
 PHOTO_PRICE_IDS = ["price_1NqS6fDNUMHo0j8JSsibkHw7", "price_1NqS6fDNUMHo0j8JRl4UFBZv", "price_1NqS6fDNUMHo0j8JC15M3yPW", "price_1NqS6fDNUMHo0j8JJdkeCaUB", "price_1NqS6fDNUMHo0j8Jm9ocRrHv", "price_1NqS6fDNUMHo0j8Jocts6Mkh"]
 WEBDEV_DESCRIPTIONS = ["Simple, static website. Ideal for businesses that don't need interactivity, just a business page with contacts, information, and photos.",
     "Basic website with simple interactivity, modals, and user logins. Ideal for small businesses that don't need complex interactivity or marketing.",
@@ -14,7 +14,7 @@ WEBDEV_DESCRIPTIONS = ["Simple, static website. Ideal for businesses that don't 
     "Advanced website with facial recognition, biometric security, advanced login, custom authentication, barcode scanning, machine learning and more. Preceding features included. Ideal for large projects and governments. Multiple options available.",
 ]
 SURROGACY_PRICE_ID = "price_1OBuzfDNUMHo0j8JEKdChyTl"
-CART_ID = ""
+CART_ID = "prod_RFyYRWQb3e6uvm"
 
 import stripe
 from django.conf import settings
