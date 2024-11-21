@@ -1,0 +1,58 @@
+#!/bin/bash
+USER="team"
+PROJECT="lotteh"
+DIR="/home/$USER/$PROJECT"
+echo $DIR
+cd $DIR
+sudo rm -r venv
+python3 -m venv venv
+source venv/bin/activate
+cd $DIR
+echo "Creating virtual environment"
+source venv/bin/activate
+pip3 install distutils
+# Get and build dependencies
+echo "Getting and building dependencies, this may take a whike"
+cd $DIR
+cd violence-detection
+pip3 install -r requirements.txt
+cd $DIR
+cd dlib
+source venv/bin/activate
+python setup.py install
+cd $DIR
+source venv/bin/activate
+cd $DIR/GFPGAN/
+echo "Installing python dependencies"
+pip install basicsr
+pip install facexlib
+pip install -r requirements.txt
+python setup.py develop
+cd $DIR
+source venv/bin/activate
+pip install realesrgan
+pip3 install -U "celery[redis]"
+pip3 install -r reqfix.txt --use-deprecated=legacy-resolver --use-pep517
+pip3 install --upgrade opencv-python #==4.5.4.60
+pip3 install --upgrade opencv-contrib-python #==4.5.4.60
+#pip install opencv-python==4.5.5.64
+#pip install opencv-contrib-python==4.5.5.64
+pip3 install --upgrade opencv-python-headless
+pip3 uninstall -y channels
+pip3 uninstall -y daphne
+pip3 install channels["daphne"]
+pip3 install Pillow==9.5.0
+pip3 install librosa
+pip3 install -U 'Twisted[tls,http2]'
+pip3 install --upgrade certifi requests urllib3 numpy oauthlib twisted pyjwt sqlparse cryptography astral webauthn docbarcodes pdf417 deepface --no-cache-dir
+pip3 install tensorflow[and-cuda]
+pip3 install tensorrt==10.0.1
+pip3 install setuptools==69.5.1
+pip3 install nudepy==0.4
+pip3 install torch==2.2.0
+pip3 install torchvision==0.17.0
+pip3 install tensorflow[and-cuda]
+pip3 install googletrans==4.0.0-rc1
+pip3 install --pre torch-tensorrt --index-url https://download.pytorch.org/whl/nightly/cu124
+pip3 install --upgrade transformers torch torchvision torchaudio TA-Lib python-docx Pillow SpeechRecognition pydub ffmpeg sewar zxing pitch-detectors
+python manage.py check
