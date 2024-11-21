@@ -30,6 +30,8 @@ scripts/initialize
 scripts/convert
 scripts/loadtables
 scripts/dumptables
+scripts/githubsetup
+.github/workflows/django.yml
 scripts/backup
 scripts/activate
 scripts/check
