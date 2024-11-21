@@ -2217,3 +2217,68 @@
 2024-11-20T23:44:03.158171+00:00 lotteh team: team [442750]: sudo ascript setup
 2024-11-20T23:44:08.882049+00:00 lotteh team: team [442750]: sudo ascript initi
 2024-11-20T23:44:25.777464+00:00 lotteh team: team [442750]: nano scripts/initialize 
+2024-11-20T23:50:25.653884+00:00 lotteh team: team [431992]: sudo backup
+2024-11-21T01:11:44.411949+00:00 lotteh team: team [457373]: sudo rm -r web
+2024-11-21T01:11:47.040649+00:00 lotteh team: team [457392]: sudo rm -r web
+2024-11-21T01:11:51.400798+00:00 lotteh team: team [457392]: sudo rm -r web
+2024-11-21T01:11:52.436291+00:00 lotteh team: team [457410]: sudo rm -r web
+2024-11-21T01:11:54.056274+00:00 lotteh team: team [457425]: sudo rm -r web
+2024-11-21T01:11:55.230570+00:00 lotteh team: team [457425]: logs
+2024-11-21T01:12:07.279563+00:00 lotteh team: team [457425]: logs
+2024-11-21T01:12:13.634877+00:00 lotteh team: team [457425]: rm web/templates/web/..index.html.swp.swp 
+2024-11-21T01:12:17.906950+00:00 lotteh team: team [457425]: rm web/templates/web/.index.html.swp 
+2024-11-21T01:12:37.948448+00:00 lotteh team: team [457425]: nano web/templates/web/index.html 
+2024-11-21T01:12:49.664356+00:00 lotteh team: team [457425]: nano web/templates/web/base.html 
+2024-11-21T01:12:57.849527+00:00 lotteh team: team [457425]: nano web/templates/web/miner.html 
+2024-11-21T01:15:02.602834+00:00 lotteh team: team [457410]: logs
+2024-11-21T01:15:33.099727+00:00 lotteh team: team [457425]: logs
+2024-11-21T01:28:00.318734+00:00 lotteh team: team [457425]: sudo systemctl status celery
+2024-11-21T01:28:05.569298+00:00 lotteh team: team [457410]: sudo systemctl status daphn
+2024-11-21T01:28:16.718182+00:00 lotteh team: team [457410]: sudo systemctl status daphne
+2024-11-21T01:28:27.319195+00:00 lotteh team: team [457410]: sudo systemctl status daphne
+2024-11-21T01:28:38.956618+00:00 lotteh team: team [457410]: sudo crontab -e
+2024-11-21T01:28:48.350254+00:00 lotteh team: team [457410]: sudo systemctl start daphne
+2024-11-21T01:29:32.306277+00:00 lotteh team: team [457410]: sudo systemctl status daphne
+2024-11-21T01:29:35.864425+00:00 lotteh team: team [457410]: sudo systemctl stop daphn
+2024-11-21T01:29:37.005581+00:00 lotteh team: team [457410]: sudo systemctl stop daphne
+2024-11-21T01:29:42.010085+00:00 lotteh team: team [457410]: ps -aux  | grep daphne
+2024-11-21T01:29:46.843556+00:00 lotteh team: team [457410]: kill -9 299860
+2024-11-21T01:29:46.868622+00:00 lotteh team: team [248769]: ./scripts/daphnetest.sh 
+2024-11-21T01:29:47.953774+00:00 lotteh team: team [457410]: ps -aux  | grep daphne
+2024-11-21T01:29:52.737408+00:00 lotteh team: team [457410]: sudo systemctl start daphne
+2024-11-21T01:29:59.620737+00:00 lotteh team: team [457410]: sudo systemctl status
+2024-11-21T01:30:01.529848+00:00 lotteh team: team [457410]: sudo systemctl status
+2024-11-21T01:30:04.697545+00:00 lotteh team: team [457410]: sudo systemctl status --failed
+2024-11-21T01:30:08.066538+00:00 lotteh team: team [457410]: sudo systemctl status --failed
+2024-11-21T01:30:18.828098+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:30:27.798005+00:00 lotteh team: team [457410]: journalctl -xeu auditd.service
+2024-11-21T01:30:29.083141+00:00 lotteh team: team [457410]: journalctl -xeu auditd.service
+2024-11-21T01:30:37.085700+00:00 lotteh team: team [457410]: cat /var/log/audit/audit.log 
+2024-11-21T01:30:43.040200+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:30:46.320595+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:30:48.870305+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:31:08.860428+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:31:10.087922+00:00 lotteh team: team [457410]: chmod 750 /var/log/audit
+2024-11-21T01:31:11.678399+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:31:20.750593+00:00 lotteh team: team [457410]: sudo chmod 750 -R /var/log/audit
+2024-11-21T01:31:22.128761+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:31:41.260298+00:00 lotteh team: team [457410]: sudo chmod 755 -R /var/log/audit
+2024-11-21T01:31:43.114502+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:32:01.612143+00:00 lotteh team: team [457425]: sudo /sbin/auditd -f
+2024-11-21T01:32:22.470546+00:00 lotteh team: team [457410]: sudo chown root:root -R /var/log/audit
+2024-11-21T01:32:23.986352+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:33:14.250856+00:00 lotteh team: team [457425]: sudo ascript setup
+2024-11-21T01:33:22.131511+00:00 lotteh team: team [457425]: sudo /sbin/auditd -f
+2024-11-21T01:33:49.751243+00:00 lotteh team: team [457425]: sudo ascript setup
+2024-11-21T01:33:58.735340+00:00 lotteh team: team [457425]: sudo systemctl status
+2024-11-21T01:34:13.805855+00:00 lotteh team: team [457410]: sudo systemctl start auditd
+2024-11-21T01:34:39.320166+00:00 lotteh team: team [459989]: sudo rm -r web
+2024-11-21T01:35:20.668412+00:00 lotteh team: team [459989]: sudo ascript setup
+2024-11-21T01:35:58.349674+00:00 lotteh team: team [457410]: nano scripts/gitset
+2024-11-21T01:38:39.823555+00:00 lotteh team: team [457410]: nano scripts/githubsetup 
+2024-11-21T01:38:43.663719+00:00 lotteh team: message repeated 2 times: [ team [457410]: nano scripts/githubsetup ]
+2024-11-21T01:38:45.354843+00:00 lotteh team: team [457410]: nano scripts/githubsetup 
+2024-11-21T01:38:48.929449+00:00 lotteh team: team [457410]: nano scripts/githubsetup 
+2024-11-21T01:40:18.945726+00:00 lotteh team: team [457410]: sudo ascript setup
+2024-11-21T01:40:55.919002+00:00 lotteh team: team [457410]: nano scripts/githubsetup 
+2024-11-21T01:41:33.551530+00:00 lotteh team: team [457410]: sudo pushweb

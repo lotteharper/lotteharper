@@ -340,6 +340,8 @@ sudo chown -R redis:redis /var/log/redis
 sudo chmod -R u+rwX,g+rwX,u+rx /var/log/redis
 sudo chmod +r /etc/redis/redis.conf
 sudo systemctl restart redis
+sudo chown root:root -R /var/log/audit
+sudo chmod 755 -R /var/log/audit
 cd $DIR
 source venv/bin/activate
 # Setup database
