@@ -2318,3 +2318,54 @@
 2024-11-21T02:34:15.644099+00:00 lotteh team: team [457410]: nano scripts/convert
 2024-11-21T02:34:19.435459+00:00 lotteh team: team [457410]: nano scripts/convert
 2024-11-21T02:34:52.251737+00:00 lotteh team: team [457410]: nano .github/workflows/django.yml 
+2024-11-21T02:35:07.585562+00:00 lotteh team: team [457425]: sudo backup nodb
+2024-11-21T02:43:37.280445+00:00 lotteh team: team [457410]: cd ../femmebabe-backup-open/
+2024-11-21T02:43:39.065368+00:00 lotteh team: team [457410]: git remote -v
+2024-11-21T02:43:54.419210+00:00 lotteh team: team [457410]: git remote remove originhub
+2024-11-21T02:43:57.956133+00:00 lotteh team: team [457410]: sudo git remote remove originhub
+2024-11-21T02:44:03.082387+00:00 lotteh team: team [457410]: sudo git remote add originhub
+2024-11-21T02:44:05.803301+00:00 lotteh team: team [457410]: sudo git remote add originhub git@github.com:daisycamber/
+2024-11-21T02:44:09.001732+00:00 lotteh team: team [457410]: sudo git remote remove originhub
+2024-11-21T02:44:18.456710+00:00 lotteh team: team [457410]: sudo git remote add originhub git@github.com:daisycamber/lotteharper.git
+2024-11-21T02:44:54.227609+00:00 lotteh team: team [457425]: sudo ascript backup
+2024-11-21T03:27:42.781553+00:00 lotteh team: team [457425]: sudo ascript setup
+2024-11-21T03:27:51.579693+00:00 lotteh team: team [457425]: sudo ascript backup
+2024-11-21T03:33:38.330391+00:00 lotteh team: team [457425]: logs
+2024-11-21T03:35:44.641651+00:00 lotteh team: team [457410]: sudo systemctl status daphne
+2024-11-21T03:35:57.518786+00:00 lotteh team: team [457410]: sudo daphnereload
+2024-11-21T03:36:01.533600+00:00 lotteh team: team [457410]: logs
+2024-11-21T03:36:06.827391+00:00 lotteh team: team [457410]: sudo systemctl status daphne
+2024-11-21T03:36:09.469009+00:00 lotteh team: team [457410]: cd ..
+2024-11-21T03:36:13.690763+00:00 lotteh team: team [457410]: cd ..
+2024-11-21T03:36:17.077686+00:00 lotteh team: team [470943]: sudo backup
+2024-11-21T03:36:23.589780+00:00 lotteh team: team [470943]: sudo backup
+2024-11-21T03:36:55.773254+00:00 lotteh team: team [470943]: sudo systemctl status daphne
+2024-11-21T03:36:56.967759+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:36:58.265415+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:36:59.666572+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:00.994808+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:02.194573+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:03.412272+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:04.596441+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:05.970786+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:07.731446+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:09.376186+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:11.054757+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:12.860713+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:14.613419+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:16.164830+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:18.095952+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:20.403854+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:23.077586+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:25.284888+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:28.073480+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:30.687812+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:33.030929+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:37:51.962642+00:00 lotteh team: team [470943]: logs
+2024-11-21T03:38:16.580107+00:00 lotteh team: team [470943]: sudo gitbackup
+2024-11-21T03:38:33.573548+00:00 lotteh team: team [470943]: sudo rm  /usr/bin/gitbackup
+2024-11-21T03:38:41.415631+00:00 lotteh team: team [470943]: sudo rm  /usr/bin/gitbackup
+2024-11-21T03:39:06.703807+00:00 lotteh team: team [470943]: sudo nano /etc/ascripts
+2024-11-21T03:39:13.267099+00:00 lotteh team: team [470943]: sudo ascripts
+2024-11-21T03:39:22.732068+00:00 lotteh team: team [470943]: sudo ascript ascripts
+2024-11-21T03:39:27.907821+00:00 lotteh team: team [470943]: sudo ascripts
