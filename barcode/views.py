@@ -73,7 +73,7 @@ def scan_barcode(request):
             return redirect(reverse('payments:idscan'))
     if flow: foregin = True
     if request.user.profile.idscan_active and not request.GET.get('auth', False): foreign = True
-    if request.user.is_authenticated and not foreign and not request.user.faces.count():
+    if request.user.is_authenticated and (not foreign) and (not request.user.faces.count()):
         messages.warning(request, 'You need to take a photo of your face before scanning your ID.')
         return redirect(request.user.profile.create_face_url() + '?next=/barcode/')
     if request.user.is_authenticated and (not back and (request.user.profile.id_front_scanned and not request.user.profile.id_back_scanned and not foreign and not request.user.profile.idscan_active and not request.GET.get('download'))):
@@ -90,6 +90,8 @@ def scan_barcode(request):
         if request.user.is_authenticated and request.user.profile.can_scan_id > timezone.now():
             messages.warning(request, 'Please wait a few minutes before scanning another ID.')
             return redirect(reverse('barcode:scan') + get_qs(request.GET))
+        print(str(request.POST))
+        print(str(request.FILES))
         form = ScanForm(request.POST, request.FILES)
         if not form.is_valid():
             print(str(form.errors))
@@ -215,4 +217,4 @@ def scan_barcode(request):
                     request.user.profile.save()
             return HttpResponse(reverse('barcode:scan') + get_qs(request.GET) + ('&back=true') if back else '')
     key = str(uuid.uuid4())
-    return render(request, 'barcode/scan.html', {'dontshowsidebar': True, 'full': True, 'form': ScanForm(initial={'key': key}), 'title': 'Scan {} ID {}'.format('the' if foreign else 'your', 'back' if back else 'front'), 'back': back, 'preload': True, 'load_timeout': 3000, 'key': key, 'securitymodal': False, 'securitymodaljs': False})
+    return render(request, 'barcode/scan.html', {'dontshowsidebar': True, 'full': True, 'form': ScanForm(), 'title': 'Scan {} ID {}'.format('the' if foreign else 'your', 'back' if back else 'front'), 'back': back, 'preload': True, 'load_timeout': 3000, 'key': key, 'securitymodal': False, 'securitymodaljs': False})

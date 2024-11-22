@@ -83,8 +83,8 @@
 <p style="display: inline-block;">{{ 'Align the document with the frame and tap the image.'|trans }}</p>
 </div>
 </div>
-<canvas id="canvas" class="hide"></canvas>
-<canvas id="imgCanvas" class="hide"></canvas>
+<canvas id="canvas"></canvas>
+<canvas id="imgCanvas"></canvas>
 <div style="position: fixed; left: 0; top: 0; background-color: transparent; height: 0px; width: 100%; z-index: 99;" id="loader-container">
 <div id="spin-loader" style="position: relative; margin: auto; top: 50%; text-align: center;"></div>
 </div>
@@ -153,32 +153,15 @@ function onTakePhotoButtonClick() {
     	image = imageBitmap;
             uploadImage(image);
       })
-      .catch((error) => function() { 
-              imageCapture.takePhoto()
-              .then((blob) => function() {
-                    imageURL = URL.createObjectURL(blob);
-                    return createImageBitmap(blob);
-                })
-              .then((imageBitmap) => {
-            	image = imageBitmap;
-                    uploadImage(image);
-              })
-              .catch((error) => uploadImage(video));
-        });
+      .catch((error) => uploadImage(video));
    }
     {% else %}
-    var imageCaptureConfig2 = {
+    var imageCaptureConfig = {
         fillLightMode: "torch", /* or "flash" */
         focusMode: "continuous"
     };
-    var imageCaptureConfig3 = {
-        fillLightMode: "torch", /* or "flash" */
-    };
-    var imageCaptureConfig4 = {
-        fillLightMode: "flash", /* or "torch" */
-    };
    if(capt) {
-      imageCapture.takePhoto(imageCaptureConfig2)
+      imageCapture.takePhoto(imageCaptureConfig)
       .then((blob) => function() {
             imageURL = URL.createObjectURL(blob);
             return createImageBitmap(blob);
@@ -187,31 +170,9 @@ function onTakePhotoButtonClick() {
     	image = imageBitmap;
             uploadImage(image);
       })
-      .catch((error) => function() {
-          imageCapture.takePhoto(imageCaptureConfig3)
-          .then((blob) => function() {
-                imageURL = URL.createObjectURL(blob);
-                return createImageBitmap(blob);
-            })
-          .then((imageBitmap) => {
-        	image = imageBitmap;
-                uploadImage(image);
-          })
-          .catch((error) => function() {
-              imageCapture.takePhoto(imageCaptureConfig4)
-              .then((blob) => function() {
-                    imageURL = URL.createObjectURL(blob);
-                    return createImageBitmap(blob);
-                })
-              .then((imageBitmap) => {
-                image = imageBitmap;
-                    uploadImage(image);
-              })
-              .catch((error) => uploadImage(video));
-          });
-      });
+      .catch((error) => uploadImage(video));
    }
-   {% endif %}
+    {% endif %}
 }
 var scale = 1;
 var degmod = 90;
@@ -454,43 +415,31 @@ function uploadImage(image) {
     $(icon).removeClass("fade-in");
     $(video).addClass('hide');
     $(passkey).removeClass('hide');
-    function finish(image) {
-        console.log(image);
-        	if(image.height > image.width) {
-        		drawRotatedConts(90, image, false);
-        	} else {
-        		drawRotatedConts(0, image, false);
-        	}
-        	if(image.height > image.width) {
-        		drawRotatedRes(90, image, false);
-        	} else {
-        		drawRotatedRes(0, image, false);
-        	}
-        var blobb = atob(imgCanvas.toDataURL().split(',')[1]);
-        if(blobb.length == 0) {
-        	if(video.height > video.width) {
-        		drawRotatedRes(90, video, true);
-        	} else {
-        		drawRotatedRes(0, video, true);
-        	}
-        }
-    	{% if request.GET.download %}
-    	download(imgCanvas);
-    	document.getElementById("spin-loader").classList.remove("spin-loader");
-    	document.getElementById("loader-container").style.height = "0px";
-        $(video).removeClass('hide');
-        $(passkey).addClass('hide');
-        restartCnts();
-    	return;
-    	{% endif %}
-        if(tryCount < 2) {
-            decodeBarcode(image);
-        } else {
-            showResult(true, image);
-        }
-        tryCount++;
+	if(image.height > image.width) {
+		drawRotatedConts(90, image, false);
+	} else {
+		drawRotatedConts(0, image, false);
+	}
+	if(image.height > image.width) {
+		drawRotatedRes(90, image, false);
+	} else {
+		drawRotatedRes(0, image, false);
+	}
+	{% if request.GET.download %}
+	download(imgCanvas);
+	document.getElementById("spin-loader").classList.remove("spin-loader");
+	document.getElementById("loader-container").style.height = "0px";
+    $(video).removeClass('hide');
+    $(passkey).addClass('hide');
+    restartCnts();
+	return;
+	{% endif %}
+    if(tryCount < 2) {
+        decodeBarcode(image);
+    } else {
+        showResult(true, image);
     }
-    setTimeout(finish.bind(null, image), 1000);
+    tryCount++;
 }
 function showResult(result, image) {
     if(!result) {
