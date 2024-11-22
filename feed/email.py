@@ -36,10 +36,10 @@ def send_photos_email(user, posts):
     import os
     for photo in posts:
         if photo.file and not os.path.exists(photo.file.path): photo.download_file()
-        if authenticated and photo.private:
+        if authenticated and (photo.private or not photo.public):
             if photo.image: photo_urls = photo_urls + [photo.get_image_url()]
             if photo.file: files = files + [photo.file.path]
-        elif not photo.private:
+        elif not (photo.private or not photo.public):
             if photo.image: photo_urls = photo_urls + [photo.get_image_url()]
             if photo.file: files = files + [photo.file.path]
     html_message = render_to_string('feed/photo_email.html', {

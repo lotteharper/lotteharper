@@ -1,17 +1,10 @@
-import os
-import requests
-import json
-from .nude import is_nude
-from face.deep import is_face, verify_age
 from django.conf import settings
-from feed.middleware import get_current_user
-from feed.audiotovideo import audio_to_video
 
 api_user = settings.SIGHTENGINE_USER
 api_secret = settings.SIGHTENGINE_SECRET
 
-
 def sightengine_image(image_path):
+    import requests
     params = {
         'workflow': 'wfl_chz5r9ffPSio8qWGRryUf',
         'api_user': api_user,
@@ -21,12 +14,16 @@ def sightengine_image(image_path):
     r = requests.post('https://api.sightengine.com/1.0/check-workflow.json', files=files, data=params)
     return r.text
 
-base_path = os.path.join(settings.BASE_DIR, 'temp/')
-
 def sightengine_audio(file_path):
+    import os
+    import json
     op = ''
+    import os
+    base_path = os.path.join(settings.BASE_DIR, 'temp/')
     try:
+        from feed.middleware import get_current_user
         image = get_current_user().profile.image.path
+        from feed.audiotovideo import audio_to_video
         output = os.path.join(base_path, get_current_user().profile.name + '.mp4')
         audio_to_video(file_path, image, output)
         op = sightengine_file(output)
@@ -35,6 +32,7 @@ def sightengine_audio(file_path):
     return op
 
 def sightengine_file(file_path):
+    import requests
     params = {
         'workflow': 'wfl_chz7AZ2mLuIfzDhgPOKwM',
         'api_user': api_user,
@@ -45,6 +43,8 @@ def sightengine_file(file_path):
     return r.text
 
 def is_safe_public_video(video_path):
+    import requests
+    import json
     params = {
         'workflow': 'wfl_caKQzh2jI3i0gPINGCLZf',
         'api_user': api_user,
@@ -60,6 +60,7 @@ def is_safe_public_video(video_path):
     return True
 
 def is_safe_private_video(video_path):
+    import requests, json
     params = {
         'workflow': 'wfl_c7IKUvqOfigoGLdGcFoUS',
         'api_user': api_user,
@@ -76,6 +77,9 @@ def is_safe_private_video(video_path):
 
 
 def is_safe_public_image(image_path):
+    from .nude import is_nude
+    from face.deep import is_face, verify_age
+    import requests, json
     try:
         if is_nude(image_path):
             return False
@@ -96,6 +100,9 @@ def is_safe_public_image(image_path):
     return True
 
 def is_safe_private_image(image_path):
+    from .nude import is_nude
+    from face.deep import is_face, verify_age
+    import requests, json
     try:
         if is_face(image_path) and not verify_age(image_path):
             return False

@@ -13,6 +13,7 @@ def validate_barcode(request, key):
     return HttpResponse('y' if DocumentScan.objects.filter(key=key).count() > 0 and DocumentScan.objects.filter(key=key).last().succeeded else 'n')
 
 #@login_required
+@csrf_exempt
 def scan_barcode(request):
     from verify.models import VeriFlow
     from django.urls import reverse
@@ -91,6 +92,7 @@ def scan_barcode(request):
             return redirect(reverse('barcode:scan') + get_qs(request.GET))
         form = ScanForm(request.POST, request.FILES)
         if not form.is_valid():
+            print(str(form.errors))
             messages.warning(request, 'The form did not validate. Please try again.')
             return HttpResponse(reverse('barcode:scan') + get_qs(request.GET))
         form.instance.user = request.user if request.user.is_authenticated else None

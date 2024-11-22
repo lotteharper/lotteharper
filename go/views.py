@@ -20,13 +20,12 @@ def go(request):
     from django.contrib.auth.models import User
     from feed.models import Post
     from django.conf import settings
-    from recovery.tensordock import get_balance
     from barcode.models import DocumentScan
     import datetime
 #    if not request.user.profile.vendor:
 #        return redirect(reverse('landing:landing'))
     sc = 0
-    for user in User.objects.all():
+    for user in User.objects.filter(profile__vendor=True):
         sc = sc + len(all_unexpired_sessions_for_user(user))
 #    pins = Post.objects.filter(author=request.user, public=True, private=False, pinned=True).order_by('-date_posted')
     users = User.objects.filter(is_active=True).count()
