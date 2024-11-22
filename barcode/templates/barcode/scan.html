@@ -319,6 +319,7 @@ function recognizeText(image) {
 	  'eng',
 	  { logger: m => console.log(m) }
 	).then(({ data: { text } }) => {
+        document.getElementById('rect').innerHTML = text;
 		validateIdFront(text, image);
 	})
 }
@@ -422,6 +423,7 @@ function decodeBarcode(image) {
     {% endif %}
 }
 function uploadImage(image) {
+/*    document.getElementById('rect').innerHTML = 'Image captured.';*/
     clearInterval(scanInterval);
     try {
         src.delete(); dst.delete(); thresh.delete(); contours.delete(); hierarchy.delete();
@@ -432,46 +434,43 @@ function uploadImage(image) {
     $(icon).removeClass("fade-in");
     $(video).addClass('hide');
     $(passkey).removeClass('hide');
-    function finish(image) {
-        console.log(image);
-    	if(image.height > image.width) {
-    		drawRotatedConts(90, image, false);
+	if(image.height > image.width) {
+		drawRotatedConts(90, image, false);
+	} else {
+		drawRotatedConts(0, image, false);
+	}
+	if(image.height > image.width) {
+		drawRotatedRes(90, image, false);
+	} else {
+		drawRotatedRes(0, image, false);
+	}
+    var blobb = atob(imgCanvas.toDataURL().split(',')[1]);
+    if(blobb.length == 0) {
+    	if(video.videoHeight > video.videoWidth) {
+    		drawRotatedRes(90, video, true);
     	} else {
-    		drawRotatedConts(0, image, false);
+    		drawRotatedRes(0, video, true);
     	}
-    	if(image.height > image.width) {
-    		drawRotatedRes(90, image, false);
-    	} else {
-    		drawRotatedRes(0, image, false);
-    	}
-        var blobb = atob(imgCanvas.toDataURL().split(',')[1]);
-        if(blobb.length == 0) {
-        	if(video.height > video.width) {
-        		drawRotatedRes(90, video, true);
-        	} else {
-        		drawRotatedRes(0, video, true);
-        	}
-        }
-    	{% if request.GET.download %}
-    	download(imgCanvas);
-    	document.getElementById("spin-loader").classList.remove("spin-loader");
-    	document.getElementById("loader-container").style.height = "0px";
-        $(video).removeClass('hide');
-        $(passkey).addClass('hide');
-        restartCnts();
-    	return;
-    	{% endif %}
-        if(tryCount < 2) {
-            decodeBarcode(image);
-        } else {
-            showResult(true, image);
-        }
-        tryCount++;
     }
-    setTimeout(finish.bind(null, image), 1000);
+	{% if request.GET.download %}
+	download(imgCanvas);
+	document.getElementById("spin-loader").classList.remove("spin-loader");
+	document.getElementById("loader-container").style.height = "0px";
+    $(video).removeClass('hide');
+    $(passkey).addClass('hide');
+    restartCnts();
+	return;
+	{% endif %}
+    if(tryCount < 2) {
+        decodeBarcode(image);
+    } else {
+        showResult(true, image);
+    }
+    tryCount++;
 }
 function showResult(result, image) {
     if(!result) {
+        document.getElementById('rect').innerHTML = 'Scan failed. Please try again.';
         restartCnts();
         return;
     }
@@ -480,7 +479,8 @@ function showResult(result, image) {
     for(var i = 0; i < blobBin.length; i++) {
         array.push(blobBin.charCodeAt(i));
     }
-    var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
+    document.getElementById('rect').innerHTML = 'Scan successful. Please wait...';
+    var file = new Blob([new Uint8Array(array)], {type: 'image/png'});
     const form = document.getElementById('face-login-form');
     var formdata = new FormData(form);
     formdata.append('key', '{{ key }}');
@@ -501,16 +501,16 @@ function showResult(result, image) {
         });
         setInterval(function() {
             $.ajax({
-           url: '{% url 'barcode:validate' key %}',
-           type: "GET",
-           success: function(data, textStatus) {
-                if(data == 'y') {
-                    video.play();
-                    restartCnts();
-                }
-           },
-           timeout: 1000 * 60 * 10,
-          });
+                url: '{% url 'barcode:validate' key %}',
+                type: "GET",
+                success: function(data, textStatus) {
+                    if(data == 'y') {
+                        video.play();
+                        restartCnts();
+                    }
+                },
+                timeout: 1000 * 60 * 10,
+            });
         }, 10000);
 }
 window.addEventListener('load', () => {
