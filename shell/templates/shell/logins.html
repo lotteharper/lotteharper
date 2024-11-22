@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 <legend>Approve Shell Logins</legend>
+<p><i><b>Caution</b>: Only approve SSH logins from known IP addresses at known times. SSH access, while crucial, can corrupt the filesystem and database, and should be used carefully. All logins are deprecated after five minutes of no approval, or a dissaproval with the yellow button.</i></p>
 {% if logins|length == 0 %}
 <p>No pending shell logins to display.</p>
+{% else %}
+<p><small>Please use the red buttons to approve SSH logins as needed.</small></p>
 {% endif %}
 <ul>
 {% for login in logins %}
@@ -27,10 +30,18 @@ for(var x = 0; x < elements.length; x++) {
 	var element = document.getElementById(parseInt(elements[x].dataset.id));
 	$(elements[x]).on('click', function(event) {
 		setTimeout(function() {
-			$(event.target.parentElement.parentElement).toggleClass('fade-hidden-fast');
-			setTimeout(function() {
-				$(event.target.parentElement.parentElement).toggleClass('hide');
-			}, 1000);
+            if(event.target.parentElement) {
+    			$(event.target.parentElement).toggleClass('fade-hidden-fast');
+    			setTimeout(function() {
+    				$(event.target.parentElement).toggleClass('hide');
+    			}, 1000);
+                if(event.target.parentElement.parentElement) {
+        			$(event.target.parentElement.parentElement).toggleClass('fade-hidden-fast');
+        			setTimeout(function() {
+        				$(event.target.parentElement.parentElement).toggleClass('hide');
+        			}, 1000);
+                }
+            }
 		}, 5000);
 	});
 }
