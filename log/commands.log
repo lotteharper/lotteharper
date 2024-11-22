@@ -3507,3 +3507,27 @@
 2024-11-21T22:59:05.395137-08:00 lotteh team: team [360409]: sudo doreload
 2024-11-21T22:59:31.853227-08:00 lotteh team: team [341895]: venv
 2024-11-21T23:03:44.669903-08:00 lotteh team: team [360409]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:04:03.476462-08:00 lotteh team: team [360443]: sudo backup nodb
+2024-11-21T23:05:40.360002-08:00 lotteh team: team [360409]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:05:41.666196-08:00 lotteh team: team [360409]: sudo doreload
+2024-11-21T23:07:30.187316-08:00 lotteh team: team [360443]: logs
+2024-11-21T23:07:47.175676-08:00 lotteh team: team [360443]: logs
+2024-11-21T23:08:04.897860-08:00 lotteh team: team [360443]: logs
+2024-11-21T23:08:09.245402-08:00 lotteh team: team [360443]: logs
+2024-11-21T23:08:14.951025-08:00 lotteh team: team [360443]: cat barcode/templates/barcode/scan.html | grep rect
+2024-11-21T23:08:30.151289-08:00 lotteh team: team [360443]: cat barcode/templates/barcode/scan.html | grep rect -nH
+2024-11-21T23:09:12.632748-08:00 lotteh team: team [360443]: nano barcode/templates/barcode/scan.html 
+2024-11-21T23:09:37.904002-08:00 lotteh team: team [360443]: nano barcode/templates/barcode/scan.html 
+2024-11-21T23:09:40.512970-08:00 lotteh team: team [360443]: sudo doreload
+2024-11-21T23:52:15.308846-08:00 lotteh team: team [375253]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:52:16.771215-08:00 lotteh team: team [375286]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:52:17.920678-08:00 lotteh team: team [375302]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:52:19.470303-08:00 lotteh team: team [375319]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:52:42.077438-08:00 lotteh team: team [375319]: nano barcode/templates/barcode/scan.html
+2024-11-21T23:52:44.627085-08:00 lotteh team: team [375319]: sudo doreload
+2024-11-21T23:54:02.165358-08:00 lotteh team: team [375319]: logs
+2024-11-21T23:54:04.041372-08:00 lotteh team: team [375319]: logs
+2024-11-21T23:54:05.476451-08:00 lotteh team: team [375319]: logs
+2024-11-21T23:54:23.044096-08:00 lotteh team: team [375319]: sudo tail -1000 /var/log/apache2/error.log
+2024-11-21T23:56:11.677246-08:00 lotteh team: team [375319]: sudo tail -1000 /var/log/apache2/error.log | grep POST
+2024-11-21T23:56:30.462686-08:00 lotteh team: team [375319]: sudo tail -3000 /var/log/apache2/error.log | grep POST
