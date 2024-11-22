@@ -273,7 +273,7 @@ function showResult(result) {
         array.push(blobBin.charCodeAt(i));
     }
     var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
-    form = document.getElementById('face-login-form');
+    const form = document.getElementById('face-login-form');
     var formdata = new FormData(form);
     document.getElementById('rect').innerHTML = blobBin;
     formdata.append('document', new File([file], 'image.png'));
