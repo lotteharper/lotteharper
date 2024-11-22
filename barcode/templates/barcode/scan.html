@@ -52,10 +52,12 @@
 <legend class="mb-2">{% blocktrans %}Scan the {% if not back %}front{% else %}back{% endif %} of {% if request.GET.foreign %}the{% else %}your{% endif %} ID{% endblocktrans %}</legend>
 <div style="display: flex; justify-content: space-around;">
 {% if request.GET.foreign and request.GET.back %}
-<a href="{{ request.path }}?foreign=true&{% for key,val in request.GET.items %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endfor %}" title="Scan the front of an ID" class="btn btn-sm btn-outline-primary">{{ 'Scan Front'|trans }}</a>
+<a href="{{ request.path }}?foreign=true&{% for key,val in request.GET.items %}{% if not key == 'back' %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}" title="Scan the front of an ID" class="btn btn-sm btn-outline-primary">{{ 'Scan Front'|trans }}</a>
+{% else%}
+<a href="{{ request.path }}?foreign=true&back=true&{% for key,val in request.GET.items %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endfor %}" title="Scan the back of an ID" class="btn btn-sm btn-outline-primary">{{ 'Scan Back'|trans }}</a>
 {% endif %}
 {% if not request.GET.noflash %}
-<a href="{{ request.path }}?noflash=t&{% for key,val in request.GET.items %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endfor %}" id="flash-switch" class="btn btn-sm btn-outline-primary"><i class="bi bi-toggle-on"></i> Flash on</a>
+<a href="{{ request.path }}?noflash=true&{% for key,val in request.GET.items %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endfor %}" id="flash-switch" class="btn btn-sm btn-outline-primary"><i class="bi bi-toggle-on"></i> Flash on</a>
 {% else %}
 <a href="{{ request.path }}?{% for key,val in request.GET.items %}{% if not key == 'noflash' %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}" id="flash-switch" class="btn btn-sm btn-outline-primary"><i class="bi bi-toggle-off"></i> Flash off</a>
 {% endif %}
@@ -139,7 +141,7 @@ document.getElementById("video-container").addEventListener("click", function(ev
 	onTakePhotoButtonClick();
 });
 function onTakePhotoButtonClick() {
-    {% if request.GET.noflash == 't' %}
+    {% if request.GET.noflash %}
     var imageCaptureConfig = {
         focusMode: "continuous"
     };
