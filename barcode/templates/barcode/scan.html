@@ -209,7 +209,7 @@ function calculateAge(birthday) { // birthday is a date
 	return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 var min_age = 21;
-function validateIdFront(text) {
+function validateIdFront(text, image) {
 	var results = text.matchAll("\d\d\/\d\d\/\d\d\d\d");
 	var birthdate = null;
 	var expiry = null;
@@ -224,12 +224,12 @@ function validateIdFront(text) {
 		}
 	}
 	if(birthdate && (expiry || tryCount > 1)) {
-		showResult(true);
+		showResult(true, image);
 		return;
 	}
-	showResult(false);
+	showResult(false, image);
 }
-function validateIdBack(text) {
+function validateIdBack(text, image) {
 	var results = text.matchAll("\d\d\d\d\d\d\d\d");
 	var birthdate = null;
 	var expiry = null;
@@ -244,10 +244,10 @@ function validateIdBack(text) {
 		}
 	}
 	if(birthdate && (expiry || tryCount > 1)) {
-		showResult(true);
+		showResult(true, image);
 		return;
 	}
-	showResult(false);
+	showResult(false, image);
 }
 function setGetParam(key,value) {
   if (history.pushState) {
@@ -260,11 +260,16 @@ function setGetParam(key,value) {
   }
 }
 var params = new URLSearchParams(window.location.search);
-function showResult(result) {
+function showResult(result, image) {
     if(!result) {
         restartCnts();
         return;
     }
+	if(image.height > image.width) {
+		drawRotated(90, image, false);
+	} else {
+		drawRotated(0, image, false);
+	}
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 	var blobBin = atob(canvas.toDataURL().split(',')[1]);
@@ -311,7 +316,7 @@ function recognizeText(image) {
 	  'eng',
 	  { logger: m => console.log(m) }
 	).then(({ data: { text } }) => {
-		validateIdFront(text);
+		validateIdFront(text, image);
 	})
 }
 var src;
@@ -400,7 +405,7 @@ function decodeBarcode(image) {
     				return;
     			}
                 document.getElementById('rect').innerHTML = data;
-			    validateIdBack(data);
+			    validateIdBack(data, image);
     		}).catch((e) => {
                 document.getElementById('rect').innerHTML = new String('Stack: ' + e.stack + ' - Name: ' + e.name + ' - Message: ' + e.message);
                 restartCnts();
@@ -436,9 +441,9 @@ function uploadImage(image){
 	return;
 	{% endif %}
     if(tryCount < 2) {
-        decodeBarcode(canvas);
+        decodeBarcode(image);
     } else {
-        showResult(true);
+        showResult(true, image);
     }
     tryCount++;
 }
