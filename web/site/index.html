@@ -114,7 +114,7 @@
 <h1>My Photos</h1>
 <legend>Daisy</legend>
 <p>Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it.</p>
-<p style="text-align: center;"><small>Nov. 20, 2024, 5:34 p.m.</small></p>
+<p style="text-align: center;"><small>Nov. 23, 2024, 6:22 p.m.</small></p>
 <p>Visit my GitHub to see my <a href="https://github.com/daisycamber" title="My projects on GitHub">projects</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -542,17 +542,7 @@ var images = `<div id="div11">A woman laying on a bed with a red blanket.<img wi
 <div id="div292">A woman laying on a bed with a pink blanket.<img width="100%" height="auto" src="https://glamgirlx.com/media/images/5a19e89f-7dac-4a44-8f4e-a9e965b6f755.png" id="img292" alt="A woman laying on a bed with a pink blanket."/><p><a href="/a-woman-laying-on-a-bed-with-a-group-notice-foot" title="View Post - A woman laying on a bed with a pink blanket. by Daisy">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=5a19e89f-7dac-4a44-8f4e-a9e965b6f755" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/Daisy/crypto/?id=5a19e89f-7dac-4a44-8f4e-a9e965b6f755&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with crypto</a></p></div><hr>
 `.split('\n');
 
-window.google_ad_client = "ca-pub-6209985848112194";
-window.google_ad_slot = "2468505458";
-window.google_ad_width = 300;
-window.google_ad_height = 250;
-	    
 var container = document.getElementById('photo-page');
-var w = document.write;
-document.write = function (content) {
-  container.insertAdjacentHTML("beforeend", content);
-  document.write = w;
-};
 var lcount = 12;
 var ncount = 12;
 var load_next = false;
@@ -566,19 +556,8 @@ function garbageDisposal(count) {
     d = document.getElementById('div' + new String(count + disposal_limit));
     if(d) { d.remove();}
 }
-const adsenseAd = `<div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
-crossorigin="anonymous"><\/script>
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-6209985848112194"
-data-ad-slot="2468505458"
-data-ad-format="auto"
-data-full-width-responsive="true"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-<\/script>
-</div>
+const adsenseAd = `<iframe width="100%" src="/ad" height="350px">
+</iframe>
 <hr>`;
 setInterval(function() {
     if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {

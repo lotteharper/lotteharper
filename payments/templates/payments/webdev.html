@@ -80,7 +80,7 @@ var vendor = {{ vendor.id }};
 var payForm = document.getElementById('pay-form');
 {% if payment_processor == 'paypal' %}
 function payFee() {
-    var email = document.getElementById('id_email').value;
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
     var url = '{{ base_url }}{% url 'payments:paypal-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid;
 	if(check.checked) url = url + "&sub=t";
     $.ajax({
@@ -95,7 +95,7 @@ function payFee() {
 }
 {% elif payment_processor == 'square' %}
 function payFee() {
-    var email = document.getElementById('id_email').value;
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
     var url = '{{ base_url }}{% url 'payments:square-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid;
 	if(check.checked) url = url + "&sub=t";
     $.ajax({
@@ -111,7 +111,7 @@ function payFee() {
 {% elif payment_processor == 'helcim' %}
 var checkoutToken;
 function payFee() {
-    var email = document.getElementById('id_email').value;
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
     $.ajax({
         url: '{{ base_url }}{% url 'payments:invoice' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
         method:'POST',
@@ -149,7 +149,7 @@ function validateResponse(eventMessage) {
 {% elif payment_processor == 'stripe' %}
 var stripe = Stripe('{{ stripe_pubkey }}');
 function payFee(){
-    var email = document.getElementById('id_email').value;
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
 	var url = "/payments/webdev/checkout/?plan=" + price + "&email=" + email;
 	if(check.checked) url = url + "&monthly=t";
         fetch(url)

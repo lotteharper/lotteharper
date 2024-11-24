@@ -1712,7 +1712,6 @@ def tip_crypto_simple(request, username):
     from payments.crypto import get_payment_address, get_lightning_address
     if request.GET.get('lightning', None) and crypto != 'BTC': return redirect(request.path + '?lightning=t&crypto=BTC')
     network = None if not request.GET.get('lightning', False) else 'lightning'
-    address, transaction_id = get_payment_address(user, crypto, fee) if not request.GET.get('lightning') else get_lightning_address(user, crypto, fee)
     from feed.models import Post
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
@@ -1758,7 +1757,7 @@ def tip_crypto_simple(request, username):
             return redirect(reverse('payments:subscribe-bitcoin-thankyou', kwargs={'username': user.profile.name}))
     from payments.crypto import get_payment_address, get_lightning_address
     if request.GET.get('lightning', None) and crypto != 'BTC': return redirect(request.path + '?lightning=t&crypto=BTC')
-    address, transaction_id = get_payment_address(user, crypto, fee_reduced) if not request.GET.get('lightning') else get_lightning_address(user, crypto, fee_reduced)
+    address, transaction_id = get_payment_address(user, crypto, fee_reduced, tip=True) if not request.GET.get('lightning') else get_lightning_address(user, crypto, fee_reduced, ln=True, tip=True)
     from lotteh.celery import validate_tip_payment
     if request.user.is_authenticated: validate_tip_payment.apply_async(timeout=60*10, args=(request.user.id, user.id, float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE, transaction_id,crypto,network),)
     from django.shortcuts import render
