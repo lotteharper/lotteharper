@@ -37,7 +37,7 @@ def get_lightning_address(model, currency, amount, ln=True, tip=False):
     if tip and (currency in addresses and (session_key in addresses[currency]) and (amount in addresses[currency][session_key])):
         import datetime
         address, payment_id, time = addresses[currency][session_key][amount]
-        if time > timezone.now() - datetime.timedelta(minutes=60):
+        if time > timezone.now() - datetime.timedelta(minutes=10):
             return address, payment_id
     data = {'currency': 'BTC', 'amount': str(round(float(amount) * 100000000))}
     headers = {"Authorization": "{}".format(settings.OPENNODE_KEY), 'Content-Type': 'application/json; charset=utf-8'}
@@ -62,7 +62,7 @@ def get_payment_address(model, currency, amount, tip=False):
     if tip and (currency in addresses and (session_key in addresses[currency])):
         import datetime
         address, payment_id, time = addresses[currency][session_key]
-        if time > timezone.now() - datetime.timedelta(minutes=60):
+        if time > timezone.now() - datetime.timedelta(minutes=30):
             return address, payment_id
 #    id = str(model.vendor_payments_profile.first().get_sub_partner_id())
     data = {
