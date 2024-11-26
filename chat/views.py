@@ -86,16 +86,16 @@ def chat(request, username):
         UpdateView,
         DeleteView
     )
-    profile = get_object_or_404(Profile, name=username, identity_verified=True)
+    profile = get_object_or_404(Profile, name=username)
     recipient = get_object_or_404(User, profile__name=username)
     page = 1
     if(request.GET.get('page', '') != ''):
         page = int(request.GET.get('page', ''))
     msgs = None
     if recipient == request.user:
-        msgs = Message.objects.filter(sender__profile__identity_verified=True, recipient__profile__identity_verified=True, recipient=recipient).order_by('-sent_at')
+        msgs = Message.objects.filter(sender__profile__id_back_scanned=True, recipient__profile__id_back_scanned=True, recipient=recipient).order_by('-sent_at')
     else:
-        msgs = Message.objects.filter(sender__profile__identity_verified=True, recipient__profile__identity_verified=True, sender=recipient).union(Message.objects.filter(sender__profile__identity_verified=True, recipient__profile__identity_verified=True, sender=request.user)).order_by('-sent_at')
+        msgs = Message.objects.filter(sender__profile__id_back_scanned=True, recipient__profile__id_back_scanned=True, sender=recipient).union(Message.objects.filter(sender__profile__id_back_scanned=True, recipient__profile__id_back_scanned=True, sender=request.user)).order_by('-sent_at')
     p = Paginator(msgs, 10)
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
@@ -200,9 +200,9 @@ def raw(request, username):
         page = int(request.GET.get('page', ''))
     msgs = None
     if recipient == request.user:
-        msgs = Message.objects.filter(sender__profile__identity_verified=True, recipient__profile__identity_verified=True, recipient=recipient).order_by('-sent_at')
+        msgs = Message.objects.filter(sender__profile__id_back_scanned=True, recipient__profile__id_back_scanned=True, recipient=recipient).order_by('-sent_at')
     else:
-        msgs = Message.objects.filter(sender__profile__identity_verified=True, recipient__profile__identity_verified=True, sender=recipient).union(Message.objects.filter(sender__profile__identity_verified=True, recipient__profile__identity_verified=True, sender=request.user)).order_by('-sent_at')
+        msgs = Message.objects.filter(sender__profile__id_back_scanned=True, recipient__profile__id_back_scanned=True, sender=recipient).union(Message.objects.filter(sender__profile__id_back_scanned=True, recipient__profile__id_back_scanned=True, sender=request.user)).order_by('-sent_at')
     p = Paginator(msgs, 10)
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")

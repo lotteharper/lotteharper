@@ -107,3 +107,96 @@
 2024-11-25T21:51:15.122828-08:00 lotteh team: team [51360]: ls web/site/media/images/ |  grep 4dbb
 2024-11-25T22:04:52.280429-08:00 lotteh team: team [53066]: logs
 2024-11-25T22:04:57.012804-08:00 lotteh team: team [53066]: sudo gitbac
+2024-11-25T22:05:25.179696-08:00 lotteh team: team [53066]: sudo backup nodb
+2024-11-25T22:44:36.165655-08:00 lotteh team: team [51360]: nano templates/language.html 
+2024-11-25T22:44:38.324037-08:00 lotteh team: team [51360]: sudo doreload
+2024-11-25T22:44:59.090063-08:00 lotteh team: team [51360]: nano templates/language.html 
+2024-11-25T22:45:25.475932-08:00 lotteh team: team [51360]: sudo purgecache
+2024-11-25T22:45:47.729868-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:45:49.248582-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:45:53.036422-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:45:54.456267-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:45:56.632133-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:45:58.239676-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:46:01.142530-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:46:04.585232-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:46:08.958653-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:46:37.394117-08:00 lotteh team: team [51360]: nano chat/urls.py 
+2024-11-25T22:47:29.607859-08:00 lotteh team: team [51360]: nano chat/views.py 
+2024-11-25T22:48:09.874856-08:00 lotteh team: team [51360]: nano chat/urls.py 
+2024-11-25T22:48:12.719567-08:00 lotteh team: team [51360]: sudo doreload
+2024-11-25T22:48:16.816930-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:48:43.548088-08:00 lotteh team: team [51360]: nano chat/urls.py 
+2024-11-25T22:48:46.224643-08:00 lotteh team: team [51360]: nano chat/vi
+2024-11-25T22:48:49.099452-08:00 lotteh team: team [51360]: nano chat/urls.py
+2024-11-25T22:48:52.560264-08:00 lotteh team: team [51360]: nano chat/vi
+2024-11-25T22:49:37.286001-08:00 lotteh team: team [51360]: nano chat/views.py 
+2024-11-25T22:49:39.797110-08:00 lotteh team: team [51360]: sudo doreload
+2024-11-25T22:49:42.348477-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:43.771259-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:45.110086-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:46.392944-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:50.737365-08:00 lotteh team: team [51360]: lglogs
+2024-11-25T22:49:52.760835-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:54.549221-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:55.758088-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:57.077803-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:49:58.351850-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:50:00.347172-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:50:02.117899-08:00 lotteh team: team [51360]: logs
+2024-11-25T22:52:34.118633-08:00 lotteh team: team [51360]: sudo purgecache
+2024-11-25T22:55:37.668960-08:00 lotteh team: team [53066]: nano chat/templates/chat/chat.html 
+2024-11-25T22:57:07.412109-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T22:57:28.156035-08:00 lotteh team: team [53066]: nano users/models.py 
+2024-11-25T22:57:31.565851-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T22:59:20.073965-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T22:59:25.009760-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T22:59:44.425476-08:00 lotteh team: team [53066]: nano chat/consumers.py 
+2024-11-25T22:59:46.706283-08:00 lotteh team: team [53066]: sudo doreload
+2024-11-25T22:59:53.803592-08:00 lotteh team: team [53066]: logs
+2024-11-25T22:59:55.023428-08:00 lotteh team: team [53066]: logs
+2024-11-25T22:59:56.111469-08:00 lotteh team: team [53066]: logs
+2024-11-25T22:59:57.772683-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:00.154224-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:01.513085-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:02.779575-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:04.196196-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:05.547432-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:06.978242-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:00:11.067832-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:01:19.459082-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T23:01:21.038069-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:02:00.550269-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T23:02:02.258424-08:00 lotteh team: team [53066]: sudo doreload
+2024-11-25T23:02:46.328675-08:00 lotteh team: team [53066]: nano chat/views.py 
+2024-11-25T23:02:51.711057-08:00 lotteh team: team [53066]: sudo daphnereload
+2024-11-25T23:02:55.372449-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:03:29.449083-08:00 lotteh team: team [53066]: sudo purgecache
+2024-11-25T23:03:35.107084-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:03:50.679575-08:00 lotteh team: team [53066]: logs
+2024-11-25T23:05:25.753800-08:00 lotteh team: team [51360]: nano chat/templates/chat/messages_raw.html 
+2024-11-25T23:05:48.570706-08:00 lotteh team: team [53066]: python manage.py shell
+2024-11-25T23:36:28.279483-08:00 lotteh team: team [51360]: cmds
+2024-11-25T23:38:25.198740-08:00 lotteh team: team [51360]: cmds
+2024-11-25T23:38:32.408827-08:00 lotteh team: team [51360]: sudo tail 3000 /var/log/commands.log
+2024-11-25T23:38:46.548613-08:00 lotteh team: team [51360]: sudo tail --lines 3000 /var/log/commands.log
+2024-11-25T23:39:03.802250-08:00 lotteh team: team [51360]: sudo tail --lines 10000 /var/log/commands.log
+2024-11-25T23:39:40.203297-08:00 lotteh team: team [51360]: sudo tail --lines 100000 /var/log/commands.log
+2024-11-25T23:39:54.913415-08:00 lotteh team: team [51360]: sudo tail -l 100000 /var/log/commands.log
+2024-11-25T23:40:07.059141-08:00 lotteh team: team [51360]: sudo tail -l
+2024-11-25T23:40:12.113381-08:00 lotteh team: team [51360]: tail
+2024-11-25T23:40:15.302105-08:00 lotteh team: team [51360]: tail -l
+2024-11-25T23:40:17.842823-08:00 lotteh team: team [51360]: tail --lines
+2024-11-25T23:40:21.662075-08:00 lotteh team: team [51360]: tail --lines 1000
+2024-11-25T23:40:32.277080-08:00 lotteh team: message repeated 2 times: [ team [51360]: tail --lines 1000]
+2024-11-25T23:40:37.798147-08:00 lotteh team: team [51360]: tail --lines 1000 /var/log/commands.log
+2024-11-25T23:40:42.816288-08:00 lotteh team: team [51360]: tail --lines 10000 /var/log/commands.log
+2024-11-25T23:40:53.816902-08:00 lotteh team: team [51360]: cat /var/log/commands.log
+2024-11-25T23:41:05.757623-08:00 lotteh team: team [51360]: nano /var/log/commands.log
+2024-11-25T23:41:35.233484-08:00 lotteh team: team [51360]: sudo ascript backup
+2024-11-25T23:41:41.277192-08:00 lotteh team: team [51360]: cat scripts/backup | grep comm
+2024-11-25T23:41:47.602026-08:00 lotteh team: team [51360]: cat log/commands.log 
+2024-11-25T23:42:04.159700-08:00 lotteh team: team [51360]: sudo ascript setup
+2024-11-25T23:42:10.574087-08:00 lotteh team: team [51360]: cat scripts/setup | grep commands
+2024-11-25T23:42:52.230597-08:00 lotteh team: team [51360]: sudo ascript setup
+2024-11-25T23:55:44.078829-08:00 lotteh team: team [53066]: sudo gitbackup
