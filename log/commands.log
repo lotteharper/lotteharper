@@ -29,3 +29,81 @@
 2024-11-25T01:55:31.250871-08:00 lotteh team: team [913529]: nano lotteh/settings.py 
 2024-11-25T01:55:33.060742-08:00 lotteh team: team [913529]: sudo doreload
 2024-11-25T01:56:03.290966-08:00 lotteh team: team [913529]: sudo doreload
+2024-11-25T20:53:14.703842-08:00 lotteh team: team [50987]: venv
+2024-11-25T20:53:16.229126-08:00 lotteh team: team [51018]: venv
+2024-11-25T20:53:26.653503-08:00 lotteh team: team [51047]: venv
+2024-11-25T20:53:32.485413-08:00 lotteh team: team [51072]: venv
+2024-11-25T20:53:45.614036-08:00 lotteh team: team [51072]: nano /usr/bin/jump
+2024-11-25T20:58:37.617856-08:00 lotteh team: team [51072]: sudo ascript jump
+2024-11-25T20:58:40.172193-08:00 lotteh team: team [51338]: venv
+2024-11-25T20:58:47.560270-08:00 lotteh team: team [51072]: jump
+2024-11-25T20:58:49.429343-08:00 lotteh team: team [51018]: venv
+2024-11-25T20:58:51.936824-08:00 lotteh team: team [51360]: exit
+2024-11-25T21:02:20.477895-08:00 lotteh team: team [51360]: exit
+2024-11-25T21:03:51.507083-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:05:08.164941-08:00 lotteh team: team [51047]: venv
+2024-11-25T21:05:10.353964-08:00 lotteh team: team [51047]: venv
+2024-11-25T21:05:19.583336-08:00 lotteh team: team [51047]: nano feed/upload.py 
+2024-11-25T21:06:09.627653-08:00 lotteh team: team [51360]: python manage.py shell
+2024-11-25T21:06:11.372514-08:00 lotteh team: team [53066]: exit
+2024-11-25T21:06:13.316524-08:00 lotteh team: team [53066]: exit
+2024-11-25T21:09:14.861520-08:00 lotteh team: team [53066]: nano feed/upload.py 
+2024-11-25T21:10:27.045384-08:00 lotteh team: team [53066]: nano feed/upload.py 
+2024-11-25T21:11:02.048808-08:00 lotteh team: team [53066]: nano lotteh/celery.py 
+2024-11-25T21:11:04.391999-08:00 lotteh team: team [53066]: nano feed/upload.py 
+2024-11-25T21:11:45.943460-08:00 lotteh team: team [53066]: nano lotteh/celery.py 
+2024-11-25T21:14:07.903771-08:00 lotteh team: team [51360]: nano lotteh/celery.py 
+2024-11-25T21:15:04.355484-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:16:51.830970-08:00 lotteh team: team [53066]: python manage.py shell
+2024-11-25T21:17:04.321700-08:00 lotteh team: team [53066]: nano feed/upload.py 
+2024-11-25T21:18:20.879765-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:18:21.057855-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:19:23.402665-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:20:14.121764-08:00 lotteh team: team [53066]: python manage.py shell
+2024-11-25T21:20:18.268140-08:00 lotteh team: team [53066]: sudo purgecache
+2024-11-25T21:20:34.347174-08:00 lotteh team: team [53066]: logs
+2024-11-25T21:25:58.164089-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:29:58.727461-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:30:01.889125-08:00 lotteh team: team [53066]: python manage.py shell
+2024-11-25T21:30:28.273147-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:30:51.342947-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:30:54.115266-08:00 lotteh team: team [53066]: python manage.py shell
+2024-11-25T21:32:03.002805-08:00 lotteh team: team [53066]: python manage.py shell
+2024-11-25T21:32:07.920649-08:00 lotteh team: team [51360]: nano feed/upload.py 
+2024-11-25T21:32:14.005923-08:00 lotteh team: team [51360]: python upload_post
+2024-11-25T21:32:28.929143-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:32:41.879770-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:32:55.012549-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:33:09.412889-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:33:32.205858-08:00 lotteh team: team [53066]: sudo systemctl restart celery
+2024-11-25T21:33:39.118168-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:33:49.508202-08:00 lotteh team: message repeated 20 times: [ team [51360]: python upload_post.py ]
+2024-11-25T21:34:35.617777-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:36:23.331020-08:00 lotteh team: team [53066]: ps -aux | grep manage.py
+2024-11-25T21:36:27.688422-08:00 lotteh team: team [53066]: ps -aux | grep manage
+2024-11-25T21:36:31.336236-08:00 lotteh team: team [53066]: ps -aux | grep python
+2024-11-25T21:36:36.882534-08:00 lotteh team: team [53066]: kill 199346
+2024-11-25T21:36:36.923377-08:00 lotteh team: team [51360]: python upload_posts.py 
+2024-11-25T21:36:44.114789-08:00 lotteh team: team [51360]: sudo purgecache
+2024-11-25T21:36:47.279250-08:00 lotteh team: team [51360]: sudo doreload
+2024-11-25T21:36:49.915181-08:00 lotteh team: team [51360]: sudo daphnereload
+2024-11-25T21:40:24.881313-08:00 lotteh team: team [51360]: nano web/generate.py 
+2024-11-25T21:41:25.631608-08:00 lotteh team: team [51360]: nano feed/models.py
+2024-11-25T21:41:27.727852-08:00 lotteh team: team [51360]: ls web/site
+2024-11-25T21:41:30.819626-08:00 lotteh team: team [51360]: ls web/site/media
+2024-11-25T21:41:33.993424-08:00 lotteh team: team [51360]: ls web/site/media/static
+2024-11-25T21:41:38.188842-08:00 lotteh team: team [51360]: ls web/site/media/images/
+2024-11-25T21:42:11.074747-08:00 lotteh team: team [51360]: nano feed/models.py
+2024-11-25T21:42:45.863593-08:00 lotteh team: team [51360]: nano web/generate.py 
+2024-11-25T21:44:05.134490-08:00 lotteh team: team [51360]: sudo pushweb
+2024-11-25T21:44:14.379861-08:00 lotteh team: team [53066]: pushweb
+2024-11-25T21:45:30.753020-08:00 lotteh team: team [51360]: watch du -sh web/site/media
+2024-11-25T21:46:34.864454-08:00 lotteh team: team [51360]: watch du -sh web/site/media
+2024-11-25T21:46:37.534615-08:00 lotteh team: team [51360]: python upload_post
+2024-11-25T21:46:46.680498-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:46:46.923270-08:00 lotteh team: team [51360]: python upload_post.py 
+2024-11-25T21:48:43.785798-08:00 lotteh team: team [53066]: sudo pushweb
+2024-11-25T21:49:18.597255-08:00 lotteh team: team [51360]: sudo purgecache
+2024-11-25T21:51:15.122828-08:00 lotteh team: team [51360]: ls web/site/media/images/ |  grep 4dbb
+2024-11-25T22:04:52.280429-08:00 lotteh team: team [53066]: logs
+2024-11-25T22:04:57.012804-08:00 lotteh team: team [53066]: sudo gitbac

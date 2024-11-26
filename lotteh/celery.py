@@ -21,6 +21,12 @@ try:
 except: pass
 
 @app.task
+def async_check_upload(post_id):
+    from feed.models import Post
+    from feed.upload import check_offsite
+    check_offsite(Post.objects.get(id=post_id))
+
+@app.task
 def async_get_sun(user_id, user_is_authenticated, ip):
     from feed.sun import get_sun
     get_sun(user_id, user_is_authenticated, ip)

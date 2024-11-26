@@ -1,6 +1,26 @@
 import requests, json, base64, os, traceback
 from django.conf import settings
 
+def check_all_offsite():
+    from feed.models import Post
+    for post in Post.objects.all():
+        check_offsite(post)
+
+def check_offsite(post):
+    if post.image_offsite and not get_offsite_image(post.image_offsite.split('.')[-2].split('/')[-1]):
+        post.image_offsite = None
+        post.save()
+    if post.image_thumb_offsite and not get_offsite_image(post.image_thumb_offsite.split('.')[-2].split('/')[-1]):
+        post.image_thumb_offsite = None
+        post.save()
+
+def get_offsite_image(hash):
+    headers = {"Authorization": "Client-ID {}".format(settings.IMGUR_ID)}
+    r = requests.get('https://api.imgur.com/3/image/{}'.format(hash), headers=headers)
+    print(r.text)
+    j = r.json()
+    return (not 'status' in j) or (j['status'] != 404)
+
 def get_image(image_path):
     from PIL import Image
     base_width = settings.MAX_RED_IMAGE_DIMENSION
@@ -137,6 +157,8 @@ def upload_post(post):
             except: print(traceback.format_exc())
         post.offsite = True
         post.save()
+        from lotteh.celery import async_check_upload
+        async_check_upload.apply_async(countdown=60*5, args=[post.id])
 #        except: print(traceback.format_exc())
         print('Uploaded post ({}). - {}'.format(post.id, post.image_offsite))
         return True

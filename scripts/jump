@@ -5,8 +5,10 @@ LOG_FILE="`date --date="today" "+%Y-%m-%d_%H-%M-%S"`_`whoami`"
 LOG_DIR="/var/log/jump/"
 # Print a welcome message
 echo ""
-echo "NOTE: This SSH session will be recorded"
+echo "Now accessing Lotte Harper. Please use the shell session carefully."
+echo "NOTE: This SSH session will be recorded and monitored."
 echo "AUDIT KEY: $LOG_FILE"
+echo "Your access is granted."
 echo ""
 # I suffix the log file name with a random string. I explain why
 # later on.
