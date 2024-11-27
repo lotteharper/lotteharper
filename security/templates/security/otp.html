@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block head %}
+<script src="/static/qrcode.min.js" type="text/javascript"></script>
+{% endblock %}
+{% block content %}
+<legend>One Time Passcode</legend>
+{% if request.GET.generate %}
+<i>Scan this code in your authenticator app or camera.</i>
+<div id="authqrcode"></div>
+<a href="{{ link }}" title="Click here to add this app to your authenticator app."><i>Alternativley, click here</i></a>
+<hr>
+{% endif %}
+{% load crispy_forms_tags %}
+<i>Enter the code from your authenticator app.</i>
+<form id="pin-form" method="POST">
+{% csrf_token %}
+{{ form|crispy }}
+<button type="submit" class="btn btn-primary" title="Submit the code">Submit</button>
+</form>
+{% endblock %}
+{% block javascript %}
+{% if request.GET.generate %}
+$("#pin-form").on("submit", function(event) {
+    window.navigator.vibrate({{ default_vibration }});
+});
+document.body.onclick = function(evt) {
+    if(evt.target.getAttribute('type') != 'submit') {
+        document.getElementById('id_otp').focus();
+    }
+};
+$(document).ready(function() {
+    var sqrdiv = document.getElementById("authqrcode");
+    if(!sqrdiv) return;
+    var sqr = new QRCode(sqrdiv, "{{ link }}");
+    var simage = sqrdiv.querySelector('img');
+    simage.style.width = "100%";
+    simage.style.height = "100%";
+    simage.style.maxWidth = "250px";
+    simage.alt = "Share this page by scanning a QR code.";
+});
+{% endif %}
+{% endblock %}
