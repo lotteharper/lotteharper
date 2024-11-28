@@ -260,8 +260,9 @@ PYTHON_VERSION="3.12"
 cp scripts/content.py /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pyxb/binding/content.py
 cp scripts/pwa_webpush_forms.py /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pwa_webpush/forms.py
 cp scripts/webauth_views.py /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/webauth/views.py
-cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/
-#cp scripts/json.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
+#cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
+cp venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/json.py
+#cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
 cp scripts/nude.py venv/lib/python$PYTHON_VERSION/site-packages/nude.py
 # Set user settings
 sudo gpasswd -a www-data users
@@ -372,6 +373,8 @@ cat db.json.?? > db.json
 echo "Loading data, this may take a while"
 python manage.py loaddata db.json
 ./scripts/loadtables
+# Fix venv again
+cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
 sudo systemctl start apache2 daphne celery celerybeat
 echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -

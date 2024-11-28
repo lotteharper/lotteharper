@@ -797,4 +797,4 @@ def cryptoformat(amount):
 
 @register.filter('replspace')
 def replspace(text):
-    return text.replace(' ', '+')
+    return str(text).replace(' ', '+')

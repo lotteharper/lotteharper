@@ -32,6 +32,7 @@ def scan_id(scan_path, instance):
         return False
     result = response['ParseImageResult']
     document = result[list(result.keys())[0]]
+    if list(result.keys())[0] in settings.BANNED_ID_TYPES: return False
     exp_date = document['ExpirationDate']
     exp_date = datetime.strptime(exp_date, '%Y-%m-%d').replace(tzinfo=utc)
     if exp_date < timezone.now().date():

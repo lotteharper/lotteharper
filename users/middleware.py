@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from users.models import Profile
+from security.models import SecurityProfile
 from django.shortcuts import redirect
 from django.urls import reverse
 import urllib, json
@@ -84,6 +85,8 @@ def simple_middleware(get_response):
             if request.user.is_authenticated and (request.user.profile.enable_two_factor_authentication or request.user.profile.vendor) and not request.path.startswith('/accounts/tfa/') and not request.path.startswith('/accounts/logout/') and not request.path.startswith("/face/") and not request.path.startswith("/verify/"):
                 if not request.user.profile.phone_number or len(request.user.profile.phone_number) < 11:
                     return HttpResponseRedirect(reverse('users:tfa_onboarding'))
+            if not hasattr(request.user, 'profile'): Profile.objects.create(user=request.user)
+            if not hasattr(request.user, 'security_profile'): SecurityProfile.objects.create(user=request.user)
             response = get_response(request)
             if request.COOKIES.get('user_signup', False):
                 request.user_signup = True

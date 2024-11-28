@@ -4,7 +4,7 @@ Serialize data to/from JSON
 
 import datetime
 import decimal
-import json
+import json, ijson
 import uuid
 
 from django.core.serializers.base import DeserializationError
@@ -61,13 +61,13 @@ class Serializer(PythonSerializer):
 
 def Deserializer(stream_or_string, **options):
     """Deserialize a stream or string of JSON data."""
-    if not isinstance(stream_or_string, (bytes, str)):
-        stream_or_string = stream_or_string.read()
-    if isinstance(stream_or_string, bytes):
-        stream_or_string = stream_or_string.decode()
+#    if not isinstance(stream_or_string, (bytes, str)):
+#        stream_or_string = stream_or_string.read()
+#    if isinstance(stream_or_string, bytes):
+#        stream_or_string = stream_or_string.decode()
     try:
-        objects = json.loads(stream_or_string)
-        yield from PythonDeserializer(objects, **options)
+        with open('/home/team/lotteh/data/security.json', 'r') as f:
+            yield from PythonDeserializer(ijson.items(f, 'item'), **options)
     except (GeneratorExit, DeserializationError):
         raise
     except Exception as exc:

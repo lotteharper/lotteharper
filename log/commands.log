@@ -1002,3 +1002,222 @@
 2024-11-27T02:05:39.369455-08:00 lotteh team: team [9763]: sudo rm -r venv-new
 2024-11-27T02:05:43.898887-08:00 lotteh team: team [9763]: sudo rm -r .git
 2024-11-27T02:06:04.019257-08:00 lotteh team: team [9763]: sudo ascript backup
+2024-11-27T02:11:04.594527-08:00 lotteh team: team [9763]: sudo backup nodb
+2024-11-27T02:11:57.372200-08:00 lotteh team: team [9763]: sudo systemctl stop daphne
+2024-11-27T02:12:21.078007-08:00 lotteh team: team [2108]: ./scripts/daphnetest.sh 
+2024-11-27T02:12:35.395742-08:00 lotteh team: team [2108]: ./scripts/daphnetest.sh 
+2024-11-27T02:13:09.167997-08:00 lotteh team: team [2108]: nano shell/consumers.py 
+2024-11-27T02:13:17.720896-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:13:19.689954-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:13:26.745035-08:00 lotteh team: team [2108]: sudo systemctl start daphne
+2024-11-27T02:16:02.407856-08:00 lotteh team: team [2108]: sudo systemctl start daphne
+2024-11-27T02:16:19.537998-08:00 lotteh team: team [2108]: nano scripts/webauth_views.py 
+2024-11-27T02:16:35.944262-08:00 lotteh team: team [2108]: nano scripts/webauth_views.py 
+2024-11-27T02:16:50.498975-08:00 lotteh team: team [2108]: nano scripts/patchvenv 
+2024-11-27T02:16:54.165867-08:00 lotteh team: team [2108]: nano scripts/patchvenv 
+2024-11-27T02:17:13.353306-08:00 lotteh team: team [2108]: sudo ascript resetvenv
+2024-11-27T02:17:24.572011-08:00 lotteh team: team [2108]: cp scripts/webauth_views.py /home/team/lotteh/venv/lib/python3.12/site-packages/webauth/views.py
+2024-11-27T02:17:36.647300-08:00 lotteh team: team [2108]: cp scripts/webauth_views.py /home/team/lotteh/venv/lib/python3.12/site-packages/webauth/views.py
+2024-11-27T02:17:39.288681-08:00 lotteh team: team [2108]: sudo doreload
+2024-11-27T02:17:43.642025-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:44.912147-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:46.084812-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:47.456500-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:48.688843-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:50.022616-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:51.302603-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:52.796507-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:54.191430-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:55.663021-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:57.563628-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:17:59.362701-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:18:01.166916-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:18:03.132126-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:18:26.222817-08:00 lotteh team: team [2108]: nano security/middleware.py
+2024-11-27T02:19:17.419712-08:00 lotteh team: team [2108]: nano security/middleware.py
+2024-11-27T02:19:18.296725-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:19:20.990007-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:19:23.598649-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:19:26.340180-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:19:28.089007-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:19:52.827045-08:00 lotteh team: team [2108]: nano feed/apps.py 
+2024-11-27T02:20:05.464872-08:00 lotteh team: team [2108]: nano feed/templatetags/app_filters.py
+2024-11-27T02:20:07.234129-08:00 lotteh team: team [2108]: sudo doreload
+2024-11-27T02:20:11.106607-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:20:33.309126-08:00 lotteh team: team [2108]: watchlogs
+2024-11-27T02:20:46.938540-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:21:53.266977-08:00 lotteh team: team [2108]: cat scripts/setup| grep cat
+2024-11-27T02:22:05.333487-08:00 lotteh team: team [2108]: cat scripts/loadtables| grep cat
+2024-11-27T02:22:09.161940-08:00 lotteh team: team [12456]: cd
+2024-11-27T02:22:14.385511-08:00 lotteh team: team [12456]: git clone git@gitlab.com:jasperholton/lotteh2024-17.git
+2024-11-27T02:23:17.719438-08:00 lotteh team: team [12456]: sudo git clone git@gitlab.com:jasperholton/lotteh2024-17.git
+2024-11-27T02:23:45.876168-08:00 lotteh team: team [12456]: sudo git clone git@gitlab.com:jasperholton/lotteh2024-17.git
+2024-11-27T02:23:49.852510-08:00 lotteh team: team [12456]: sudo chown -R team:users lotteh2024-17 && sudo chmod -R 775 lotteh2024-17
+2024-11-27T02:23:58.859959-08:00 lotteh team: team [12456]: cd lotteh2024-17/
+2024-11-27T02:24:01.489091-08:00 lotteh team: team [12456]: cat data/security.json.?? > data/security.json
+2024-11-27T02:24:14.948189-08:00 lotteh team: team [12456]: cp data/security.json ../lotteh/data/security.json
+2024-11-27T02:24:21.460405-08:00 lotteh team: team [12456]: cp data/security.json ../lotteh/data/security.json
+2024-11-27T02:26:19.269939-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:27:08.287220-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:27:11.653156-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:27:32.127274-08:00 lotteh team: team [2108]: nano scripts/serializers_json_lowmem.py 
+2024-11-27T02:28:47.000356-08:00 lotteh team: team [12456]: ls scripts/serializers_json_lowmem.py 
+2024-11-27T02:29:11.909503-08:00 lotteh team: team [2108]: sudo ascript setup
+2024-11-27T02:29:19.007534-08:00 lotteh team: team [12456]: ls scripts/serializers_json_lowmem.py 
+2024-11-27T02:29:28.229238-08:00 lotteh team: team [2108]: sudo ascript backup
+2024-11-27T02:30:04.612312-08:00 lotteh team: team [2108]: sudo ascript setup
+2024-11-27T02:30:09.313354-08:00 lotteh team: team [12456]: rm scripts/serializers_json_lowmem.py 
+2024-11-27T02:30:12.547357-08:00 lotteh team: team [12456]: rm scripts/serializers_json_lowmem.py 
+2024-11-27T02:30:13.007717-08:00 lotteh team: team [12456]: cd
+2024-11-27T02:30:14.680952-08:00 lotteh team: team [12456]: cd lotteh
+2024-11-27T02:30:18.993745-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py 
+2024-11-27T02:30:23.378281-08:00 lotteh team: team [12456]: rm scripts/serializers_json_lowmem.py 
+2024-11-27T02:34:09.504870-08:00 lotteh team: team [2108]: nano scripts/serializers_json_lowmem.py 
+2024-11-27T02:34:11.089566-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:34:11.280800-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:34:29.767246-08:00 lotteh team: team [12456]: cp venv/lib/python3.12/site-packages/django/core/serializers/json.py  scripts/serializers_json_lowmem.py
+2024-11-27T02:35:19.155830-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:35:39.740608-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:37:34.316812-08:00 lotteh team: team [12456]: p scripts/serializers_json_lowmem.pyvenv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:37:34.347540-08:00 lotteh team: message repeated 4 times: [ team [12456]: p scripts/serializers_json_lowmem.pyvenv/lib/python3.12/site-packages/django/core/serializers/json.py]
+2024-11-27T02:37:34.495032-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:37:34.503948-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:37:41.224995-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:37:55.409681-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:38:14.668315-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:38:44.306736-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:38:47.664815-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:39:06.011844-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:39:09.587949-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:39:25.381407-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:39:37.632289-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:39:41.269091-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:39:48.574963-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:40:06.263451-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:40:22.093434-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:40:29.601079-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:40:30.111745-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:40:44.442739-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:40:46.617910-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:44:27.672278-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:44:40.554074-08:00 lotteh team: team [2108]: cat data/contact.json 
+2024-11-27T02:44:51.908409-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:44:58.234160-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:45:04.569548-08:00 lotteh team: team [12456]: logs
+2024-11-27T02:45:08.570231-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:45:12.155753-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:45:49.697875-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:45:51.941895-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:46:10.256204-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:47:12.063680-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:47:22.401144-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:47:26.251027-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:47:38.360075-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:47:49.739656-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:48:19.611850-08:00 lotteh team: team [2108]: sudo crontab -e
+2024-11-27T02:48:25.889386-08:00 lotteh team: team [2108]: sudo stopservices
+2024-11-27T02:48:27.061105-08:00 lotteh team: team [2108]: sudo stopservices &
+2024-11-27T02:48:38.759445-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:48:51.977373-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:48:53.809976-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:51:03.181454-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:51:04.637688-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:51:15.878890-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:51:17.334082-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:51:17.391298-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:52:39.947435-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:52:52.620602-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:52:54.447974-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:54:09.921700-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:54:21.899604-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T02:54:23.877526-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T02:54:53.033981-08:00 lotteh team: team [2108]: python manage.pycheck
+2024-11-27T02:54:58.393072-08:00 lotteh team: team [2108]: python manage.py check
+2024-11-27T02:55:21.706576-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py
+2024-11-27T02:55:27.444310-08:00 lotteh team: team [12456]: cp scripts/serializers_json_lowmem.py venv/lib/python3.12/site-packages/django/core/serializers/json.py
+2024-11-27T02:55:32.946336-08:00 lotteh team: team [2108]: python manage.py check
+2024-11-27T02:55:34.949897-08:00 lotteh team: team [2108]: sudo daphnereload
+2024-11-27T02:55:40.402323-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:55:41.918567-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:55:43.241214-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:55:44.423848-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:55:45.823727-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:55:49.875444-08:00 lotteh team: team [2108]: logs
+2024-11-27T02:55:59.096886-08:00 lotteh team: team [2108]: watchlogs
+2024-11-27T02:56:04.323437-08:00 lotteh team: team [2108]: sudo systemctl status apache2
+2024-11-27T02:56:07.027232-08:00 lotteh team: team [2108]: sudo systemctl start apache2
+2024-11-27T02:57:37.703973-08:00 lotteh team: team [2108]: sudo ascript setup
+2024-11-27T02:57:45.825860-08:00 lotteh team: team [2108]: python manage.py check
+2024-11-27T02:57:53.833708-08:00 lotteh team: team [2108]: sudo startservices
+2024-11-27T02:57:55.838198-08:00 lotteh team: team [2108]: sudo startservices &
+2024-11-27T03:00:37.669662-08:00 lotteh team: team [2108]: nano users/middleware.py 
+2024-11-27T03:00:45.946558-08:00 lotteh team: team [2108]: cat security/models.py| grep security_pro
+2024-11-27T03:00:54.703596-08:00 lotteh team: team [2108]: sudo doreload
+2024-11-27T03:02:20.884903-08:00 lotteh team: team [21885]: exit
+2024-11-27T03:02:24.220874-08:00 lotteh team: team [21885]: vdnv
+2024-11-27T03:02:25.752586-08:00 lotteh team: team [21921]: exit
+2024-11-27T03:02:30.702309-08:00 lotteh team: team [21921]: python mange.py check
+2024-11-27T03:02:36.019125-08:00 lotteh team: team [21921]: python anage.py check
+2024-11-27T03:02:46.764057-08:00 lotteh team: team [21921]: python manage.py check
+2024-11-27T03:02:48.982500-08:00 lotteh team: team [21921]: logs
+2024-11-27T03:03:06.467185-08:00 lotteh team: team [21885]: venv
+2024-11-27T03:05:49.092209-08:00 lotteh team: team [9763]: cd
+2024-11-27T03:05:53.991064-08:00 lotteh team: team [9763]: opendkimkey
+2024-11-27T03:09:39.592324-08:00 lotteh team: team [23730]: logs
+2024-11-27T03:36:50.036257-08:00 lotteh team: team [12456]: nano scripts/serializers_json_lowmem.py 
+2024-11-27T03:39:19.569065-08:00 lotteh team: team [12456]: cp scripts/json.py scripts/ijson.py
+2024-11-27T03:40:46.419022-08:00 lotteh team: team [12456]: nano scripts/ijson.py 
+2024-11-27T05:03:17.523909-08:00 lotteh team: team [12456]: cp scripts/ijson.py venv/lib/python3.12/site-packages/django/core/serializers/json.py 
+2024-11-27T05:03:46.252545-08:00 lotteh team: team [12456]: nano scripts/ijson.py 
+2024-11-27T05:04:05.467846-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T05:04:09.832478-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T05:04:44.180880-08:00 lotteh team: team [12456]: nano scripts/ijson.py 
+2024-11-27T05:04:47.975935-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T05:04:52.572910-08:00 lotteh team: team [12456]: nano scripts/ijson.py 
+2024-11-27T05:04:54.184867-08:00 lotteh team: team [12456]: cp scripts/ijson.py venv/lib/python3.12/site-packages/django/core/serializers/json.py 
+2024-11-27T05:05:14.933705-08:00 lotteh team: team [26955]: logs
+2024-11-27T05:05:19.804961-08:00 lotteh team: team [26955]: cat scripts/ijson.py 
+2024-11-27T05:06:36.709646-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T05:06:37.753113-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T05:07:21.473522-08:00 lotteh team: team [12456]: nano scripts/ijson.py 
+2024-11-27T05:07:55.773811-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T05:08:02.285599-08:00 lotteh team: team [12456]: ca scripts/ijson.py 
+2024-11-27T05:08:06.585667-08:00 lotteh team: team [12456]: cat scripts/ijson.py 
+2024-11-27T05:08:58.622230-08:00 lotteh team: team [26955]: cat scripts/ijson.py 
+2024-11-27T05:09:02.414912-08:00 lotteh team: team [12456]: cat scripts/ijson.py 
+2024-11-27T05:34:18.043944-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T17:18:15.955629-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T17:18:42.869781-08:00 lotteh team: team [2108]: python manage.py shell
+2024-11-27T17:19:20.569116-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T17:19:33.586719-08:00 lotteh team: team [2108]: sudo crontab -e
+2024-11-27T17:19:40.961259-08:00 lotteh team: team [2108]: sudo stopservices
+2024-11-27T17:19:52.204897-08:00 lotteh team: team [12456]: logs
+2024-11-27T17:19:57.640361-08:00 lotteh team: team [12456]: cat scripts/ijson.py 
+2024-11-27T17:20:25.519178-08:00 lotteh team: team [12456]: cat scripts/ijson.py 
+2024-11-27T17:22:46.180695-08:00 lotteh team: team [26955]: cat barcode/barcode.py 
+2024-11-27T17:23:00.423400-08:00 lotteh team: team [26955]: nano verify/process_barcode.py 
+2024-11-27T17:23:17.869412-08:00 lotteh team: team [26955]: nano barcode/views.py 
+2024-11-27T17:23:21.240633-08:00 lotteh team: team [26955]: nano barcode/idscan
+2024-11-27T17:23:43.565777-08:00 lotteh team: team [26955]: nano barcode/idscan.py 
+2024-11-27T17:25:44.522722-08:00 lotteh team: team [26955]: nano verify/idscan.py 
+2024-11-27T17:26:22.548028-08:00 lotteh team: team [26955]: nano barcode/idscan.py 
+2024-11-27T17:26:32.085645-08:00 lotteh team: team [26955]: nano verify/idscan.py 
+2024-11-27T17:28:23.039411-08:00 lotteh team: team [26955]: nano barcode/idscan.py 
+2024-11-27T17:28:29.535106-08:00 lotteh team: team [26955]: cat lotteh/settings.py | grep Sex
+2024-11-27T17:28:33.388933-08:00 lotteh team: team [26955]: cat lotteh/settings.py | grep Sex
+2024-11-27T17:28:45.517771-08:00 lotteh team: team [26955]: cat */* | grep Sex
+2024-11-27T17:28:48.752478-08:00 lotteh team: team [26955]: cat */*.py | grep Sex
+2024-11-27T17:28:53.653325-08:00 lotteh team: team [26955]: cat */*.py | grep Sex -nH
+2024-11-27T17:29:03.295013-08:00 lotteh team: team [26955]: grep Sex -nH */*.py
+2024-11-27T17:29:40.286138-08:00 lotteh team: team [26955]: cat scripts/get-pip.py 
+2024-11-27T17:29:51.959696-08:00 lotteh team: team [26955]: cat scripts/get-pip.py 
+2024-11-27T17:29:55.971165-08:00 lotteh team: team [26955]: head scripts/get-pip.py 
+2024-11-27T17:30:07.795289-08:00 lotteh team: team [26955]: head scripts/get-pip.py --lines 400
+2024-11-27T17:30:10.758292-08:00 lotteh team: team [26955]: head scripts/get-pip.py --lines 100
+2024-11-27T17:32:00.638257-08:00 lotteh team: team [26955]: clear
+2024-11-27T17:32:01.391424-08:00 lotteh team: team [26955]: ls
+2024-11-27T17:59:52.352134-08:00 lotteh team: team [2108]: python manage.py loaddata data/security.json
+2024-11-27T18:19:32.890347-08:00 lotteh team: team [12456]: compinfo
+2024-11-27T18:19:35.438375-08:00 lotteh team: team [26955]: dbinfo
+2024-11-27T18:19:42.611585-08:00 lotteh team: team [2108]: git remote -v
+2024-11-27T18:19:43.786693-08:00 lotteh team: team [2108]: git remote -v

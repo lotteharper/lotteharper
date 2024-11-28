@@ -80,7 +80,7 @@ class Registration(LoginRequiredMixin, View):
         pub_key_credential = json.dumps(data.get("pubKeyCredential"))
 
         verification = verify_registration_response(
-            credential=RegistrationCredential.parse_raw(pub_key_credential),
+            credential=pub_key_credential,
             expected_challenge=challenge,
             expected_origin=settings.WEBAUTH_ORIGIN,
             expected_rp_id=settings.WEBAUTH_RP_ID,
@@ -124,6 +124,7 @@ class Verification(LoginRequiredMixin, View):
                                 "usb",
                                 "ble",
                                 "nfc",
+                                "internal",
                             ],
                         }
                         for credential_id in credential_ids
@@ -136,18 +137,27 @@ class Verification(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         challenge = bytes.fromhex(request.session.pop("webauth_challenge"))
 
-        credential = AuthenticationCredential.parse_raw(request.body.decode())
-        device = WebAuthDevice.objects.get(credential_id=credential.raw_id)
-
-        verification = verify_authentication_response(
-            credential=credential,
-            expected_challenge=challenge,
-            expected_rp_id=settings.WEBAUTH_RP_ID,
-            expected_origin=settings.WEBAUTH_ORIGIN,
-            credential_public_key=device.public_key,
-            credential_current_sign_count=device.sign_count,
-            require_user_verification=False,
-        )
+        credential = request.body.decode()
+        c = json.loads(credential)
+        print(json.dumps(c))
+        devices = WebAuthDevice.objects.filter(user=request.user)
+#credential_id=c['rawId'].encode())
+        verification = None
+        for device in devices:
+            try:
+                verification = verify_authentication_response(
+                    credential=credential,
+                    expected_challenge=challenge,
+                    expected_rp_id=settings.WEBAUTH_RP_ID,
+                    expected_origin=settings.WEBAUTH_ORIGIN,
+                    credential_public_key=device.public_key,
+                    credential_current_sign_count=device.sign_count,
+                    require_user_verification=False,
+                )
+                break
+            except:
+                pass
+        if not verification: raise Exception('No valid devices with this credential')
 
         device.sign_count = verification.new_sign_count
         device.save()
