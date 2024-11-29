@@ -25,7 +25,7 @@ class ScheduledEmail(models.Model):
                 if not User.objects.filter(email=recipient).count():
                     from users.models import Profile
                     from security.models import SecurityProfile
-                    user = User.objects.create_user(email=recipient, username=get_random_username(), password=get_random_string(8))
+                    user = User.objects.create_user(email=recipient, username=get_random_username(e), password=get_random_string(8))
                     if not hasattr(user, 'profile'):
                         p = Profile.objects.get_or_create(user=user)
                         p.email_verified = False

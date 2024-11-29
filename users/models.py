@@ -24,13 +24,9 @@ def get_uuid():
     id = "%s" % (uuid.uuid4())
     return id
 
-def generate_username():
-    import random
-    r = random.randint(111111,999999)
-    return 'Guest_' + str(r)
-
-def generate_name():
-    return generate_username()
+def generate_username(instance):
+    from users.username_generator import generate_username
+    return generate_username(self.user.username)
 
 def recovery_token():
     from django.utils.crypto import get_random_string

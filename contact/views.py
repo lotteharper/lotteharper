@@ -107,7 +107,7 @@ def contact(request):
             us = User.objects.filter(email=e).last()
             safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
             if valid and (not us) and safe:
-                user = User.objects.create_user(email=e, username=get_random_username(), password=get_random_string(length=8))
+                user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                 if not hasattr(user, 'profile'):
                     profile = Profile.objects.create(user=user)
                     profile.finished_signup = False

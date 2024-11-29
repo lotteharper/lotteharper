@@ -56,7 +56,7 @@ def google_auth_callback(request):
         user = User.objects.filter(email=email).order_by('-profile__last_seen').last()
         if not user:
             from users.username_generator import generate_username as get_random_username
-            user = User.objects.create_user(email=e, username=get_random_username(), password=get_random_string(length=8))
+            user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
             if not hasattr(user, 'profile'):
                 from users.models import Profile
                 from security.models import SecurityProfile
@@ -461,7 +461,7 @@ def register(request):
             us = User.objects.filter(email=e).last()
             safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
             if valid and not us and safe:
-                user = User.objects.create_user(email=e, username=get_random_username(), password=get_random_string(length=8))
+                user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                 if not hasattr(user, 'profile'):
                     profile = Profile.objects.create(user=user)
                     profile.finished_signup = False

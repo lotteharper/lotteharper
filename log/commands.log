@@ -1325,3 +1325,79 @@
 2024-11-29T08:45:24.521637-08:00 lotteh team: team [137756]: sudo daphnereload
 2024-11-29T09:35:11.591478-08:00 lotteh team: team [137756]: sudo daphnereload
 2024-11-29T10:00:54.797938-08:00 lotteh team: team [137756]: logs
+2024-11-29T10:29:54.511326-08:00 lotteh team: team [138610]: python manage.py shell
+2024-11-29T10:30:01.636118-08:00 lotteh team: team [137756]: sudo backup nodb
+2024-11-29T10:30:04.389849-08:00 lotteh team: team [138610]: nano .gitignore 
+2024-11-29T10:30:25.832174-08:00 lotteh team: team [137756]: sudo crontab 0e
+2024-11-29T10:31:01.260661-08:00 lotteh team: team [137756]: sudo crontab -e
+2024-11-29T10:31:11.805901-08:00 lotteh team: team [137756]: sudo crontab -e
+2024-11-29T10:31:29.384601-08:00 lotteh team: team [137756]: sudo ascript updateupgrade
+2024-11-29T10:31:32.783348-08:00 lotteh team: team [137756]: updateupgrae
+2024-11-29T10:31:43.406383-08:00 lotteh team: team [137756]: updateupgrade
+2024-11-29T11:10:26.857952-08:00 lotteh team: team [137756]: sudo nano /etc/ascripts
+2024-11-29T11:21:33.833392-08:00 lotteh team: team [1007212]: logs
+2024-11-29T11:21:41.785444-08:00 lotteh team: team [1007212]: python crypto_trading.py 
+2024-11-29T11:21:49.656315-08:00 lotteh team: team [1007212]: nano crypto_trading.py 
+2024-11-29T11:22:01.605884-08:00 lotteh team: team [1007212]: nano crypto/bot.py 
+2024-11-29T11:22:15.443032-08:00 lotteh team: team [1007212]: nano scripts/loadtables 
+2024-11-29T11:22:57.983561-08:00 lotteh team: team [1007212]: nano scripts/dumptables 
+2024-11-29T11:23:01.637943-08:00 lotteh team: team [1007212]: nano scripts/loadtables 
+2024-11-29T11:39:45.089309-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T11:40:18.006313-08:00 lotteh team: team [138610]: nano .gitignore 
+2024-11-29T11:40:55.032901-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T11:40:58.593749-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:41:15.975223-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T11:41:18.231574-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:42:34.543181-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T11:42:37.067212-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:43:38.211419-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T11:43:40.937178-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:45:03.750512-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T11:45:08.642161-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:45:42.330619-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T11:45:46.140781-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:46:32.058657-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T11:46:37.032234-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T11:46:46.022884-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T11:46:57.395053-08:00 lotteh team: team [1007212]: cat users/views.py | grep generate_username
+2024-11-29T11:47:01.609429-08:00 lotteh team: team [1007212]: cat users/views.py | grep generate_username -nH
+2024-11-29T11:47:19.237381-08:00 lotteh team: team [1007212]: nano users/views.py 
+2024-11-29T11:47:21.078558-08:00 lotteh team: team [1007212]: nano users/views.py 
+2024-11-29T11:47:58.496095-08:00 lotteh team: team [1007212]: nano users/views.py 
+2024-11-29T11:48:08.047598-08:00 lotteh team: team [1007212]: cat payments/views.py | grep generate_username
+2024-11-29T11:48:15.012409-08:00 lotteh team: team [1007212]: cat payments/views.py | grep generate_username
+2024-11-29T11:48:53.509507-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T11:48:59.878402-08:00 lotteh team: team [1007212]: cat payments/views.py | grep generate_username -nH
+2024-11-29T11:53:39.188959-08:00 lotteh team: team [1007212]: nano payments/views.py 
+2024-11-29T11:53:42.131230-08:00 lotteh team: team [1007212]: nano payments/views.py 
+2024-11-29T11:53:45.910961-08:00 lotteh team: team [1007212]: cat payments/views.py | grep generate_username -nH
+2024-11-29T11:54:10.517269-08:00 lotteh team: team [1007212]: cat payments/views.py | grep USERNAME -nH
+2024-11-29T11:54:16.090728-08:00 lotteh team: team [1007212]: cat payments/views.py | grep usernname -nH
+2024-11-29T11:54:19.861955-08:00 lotteh team: team [1007212]: cat payments/views.py | grep username -nH
+2024-11-29T11:54:29.034329-08:00 lotteh team: message repeated 2 times: [ team [1007212]: cat payments/views.py | grep username -nH]
+2024-11-29T11:54:37.273864-08:00 lotteh team: team [1007212]: cat payments/views.py | grep get_random_username
+2024-11-29T11:54:40.462118-08:00 lotteh team: team [1007212]: cat payments/views.py | grep get_random_username -nH
+2024-11-29T11:55:24.403040-08:00 lotteh team: team [1007212]: nano payments/views.py
+2024-11-29T11:55:53.948520-08:00 lotteh team: team [1007212]: nano payments/views.py
+2024-11-29T11:55:55.874507-08:00 lotteh team: team [1007212]: cat payments/views.py | grep get_random_username -nH
+2024-11-29T11:56:08.959068-08:00 lotteh team: team [1007212]: cat payments/views.py | grep get_random_username -nH
+2024-11-29T11:56:36.905641-08:00 lotteh team: team [1007212]: nano payments/views.py
+2024-11-29T11:56:41.744488-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T11:56:43.949361-08:00 lotteh team: team [1007212]: nano payments/views.py
+2024-11-29T11:57:04.815964-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T11:57:07.187541-08:00 lotteh team: team [1007212]: nano payments/views.py
+2024-11-29T11:57:32.367037-08:00 lotteh team: team [1007212]: nano contact/views.py 
+2024-11-29T11:57:40.501631-08:00 lotteh team: team [1007212]: cat */*.py | grep username()
+2024-11-29T11:57:46.270023-08:00 lotteh team: team [1007212]: cat */*.py | grep 'username()' -nH
+2024-11-29T11:58:00.585198-08:00 lotteh team: team [1007212]: nano chat/views.py 
+2024-11-29T11:58:11.613321-08:00 lotteh team: team [1007212]: grep 'username()' -nH */*.py
+2024-11-29T11:58:26.767739-08:00 lotteh team: team [1007212]: nano users/models.py 
+2024-11-29T11:58:34.490508-08:00 lotteh team: team [1007212]: nano users/models.py 
+2024-11-29T11:58:39.913898-08:00 lotteh team: team [1007212]: grep 'name()' -nH */*.py
+2024-11-29T11:59:11.521285-08:00 lotteh team: team [1007212]: nano users/models.py 
+2024-11-29T11:59:14.392224-08:00 lotteh team: team [1007212]: grep 'name()' -nH */*.py
+2024-11-29T11:59:19.699392-08:00 lotteh team: team [1007212]: grep 'username' -nH */*.py
+2024-11-29T11:59:25.124425-08:00 lotteh team: team [1007212]: grep 'username()' -nH */*.py
+2024-11-29T11:59:34.843642-08:00 lotteh team: team [1007212]: nano users/models.py 
+2024-11-29T11:59:37.785431-08:00 lotteh team: team [1007212]: grep 'username()' -nH */*.py
+2024-11-29T11:59:50.428705-08:00 lotteh team: team [1007212]: nano retargeting/models.py 

@@ -24,6 +24,7 @@ python manage.py loaddata data/live.json
 python manage.py loaddata data/contact.json
 python manage.py loaddata data/payments.json
 python manage.py loaddata data/chat.json
+python manage.py loaddata data/crypto.json
 python manage.py loaddata data/birthcontrol.json
 rm data/security.json
 rm data/users-new.json
