@@ -344,6 +344,8 @@ cd $DIR
 git init --initial-branch=main
 git remote remove origin
 git remote add originlab $GIT_URL
+cd $DIR/web/site
+git remote remove origin
 cd $DIR
 # Setup database in postgres
 echo "Postgres setup"

@@ -5,8 +5,8 @@
 {% endblock %}{% block content %}
 {% load feed_filters %}
 <div id="pg2">
-<legend>Contact - <a href="{{ site_url }}/landing/" class="btn btn-outline-info btn-lg">Visit Site</a></legend>
-<i>Contact me - visit the link above</i>
+<legend>Contact</legend>
+<p>{{ the_ad_text }}</p>
 {% include 'contact/form.html' %}
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 {% if darkmode %}bg-dark{% else %}bg-white{% endif %}">

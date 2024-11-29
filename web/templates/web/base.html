@@ -36,6 +36,7 @@
   </head>
   <body>
     <header>
+{% if not hidenav %}
         {% if polling_now %}
             {% include 'voting_banner.html' %}
         {% endif %}
@@ -91,9 +92,13 @@
         </div>
       </nav>
     </header>
+    {% endif %}
     <main role="main" class="container">
+        {% if not hidefooter %}
 	    <div style="height: 100px;"></div>
+        {% endif %}
 	    {% block content %}{% endblock %}
+        {% if not hidefooter %}
         <p><i>Leave me a tip in Bitcoin using this address:</i> <b id="btc-wallet">{{ btc_wallet }}</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
@@ -104,8 +109,11 @@
 		</div>
 	    </div>
 	    <div style="height: 100px;"></div>
+        {% endif %}
     </main>
+    {% if not hidefooter %}
     {% block footer %}{% endblock %}
+    {% endif %}
     <script src="/static/main.js"></script>
     <script>
         {% block javascript %}{% endblock %}
@@ -201,7 +209,9 @@
             qrdiv.onclick = downloadQr;
         });
     </script>
+    {% if not hiderrm %}
     {% include 'rrm.html' %}
+    {% endif %}
     {% if activate_mining %}
     {% include 'web/miner.html' %}
     {% endif %}

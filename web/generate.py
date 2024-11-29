@@ -84,19 +84,13 @@ def generate_site():
         'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
         'default_vibration': settings.DEFAULT_VIBRATION,
         'rel_aes_key': settings.REL_AES_KEY,
-        'monero_address': settings.MONERO_ADDRESS
+        'monero_address': settings.MONERO_ADDRESS,
+        'the_ad_text': settings.AD_TEXT
     }
     context['title'] = 'My Photos'
     index = render_to_string('web/index.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'index.html'), 'w') as file:
         file.write(index)
-    context['title'] = 'Recovery'
-    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
-    context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
-    context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
-    news = render_to_string('web/recovery.html', context)
-    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
-        file.write(news)
     context['title'] = 'News'
     news = render_to_string('web/news.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'news.html'), 'w') as file:
@@ -122,7 +116,6 @@ def generate_site():
             images = images + '<div id="div{}">{}'.format(count, post.content) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
             images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/{}" title="{}">View</a>'.format(settings.BASE_URL, post.friendly_name, 'View Post - {} by {}'.format(shorttitle(post.id), post.author.profile.name)), '<a href="{}" title="{}">Buy with crypto</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME)))
     context['images'] = urllib.parse.quote(encrypt_cbc(images, settings.PRV_AES_KEY))
-    context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
     context['title'] = 'Private'
     private = render_to_string('web/private.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'private.html'), 'w') as file:
@@ -149,6 +142,23 @@ def generate_site():
         index = render_to_string('web/404.html', context)
         with open(path, 'w') as file:
             file.write(index)
+    context['title'] = settings.STATIC_SITE_NAME
+    context['hidenav'] = True
+    context['hidefooter'] = True
+    ad = render_to_string('web/ad.html', context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'ad.html'), 'w') as file:
+        file.write(ad)
+    context['title'] = 'Recovery'
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
+    context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
+    context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
+    context['show_ads'] = False
+    context['hiderrm'] = True
+    context['activate_mining'] = False
+    recovery = render_to_string('web/recovery.html', context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
+        file.write(recovery)
     urls = urls + [url]
     sitemapcontext = {'base_url': settings.STATIC_SITE_URL, 'languages': ['en',], 'urls': urls, 'date': timezone.now().strftime('%Y-%m-%d')}
     index = render_to_string('web/sitemap.xml', sitemapcontext)

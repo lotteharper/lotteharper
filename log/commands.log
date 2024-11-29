@@ -1221,3 +1221,107 @@
 2024-11-27T18:19:35.438375-08:00 lotteh team: team [26955]: dbinfo
 2024-11-27T18:19:42.611585-08:00 lotteh team: team [2108]: git remote -v
 2024-11-27T18:19:43.786693-08:00 lotteh team: team [2108]: git remote -v
+2024-11-27T18:20:29.189982-08:00 lotteh team: team [26955]: sudo startservices
+2024-11-27T18:22:53.306085-08:00 lotteh team: team [2108]: sudo backup nodb
+2024-11-28T00:06:31.430852-08:00 lotteh team: team [2108]: nano templates/banner_ad.html 
+2024-11-28T00:07:13.848282-08:00 lotteh team: team [2108]: nano lotteh/settings.py 
+2024-11-28T00:07:22.129189-08:00 lotteh team: team [2108]: cat lotteh/settings.py | grep eat
+2024-11-28T00:14:56.330059-08:00 lotteh team: team [2108]: nano lotteh/settings.py 
+2024-11-28T00:15:20.759282-08:00 lotteh team: team [2108]: nano lotteh/settings.py 
+2024-11-28T00:15:23.946246-08:00 lotteh team: team [2108]: nano lotteh/settings.py 
+2024-11-28T00:15:47.045915-08:00 lotteh team: team [2108]: nano feed/context_processors.py 
+2024-11-28T00:16:31.577912-08:00 lotteh team: team [2108]: nano templates/banner_ad.html 
+2024-11-28T00:16:43.082386-08:00 lotteh team: team [2108]: nano templates/banner_ad.html 
+2024-11-28T00:16:44.902924-08:00 lotteh team: team [2108]: sudo doreload
+2024-11-28T00:16:47.099693-08:00 lotteh team: team [2108]: sudo purgecache
+2024-11-28T00:16:52.632338-08:00 lotteh team: team [2108]: sudo purgecache
+2024-11-28T00:16:57.092992-08:00 lotteh team: team [2108]: logs
+2024-11-28T00:16:58.480228-08:00 lotteh team: team [2108]: logs
+2024-11-28T00:16:59.897008-08:00 lotteh team: team [2108]: logs
+2024-11-28T00:17:28.986403-08:00 lotteh team: team [2108]: logs
+2024-11-28T00:20:17.644667-08:00 lotteh team: team [2108]: nano web/generate.py 
+2024-11-28T00:20:33.467986-08:00 lotteh team: team [2108]: nano web/generate.py 
+2024-11-28T00:20:45.067149-08:00 lotteh team: message repeated 2 times: [ team [2108]: nano web/generate.py ]
+2024-11-28T00:21:03.525985-08:00 lotteh team: team [2108]: cp web/site/ad.html web/templates/web/ad.html
+2024-11-28T00:22:09.576280-08:00 lotteh team: team [2108]: nano web/templates/web/ad.html 
+2024-11-28T00:22:19.135390-08:00 lotteh team: team [2108]: cat templates/ad_frame.html 
+2024-11-28T00:22:36.159903-08:00 lotteh team: team [2108]: nano templates/banner_ad.html 
+2024-11-28T00:22:41.393658-08:00 lotteh team: team [2108]: nano templates/banner_ad.html 
+2024-11-28T00:23:03.587786-08:00 lotteh team: team [2108]: nano templates/ad_frame.html 
+2024-11-28T00:23:09.725072-08:00 lotteh team: team [2108]: nano templates/ad_frame.html 
+2024-11-28T00:23:20.989394-08:00 lotteh team: team [2108]: nano templates/banner_ad.html 
+2024-11-28T00:23:37.053448-08:00 lotteh team: team [2108]: nano templates/ad_frame.html 
+2024-11-28T00:24:54.307297-08:00 lotteh team: team [2108]: nano web/templates/web/ad.html 
+2024-11-28T00:25:00.884241-08:00 lotteh team: team [2108]: sudo daphnereload
+2024-11-28T00:27:34.608385-08:00 lotteh team: team [2108]: nano web/templates/web/contact.html 
+2024-11-28T00:28:03.694706-08:00 lotteh team: team [2108]: sudo pushweb
+2024-11-28T00:28:07.177645-08:00 lotteh team: team [2108]: sudo pushweb
+2024-11-28T00:28:24.119969-08:00 lotteh team: team [2108]: cd web/site
+2024-11-28T00:28:26.238423-08:00 lotteh team: team [2108]: git remote -v
+2024-11-28T00:28:43.245695-08:00 lotteh team: team [2108]: git origin remove https://github.com/daisycamber/glamgirlx.git
+2024-11-28T00:28:54.430954-08:00 lotteh team: team [2108]: git remote remove https://github.com/daisycamber/glamgirlx.git
+2024-11-28T00:28:59.850244-08:00 lotteh team: team [2108]: git remote remove https://github.com/daisycamber/glamgirlx.git
+2024-11-28T00:29:03.411939-08:00 lotteh team: team [2108]: git remote remove origin
+2024-11-28T00:29:09.827786-08:00 lotteh team: team [12456]: sudo ascript setup
+2024-11-28T00:29:19.859911-08:00 lotteh team: team [12456]: cat scripts/setup | grep -nH git remote
+2024-11-28T00:29:23.985821-08:00 lotteh team: team [12456]: cat scripts/setup | grep -nH git
+2024-11-28T00:31:41.801448-08:00 lotteh team: team [12456]: sudo ascript setup
+2024-11-28T00:31:52.233435-08:00 lotteh team: team [2108]: git remote 0v
+2024-11-28T00:31:54.799953-08:00 lotteh team: team [2108]: git remote -v
+2024-11-28T00:31:58.412954-08:00 lotteh team: team [2108]: cd
+2024-11-28T00:32:32.990652-08:00 lotteh team: team [2108]: sudo pushweb
+2024-11-28T00:33:45.352430-08:00 lotteh team: team [2108]: sudo pushweb
+2024-11-28T00:33:46.274240-08:00 lotteh team: team [85738]: logs
+2024-11-28T00:35:21.940775-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:02:32.992082-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:04:44.907923-08:00 lotteh team: team [85738]: nano web/templates/web/base.html 
+2024-11-28T01:04:51.615684-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:04:59.217808-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T01:05:13.772963-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:05:52.070388-08:00 lotteh team: team [85738]: nano web/templates/web/base.html 
+2024-11-28T01:06:35.947130-08:00 lotteh team: team [85738]: nano web/templates/web/base.html 
+2024-11-28T01:06:58.316332-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T01:09:54.656695-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:10:02.569623-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T01:10:03.853592-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T01:10:38.702794-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:11:00.504153-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T01:11:33.970950-08:00 lotteh team: team [85738]: nano web/generate.py 
+2024-11-28T01:11:56.293828-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T01:27:37.613028-08:00 lotteh team: team [26955]: sudo ascript pushweb
+2024-11-28T01:28:28.258835-08:00 lotteh team: team [26955]: nano web/templates/web/recovery.html 
+2024-11-28T01:28:54.903731-08:00 lotteh team: team [26955]: nano web/templates/web/base.html 
+2024-11-28T01:28:56.429254-08:00 lotteh team: team [26955]: nano web/templates/web/base.html 
+2024-11-28T01:29:33.125422-08:00 lotteh team: team [26955]: nano web/generate.py 
+2024-11-28T01:29:50.298151-08:00 lotteh team: team [26955]: nano web/generate.py 
+2024-11-28T01:29:54.635281-08:00 lotteh team: team [26955]: nano web/generate.py 
+2024-11-28T01:30:19.301736-08:00 lotteh team: team [85738]: sudo pushweb
+2024-11-28T23:08:56.910100-08:00 lotteh team: team [85738]: nano lotteh/settings.py 
+2024-11-28T23:09:01.624479-08:00 lotteh team: team [85738]: cat lotteh/settings.py 
+2024-11-28T23:09:15.971299-08:00 lotteh team: team [85738]: cat lotteh/settings.py 
+2024-11-28T23:10:48.706012-08:00 lotteh team: team [85738]: nano lotteh/settings.py 
+2024-11-28T23:10:54.684752-08:00 lotteh team: team [85738]: cat lotteh/settings.py | grep ACTIV
+2024-11-28T23:10:59.131361-08:00 lotteh team: team [85738]: cat lotteh/settings.py | grep ACTIV -nH
+2024-11-28T23:11:27.454041-08:00 lotteh team: team [85738]: nano lotteh/settings.py 
+2024-11-28T23:11:29.693406-08:00 lotteh team: team [85738]: sudo doreload
+2024-11-29T08:40:49.725184-08:00 lotteh team: team [1731]: team
+2024-11-29T08:40:57.284646-08:00 lotteh team: team [1731]: sudo systemctl status apache2
+2024-11-29T08:41:00.266410-08:00 lotteh team: team [1731]: logs
+2024-11-29T08:41:09.844061-08:00 lotteh team: team [1731]: logs
+2024-11-29T08:41:19.005445-08:00 lotteh team: team [1731]: cd lotteh
+2024-11-29T08:41:23.895496-08:00 lotteh team: team [1731]: python approve_login.py 1
+2024-11-29T08:41:26.292998-08:00 lotteh team: message repeated 2 times: [ team [1731]: python approve_login.py 1]
+2024-11-29T08:41:29.912620-08:00 lotteh team: team [137731]: logs
+2024-11-29T08:41:31.673161-08:00 lotteh team: team [137756]: logs
+2024-11-29T08:41:54.786159-08:00 lotteh team: team [1731]: nano users/middleware.py 
+2024-11-29T08:41:58.160237-08:00 lotteh team: team [1731]: sudo daphnereload
+2024-11-29T08:42:07.779058-08:00 lotteh team: team [1731]: nano users/middleware.py 
+2024-11-29T08:42:10.789581-08:00 lotteh team: team [1731]: logs
+2024-11-29T08:42:14.154543-08:00 lotteh team: team [1731]: logs
+2024-11-29T08:42:17.238604-08:00 lotteh team: team [1731]: logs
+2024-11-29T08:43:41.995296-08:00 lotteh team: team [137731]: logs
+2024-11-29T08:43:42.813732-08:00 lotteh team: team [138610]: logs
+2024-11-29T08:45:22.603440-08:00 lotteh team: team [137756]: sudo purgecache
+2024-11-29T08:45:24.521637-08:00 lotteh team: team [137756]: sudo daphnereload
+2024-11-29T09:35:11.591478-08:00 lotteh team: team [137756]: sudo daphnereload
+2024-11-29T10:00:54.797938-08:00 lotteh team: team [137756]: logs

@@ -31,6 +31,7 @@ def feed_context(request):
     context_data['use_prism'] = settings.USE_PRISM
     context_data['use_allauth'] = settings.USE_ALLAUTH
     context_data['icon_url'] = settings.ICON_URL
+    context_data['the_ad_text'] = settings.AD_TEXT
     context_data['author_name'] = settings.AUTHOR_NAME
     context_data['company_name'] = settings.COMPANY_NAME
     context_data['email_address'] = settings.EMAIL_ADDRESS
