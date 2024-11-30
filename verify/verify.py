@@ -1,37 +1,36 @@
-from django.db import models
-from django.contrib.auth.models import User
-import math
-from PIL import Image
-from django.utils import timezone
-import os, traceback
-from feed.blur import blur_faces
-from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
-from django.urls import reverse
-from django.utils.html import strip_tags
-from django.db.models import CharField
-from django.db.models.functions import Length
-import shutil
-from django.utils.crypto import get_random_string
-from django.conf import settings
-from security.secure import get_secure_path, get_secure_public_path
-from feed.apis import is_safe_public_image
-from verify.forensics import text_matches_name, text_matches_birthday
-from verify.ocr import get_image_text
-from datetime import date
-import sys, pytz
-from feed.align import face_angle_detect
-from verify.barcode import barcode_valid
-import uuid
-import os
-from barcode.idscantext import decode_ocr
-
 def get_uuid():
+    import uuid
     id = "%s" % (uuid.uuid4())
     return id
 
-import random
-
 def validate_id(verification):
+    import random
+    from django.db import models
+    from django.contrib.auth.models import User
+    import math
+    from PIL import Image
+    from django.utils import timezone
+    import os, traceback
+    from feed.blur import blur_faces
+    from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+    from django.urls import reverse
+    from django.utils.html import strip_tags
+    from django.db.models import CharField
+    from django.db.models.functions import Length
+    import shutil
+    from django.utils.crypto import get_random_string
+    from django.conf import settings
+    from security.secure import get_secure_path, get_secure_public_path
+    from feed.apis import is_safe_public_image
+    from verify.forensics import text_matches_name, text_matches_birthday
+    from verify.ocr import get_image_text
+    from datetime import date
+    import sys, pytz
+    from feed.align import face_angle_detect
+    from verify.barcode import barcode_valid
+    import uuid
+    import os
+    from barcode.idscantext import decode_ocr
     verification.save()
     self = verification
     from PIL import Image

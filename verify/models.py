@@ -1,8 +1,5 @@
 from simple_history.models import HistoricalRecords
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-from django.conf import settings
 from jsignature.fields import JSignatureField
 from address.models import AddressField
 
@@ -21,16 +18,22 @@ def get_signature_path(instance, filename):
 
 def get_past_date():
     from dateutil.relativedelta import relativedelta
+    from django.conf import settings
+    from django.utils import timezone
     return timezone.now() - relativedelta(years=settings.MIN_AGE)
 
 def get_past_day():
     from dateutil.relativedelta import relativedelta
+    from django.conf import settings
+    from django.utils import timezone
     return timezone.now() - relativedelta(years=settings.MIN_AGE)
+
+import uuid
+from django.contrib.auth.models import User
 
 from barcode.models import DocumentScan
 from face.models import Face
 
-import uuid
 class VeriFlow(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='veriflows')
@@ -41,6 +44,8 @@ class VeriFlow(models.Model):
 
     def is_valid(self):
         return self.face.authorized and self.scans.filter(side=True, succeeded=True).count() > 0 and self.scans.filter(side=False, succeeded=True).count() > 0
+
+from django.utils import timezone
 
 class IdentityDocument(models.Model):
     id = models.AutoField(primary_key=True)

@@ -5,14 +5,12 @@ from feed.tests import identity_verified
 from vendors.tests import is_vendor
 from django.views.decorators.csrf import csrf_exempt
 from barcode.tests import document_scanned
-from django.views.generic import DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from vendors.tests import is_vendor
-from live.models import VideoRecording
 
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 def recordings(request, username):
+    from live.models import VideoRecording
     from django.shortcuts import render
     from django.shortcuts import redirect, get_object_or_404
     from django.urls import reverse
@@ -62,6 +60,7 @@ def recordings(request, username):
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording(request, uuid):
+    from live.models import VideoRecording
     from django.shortcuts import render
     from django.shortcuts import redirect, get_object_or_404
     from django.urls import reverse
@@ -125,6 +124,7 @@ def recording(request, uuid):
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording_frame(request, uuid):
+    from live.models import VideoRecording
     from django.shortcuts import render
     from django.shortcuts import redirect, get_object_or_404
     from django.urls import reverse
@@ -155,6 +155,7 @@ def recording_frame(request, uuid):
     return render(request, 'recordings/frame.html', {'title': 'Recording', 'frame': frame})
 
 def idle_recording(username):
+    from live.models import VideoRecording
     from django.shortcuts import render
     from django.shortcuts import redirect, get_object_or_404
     from django.urls import reverse
@@ -181,6 +182,7 @@ def idle_recording(username):
     return recording
 
 def idle_frame(username):
+    from live.models import VideoRecording
     from django.shortcuts import render
     from django.shortcuts import redirect, get_object_or_404
     from django.urls import reverse
@@ -209,6 +211,7 @@ def idle_frame(username):
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording_idle(request, username):
+    from live.models import VideoRecording
     from django.shortcuts import render
     from django.shortcuts import redirect, get_object_or_404
     from django.urls import reverse
@@ -237,6 +240,10 @@ def recording_idle(request, username):
     recording = idle_recording(username)
     return HttpResponse(recording.uuid)
 
+
+from live.models import VideoRecording
+from django.views.generic import DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 class RecordingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = VideoRecording

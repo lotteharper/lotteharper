@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 import datetime, uuid
-from django.conf import settings
 from feed.storage import MediaStorage
 
 DEFAULT_CAMERA_NAME = 'private'

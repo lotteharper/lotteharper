@@ -166,7 +166,7 @@ def upload_post(post):
 
 def upload_posts():
     from feed.models import Post
-    for post in Post.objects.filter(published=True, image_offsite=None).order_by('-date_posted'):
+    for post in Post.objects.filter(published=True, image_offsite=None, offsite=False).order_by('-date_posted'):
         if not (post.image_offsite and len(post.image_offsite) > 0) and post.image: # or (post.image and os.path.exists(post.image.path):
             try: upload_post(post)
             except:

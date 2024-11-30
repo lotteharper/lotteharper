@@ -3,8 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from face.tests import is_superuser_or_vendor
 from feed.tests import identity_verified
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
 
 def send_contact_push(name):
     from django.shortcuts import render

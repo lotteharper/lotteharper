@@ -1,8 +1,4 @@
-from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-
-account_sid = settings.TWILIO_ACCOUNT_SID
-auth_token = settings.TWILIO_AUTH_TOKEN
 
 timeouts = {}
 
@@ -10,6 +6,9 @@ RATE_LIMIT = 5
 
 @csrf_exempt
 def sms(request):
+    from django.conf import settings
+    account_sid = settings.TWILIO_ACCOUNT_SID
+    auth_token = settings.TWILIO_AUTH_TOKEN
     from django.shortcuts import render
     from django.contrib.auth.decorators import login_required
     from django.shortcuts import redirect

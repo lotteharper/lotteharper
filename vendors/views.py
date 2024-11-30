@@ -1,13 +1,8 @@
 from django.shortcuts import render
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from vendors.models import VendorProfile
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
 from feed.tests import identity_verified, identity_really_verified
-from .forms import VendorProfileUpdateForm
-from django.utils import timezone
-import pytz
 
 def video(request, username):
     from .models import VendorProfile
@@ -61,6 +56,7 @@ def vendor_preferences(request):
     from django.urls import reverse
     from payments.models import VendorPaymentsProfile
     from .forms import VendorProfileUpdateForm
+    from .models import VendorProfile
     from django.contrib import messages
     v, created = VendorProfile.objects.get_or_create(user=request.user)
     v.save()
@@ -70,17 +66,21 @@ def vendor_preferences(request):
         if form.is_valid():
             form.instance.user = request.user
             from payments.apis import validate_address
+            accepted = True
             try:
                 if not validate_address(form.cleaned_data.get('payout_address'), form.cleaned_data.get('payout_currency')):
                     form.instance.payout_address = ''
                     messages.warning(request, 'This crypto address could not be accepted. Please check the address and the currency.')
+                    accepted = False
             except:
                 form.instance.payout_address = ''
                 messages.warning(request, 'This crypto address could not be accepted. Please check the address and the currency.')
-            p = form.save()
-            p.user.profile.vendor = True
-            p.user.profile.save()
-            messages.success(request, 'Vendor profile updated.')
-            return redirect(reverse('go:go'))
+                accepted = False
+            if accepted:
+                p = form.save()
+                p.user.profile.vendor = True
+                p.user.profile.save()
+                messages.success(request, 'Vendor profile updated.')
+                return redirect(reverse('go:go'))
     from django.conf import settings
     return render(request, 'vendors/vendor_preferences.html', {'title': 'Vendor Preferences','form': form, 'payment_processor': settings.PAYMENT_PROCESSOR})

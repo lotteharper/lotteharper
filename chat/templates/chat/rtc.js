@@ -70,6 +70,7 @@ function hideVideoCall() {
   hideElement(endButton);
   hideElement(muteButton);
   showElement(members);
+  stopStream();
 }
 var inter;
 var meminter;
@@ -162,44 +163,89 @@ var username = cu;
 theLink.innerHTML = "https://qoshlli.com/?key=" + username;
 document.getElementById("thename").innerHTML = username;
 const socketUrl = 'wss://' + window.location.host + '/ws/chat/video/';
-async function startVideo() {
-	  navigator
-	    .mediaDevices
-	    .getUserMedia({ video: true, audio: { echoCancellation: true } })
-	    .then((localStream) => {
-	      for (const track of localStream.getTracks()) {
-	        webrtc.addTrack(track, localStream);
-	      }
-          localVideo.srcObject = localStream;
-          localVideo.play();
-	    }).catch(function(err) {
-	  navigator
-	    .mediaDevices
-	    .getUserMedia({ audio: { echoCancellation: true } })
-	    .then((localStream) => {
-	      /** @type {HTMLVideoElement} */
-	      for (const track of localStream.getTracks()) {
-	        webrtc.addTrack(track, localStream);
-	      }
-          localVideo.srcObject = localStream;
-          localVideo.play();
-	    }).catch(function(err) {
-	  navigator
-	    .mediaDevices
-	    .getUserMedia({ video: true })
-	    .then((localStream) => {
-	      /** @type {HTMLVideoElement} */
-	      for (const track of localStream.getTracks()) {
-	        webrtc.addTrack(track, localStream);
-	      }
-          localVideo.srcObject = localStream;
-          localVideo.play();
-	    }).catch(function(err) {
-		    console.log("An error occurred: " + err);
-		    errorMessage.classList.remove('hide');
-		  });
-		 });
-		});
+function stopStream() {
+    if (!window.streamReference) return;
+
+    window.streamReference.getAudioTracks().forEach(function(track) {
+        track.stop();
+    });
+
+    window.streamReference.getVideoTracks().forEach(function(track) {
+        track.stop();
+    });
+
+    window.streamReference = null;
+}
+async function startMedia() {
+		 navigator
+         .mediaDevices
+         .getUserMedia({
+            video: true,
+            audio: {
+               echoCancellation: true
+            }
+         })
+         .then((localStream) => {
+            /** @type {HTMLVideoElement} */
+            for (const track of localStream.getTracks()) {
+               webrtc.addTrack(track, localStream);
+            }
+            localVideo.srcObject = localStream;
+    		window.streamReference = localStream;
+            localVideo.play();
+
+         }).catch(function (err) {
+            navigator
+               .mediaDevices
+               .getUserMedia({
+                  video: true,
+                  audio: true
+               })
+               .then((localStream) => {
+                  /** @type {HTMLVideoElement} */
+                  for (const track of localStream.getTracks()) {
+                     webrtc.addTrack(track, localStream);
+                  }
+                  localVideo.srcObject = localStream;
+	    	       window.streamReference = localStream;
+                  localVideo.play();
+
+               }).catch(function (err) {
+                  navigator
+                     .mediaDevices
+                     .getUserMedia({
+                        audio: true
+                     })
+                     .then((localStream) => {
+                        /** @type {HTMLVideoElement} */
+                        for (const track of localStream.getTracks()) {
+                           webrtc.addTrack(track, localStream);
+                        }
+                        localVideo.srcObject = localStream;
+		        	     window.streamReference = localStream;
+                        localVideo.play();
+
+                     }).catch(function (err) {
+                        navigator
+                           .mediaDevices
+                           .getUserMedia({
+                              video: true
+                           })
+                           .then((localStream) => {
+                              /** @type {HTMLVideoElement} */
+                              for (const track of localStream.getTracks()) {
+                                 webrtc.addTrack(track, localStream);
+                              }
+                              localVideo.srcObject = localStream;
+        					   window.streamReference = localStream;
+                              localVideo.play();
+                           }).catch(function (err) {
+                              console.log("An error occurred: " + err);
+                              errorMessage.classList.remove('hide');
+                           });
+                     });
+               });
+         });
 }
 async function handleMessage(message) {
   switch (message.channel) {
@@ -212,7 +258,7 @@ async function handleMessage(message) {
           var key = urParams.get('key');
 		  if(key == message.otherPerson || confirm(message.otherPerson + " is calling you, accept?")) {
               ringtone.pause();
-              startVideo();
+              startMedia();
 	          setTimeout(async function() {
         	      acceptCall();
     		      otherPerson = message.otherPerson;
@@ -229,7 +275,7 @@ async function handleMessage(message) {
 		  } else {
 			  var i = setInterval(async function() {
 			  if(callAccepted && callHandled) {
-                  startVideo();
+                  startMedia();
 				  clearInterval(i);
 			      otherPerson = message.otherPerson;
 			      showVideoCall();
@@ -244,6 +290,7 @@ async function handleMessage(message) {
 			  } else if(!callAccepted && callHandled) {
 				  clearInterval(i);
                   ringtone.pause();
+                  hideVideoCall();
 			  }
 			  }, 1000);
 		  }
@@ -422,7 +469,7 @@ callButton.addEventListener("click", async () => {
     otherPerson = prompt("Who would you like to call?");
   }
   if(otherPerson) {
-    startVideo();
+    startMedia();
     setTimeout(function() {
         showVideoCall();
         sendMessageToSignallingServer({

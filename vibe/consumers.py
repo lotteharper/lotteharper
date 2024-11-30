@@ -1,32 +1,32 @@
-import json, threading
 from channels.generic.websocket import AsyncWebsocketConsumer
-import os, asyncio
-import sys
-from django.conf import settings
-from django.contrib.auth.models import User
-from vibe.models import Vibrator
 from asgiref.sync import sync_to_async
+
+vibes = {}
 
 @sync_to_async
 def get_vibrator(user):
+    from vibe.models import Vibrator
     vibrator, created = Vibrator.objects.get_or_create(user=user)
     return vibrator
 
 @sync_to_async
 def set_vibrator(user, setting):
+    from vibe.models import Vibrator
     vibrator, created = Vibrator.objects.get_or_create(user=user)
-    if vibrator.last_set < timezone.now() - datetime.timedelta(seconds=1.0/4 - 0.07):
-        vibrator.setting = setting
-        vibrator.save()
+    global vibes
+    if (user.username in vibes) and vibes[user.username][1] < timezone.now() - datetime.timedelta(seconds=1.0/4 - 0.08):
+        vibes[user.username][0].send(text_data=setting)
 
 @sync_to_async
 def get_vibe_user(name):
+    from django.contrib.auth.models import User
     return User.objects.get(profile__name=name)
 
 @sync_to_async
 def get_user(user_id):
-    print(user_id)
+    from django.contrib.auth.models import User
     return User.objects.get(id=user_id)
+
 
 # Send the setting to the server from foreign user
 class RemoteConsumer(AsyncWebsocketConsumer):
@@ -51,6 +51,7 @@ async def vibe_event(self):
 async def vibe_thread(self):
     while self.connected:
         await vibe_event(self)
+        import asyncio
         await asyncio.sleep(1.0/4)
 
 # Send the setting from the foreign user
@@ -62,6 +63,9 @@ class RemoteReceiveConsumer(AsyncWebsocketConsumer):
         await self.accept()
         self.connected = True
         await vibe_thread(self)
+        global vibes
+        from django.utils import timezone
+        vibes[self.vibe_user] = (self, timezone.now())
 
     async def disconnect(self, close_code):
         self.connected = False

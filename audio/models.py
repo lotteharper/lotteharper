@@ -1,19 +1,17 @@
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import User
-import uuid
-import os, shutil, pytz
-from security.secure import get_secure_path
-from django.conf import settings
-import math
+from django.utils import timezone
 
 noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 A4 = 440
 def pitchToNote(frequency):
+    import math
     noteNum = 12 * (math.log( frequency / A4 )/math.log(2) )
     return round( noteNum ) + 69
 
 def get_file_path(instance, filename):
+    import uuid
+    import os, shutil, pytz
     ext = filename.split('.')[-1]
     filename = "%s.%s" % ('{}-{}'.format(uuid.uuid4(), instance.uploaded_file.strftime("%Y%m%d-%H%M%S")), ext)
     return os.path.join('audio/', filename)
@@ -37,6 +35,8 @@ class AudioRecording(models.Model):
     fingerprint = models.TextField(default='', null=True, blank=True)
 
     def get_secure_url(self):
+        from security.secure import get_secure_path
+        from django.conf import settings
         path, url = get_secure_path(self.content.name)
         full_path = os.path.join(settings.BASE_DIR, path)
         shutil.copy(self.content.path, full_path)
@@ -45,6 +45,8 @@ class AudioRecording(models.Model):
         return url
 
     def get_plot_url(self):
+        from security.secure import get_secure_path
+        from django.conf import settings
         path, url = get_secure_path(self.plot.name)
         full_path = os.path.join(settings.BASE_DIR, path)
         shutil.copy(self.plot.path, full_path)
@@ -59,9 +61,13 @@ class AudioRecording(models.Model):
         return '["{}"]'.format(self.pitch_notes.replace(',', '","'))
 
     def short_time(self):
+        import pytz
+        from django.conf import settings
         return self.uploaded_file.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:%S')
 
     def __str__(self):
+        import pytz
+        from django.conf import settings
         return 'user @ {} {}'.format(self.user.username, self.uploaded_file.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%B %d, %Y %H:%M:%S'))
 
     def pitch_detect(self):

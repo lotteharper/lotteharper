@@ -1,5 +1,4 @@
 from django import forms
-import datetime
 from .models import CustomerPaymentsProfile
 from .models import PaymentCard
 from address.forms import AddressField
@@ -18,8 +17,6 @@ class CardNumberForm(forms.ModelForm):
     class Meta:
         model = PaymentCard
         fields = ('agreed', 'address', 'number',)
-
-from django.utils import timezone
 
 expiry_months = ['MM']
 for x in range(12):

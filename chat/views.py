@@ -5,7 +5,6 @@ from feed.tests import identity_verified
 from vendors.tests import is_vendor
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.views.generic import (
     DeleteView

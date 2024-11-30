@@ -1,16 +1,14 @@
 from django import forms
 from .models import IdentityDocument
-from django.utils import timezone
-import datetime
-from django.conf import settings
-from dateutil.relativedelta import relativedelta
-from feed.middleware import get_current_user, get_current_request
 from jsignature.forms import JSignatureField, JSignatureWidget
-from feed.middleware import get_current_request
-from translate.translate import translate
 
 def get_past_date():
+    import datetime
+    from dateutil.relativedelta import relativedelta
+    from django.conf import settings
     return datetime.datetime.now() - relativedelta(years=settings.MIN_AGE_VERIFIED)
+
+from feed.middleware import get_current_user
 
 class VerificationForm(forms.ModelForm):
     document_number = forms.CharField(widget=forms.TextInput())
@@ -22,6 +20,7 @@ class VerificationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VerificationForm, self).__init__(*args, **kwargs)
         r = get_current_request()
+        from translate.translate import translate
         self.fields['document'].required = True
         self.fields['address'].required = True
         self.fields['document_number'].required = True

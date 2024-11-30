@@ -1401,3 +1401,343 @@
 2024-11-29T11:59:34.843642-08:00 lotteh team: team [1007212]: nano users/models.py 
 2024-11-29T11:59:37.785431-08:00 lotteh team: team [1007212]: grep 'username()' -nH */*.py
 2024-11-29T11:59:50.428705-08:00 lotteh team: team [1007212]: nano retargeting/models.py 
+2024-11-29T12:00:07.419768-08:00 lotteh team: team [1007212]: nano feed/views.py
+2024-11-29T12:00:12.744860-08:00 lotteh team: team [1007212]: nano feed/views.py
+2024-11-29T12:00:16.561444-08:00 lotteh team: team [1007212]: grep 'username()' -nH */*.py
+2024-11-29T12:00:26.208507-08:00 lotteh team: team [1007212]: python manage.py check
+2024-11-29T12:01:55.474936-08:00 lotteh team: team [1007212]: nano users/models.py 
+2024-11-29T12:02:00.250292-08:00 lotteh team: team [1007212]: python manage.py check
+2024-11-29T12:02:00.853396-08:00 lotteh team: team [1007212]: logs
+2024-11-29T12:02:06.455791-08:00 lotteh team: team [1007212]: sudo daphnereload
+2024-11-29T12:02:15.751076-08:00 lotteh team: team [1007212]: sudo systemctl status celery
+2024-11-29T12:02:23.948010-08:00 lotteh team: team [1007212]: sudo systemctl start celery
+2024-11-29T12:02:40.605338-08:00 lotteh team: team [1007212]: sudo systemctl restart celery
+2024-11-29T12:02:53.258038-08:00 lotteh team: team [1007212]: sudo systemctl restart celery
+2024-11-29T12:03:54.071782-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T12:09:08.600280-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:09:11.854977-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:10:15.799614-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:10:18.010585-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:11:30.272164-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:11:33.086392-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:12:03.421607-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:14:52.513871-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:14:55.262594-08:00 lotteh team: team [1007212]: python
+2024-11-29T12:15:15.781265-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:15:17.394191-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:16:00.984734-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:16:03.788810-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:16:51.328970-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T12:17:05.555744-08:00 lotteh team: team [138610]: sudo systemctl restart celery
+2024-11-29T12:17:25.280255-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:17:27.378197-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:17:43.173733-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T12:17:45.847009-08:00 lotteh team: team [138610]: sudo systemctl restart celery
+2024-11-29T12:17:47.046026-08:00 lotteh team: team [138610]: sudo systemctl restart celery &
+2024-11-29T12:17:51.280392-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:17:56.931605-08:00 lotteh team: team [1007212]: nano users/username_generator.py 
+2024-11-29T12:17:59.174522-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T12:18:11.007908-08:00 lotteh team: team [138610]: sudo systemctl restart celery
+2024-11-29T12:19:10.355637-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:19:13.403014-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T12:19:17.517901-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:22:45.521814-08:00 lotteh team: team [138610]: nano users/username_generator.py 
+2024-11-29T12:23:08.253748-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:23:43.735358-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T12:23:55.441861-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T16:41:12.074373-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T16:41:17.535327-08:00 lotteh team: team [1007212]: nano templates/social
+2024-11-29T16:41:25.679450-08:00 lotteh team: team [1007212]: nano templates/social.html 
+2024-11-29T16:41:29.762711-08:00 lotteh team: team [1007212]: cat templates/social.html 
+2024-11-29T16:42:17.035854-08:00 lotteh team: team [1007212]: nano games/templates/games/invite.html 
+2024-11-29T16:42:23.724171-08:00 lotteh team: message repeated 2 times: [ team [1007212]: nano games/templates/games/invite.html ]
+2024-11-29T16:43:51.690654-08:00 lotteh team: team [138610]: cat templates/base.html
+2024-11-29T16:46:25.146791-08:00 lotteh team: team [1007212]: nano games/templates/games/invite.html 
+2024-11-29T16:46:28.976677-08:00 lotteh team: team [1007212]: sudo doreload
+2024-11-29T16:55:24.764600-08:00 lotteh team: team [1007212]: nano chat/templates/chat/video.html 
+2024-11-29T16:56:35.178654-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T16:56:37.507082-08:00 lotteh team: team [1007212]: sudo doreload
+2024-11-29T16:57:09.075003-08:00 lotteh team: team [1007212]: logs
+2024-11-29T16:57:10.338903-08:00 lotteh team: team [1007212]: logs
+2024-11-29T16:59:07.293946-08:00 lotteh team: team [138610]: cat templates/base.html
+2024-11-29T16:59:08.821955-08:00 lotteh team: team [1007212]: nano chat/urls.py 
+2024-11-29T16:59:13.025768-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T16:59:22.879100-08:00 lotteh team: team [1007212]: cat chat/templates/chat/rtc.js|grep startVideo
+2024-11-29T16:59:40.601787-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T17:00:10.172830-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T17:00:12.429547-08:00 lotteh team: team [1007212]: cat chat/templates/chat/rtc.js|grep startVideo -nH
+2024-11-29T17:01:29.484564-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T17:02:04.462843-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T17:02:05.476707-08:00 lotteh team: team [1007212]: cat chat/templates/chat/rtc.js|grep startVideo -nH
+2024-11-29T17:02:35.643335-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T17:02:37.611357-08:00 lotteh team: team [1007212]: sudo doreload
+2024-11-29T17:02:43.299529-08:00 lotteh team: team [1007212]: logs
+2024-11-29T17:02:44.121924-08:00 lotteh team: team [1007212]: logs
+2024-11-29T17:02:48.630102-08:00 lotteh team: team [138610]: logs
+2024-11-29T17:02:50.204193-08:00 lotteh team: team [138610]: logs
+2024-11-29T17:05:08.551107-08:00 lotteh team: team [1007212]: watchlogs
+2024-11-29T17:07:11.386415-08:00 lotteh team: team [1007212]: nano chat/templates/chat/rtc.js
+2024-11-29T17:07:14.584686-08:00 lotteh team: team [1007212]: sudo doreload
+2024-11-29T17:07:28.799817-08:00 lotteh team: team [1007212]: logs
+2024-11-29T17:07:30.205174-08:00 lotteh team: team [1007212]: logs
+2024-11-29T17:07:31.415336-08:00 lotteh team: team [1007212]: logs
+2024-11-29T17:07:32.460350-08:00 lotteh team: team [1007212]: logs
+2024-11-29T17:15:44.547521-08:00 lotteh team: team [1007212]: python upload_post
+2024-11-29T17:15:59.895848-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:16:11.409348-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:16:19.185568-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:16:36.443427-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:16:46.643041-08:00 lotteh team: message repeated 3 times: [ team [1007212]: python upload_post.py ]
+2024-11-29T17:16:52.015226-08:00 lotteh team: team [1007212]: nano feed/upload.py 
+2024-11-29T17:19:52.282755-08:00 lotteh team: team [138610]: logs
+2024-11-29T17:19:56.735520-08:00 lotteh team: team [138610]: ps -aux | grep python
+2024-11-29T17:20:09.334664-08:00 lotteh team: team [138610]: kill -9 1263540
+2024-11-29T17:20:09.394541-08:00 lotteh team: team [1007212]: python upload_posts.py 
+2024-11-29T17:20:29.788639-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:22:10.636047-08:00 lotteh team: team [1007212]: sudo nano /etc/config.json 
+2024-11-29T17:22:16.926476-08:00 lotteh team: team [1007212]: cat /etc/config.json | grep IMGUR
+2024-11-29T17:22:21.129402-08:00 lotteh team: team [1007212]: cat /etc/api.json | grep IMGUR
+2024-11-29T17:22:24.224895-08:00 lotteh team: team [1007212]: cat /etc/apis.json | grep IMGUR
+2024-11-29T17:22:43.859531-08:00 lotteh team: team [1007212]: sudo nano /etc/apis.json 
+2024-11-29T17:22:47.393623-08:00 lotteh team: team [1007212]: sudo doreload
+2024-11-29T17:22:56.664006-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:23:00.527915-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:23:04.926548-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:23:30.986188-08:00 lotteh team: team [1007212]: nano feed/upload.py 
+2024-11-29T17:23:52.848075-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:26:00.507686-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:29:25.128163-08:00 lotteh team: team [1007212]: python manage.py shell
+2024-11-29T17:29:59.579157-08:00 lotteh team: team [1007212]: nano feed/upload.py 
+2024-11-29T17:30:02.594049-08:00 lotteh team: team [1007212]: python upload_post
+2024-11-29T17:30:20.489577-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T17:31:41.282359-08:00 lotteh team: team [1007212]: sudo crontab -e
+2024-11-29T18:19:50.485659-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T18:19:51.628518-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T18:19:52.962702-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T18:19:54.574625-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T18:20:00.507900-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T18:20:05.113549-08:00 lotteh team: team [1007212]: sudo doreload
+2024-11-29T18:20:12.331119-08:00 lotteh team: team [1007212]: sudo daphnereload
+2024-11-29T18:20:30.740943-08:00 lotteh team: team [1007212]: sudo nano /etc/apache2/sites-available/lotteh-le-ssl.conf 
+2024-11-29T18:20:34.541453-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:35.694728-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:36.654897-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:37.728876-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:39.079573-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:43.746438-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:45.755171-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:45.801364-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:48.303941-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:51.412023-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:53.049436-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:20:54.348191-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:00.170503-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:02.192548-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:03.829907-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:05.175431-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:06.321083-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:25.004618-08:00 lotteh team: team [1007212]: compinfo
+2024-11-29T18:21:26.091678-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:27.799566-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:29.350194-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:30.812050-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:32.648134-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:34.059668-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:35.521498-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:36.958821-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:38.315612-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:39.735615-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:41.151563-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:42.443232-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:21:43.704306-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:22:35.336824-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:22:36.391104-08:00 lotteh team: team [1007212]: logs
+2024-11-29T18:23:00.210729-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T20:00:21.954775-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T20:00:36.351587-08:00 lotteh team: team [1007212]: cat */*.py | grep import
+2024-11-29T20:00:59.043373-08:00 lotteh team: team [1007212]: grep import -nH */*.py
+2024-11-29T20:01:30.371952-08:00 lotteh team: team [1007212]: grep import -nH */*.py
+2024-11-29T20:01:54.415300-08:00 lotteh team: team [1007212]: nano voice/forms.py 
+2024-11-29T20:02:02.883108-08:00 lotteh team: team [1007212]: nano voice/forms.py 
+2024-11-29T20:11:46.767712-08:00 lotteh team: team [1007212]: nano vibe/consumers.py 
+2024-11-29T20:12:06.835944-08:00 lotteh team: team [1007212]: nano vibe/views.py 
+2024-11-29T20:13:03.500697-08:00 lotteh team: team [1007212]: nano verify/views.py
+2024-11-29T20:13:13.372509-08:00 lotteh team: team [1007212]: nano verify/models.py 
+2024-11-29T20:13:30.821809-08:00 lotteh team: team [1007212]: nano verify/verify.py 
+2024-11-29T20:14:10.430339-08:00 lotteh team: team [1007212]: nano verify/verify.py 
+2024-11-29T20:15:01.310972-08:00 lotteh team: team [1007212]: nano verify/tests.py 
+2024-11-29T20:17:17.023630-08:00 lotteh team: team [1007212]: nano verify/forms.py 
+2024-11-29T20:18:19.898988-08:00 lotteh team: team [1007212]: nano verify/views.py 
+2024-11-29T20:19:50.349772-08:00 lotteh team: team [1007212]: nano vendors/views.py 
+2024-11-29T20:20:47.429630-08:00 lotteh team: team [1007212]: nano verify/models.py 
+2024-11-29T20:20:52.524758-08:00 lotteh team: team [1007212]: nano verify/tests.py 
+2024-11-29T20:22:44.567925-08:00 lotteh team: team [1007212]: nano vendors/models.py 
+2024-11-29T20:23:01.921229-08:00 lotteh team: team [1007212]: nano vendors/models.py 
+2024-11-29T20:24:08.251170-08:00 lotteh team: team [1007212]: nano users/tokens.py
+2024-11-29T20:24:57.912237-08:00 lotteh team: team [1007212]: nano users/views.py 
+2024-11-29T20:27:40.827699-08:00 lotteh team: team [1007212]: nano security/secur
+2024-11-29T20:28:32.238750-08:00 lotteh team: team [1007212]: nano security/secure.py 
+2024-11-29T20:32:41.096234-08:00 lotteh team: team [1007212]: nano live/models.py 
+2024-11-29T20:35:37.521563-08:00 lotteh team: team [1007212]: nano payments/forms.py 
+2024-11-29T20:39:25.492432-08:00 lotteh team: team [1007212]: nano audio/models.py 
+2024-11-29T20:40:41.124628-08:00 lotteh team: team [1007212]: nano audio/views.py 
+2024-11-29T20:40:48.546916-08:00 lotteh team: team [1007212]: nano audio/models.py 
+2024-11-29T20:41:23.995069-08:00 lotteh team: team [1007212]: nano audio/models.py 
+2024-11-29T20:41:34.423722-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T20:41:39.591608-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T20:41:40.753598-08:00 lotteh team: team [1007212]: compinfo
+2024-11-29T20:41:44.014956-08:00 lotteh team: team [1007212]: sudo daphnereload &
+2024-11-29T20:42:09.842258-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T20:42:13.257586-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:42:14.541870-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:42:29.128211-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:42:32.946944-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:42:37.396570-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:43:06.169487-08:00 lotteh team: team [138610]: nano /home/team/lotteh/venv/lib/python3.12/site-packages/django/apps/registry.py
+2024-11-29T20:43:17.910856-08:00 lotteh team: team [138610]: python manage.py check
+2024-11-29T20:43:32.846667-08:00 lotteh team: team [138610]: nano verify/models.py 
+2024-11-29T20:43:35.789110-08:00 lotteh team: team [138610]: python manage.py check
+2024-11-29T20:43:43.155964-08:00 lotteh team: team [138610]: nano /home/team/lotteh/venv/lib/python3.12/site-packages/django/apps/registry.py
+2024-11-29T20:43:49.611182-08:00 lotteh team: team [138610]: nano /home/team/lotteh/venv/lib/python3.12/site-packages/django/apps/registry.py
+2024-11-29T20:43:50.488428-08:00 lotteh team: team [1007212]: compinfo
+2024-11-29T20:43:52.600206-08:00 lotteh team: team [1007212]: sudo daphnereload
+2024-11-29T20:43:54.113339-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:43:55.058748-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:44:06.612779-08:00 lotteh team: team [1007212]: watchlogs
+2024-11-29T20:44:07.395558-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:44:23.422990-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:44:25.594759-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:44:26.881765-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:35.450653-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:37.124142-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:39.475236-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:40.623697-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:49.947585-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:51.906758-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:53.526741-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:55.422189-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:57.564777-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:45:59.372456-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:46:08.644352-08:00 lotteh team: team [1007212]: logs
+2024-11-29T20:46:45.615619-08:00 lotteh team: team [1007212]: nano security/middleware.py
+2024-11-29T20:46:54.569938-08:00 lotteh team: team [1007212]: nano security/middleware.py
+2024-11-29T20:47:03.372661-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T20:47:10.485755-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T20:47:14.687878-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T20:47:19.325283-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:40.159863-08:00 lotteh team: team [138610]: sudo systemctl restart celery
+2024-11-29T20:47:46.219954-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:47.409227-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:48.414924-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:49.495971-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:50.620815-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:51.654137-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:52.786888-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:53.812240-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:54.947968-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:47:55.928868-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T20:48:12.842400-08:00 lotteh team: team [138610]: sudo ascript daphnereload
+2024-11-29T20:48:14.432360-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:48:16.908770-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:22.916347-08:00 lotteh team: team [138610]: nano vendors/views.py 
+2024-11-29T20:52:25.342399-08:00 lotteh team: team [138610]: nano vendors/views.py 
+2024-11-29T20:52:27.324927-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T20:52:28.459556-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:36.293087-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:37.480105-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:38.746570-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:40.056899-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:41.750402-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:43.091279-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:52:45.647767-08:00 lotteh team: team [138610]: watchlogs
+2024-11-29T20:53:21.392104-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T20:54:14.454920-08:00 lotteh team: team [138610]: nano vendors/views.py 
+2024-11-29T20:54:19.092871-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T20:54:44.432380-08:00 lotteh team: team [138610]: watchlogs
+2024-11-29T20:57:05.638682-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T20:57:06.461557-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:57:08.165533-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:57:09.641611-08:00 lotteh team: team [138610]: logs
+2024-11-29T20:57:10.998507-08:00 lotteh team: team [138610]: logs
+2024-11-29T22:45:47.049240-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:45:50.540075-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:45:52.058439-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:45:53.616203-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:46:59.418087-08:00 lotteh team: team [138610]: nano lotteh/celery.py 
+2024-11-29T22:47:17.574627-08:00 lotteh team: team [138610]: sudo systemctl restart celery
+2024-11-29T22:47:21.432736-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:22.617615-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:23.791608-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:24.978254-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:26.446683-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:27.930569-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:29.496968-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:30.957596-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:32.566421-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:34.138889-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:35.798476-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:38.394039-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:41.512407-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:43.346755-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:47:44.906559-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:46.891986-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T22:52:50.380688-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:51.780261-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:53.069404-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:54.271237-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:55.754551-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:57.295439-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:52:59.506698-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T22:53:05.296256-08:00 lotteh team: team [138610]: sudo systemctl status celery
+2024-11-29T23:00:03.916183-08:00 lotteh team: team [138610]: nano lotteh/celery.py 
+2024-11-29T23:00:11.928208-08:00 lotteh team: team [138610]: nano lotteh/celery.py 
+2024-11-29T23:00:18.372800-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:00:24.477547-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T23:00:33.145454-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T23:00:34.575954-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T23:00:35.107919-08:00 lotteh team: team [138610]: sudo systemctl status apache2
+2024-11-29T23:00:45.719422-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T23:00:49.798621-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T23:01:11.340729-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T23:01:38.000889-08:00 lotteh team: team [138610]: grep -nH "\nimport" */views.py
+2024-11-29T23:01:43.720648-08:00 lotteh team: message repeated 2 times: [ team [138610]: grep -nH "\nimport" */views.py]
+2024-11-29T23:01:49.581095-08:00 lotteh team: team [138610]: grep -nH "import" */views.py
+2024-11-29T23:01:51.979691-08:00 lotteh team: team [138610]: grep -nH "\nimport" */views.py
+2024-11-29T23:01:55.935615-08:00 lotteh team: team [138610]: grep -nH "\n\rimport" */views.py
+2024-11-29T23:02:02.183355-08:00 lotteh team: team [138610]: grep -nH "\rimport" */views.py
+2024-11-29T23:02:06.256795-08:00 lotteh team: team [138610]: grep -nH "import" */views.py
+2024-11-29T23:02:19.374591-08:00 lotteh team: team [138610]: nano web/views.py 
+2024-11-29T23:04:17.674615-08:00 lotteh team: team [138610]: nano voice/views.py 
+2024-11-29T23:04:55.934564-08:00 lotteh team: team [138610]: nano verify/views.py 
+2024-11-29T23:05:27.106572-08:00 lotteh team: team [138610]: nano users/views.py 
+2024-11-29T23:07:44.662595-08:00 lotteh team: team [138610]: nano sms/views.py 
+2024-11-29T23:09:38.229695-08:00 lotteh team: team [138610]: nano remote/views.py 
+2024-11-29T23:09:39.963653-08:00 lotteh team: team [138610]: nano sms/views.py 
+2024-11-29T23:11:53.371714-08:00 lotteh team: team [138610]: nano recordings/views.py 
+2024-11-29T23:14:25.880629-08:00 lotteh team: team [138610]: nano payments/views.py 
+2024-11-29T23:17:48.250449-08:00 lotteh team: team [138610]: nano contact/views.py 
+2024-11-29T23:17:51.144133-08:00 lotteh team: team [138610]: nano chat/vi
+2024-11-29T23:17:56.009516-08:00 lotteh team: team [138610]: nano chat/views.py 
+2024-11-29T23:17:59.652912-08:00 lotteh team: team [138610]: sudo daphnereload
+2024-11-29T23:18:11.958991-08:00 lotteh team: team [1007212]: sudo systemctl status apache
+2024-11-29T23:18:15.355635-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:17.263338-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:31.992274-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:43.827829-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:45.699784-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:47.318854-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:48.635558-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:49.895174-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:51.149159-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:52.546761-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:53.773058-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:55.447444-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:18:57.337280-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:19:00.931789-08:00 lotteh team: team [1007212]: sudo systemctl status apache2
+2024-11-29T23:21:38.073634-08:00 lotteh team: team [1007212]: sudo daphnereload
+2024-11-29T23:22:31.776645-08:00 lotteh team: team [1007212]: watchlogs
+2024-11-29T23:23:17.715027-08:00 lotteh team: team [1007212]: sudo gitbackup nodb
+2024-11-29T23:23:22.589897-08:00 lotteh team: team [1007212]: clear
+2024-11-29T23:26:16.281279-08:00 lotteh team: team [1007212]: sudo backup nodb
+2024-11-29T23:26:26.303445-08:00 lotteh team: team [1007212]: sudo backup nodb
+2024-11-29T23:26:37.917345-08:00 lotteh team: team [1007212]: nano .gitignore 

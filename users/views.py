@@ -5,14 +5,11 @@ from django.views.generic import (
     DeleteView
 )
 from django.utils.decorators import method_decorator
-from django.http import HttpResponseRedirect
 from face.tests import is_superuser_or_vendor
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page, never_cache, cache_control
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
 
 
 #@csrf_exempt

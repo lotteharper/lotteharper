@@ -7,7 +7,6 @@ from feed.tests import identity_verified
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control
 from django.views.decorators.vary import vary_on_cookie
-import threading, time, pytz, shutil, datetime
 
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')

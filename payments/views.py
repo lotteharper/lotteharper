@@ -6,8 +6,6 @@ from feed.tests import identity_verified, identity_really_verified
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
-from users.username_generator import generate_username as get_random_username
-from .forms import CardPaymentForm
 
 def clear_cart(response):
     import datetime

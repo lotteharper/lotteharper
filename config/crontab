@@ -1,6 +1,7 @@
 0 4 * * 1 sudo apt-get update && sudo apt-get upgrade -y && sudo reboot
 0 0 1 * * sudo certbot renew --quiet
 #*/5 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
+0 */3 * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/upload_post.py
 * * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/crypto_trading.py
 */30 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/process_recordings.py
 0 */12 * * * sh -c "sudo backup" team
