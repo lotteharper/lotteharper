@@ -170,7 +170,6 @@ echo "db.json.*" >> .gitignore
 echo "client_secret.json" >> .gitignore
 echo "mailbox/" >> .gitignore
 echo "data/" >> .gitignore
-echo "venv-new/" >> .gitignore
 echo "scripts/initialize" >> .gitignore
 echo "config/etc_dovecot_passwd" >> .gitignore
 echo "config/config.json" >> .gitignore

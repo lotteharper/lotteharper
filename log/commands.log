@@ -1744,3 +1744,48 @@
 2024-11-29T23:26:52.988051-08:00 lotteh team: team [138610]: compinfo
 2024-11-29T23:29:31.051171-08:00 lotteh team: team [1007212]: sudo backup nodb
 2024-11-29T23:29:46.916604-08:00 lotteh team: team [1007212]: nano .gitignore 
+2024-11-29T23:29:58.323745-08:00 lotteh team: team [138610]: compinfo
+2024-11-29T23:30:01.237788-08:00 lotteh team: team [138610]: ls venv-new
+2024-11-29T23:30:10.641550-08:00 lotteh team: team [138610]: sudo rm -r venv-new
+2024-11-29T23:30:20.342740-08:00 lotteh team: team [138610]: ls venv
+2024-11-29T23:32:31.806344-08:00 lotteh team: team [1007212]: sudo backup nodb
+2024-11-29T23:33:19.186943-08:00 lotteh team: team [1007212]: sudo ascript backup
+2024-11-29T23:45:22.371145-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:45:40.735830-08:00 lotteh team: team [138610]: sudo systemctl stop daphne
+2024-11-29T23:45:42.623727-08:00 lotteh team: team [138610]: sudo systemctl stop daphne &
+2024-11-29T23:45:48.744928-08:00 lotteh team: team [138610]: ./scripts/daphnetest.sh 
+2024-11-29T23:45:52.922590-08:00 lotteh team: team [138610]: ./scripts/daphnetest.sh 
+2024-11-29T23:46:00.605697-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:04.030813-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:05.173931-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:06.335572-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:07.612612-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:10.142022-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:12.044369-08:00 lotteh team: team [138610]: sudo systemctl status daphne
+2024-11-29T23:46:15.632622-08:00 lotteh team: team [138610]: ./scripts/daphnetest.sh 
+2024-11-29T23:46:20.633824-08:00 lotteh team: team [138610]: ps -aux | grep daphne
+2024-11-29T23:46:29.454434-08:00 lotteh team: team [138610]: ps -aux | grep daphne
+2024-11-29T23:46:34.125910-08:00 lotteh team: message repeated 8 times: [ team [138610]: ps -aux | grep daphne]
+2024-11-29T23:46:39.523612-08:00 lotteh team: team [138610]: kill -9 1351371
+2024-11-29T23:46:41.314619-08:00 lotteh team: team [138610]: ps -aux | grep daphne
+2024-11-29T23:47:02.801251-08:00 lotteh team: team [1360443]: logs
+2024-11-29T23:47:07.101076-08:00 lotteh team: team [1360443]: logs
+2024-11-29T23:47:09.608427-08:00 lotteh team: team [1360443]: la
+2024-11-29T23:47:10.887196-08:00 lotteh team: team [1360443]: ls
+2024-11-29T23:47:13.700590-08:00 lotteh team: team [1360443]: clear
+2024-11-29T23:47:18.775578-08:00 lotteh team: team [1007212]: compinfo
+2024-11-29T23:47:22.924686-08:00 lotteh team: team [1007212]: ps -aux | grep daphne
+2024-11-29T23:47:32.421164-08:00 lotteh team: team [1007212]: kill -9 1360205
+2024-11-29T23:47:32.459693-08:00 lotteh team: team [138610]: ./scripts/daphnetest.sh 
+2024-11-29T23:47:37.808564-08:00 lotteh team: team [1007212]: sudo systemctl start daphne
+2024-11-29T23:47:41.470556-08:00 lotteh team: team [1007212]: sudo daphnereload
+2024-11-29T23:48:09.046075-08:00 lotteh team: team [1361057]: clear
+2024-11-29T23:48:15.766409-08:00 lotteh team: team [1361057]: logs
+2024-11-29T23:48:18.101587-08:00 lotteh team: team [1361057]: clear
+2024-11-29T23:48:19.643322-08:00 lotteh team: team [1361057]: ls
+2024-11-29T23:48:23.307761-08:00 lotteh team: team [1361113]: clear
+2024-11-29T23:48:26.085962-08:00 lotteh team: team [1361113]: logs
+2024-11-29T23:48:33.470617-08:00 lotteh team: team [1361113]: python manage.py check
+2024-11-29T23:49:45.358010-08:00 lotteh team: team [1361057]: venv
+2024-11-29T23:50:38.618337-08:00 lotteh team: team [1007212]: python upload_post.py 
+2024-11-29T23:51:02.466903-08:00 lotteh team: team [1007212]: sudo crontab -e
