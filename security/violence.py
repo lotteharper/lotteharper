@@ -32,7 +32,7 @@ def detect(image):
     if label != 'Unknown' and label in EXCLUDED_LABELS: return True
     return False
 
-SCALE_FACTOR = 0.3
+SCALE_FACTOR = 0.1
 
 def resize_with_aspect_ratio(image, width=None, height=None):
     import cv2

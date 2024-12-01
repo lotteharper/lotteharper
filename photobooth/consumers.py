@@ -14,16 +14,18 @@ from django.conf import settings
 import base64
 import urllib.parse
 
-@sync_to_async
-def get_camera_status(camera_user, camera_name):
-    return Camera.objects.get_or_create(name=camera_name, user__profile__name=camera_user).data
+cameras = {}
 
-@sync_to_async
-def update_camera(camera_user, camera_name, camera_data):
-    camera, created = Camera.objects.get_or_create(name=camera_name, user__profile__name=camera_user)
-    camera.connected = timezone.now()
-    camera.data = camera_data
-    camera.save()
+#@sync_to_async
+#def get_camera_status(camera_user, camera_name):
+#    return Camera.objects.get_or_create(name=camera_name, user__profile__name=camera_user).data
+
+#@sync_to_async
+#def update_camera(camera_user, camera_name, camera_data):
+#    camera, created = Camera.objects.get_or_create(name=camera_name, user__profile__name=camera_user)
+#    camera.connected = timezone.now()
+#    camera.data = camera_data
+#    camera.save()
 
 @sync_to_async
 def get_user(id):
@@ -47,14 +49,18 @@ class PhotoboothConsumer(AsyncWebsocketConsumer):
         auth2 = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
         if not (auth and auth2): return
         await self.accept()
+        global cameras
+        cameras[self.camera_name] = {}
+        cameras[self.camera_name][self.camera_user] = self
+
 
     async def disconnect(self, close_code):
         pass
 
     async def receive(self, text_data):
-        text = await update_camera(self.camera_user, self.camera_name, text_data)
-        await self.send(text_data=text)
-
+#        text = await update_camera(self.camera_user, self.camera_name, text_data)
+#        await self.send(text_data=text)
+        pass
     pass
 
 class PhotoboothRemoteConsumer(AsyncWebsocketConsumer):
@@ -70,8 +76,9 @@ class PhotoboothRemoteConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         if not text_data == 'i':
-            text = await update_camera(self.camera_user, self.camera_name, text_data)
-        text = await get_camera_status(self.camera_user, self.camera_name)
-        await self.send(text_data=text)
-
+            global cameras
+            if self.camera_user in cameras and self.camera_name in cameras[self.camera_user]: await cameras[camera_user][camera_name].send(text_data=text_data)
+#        text = await get_camera_status(self.camera_user, self.camera_name)
+#        await self.send(text_data=text)
+        pass
     pass

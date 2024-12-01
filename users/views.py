@@ -6,11 +6,35 @@ from django.views.generic import (
 )
 from django.utils.decorators import method_decorator
 from face.tests import is_superuser_or_vendor
+from vendors.tests import is_vendor
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page, never_cache, cache_control
 
+@login_required
+@user_passes_test(is_vendor)
+def imgur_oauth(request):
+    from users.oauth import get_imgur_url
+    from django.shortcuts import redirect
+    return redirect(get_imgur_url())
+
+@csrf_exempt
+@login_required
+@user_passes_test(is_vendor)
+def imgur_callback(request):
+    if request.method == 'POST':
+        vp = request.user.vendor_profile
+        vp.imgur_token = request.GET.get('access_token', '')
+        vp.imgur_refresh = request.GET.get('refresh_token', '')
+        vp.imgur_username = request.GET.get('account_username', '')
+        from django.utils import timezone
+        vp.imgur_time = timezone.now()
+        vp.save()
+        from django.http import HttpResponse
+        return HttpResponse(200)
+    from django.shortcuts import render
+    return render(request, 'users/imgur.html', {'title': 'Imgur Authentication'})
 
 #@csrf_exempt
 #@login_required

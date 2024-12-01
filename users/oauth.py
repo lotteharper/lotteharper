@@ -8,6 +8,11 @@ import os
 
 flows = {}
 
+def get_imgur_url():
+    import uuid
+    url = 'https://api.imgur.com/oauth2/authorize?client_id={}&response_type=token&state={}'.format(settings.IMGUR_ID, str(uuid.uuid4()))
+    return url
+
 def get_auth_url(request, email):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(str(os.path.join(settings.BASE_DIR, 'client_secret.json')),
     scopes=['https://www.googleapis.com/auth/youtube.force-ssl',

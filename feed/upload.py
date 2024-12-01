@@ -48,7 +48,7 @@ def resize_image(image_path):
 def get_as_base64(url):
     return base64.b64encode(requests.get(url).content)
 
-def upload_photo(path):
+def upload_photo(path, key=None):
     from io import BytesIO
     buffered1 = BytesIO()
     im1 = get_image(path)
@@ -59,9 +59,9 @@ def upload_photo(path):
     im2.save(buffered2, format="PNG")
     image2 = base64.b64encode(buffered2.getvalue())
     if not len(image1) > 0: return None, None
-    return upload(image1) if len(image1) > 0 else None, upload(image2) if len(image2) > 0 else None
+    return upload(image1, key=None) if len(image1) > 0 else None, upload(image2, key=None) if len(image2) > 0 else None
 
-def upload(base64_data):
+def upload(base64_data, key=None):
 #    b64data = 'data:image/png;base64,' + base64_data.decode('utf-8')
     data = {
         'image': base64_data,
@@ -69,7 +69,7 @@ def upload(base64_data):
         'title': '{} - {}'.format(settings.SITE_NAME, settings.AUTHOR_NAME),
         'description': settings.BASE_DESCRIPTION + ' - from {}'.format(settings.STATIC_DOMAIN),
     }
-    headers = {"Authorization": "Client-ID {}".format(settings.IMGUR_ID)}
+    headers = {"Authorization": "Client-ID {}".format(settings.IMGUR_ID if not key else key)}
     out = requests.post('https://api.imgur.com/3/image', data=data, headers=headers)
     print(out)
     print(out.text)
@@ -131,8 +131,10 @@ def upload_post(post):
             post = Post.objects.get(id=post.id)
             post.get_blur_url(gen=True)
             post = Post.objects.get(id=post.id)
+        from django.utils import timezone
+        import datetime
         try:
-            i1, i2 = upload_photo(post.image.path if post.public and not post.private else post.image_censored.path)
+            i1, i2 = upload_photo((post.image.path if post.public and not post.private else post.image_censored.path), post.author.vendor_profile.imgur_token if post.author.vendor_profile.imgur_time > timezone.now() - datetime.timedelta(minutes=60) else None)
             post.image_offsite = i1
             post.image_thumb_offsite = i2
         except OSError:

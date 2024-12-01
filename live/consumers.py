@@ -128,6 +128,8 @@ class CameraConsumer(AsyncWebsocketConsumer):
 
     pass
 
+remotes = {}
+
 class RemoteConsumer(AsyncWebsocketConsumer):
     camera_user = None
     camera_name = None
@@ -140,8 +142,11 @@ class RemoteConsumer(AsyncWebsocketConsumer):
         pass
 
     async def receive(self, text_data):
-        text = await get_camera_status(self.camera_user, self.camera_name)
-        await self.send(text_data=text)
+        global remotes
+        if self.camera_user in remotes and self.camera_name in remotes[self.camera_user]: remotes[self.camera_user][self.camera_name].send(text_data=text_data)
+#        text = await get_camera_status(self.camera_user, self.camera_name)
+#        await self.send(text_data=text)
+    pass
 
 async def run_updates(self, camera_user, camera_name, index, user):
     text = await get_camera_data(self, camera_user, camera_name, index, user)
@@ -167,7 +172,10 @@ class VideoConsumer(AsyncWebsocketConsumer):
         if 'key' in query_params and query_params['key']: self.key = query_params['key']
         await self.accept()
         index = int(self.key)
-        await send_updates(self, self.camera_user, self.camera_name, index, self.user)
+        global remotes
+        remotes[self.camera_user] = {}
+        remotes[self.camera_user][self.camera_name] = self
+#        await send_updates(self, self.camera_user, self.camera_name, index, self.user)
 
     async def disconnect(self, close_code):
         pass
@@ -175,3 +183,4 @@ class VideoConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
 
         pass
+    pass

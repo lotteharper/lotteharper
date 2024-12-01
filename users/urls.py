@@ -46,4 +46,6 @@ urlpatterns = [
     path('user/<int:pk>/active/', views.toggle_user_active, name='toggle-user-active'),
     path('auth/google/', views.google_auth, name='youtube'),
     path('auth/callback/', views.google_auth_callback, name='oauth'),
+    path('auth/imgur/', views.imgur_oauth, name='imgur'),
+    path('auth/imgur/callback/', views.imgur_callback, name='imgur-callback')
 ]
