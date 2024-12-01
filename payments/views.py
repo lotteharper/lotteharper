@@ -57,6 +57,7 @@ def cart_card(request):
     from django.shortcuts import render
     from django.contrib.auth.models import User
     from feed.models import Post
+    from .forms import CardPaymentForm
     from django.template.loader import render_to_string
     signature = None
     parent_signature = None
@@ -595,6 +596,7 @@ def webdev(request):
     for x in range(0, len(prices)):
         price_dev = price_dev + [{'price': prices[x], 'description': WEBDEV_DESCRIPTIONS[x]}]
     from contact.forms import ContactForm
+    from .forms import CardPaymentForm
     from django.contrib.auth.models import User
     r = render(request, 'payments/webdev.html', {'title': 'Web Development Pricing', 'plans': price_dev, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'vendor': User.objects.get(id=settings.MY_ID)})
     if request.user.is_authenticated: patch_cache_control(r, private=True)
@@ -607,6 +609,7 @@ def idscan(request):
     from django.conf import settings
     from django.shortcuts import render
     price_scans = ['5','10', '20', '50', '100', '200', '500', '1000', '2000', '5000']
+    from .forms import CardPaymentForm
     from django.contrib.auth.models import User
     r = render(request, 'payments/idscan.html', {'title': 'ID Scanner Pricing', 'plans': price_scans, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'free_trial': settings.IDSCAN_TRIAL_DAYS, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'vendor': User.objects.get(id=settings.MY_ID)})
     if request.user.is_authenticated: patch_cache_control(r, private=True)
@@ -621,6 +624,7 @@ def surrogacy(request, username):
     from django.contrib.auth.models import User
     from feed.models import Post
     from django.template.loader import render_to_string
+    from .forms import CardPaymentForm
     signature = None
     parent_signature = None
     vendor = User.objects.get(profile__name=username, profile__vendor=True)
@@ -1350,6 +1354,7 @@ def subscribe_card(request, username):
     from feed.models import Post
     from django.shortcuts import redirect
     from django.urls import reverse
+    from .forms import CardPaymentForm
     user = User.objects.get(profile__name=username, profile__vendor=True)
     if hasattr(request, 'user') and request.user.is_authenticated and user in request.user.profile.subscriptions.all():
         return redirect(reverse('feed:profile', kwargs={'username': user.profile.name}))
@@ -1372,6 +1377,7 @@ def tip_card(request, username, tip):
     from .forms import CardNumberForm, CardInfoForm
     from .models import PaymentCard, CardPayment
     from django.contrib import messages
+    from .forms import CardPaymentForm
     fee = tip
     user = User.objects.get(profile__name=username, profile__vendor=True)
     profile = user.profile
