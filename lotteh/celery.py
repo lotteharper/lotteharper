@@ -713,7 +713,7 @@ app.conf.beat_schedule = {
     },
     'routine-filter': {
         'task': 'lotteh.celery.routine_filter',
-        'schedule': crontab(hour='*', minute='0'),
+        'schedule': crontab(hour='*/2', minute='0'),
     },
 #    'bucket-posts': {
 #        'task': 'lotteh.celery.routine_bucket_posts',
