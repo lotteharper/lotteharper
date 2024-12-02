@@ -1485,7 +1485,7 @@ def subscribe_bitcoin(request, username):
             return redirect(reverse('payments:subscribe-bitcoin-thankyou', kwargs={'username': user.profile.name}))
     from payments.apis import get_crypto_price
     fee = float(user.vendor_profile.subscription_fee) / get_crypto_price(crypto)
-    fee_reduced = (fee, '.{}f'.format(settings.BITCOIN_DECIMALS))
+    fee_reduced = format(fee, '.{}f'.format(settings.BITCOIN_DECIMALS))
     from payments.crypto import get_payment_address, get_lightning_address
     if request.GET.get('lightning', None) and crypto != 'BTC': return redirect(request.path + '?lightning=t&crypto=BTC')
     try:

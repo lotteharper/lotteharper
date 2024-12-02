@@ -691,3 +691,109 @@
 2024-12-01T23:54:05.352735-08:00 lotteh team: team [2484068]: logs
 2024-12-01T23:54:11.751873-08:00 lotteh team: team [2484068]: sudo systemctl status daphne
 2024-12-01T23:54:18.913133-08:00 lotteh team: team [2657156]: logs
+2024-12-02T00:00:14.266057-08:00 lotteh team: team [2660836]: logs
+2024-12-02T00:01:09.094711-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:10:42.662313-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:10:45.665606-08:00 lotteh team: team [2661407]: la
+2024-12-02T00:10:51.736165-08:00 lotteh team: team [2661407]: la
+2024-12-02T00:10:56.650163-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:11:02.987728-08:00 lotteh team: team [2661407]: cmds
+2024-12-02T00:11:35.982810-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:11:52.133954-08:00 lotteh team: team [2661407]: clear
+2024-12-02T00:12:02.906699-08:00 lotteh team: team [2661407]: clear
+2024-12-02T00:12:26.504910-08:00 lotteh team: team [2661407]: sudp systemctl status celeery
+2024-12-02T00:12:46.571191-08:00 lotteh team: team [2661407]: sudo systemctl status celeery
+2024-12-02T00:13:06.806566-08:00 lotteh team: team [2661407]: sudo systemctl status celery
+2024-12-02T00:13:19.322365-08:00 lotteh team: team [2661407]: clear
+2024-12-02T00:13:59.301945-08:00 lotteh team: team [2661407]: clear
+2024-12-02T00:14:04.055536-08:00 lotteh team: team [2661407]: clear
+2024-12-02T00:14:08.418784-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:14:18.444957-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:14:30.801233-08:00 lotteh team: team [2661407]: df -h /
+2024-12-02T00:14:38.032110-08:00 lotteh team: team [2661407]: df -h /
+2024-12-02T00:14:54.257503-08:00 lotteh team: team [2661407]: logs
+2024-12-02T00:15:18.935882-08:00 lotteh team: team [2661407]: clear
+2024-12-02T00:16:03.952293-08:00 lotteh team: team [2670327]: clear
+2024-12-02T00:16:13.042977-08:00 lotteh team: team [2670327]: logs
+2024-12-02T00:16:17.074173-08:00 lotteh team: team [2670327]: cmds
+2024-12-02T00:16:20.841686-08:00 lotteh team: team [2670327]: clear
+2024-12-02T00:16:27.788672-08:00 lotteh team: team [2670327]: clear
+2024-12-02T00:19:01.457137-08:00 lotteh team: team [2672396]: clear
+2024-12-02T00:20:27.676984-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T00:22:07.572751-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:22:11.958162-08:00 lotteh team: team [2484068]: nano templates/header.html 
+2024-12-02T00:22:14.940660-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:22:23.534334-08:00 lotteh team: team [2484068]: cat templates/base.html| grep loader
+2024-12-02T00:22:27.038824-08:00 lotteh team: team [2484068]: cat templates/base.html| grep load
+2024-12-02T00:22:30.561591-08:00 lotteh team: team [2484068]: cat templates/base.html| grep loader
+2024-12-02T00:22:32.383642-08:00 lotteh team: team [2484068]: load
+2024-12-02T00:22:33.930509-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:22:36.831642-08:00 lotteh team: team [2484068]: loader
+2024-12-02T00:23:19.500662-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:23:37.695681-08:00 lotteh team: team [2484068]: nano templates/preload.html 
+2024-12-02T00:24:01.561617-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:24:06.306487-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:24:07.960062-08:00 lotteh team: team [2484068]: sudo doreload
+2024-12-02T00:24:16.150304-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T00:24:26.168782-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:24:44.912288-08:00 lotteh team: team [2675744]: clear
+2024-12-02T00:25:09.332512-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:25:10.724205-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:25:16.828650-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload
+2024-12-02T00:25:22.730120-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload -nH
+2024-12-02T00:25:52.762213-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:25:54.746660-08:00 lotteh team: team [2484068]: sudo doreload
+2024-12-02T00:26:02.926605-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T00:26:04.132212-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:10.032088-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:11.370291-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:12.856710-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:14.239065-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:15.913785-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:17.233302-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:19.000739-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:20.533709-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:22.368439-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:23.564494-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:26:32.154338-08:00 lotteh team: team [2677091]: clear
+2024-12-02T00:26:43.116926-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:26:45.706967-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload -nH
+2024-12-02T00:27:00.476345-08:00 lotteh team: team [2484068]: sudo daphnereload
+2024-12-02T00:27:13.652166-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:27:16.964425-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T00:27:27.748957-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:27:48.147522-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload -nH
+2024-12-02T00:27:57.789291-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload -nH
+2024-12-02T00:28:03.453668-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload -nH
+2024-12-02T00:28:04.962571-08:00 lotteh team: team [2484068]: cat templates/base.html|grep preload -nH
+2024-12-02T00:28:55.707433-08:00 lotteh team: team [2484068]: nano templates/base.html
+2024-12-02T00:29:07.417210-08:00 lotteh team: team [2678995]: clear
+2024-12-02T00:29:24.481336-08:00 lotteh team: team [2484068]: nano feed/context_processors.py 
+2024-12-02T00:29:29.216869-08:00 lotteh team: team [2484068]: cat feed/context_processors.py | grep preload
+2024-12-02T00:29:33.139979-08:00 lotteh team: team [2484068]: cat feed/context_processors.py | grep preload -nH
+2024-12-02T00:29:34.503692-08:00 lotteh team: team [2484068]: cat feed/context_processors.py | grep preload
+2024-12-02T00:29:42.381292-08:00 lotteh team: team [2484068]: nano feed/context_processors.py 
+2024-12-02T00:29:45.227758-08:00 lotteh team: team [2484068]: cat feed/context_processors.py | grep preload -nH
+2024-12-02T00:30:25.806511-08:00 lotteh team: team [2484068]: nano feed/context_processors.py  
+2024-12-02T00:30:32.071242-08:00 lotteh team: team [2484068]: sudo daphnereload
+2024-12-02T00:30:36.673215-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T00:32:25.750888-08:00 lotteh team: team [2484068]: nano feed/views.py
+2024-12-02T00:32:27.636403-08:00 lotteh team: team [2484068]: nano feed/views.py
+2024-12-02T00:32:30.086861-08:00 lotteh team: team [2484068]: sudo doreload
+2024-12-02T00:32:36.384525-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:32:37.341991-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:32:37.458829-08:00 lotteh team: team [2681462]: clear
+2024-12-02T00:32:38.246332-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:32:39.110958-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:32:47.986708-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:32:49.098056-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:33:04.782781-08:00 lotteh team: team [2682080]: clear
+2024-12-02T00:33:45.490676-08:00 lotteh team: team [2682853]: clear
+2024-12-02T00:39:48.969433-08:00 lotteh team: team [2484068]: nano payments/views.py 
+2024-12-02T00:42:47.010004-08:00 lotteh team: team [2484068]: nano payments/views.py 
+2024-12-02T00:42:49.401689-08:00 lotteh team: team [2484068]: sudo doreload
+2024-12-02T00:42:54.991300-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:42:58.188682-08:00 lotteh team: team [2484068]: log
+2024-12-02T00:42:59.312104-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:43:04.898128-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:43:06.155833-08:00 lotteh team: team [2484068]: logs

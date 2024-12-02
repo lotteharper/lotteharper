@@ -107,7 +107,7 @@
         {% if not hidega %}
         {% include 'gtmbody.html' %}
         {% endif %}
-        {% if not load_timeout == 0 %}
+        {% if preload and not disable_preload and not load_timeout == 0 %}
         {% include 'preload.html' %}
         {% endif %}
         <div class="hide-on-fs">
@@ -208,6 +208,7 @@
         			}, 1000);
         		}, 2000);
         	}, 20000);
+            {% if preload and not disable_preload %}
         	{% if load_timeout %}
             setTimeout(function(){
         		$('body').addClass('loaded');
@@ -220,6 +221,7 @@
         	setTimeout(function() {
         		$('#loader-wrapper-init').addClass('fade-hidden-fast');
         	}, 100);
+            {% endif %}
                 var qrdiv = document.getElementById("shareqrcode");
         	if(!qrdiv) return;
         	var qr = new QRCode(qrdiv, "{{ base_url }}{{ request.path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value|replspace}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}");

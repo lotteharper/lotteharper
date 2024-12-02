@@ -417,8 +417,6 @@ def profile_grid(request, username):
         'count': len(posts),
         'profile': profile,
         'following': following,
-        'preload': True,
-        'load_timeout': 10000,
         'full': True,
         'hiderrm': True if request.GET.get('handtrack', False) else False,
         'tip_options': choices
@@ -647,7 +645,6 @@ def profile(request, username):
         'page_obj': p.get_page(page),
         'profile': profile,
         'following': following,
-        'preload': True,
         'tip_options': choices,
         'num_pages': p.num_pages,
         'page': page,
@@ -655,7 +652,7 @@ def profile(request, username):
         'webpush-override': True,
         'full': True,
         'hidenavbar': True if scroll_page else False,
-        'load_timeout': 0 if scroll_page else 5000,
+        'load_timeout': 0 if scroll_page else 0,
     })
     if request.user.is_authenticated: patch_cache_control(resp, private=True)
     else: patch_cache_control(resp, public=True)

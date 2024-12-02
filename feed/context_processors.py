@@ -86,7 +86,7 @@ def feed_context(request):
 #    day_start = timezone.now().astimezone(pytz.timezone(settings.TIME_ZONE)).replace(hour=0, minute=0, second=0, microsecond=0)
 #    day_end = timezone.now().astimezone(pytz.timezone(settings.TIME_ZONE)).replace(hour=23, minute=59, second=59, microsecond=999999)
     if not 'preload' in context_data and not (hasattr(request, 'user') and request.user.is_authenticated):
-        context_data['preload'] = True
+        context_data['preload'] = False
     context_data['photo_timeout'] = 500
     context_data['show_wishlist'] = settings.SHOW_WISHLIST
     context_data['show_ads'] = settings.SHOW_ADS if (((not hasattr(request, 'user')) or not request.user.is_authenticated) or (request.user.is_authenticated and not request.user.profile.vendor and not User.objects.get(id=settings.MY_ID) in request.user.profile.subscriptions.all())) else False
@@ -94,8 +94,9 @@ def feed_context(request):
 #    try:
 #        context_data['injection_key'] = sessions.last().injection_key
 #    except: pass
+    context_data['preload'] = False
     if not 'load_timeout' in context_data:
-        context_data['load_timeout'] = 600
+        context_data['load_timeout'] = 0
     context_data['private_text_large'] = settings.PRIVATE_TEXT_LARGE
     context_data['REDIRECT_URL'] = settings.REDIRECT_URL
     if request.GET.get('hidenavbar'): context_data['hidenavbar'] = True
