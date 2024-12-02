@@ -17,8 +17,8 @@
     <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=id">Bahasa</a>
     <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=hi">हिंदी</a>
     <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=ru">Русский</a>
-    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}lang=zh-CN">中国人</a>
-    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}lang=ja">日本語</a>
-    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}lang=th">แบบไทย</a>
+    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=zh-CN">中国人</a>
+    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=ja">日本語</a>
+    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=th">แบบไทย</a>
   </div>
 </div>

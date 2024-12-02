@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'banner_ad.html' %}
-<p>{{ the_ad_text }}</p>
+{% load feed_filters %}
+<p>{{ the_ad_text|etrans }}</p>
 <p><i>{{ the_site_name }}</i></p>
 <hr>
 {% endblock %}

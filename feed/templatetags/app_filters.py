@@ -54,7 +54,7 @@ def transpost(target):
     from feed.middleware import get_current_request
     from feed.models import Post
     post = Post.objects.get(id=int(target))
-    return translate(get_current_request(), post.content, None, post.author.profile.language_code if post.author.profile.language_code else None)
+    return translate(get_current_request(), post.content, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.author.profile.language_code if post.author.profile.language_code else None)
 
 @register.filter('transauthor')
 def transauthor(content, target):
@@ -62,7 +62,7 @@ def transauthor(content, target):
     from feed.middleware import get_current_request
     from feed.models import Post
     post = Post.objects.get(id=int(target))
-    return translate(get_current_request(), content, None, post.author.profile.language_code if post.author.profile.language_code else None)
+    return translate(get_current_request(), post.content, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.author.profile.language_code if post.author.profile.language_code else None)
 
 @register.filter('transmsg')
 def transmsg(target):
@@ -70,7 +70,7 @@ def transmsg(target):
     from feed.middleware import get_current_request
     from chat.models import Message
     post = Message.objects.get(id=int(target))
-    return translate(get_current_request(), post.content, None, post.sender.profile.language_code if post.sender.profile.language_code else None)
+    return translate(get_current_request(), post.content, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.sender.profile.language_code if post.sender.profile.language_code else None)
 
 @register.filter('transbio')
 def transbio(target):
@@ -78,7 +78,7 @@ def transbio(target):
     from feed.middleware import get_current_request
     from users.models import Profile
     post = Profile.objects.get(id=int(target))
-    return translate(get_current_request(), post.bio, None, post.user.profile.language_code if post.user.profile.language_code else None)
+    return translate(get_current_request(), post.bio, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.language_code if post.language_code else None)
 
 def do_blocktrans(parser, token):
     nodelist = parser.parse(('endblocktrans',))
@@ -121,7 +121,7 @@ def etrans(content):
     from translate.translate import translate
     from feed.middleware import get_current_request
     from django.conf import settings
-    return translate(get_current_request(), content, target=get_current_request().LANGUAGE_CODE if get_current_request() else settings.DEFAULT_LANG, src='en')
+    return translate(get_current_request(), content, target=get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG, src='en')
 
 @register.filter('stripsender')
 def stripsender(sender):

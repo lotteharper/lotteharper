@@ -1644,7 +1644,7 @@ def buy_photo_card(request, username):
     fee = user.vendor_profile.photo_tip
     from django.shortcuts import redirect
     from feed.models import Post
-    if not request.GET.get('id'): return redirect(request.path + '?id={}{}'.format(Post.objects.filter(author=user, private=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid), ('&' + get_qs(request.GET) if len(request.GET) > 0 else ''))
+    if not request.GET.get('id'): return redirect(request.path + '?id={}{}'.format(Post.objects.filter(author=user, private=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid, get_qs(request.GET) if (len(request.GET.keys()) > 0) else ''))
     id = request.GET.get('id', None)
     post = Post.objects.filter(uuid=id, private=False).first()
     from django.shortcuts import render

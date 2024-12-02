@@ -711,10 +711,10 @@ app.conf.beat_schedule = {
         'task': 'lotteh.celery.crypto_trading_bots',
         'schedule': crontab(hour='*', minute='*'),
     },
-    'routine-filter': {
-        'task': 'lotteh.celery.routine_filter',
-        'schedule': crontab(hour='*/2', minute='0'),
-    },
+#    'routine-filter': {
+#        'task': 'lotteh.celery.routine_filter',
+#        'schedule': crontab(hour='*/2', minute='0'),
+#    },
 #    'bucket-posts': {
 #        'task': 'lotteh.celery.routine_bucket_posts',
 #        'schedule': crontab(hour='*', minute='*'),

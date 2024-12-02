@@ -6,7 +6,7 @@
 	{% endfor %}
     {% endwith %}
 	{% if show_ads %}
-	<iframe width="100%" src="{% url 'misc:ad' %}" height="350px">
+	<iframe width="100%" src="{% url 'misc:ad' %}?lang={{ lang }}" height="750px">
 	</iframe>
 	<hr>
 	{% endif %}

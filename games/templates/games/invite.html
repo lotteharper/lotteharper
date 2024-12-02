@@ -17,7 +17,6 @@
 {% endblock %}
 {% block javascript %}
 var gameqrdiv = document.getElementById("gameqrcode");
-if(!gameqrdiv) return;
 var gameqr = new QRCode(gameqrdiv, "{{ base_url }}/games/{{ game.post.id }}/{{ code }}/");
 var gameimage = gameqrdiv.querySelector('img');
 gameimage.style.width = "100%";

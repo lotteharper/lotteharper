@@ -29,7 +29,7 @@ def set_game(id, code, turn):
 @sync_to_async
 def update_players(game_id, p):
     game = Game.objects.get(id=int(game_id))
-    if game.players is None: game.players = 0
+    if game.players is None or game.players < 0: game.players = 0
     game.players = game.players + p
     game.save()
 

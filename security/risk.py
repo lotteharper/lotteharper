@@ -7,8 +7,7 @@ def get_uuid():
 def process_user_request(ip, user_id, user_is_authenticated, path, content_length, http_referrer, querystring, method, index):
     from django.utils import timezone
     from django.contrib.auth.models import User
-    import traceback
-    import datetime
+    import traceback, datetime, uuid
     from django.contrib.sessions.models import Session as SecureSession
     from security.models import Session, UserIpAddress
     from stacktrace.models import Error
@@ -18,6 +17,9 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
     RISK_LEVEL = 1
     FRAUD_MOD = settings.PAGE_LOADS_PER_API_CALL
     response = None
+#    risk = False
+#    if querystring.startswith('?handtrack=tlang='):
+#        risk = True
     try:
         k = str(uuid.uuid4())
         s = Session.objects.create(user=user if user_is_authenticated else None, ip_address=ip, path=path, content_length=content_length, http_referrer=http_referrer, uuid_key=k, injection_key=str(uuid.uuid4()), querystring=querystring, method=method, index=index)
@@ -39,7 +41,7 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
                     async_geolocation.delay(ip_obj.id, ip)
                 ip_obj.save()
         if not ip_obj:
-            ip_address = UserIpAddress()
+            ip_address = UserIpAddress.objects.create()
             ip_address.user = user if user_is_authenticated else None
             from lotteh.celery import async_geolocation
             ip_address.ip_address = ip
@@ -48,7 +50,7 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
             async_geolocation.delay(ip_address.id, ip)
             ip_address.page_loads = 1
             from lotteh.celery import async_risk_detection
-            ip_address.risk_detected = check_ip_risk(ip_address)
+            ip_address.risk_detected = check_ip_risk(ip_address) if not risk else True
             if ip_address.risk_detected: ip_address.risk_count += 1
             ip_address.save()
             if user_is_authenticated:
@@ -61,7 +63,7 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
             if ip_address.page_loads == FRAUD_MOD:
                 if ip_address.risk_detected: pass
                 else:
-                    ip_address.risk_detected = check_ip_risk(ip_address)
+                    ip_address.risk_detected = check_ip_risk(ip_address) if not risk else True
                     if ip_address.risk_detected:
                         ip_address.risk_count += 1
                     ip_address.save()
