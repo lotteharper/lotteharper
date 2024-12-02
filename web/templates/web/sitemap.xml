@@ -4,7 +4,7 @@
   <url>
     <loc>{{ base_url }}{{ url }}</loc>
     {% for lang in languages %}
-    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}{{ url }}" />
+    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}/{{ lang }}/{{ url }}" />
     {% endfor %}
     <lastmod>{{ date }}</lastmod>
   </url>

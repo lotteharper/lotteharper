@@ -41,7 +41,8 @@ def load_path1():
 
 def load_path2():
     global output
-    output = run_command('tail -n 500 {}'.format(logpath))
+    logpath = glob.glob('/var/log/auth.log.*')[-1]
+    output = run_command('tail -n 5000 {}'.format(logpath))
 
 thread_started = False
 #load_path1()
@@ -63,27 +64,30 @@ IPV6GROUPS = (
     r'(?:' + IPV6SEG + r':){1,4}:[^\s:]' + IPV4ADDR,          # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
 )
 IPV6ADDR = '|'.join(['(?:{})'.format(g) for g in IPV6GROUPS[::-1]])  # Reverse rows for greedy match
-#output = run_command('tail -n 500 {}'.format(logpath1))
+output = run_command('tail -n 5000 {}'.format(logpath))
 
 ips = []
-#while not output:
-#    print('awaiting output')
-#    time.sleep(3)
-#    if not output and not thread_started:
-#        thread_started = True
-#        load_path2()
-#    if output:
-#        op = output.split('\n')
-#        op.reverse()
-#        output = '\n'.join(op)
-#        ips = unique(re.findall(IPV4ADDR + '|' + IPV6ADDR, output))
-#        if len(ips) == 0 and thread_started: sys.exit(2)
+thread_started = False
+while not output:
+    print('awaiting output')
+    time.sleep(3)
+    if output:
+        op = output.split('\n')
+        op.reverse()
+        output = '\n'.join(op)
+        ips = unique(re.findall(IPV4ADDR + '|' + IPV6ADDR, output))
+        if len(ips) == 0 and thread_started: sys.exit(2)
+    if not thread_started:
+        thread_started = True
+        load_path2()
+        break
 
 #print(output)
 
 #print(ips)
 if len(ips) == 0:
-    if logpath: output2 = run_command('tail -n 500 {}'.format(logpath))
+    logpath = glob.glob('/var/log/auth.log.*')[-1]
+    if logpath: output2 = run_command('sudo tail -n 5000 {}'.format(logpath))
     op = output2.split('\n')
     op.reverse()
     output = '\n'.join(op)

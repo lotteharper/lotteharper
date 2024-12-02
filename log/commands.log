@@ -896,3 +896,183 @@
 2024-12-02T01:41:29.148260-08:00 lotteh team: team [2484068]: sudo purgecache
 2024-12-02T01:43:09.583608-08:00 lotteh team: team [2484068]: logs
 2024-12-02T01:45:19.797445-08:00 lotteh team: team [2484068]: compinfo
+2024-12-02T01:45:49.618140-08:00 lotteh team: team [2484068]: sudo backup ndob
+2024-12-02T01:50:51.865593-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:50:53.188334-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:19.174100-08:00 lotteh team: team [2484068]: nano lotteh/celery.py 
+2024-12-02T01:52:22.414660-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:23.250246-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:29.159937-08:00 lotteh team: team [2484068]: sudo systemctl restart celery &
+2024-12-02T01:52:31.778487-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:33.054068-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:34.408376-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:35.776708-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:37.107569-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:38.746308-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:41.213697-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:43.691140-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:45.442059-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:46.599322-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:52:48.129568-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:54:49.423216-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:54:50.466027-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:54:54.448525-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:54:56.287818-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:54:58.784549-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:55:01.345881-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:55:03.468555-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:57:15.670785-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:57:27.945689-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:34:06.103441-08:00 lotteh team: team [2484068]: compinfo
+2024-12-02T03:34:07.857631-08:00 lotteh team: team [2484068]: logs
+2024-12-02T03:35:25.542326-08:00 lotteh team: team [2484068]: logs
+2024-12-02T03:35:26.693243-08:00 lotteh team: team [2907549]: clear
+2024-12-02T03:35:31.627906-08:00 lotteh team: team [2907549]: pip3 install pydantic
+2024-12-02T03:35:41.439138-08:00 lotteh team: team [2907549]: pip3 install pydantic
+2024-12-02T03:36:19.768949-08:00 lotteh team: team [2907549]: sudo chown -r team:users venv
+2024-12-02T03:36:27.708697-08:00 lotteh team: team [2907549]: sudo chown -R team:users venv
+2024-12-02T03:36:43.017412-08:00 lotteh team: team [2484599]: sudo chmod 775 -R ./
+2024-12-02T03:36:45.293170-08:00 lotteh team: team [2907549]: pip3 install pydantic
+2024-12-02T03:36:56.114635-08:00 lotteh team: team [2907549]: ls /var/tmp
+2024-12-02T03:37:04.370071-08:00 lotteh team: team [2907549]: df -h /
+2024-12-02T03:37:18.364664-08:00 lotteh team: team [2907549]: sudo rm -r media/images/*
+2024-12-02T03:37:23.613821-08:00 lotteh team: team [2907549]: pip3 install pydantic
+2024-12-02T03:37:52.264504-08:00 lotteh team: team [2907549]: nano feed/models.py
+2024-12-02T03:37:57.933280-08:00 lotteh team: team [2907549]: pip3 install pydantic
+2024-12-02T03:39:38.571158-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:39:39.503046-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:41:36.511931-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:41:39.127436-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:43:09.240285-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:43:12.352716-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:46:03.310608-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:46:06.535892-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:46:09.390456-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:47:03.443671-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:47:08.086720-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:47:46.775689-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T03:54:25.786008-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:54:30.323529-08:00 lotteh team: team [2907549]: cat lotteh/settings.py | grep LANG
+2024-12-02T03:54:35.154488-08:00 lotteh team: team [2907549]: cat lotteh/settings.py | grep LANG
+2024-12-02T03:54:39.754834-08:00 lotteh team: team [2907549]: cat lotteh/settings.py | grep LANG
+2024-12-02T03:55:12.359513-08:00 lotteh team: team [2907549]: nano misc/views.py 
+2024-12-02T03:55:18.909706-08:00 lotteh team: team [2907549]: nano misc/sitemap.py 
+2024-12-02T03:55:26.013698-08:00 lotteh team: message repeated 2 times: [ team [2907549]: nano misc/sitemap.py ]
+2024-12-02T03:57:13.014276-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:57:53.005919-08:00 lotteh team: team [2907549]: nano web/templates/web/sitemap.xml 
+2024-12-02T03:58:22.448772-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:59:37.591300-08:00 lotteh team: team [2907549]: nano web/generate.py 
+2024-12-02T03:59:52.097592-08:00 lotteh team: team [2907549]: sudo pushweb
+2024-12-02T04:14:27.972888-08:00 lotteh team: team [20493]: sudo ascript setup
+2024-12-02T04:14:33.645974-08:00 lotteh team: team [20493]: venv
+2024-12-02T04:14:36.066312-08:00 lotteh team: team [20493]: cd lotteh
+2024-12-02T04:14:41.452983-08:00 lotteh team: team [20493]: python approve_login.py 
+2024-12-02T04:14:44.434194-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:14:48.488248-08:00 lotteh team: team [20493]: python last_logins.py 
+2024-12-02T04:14:52.143003-08:00 lotteh team: team [20493]: python last_logins.py 
+2024-12-02T04:14:55.581005-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:15:00.791641-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:15:03.972131-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:15:11.076099-08:00 lotteh team: team [20493]: compinfo
+2024-12-02T04:15:14.501487-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:15:21.546928-08:00 lotteh team: message repeated 2 times: [ team [20493]: python approve_login.py 1]
+2024-12-02T04:15:24.539166-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:15:35.517177-08:00 lotteh team: message repeated 3 times: [ team [20493]: python approve_login.py 1]
+2024-12-02T04:15:50.437490-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:15:54.404597-08:00 lotteh team: team [20493]: compinfo
+2024-12-02T04:15:58.614534-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:02.008884-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:05.278970-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:08.978389-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:12.307524-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:28.614958-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:38.241965-08:00 lotteh team: team [20493]: compinfo
+2024-12-02T04:16:41.632055-08:00 lotteh team: team [20493]: python approve_login.py 1
+2024-12-02T04:16:47.042760-08:00 lotteh team: team [20493]: python last_logins.py 
+2024-12-02T04:17:00.372285-08:00 lotteh team: team [20493]: sudo nano /etc/pam.d/sshd 
+2024-12-02T04:17:24.150916-08:00 lotteh team: team [20493]: sudo nano /etc/pam.d/sshd 
+2024-12-02T04:17:28.850536-08:00 lotteh team: team [20493]: nano blacklist.txt 
+2024-12-02T04:17:37.607067-08:00 lotteh team: team [20493]: nano pam.sh 
+2024-12-02T04:17:45.905009-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:17:50.519215-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:18:01.306020-08:00 lotteh team: team [20493]: sudo systemctl status
+2024-12-02T04:18:04.492239-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:18:14.243626-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:18:25.344417-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:18:39.583014-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:18:44.011580-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:18:53.482995-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:19:00.142115-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:19:05.177375-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:19:45.572892-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:19:49.219624-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:19:59.469865-08:00 lotteh team: team [20493]: ls /var/log/auth*
+2024-12-02T04:20:07.315464-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:20:57.341253-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:21:00.624396-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:21:57.696373-08:00 lotteh team: team [20493]: python manage.py shell
+2024-12-02T04:21:59.733391-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:22:45.544720-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:22:49.498444-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:23:15.944374-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:23:22.778012-08:00 lotteh team: team [20493]: cat /var/log/auth.log.1 
+2024-12-02T04:23:29.365486-08:00 lotteh team: team [20493]: sudo cat /var/log/auth.log.1 
+2024-12-02T04:23:33.811858-08:00 lotteh team: team [20493]: sudo tail /var/log/auth.log.1 
+2024-12-02T04:23:51.996732-08:00 lotteh team: team [20493]: sudo cat /var/log/auth.log.1 
+2024-12-02T04:23:52.153885-08:00 lotteh team: team [20493]: sudo cat /var/log/auth.log.1 
+2024-12-02T04:24:19.134630-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:24:26.056485-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:24:32.708460-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:24:36.153903-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:26:03.801055-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:26:07.231696-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:28:17.090126-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:28:22.530701-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:28:30.625052-08:00 lotteh team: team [114790]: sudo ascript setup
+2024-12-02T04:28:32.183003-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:30:11.375954-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T04:30:17.049230-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T04:30:26.212990-08:00 lotteh team: team [127596]: sudo ascript setup
+2024-12-02T04:30:33.356875-08:00 lotteh team: team [128359]: sudo ascript setup
+2024-12-02T04:30:35.156638-08:00 lotteh team: team [128359]: cat pam.py 
+2024-12-02T04:31:22.797702-08:00 lotteh team: team [128359]: cat pam.py 
+2024-12-02T04:31:23.260192-08:00 lotteh team: message repeated 2 times: [ team [128359]: cat pam.py ]
+2024-12-02T04:31:27.652717-08:00 lotteh team: team [114790]: sudo ascript setup
+2024-12-02T04:31:30.461324-08:00 lotteh team: team [134774]: sudo ascript setup
+2024-12-02T04:31:47.820575-08:00 lotteh team: team [134774]: nano logout.py 
+2024-12-02T04:31:58.629624-08:00 lotteh team: team [134774]: python logout.py 
+2024-12-02T04:32:03.807860-08:00 lotteh team: team [134774]: python logout.py 
+2024-12-02T04:32:46.496887-08:00 lotteh team: team [128359]: cat pam.py 
+2024-12-02T04:32:54.548931-08:00 lotteh team: team [128359]: sudo nano /etc/pam.d/sshd 
+2024-12-02T04:33:06.021612-08:00 lotteh team: team [128359]: logs
+2024-12-02T04:33:07.704143-08:00 lotteh team: team [128359]: logs
+2024-12-02T04:33:07.763030-08:00 lotteh team: team [145646]: sudo ascript setup
+2024-12-02T04:33:12.815175-08:00 lotteh team: team [128359]: logs
+2024-12-02T04:33:20.341086-08:00 lotteh team: team [128359]: python logout.py 
+2024-12-02T04:33:34.054169-08:00 lotteh team: team [128359]: nano logout.sh 
+2024-12-02T04:33:51.744327-08:00 lotteh team: team [150699]: sudo ascript setup
+2024-12-02T04:34:04.320531-08:00 lotteh team: team [128359]: nano logout.sh 
+2024-12-02T04:34:13.947451-08:00 lotteh team: team [128359]: sudo nano /etc/pam.d/sshd 
+2024-12-02T04:34:22.551758-08:00 lotteh team: team [128359]: python logout.py 
+2024-12-02T04:34:39.283367-08:00 lotteh team: team [156147]: sudo ascript setup
+2024-12-02T04:34:43.029715-08:00 lotteh team: team [128359]: python logout.sh
+2024-12-02T04:35:07.438634-08:00 lotteh team: team [128359]: nano logout.sh 
+2024-12-02T04:35:09.554034-08:00 lotteh team: team [128359]: python logout.sh
+2024-12-02T04:35:13.819760-08:00 lotteh team: team [128359]: python logout.py
+2024-12-02T04:35:23.687439-08:00 lotteh team: team [128359]: ./logout.sh 
+2024-12-02T04:35:37.553513-08:00 lotteh team: team [128359]: ./logout.sh 
+2024-12-02T04:35:40.685233-08:00 lotteh team: team [162988]: sudo ascript setup
+2024-12-02T04:35:44.186262-08:00 lotteh team: team [128359]: ./logout.sh 
+2024-12-02T04:35:54.948085-08:00 lotteh team: team [128359]: nano logout.sh 
+2024-12-02T04:35:58.272609-08:00 lotteh team: team [128359]: python logout.py
+2024-12-02T04:37:18.253126-08:00 lotteh team: team [128359]: nano logout.py 
+2024-12-02T04:37:23.617941-08:00 lotteh team: team [128359]: python logout.py
+2024-12-02T04:37:37.631356-08:00 lotteh team: team [128359]: python logout.py
+2024-12-02T04:37:39.349879-08:00 lotteh team: team [176542]: sudo ascript setup
+2024-12-02T04:37:44.664918-08:00 lotteh team: team [128359]: python logout.py
+2024-12-02T04:37:49.879930-08:00 lotteh team: team [128359]: nano logout.py 
+2024-12-02T04:37:59.251646-08:00 lotteh team: team [128359]: ./logout.sh 
+2024-12-02T04:38:51.864365-08:00 lotteh team: team [128359]: nano logout.py
+2024-12-02T04:38:57.703349-08:00 lotteh team: team [128359]: ./logout.sh 
+2024-12-02T04:39:11.706873-08:00 lotteh team: team [186926]: sudo ascript setup
+2024-12-02T04:39:15.246463-08:00 lotteh team: team [128359]: logs

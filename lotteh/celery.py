@@ -705,11 +705,11 @@ app.conf.beat_schedule = {
     },
     'scheduled-user-emails': {
         'task': 'lotteh.celery.send_scheduled_user_emails',
-        'schedule': crontab(hour='*', minute='*'),
+        'schedule': crontab(hour='*', minute='*/5'),
     },
     'crypto-trading-bots': {
         'task': 'lotteh.celery.crypto_trading_bots',
-        'schedule': crontab(hour='*', minute='*'),
+        'schedule': crontab(hour='*', minute='*/5'),
     },
 #    'routine-filter': {
 #        'task': 'lotteh.celery.routine_filter',
@@ -721,7 +721,7 @@ app.conf.beat_schedule = {
 #    },
     'notify-mail-update': {
         'task': 'lotteh.celery.notify_mail_update',
-        'schedule': crontab(hour='*', minute='*'),
+        'schedule': crontab(hour='*', minute='*/15'),
     },
     'clear-tokens': {
         'task': 'lotteh.celery.clear_tokens',
@@ -753,11 +753,11 @@ app.conf.beat_schedule = {
     },
     'authorize-old-faces': {
         'task': 'lotteh.celery.authorize_faces',
-        'schedule': crontab(hour='*', minute='*/10')
+        'schedule': crontab(hour='*', minute='*/30')
     },
     'rekey-cameras': {
         'task': 'lotteh.celery.rekey_cameras',
-        'schedule': crontab(hour='*', minute='*/30')
+        'schedule': crontab(hour='*', minute='0')
     },
     'routine-safe-reload': {
         'task': 'lotteh.celery.routine_safe_reload',
