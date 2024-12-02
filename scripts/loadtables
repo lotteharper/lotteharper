@@ -21,6 +21,7 @@ python manage.py loaddata data/voice.json
 python manage.py loaddata data/tts.json
 python manage.py loaddata data/audio.json
 python manage.py loaddata data/live.json
+python manage.py loaddata data/translate.json
 python manage.py loaddata data/contact.json
 python manage.py loaddata data/payments.json
 python manage.py loaddata data/chat.json
