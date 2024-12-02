@@ -97,7 +97,7 @@ def enhance_post(post_id):
             towrite.write(file.read())
         towrite.close()
         p.image_public_bucket = p.image_public.path
-    p.get_blur_url()
+    p.get_blur_url(gen=True)
     if p.image_censored and os.path.exists(p.image_censored.path):
         towrite = p.image_censored_bucket.storage.open(p.image_censored.path, mode='wb')
         with p.image_censored.open('rb') as file:

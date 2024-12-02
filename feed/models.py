@@ -246,6 +246,16 @@ class Post(models.Model):
             full_path = os.path.join(settings.BASE_DIR, path)
             shutil.copy(self.image_censored.path, full_path)
         else:
+            if not self.image_censored_bucket:
+                p = self
+                if p.image_censored and os.path.exists(p.image_censored.path):
+                    towrite = p.image_censored_bucket.storage.open(p.image_censored.path, mode='wb')
+                    with p.image_censored.open('rb') as file:
+                        towrite.write(file.read())
+                    towrite.close()
+                    p.image_censored_bucket = p.image_censored.path
+                    p.save()
+                return p.image_censored_bucket.url
             path, url = get_secure_path(self.image_censored.name)
             full_path = os.path.join(settings.BASE_DIR, path)
             shutil.copy(self.image_censored.path, full_path)

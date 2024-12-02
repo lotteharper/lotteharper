@@ -803,3 +803,96 @@
 2024-12-02T00:45:24.603711-08:00 lotteh team: team [2484068]: sudo backup nodb
 2024-12-02T00:47:24.122062-08:00 lotteh team: team [2484068]: nano scripts/loadtables 
 2024-12-02T00:47:42.280685-08:00 lotteh team: team [2484068]: nano scripts/dumptables 
+2024-12-02T00:49:18.193949-08:00 lotteh team: team [2484068]: sudo backup nodb
+2024-12-02T00:51:29.798160-08:00 lotteh team: team [2484068]: logs
+2024-12-02T00:56:04.034154-08:00 lotteh team: team [2484599]: python upload_post.py 
+2024-12-02T00:56:07.599413-08:00 lotteh team: team [2484599]: ls media/images
+2024-12-02T00:56:48.906010-08:00 lotteh team: team [2484068]: compinfo
+2024-12-02T00:56:53.662590-08:00 lotteh team: team [2484068]: ps -aux | grep upload
+2024-12-02T00:57:01.937627-08:00 lotteh team: team [2484068]: kill 2700248
+2024-12-02T00:57:01.996341-08:00 lotteh team: team [2484599]: python upload_post.py 
+2024-12-02T00:57:20.101582-08:00 lotteh team: team [2484599]: sudo crontab -e
+2024-12-02T00:57:27.945059-08:00 lotteh team: team [2484599]: python upload_post.py 
+2024-12-02T00:57:28.015756-08:00 lotteh team: team [2484599]: python upload_post.py 
+2024-12-02T00:57:32.356810-08:00 lotteh team: team [1731]: dbinfo
+2024-12-02T00:57:36.296747-08:00 lotteh team: message repeated 4 times: [ team [1731]: dbinfo]
+2024-12-02T00:58:46.328744-08:00 lotteh team: team [2484599]: nano feed/models.py
+2024-12-02T01:01:01.010217-08:00 lotteh team: team [2484068]: nano feed/models.py
+2024-12-02T01:01:50.659033-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T01:01:53.912528-08:00 lotteh team: team [2484068]: nano feed/models.py
+2024-12-02T01:02:17.378566-08:00 lotteh team: team [2484068]: ps -aux | grep upload
+2024-12-02T01:02:23.240919-08:00 lotteh team: team [2484068]: kill 2704289
+2024-12-02T01:02:23.261125-08:00 lotteh team: team [2484599]: python upload_post.py 
+2024-12-02T01:04:13.518379-08:00 lotteh team: team [2484068]: nano feed/models.py
+2024-12-02T01:04:30.081695-08:00 lotteh team: team [2484068]: nano feed/upload.py 
+2024-12-02T01:05:02.105784-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T01:05:40.800382-08:00 lotteh team: team [2484068]: nano enhance/image.py 
+2024-12-02T01:05:42.186609-08:00 lotteh team: team [2484599]: nano feed/models.py
+2024-12-02T01:06:29.009790-08:00 lotteh team: team [2484068]: ls /home/team/lotteh/media/images/daebac73-f993-4c4c-aa9b-a40a2bd6060b.png
+2024-12-02T01:06:51.571107-08:00 lotteh team: team [2484068]: nano feed/upload.py 
+2024-12-02T01:07:26.280710-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T01:09:32.009450-08:00 lotteh team: team [2484599]: nano feed/models.py
+2024-12-02T01:10:04.874134-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T01:11:23.249476-08:00 lotteh team: team [2484599]: python manage.py shell
+2024-12-02T01:11:23.893590-08:00 lotteh team: team [2484068]: nano enhance/image.py 
+2024-12-02T01:11:25.991916-08:00 lotteh team: team [2484068]: sudo doreload
+2024-12-02T01:11:57.407144-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:12:05.100382-08:00 lotteh team: team [2484599]: logs
+2024-12-02T01:12:36.529746-08:00 lotteh team: team [2484068]: compinfo
+2024-12-02T01:13:00.143079-08:00 lotteh team: team [2484068]: nano app/views.py 
+2024-12-02T01:14:09.111945-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:14:11.963195-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:16:46.684098-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:16:47.968675-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:16:49.496761-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:16:50.756147-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:16:51.698280-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:16:53.346478-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:17:19.515826-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:17:28.270902-08:00 lotteh team: team [2484068]: sudo systemctl status celery
+2024-12-02T01:17:36.185596-08:00 lotteh team: team [2484068]: sudo systemctl restart celert
+2024-12-02T01:18:04.645044-08:00 lotteh team: team [2484068]: sudo systemctl restart celery
+2024-12-02T01:26:31.684171-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:26:33.172762-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:26:35.387569-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:27:18.292579-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:27:19.475268-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:27:20.673676-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:27:24.110636-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:28:51.294536-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:29:49.609879-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:30:01.104413-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:30:07.444644-08:00 lotteh team: team [2484068]: cat lotteh/settings.py | grep READER
+2024-12-02T01:32:23.894330-08:00 lotteh team: team [2484068]: nano feed/templatetags/app_filters.py
+2024-12-02T01:32:26.505195-08:00 lotteh team: team [2484068]: nano feed/templatetags/app_filters.py
+2024-12-02T01:32:28.901865-08:00 lotteh team: team [2484068]: sudo daphnereload
+2024-12-02T01:32:33.886609-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T01:38:08.256355-08:00 lotteh team: team [2484068]: nano feed/templates/feed/_post.html
+2024-12-02T01:38:11.292294-08:00 lotteh team: team [2484068]: sudo doreload
+2024-12-02T01:38:16.482640-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T01:38:35.798782-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:38:37.837798-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:38:39.415926-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:38:40.815617-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:38:42.680522-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:38:46.076441-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:38:49.826554-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:39:09.677886-08:00 lotteh team: team [2484068]: compinfo
+2024-12-02T01:40:23.289209-08:00 lotteh team: team [2484068]: nano feed/templates/feed/_post.html
+2024-12-02T01:40:25.392162-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T01:40:30.304620-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:32.107808-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:35.793553-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:38.474112-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:39.975353-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:41.781853-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:44.141050-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:45.982161-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:40:51.566665-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:41:21.371606-08:00 lotteh team: team [2484068]: nano feed/templates/feed/_post.html
+2024-12-02T01:41:22.798478-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T01:41:25.167510-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T01:41:27.182905-08:00 lotteh team: team [2484068]: sudo daphnereload
+2024-12-02T01:41:29.148260-08:00 lotteh team: team [2484068]: sudo purgecache
+2024-12-02T01:43:09.583608-08:00 lotteh team: team [2484068]: logs
+2024-12-02T01:45:19.797445-08:00 lotteh team: team [2484068]: compinfo
