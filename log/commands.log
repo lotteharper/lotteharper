@@ -1076,3 +1076,46 @@
 2024-12-02T04:38:57.703349-08:00 lotteh team: team [128359]: ./logout.sh 
 2024-12-02T04:39:11.706873-08:00 lotteh team: team [186926]: sudo ascript setup
 2024-12-02T04:39:15.246463-08:00 lotteh team: team [128359]: logs
+2024-12-02T17:01:14.929501-08:00 lotteh team: team [127596]: venv
+2024-12-02T17:16:16.386916-08:00 lotteh team: team [554084]: logs
+2024-12-02T17:16:52.054084-08:00 lotteh team: team [554084]: clear
+2024-12-02T17:16:55.410203-08:00 lotteh team: team [554084]: ls
+2024-12-02T17:17:38.360498-08:00 lotteh team: team [561620]: ls
+2024-12-02T17:18:13.457741-08:00 lotteh team: team [561620]: logs
+2024-12-02T17:19:03.073878-08:00 lotteh team: team [561620]: clear
+2024-12-02T17:47:07.773532-08:00 lotteh team: team [727335]: ls
+2024-12-02T17:48:06.033215-08:00 lotteh team: team [733003]: ls
+2024-12-02T17:49:38.889064-08:00 lotteh team: team [741292]: ls
+2024-12-02T17:49:45.370168-08:00 lotteh team: team [741292]: clear
+2024-12-02T17:50:24.866423-08:00 lotteh team: team [741292]: nano .ssh/authorized_keys 
+2024-12-02T17:50:32.202916-08:00 lotteh team: team [741292]: sudp nano .ssh/authorized_keys 
+2024-12-02T17:51:03.729811-08:00 lotteh team: team [741292]: sudo nano .ssh/authorized_keys 
+2024-12-02T17:51:42.669786-08:00 lotteh team: team [752712]: sudo nano .ssh/authorized_keys 
+2024-12-02T17:52:04.913227-08:00 lotteh team: team [754932]: sudo nano .ssh/authorized_keys 
+2024-12-02T17:52:21.997462-08:00 lotteh team: team [754932]: cat .ssh/authorized_keys 
+2024-12-02T17:53:07.112932-08:00 lotteh team: team [760347]: cat .ssh/authorized_keys 
+2024-12-02T17:53:29.717250-08:00 lotteh team: team [760347]: cat /etc/ssh/sshd_config
+2024-12-02T17:54:42.489562-08:00 lotteh team: team [768194]: cat /etc/ssh/sshd_config
+2024-12-02T18:08:35.339724-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T18:08:39.094724-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T18:08:42.010509-08:00 lotteh team: team [20493]: df -h /
+2024-12-02T18:08:52.891907-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T18:09:34.920286-08:00 lotteh team: team [20493]: nano pam.py 
+2024-12-02T18:09:42.561759-08:00 lotteh team: team [20493]: sudo rm /var/log/auth.log*
+2024-12-02T18:09:53.861921-08:00 lotteh team: team [20493]: python pam.py 
+2024-12-02T18:10:24.921222-08:00 lotteh team: team [20493]: sudo nano /etc/pam.d/sshd 
+2024-12-02T18:10:26.510613-08:00 lotteh team: team [20493]: sudo doreload
+2024-12-02T18:10:28.844089-08:00 lotteh team: team [20493]: logs
+2024-12-02T18:10:53.800152-08:00 lotteh team: team [20493]: sudo service ssh restart
+2024-12-02T18:11:08.859560-08:00 lotteh team: team [20493]: compinfo
+2024-12-02T18:11:52.548056-08:00 lotteh team: team [20493]: sudo systemctl status ssh
+2024-12-02T18:11:54.926937-08:00 lotteh team: team [20493]: sudo systemctl status pam
+2024-12-02T18:11:56.170646-08:00 lotteh team: team [20493]: sudo systemctl status pam.d
+2024-12-02T18:12:01.074628-08:00 lotteh team: team [20493]: sudo systemctl status ssh
+2024-12-02T18:12:06.561122-08:00 lotteh team: team [20493]: ssh team@lotteh.com
+2024-12-02T18:12:08.748045-08:00 lotteh team: team [20493]: ssh team@lotteh.com
+2024-12-02T18:12:46.076020-08:00 lotteh team: team [856735]: cat /etc/ssh/sshd_config
+2024-12-02T18:12:47.846406-08:00 lotteh team: team [20493]: ssh team@lotteh.com -p 45783
+2024-12-02T18:13:42.637165-08:00 lotteh team: team [20493]: ssh team@lotteh.com -p 45783
+2024-12-02T18:13:58.762694-08:00 lotteh team: team [20493]: sudo backup nodb
+2024-12-02T18:13:59.272267-08:00 lotteh team: message repeated 13 times: [ team [20493]: sudo backup nodb]
