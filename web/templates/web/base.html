@@ -1,11 +1,13 @@
-<!doctype html> <html lang="en">
+<!doctype html> <html lang="{{ lang }}">
+{% load feed_filters %}
+{% load app_filters %}
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{{ description }}">
     <meta name="author" content="Charlotte Grace Harper">
     <link rel="icon" href="/media/favicon.ico">
-    <title>{% if title %}{{ title }} - {% endif %}{{ site_name }}</title>
+    <title>{% if title %}{{ title|etrans }} - {% endif %}{{ site_name }}</title>
     <link rel="canonical" href="https://glamgirlx.com{{ path }}">
     <link href="/static/main.css" rel="stylesheet">
     <link rel="manifest" href="/site.webmanifest">
@@ -41,41 +43,43 @@
             {% include 'voting_banner.html' %}
         {% endif %}
       <nav id="glam-navbar" class="navbar fixed-top navbar-expand-lg navbar-light p-2" style="background-color: #e3f2fd;">
-        <a style="position: relative; z-index: 1;" class="navbar-brand" href="/" title="The homepage">
+        <a style="position: relative; z-index: 1;" class="navbar-brand" href="/{{ lang }}/" title="The homepage">
 	        <img src="/media/lips.png" alt="{{ site_name }}" width="30" height="30" style="border-radius: 50%; background-color: transparent;">
 		{{ site_name }}
 	</a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+{% load feed_filters %}
+{% load app_filters %}
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/news" title="New articles">News</a>
+              <a class="nav-link" href="/{{ lang }}/news" title="{{ 'New articles'|etrans }}">{{ 'News'|etrans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contact" title="Contact me">Contact</a>
+              <a class="nav-link" href="/{{ lang }}/contact" title="{{ 'Contact me'|etrans }}">{{ 'Contact'|etrans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/landing" title="Visit the landing page">Landing</a>
+              <a class="nav-link" href="/{{ lang }}/landing" title="{{ 'Visit the landing page'|etrans }}">{{ 'Landing'|etrans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ add_url }}" title="Video chat">Chat</a>
+              <a class="nav-link" href="{{ add_url }}" title="{{ 'Video chat'|etrans }}">{{ 'Chat'|etrans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/private" title="See private photos with a key">Private</a>
+              <a class="nav-link" href="/{{ lang }}/private" title="{{ 'See private photos with a key'|etrans }}">{{ 'Private'|etrans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ site_url }}{% url 'payments:surrogacy' model_name %}" title="Surrogacy plans">Surrogacy</a>
+              <a class="nav-link" href="{{ site_url }}{% url 'payments:surrogacy' model_name %}" title="Surrogacy plans">{{ 'Surrogacy'|etrans }}</a>
             </li>
           </ul>
           <ul class="navbar-nav" style="margin-left: auto;">
             <form class="form-inline d-flex mt-2 mt-md-0" action="{{ site_url }}/search/" method="GET">
               <input class="form-control mr-sm-2" type="text" id="q" name="q" placeholder="Search" aria-label="Search" required>
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit" title="Search my website, {{ base_domain }}">Search</button>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit" title="{{ 'Search my website,'|etrans }} {{ base_domain }}">{{ 'Search'|etrans }}</button>
             </form>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#" title="Always free - Create an account to support me">Free</a>
+              <a class="nav-link disabled" href="#" title="{{ 'Always free - Create an account to support me'|etrans }}">{{ 'Free'|etrans }}</a>
             </li>
             <li class="nav-item align-middle">
               {% include 'dynamic_time.html' %}
@@ -84,7 +88,7 @@
               {% include 'dynamic_text_time.html' %}
             </li>
             <li class="nav-item">
-	          <a href="{{ site_url }}{% url 'landing:index' %}" title="Visit the landing page">
+	          <a href="{{ site_url }}{% url 'landing:index' %}" title="{{ 'Visit the landing page'|etrans }}">
                 {% include 'sclock.html' %}
               </a>
             </li>
@@ -99,13 +103,14 @@
         {% endif %}
 	    {% block content %}{% endblock %}
         {% if not hidefooter %}
-        <p><i>Leave me a tip in Bitcoin using this address:</i> <b id="btc-wallet">{{ btc_wallet }}</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
+        <p>{% include 'web/language.html' %}</p>
+        <p><i>{{ 'Leave me a tip in Bitcoin using this address:'|etrans }}</i> <b id="btc-wallet">{{ btc_wallet }}</b> <button class="btn btn-sm btn-info" title="{{ 'Copy address'|etrans }}" onclick="copyToClipboard('btc-wallet');">{{ 'Copy'|etrans }}</button></p>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; {{ site_name }} {{ year }}</span></p>
 		</div>
 	        <div style="float:right;">
-	          <p><span class="badge bg-light text-dark shadow p-1"><a href="{{ site_url }}/terms/" title="See the terms of service'">Terms of Service</a></span></p>
+	          <p><span class="badge bg-light text-dark shadow p-1"><a href="{{ site_url }}/terms/" title="See the terms of service'">{{ 'Terms of Service'|etrans }}</a></span></p>
 		</div>
 	    </div>
 	    <div style="height: 100px;"></div>
@@ -117,6 +122,8 @@
     <script src="/static/main.js"></script>
     <script>
         {% block javascript %}{% endblock %}
+{% load feed_filters %}
+{% load app_filters %}
         $(document).ready(function() {
             {% if not hidenavbar %}
             {% if polling_now %}
@@ -194,7 +201,7 @@
             image.style.width = "100%";
             image.style.height = "100%";
             image.style.maxWidth = "160px";
-            image.alt = "Share this page by scanning a QR code.";
+            image.alt = "{{ 'Share this page by scanning a QR code.'|etrans }}";
             function downloadQrImage(url, filename) {
               const link = document.createElement('a');
               link.href = url;

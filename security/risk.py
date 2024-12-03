@@ -17,9 +17,9 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
     RISK_LEVEL = 1
     FRAUD_MOD = settings.PAGE_LOADS_PER_API_CALL
     response = None
-#    risk = False
-#    if querystring.startswith('?handtrack=tlang='):
-#        risk = True
+    risk = False
+    if querystring.startswith('?handtrack=tlang='):
+        risk = True
     try:
         k = str(uuid.uuid4())
         s = Session.objects.create(user=user if user_is_authenticated else None, ip_address=ip, path=path, content_length=content_length, http_referrer=http_referrer, uuid_key=k, injection_key=str(uuid.uuid4()), querystring=querystring, method=method, index=index)

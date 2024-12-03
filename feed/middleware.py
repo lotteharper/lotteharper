@@ -16,6 +16,12 @@ def get_current_request():
     except AttributeError:
         return None
 
+def set_current_request(value):
+    try:
+        _request.value = value
+    except AttributeError:
+        return None
+
 
 class ExceptionVerboseMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):

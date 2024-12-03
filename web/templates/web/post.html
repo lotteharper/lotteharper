@@ -1,15 +1,16 @@
 {% extends 'web/base.html' %}
-{% load feed_filters %}
 {% block head %}
 <meta property="og:image" content="{{ post.get_image_url }}">
 <meta name="pinterest:image" content="{{ post.get_image_url }}"/>
 {% endblock %}
 {% block content %}
-<h1>{{ post.id|shorttitle }}</h1>
+{% load feed_filters %}
+{% load app_filters %}
+<h1>{{ post.id|shorttitle|etrans }}</h1>
 <img src="{{ post.author.profile.get_image_url }}" alt="{{ post.author.profile.name }}'s profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;"/>
 <p><i>By {{ post.author.profile.name }}</i></p>
 {% autoescape off %}
-<div style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content_compiled }}{% else %}{{ post.content }}{% endif %}</div>
+<div style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content_compiled|etrans }}{% else %}{{ post.content|etrans }}{% endif %}</div>
 {% include 'banner_ad.html' %}
 {% if post.image %}
 <img width="100%;" height="auto" src="{{ post.get_image_url }}" alt="{{ post.id|shorttitle }} - by {{ post.author.profile.name }}">
@@ -43,11 +44,11 @@
 <div style="mx-auto">
 <p id="url" hidden>{{ static_url }}{{ path }}</p>
 <hr>
-<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }}{{ path }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="Share this page by copying the link"><i class="bi bi-clipboard-plus"></i> Copy link</button></p></div>
+<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }}{{ path }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="Share this page by copying the link"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button></p></div>
 <hr>
 <div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
-<div style="text-align: center;"><small>(Click or tap to download image)</small></div>
-<div>{{ base_description }}</div>
+<div style="text-align: center;"><small>{{ '(Click or tap to download image)'|etrans }}</small></div>
+<div>{{ base_description|etrans }}</div>
 </div>
 {% endblock %}
 {% block javascript %}

@@ -12,15 +12,24 @@ from feed.templatetags.app_filters import shorttitle
 from django.urls import reverse
 
 class GetParams():
-    lang = 'en'
+    lang = None
     def __init__(self, lang, *args, **kwargs):
         self.lang = lang
 
+    def get(self, param, other=False):
+        return self.lang
+
+class DummyUser():
+    is_authenticated = False
+
 class DummyRequest():
     GET = None
-    LANGUAGE_CODE = 'en'
+    LANGUAGE_CODE = None
+    user = None
     def __init__(self, lang, *args, **kwargs):
         self.GET = GetParams(lang)
+        self.LANGUAGE_CODE = lang
+        self.user = DummyUser()
 
 def generate_site():
     global overwrite
@@ -28,12 +37,21 @@ def generate_site():
     from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
     from misc.sitemap import languages
     from translate.translate import translate
-    languages = ['en', 'de']
-    for lang in languages:
+    from feed.middleware import set_current_request
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+#    languages = ['en', 'de']
+    langs = languages
+    for lang in langs:
         images = ''
         init_images = ''
         count = 0
         request = DummyRequest(lang)
+        request.GET = GetParams(lang)
+        set_current_request(request)
+        print(lang)
+        try:
+            os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
+        except: pass
         for post in Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted'):
             if post.image and post.image:
                 if post.image and not post.image_offsite: post.copy_web()
@@ -41,17 +59,17 @@ def generate_site():
                 if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
                 count = count + 1
                 if count < 11:
-                    init_images = init_images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
-                    init_images = init_images + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}" title="{}">View</a>'.format(post.friendly_name, 'View Post - {} by {}'.format(shorttitle(post.id), post.author.profile.name)), '<a href="{}" title="{}">Buy</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME)), '<a href="{}" title="{}">Buy with crypto</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME)))
+                    init_images = init_images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, translate(request, shorttitle(post.id), lang, 'en')) if post.image else '')
+                    init_images = init_images + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}'.format(lang) + '/{}" title="{}">{}</a>'.format(post.friendly_name, translate(request, 'View Post', lang, 'en') + ' - {} by {}'.format(translate(request, shorttitle(post.id), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid),  translate(request, 'Buy on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), translate(request, translate(request, 'Buy with cryptocurrency on', lang, 'en'), lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
                     if count % 5 == 0:
                         init_images = init_images + render_to_string('banner_ad.html', {'show_ads': True}) + '<hr>'
                 else:
                     images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
-                    images = images + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}" title="{}">View</a>'.format(post.friendly_name, 'View Post - {} by {}'.format(shorttitle(post.id), post.author.profile.name)), '<a href="{}" title="{}">Buy</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME)), '<a href="{}" title="{}">Buy with crypto</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME)))
+                    images = images + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}'.format(lang) + '/{}" title="{}">{}</a>'.format(post.friendly_name, 'View Post - {} by {}'.format(shorttitle(post.id), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), translate(request, 'Buy on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
         blog = ''
         for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").order_by('-date_posted'):
             text = ''
-            title = shorttitle(post.id)
+            title = translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en')
             print(post.content)
     #        for obj in highlightcode(post.content):
     #            text = embedlinks(addhttpstodomains(obj['text'])) + ('<pre class="language-{}"><code>{}</code></pre>'.format(obj['lang'], obj['code']) if ('code' in obj) and ('lang' in obj) else '')
@@ -64,7 +82,7 @@ def generate_site():
             img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
             if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url()
             blog = blog + '<div id="feed{}">{}'.format(count, translate(request, post.content_compiled, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, title) if post.image else '')
-            blog = blog + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}" title="{}">View</a>'.format(post.friendly_name, 'View Post - {} by {}'.format(title, post.author.profile.name)), '<a href="{}" title="{}">Buy</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME)), '<a href="{}" title="{}">Buy with crypto</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME)))
+            blog = blog + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}'.format(lang) + '/{}" title="{}">{}</a>'.format(post.friendly_name, translate(request, 'View post', lang, 'en'), translate(request, 'Buy on', lang, 'en')), ' - {} {} {}'.format(title, post.author.profile.name, '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), translate(request, 'Buy on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en'))), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), translate(request, 'Buy with cryptocurrency on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
             count = count + 1
             if count%5 == 0:
                 blog = blog + render_to_string('banner_ad.html', {'show_ads': True})
@@ -102,21 +120,22 @@ def generate_site():
             'rel_aes_key': settings.REL_AES_KEY,
             'monero_address': settings.MONERO_ADDRESS,
             'the_ad_text': settings.AD_TEXT,
-            'request': request
+            'request': request,
+            'lang': lang
         }
-        context['title'] = 'My Photos'
+        context['title'] = translate(request, 'My Photos', lang, 'en')
         index = render_to_string('web/index.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/index.html'.format(lang)), 'w') as file:
             file.write(index)
-        context['title'] = 'News'
+        context['title'] = translate(request, 'News', lang, 'en')
         news = render_to_string('web/news.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
             file.write(news)
-        context['title'] = 'Contact'
+        context['title'] = translate(request, 'Contact', lang, 'en')
         contact = render_to_string('web/contact.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/contact.html'.format(lang)), 'w') as file:
             file.write(contact)
-        context['title'] = 'Landing'
+        context['title'] = translate(request, 'Landing', lang, 'en')
         landing = render_to_string('web/landing.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/landing.html'.format(lang)), 'w') as file:
             file.write(landing)
@@ -130,30 +149,37 @@ def generate_site():
                 img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
                 if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
                 count = count + 1
-                images = images + '<div id="div{}">{}'.format(count, post.content) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
-                images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/{}" title="{}">View</a>'.format(settings.BASE_URL, post.friendly_name, 'View Post - {} by {}'.format(shorttitle(post.id), post.author.profile.name)), '<a href="{}" title="{}">Buy with crypto</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME)))
+                images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
+                images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/{}" title="{}">{}</a>'.format(settings.BASE_URL, post.friendly_name, translate(request, 'View post', lang, 'en') + ' - {} by {}'.format(translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
         context['images'] = urllib.parse.quote(encrypt_cbc(images, settings.PRV_AES_KEY))
-        context['title'] = 'Private'
+        context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
+        context['title'] = translate(request, 'Private', lang, 'en')
         private = render_to_string('web/private.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
             file.write(private)
         urls = ['/', '/news', '/landing','/private','/index','/contact']
         context['footer'] = False
         for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, offsite=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted'):
-            url = '/{}'.format(post.friendly_name)
+            url = '/{}/{}'.format(lang, post.friendly_name)
             context['post'] = post
             context['path'] = url
             print(url)
-            context['title'] = shorttitle(post.id)
-            context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">Buy</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME)), '<a href="{}" title="{}">Buy with crypto</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME)))
-            path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format(post.friendly_name))
+            context['title'] = translate(request, shorttitle(post.id), lang, 'en')
+            context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+            path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
             if (not os.path.exists(path)) or overwrite:
                 index = render_to_string('web/post.html', context)
                 with open(path, 'w') as file:
                     file.write(index)
-            urls = urls + [url]
+    images = None
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+    context['lang'] = lang
     context['path'] = '/404'
     context['title'] = 'Error 404 - File Not Found'
+    context['hiderrm'] = True
     path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format('404'))
     if not os.path.exists(path) or overwrite:
         index = render_to_string('web/404.html', context)
@@ -165,13 +191,10 @@ def generate_site():
     ad = render_to_string('web/ad.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'ad.html'), 'w') as file:
         file.write(ad)
+    context['show_ads'] = False
     context['title'] = 'Recovery'
-    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
-    context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
     context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
     context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
-    context['show_ads'] = False
-    context['hiderrm'] = True
     context['activate_mining'] = False
     recovery = render_to_string('web/recovery.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:

@@ -5,7 +5,7 @@
 {% endblock %}{% block content %}
 {% load feed_filters %}
 <div id="pg1" style="white-space: pre-wrap;">
-<legend>News - <a href="{{ site_url }}/" class="btn btn-outline-info btn-lg">Visit Site</a></legend>
+<legend>{{ 'News'|etrans }} - <a href="{{ site_url }}/" class="btn btn-outline-info btn-lg">{{ 'Visit Site'|etrans }}</a></legend>
 {% include 'banner_ad.html' %}
 <div style="white-space: pre-wrap;">
 {% autoescape off %}
@@ -40,11 +40,11 @@
 <div style="mx-auto">
 <p id="url" hidden>{{ static_url }}</p>
 <hr>
-<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="Share this page by copying the link"><i class="bi bi-clipboard-plus"></i> Copy link</button></p></div>
+<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="{{ 'Share this page by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button></p></div>
 <hr>
 <div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
-<div style="text-align: center;"><small>(Click or tap to download image)</small></div>
-<div>{{ base_description }}</div>
+<div style="text-align: center;"><small>{{ '(Click or tap to download image)'|etrans }}</small></div>
+<div>{{ base_description|etrans }}</div>
 </div>
 {% endblock %}
 {% block footer %}

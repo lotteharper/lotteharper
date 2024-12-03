@@ -3,10 +3,11 @@
 <meta property="og:image" content="{{ model.profile.get_image_url }}">
 <meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
 {% endblock %}{% block content %}
+{% load app_filters %}
 {% load feed_filters %}
 <div id="pg2">
-<legend>Contact</legend>
-<p>{{ the_ad_text }}</p>
+<legend>{{ 'Contact'|etrans }}</legend>
+<p>{{ the_ad_text|etrans }}</p>
 {% include 'contact/form.html' %}
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 {% if darkmode %}bg-dark{% else %}bg-white{% endif %}">
@@ -39,7 +40,7 @@
 <hr>
 <div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
 <div style="text-align: center;"><small>(Click or tap to download image)</small></div>
-<div>{{ base_description }}</div>
+<div>{{ base_description|etrans }}</div>
 </div>
 {% endblock %}
 {% block footer %}

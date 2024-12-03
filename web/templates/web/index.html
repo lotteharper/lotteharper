@@ -4,13 +4,14 @@
 <meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
 {% endblock %}{% block content %}
 {% load feed_filters %}
+{% load app_filters %}
 <div id="pg0">
 <div class="mx-auto" style="width: 100%; max-width: 800px;"><img src="{{ model.profile.get_cover_image }}" width="100%" class="rounded"></img></div>
-<h1>My Photos</h1>
+<h1>{{ 'My Photos'|etrans }}</h1>
 <legend>{{ model_name }}</legend>
-<p>{{ model.profile.bio }}</p>
+<p>{{ model.profile.bio|trans }}</p>
 <p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
-<p>Visit my GitHub to see my <a href="{{ github_url }}" title="My projects on GitHub">projects</a>.</p>
+<p>{{ 'Visit my GitHub to see my'|etrans }} <a href="{{ github_url }}" title="{{ 'My projects on GitHub'|etrans }}">{{ 'projects'|etrans }}</a>.</p>
 {% include 'banner_ad.html' %}
 <hr>
 <div id="photo-page">
@@ -45,11 +46,11 @@
 <div style="mx-auto">
 <p id="url" hidden>{{ static_url }}</p>
 <hr>
-<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="Share this page by copying the link"><i class="bi bi-clipboard-plus"></i> Copy link</button></p></div>
+<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="{{ 'Share this page by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button></p></div>
 <hr>
 <div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
-<div style="text-align: center;"><small>(Click or tap to download image)</small></div>
-<div>{{ base_description }}</div>
+<div style="text-align: center;"><small>{{ '(Click or tap to download image)'|etrans }}</small></div>
+<div>{{ base_description|etrans }}</div>
 </div>
 {% endblock %}
 {% block footer %}

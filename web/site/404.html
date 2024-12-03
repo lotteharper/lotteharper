@@ -1,4 +1,6 @@
 <!doctype html> <html lang="en">
+
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,31 +38,34 @@
   </head>
   <body>
     <header>
+
         
       <nav id="glam-navbar" class="navbar fixed-top navbar-expand-lg navbar-light p-2" style="background-color: #e3f2fd;">
-        <a style="position: relative; z-index: 1;" class="navbar-brand" href="/" title="The homepage">
+        <a style="position: relative; z-index: 1;" class="navbar-brand" href="/en/" title="The homepage">
 	        <img src="/media/lips.png" alt="Glam Girl X" width="30" height="30" style="border-radius: 50%; background-color: transparent;">
 		Glam Girl X
 	</a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
+
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/news" title="New articles">News</a>
+              <a class="nav-link" href="/en/news" title="New articles">News</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contact" title="Contact me">Contact</a>
+              <a class="nav-link" href="/en/contact" title="Contact me">Contact</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/landing" title="Visit the landing page">Landing</a>
+              <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/private" title="See private photos with a key">Private</a>
+              <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="https://lotteh.com/payments/surrogacy/Daisy/" title="Surrogacy plans">Surrogacy</a>
@@ -102,8 +107,11 @@
         </div>
       </nav>
     </header>
+    
     <main role="main" class="container">
+        
 	    <div style="height: 100px;"></div>
+        
 	    
 <h1>This page could not be found.</h1>
 <p><i>Consider going back to the <a href="/" title="Home page">home page</a>.</i></p>
@@ -122,10 +130,34 @@
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div>
-<hr>
 
 
 
+        
+        <p>
+
+<div class="dropdown">
+  <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-globe"></i> Language
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="/en/">English</a>
+    <a class="dropdown-item" href="/es/">Española</a>
+    <a class="dropdown-item" href="/fr/">Français</a>
+    <a class="dropdown-item" href="/de/">Deutsch</a>
+    <a class="dropdown-item" href="/nl/">Nederlands</a>
+    <a class="dropdown-item" href="/af/">Afrikaans</a>
+    <a class="dropdown-item" href="/ar/">عربي</a>
+    <a class="dropdown-item" href="/pt/">Português (Portugal)</a>
+    <a class="dropdown-item" href="/pt-br/">Português (Brasil)</a>
+    <a class="dropdown-item" href="/id/">Bahasa</a>
+    <a class="dropdown-item" href="/hi/">हिंदी</a>
+    <a class="dropdown-item" href="/ru/">Русский</a>
+    <a class="dropdown-item" href="/ja/">日本語</a>
+    <a class="dropdown-item" href="/th/">แบบไทย</a>
+  </div>
+</div>
+</p>
         <p><i>Leave me a tip in Bitcoin using this address:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
@@ -136,11 +168,16 @@
 		</div>
 	    </div>
 	    <div style="height: 100px;"></div>
+        
     </main>
+    
+    
     
     <script src="/static/main.js"></script>
     <script>
         
+
+
         $(document).ready(function() {
             
             
@@ -151,7 +188,7 @@
         var socket;
         function openSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href);
+            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
             socket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
@@ -314,7 +351,7 @@ if(document.getElementById("current-time")) {
 
             var qrdiv = document.getElementById("shareqrcode");
         	if(!qrdiv) return;
-        	var qr = new QRCode(qrdiv, "https://glamgirlx.com/404");
+        	var qr = new QRCode(qrdiv, "https://glamgirlx.com/404?");
         	var image = qrdiv.querySelector('img');
             image.style.width = "100%";
             image.style.height = "100%";
@@ -334,6 +371,7 @@ if(document.getElementById("current-time")) {
             qrdiv.onclick = downloadQr;
         });
     </script>
+    
     <script async type="application/javascript"
         src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
 <script>
@@ -347,6 +385,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     <script>
         if (navigator.serviceWorker) {
             navigator.serviceWorker.register (

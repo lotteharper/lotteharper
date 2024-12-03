@@ -33,7 +33,7 @@ def blacklist(ip):
         file.write('{}\n'.format(ip))
         file.close()
 
-logpath = glob.glob('/var/log/auth.log.*')[-1]
+logpath = glob.glob('/var/log/auth.log')[-1]
 
 def load_path1():
     global output
@@ -41,32 +41,27 @@ def load_path1():
 
 def load_path2():
     global output
-    logpath = glob.glob('/var/log/auth.log')[-1]
+    try:
+        if glob.glob('/var/log/auth.log.*')[-1]:
+            run_command('sudo rm {}*'.format(logpath))
+    except:
+        run_command('sudo rm {}*'.format(logpath))
+    sys.exit(1)
+    logpath = glob.glob('/var/log/auth.log.*')[-1]
     output = run_command('tail -n 5000 {}'.format(logpath))
 
 thread_started = False
-#load_path1()
-IPV4SEG  = r'(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])'
-IPV4ADDR = r'(?:(?:' + IPV4SEG + r'\.){3,3}' + IPV4SEG + r')'
-IPV6SEG  = r'(?:(?:[0-9a-fA-F]){1,4})'
-IPV6GROUPS = (
-    r'(?:' + IPV6SEG + r':){7,7}' + IPV6SEG,                  # 1:2:3:4:5:6:7:8
-    r'(?:' + IPV6SEG + r':){1,7}:',                           # 1::                                 1:2:3:4:5:6:7::
-    r'(?:' + IPV6SEG + r':){1,6}:' + IPV6SEG,                 # 1::8               1:2:3:4:5:6::8   1:2:3:4:5:6::8
-    r'(?:' + IPV6SEG + r':){1,5}(?::' + IPV6SEG + r'){1,2}',  # 1::7:8             1:2:3:4:5::7:8   1:2:3:4:5::8
-    r'(?:' + IPV6SEG + r':){1,4}(?::' + IPV6SEG + r'){1,3}',  # 1::6:7:8           1:2:3:4::6:7:8   1:2:3:4::8
-    r'(?:' + IPV6SEG + r':){1,3}(?::' + IPV6SEG + r'){1,4}',  # 1::5:6:7:8         1:2:3::5:6:7:8   1:2:3::8
-    r'(?:' + IPV6SEG + r':){1,2}(?::' + IPV6SEG + r'){1,5}',  # 1::4:5:6:7:8       1:2::4:5:6:7:8   1:2::8
-    IPV6SEG + r':(?:(?::' + IPV6SEG + r'){1,6})',             # 1::3:4:5:6:7:8     1::3:4:5:6:7:8   1::8
-    r':(?:(?::' + IPV6SEG + r'){1,7}|:)',                     # ::2:3:4:5:6:7:8    ::2:3:4:5:6:7:8  ::8       ::
-    r'fe80:(?::' + IPV6SEG + r'){0,4}%[0-9a-zA-Z]{1,}',       # fe80::7:8%eth0     fe80::7:8%1  (link-local IPv6 addresses with zone index)
-    r'::(?:ffff(?::0{1,4}){0,1}:){0,1}[^\s:]' + IPV4ADDR,     # ::255.255.255.255  ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-    r'(?:' + IPV6SEG + r':){1,4}:[^\s:]' + IPV4ADDR,          # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-)
-IPV6ADDR = '|'.join(['(?:{})'.format(g) for g in IPV6GROUPS[::-1]])  # Reverse rows for greedy match
-output = run_command('tail -n 5000 {}'.format(logpath))
 
-ips = []
+ipv4_pattern = r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
+ipv6_pattern = r"\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b"
+
+output = run_command('sudo tail -n 500 {}'.format(logpath))
+time.sleep(1)
+op = output.split('\n')
+op.reverse()
+output = '\n'.join(op)
+ips = unique(re.findall(ipv6_pattern + '|' + ipv4_pattern, output))
+
 thread_started = False
 while not output:
     print('awaiting output')
@@ -75,23 +70,15 @@ while not output:
         op = output.split('\n')
         op.reverse()
         output = '\n'.join(op)
-        ips = unique(re.findall(IPV4ADDR + '|' + IPV6ADDR, output))
+        ips = unique(re.findall(ipv6_pattern + '|' + ipv4_pattern, output))
         if len(ips) == 0 and thread_started: sys.exit(2)
     if not thread_started:
         thread_started = True
         load_path2()
         break
 
-#print(output)
-
-#print(ips)
 if len(ips) == 0:
-    logpath = glob.glob('/var/log/auth.log.*')[-1]
-    if logpath: output2 = run_command('sudo tail -n 5000 {}'.format(logpath))
-    op = output2.split('\n')
-    op.reverse()
-    output = '\n'.join(op)
-    ips = unique(re.findall(IPV4ADDR + '|' + IPV6ADDR, output))
+    sys.exit(2)
 
 ip = ips[0]
 

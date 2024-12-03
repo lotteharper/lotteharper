@@ -30,5 +30,12 @@ languages = ['en',
     'pt',
     'ar',
     'da',
-    'nl'
+    'nl',
+    'th',
+    'id',
+    'ru',
+    'ja',
+    'th',
+    'af',
+    'hi'
 ]
