@@ -11,7 +11,7 @@
 </div>
 <div class="row">
 <legend id="contact-message" style="text-color: green; font-color: green; color: green; text-align: center;" class="hide fade-in-fast">{{ 'Message sent.'|trans }}</div>
-<p>We typically respond within {{ typical_response_time|nts }} hours. Last active {{ my_profile.last_seen }}</p>
+<p>{{ 'We typically respond within'|etrans }} {{ typical_response_time|nts|etrans }} {{ 'hours. Last active'|etrans }} {{ my_profile.last_seen }}</p>
 <div class="d-flex">{% with my_profile as content %}{% include 'clock.html' %}{% endwith %}</div>
 </div>
 </div>
