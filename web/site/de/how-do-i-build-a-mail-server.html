@@ -71,7 +71,7 @@
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://lotteh.com/payments/surrogacy/Daisy/" title="Surrogacy plans">Surrogat</a>
+              <a class="nav-link" href="https://lotteh.com/payments/surrogacy/Daisy/" title="Surrogacy plans">Leihmutterschaft</a>
             </li>
           </ul>
           <ul class="navbar-nav" style="margin-left: auto;">
@@ -120,7 +120,7 @@
 
 <h1>Wie erstelle ich einen Mailserver mit Postfix?</h1>
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;"/>
-<p><i>By Daisy</i></p>
+<p><i>Von Daisy</i></p>
 
 <div style="white-space: pre-wrap;"><p> Wie erstelle ich einen Mailserver mit Postfix?BR> </p> <p> 1.Installieren Sie Postfix: Verwenden Sie Ihren Paket -Manager, um Postfix auf Ihrem Server zu installieren.Zum Beispiel können Sie auf Debian/Ubuntu `sudo apt-Get-Installation postfix`. </P> <p> <br> </p> <p> 2 ausführen.Konfigurieren Sie Postfix: Postfix -Konfigurationsdateien befinden sich in `/etc/postfix/`.Die Hauptkonfigurationsdatei lautet `main.cf`.Sie können diese Datei bearbeiten, um Ihren Mailserver gemäß Ihren Anforderungen einzurichten.Einige gängige Konfigurationen, die Sie möglicherweise festlegen müssen, enthalten den Domänennamen, die E -Mail -Relay -Einstellungen, virtuelle Domänen usw. </p> <p> <br> </p> <p> 3.Richten Sie DNS -Datensätze ein: Um die E -Mail -Lieferung sicherzustellen, müssen Sie die erforderlichen DNS -Datensätze (MX- und SPF -Datensätze) für Ihre Domain einrichten.Wenden Sie sich bei Bedarf an Ihren Domain -Registrar- oder DNS -Anbieter, um Hilfe zu erhalten. </P> <p> <br> </p> <p> 4.Konfigurieren Sie virtuelle Domänen und Benutzer: Wenn Sie mehrere Domänen auf Ihrem Mailserver hosten möchten, müssen Sie konfigurierenVirtuelle Domänen und Benutzer.Dies kann mit den Einstellungen von `virtual_alias_maps` und` virtual_mailbox_maps` in der Postfix -Konfigurationsdatei erfolgen. </P> <p> <br> </p> <p> 5.Sichern Sie Ihren Mailserver: Stellen Sie sicher, dass Ihr Mailserver sicher ist, indem Sie Firewall -Regeln einrichten, die TLS -Verschlüsselung für eingehende und ausgehende E -Mails verwenden und andere für Mail -Server empfohlene Sicherheitsmaßnahmen implementieren. </P> <p> <br> </p> <p> 6.Testen Sie Ihren Mailserver: Sobald alles eingerichtet ist, sollten Sie Ihren Mailserver durch Senden und Empfangen von Test -E -Mails testen.Verwenden Sie Tools wie Telnet oder Mailx, um E -Mails manuell zu senden, und prüfen Sie, ob sie erfolgreich empfangen werden.sicher.Es ist auch eine gute Idee, Mailserverprotokolle für Probleme oder verdächtige Überwachung zu überwachen</div>
 
@@ -186,20 +186,19 @@
     <i class="bi bi-globe"></i> Sprache
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <a class="dropdown-item" href="/en/">English</a>
-    <a class="dropdown-item" href="/es/">Española</a>
-    <a class="dropdown-item" href="/fr/">Français</a>
-    <a class="dropdown-item" href="/de/">Deutsch</a>
-    <a class="dropdown-item" href="/nl/">Nederlands</a>
-    <a class="dropdown-item" href="/af/">Afrikaans</a>
-    <a class="dropdown-item" href="/ar/">عربي</a>
-    <a class="dropdown-item" href="/pt/">Português (Portugal)</a>
-    <a class="dropdown-item" href="/pt-br/">Português (Brasil)</a>
-    <a class="dropdown-item" href="/id/">Bahasa</a>
-    <a class="dropdown-item" href="/hi/">हिंदी</a>
-    <a class="dropdown-item" href="/ru/">Русский</a>
-    <a class="dropdown-item" href="/ja/">日本語</a>
-    <a class="dropdown-item" href="/th/">แบบไทย</a>
+    <a class="dropdown-item" href="/en/how-do-i-build-a-mail-server">English</a>
+    <a class="dropdown-item" href="/es/how-do-i-build-a-mail-server">Española</a>
+    <a class="dropdown-item" href="/fr/how-do-i-build-a-mail-server">Français</a>
+    <a class="dropdown-item" href="/de/how-do-i-build-a-mail-server">Deutsch</a>
+    <a class="dropdown-item" href="/nl/how-do-i-build-a-mail-server">Nederlands</a>
+    <a class="dropdown-item" href="/af/how-do-i-build-a-mail-server">Afrikaans</a>
+    <a class="dropdown-item" href="/ar/how-do-i-build-a-mail-server">عربي</a>
+    <a class="dropdown-item" href="/pt/how-do-i-build-a-mail-server">Português (Portugal, Brazil)</a>
+    <a class="dropdown-item" href="/id/how-do-i-build-a-mail-server">Bahasa</a>
+    <a class="dropdown-item" href="/hi/how-do-i-build-a-mail-server">हिंदी</a>
+    <a class="dropdown-item" href="/ru/how-do-i-build-a-mail-server">Русский</a>
+    <a class="dropdown-item" href="/ja/how-do-i-build-a-mail-server">日本語</a>
+    <a class="dropdown-item" href="/th/how-do-i-build-a-mail-server">แบบไทย</a>
   </div>
 </div>
 </p>
@@ -349,7 +348,7 @@ if(document.getElementById("dynamicClockContainer")) {
 	}, 1000);
 }
 var hrs = ["ZWÖLF", "eins", "zwei", "drei", "vier", "Fünf", "SECHS", "Sieben", "eight", "neun", "bei", "Der Student"];
-var digits = ["","eins", "zwei", "drei", "vier", "Fünf", "SECHS", "Sieben", "acht", "neun", "bei", "Der Student"];
+var digits = ["","eins", "zwei", "drei", "vier", "Fünf", "SECHS", "Sieben", "eight", "neun", "bei", "Der Student"];
 var teens = ["Der Student", "ZWÖLF", "dreizehn", "vierzehn", "Fünfzehn", "Spiral-", "Siebzehn", "achtzehn", "Ninete"];
 var tens = ["Die&#x27;","bei","zwanzig","dreißig","vierzig","Fünfzig"];
 function capitalizeFirstLetter(string) {

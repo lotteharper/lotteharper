@@ -1893,3 +1893,33 @@
 2024-12-03T22:31:44.618460-08:00 lotteh team: team [735594]: sudo backup nodb
 2024-12-03T22:39:23.509667-08:00 lotteh team: team [735607]: sudo pushweb
 2024-12-03T22:50:45.591072-08:00 lotteh team: team [735594]: nano web/templates/web/landing.html 
+2024-12-03T22:51:41.351826-08:00 lotteh team: team [904124]: sudo backup nodb
+2024-12-03T22:59:13.169411-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T23:06:40.670376-08:00 lotteh team: team [735594]: nano feed/templates/feed/modal.
+2024-12-03T23:07:17.018907-08:00 lotteh team: team [735594]: nano feed/templates/feed/modal.html
+2024-12-03T23:07:50.334687-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T23:11:25.189931-08:00 lotteh team: team [904124]: sudo backup nodb
+2024-12-03T23:11:33.184726-08:00 lotteh team: team [904124]: sudo systemctl status apache2
+2024-12-03T23:12:16.355310-08:00 lotteh team: team [735607]: nano feed/templates/feed/modal.
+2024-12-03T23:12:50.401829-08:00 lotteh team: team [735607]: nano feed/templates/feed/modal.html
+2024-12-03T23:13:36.123356-08:00 lotteh team: team [735607]: nano landing/templates/landing/landing.html
+2024-12-03T23:13:42.294200-08:00 lotteh team: team [735607]: nano landing/templates/landing/index.html 
+2024-12-03T23:14:07.140800-08:00 lotteh team: team [735607]: nano landing/templates/landing/landing.html 
+2024-12-03T23:14:13.379188-08:00 lotteh team: team [735607]: cat templates/base.html| grep modal
+2024-12-03T23:14:20.575433-08:00 lotteh team: team [735607]: cat templates/base.html| grep modal -nH
+2024-12-03T23:14:27.767091-08:00 lotteh team: team [735607]: cat templates/base.html| grep modal -nH
+2024-12-03T23:14:48.977790-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T23:15:01.547784-08:00 lotteh team: team [735607]: nano templates/base.html
+2024-12-03T23:15:06.342871-08:00 lotteh team: team [735607]: nano feed/models.py
+2024-12-03T23:16:11.809970-08:00 lotteh team: team [735607]: nano feed/templates/feed/modal.html
+2024-12-03T23:30:29.141619-08:00 lotteh team: team [735607]: nano feed/templates/feed/new_post.html
+2024-12-03T23:30:51.861759-08:00 lotteh team: team [735607]: logs
+2024-12-03T23:30:53.442145-08:00 lotteh team: team [735607]: logs
+2024-12-03T23:32:37.593762-08:00 lotteh team: team [735594]: cat templates/base.html | grep etrans
+2024-12-03T23:36:40.832182-08:00 lotteh team: team [735594]: cat templates/base.html | grep etrans
+2024-12-03T23:36:41.616428-08:00 lotteh team: team [735594]: logs
+2024-12-03T23:39:13.358430-08:00 lotteh team: team [735594]: sudo purgecache
+2024-12-03T23:39:15.919690-08:00 lotteh team: team [735594]: sudo daphnereload
+2024-12-03T23:41:18.272519-08:00 lotteh team: team [735594]: nano feed/templates/feed/new_post.html
+2024-12-03T23:45:05.173584-08:00 lotteh team: team [735594]: nano feed/templates/feed/new_post.html
+2024-12-03T23:45:20.814348-08:00 lotteh team: team [735594]: nano feed/templates/feed/new_post.html

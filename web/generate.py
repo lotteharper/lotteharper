@@ -1,4 +1,4 @@
-overwrite = False
+overwrite = True
 PRIV_POSTS = 24
 import os, pytz
 from datetime import datetime
@@ -39,7 +39,7 @@ def generate_site():
     from translate.translate import translate
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
-#    languages = ['en', 'de']
+    languages = ['en', 'de']
     langs = languages
     for lang in langs:
         images = ''
