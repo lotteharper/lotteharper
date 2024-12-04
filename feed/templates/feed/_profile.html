@@ -7,7 +7,7 @@
     </div>
     <p class="article-content"><img src="{% if profile.user in request.user.profile.subscriptions.all %}{{ profile.get_image_url }}{% else %}{{ profile.get_face_blur_url }}{% endif %}" alt="@{{ profile.user.username }}'s profile photo" width="120" height="120" align="left" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;"/>{{ profile.bio|addhttpstodomains|embedlinks|tagusers|trans }}</p>
    <div style="display: flex; justify-content: space-around;">
-    <a href="{% url 'feed:profile' profile.name %}" title="See @{{ profile.name }}'s profile" class="btn btn-outline-success">{{ 'See Profile'|trans }}</a>
+    <a href="{% url 'feed:profile' profile.name %}" title="See @{{ profile.name }}'s profile" class="btn btn-outline-success">{{ 'See Profile'|etrans }}</a>
    </div>
 </div>
 <hr>

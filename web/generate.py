@@ -52,7 +52,7 @@ def generate_site():
         try:
             os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
         except: pass
-        for post in Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted'):
+        for post in Post.objects.filter(uploaded=True, public=True, private=False, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted'):
             if post.image and post.image:
                 if post.image and not post.image_offsite: post.copy_web()
                 img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
@@ -70,7 +70,7 @@ def generate_site():
         for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").order_by('-date_posted'):
             text = ''
             title = translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en')
-            print(post.content)
+#            print(post.content)
     #        for obj in highlightcode(post.content):
     #            text = embedlinks(addhttpstodomains(obj['text'])) + ('<pre class="language-{}"><code>{}</code></pre>'.format(obj['lang'], obj['code']) if ('code' in obj) and ('lang' in obj) else '')
     #            blog = blog + text
@@ -123,18 +123,22 @@ def generate_site():
             'request': request,
             'lang': lang
         }
+        context['path'] = '/{}/{}'.format(lang, '')
         context['title'] = translate(request, 'My Photos', lang, 'en')
         index = render_to_string('web/index.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/index.html'.format(lang)), 'w') as file:
             file.write(index)
+        context['path'] = '/{}/{}'.format(lang, 'news')
         context['title'] = translate(request, 'News', lang, 'en')
         news = render_to_string('web/news.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
             file.write(news)
+        context['path'] = '/{}/{}'.format(lang, 'contact')
         context['title'] = translate(request, 'Contact', lang, 'en')
         contact = render_to_string('web/contact.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/contact.html'.format(lang)), 'w') as file:
             file.write(contact)
+        context['path'] = '/{}/{}'.format(lang, 'landing')
         context['title'] = translate(request, 'Landing', lang, 'en')
         landing = render_to_string('web/landing.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/landing.html'.format(lang)), 'w') as file:
@@ -153,23 +157,38 @@ def generate_site():
                 images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/feed/post/{}" title="{}">{}</a>'.format(settings.BASE_URL, post.friendly_name, translate(request, 'View post', lang, 'en') + ' - {} by {}'.format(translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
         context['images'] = urllib.parse.quote(encrypt_cbc(images, settings.PRV_AES_KEY))
         context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
+        context['path'] = '/{}/{}'.format(lang, 'private')
         context['title'] = translate(request, 'Private', lang, 'en')
         private = render_to_string('web/private.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
             file.write(private)
-        context['footer'] = False
-        for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, offsite=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted'):
-            url = '/{}/{}'.format(lang, post.friendly_name)
-            context['post'] = post
-            context['path'] = url
-            print(url)
-            context['title'] = translate(request, shorttitle(post.id), lang, 'en')
-            context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
-            path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
-            if (not os.path.exists(path)) or overwrite:
-                index = render_to_string('web/post.html', context)
-                with open(path, 'w') as file:
-                    file.write(index)
+        context['footer'] = False # ...None).exclude(image_offsite=None)
+        for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted'):
+            if post:
+                url = '/{}/{}'.format(lang, post.friendly_name)
+                context['post'] = post
+                context['path'] = url
+ #               print(url)
+                context['title'] = translate(request, shorttitle(post.id), lang, 'en')
+                context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+                path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
+                if (not os.path.exists(path)) or overwrite:
+                    try:
+                        index = render_to_string('web/post.html', context)
+                        with open(path, 'w') as file:
+                            file.write(index)
+                    except:
+                        import traceback
+                        print(traceback.format_exc())
+        context['title'] = settings.STATIC_SITE_NAME
+        context['hidenav'] = True
+        context['hidefooter'] = True
+        context['path'] = '/{}/{}'.format(lang, 'ad')
+        ad = render_to_string('web/ad.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/ad.html'.format(lang)), 'w') as file:
+            file.write(ad)
+    context['hidenav'] = False
+    context['hidefooter'] = False
     urls = ['/', '/news', '/landing','/private','/index','/contact']
     images = None
     lang = 'en'
@@ -185,14 +204,9 @@ def generate_site():
         index = render_to_string('web/404.html', context)
         with open(path, 'w') as file:
             file.write(index)
-    context['title'] = settings.STATIC_SITE_NAME
-    context['hidenav'] = True
-    context['hidefooter'] = True
-    ad = render_to_string('web/ad.html', context)
-    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'ad.html'), 'w') as file:
-        file.write(ad)
     context['show_ads'] = False
     context['title'] = 'Recovery'
+    context['path'] = '/recovery'
     context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
     context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
     context['activate_mining'] = False

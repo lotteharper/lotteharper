@@ -34,11 +34,11 @@
 </div>
 <p>{{ profile.bio|trans }}</p>
 <p style="text-align:center;"><small class="text-muted">{{ 'Last Seen'|etrans }}: {{ profile.last_seen|date:"F d, Y" }} {{ profile.last_seen|time:"H:i" }}</small> - <small class="text-muted"> {{ 'Joined'|etrans }}: {{ profile.date_joined|date:"F d, Y" }} {{ profile.date_joined|time:"H:i" }}</small></p>
-<i>(Expand)</i>
+<i>({{ 'Expand'|etrans }})</i>
 </div>
 <div id="hide-at-begin"{% if request.GET.page == '1' or request.GET.page == None or request.GET.page == '' %} style="visibility: hidden; height: 0px"{% endif %}>
 {% include 'opc.html' %}
-<h4 id="loading-posts">{{ 'Loading more posts...'|trans }}</h4>
+<h4 id="loading-posts">{{ 'Loading more posts...'|etrans }}</h4>
 {% include 'clc.html' %}
 </div>
 <p><a href="{{ request.path }}" class="btn btn-outline-primary" title="{{ 'Back to the first page'|trans }}">{{ 'Back'|trans }}</a></p>
@@ -57,7 +57,7 @@
 </div>
 <div id="hide-at-end"{% if request.GET.page == num_pages or count <= 10 %} style="visibility: hidden; height: 0px"{% endif %}>
 {% include 'opc.html' %}
-<h4 id="loading-posts">{{ 'Loading more posts...'|trans }}</h4>
+<h4 id="loading-posts">{{ 'Loading more posts...'|etrans }}</h4>
 {% include 'clc.html' %}
 </div>
 {% endblock content %}

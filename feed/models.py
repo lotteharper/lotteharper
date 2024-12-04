@@ -412,7 +412,7 @@ class Post(models.Model):
         else: return self.get_friendly_name()
 
     def get_friendly_name(self, save=True):
-        if self.friendly_name:
+        if self.friendly_name and save:
             return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
         from django.utils.html import strip_tags
         from feed.templatetags.app_filters import clean_html

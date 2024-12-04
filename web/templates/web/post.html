@@ -8,7 +8,7 @@
 {% load app_filters %}
 <h1>{{ post.id|shorttitle|etrans }}</h1>
 <img src="{{ post.author.profile.get_image_url }}" alt="{{ post.author.profile.name }}'s profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;"/>
-<p><i>By {{ post.author.profile.name }}</i></p>
+<p><i>{{ 'By'|etrans }} {{ post.author.profile.name }}</i></p>
 {% autoescape off %}
 <div style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content_compiled|etrans }}{% else %}{{ post.content|etrans }}{% endif %}</div>
 {% include 'banner_ad.html' %}

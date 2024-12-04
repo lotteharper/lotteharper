@@ -2,6 +2,11 @@ from django import template
 
 register = template.Library()
 
+@register.filter('useablepath')
+def useablepath(path):
+    # eg /en/test
+    return '/'.join(path.split('/')[2:])
+
 @register.filter('islive')
 def islive(profile):
     from feed.middleware import get_current_request

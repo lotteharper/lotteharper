@@ -37,13 +37,13 @@ b {
 {% include 'feed/_full_profile.html' %}
 {% elif not request.GET.grid %}
 <h1>Search</h1>
-<p>{{ 'Your search'|trans }}, "{{ request.GET.q }}", {% blocktrans %}returned {{ count|nts }} results.{% endblocktrans %}</p>
-<a class="btn btn-sm btn-outline-info" href="{{ request.path }}?q={{ query }}" title="{{ 'Standard view'|trans }}">{{ 'Standard'|trans }}</a>
+<p>{{ 'Your search'|etrans }}, "{{ request.GET.q }}", {% blocktrans %}returned {{ count|nts }} results.{% endblocktrans %}</p>
+<a class="btn btn-sm btn-outline-info" href="{{ request.path }}?q={{ query }}" title="{{ 'Standard view'|etrans }}">{{ 'Standard'|etrans }}</a>
 {% include 'search.html' %}
 <div class="gcse-search"></div>
 {% endif %}
 <div style="display: flex; justify-content: space-around;">
-{% if profile %}<a href="{% url 'feed:profile' profile.name %}" class="btn btn-outline-info" title="{{ 'See'|trans }} {{ profile.name }}'s {{ 'profile'|trans }}">{{ 'Profile'|trans }}</a>{% endif %}
+{% if profile %}<a href="{% url 'feed:profile' profile.name %}" class="btn btn-outline-info" title="{{ 'See'|etrans }} {{ profile.name }}'s {{ 'profile'|etrans }}">{{ 'Profile'|etrans }}</a>{% endif %}
 <div style="width: 130px;">
 {% include 'jumptoindex.html' %}
 </div>
@@ -53,7 +53,7 @@ b {
 <a href="{{ request.path }}?handtrack=t&{% if request.GET.q %}q={{ request.GET.q }}{% endif %}" class="btn btn-outline-primary"><i class="bi bi-hand-index-thumb-fill"></i></a>
 {% endif %}
 <div style="height: 100%;"><div style="vertical-align: middle;">{% if request.GET.index %}{{ request.GET.index }}{% else %}1{% endif %} of {{ count }}.</div></div>
-<b>Loading...</b>
+<b>{{ 'Loading'|etrans }}...</b>
 </div>
 <hr style="background-color: red;" class="mb-5">
 {% include 'feed/login_register_buttons.html' %}
@@ -87,7 +87,7 @@ b {
 <i class="bi bi-hand-index-thumb-fill" class="hide" id="hand-indicator"></i>
 </div>
 <div style="display: inline-block;">
-<a class="btn btn-outline-info" id="view">{{ 'View'|trans }}</a>
+<a class="btn btn-outline-info" id="view">{{ 'View'|etrans }}</a>
 <div class="container" style="margin-right: 5px; margin-left: 5px;"><div id="content"></div></div>
 <img id="large-frame" style="min-height: 40vh; max-height: 50vh; text-align: center;" class="center rounded shadow fade-in-fast"></img>
 <video controls id="large-frame-video" style="min-height: 40vh; max-height: 50vh; text-align: center;" class="center rounded shadow fade-in-fast hide"> 

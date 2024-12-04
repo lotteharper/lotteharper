@@ -93,7 +93,7 @@ function garbageDisposal(count) {
     d = document.getElementById('div' + new String(count + disposal_limit));
     if(d) { d.remove();}
 }
-const adsenseAd = `<iframe width="100%" src="/ad" height="700px">
+const adsenseAd = `<iframe width="100%" src="/{{ lang }}/ad" height="700px">
 </iframe>
 <hr>`;
 var successfulWrite = false;

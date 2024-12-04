@@ -9,14 +9,15 @@
 {% endif %}
 {% endblock %}
 {% block content %}
+{% load app_filters %}
        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Update Post
+                <legend class="border-bottom mb-4">{{ 'Update Post'|etrans }}
 		{% if form.instance %}
 		<div style="text-align: right;">
-			<button type="submit" class="btn btn-outline-info">Update</button>
-			<a style="float: right;" href="{% url 'feed:post-delete' pk=form.instance.id %}" title="Delete this post"><button type="button" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i> Delete</button></a>
+			<button type="submit" class="btn btn-outline-info">{{ 'Update'|etrans }}</button>
+			<a style="float: right;" href="{% url 'feed:post-delete' pk=form.instance.id %}" title="{{ 'Delete this post'|etrans }}"><button type="button" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i> {{ 'Delete'|etrans }}</button></a>
 		</div>
 		{% endif %}
 		</legend>
@@ -26,7 +27,7 @@
             <hr>
             <p id="contentLength"></p>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Post</button>
+                <button class="btn btn-outline-info" type="submit">{{ 'Post'|etrans }}</button>
             </div>
         </form>
         <hr>
@@ -35,15 +36,15 @@
 	<div style="display: flex; justify-content: space-around;">
 	<form method="POST" action="{% url 'feed:rotate' pk=form.instance.id direction='left' %}">
 		{% csrf_token %}
-		<button type="submit" class="btn btn-outline-secondary">Rotate Left</button>
+		<button type="submit" class="btn btn-outline-secondary">{{ 'Rotate Left'|etrans }}</button>
 	</form>
 	<form method="POST" action="{% url 'feed:rotate' pk=form.instance.id direction='flip' %}">
 		{% csrf_token %}
-		<button type="submit" class="btn btn-outline-secondary">Flip 180°</button>
+		<button type="submit" class="btn btn-outline-secondary">{{ 'Flip 180°'|etrans }}</button>
 	</form>
 	<form method="POST" action="{% url 'feed:rotate' pk=form.instance.id direction='right' %}">
 		{% csrf_token %}
-		<button type="submit" class="btn btn-outline-secondary">Rotate Right</button>
+		<button type="submit" class="btn btn-outline-secondary">{{ 'Rotate Right'|etrans }}</button>
 	</form>
 	</div>
 	{% endif %}

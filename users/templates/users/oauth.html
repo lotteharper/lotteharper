@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Authenticating...</h1>
+{% load app_filters %}
+<h1>{{ 'Authenticating'|etrans }}...</h1>
 {% endblock %}
 {% block javascript %}
 var form = document.getElementById("upload");

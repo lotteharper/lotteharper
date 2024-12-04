@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<legend>Please wait, authenticating</legend>
+{% load app_filters %}
+<legend>{{ 'Please wait, authenticating'|etrans }}...</legend>
 <hr>
 {% endblock %}
 {% block javascript %}
@@ -20,10 +21,10 @@ req.onreadystatechange = function (e) {
        window.location.href = '/';
    }
   else if(req.status == 400) {
-        alert('There was an error processing the token.')
+        alert('{{ 'There was an error processing the token.'|etrans }}')
     }
     else {
-      alert('something else other than 200 was returned')
+      alert('{{ 'Something else other than 200 was returned'|etrans }}')
     }
   }
 };
