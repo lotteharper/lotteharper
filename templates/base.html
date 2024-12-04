@@ -1,4 +1,4 @@
-{% load static %}{% load feed_filters %}{% load filters %}{% linebreakless %}{% load pwa_webpush %}
+{% load static %}{% load app_filters %}{% load feed_filters %}{% load filters %}{% linebreakless %}{% load pwa_webpush %}
 <!DOCTYPE html>
 <html lang="{{ lang }}">
     <head>
@@ -17,11 +17,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="/media/static/favicon.ico">
         <title>{% if title %}{{ title|trans|capitalize }} - {{ the_site_name }}{% else %}{{ the_site_name }}{% endif %}</title>
-        <meta name="description" content="{% if description != None %}{{ description|trans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|trans }}{% endif %}">
+        <meta name="description" content="{% if description != None %}{{ description|etrans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|trans }}{% endif %}">
         <meta name="author" content="{{ author_name }}">
         <meta name="copyright" content="© {{ the_site_name }} {{ currentyear }}" />
         <meta name="application-name" content="{{ the_site_name }}" />
-        <meta name="twitter:description" content="{% if description != None %}{{ description|trans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|trans }}{% endif %}" />
+        <meta name="twitter:description" content="{% if description != None %}{{ description|etrans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|etrans }}{% endif %}" />
         <meta name="twitter:title" content="{% if title %}{{ title|trans|capitalize }} - {{ the_site_name }}{% else %}{{ the_site_name }}{% endif %}" />
         <meta name="twitter:card" content="summary" />
         <meta property="og:type" content="article" />
@@ -128,7 +128,7 @@
             {% if messages %}
             {% for message in messages %}
             	<div class="alert alert-{{ message.tags }}" style="text-color: black !important; color: black !important;">
-            	{{ message.message|trans }}
+            	{{ message.message|etrans }}
             	</div>
             {% endfor %}
             {% endif %}
@@ -229,7 +229,7 @@
                 image.style.width = "100%";
                 image.style.height = "100%";
                 image.style.maxWidth = "160px";
-        	image.alt = "Share this page by scanning a QR code.";
+        	image.alt = "{{ 'Share this page by scanning a QR code.'|etrans }}";
                 function downloadQrImage(url, filename) {
                   const link = document.createElement('a');
                   link.href = url;

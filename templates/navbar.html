@@ -15,92 +15,92 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100%;">
         <ul class="navbar-nav mr-auto" style="height: 100%;">
-{% if not request.user.is_authenticated %}
+        {% if not request.user.is_authenticated %}
     	  <li class="nav-item {% if request.path|startswith:'/feed/profile/' %}active{% endif %}">
             <a class="nav-link" href="{% url 'feed:follow' profileusername %}" title="{{ 'Subscribe'|etrans }}">{{ 'Subscribe'|etrans }}</a>
           </li>
     	  <li class="nav-item {% if request.path|startswith:'/payments/photo/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'payments:buy-photo-card' profileusername %}" title="{{ 'Buy photos'|trans }}">{{ 'Buy Photos'|trans }}</a>
+            <a class="nav-link" href="{% url 'payments:buy-photo-card' profileusername %}" title="{{ 'Buy photos'|etrans }}">{{ 'Buy Photos'|etrans }}</a>
           </li>
-{% endif %}
+        {% endif %}
           <li class="nav-item {% if request.path == '/payments/webdev/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'payments:webdev' %}" title="{{ 'Learn about our services'|trans }}">{{ 'Services'|trans }}</a>
+            <a class="nav-link" href="{% url 'payments:webdev' %}" title="{{ 'Learn about our services'|etrans }}">{{ 'Services'|etrans }}</a>
           </li>
           <li class="nav-item {% if request.path == '/models/' %}active{% endif %}">
              <a class="nav-link" href="{% url 'feed:profiles' %}" title="{{ 'See profiles from active models'|etrans }}">{{ 'Models'|etrans|capitalize }}</a>
           </li>
            {% if my_profile.user.vendor_profile.activate_surrogacy %}
           <li class="nav-item active">
-           <a class="nav-link" href="{% url 'payments:surrogacy' profileusername %}" title="{{ 'Surrogacy plans'|trans }}">{{ 'Surrogacy'|trans }}</a>
+           <a class="nav-link" href="{% url 'payments:surrogacy' profileusername %}" title="{{ 'Surrogacy plans'|etrans }}">{{ 'Surrogacy'|etrans }}</a>
           </li>
           {% endif %}
           {% if not request.user.is_authenticated %}
           {% if not request.user.profile.admin %}
           {% endif %}
           {% endif %}
-	  {% if request.user.profile.subscriptions.count > 0 %}
-	  <li class="nav-item {% if request.path == '/feed/subscriptions/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'feed:subscriptions' %}" title="{{ 'Your Subscriptions'|trans }}">{{ 'Subscriptions'|trans }}</a>
+	      {% if request.user.profile.subscriptions.count > 0 %}
+	      <li class="nav-item {% if request.path == '/feed/subscriptions/' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'feed:subscriptions' %}" title="{{ 'Your Subscriptions'|etrans }}">{{ 'Subscriptions'|etrans }}</a>
           </li>
-	  {% endif %}
+	      {% endif %}
           <li class="nav-item{% if request.path|startswith:'/payments/crypto/' %} active{% endif %}">
-            <a class="nav-link" href="{% url 'payments:tip-crypto-simple' profileusername %}" title="{{ 'Tip me in Cryptocurrency'|trans }}">{{ 'Tip Crypto'|trans }}</a>
+            <a class="nav-link" href="{% url 'payments:tip-crypto-simple' profileusername %}" title="{{ 'Tip me in Cryptocurrency'|etrans }}">{{ 'Tip Crypto'|etrans }}</a>
           </li>
         </ul>
       </ul>
         <ul class="navbar-nav align">
-	  {% if user.is_authenticated %}
+    	  {% if user.is_authenticated %}
           <li class="nav-item {% if request.path == '/accounts/profile/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'users:profile' %}" title="{{ 'Your Profile'|trans }}">{{ 'Profile'|trans }}</a>
+            <a class="nav-link" href="{% url 'users:profile' %}" title="{{ 'Your Profile'|etrans }}">{{ 'Profile'|etrans }}</a>
           </li>
-	  {% endif %}
+	      {% endif %}
           {% if user.is_authenticated and user.profile.vendor %}
           <li class="nav-item {% if request.path == '/feed/post/new/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'feed:new_post' %}" title="{{ 'New Post'|trans }}">{{ 'New'|trans }}</a>
+            <a class="nav-link" href="{% url 'feed:new_post' %}" title="{{ 'New Post'|etrans }}">{{ 'New'|etrans }}</a>
           </li>
           <li class="nav-item {% if request.path == '/go/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'go:go' %}" title="{{ 'Go somewhere useful'|trans }}">{{ 'Go'|trans }}</a>
+            <a class="nav-link" href="{% url 'go:go' %}" title="{{ 'Go somewhere useful'|etrans }}">{{ 'Go'|etrans }}</a>
           </li>
           {% endif %}
         </ul>
         <form class="d-flex" action="{% url 'misc:search' %}" style="margin-left: auto;">
-          <input class="form-control mr-sm-2" type="text" placeholder="{{ 'Search'|trans }}" aria-label="{{ 'Search'|trans }}" required id="q" name="q"{% if query %} value="{{ query }}"{% endif %} {% if request.path == '/search/' %}autofocus{% endif %}>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ 'Search'|trans }}</button>
+          <input class="form-control mr-sm-2" type="text" placeholder="{{ 'Search'|trans }}" aria-label="{{ 'Search'|etrans }}" required id="q" name="q"{% if query %} value="{{ query }}"{% endif %} {% if request.path == '/search/' %}autofocus{% endif %}>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ 'Search'|etrans }}</button>
         </form>
         <ul class="navbar-nav" style="margin-left: auto;">
           {% if user.is_superuser or user.profile.vendor %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'barcode:scan' %}?foreign=true&back=true" title="{{ 'Verify an ID with a barcode'|trans }}">{{ 'Scan ID'|trans }}</a>
+            <a class="nav-link" href="{% url 'barcode:scan' %}?foreign=true&back=true" title="{{ 'Verify an ID with a barcode'|etrans }}">{{ 'Scan ID'|etrans }}</a>
           </li>
           <li class="nav-item align-middle">
-            <a class="nav-link align-middle" href="/admin/" title="{{ 'Admin panel'|trans }}">{{ 'Admin'|trans }}</a>
+            <a class="nav-link align-middle" href="/admin/" title="{{ 'Admin panel'|etrans }}">{{ 'Admin'|etrans }}</a>
           </li>
-	  {% elif request.user.profile.idscan_active %}
+    	  {% elif request.user.profile.idscan_active %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'barcode:scan' %}?foreign=true&back=true" title="{{ 'Verify an ID with a barcode'|trans }}">{{ 'Scan ID'|trans }}</a>
+            <a class="nav-link" href="{% url 'barcode:scan' %}?foreign=true&back=true" title="{{ 'Verify an ID with a barcode'|etrans }}">{{ 'Scan ID'|etrans }}</a>
           </li>
-	  {% else %}
+    	  {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'payments:idscan' %}" title="{{ 'Sign up to scan IDs with a barcode'|trans }}">{{ 'Scan ID'|trans }}</a>
+            <a class="nav-link" href="{% url 'payments:idscan' %}" title="{{ 'Sign up to scan IDs with a barcode'|etrans }}">{{ 'Scan ID'|etrans }}</a>
           </li>
           {% endif %}
           {% if not request.user.profile.vendor %}
           <li class="nav-item {% if request.path == '/cart/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'payments:cart-card' %}" title="{{ 'Cart'|trans }}">{{ 'Cart'|trans }} <i id="cart-counter"></i></a>
+            <a class="nav-link" href="{% url 'payments:cart-card' %}" title="{{ 'Cart'|etrans }}">{{ 'Cart'|etrans }} <i id="cart-counter"></i></a>
           </li>
           {% endif %}
           {% if not request.user.is_authenticated %}
           <li class="nav-item {% if request.path == '/accounts/register/' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'users:register' %}" title="{{ 'Join today'|trans }}">{{ 'Sign Up'|trans }}</a>
+            <a class="nav-link" href="{% url 'users:register' %}" title="{{ 'Join today'|etrans }}">{{ 'Sign Up'|etrans }}</a>
           </li>
           {% endif %}
           {% if user.is_authenticated %}
           <li class="nav-item {% if request.path == '/accounts/logout/' %}active {% endif %}align-middle">
-            <a class="nav-link" href="{% url 'users:logout' %}" title="{{ 'Log out'|trans }}">{{ 'Logout'|trans }}</a>
+            <a class="nav-link" href="{% url 'users:logout' %}" title="{{ 'Log out'|etrans }}">{{ 'Logout'|etrans }}</a>
           </li>
           {% else %}
           <li class="nav-item {% if request.path == '/accounts/login/' %}active {% endif %}align-middle">
-            <a class="nav-link" href="{% url 'users:login' %}" title="{{ 'Log in to'|trans }} {{ the_site_name }}">{{ 'Login'|trans }}</a>
+            <a class="nav-link" href="{% url 'users:login' %}" title="{{ 'Log in to'|etrans }} {{ the_site_name }}">{{ 'Login'|etrans }}</a>
           </li>
           {% endif %}
           <li class="nav-item align-middle">
@@ -110,7 +110,7 @@
           {% include 'dynamic_text_time.html' %}
           </li>
           <li class="nav-item">
-	        <a href="{% url 'landing:index' %}" title="{{ 'Visit the landing page'|trans }}">
+	        <a href="{% url 'landing:index' %}" title="{{ 'Visit the landing page'|etrans }}">
                 {% include 'sclock.html' %}
             </a>
           </li>

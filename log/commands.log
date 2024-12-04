@@ -1579,3 +1579,120 @@
 2024-12-03T00:57:39.699700-08:00 lotteh team: team [1941]: nano contact/templates/contact/form.html 
 2024-12-03T07:18:25.136027-08:00 lotteh team: team [1820]: venv
 2024-12-03T07:57:44.412310-08:00 lotteh team: team [1970]: venv
+2024-12-03T16:13:30.748565-08:00 lotteh team: team [1718]: sudo systemctl start celery celerybeat &
+2024-12-03T16:13:48.536473-08:00 lotteh team: team [1718]: python approve_login.py 1
+2024-12-03T16:13:50.582205-08:00 lotteh team: team [1718]: python approve_login.py 1
+2024-12-03T16:13:55.271642-08:00 lotteh team: team [1718]: python last_logins.py 
+2024-12-03T16:13:56.899394-08:00 lotteh team: team [735564]: ls web/site/pt-br/
+2024-12-03T16:13:57.170635-08:00 lotteh team: team [735582]: ls web/site/pt-br/
+2024-12-03T16:13:58.837698-08:00 lotteh team: team [735594]: ls web/site/pt-br/
+2024-12-03T16:14:00.190052-08:00 lotteh team: team [735607]: ls web/site/pt-br/
+2024-12-03T16:19:54.678511-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:19:56.583421-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:20:15.372973-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:20:18.660690-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:20:30.319518-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:23:29.036818-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:23:39.171405-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:23:52.446607-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:23:57.917908-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:24:07.721746-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:24:13.320952-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:26:17.584305-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:26:22.931671-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:26:34.073061-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:26:41.083585-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:28:56.645451-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:29:02.919574-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:29:50.718916-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:30:15.378081-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:30:48.124885-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:31:40.486883-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:41:15.985709-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T16:45:17.606522-08:00 lotteh team: team [735607]: nano web/generate.py
+2024-12-03T16:46:53.598106-08:00 lotteh team: team [735607]: ls web/site/de/
+2024-12-03T16:47:03.333791-08:00 lotteh team: team [735607]: ls web/site/de/
+2024-12-03T16:47:42.783300-08:00 lotteh team: team [735594]: sudo pushweb
+2024-12-03T16:48:51.236506-08:00 lotteh team: team [735607]: nano web/generate.py
+2024-12-03T16:49:33.791660-08:00 lotteh team: team [735607]: nano web/generate.py
+2024-12-03T16:49:44.896797-08:00 lotteh team: team [735594]: nano web/generate.py
+2024-12-03T17:19:11.662023-08:00 lotteh team: team [735594]: nano templates/search.html 
+2024-12-03T17:19:14.259903-08:00 lotteh team: team [735594]: nano templates/search.html 
+2024-12-03T17:19:17.926966-08:00 lotteh team: team [735594]: nano templates/nab
+2024-12-03T17:19:22.107834-08:00 lotteh team: team [735594]: nano templates/navbar
+2024-12-03T17:23:43.351628-08:00 lotteh team: team [735594]: nano templates/navbar.html
+2024-12-03T17:25:24.012010-08:00 lotteh team: team [735594]: nano templates/footer.html 
+2024-12-03T17:25:26.435292-08:00 lotteh team: team [735594]: sudo daphnereload
+2024-12-03T17:25:31.459204-08:00 lotteh team: team [735594]: sudo daphnereload
+2024-12-03T17:25:40.563557-08:00 lotteh team: team [735594]: ls templates
+2024-12-03T17:27:26.123947-08:00 lotteh team: team [735594]: nano templates/base.html
+2024-12-03T17:29:45.692412-08:00 lotteh team: team [735594]: nano templates/voting_banner.html 
+2024-12-03T17:32:29.034756-08:00 lotteh team: team [735594]: nano templates/securitymodal.
+2024-12-03T17:34:26.385859-08:00 lotteh team: team [735594]: nano templates/securitymodal.html 
+2024-12-03T17:39:17.539122-08:00 lotteh team: team [735594]: nano web/templates/web/private.html 
+2024-12-03T17:39:20.500733-08:00 lotteh team: team [735594]: nano templates/social
+2024-12-03T17:44:40.240185-08:00 lotteh team: team [735594]: nano templates/social.html 
+2024-12-03T17:44:49.055978-08:00 lotteh team: team [735594]: python manage.py check
+2024-12-03T17:44:59.455429-08:00 lotteh team: team [735594]: nano templates/adminbase
+2024-12-03T17:45:07.842290-08:00 lotteh team: team [735594]: nano templates/adminbase.html 
+2024-12-03T17:45:11.541980-08:00 lotteh team: team [735594]: nano templates/adminbase.html 
+2024-12-03T17:45:15.518269-08:00 lotteh team: team [735594]: compinfo
+2024-12-03T17:45:17.197752-08:00 lotteh team: team [735594]: sudo doreload
+2024-12-03T17:45:18.511391-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:20.078545-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:21.066451-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:22.027993-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:22.979452-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:24.006011-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:24.970637-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:38.855182-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:45:54.029674-08:00 lotteh team: team [735594]: watchlogs
+2024-12-03T17:45:55.491526-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:12.889221-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:35.660135-08:00 lotteh team: team [735594]: nano templates/base.html
+2024-12-03T17:46:40.883264-08:00 lotteh team: team [735594]: sudo daphnereload
+2024-12-03T17:46:42.143622-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:43.634481-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:45.532636-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:47.131420-08:00 lotteh team: team [735594]: ogs
+2024-12-03T17:46:48.647119-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:49.924850-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:46:56.479301-08:00 lotteh team: team [735594]: watchlogs
+2024-12-03T17:46:59.211854-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:47:01.667088-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:47:17.085249-08:00 lotteh team: team [735594]: nano templates/social.html 
+2024-12-03T17:47:33.967088-08:00 lotteh team: team [735594]: nano templates/securitymodal.html 
+2024-12-03T17:47:54.137175-08:00 lotteh team: team [735594]: nano templates/voting_banner.html 
+2024-12-03T17:48:02.140090-08:00 lotteh team: team [735594]: nano templates/base.html
+2024-12-03T17:48:15.714954-08:00 lotteh team: team [735594]: nano templates/footer.html 
+2024-12-03T17:48:38.289022-08:00 lotteh team: team [735594]: nano templates/navbar.html
+2024-12-03T17:48:51.084817-08:00 lotteh team: team [735594]: nano templates/search.html 
+2024-12-03T17:49:02.895980-08:00 lotteh team: team [735594]: nano templates/search.html 
+2024-12-03T17:49:04.932814-08:00 lotteh team: team [735594]: sudo doreload
+2024-12-03T17:49:09.573760-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:10.725180-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:13.780417-08:00 lotteh team: team [735607]: nano web/generate.py
+2024-12-03T17:49:18.777791-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:30.128214-08:00 lotteh team: team [735594]: compinfo
+2024-12-03T17:49:32.123616-08:00 lotteh team: team [735594]: sudo daphnereload
+2024-12-03T17:49:39.966990-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:41.041393-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:42.153385-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:43.423792-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:44.712608-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:49:45.651162-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:50:29.859608-08:00 lotteh team: team [735594]: logs
+2024-12-03T17:50:32.598096-08:00 lotteh team: team [735594]: compinfp
+2024-12-03T17:50:37.441526-08:00 lotteh team: team [735594]: compinfo
+2024-12-03T18:10:11.438165-08:00 lotteh team: team [753243]: ls web/site/pt-br/
+2024-12-03T18:10:22.551229-08:00 lotteh team: team [753372]: ls web/site/pt-br/
+2024-12-03T18:10:36.992981-08:00 lotteh team: team [753372]: ls
+2024-12-03T18:10:42.371157-08:00 lotteh team: team [753372]: clear
+2024-12-03T18:10:46.715398-08:00 lotteh team: team [753372]: logs
+2024-12-03T18:10:50.281125-08:00 lotteh team: team [753372]: cmds
+2024-12-03T18:10:59.117256-08:00 lotteh team: team [753372]: df -h /
+2024-12-03T18:19:56.034396-08:00 lotteh team: team [756200]: ls web/site/pt-br/
+2024-12-03T18:27:26.595786-08:00 lotteh team: team [759479]: ls web/site/pt-br/
+2024-12-03T18:55:38.422014-08:00 lotteh team: team [770959]: ls web/site/pt-br/
+2024-12-03T18:57:21.981012-08:00 lotteh team: team [771768]: ls web/site/pt-br/
+2024-12-03T19:16:36.973403-08:00 lotteh team: team [786084]: ls web/site/pt-br/
