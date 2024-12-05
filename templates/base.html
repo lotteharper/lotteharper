@@ -17,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="/media/static/favicon.ico">
         <title>{% if title %}{{ title|trans|capitalize }} - {{ the_site_name }}{% else %}{{ the_site_name }}{% endif %}</title>
-        <meta name="description" content="{% if description != None %}{{ description|etrans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|trans }}{% endif %}">
+        <meta name="description" content="{% if description != None %}{{ description|trans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|etrans }}{% endif %}">
         <meta name="author" content="{{ author_name }}">
         <meta name="copyright" content="© {{ the_site_name }} {{ currentyear }}" />
         <meta name="application-name" content="{{ the_site_name }}" />

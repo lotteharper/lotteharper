@@ -104,9 +104,10 @@ class Post(models.Model):
             shutil.copy(self.image.path, new_path)
         new_path_thumb = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '-thumb.png'))
         if self.image_thumbnail and (not os.path.exists(new_path_thumb)) or force:
-            if not os.path.exists(self.image_thumbnail.path): self.download_thumbnail()
+            if not os.path.exists(self.image_thumbnail.path):
+                self.download_thumbnail()
+                self.get_image_thumb_url()
             if not os.path.exists(self.image_thumbnail.path): return
-            self.get_image_thumb_url()
             shutil.copy(self.image_thumbnail.path, new_path_thumb)
 
     def has_auction(self):

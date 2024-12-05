@@ -99,15 +99,15 @@ $(function() {
         });
     });
 });
-let btns = document.querySelectorAll('#likeForm');
-for (i of btns) {
-	if(!i.classList.contains("ready")){
-	       	i.classList.add("ready");
-		$(i).attr('last-action', new String(new Date().getTime()));
-     		$(i).on('submit', function(e) {
-	        	e.preventDefault();
-			if(parseInt($(this).prop('last-action')) - new Date().getTime() > -1000) return;
-			$(this).attr('last-action', new String(new Date().getTime()));
+let btns = document.querySelectorAll('.likeForm');
+for (butt of btns) {
+	if(!butt.classList.contains("ready")){
+	       	butt.classList.add("ready");
+    		$(butt).attr('last-action', new String(new Date().getTime()));
+     		$(butt).on('submit', function(e) {
+        	e.preventDefault();
+			if(parseInt($(butt).prop('last-action')) - new Date().getTime() > -1000) { console.log('Skipping double click'); return ;  }
+			$(butt).attr('last-action', new String(new Date().getTime()));
         		var button = $(this).find(':submit');
         		button.toggleClass('btn-success');
         		button.toggleClass('btn-warning');
@@ -372,16 +372,16 @@ if(document.getElementById('clemn-navbar')) {
 })(jQuery, window, document);
 }
 function publishForm() {
-    let btns = document.querySelectorAll('#publishForm');
-    for (i of btns) {
-	if(!$(i).hasClass('init')) {
-		$(i).addClass('init');
-		$(i).attr('last-action', new String(new Date().getTime()));
-        	$(i).on('submit', function(e) {
-		    if(parseInt($(i).prop('last-action')) - new Date().getTime() > -1000) return;
-		    $(i).attr('last-action', new String(new Date().getTime()));
+    let btns = document.querySelectorAll('.publishForm');
+    for (butt of btns) {
+	if(!$(butt).hasClass('init')) {
+		$(butt).addClass('init');
+		$(butt).attr('last-action', new String(new Date().getTime()));
+        	$(butt).on('submit', function(e) {
           	    e.preventDefault();
-           	    $(this).find(':submit').html('<i class="bi bi-cloud-snow-fill"></i>');
+                if(parseInt($(butt).prop('last-action')) - new Date().getTime() > -1000) { console.log('Skipping double click'); return ;  }
+	    	    $(butt).attr('last-action', new String(new Date().getTime()));
+           	    $(butt).find(':submit').html('<i class="bi bi-cloud-snow-fill"></i>');
             	    $.ajax({
         	        url: $(this).attr('action') || window.location.pathname,
 	               	type: "POST",

@@ -7,7 +7,7 @@
 	<img src="{{ icon_url }}" alt="{{ the_site_name }}" width="30" height="30" style="border-radius: 50%;">
 	<i style="color: {% if darkmode %}white{% else %}black{% endif %} !important;">{{ the_site_name }}</i>
 	<small class="nav-title" style="color: red !important; position: absolute; top: 12px; left: 45px; z-index: 2;"><small><small><small class="nav-title" style="color: red !important;">ファムベイビー</small></small></small></small>
-    </a>
+     </a>
     {% endif %}
     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -64,7 +64,7 @@
           {% endif %}
         </ul>
         <form class="d-flex" action="{% url 'misc:search' %}" style="margin-left: auto;">
-          <input class="form-control mr-sm-2" type="text" placeholder="{{ 'Search'|trans }}" aria-label="{{ 'Search'|etrans }}" required id="q" name="q"{% if query %} value="{{ query }}"{% endif %} {% if request.path == '/search/' %}autofocus{% endif %}>
+          <input class="form-control mr-sm-2" type="text" placeholder="{{ 'Search'|etrans }}" aria-label="{{ 'Search'|etrans }}" required id="q" name="q"{% if query %} value="{{ query }}"{% endif %} {% if request.path == '/search/' %}autofocus{% endif %}>
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ 'Search'|etrans }}</button>
         </form>
         <ul class="navbar-nav" style="margin-left: auto;">
