@@ -470,27 +470,6 @@ function staticClocks() {
     }
 }
 staticClocks();
-function reportContent(uuid){
-    var result = window.prompt('What is the issue with this content you would like to report?')
-    if(result && result.length > 15) {
-        var fd = {'uid': uuid, 'text': result};
-        $.ajax({
-            url: 'https://lotteh.com/feed/report/' + uuid + '/',
-            method: 'POST',
-            data: fd,
-            tryCount: 0,
-            retryLimit: 5,
-            error: (xhr, textStatus, errorThrown) => {
-                this.tryCount++;
-                if(this.tryCount >= this.retryLimit) return;
-                $.ajax(this);
-            },
-            success: function(data) {
-                alert(data);
-            }
-        });
-    }
-}
 function setCookie(cname, cvalue, exdays) {
    const d = new Date();
    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -501,8 +480,8 @@ function getCookie(cname) {
    let name = cname + "=";
    let decodedCookie = decodeURIComponent(document.cookie);
    let ca = decodedCookie.split(';');
-   for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
+   for (let ct = 0; ct < ca.length; ct++) {
+      let c = ca[ct];
       while (c.charAt(0) == ' ') {
          c = c.substring(1);
       }
