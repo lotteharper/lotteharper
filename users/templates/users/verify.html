@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load app_filters %}
+    <h2>{{ 'Verify Your Email'|etrans }}</h2>
+    <p>{{ 'Please check your email and click the link to verify your account. You need to verify your email before you can log in. This step helps keep the site only accessible by real people like you.'|etrans }}</p>
+    <a href="{% url 'users:resend_activation' %}" title="{{ 'Resend activation email'|etrans }}" class="btn btn-info">{{ 'Resend Verification Email'|etrans }}</a>
+{% endblock content %}

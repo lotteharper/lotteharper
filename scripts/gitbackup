@@ -1,0 +1,7 @@
+#!/bin/bash
+cd /home/team/lotteh
+sudo git init --initial-branch=main
+sudo git add --all
+sudo git commit -m "backup"
+sudo git remote add originlab git@gitlab.com:jasperholton/lotteh2024-11-09.git
+sudo git push -u originlab main
