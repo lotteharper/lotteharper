@@ -25,7 +25,7 @@ jobs:
       run: |
         echo "Hello World"
         curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin" | bash /dev/stdin
-        /home/team/lotteharper/scripts/convert "Awesome App" "yourdomainhere.com" "lotteharper" "Your Name" "youremail@gmail.com" "team"
+#        /home/team/lotteharper/scripts/convert "Awesome App" "yourdomainhere.com" "lotteharper" "Your Name" "youremail@gmail.com" "team"
 #        /home/team/lotteharper/scripts/githubsetup # Note that this requires about 20G of space to install on Linux
     - name: Configure
       run: |
