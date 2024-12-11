@@ -15,6 +15,7 @@ def interactive(key):
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def call_recordings(request):
+    from django.conf import settings
     account_sid = settings.TWILIO_ACCOUNT_SID
     auth_token = settings.TWILIO_AUTH_TOKEN
     from django.shortcuts import render
@@ -62,7 +63,6 @@ def option_add(request):
     from django.contrib.auth.decorators import user_passes_test
     from vendors.tests import is_vendor
     from feed.tests import identity_verified
-    from vendors.tests import is_vendor
     from django.contrib.sessions.models import Session
     from live.models import VideoRecording
     from django.core.paginator import Paginator
