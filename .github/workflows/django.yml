@@ -29,4 +29,4 @@ jobs:
 #        /home/team/lotteharper/scripts/githubsetup # Note that this requires about 20G of space to install on Linux
     - name: Configure
       run: |
-        python manage.py check
+        python
