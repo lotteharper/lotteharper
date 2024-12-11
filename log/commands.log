@@ -3297,3 +3297,76 @@
 2024-12-11T13:52:53.324656-08:00 lotteh team: team [1547103]: nano .github/workflows/django.yml 
 2024-12-11T13:53:11.030220-08:00 lotteh team: team [1547103]: sudo backup nodb
 2024-12-11T13:54:22.276061-08:00 lotteh team: team [1547103]: nano .github/workflows/django.yml 
+2024-12-11T13:54:37.624786-08:00 lotteh team: team [1547103]: sudo backup nodb
+2024-12-11T13:59:04.072264-08:00 lotteh team: team [1562434]: cd
+2024-12-11T13:59:06.130779-08:00 lotteh team: team [1562434]: git clone https://github.com/daisycamber/lotteharper.git
+2024-12-11T13:59:13.341373-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/
+2024-12-11T13:59:26.493476-08:00 lotteh team: team [1547103]: sudo rm -r lotteharper/media/
+2024-12-11T13:59:27.474658-08:00 lotteh team: team [1547103]: sudo rm -r lotteharper/media/
+2024-12-11T13:59:34.392079-08:00 lotteh team: team [1562434]: git clone https://github.com/daisycamber/lotteharper.git
+2024-12-11T13:59:35.381289-08:00 lotteh team: team [1547103]: sudo rm -r lotteharper/media/
+2024-12-11T13:59:37.304872-08:00 lotteh team: team [1547103]: sudo rm -r lotteharper/media/
+2024-12-11T13:59:46.450898-08:00 lotteh team: team [1547103]: sudo rm -r ../lotteharper/media/
+2024-12-11T13:59:59.556717-08:00 lotteh team: team [1562434]: du -sh lotteharper
+2024-12-11T14:00:02.163155-08:00 lotteh team: team [1562434]: du -sh lotteharper
+2024-12-11T14:00:08.004172-08:00 lotteh team: team [1562434]: ls lotteharper/mail/
+2024-12-11T14:00:09.513984-08:00 lotteh team: team [1562434]: ls lotteharper/mailbox
+2024-12-11T14:00:13.492782-08:00 lotteh team: team [1562434]: ls lotteharper/mail/inbox
+2024-12-11T14:00:32.665132-08:00 lotteh team: team [1547103]: sudo rm -r ../lotteharper/media/
+2024-12-11T14:00:39.401649-08:00 lotteh team: team [1547103]: sudo rm -r mail/inbox
+2024-12-11T14:00:41.713551-08:00 lotteh team: team [1547103]: cd
+2024-12-11T14:00:45.915102-08:00 lotteh team: team [1547103]: cd femmebabe-backup-open/
+2024-12-11T14:00:48.825647-08:00 lotteh team: team [1547103]: sudo rm -r mail/inbox
+2024-12-11T14:00:51.083839-08:00 lotteh team: team [1562434]: ls lotteharper/mail/inbox
+2024-12-11T14:00:53.609917-08:00 lotteh team: team [1562434]: ls lotteharper/
+2024-12-11T14:01:17.847746-08:00 lotteh team: team [1562434]: du -sh lotteharper/*.py
+2024-12-11T14:01:21.713418-08:00 lotteh team: team [1562434]: du -sh lotteharper/*/*.py
+2024-12-11T14:01:45.793742-08:00 lotteh team: team [1562434]: du -sh ./
+2024-12-11T14:01:49.381523-08:00 lotteh team: team [1562434]: du -sh ./lotteh
+2024-12-11T14:01:50.272256-08:00 lotteh team: team [1562434]: du -sh ./lotteharper/
+2024-12-11T14:02:03.888797-08:00 lotteh team: team [1562434]: ls lotteharper/
+2024-12-11T14:02:12.097520-08:00 lotteh team: team [1562434]: ls lotteharper/web/site
+2024-12-11T14:02:24.225141-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/web/site
+2024-12-11T14:02:26.398088-08:00 lotteh team: team [1562434]: ls lotteharper/web/site
+2024-12-11T14:02:30.538659-08:00 lotteh team: team [1562434]: du -sh ./lotteharper/
+2024-12-11T14:02:39.462072-08:00 lotteh team: team [1562434]: ls lotteharper/
+2024-12-11T14:02:54.179788-08:00 lotteh team: team [1547103]: nano .gitignore 
+2024-12-11T14:03:07.578220-08:00 lotteh team: team [1547103]: nano .gitignore 
+2024-12-11T14:03:20.418562-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/cache
+2024-12-11T14:03:25.503352-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/cache
+2024-12-11T14:03:29.298806-08:00 lotteh team: team [1562434]: ls lotteharper/email
+2024-12-11T14:03:35.535354-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/email
+2024-12-11T14:03:44.697193-08:00 lotteh team: team [1562434]: sudo ascript backup
+2024-12-11T14:04:00.963625-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/vision
+2024-12-11T14:04:40.824753-08:00 lotteh team: team [1562434]: sudo rm -r lotteharper/cache
+2024-12-11T14:04:45.313826-08:00 lotteh team: team [1562434]: du -sh lotteharper/
+2024-12-11T14:29:08.944683-08:00 lotteh team: team [1609084]: python approve_login.py 1
+2024-12-11T14:29:28.181067-08:00 lotteh team: team [1609084]: python approve_login.py 1
+2024-12-11T14:29:30.490320-08:00 lotteh team: team [1609084]: ls
+2024-12-11T14:29:33.415499-08:00 lotteh team: team [1609084]: clear
+2024-12-11T14:29:36.659864-08:00 lotteh team: team [1609084]: ls
+2024-12-11T14:29:42.799193-08:00 lotteh team: team [1609084]: ls
+2024-12-11T14:29:48.381109-08:00 lotteh team: team [1609084]: logs
+2024-12-11T14:29:53.657708-08:00 lotteh team: team [1609084]: cmds
+2024-12-11T14:30:02.927711-08:00 lotteh team: team [1609084]: ps -auc
+2024-12-11T14:30:17.581293-08:00 lotteh team: team [1609084]: ps -auc
+2024-12-11T14:30:30.158206-08:00 lotteh team: team [1609084]: netstat -plant | grep LISTEN
+2024-12-11T14:31:16.826329-08:00 lotteh team: team [1609084]: sudo ufw status
+2024-12-11T14:32:33.864093-08:00 lotteh team: team [1609084]: sudo ufw status
+2024-12-11T14:33:25.145925-08:00 lotteh team: team [1609084]: netstat -plant | grep LISTEN
+2024-12-11T14:36:05.685866-08:00 lotteh team: team [1609084]: sudo ascript setup
+2024-12-11T14:37:18.689992-08:00 lotteh team: team [1614313]: python approve_login.py 1
+2024-12-11T14:37:22.255964-08:00 lotteh team: team [1614313]: sudo ufw allow 993
+2024-12-11T14:37:29.123334-08:00 lotteh team: team [1614313]: sudo ufw allow 995
+2024-12-11T14:37:39.056541-08:00 lotteh team: team [1614313]: sudo ufw reload
+2024-12-11T14:38:15.203129-08:00 lotteh team: team [1614313]: sudo passwd root
+2024-12-11T14:38:35.199620-08:00 lotteh team: team [1614313]: sudo passwd team
+2024-12-11T14:38:42.462994-08:00 lotteh root: root [1615761]: exit
+2024-12-11T14:38:47.275706-08:00 lotteh team: team [1614313]: sudo su
+2024-12-11T14:39:02.099754-08:00 lotteh team: team [1616083]: sudo ascript setup
+2024-12-11T14:39:22.126772-08:00 lotteh team: team [1616083]: sudo su
+2024-12-11T15:15:59.438375-08:00 lotteh team: team [1639179]: sudo su
+2024-12-11T15:25:32.810814-08:00 lotteh team: team [1645036]: sudo su
+2024-12-11T15:32:48.921657-08:00 lotteh team: team [1649536]: sudo su
+2024-12-11T15:54:09.288803-08:00 lotteh team: team [1645036]: sudo backup nodb and
+2024-12-11T15:54:11.165896-08:00 lotteh team: team [1645036]: sudo backup nodb and
