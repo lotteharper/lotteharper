@@ -26,7 +26,7 @@ sudo cat /home/$USER_NAME/.ssh/id_rsa.pub | sudo tee -a /home/$USER_NAME/.ssh/au
  echo $SSH_KEY | sudo tee -a /home/$USER_NAME/.ssh/authorized_keys
 sudo su team
 cd /home/team
-git clone "https://github.com/daisycamber/lotteharper.git"
+git clone $GIT_REPO
 pwd
 ls
 # Convert the software to use the name Makeup Girl, domain mupgirl.com, mupgirl directory and settings (must be the same as above two lines), and the name Daisy with (for example) with your email and a good mail name for your project user (i'm using team, above)
