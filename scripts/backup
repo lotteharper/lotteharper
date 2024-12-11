@@ -3,6 +3,8 @@ GIT_URL="git@gitlab.com:jasperholton/lotteh2024-12-07.git"
 U="team"
 DIR="lotteh"
 #  Configure URLs
+GIT_URL_PROJ=`sed -n '1p' < /home/$U/$DIR/config/git`
+GIT_URL_PUB=`sed -n '3p' < /home/$U/$DIR/config/git`
 GIT_URL=`sed -n '4p' < /home/$U/$DIR/config/git`
 echo $GIT_URL
 escaped_url=$(echo "$GIT_URL" | sed 's/\//\\\//g')
@@ -159,7 +161,7 @@ if [ "$DOW" -eq 1 ]; then
 	fi
 fi
 git init --initial-branch=main
-sudo git remote add originlab $GIT_URL
+sudo git remote add originlab $GIT_URL_PROJ
 sudo git add --all
 sudo git commit -m "backup"
 sudo git push -u originlab main
@@ -192,11 +194,18 @@ echo "media/images" >> .gitignore
 echo "media/documents" >> .gitignore
 echo "media/files" >> .gitignore
 echo "media/birthcontrol" >> .gitignore
+echo "cache/" >> .gitignore
+echo "log/" >> .gitignore
+echo "secure/" >> .gitignore
+echo "email/" >> .gitignore
+echo "celerybeat-schedule/" >> .gitignore
+jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/config.json > config/config-example.json
+jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/apis.json > config/apis-example.json
 sudo chmod -R 774 ./*
 sudo chown -R :users ./*
 sudo git init --initial-branch=main
 sudo git add --all
 sudo git commit -m "open source"
-sudo git remote add originhub git@github.com:daisycamber/lotteharper.git
+sudo git remote add originhub $GIT_URL_PUB
 sudo git push -u -f originhub main
 cd $"/home/$U"

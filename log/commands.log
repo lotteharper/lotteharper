@@ -3122,3 +3122,159 @@
 2024-12-10T21:19:59.188754-08:00 lotteh team: team [978813]: nano survey/templates/survey/surveys.html 
 2024-12-10T23:16:00.151628-08:00 lotteh team: team [1048880]: nano survey/templates/survey/surveys.html 
 2024-12-10T23:35:22.551136-08:00 lotteh team: team [1060481]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:40:56.369432-08:00 lotteh team: team [1535911]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:41:10.391883-08:00 lotteh team: team [1536199]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:41:31.248244-08:00 lotteh team: team [1536445]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:41:47.298079-08:00 lotteh team: team [1536445]: nano feed/views.py
+2024-12-11T12:41:53.773147-08:00 lotteh team: team [1536445]: logs
+2024-12-11T12:42:00.299796-08:00 lotteh team: team [1536445]: dbingo
+2024-12-11T12:43:01.227878-08:00 lotteh team: team [1536445]: dbinfo
+2024-12-11T12:43:09.524527-08:00 lotteh team: team [1536445]: dbinfo
+2024-12-11T12:43:13.274726-08:00 lotteh team: team [1536445]: cd
+2024-12-11T12:43:50.345390-08:00 lotteh team: team [1536445]: cp femmebabe-backup-open/ backup
+2024-12-11T12:44:10.323195-08:00 lotteh team: team [1536445]: cp -r femmebabe-backup-open/ backup
+2024-12-11T12:44:25.685058-08:00 lotteh team: team [1536445]: rm backup/media -r
+2024-12-11T12:44:34.750398-08:00 lotteh team: team [1536445]: du -sh backup
+2024-12-11T12:44:56.328994-08:00 lotteh team: team [1536445]: du -sh backup/*
+2024-12-11T12:45:55.166818-08:00 lotteh team: team [1536445]: rm -r backup
+2024-12-11T12:46:01.536520-08:00 lotteh team: team [1536445]: sudo rm -r backup
+2024-12-11T12:46:18.509433-08:00 lotteh team: team [1536445]: cat lotteh/config/git 
+2024-12-11T12:47:35.536375-08:00 lotteh team: team [1536445]: git clone https://github.com/daisycamber/lotteharper.git
+2024-12-11T12:47:44.064755-08:00 lotteh team: team [1536445]: git clone https://github.com/daisycamber/lotteharper.git
+2024-12-11T12:48:47.742083-08:00 lotteh team: team [1536445]: sudo rm -r lotteharper/media
+2024-12-11T12:49:23.884299-08:00 lotteh team: team [1536445]: sudo rm -r lotteharper/media
+2024-12-11T12:49:35.509032-08:00 lotteh team: team [1536445]: du -sh lotteharper/
+2024-12-11T12:49:41.634783-08:00 lotteh team: team [1536445]: du -sh lotteharper/*
+2024-12-11T12:50:02.519762-08:00 lotteh team: team [1536445]: sudo rm -r lotteharpercache
+2024-12-11T12:50:19.665871-08:00 lotteh team: team [1536445]: sudo rm -r lotteharpe/rcache
+2024-12-11T12:50:30.994689-08:00 lotteh team: team [1536445]: sudo rm -r lotteharpr/cache
+2024-12-11T12:51:02.130085-08:00 lotteh team: team [1536445]: sudo rm -r lotteharpr/cache
+2024-12-11T12:51:20.192081-08:00 lotteh team: team [1536445]: nano lotteh/.gitignore 
+2024-12-11T12:51:28.562377-08:00 lotteh team: team [1536445]: suso ascript backup
+2024-12-11T12:52:43.934900-08:00 lotteh team: team [1536445]: sudo ascript backup
+2024-12-11T12:53:48.981196-08:00 lotteh team: team [1536445]: sudo rm -r lotteharper/cache
+2024-12-11T12:54:05.670126-08:00 lotteh team: team [1536445]: sudo rm -r lotteharper/cache
+2024-12-11T12:54:13.789045-08:00 lotteh team: team [1536445]: du -sh lotteharper/*
+2024-12-11T12:54:47.153806-08:00 lotteh team: team [1536445]: rm lotteharper/secure
+2024-12-11T12:54:56.815297-08:00 lotteh team: team [1536445]: rm-r lotteharper/secure
+2024-12-11T12:55:08.083861-08:00 lotteh team: team [1536445]: rm -r lotteharper/email
+2024-12-11T12:55:33.478496-08:00 lotteh team: team [1536445]: rm -r lotteharper/email
+2024-12-11T12:55:43.199859-08:00 lotteh team: team [1536445]: du -sh lotteharper
+2024-12-11T12:55:53.785277-08:00 lotteh team: team [1536445]: ls lotteharper
+2024-12-11T12:56:12.721232-08:00 lotteh team: team [1536445]: rm lotteharper/media
+2024-12-11T12:56:27.496910-08:00 lotteh team: team [1536445]: rm lotteharper/mail -r
+2024-12-11T12:56:42.719069-08:00 lotteh team: team [1536445]: rm lotteharper/log
+2024-12-11T12:56:52.651605-08:00 lotteh team: team [1536445]: rm lotteharper/log -r
+2024-12-11T12:57:20.182081-08:00 lotteh team: team [1546687]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:57:23.859314-08:00 lotteh team: team [1546687]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:57:33.473277-08:00 lotteh team: team [1546687]: python approve_login.py
+2024-12-11T12:57:38.452816-08:00 lotteh team: team [1546687]: python approve_login.py 1
+2024-12-11T12:57:43.656433-08:00 lotteh team: team [1546687]: python approve_login.py 1
+2024-12-11T12:57:44.784549-08:00 lotteh team: team [1547008]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:57:45.418930-08:00 lotteh team: team [1547042]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:57:47.912293-08:00 lotteh team: team [1547076]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:57:49.620869-08:00 lotteh team: team [1547103]: nano survey/templates/survey/surveys.html 
+2024-12-11T12:58:18.529361-08:00 lotteh team: team [1547103]: cmds
+2024-12-11T12:58:23.513247-08:00 lotteh team: team [1547103]: cmds
+2024-12-11T12:58:25.326342-08:00 lotteh team: team [1547103]: cmds
+2024-12-11T12:58:51.404391-08:00 lotteh team: team [1547103]: cmds
+2024-12-11T12:58:54.453140-08:00 lotteh team: team [1547103]: who 1546687
+2024-12-11T12:59:00.974641-08:00 lotteh team: team [1547103]: who 1546687
+2024-12-11T12:59:04.041861-08:00 lotteh team: team [1547103]: ps -aux | grep 1546687
+2024-12-11T12:59:49.216313-08:00 lotteh team: team [1547103]: ps -ef |grep 154
+2024-12-11T12:59:59.887650-08:00 lotteh team: team [1547103]: ps -ef |grep 1546687
+2024-12-11T13:00:06.516824-08:00 lotteh team: team [1547103]: who
+2024-12-11T13:00:35.788334-08:00 lotteh team: team [1547103]: s
+2024-12-11T13:00:36.645075-08:00 lotteh team: team [1547103]: ls
+2024-12-11T13:03:16.319072-08:00 lotteh team: team [1547103]: ls mail
+2024-12-11T13:03:24.351693-08:00 lotteh team: team [1547103]: ls ../lotteharper/mai
+2024-12-11T13:03:27.507241-08:00 lotteh team: team [1547103]: ls ../lotteharper/mail
+2024-12-11T13:03:36.018816-08:00 lotteh team: team [1547103]: cp mail ../lotteharper/mail
+2024-12-11T13:03:38.991204-08:00 lotteh team: team [1547103]: cp mail ../lotteharper/mail -r
+2024-12-11T13:03:42.186071-08:00 lotteh team: team [1547103]: ls ../lotteharper/mail
+2024-12-11T13:03:54.932489-08:00 lotteh team: team [1547076]: sudo ascript backup
+2024-12-11T13:05:41.659924-08:00 lotteh team: team [1547076]: cd
+2024-12-11T13:05:48.707317-08:00 lotteh team: team [1547076]: cp /etc/config.json test.json
+2024-12-11T13:05:52.116005-08:00 lotteh team: team [1547076]: sed '/\"mailer\"/,/}/ d; /^$/d' test.json
+2024-12-11T13:05:58.303659-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:06:20.302723-08:00 lotteh team: team [1547076]: sed -i '/\"mailer\"/,/}/ d; /^$/d' test.json
+2024-12-11T13:06:33.794409-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:06:34.679536-08:00 lotteh team: team [1547076]: sed -i '/\"mailer\"/,/}/ d; /^$/d' test.json
+2024-12-11T13:06:38.346063-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:06:41.975088-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:06:45.402696-08:00 lotteh team: team [1547076]: cp /etc/config.json test.json
+2024-12-11T13:06:48.228897-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:06:48.870343-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:07:04.888013-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:07:07.343615-08:00 lotteh team: team [1547076]: cp /etc/config.json test.json
+2024-12-11T13:07:09.060259-08:00 lotteh team: team [1547076]: cp /etc/config.json test.json
+2024-12-11T13:07:21.067069-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:07:27.135488-08:00 lotteh team: team [1547076]: sed '/\"mailer\"/,/}/ d; /^$/d' test.json
+2024-12-11T13:11:22.325880-08:00 lotteh team: team [1547076]: sed '(\{)([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)' test.json
+2024-12-11T13:11:33.707155-08:00 lotteh team: team [1547076]: sed '(\{)([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)' test.json
+2024-12-11T13:11:39.802785-08:00 lotteh team: team [1547076]: sed 's/\{([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)//g' test.json
+2024-12-11T13:11:57.176177-08:00 lotteh team: team [1547076]: sed "s/\{([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)//g" test.json
+2024-12-11T13:12:01.059744-08:00 lotteh team: team [1547076]: sed -e "s/\{([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)//g" test.json
+2024-12-11T13:12:05.587203-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:12:47.937931-08:00 lotteh team: team [1547076]: sed -i "s/\{([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)//g" test.json
+2024-12-11T13:12:53.987556-08:00 lotteh team: team [1547076]: sed -e "s/\{([\r\n].+)(\r|\n|)(.*(?:None).*)([\r\n].*)//g" test.json
+2024-12-11T13:13:21.168209-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and#012      has("trait_type") and has("value") and #012      .value == "None"#012    ) )' file
+2024-12-11T13:13:53.808049-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and#012      has("value") and #012      .value == "None"#012    ) )' test.json
+2024-12-11T13:14:08.494381-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and#012      .value == "None"#012    ) )' test.json
+2024-12-11T13:14:09.767612-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and#012      .value == "None"#012    ) )' test.json
+2024-12-11T13:14:28.585450-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and#012      has("value") and #012      .value == "None"#012    ) )' test.json
+2024-12-11T13:14:44.121596-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and has("value") and#012      has("value") and #012      .value == "None"#012    ) )' test.json
+2024-12-11T13:15:30.927710-08:00 lotteh team: team [1547076]: jq 'del( .. |#012    select(#012      type == "object" and has("value") and#012      has("value") and #012      .value == "None"#012    ) )' test.json
+2024-12-11T13:15:45.801771-08:00 lotteh team: team [1547076]: jq 'walk(if true then null else . end)' test.json
+2024-12-11T13:15:49.994205-08:00 lotteh team: team [1547076]: nano test.josn
+2024-12-11T13:15:51.774221-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:17:08.578767-08:00 lotteh team: team [1547076]: nano test.json
+2024-12-11T13:17:14.981816-08:00 lotteh team: team [1547076]: jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' test.json
+2024-12-11T13:18:54.232153-08:00 lotteh team: team [1547076]: sudo ascript backup
+2024-12-11T13:19:07.055052-08:00 lotteh team: team [1547076]: sudo ascript backup
+2024-12-11T13:19:13.825962-08:00 lotteh team: team [1560408]: nano survey/templates/survey/surveys.html 
+2024-12-11T13:20:38.208481-08:00 lotteh team: team [1560408]: nano README.md 
+2024-12-11T13:20:48.112756-08:00 lotteh team: team [1560408]: ls config/etc_dovecot_passwd-example 
+2024-12-11T13:20:52.864391-08:00 lotteh team: team [1560408]: cat config/etc_dovecot_passwd-example 
+2024-12-11T13:20:58.765752-08:00 lotteh team: team [1560408]: cat config/etc_dovecot_passwd-example 
+2024-12-11T13:21:03.033829-08:00 lotteh team: team [1560408]: cat config/etc_dovecot_passwd-example 
+2024-12-11T13:21:06.423761-08:00 lotteh team: team [1560408]: cat config/etc_dovecot_passwd-example 
+2024-12-11T13:21:09.763941-08:00 lotteh team: team [1560408]: cd
+2024-12-11T13:21:16.841502-08:00 lotteh team: team [1560408]: cd
+2024-12-11T13:21:23.567818-08:00 lotteh team: team [1560408]: cat /usr/bin/backup
+2024-12-11T13:21:35.444382-08:00 lotteh team: team [1560408]: cd femmebabe-backup-open/
+2024-12-11T13:21:37.765732-08:00 lotteh team: team [1560408]: jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/apis.json config/apis-example.json
+2024-12-11T13:21:45.871971-08:00 lotteh team: team [1560408]: jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/apis.json > config/apis-example.json
+2024-12-11T13:21:54.495451-08:00 lotteh team: team [1560408]: jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/config.json > config/config-example.json
+2024-12-11T13:22:01.203559-08:00 lotteh team: team [1560408]: nano config/config-example.json 
+2024-12-11T13:22:19.994513-08:00 lotteh team: team [1560408]: cd
+2024-12-11T13:22:23.261838-08:00 lotteh team: team [1562434]: nano survey/templates/survey/surveys.html 
+2024-12-11T13:22:42.795431-08:00 lotteh team: team [1562434]: sudo ascript backup
+2024-12-11T13:23:15.620202-08:00 lotteh team: team [1562434]: sudo backup nodb
+2024-12-11T13:23:15.635949-08:00 lotteh team: team [1562434]: sudo backup nodb
+2024-12-11T13:23:15.694182-08:00 lotteh team: team [1562434]: sudo backup nodb
+2024-12-11T13:23:16.140489-08:00 lotteh team: message repeated 11 times: [ team [1562434]: sudo backup nodb]
+2024-12-11T13:23:23.605238-08:00 lotteh team: team [1562434]: git remote -v
+2024-12-11T13:23:55.369633-08:00 lotteh team: team [1547103]: cat config/git 
+2024-12-11T13:25:40.365433-08:00 lotteh team: team [1547103]: nano scripts/initialize 
+2024-12-11T13:25:48.015671-08:00 lotteh team: team [1547103]: sudo ascript setup
+2024-12-11T13:25:49.486321-08:00 lotteh team: team [1547103]: nano scripts/initialize 
+2024-12-11T13:26:51.265836-08:00 lotteh team: team [1547103]: sudo ascript setup
+2024-12-11T13:27:07.251135-08:00 lotteh team: team [1547103]: sudo ascript setup
+2024-12-11T13:27:48.326908-08:00 lotteh team: team [1536445]: venv
+2024-12-11T13:29:00.777668-08:00 lotteh team: team [1547103]: sed -n '4p' /home/team/lotteh/config/git
+2024-12-11T13:29:09.302268-08:00 lotteh team: team [1547103]: sed -n 'p' /home/team/lotteh/config/git
+2024-12-11T13:29:12.821129-08:00 lotteh team: team [1547103]: sed -n '1p' /home/team/lotteh/config/git
+2024-12-11T13:30:17.542038-08:00 lotteh team: team [1562434]: nano scripts/backup 
+2024-12-11T13:30:21.687093-08:00 lotteh team: team [1562434]: git remote -v
+2024-12-11T13:30:25.364802-08:00 lotteh team: team [1562434]: git remote remove originlab
+2024-12-11T13:30:28.377746-08:00 lotteh team: team [1562434]: git remote remove originlab
+2024-12-11T13:30:52.507922-08:00 lotteh team: team [1562434]: sudo backup nodb
+2024-12-11T13:30:52.720019-08:00 lotteh team: team [1562434]: sudo backup nodb
+2024-12-11T13:30:57.067006-08:00 lotteh team: team [1562434]: git remote -v
+2024-12-11T13:31:11.478735-08:00 lotteh team: team [1562434]: nano scripts/backup 
+2024-12-11T13:31:18.239735-08:00 lotteh team: team [1562434]: sudo ascript backup
+2024-12-11T13:31:20.734199-08:00 lotteh team: team [1562434]: nano scripts/backup 
+2024-12-11T13:32:01.816591-08:00 lotteh team: team [1562434]: sudo ascript backup
+2024-12-11T13:32:06.884306-08:00 lotteh team: team [1562434]: git remote remove originlab
+2024-12-11T13:32:11.409360-08:00 lotteh team: team [1562434]: git remote -v
