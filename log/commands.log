@@ -3383,3 +3383,45 @@
 2024-12-12T00:20:04.275905-08:00 lotteh team: team [2098345]: pip freeze | grep Flask
 2024-12-12T00:20:07.886674-08:00 lotteh team: team [2098345]: pip freeze | grep flask
 2024-12-12T00:22:56.735203-08:00 lotteh team: team [2097534]: nano lotteh/settings.py 
+2024-12-12T12:42:57.663464-08:00 lotteh team: team [2097534]: nano lotteh/settings.py 
+2024-12-12T12:43:01.928177-08:00 lotteh team: team [2097534]: ls ..
+2024-12-12T12:43:09.643833-08:00 lotteh team: team [2097534]: du -sh ../lotteharper/
+2024-12-12T12:43:15.076081-08:00 lotteh team: team [2097534]: du -sh ../lotteharper/data
+2024-12-12T12:43:20.547045-08:00 lotteh team: team [2097534]: du -sh data
+2024-12-12T12:44:04.715427-08:00 lotteh team: team [2097534]: compinfo
+2024-12-12T12:44:07.386815-08:00 lotteh team: team [2097534]: free -h
+2024-12-12T12:44:29.549312-08:00 lotteh team: team [2097534]: free -h
+2024-12-12T12:44:30.636239-08:00 lotteh team: team [2097534]: free -h
+2024-12-12T12:44:31.571928-08:00 lotteh team: team [2097534]: free -h
+2024-12-12T12:45:03.746783-08:00 lotteh team: team [2097534]: sudo systemctl status celery
+2024-12-12T12:45:05.197038-08:00 lotteh team: team [2097534]: sudo systemctl status celery
+2024-12-12T12:45:09.833716-08:00 lotteh team: team [2097534]: sudo systemctl status apache2
+2024-12-12T12:45:16.619975-08:00 lotteh team: team [2097534]: sudo systemctl status daphne
+2024-12-12T12:45:28.902726-08:00 lotteh team: team [2097534]: sudo systemctl status stun
+2024-12-12T12:45:32.228746-08:00 lotteh team: team [2097534]: free -h
+2024-12-12T12:45:33.482217-08:00 lotteh team: team [2097534]: free -h
+2024-12-12T12:45:41.649750-08:00 lotteh team: team [2097534]: dbinfo
+2024-12-12T14:32:43.079503-08:00 lotteh team: team [2097534]: sudo cat /etc/apache2/sites-available/lotteh-le-ssl.conf 
+2024-12-12T14:33:31.430897-08:00 lotteh team: team [2097534]: cat security/risk.py 
+2024-12-12T14:35:10.897480-08:00 lotteh team: team [2098345]: logs
+2024-12-12T14:35:52.763635-08:00 lotteh team: team [2098345]: dbinfo
+2024-12-12T14:36:24.027196-08:00 lotteh team: team [2098345]: compinfo
+2024-12-12T14:36:24.980055-08:00 lotteh team: team [2098345]: logs
+2024-12-12T14:37:02.376321-08:00 lotteh team: team [2098345]: logs
+2024-12-12T14:37:21.038708-08:00 lotteh team: team [2098345]: logs
+2024-12-12T14:37:26.123739-08:00 lotteh team: team [2098345]: logs
+2024-12-12T14:38:02.503353-08:00 lotteh team: team [2098345]: cat remote/consumers.py 
+2024-12-12T18:35:10.600238-08:00 lotteh team: team [2098345]: nano feed/templates/feed/profile_grid.html 
+2024-12-12T18:35:15.628345-08:00 lotteh team: team [2098345]: sudo daphnereload
+2024-12-12T18:35:24.825131-08:00 lotteh team: team [2098345]: sudo purgecache
+2024-12-12T18:35:31.749626-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:33.990170-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:35.399243-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:36.674536-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:38.083587-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:39.513457-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:41.011210-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:35:42.489419-08:00 lotteh team: team [2098345]: logs
+2024-12-12T18:38:33.700396-08:00 lotteh team: team [2098345]: nano feed/templates/feed/profile_grid.html 
+2024-12-12T18:38:38.121830-08:00 lotteh team: team [2098345]: sudo doreload
+2024-12-12T18:39:55.702144-08:00 lotteh team: team [2098345]: sudo purgecache

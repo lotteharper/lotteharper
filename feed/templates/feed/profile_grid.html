@@ -172,8 +172,8 @@ $('#large-frame').on('load', function() {
 });
 var can_click = false;
 function handleClick(event) {
-	var min_click = window.innerWidth/7;
-	if(window.innerHeight < window.innerWidth) { min_click = window.innerHeight/5; }
+	var min_click = window.innerWidth/12;
+	if(window.innerHeight < window.innerWidth) { min_click = window.innerHeight/8; }
 	if(can_click && event.screenX < min_click) {
 		lastImage();		
 		event.preventDefault();
