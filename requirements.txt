@@ -16,7 +16,6 @@ blinker
 boto3
 botocore
 cbor2
-ccxt
 celery
 certifi
 chardet
@@ -195,6 +194,7 @@ scikit-image
 scikit-learn
 scipy
 sentry-sdk
+service-identity
 sewar
 six
 smmap
@@ -254,17 +254,16 @@ yarl
 zipp
 zope.interface
 zxing
-twilio
 autocorrect
 paramiko
 ccxt
-setuptools
 numpy
-twilio
 urllib3
+webauthn
+setuptools
+twilio
 autocorrect
 paramiko
-webauthn
 ccxt
 numpy
 urllib3
