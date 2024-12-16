@@ -131,3 +131,21 @@
 2024-12-15T19:08:36.462933-08:00 lotteh team: team [3876214]: ls scripts/setup
 2024-12-15T19:08:48.037992-08:00 lotteh team: team [3795891]: sudo backup 
 2024-12-15T19:08:48.156809-08:00 lotteh team: team [3795891]: sudo backup 
+2024-12-15T19:09:00.052722-08:00 lotteh team: team [3871161]: logs
+2024-12-15T19:09:05.619264-08:00 lotteh team: team [3876214]: dbinfo
+2024-12-15T19:09:08.268368-08:00 lotteh team: team [3876214]: du -sh data/*
+2024-12-15T19:09:22.575424-08:00 lotteh team: team [3823998]: dbinfo
+2024-12-15T19:09:47.520644-08:00 lotteh team: team [3871161]: ls
+2024-12-15T19:13:23.633770-08:00 lotteh team: team [3871433]: cat scripts/patchvenv
+2024-12-15T19:13:25.618666-08:00 lotteh team: team [3871433]: cd
+2024-12-15T19:13:29.186390-08:00 lotteh team: team [3871433]: cd lotteharper/
+2024-12-15T19:13:33.187883-08:00 lotteh team: team [3871433]: ls scripts/*up
+2024-12-15T19:14:01.329557-08:00 lotteh team: team [3871433]: cp scripts/backgroundbackup ../lotteh/scripts/
+2024-12-15T19:14:18.061688-08:00 lotteh team: team [3871433]: cp scripts/postfixsetup ../lotteh/scripts/
+2024-12-15T19:14:40.129540-08:00 lotteh team: team [3871161]: cat /usr/bin/postfixsetup
+2024-12-15T19:14:48.994766-08:00 lotteh team: team [3871433]: cp scripts/postfixsetup ../lotteh/scripts/
+2024-12-15T19:14:55.741011-08:00 lotteh team: team [3871433]: cp scripts/pgsetup ../lotteh/scripts/
+2024-12-15T19:15:09.937815-08:00 lotteh team: team [3871433]: cp scripts/backgroundbackup ../lotteh/scripts/
+2024-12-15T19:15:20.896201-08:00 lotteh team: team [3871433]: cp scripts/githubsetup ../lotteh/scripts/
+2024-12-15T19:15:39.501644-08:00 lotteh team: team [3871161]: cat /usr/bin/postfixsetup
+2024-12-15T19:16:14.854237-08:00 lotteh team: team [3795891]: sudo backup 
