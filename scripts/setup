@@ -382,7 +382,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers >> /etc/sudoers"
 # Inject pam config and remove faulty ssh config
-#sudo sed -i '' -e '$ d' /etc/pam.d/sshd
+sudo sed -i '' -e '$ d' /etc/pam.d/sshd
 #sudo sed -i '' -e '$ d' /etc/profile
 echo "session required pam_exec.so seteuid /home/team/lotteh/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/lotteh/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -494,5 +494,5 @@ echo ""
 echo "Thank you for using the lotteh installer. Have a great day!"
 echo "Goodbye."
 # Reboot safely
-sudo systemctl stop apache2 daphne celery celerybeat
+sudo systemctl stop apache2 daphne celery celerybeat stun
 sudo reboot

@@ -1,0 +1,91 @@
+2024-12-15T18:27:06.857268-08:00 lotteh team: team [3795866]: cat security/risk.py 
+2024-12-15T18:27:06.860996-08:00 lotteh team: team [3795865]: cat security/risk.py 
+2024-12-15T18:27:06.888894-08:00 lotteh team: message repeated 3 times: [ team [3795865]: cat security/risk.py ]
+2024-12-15T18:27:06.891689-08:00 lotteh team: team [3795891]: cat security/risk.py 
+2024-12-15T18:27:06.918549-08:00 lotteh team: team [3795918]: cat security/risk.py 
+2024-12-15T18:27:09.160132-08:00 lotteh team: team [3795891]: logs
+2024-12-15T18:27:11.968386-08:00 lotteh team: team [3795891]: cmds
+2024-12-15T18:27:13.990158-08:00 lotteh team: team [3795891]: cmds
+2024-12-15T18:27:23.051636-08:00 lotteh team: team [3795891]: cmds
+2024-12-15T18:27:32.163948-08:00 lotteh team: team [3795891]: cmds
+2024-12-15T18:27:33.078632-08:00 lotteh team: team [3795891]: logs
+2024-12-15T18:27:40.513393-08:00 lotteh team: team [3795891]: logs
+2024-12-15T18:28:11.598960-08:00 lotteh team: team [3795891]: sudo ascript setup
+2024-12-15T18:29:12.250096-08:00 lotteh team: team [3795918]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:29:47.881339-08:00 lotteh team: team [3795918]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:29:53.935346-08:00 lotteh team: team [3795918]: sudo ascript lockout
+2024-12-15T18:30:00.301304-08:00 lotteh team: team [3795918]: logs
+2024-12-15T18:30:19.223443-08:00 lotteh team: team [3795918]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:30:20.893232-08:00 lotteh team: team [3795918]: lockout
+2024-12-15T18:30:27.134047-08:00 lotteh team: team [3795918]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:31:22.487385-08:00 lotteh team: team [3795891]: nano scripts/initialize 
+2024-12-15T18:32:04.177241-08:00 lotteh team: team [3795918]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:32:05.046785-08:00 lotteh team: team [3795865]: venv
+2024-12-15T18:32:07.517291-08:00 lotteh team: team [3819130]: exit 2
+2024-12-15T18:32:09.502388-08:00 lotteh team: team [3795865]: venv
+2024-12-15T18:32:11.564781-08:00 lotteh team: team [3795865]: venv
+2024-12-15T18:32:15.763385-08:00 lotteh team: team [3795865]: venv
+2024-12-15T18:32:23.011096-08:00 lotteh team: team [3795865]: sudo ascript lockout
+2024-12-15T18:32:24.388435-08:00 lotteh team: team [3795865]: lockout
+2024-12-15T18:32:50.487959-08:00 lotteh team: team [3795865]: sudo nano /etc/pam.d/sshd 
+2024-12-15T18:33:05.183442-08:00 lotteh team: team [3795865]: nano pam.s
+2024-12-15T18:33:07.147946-08:00 lotteh team: team [3795865]: nano pam.s
+2024-12-15T18:33:09.221879-08:00 lotteh team: team [3823998]: exit 2
+2024-12-15T18:33:18.591111-08:00 lotteh team: team [3823998]: nano pam.sh
+2024-12-15T18:33:26.078644-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:34:10.103008-08:00 lotteh team: team [3795891]: nano scripts/initialize 
+2024-12-15T18:34:20.882928-08:00 lotteh team: team [3823998]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:34:44.357867-08:00 lotteh team: team [3823998]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:37:02.959520-08:00 lotteh team: team [3823998]: sudo nano /usr/bin/lockout
+2024-12-15T18:37:05.448023-08:00 lotteh team: team [3823998]: sudo nano /usr/bin/lockout
+2024-12-15T18:37:14.055112-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:37:24.478603-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:37:38.022247-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:37:51.492723-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:37:59.169083-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:38:05.164744-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:38:12.540179-08:00 lotteh team: team [3823998]: echo '#!/usr/bin/bash\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:38:17.392977-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:38:18.237797-08:00 lotteh team: team [3823998]: echo '#!/usr/bin/bash\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:38:22.589168-08:00 lotteh team: team [3823998]: echo '#!/usr/bin/bash\\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:38:27.073538-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:38:28.098186-08:00 lotteh team: team [3823998]: echo '#!/usr/bin/bash\\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:38:53.728544-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:39:09.693465-08:00 lotteh team: team [3823998]: echo -e '#!/usr/bin/bash\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:39:14.769328-08:00 lotteh team: team [3823998]: sudo ascript lockout
+2024-12-15T18:39:15.798296-08:00 lotteh team: team [3823998]: echo -e '#!/usr/bin/bash\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:42:01.365702-08:00 lotteh team: team [3795891]: nano scripts/initialize 
+2024-12-15T18:42:26.985486-08:00 lotteh team: team [3795891]: python last_logins.py 
+2024-12-15T18:42:34.615398-08:00 lotteh team: team [3795891]: python approve_login.py 1
+2024-12-15T18:42:35.315548-08:00 lotteh team: team [3867415]: exit 2
+2024-12-15T18:42:36.866361-08:00 lotteh team: team [3795891]: python approve_login.py 1
+2024-12-15T18:42:38.782002-08:00 lotteh team: team [3795891]: python approve_login.py 1
+2024-12-15T18:42:40.475351-08:00 lotteh team: team [3795891]: python approve_login.py 1
+2024-12-15T18:42:41.971123-08:00 lotteh team: team [3867935]: exit 2
+2024-12-15T18:42:45.668659-08:00 lotteh team: team [3868224]: exit 2
+2024-12-15T18:42:47.531669-08:00 lotteh team: team [3868384]: exit 2
+2024-12-15T18:42:48.983304-08:00 lotteh team: team [3868522]: exit 2
+2024-12-15T18:42:50.581945-08:00 lotteh team: team [3868384]: logs
+2024-12-15T18:42:51.871889-08:00 lotteh team: team [3868384]: cmds
+2024-12-15T18:43:14.282728-08:00 lotteh team: team [3868522]: top
+2024-12-15T18:43:21.722010-08:00 lotteh team: team [3871161]: exit 2
+2024-12-15T18:43:23.729715-08:00 lotteh team: team [3868224]: vnev
+2024-12-15T18:43:24.743090-08:00 lotteh team: team [3871433]: exit 2
+2024-12-15T18:43:30.873640-08:00 lotteh team: team [3795891]: python last_logins.py 
+2024-12-15T18:43:35.001727-08:00 lotteh team: team [3795891]: python last_logins.py 
+2024-12-15T18:43:37.893817-08:00 lotteh team: team [3795891]: python last_logins.py 
+2024-12-15T18:43:41.427079-08:00 lotteh team: team [3795891]: python approve_login.py 1
+2024-12-15T18:43:45.765575-08:00 lotteh team: team [3873267]: exit 2
+2024-12-15T18:43:45.779654-08:00 lotteh team: team [3873267]: exit 2
+2024-12-15T18:43:52.521380-08:00 lotteh team: team [3867935]: compinfo
+2024-12-15T18:43:53.490467-08:00 lotteh team: team [3867935]: logs
+2024-12-15T18:43:54.734202-08:00 lotteh team: team [3867935]: logs
+2024-12-15T18:43:55.333657-08:00 lotteh team: team [3867935]: cmds
+2024-12-15T18:44:22.824347-08:00 lotteh team: team [3876214]: exit 2
+2024-12-15T18:44:25.642912-08:00 lotteh team: team [3876446]: exit 2
+2024-12-15T18:45:00.405146-08:00 lotteh team: team [3876214]: sudo ascript etup
+2024-12-15T18:46:18.325749-08:00 lotteh team: team [3795891]: nano scripts/initi
+2024-12-15T18:46:59.698615-08:00 lotteh team: team [3871433]: sudo nano /etc/pam.d/sshd
+2024-12-15T18:47:09.444631-08:00 lotteh team: team [3823998]: echo -e '#!/usr/bin/bash\nexit 1' | sudo tee -a /usr/bin/lockout
+2024-12-15T18:47:32.702034-08:00 lotteh team: team [3795891]: nano scripts/initialize 
+2024-12-15T18:48:39.344330-08:00 lotteh team: team [3876214]: sudo ascript setup
