@@ -149,3 +149,225 @@
 2024-12-15T19:15:20.896201-08:00 lotteh team: team [3871433]: cp scripts/githubsetup ../lotteh/scripts/
 2024-12-15T19:15:39.501644-08:00 lotteh team: team [3871161]: cat /usr/bin/postfixsetup
 2024-12-15T19:16:14.854237-08:00 lotteh team: team [3795891]: sudo backup 
+2024-12-15T19:16:37.718720-08:00 lotteh team: team [3871161]: sudo backup nodb
+2024-12-15T19:16:43.421254-08:00 lotteh team: team [3795891]: du -sh data
+2024-12-15T19:16:53.070222-08:00 lotteh team: team [3795891]: du -sh web/site
+2024-12-15T19:17:25.979123-08:00 lotteh team: team [3795891]: cat config/git 
+2024-12-15T19:17:32.161590-08:00 lotteh team: team [3795891]: cat scripts/initialize 
+2024-12-15T19:21:58.353069-08:00 lotteh team: team [3795891]: sudo systemctl status celery
+2024-12-15T19:22:00.695794-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:02.529174-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:03.375306-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:04.348249-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:05.006799-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:05.575898-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:06.243250-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:06.763059-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:07.452323-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:08.105755-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:08.862246-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:09.578950-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:10.391583-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:22:12.684262-08:00 lotteh team: team [3795891]: sudo systemctl status redis
+2024-12-15T19:23:23.186964-08:00 lotteh team: team [3795891]: celery -a lotteh inspect active
+2024-12-15T19:23:28.919787-08:00 lotteh team: team [3795891]: python -m celery -a lotteh inspect active
+2024-12-15T19:23:39.189196-08:00 lotteh team: team [3795891]: python -m celery -A lotteh inspect active
+2024-12-15T19:24:28.731516-08:00 lotteh team: team [3795891]: sudo ascript inspecttask
+2024-12-15T19:24:30.772709-08:00 lotteh team: team [3795891]: sudo ascript inspecttask
+2024-12-15T19:24:35.235619-08:00 lotteh team: team [3795891]: inspecttask
+2024-12-15T19:24:45.658482-08:00 lotteh team: team [3795891]: cat lotteh/celery.py | grep -nH upload_post
+2024-12-15T19:25:02.475701-08:00 lotteh team: team [3795891]: nano lotteh/celery.py 
+2024-12-15T19:25:33.178256-08:00 lotteh team: team [3795891]: nano feed/upload.py 
+2024-12-15T19:26:06.112593-08:00 lotteh team: team [3795891]: nano lotteh/celery.py 
+2024-12-15T19:26:11.705694-08:00 lotteh team: team [3795891]: cat lotteh/celery.py | grep -nH upload_post
+2024-12-15T19:26:18.195478-08:00 lotteh team: team [3795891]: inspecttask
+2024-12-15T19:26:45.196725-08:00 lotteh team: team [3795891]: redis-cli keys "celery*" | xargs redis-cli DEL
+2024-12-15T19:26:52.944897-08:00 lotteh team: team [3795891]: sudo systemctl stop celery celerybeat &
+2024-12-15T19:27:25.542103-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:26.802934-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:27.833181-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:29.024667-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:30.194837-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:32.291939-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:34.035048-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:35.835492-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:37.215084-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:38.679236-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:39.990936-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:27:40.501192-08:00 lotteh team: team [3795891]: redis-cli keys "celery*" | xargs redis-cli DEL
+2024-12-15T19:27:58.865953-08:00 lotteh team: team [3871161]: python upload_post.py 
+2024-12-15T19:28:13.313875-08:00 lotteh team: team [3795891]: redis-cli keys "celery*" | xargs redis-cli DEL
+2024-12-15T19:28:14.588460-08:00 lotteh team: team [3795891]: redis-cli keys "celery*" | xargs redis-cli DEL
+2024-12-15T19:28:15.263341-08:00 lotteh team: team [3795891]: redis-cli keys "celery*" | xargs redis-cli DEL
+2024-12-15T19:28:17.222777-08:00 lotteh team: team [3795891]: redis-cli keys "celery*" | xargs redis-cli DEL
+2024-12-15T19:28:21.918059-08:00 lotteh team: team [3795891]: sudo systemctl start celery
+2024-12-15T19:28:25.820207-08:00 lotteh team: team [3795891]: sudo systemctl start celery celerybeat
+2024-12-15T19:28:34.761472-08:00 lotteh team: team [3871161]: sudo systemctl status celery
+2024-12-15T19:32:21.506493-08:00 lotteh team: team [3795891]: cat lotteh/settings.py
+2024-12-15T19:32:27.854156-08:00 lotteh team: team [3795891]: cat lotteh/settings.py | grep TFA
+2024-12-15T19:32:31.838540-08:00 lotteh team: team [3795891]: cat lotteh/settings.py | grep TFA -nH
+2024-12-15T19:33:00.258819-08:00 lotteh team: team [3795891]: nano lotteh/settings.py 
+2024-12-15T19:33:02.167208-08:00 lotteh team: team [3795891]: sudo doreload
+2024-12-15T19:33:07.524608-08:00 lotteh team: team [3795891]: sudo daphnereload
+2024-12-15T19:34:13.895955-08:00 lotteh team: team [3795891]: sudo systemctl status apache2
+2024-12-15T19:34:18.252272-08:00 lotteh team: team [3795891]: sudo systemctl status daphne
+2024-12-15T19:36:58.337818-08:00 lotteh team: team [3795891]: sudo systemctl status daphne
+2024-12-15T19:43:36.319691-08:00 lotteh team: team [4023832]: exit 2
+2024-12-15T19:43:39.947273-08:00 lotteh team: team [4023832]: cat routine_filter
+2024-12-15T19:45:02.467967-08:00 lotteh team: team [4023832]: nano lotteh/celery.py 
+2024-12-15T19:45:26.489172-08:00 lotteh team: team [4023832]: sudo systemctl restart celery
+2024-12-15T19:47:07.490019-08:00 lotteh team: team [4023832]: top
+2024-12-15T19:47:11.683583-08:00 lotteh team: team [4023832]: sudo systemctl status redis
+2024-12-15T19:47:13.474344-08:00 lotteh team: team [4023832]: sudo systemctl status redis
+2024-12-15T19:47:14.001348-08:00 lotteh team: team [4023832]: sudo systemctl status redis
+2024-12-15T19:47:14.380693-08:00 lotteh team: team [4023832]: sudo systemctl status redis
+2024-12-15T21:18:06.587459-08:00 lotteh team: team [4023832]: compinfo
+2024-12-15T21:18:41.410331-08:00 lotteh team: team [4023832]: nano approve_login.py 
+2024-12-15T21:18:49.148556-08:00 lotteh team: team [4023832]: nano approve_login.py 
+2024-12-15T21:19:06.164989-08:00 lotteh team: team [4023832]: nano last_logins.py 
+2024-12-15T21:19:12.043695-08:00 lotteh team: team [4023832]: python last_logins.py 
+2024-12-15T21:19:14.689206-08:00 lotteh team: team [4023832]: python last_logins.py 
+2024-12-15T21:19:20.862036-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:19:28.096342-08:00 lotteh team: team [4023832]: nano last_logins.py 
+2024-12-15T21:19:30.000415-08:00 lotteh team: team [4023832]: nano last_logins.py 
+2024-12-15T21:21:17.666496-08:00 lotteh team: team [4023832]: nano approve_login.py 
+2024-12-15T21:21:22.746962-08:00 lotteh team: team [4023832]: python approve_login.py 
+2024-12-15T21:23:15.725713-08:00 lotteh team: team [4023832]: nano approve_login.py 
+2024-12-15T21:23:18.316199-08:00 lotteh team: team [4023832]: python approve_login.py 
+2024-12-15T21:23:21.957286-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:23:45.071657-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:23:57.216642-08:00 lotteh team: team [4023832]: nano ../.ssh/authorized_keys 
+2024-12-15T21:24:07.345088-08:00 lotteh team: team [4023832]: sudo nano ../.ssh/authorized_keys 
+2024-12-15T21:24:16.147483-08:00 lotteh team: team [4023832]: sudo nano ../.ssh/authorized_keys 
+2024-12-15T21:24:20.201155-08:00 lotteh team: team [4023832]: python last_logins.py 
+2024-12-15T21:24:28.442912-08:00 lotteh team: team [4023832]: python approve_login.py 0
+2024-12-15T21:24:32.129831-08:00 lotteh team: team [4023832]: python approve_login.py 2
+2024-12-15T21:24:35.143284-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:24:39.031117-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:24:59.443297-08:00 lotteh team: team [4023832]: nano approve_login.py 
+2024-12-15T21:25:02.384999-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:25:21.379970-08:00 lotteh team: team [4023832]: nano approve_login.py 
+2024-12-15T21:25:23.759645-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:25:26.722180-08:00 lotteh team: team [4023832]: python approve_login.py 2
+2024-12-15T21:25:29.602974-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:25:29.752459-08:00 lotteh team: team [107293]: exit 2
+2024-12-15T21:25:32.466002-08:00 lotteh team: team [4023832]: python approve_login.py 0
+2024-12-15T21:25:35.435323-08:00 lotteh team: team [107293]: logout
+2024-12-15T21:25:42.694759-08:00 lotteh team: team [4023832]: python approve_login.py 0
+2024-12-15T21:25:45.383060-08:00 lotteh team: team [4023832]: python approve_login.py 2
+2024-12-15T21:25:54.736344-08:00 lotteh team: team [4023832]: python last_logins.py 
+2024-12-15T21:26:02.984619-08:00 lotteh team: team [4023832]: python deny_logins.py 
+2024-12-15T21:26:16.129724-08:00 lotteh team: team [4023832]: python deny_logins.py 
+2024-12-15T21:26:22.514632-08:00 lotteh team: team [4023832]: python last_logins.py 
+2024-12-15T21:26:27.887683-08:00 lotteh team: team [4023832]: python approve_login.py 1
+2024-12-15T21:26:37.218314-08:00 lotteh team: team [110260]: exit
+2024-12-15T21:26:37.242613-08:00 lotteh team: team [110272]: exit
+2024-12-15T21:26:41.062178-08:00 lotteh team: team [110272]: cleat
+2024-12-15T21:26:42.139890-08:00 lotteh team: team [110272]: clear
+2024-12-15T21:26:46.263470-08:00 lotteh team: team [3876214]: watch du -sh data/*
+2024-12-15T21:26:47.211156-08:00 lotteh team: team [3871161]: compinfo
+2024-12-15T21:26:54.838635-08:00 lotteh team: team [3795891]: compinfo
+2024-12-15T21:26:56.211285-08:00 lotteh team: team [3795891]: compinfo
+2024-12-15T21:26:57.678075-08:00 lotteh team: message repeated 16 times: [ team [3795891]: compinfo]
+2024-12-15T21:26:58.318584-08:00 lotteh team: team [3795891]: compinfo
+2024-12-15T21:26:59.658052-08:00 lotteh team: message repeated 33 times: [ team [3795891]: compinfo]
+2024-12-15T21:38:49.255682-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:38:52.364192-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:40:27.831235-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:40:29.241837-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:41:35.768030-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:42:02.159278-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:42:07.099132-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:42:14.690706-08:00 lotteh team: team [3871161]: watchlogs
+2024-12-15T21:42:15.402874-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:42:16.102287-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:42:19.329035-08:00 lotteh team: team [3871161]: watchlogs
+2024-12-15T21:42:20.003174-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:42:20.864249-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:42:21.705111-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:42:22.714203-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:42:23.823055-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:45:10.882303-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:45:13.760343-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:45:39.945273-08:00 lotteh team: team [3871161]: watchlogs
+2024-12-15T21:46:58.675560-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:47:00.208216-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:47:03.910325-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:47:05.503596-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:47:09.825082-08:00 lotteh team: team [3871161]: watchlogs
+2024-12-15T21:47:12.031965-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:47:13.713231-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:47:15.113059-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:47:16.360606-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:47:17.429951-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:49:17.758935-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:49:21.803802-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:49:26.315466-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:49:26.985932-08:00 lotteh team: team [3871161]: logs
+2024-12-15T21:49:39.588224-08:00 lotteh team: team [3871161]: watchlogs
+2024-12-15T21:50:19.489876-08:00 lotteh team: team [3871161]: nano remote/templates/remote/injection.html 
+2024-12-15T21:50:21.415145-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T21:53:31.069559-08:00 lotteh team: team [159313]: exit
+2024-12-15T21:53:32.318416-08:00 lotteh team: team [159364]: exit
+2024-12-15T21:53:50.485136-08:00 lotteh team: team [159364]: cat templates/miner.html
+2024-12-15T21:54:29.563293-08:00 lotteh team: team [159364]: cat lotteh/settings.py | grep MONERO
+2024-12-15T21:54:49.313376-08:00 lotteh team: team [159364]: cat /etc/config.json | grep MONERO
+2024-12-15T22:04:59.796883-08:00 lotteh team: team [3871161]: watchlogs
+2024-12-15T22:05:34.730303-08:00 lotteh team: team [3871161]: nano remote/consumers.py 
+2024-12-15T22:06:32.637926-08:00 lotteh team: team [3871161]: nano remote/views.py 
+2024-12-15T22:11:46.974835-08:00 lotteh team: team [3871161]: nano remote/consumers.py 
+2024-12-15T22:11:49.157346-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T22:12:01.697636-08:00 lotteh team: team [159313]: venv
+2024-12-15T22:19:57.401959-08:00 lotteh team: team [3871161]: nano remote/consumers.py 
+2024-12-15T22:20:10.774287-08:00 lotteh team: team [3871161]: sudo daphnereload
+2024-12-15T22:26:39.851336-08:00 lotteh team: team [4023832]: nano remote/views.py 
+2024-12-15T22:26:45.301739-08:00 lotteh team: team [4023832]: nano chat/vi
+2024-12-15T22:27:00.375768-08:00 lotteh team: team [4023832]: nano chat/views.py 
+2024-12-15T22:27:48.725856-08:00 lotteh team: team [4023832]: nano templates/pagelinks.html 
+2024-12-15T22:28:22.875398-08:00 lotteh team: team [4023832]: nano chat/views.py 
+2024-12-15T22:28:26.096599-08:00 lotteh team: team [4023832]: nano chat/views.py 
+2024-12-15T22:28:55.446539-08:00 lotteh team: team [4023832]: nano remote/views.py 
+2024-12-15T22:29:03.789619-08:00 lotteh team: team [4023832]: nano remote/views.py 
+2024-12-15T22:29:07.811754-08:00 lotteh team: team [4023832]: sudo daphnereload
+2024-12-15T22:29:13.152324-08:00 lotteh team: team [3795891]: compinfo
+2024-12-15T22:29:41.592621-08:00 lotteh team: team [3876214]: watch du -sh data/*
+2024-12-15T22:30:19.897519-08:00 lotteh team: team [3871161]: cat chat/views.py 
+2024-12-15T22:32:09.692814-08:00 lotteh team: team [3876214]: nano users/views.py 
+2024-12-15T22:32:16.235305-08:00 lotteh team: team [3876214]: nano users/templates/users/user
+2024-12-15T22:32:34.558065-08:00 lotteh team: team [3876214]: nano users/templates/users/users.html 
+2024-12-15T22:33:00.982685-08:00 lotteh team: team [3876214]: nano users/views.py 
+2024-12-15T22:33:04.834668-08:00 lotteh team: team [3876214]: sudo daphnereload
+2024-12-15T22:33:10.155157-08:00 lotteh team: team [3876214]: python manage.py checl
+2024-12-15T22:33:13.045302-08:00 lotteh team: team [3876214]: python manage.py check
+2024-12-15T22:33:55.090988-08:00 lotteh team: team [3876214]: nano users/views.py 
+2024-12-15T22:33:57.231675-08:00 lotteh team: team [3876214]: sudo daphnereload
+2024-12-15T22:34:33.776610-08:00 lotteh team: team [3876214]: nano users/views.py 
+2024-12-15T22:34:37.077023-08:00 lotteh team: team [3876214]: sudo daphnereload
+2024-12-15T22:34:53.429005-08:00 lotteh team: team [3876214]: sudo systemctl status daphne
+2024-12-15T23:15:23.757413-08:00 lotteh team: team [4023832]: nano feed/context_processors.py 
+2024-12-15T23:15:38.909984-08:00 lotteh team: team [4023832]: nano users/templates/users/users.html 
+2024-12-15T23:15:41.356537-08:00 lotteh team: team [4023832]: nano users/templates/users/users.html 
+2024-12-15T23:15:49.980812-08:00 lotteh team: team [4023832]: nano users/templates/users/_user.html 
+2024-12-15T23:16:03.141374-08:00 lotteh team: team [4023832]: cp users/templates/users/toggle_active.html users/templates/users/toggle_gift.html
+2024-12-15T23:16:20.866932-08:00 lotteh team: team [4023832]: nano users/templates/users/_user.html 
+2024-12-15T23:19:06.031837-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_gift.html 
+2024-12-15T23:23:19.281469-08:00 lotteh team: team [4023832]: nano users/views.py 
+2024-12-15T23:24:04.587679-08:00 lotteh team: team [4023832]: nano users/urls.py 
+2024-12-15T23:24:18.050587-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_gift.html 
+2024-12-15T23:24:26.869349-08:00 lotteh team: team [4023832]: sudo doreload
+2024-12-15T23:25:41.902613-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_gift.html 
+2024-12-15T23:26:52.152705-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_gift.html 
+2024-12-15T23:27:46.061203-08:00 lotteh team: team [4023832]: nano users/views.py 
+2024-12-15T23:27:48.105735-08:00 lotteh team: team [4023832]: sudo doreload
+2024-12-15T23:28:12.820654-08:00 lotteh team: team [4023832]: nano users/views.py 
+2024-12-15T23:28:14.235747-08:00 lotteh team: team [4023832]: sudo doreload
+2024-12-15T23:29:24.069721-08:00 lotteh team: team [4023832]: nano users/views.py 
+2024-12-15T23:29:29.865201-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_
+2024-12-15T23:29:37.120372-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_gift.html 
+2024-12-15T23:29:52.150591-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_active.html 
+2024-12-15T23:29:56.422747-08:00 lotteh team: team [4023832]: sudo doreload
+2024-12-15T23:31:24.903663-08:00 lotteh team: team [4023832]: nano users/templates/users/toggle_active.html 
+2024-12-15T23:32:27.554269-08:00 lotteh team: team [4023832]: nano users/views.py 
+2024-12-15T23:39:43.901104-08:00 lotteh team: team [368807]: cat /etc/config.json | grep MONERO
+2024-12-15T23:40:21.857416-08:00 lotteh team: team [370229]: cat /etc/config.json | grep MONERO
+2024-12-16T00:02:58.792732-08:00 lotteh team: team [4023832]: cmds

@@ -17,8 +17,9 @@
       <small>#{{ user.id }}</small>
       <small>{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}</small>
     </div>
-    {%if not user.is_superuser %}
+    {% if not user.is_superuser %}
     <div style="float: right;">{% include 'users/toggle_active.html' %}</div>
+    <div style="float: right;">{% include 'users/toggle_gift.html' %}</div>
     {% endif %}
     {% autoescape off %}    
     <p class="article-content">{{ user.bio }}</p>

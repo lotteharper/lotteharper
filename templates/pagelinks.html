@@ -9,7 +9,7 @@
       {% endif %}
 
       {% for num in page_obj.paginator.page_range %}
-        {% if recordings.number == num or posts.number == num or users.number == num or messages.number == num or msgs.number == num or pills.number == num %}
+        {% if current_page == num or recordings.number == num or posts.number == num or users.number == num or messages.number == num or msgs.number == num or pills.number == num %}
           <a class="btn btn-info mb-4" href="?{{ num|urlparams }}" title="Page {{ num }}">{{ num }}</a>
         {% elif num > page_obj.number|add:'-6' and num < page_obj.number|add:'6' %}
           <a class="btn btn-outline-info mb-4" href="?{{ num|urlparams }}" title="Page {{ num }}">{{ num }}</a>

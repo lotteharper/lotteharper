@@ -44,11 +44,11 @@ def get_session(session_id):
 def clear_session(session_id):
     session = Session.objects.filter(injection_key=session_id).last()
     session.injected = True
-    session.past_injections = session.past_injections + session.injection
+    session.past_injections = session.past_injections + session.injection + '\n'
     session.injection = ''
     session.save()
     global sessions
-    sessions[session_id] = None
+    del sessions[session_id]
 
 @sync_to_async
 def generate_session(self):

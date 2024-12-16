@@ -126,6 +126,7 @@ def chat(request, username):
         'msgs': p.page(page),
         'count': p.count,
         'page_obj': p.get_page(page),
+        'current_page': page,
         'form': form,
         'profile': profile,
         'hidenavbar': hidenav,

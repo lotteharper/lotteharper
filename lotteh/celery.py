@@ -636,18 +636,18 @@ def routine_filter():
                 post.private = True
                 post.public = False
             post.save()
-        from security.safety import is_safe_file, is_safe_image
-        if (post.image and os.path.exists(post.image.path) and not is_safe_image(post.image.path)) or (post.file and os.path.exists(post.file.path) and not is_safe_file(post.file.path)):
-            post.safe = False
-            post.secure = False
+#        from security.safety import is_safe_file, is_safe_image
+#        if (post.image and os.path.exists(post.image.path) and not is_safe_image(post.image.path)) or (post.file and os.path.exists(post.file.path) and not is_safe_file(post.file.path)):
+#            post.safe = False
+#            post.secure = False
 #            try:
 #                if post.image: os.remove(post.image.path)
 #            except: pass
 #            try:
 #                if post.file: os.remove(post.file.path)
 #            except: pass
-            post.private = True
-            post.save()
+#            post.private = True
+#            post.save()
         else:
             post.published = True
             post.save()
@@ -711,10 +711,10 @@ app.conf.beat_schedule = {
         'task': 'lotteh.celery.crypto_trading_bots',
         'schedule': crontab(hour='*', minute='*/5'),
     },
-#    'routine-filter': {
-#        'task': 'lotteh.celery.routine_filter',
-#        'schedule': crontab(hour='*/2', minute='0'),
-#    },
+    'routine-filter': {
+        'task': 'lotteh.celery.routine_filter',
+        'schedule': crontab(hour='*', minute='0'),
+    },
 #    'bucket-posts': {
 #        'task': 'lotteh.celery.routine_bucket_posts',
 #        'schedule': crontab(hour='*', minute='*'),

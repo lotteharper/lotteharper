@@ -35,7 +35,7 @@ def sessions(request):
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
-    return render(request, 'remote/sessions.html', {'title': 'Remote sessions', 'sessions': p.page(page), 'page_obj': p.get_page(page), 'count': p.count})
+    return render(request, 'remote/sessions.html', {'title': 'Remote sessions', 'sessions': p.page(page), 'page_obj': p.get_page(page), 'count': p.count, 'current_page': page})
 
 @csrf_exempt
 @login_required

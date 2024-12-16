@@ -147,7 +147,26 @@ def toggle_user_active(request, pk):
     if request.method == 'POST':
         user.is_active = not user.is_active
         user.save()
+    from django.http import HttpResponse
     return HttpResponse('<i class="bi bi-eye-fill"></i>' if user.is_active else '<i class="bi bi-eye-slash-fill"></i>')
+
+@csrf_exempt
+@login_required
+@user_passes_test(is_superuser_or_vendor)
+def toggle_gift(request, pk):
+    from django.contrib.auth.models import User
+    user = User.objects.get(id=pk)
+    from django.conf import settings
+    model = User.objects.get(id=settings.MY_ID)
+    if request.method == 'POST':
+        profile = request.user.profile
+        if model in request.user.profile.subscriptions.all():
+            profile.subscriptions.remove(model)
+        else:
+            profile.subscriptions.add(model)
+        profile.save()
+    from django.http import HttpResponse
+    return HttpResponse('<i class="bi bi-gift-fill"></i>' if model in request.user.profile.subscriptions.all() else '<i class="bi bi-gift"></i>')
 
 @login_required
 @user_passes_test(is_superuser_or_vendor)
@@ -156,12 +175,24 @@ def users(request):
     from django.contrib.auth.models import User
     from django.utils import timezone
     import datetime
+    from django.core.paginator import Paginator
+    from django.contrib import messages
     new_today = User.objects.filter(is_active=True, date_joined__gte=timezone.now() - datetime.timedelta(hours=24)).count()
     new_this_month = User.objects.filter(is_active=True, date_joined__gte=timezone.now() - datetime.timedelta(hours=24*30)).count()
     subscribers = User.objects.filter(is_active=True, profile__subscribed=True).count()
+    page = 1
+    if(request.GET.get('page', '') != ''):
+        page = int(request.GET.get('page', ''))
+    u = User.objects.all().order_by('-profile__last_seen')
+    p = Paginator(u, 30)
+    if page > p.num_pages or page < 1:
+        messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
     return render(request, 'users/users.html', {
         'title': 'All Accounts',
-        'users': User.objects.all(),
+        'count': p.count,
+        'page_obj': p.get_page(page),
+        'current_page': page,
+        'users': p.page(page),
         'new_today': new_today,
         'new_this_month': new_this_month,
         'subscribers': subscribers
