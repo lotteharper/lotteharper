@@ -89,3 +89,7 @@
 2024-12-15T18:47:09.444631-08:00 lotteh team: team [3823998]: echo -e '#!/usr/bin/bash\nexit 1' | sudo tee -a /usr/bin/lockout
 2024-12-15T18:47:32.702034-08:00 lotteh team: team [3795891]: nano scripts/initialize 
 2024-12-15T18:48:39.344330-08:00 lotteh team: team [3876214]: sudo ascript setup
+2024-12-15T18:49:20.898479-08:00 lotteh team: team [3795891]: sudo backup nodb
+2024-12-15T18:50:39.981930-08:00 lotteh team: team [3795891]: sudo ascript backup
+2024-12-15T18:50:41.782743-08:00 lotteh team: team [3795891]: git remote -v
+2024-12-15T18:50:55.294576-08:00 lotteh team: team [3795891]: sudo cat /root/.ssh/id_rsa.pub
