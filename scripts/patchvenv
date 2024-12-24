@@ -1,0 +1,11 @@
+#!/bin/bash
+DIR="/home/team/lotteh"
+PYTHON_VERSION="3.12"
+cd $DIR
+cp scripts/content.py venv/lib/python$PYTHON_VERSION/site-packages/pyxb/binding/content.py
+cp scripts/pwa_webpush_forms.py venv/lib/python$PYTHON_VERSION/site-packages/pwa_webpush/forms.py
+cp scripts/webauth_views.py venv/lib/python$PYTHON_VERSION/site-packages/webauth/views.py
+cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/
+cp scripts/googletrans_client.py venv/lib/python$PYTHON_VERSION/site-packages/googletrans/client.py
+cp scripts/ijson.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
+cp scripts/nude.py venv/lib/python$PYTHON_VERSION/site-packages/nude.py

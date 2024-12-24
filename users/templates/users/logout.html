@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'opc.html' %}
+{% load app_filters %}
+<legend>{{ 'You have been logged out.'|etrans }}</legend>
+<p><a href="{% url 'users:login' %}" title="{{ 'Log in again'|etrans }}">{{ 'Login again'|etrans }}</a></p>
+{% include 'clc.html' %}
+{% endblock %}

