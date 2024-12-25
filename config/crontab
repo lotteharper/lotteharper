@@ -9,18 +9,3 @@
 #*/10 * * * * sudo systemctl start daphne
 #*/10 * * * * sudo systemctl start celery
 0 * * * * sudo systemctl start clamav-daemon
-0 4 * * 1 sudo apt-get update && sudo apt-get upgrade -y && sudo reboot
-0 0 1 * * sudo certbot renew --quiet
-0 4 * * 1 sudo apt-get update && sudo apt-get upgrade -y && sudo reboot
-0 0 1 * * sudo certbot renew --quiet
-#*/5 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
-#0 */3 * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/upload_post.py
-#* * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/crypto_trading.py
-#*/30 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/process_recordings.py
-0 */12 * * * sh -c "sudo backup" team
-#*/10 * * * * sudo systemctl start apache2
-#*/10 * * * * sudo systemctl start daphne
-#*/10 * * * * sudo systemctl start celery
-0 * * * * sudo systemctl start clamav-daemon
-0 4 * * 1 sudo apt-get update && sudo apt-get upgrade -y && sudo reboot
-0 0 1 * * sudo certbot renew --quiet

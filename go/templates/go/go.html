@@ -146,18 +146,17 @@
     <i class="bi bi-lock-fill"></i> Security
   </a>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <li><a class="dropdown-item" href="{% url 'security:logins' %}">Bypass Logins</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:vivokey' %}?generate=t">Generate VivoKey</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:nfc' %}?generate=t">Generate NFC</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:mrz' %}?generate=t">Generate MRZ</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:otp' %}?generate=t">Generate OTP</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:vivokey' %}">VivoKey</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:nfc' %}">NFC</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:mrz' %}">MRZ</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:otp' %}">OTP</a></li>
     <li><a class="dropdown-item" href="{% url 'security:set-pin' %}">Set Pin</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:nfc' %}?generate=t">Generate NFC</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:nfc' %}">Test NFC</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:mrz' %}?generate=t">Generate MRZ</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:mrz' %}">Test MRZ</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:vivokey' %}?generate=t">Generate VivoKey</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:vivokey' %}">Test VivoKey</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:otp' %}?generate=t">Generate OTP</a></li>
+    <li><a class="dropdown-item" href="{% url 'security:otp' %}">Test OTP</a></li>
     <li><a class="dropdown-item" href="/webauth/devices/">Security Keys</a></li>
-    <li><a class="dropdown-item" href="{% url 'security:biometric' %}">Activate Biometric Security</a></li>
+    <li><a class="dropdown-item" href="/webauth/verify/?next={% url 'security:biometric' %}">Test Security Key</a></li>
   </ul>
 </div>
 {% if request.user.profile.admin %}

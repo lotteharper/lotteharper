@@ -334,10 +334,6 @@ sudo chmod 755 -R /var/log/audit
 # Postgres config
 sudo systemctl daemon-reload
 sudo systemctl start redis postgresql
-# Fix crontab
-echo "Setup crontab/sudoers configuration"
-sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
-sudo sh -c "cat config/sudoers >> /etc/sudoers"
 # Setup git
 echo "Setting up git"
 cd $DIR
