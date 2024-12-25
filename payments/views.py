@@ -921,7 +921,7 @@ def monthly_checkout_profile(request):
                     us = User.objects.filter(email=e).last()
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
-                        cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                         if not hasattr(cus_user, 'profile'):
                             profile = Profile.objects.create(user=cus_user)
                             profile.finished_signup = False
@@ -959,7 +959,6 @@ def monthly_checkout_profile(request):
         except Exception as e:
             print(str(e))
             return JsonResponse({"error": str(e)})
-
 @csrf_exempt
 def monthly_checkout(request):
     import stripe
@@ -990,7 +989,8 @@ def monthly_checkout(request):
                     us = User.objects.filter(email=e).last()
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
-                        cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        cus_user = 
+User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                         if not hasattr(cus_user, 'profile'):
                             profile = Profile.objects.create(user=cus_user)
                             profile.finished_signup = False
@@ -1057,7 +1057,7 @@ def onetime_checkout_photo(request):
                     us = User.objects.filter(email=e).last()
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
-                        cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                         if not hasattr(cus_user, 'profile'):
                             profile = Profile.objects.create(user=cus_user)
                             profile.finished_signup = False
@@ -1128,7 +1128,7 @@ def onetime_checkout_cart(request):
                     us = User.objects.filter(email=e).last()
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
-                        cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                         if not hasattr(cus_user, 'profile'):
                             profile = Profile.objects.create(user=cus_user)
                             profile.finished_signup = False
@@ -1145,7 +1145,7 @@ def onetime_checkout_cart(request):
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?{}".format('cart=t&'),
-                cancel_url=domain_url + "/payments/cancel/",
+                cancel_url=domain_url + "/payments/cancel/"
                 payment_method_types= ["card", "us_bank_account"],
                 customer_email = request.GET.get('email', None),
                 mode = "payment",
@@ -1203,7 +1203,7 @@ def onetime_checkout(request):
                     us = User.objects.filter(email=e).last()
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
-                        cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                         if not hasattr(cus_user, 'profile'):
                             profile = Profile.objects.create(user=cus_user)
                             profile.finished_signup = False
@@ -1466,7 +1466,7 @@ def subscribe_bitcoin(request, username):
                         us = User.objects.filter(email=e).last()
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
-                            cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                            cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                             if not hasattr(cus_user, 'profile'):
                                 profile = Profile.objects.create(user=cus_user)
                                 profile.finished_signup = False
@@ -1594,7 +1594,7 @@ def buy_photo_crypto(request, username):
                         us = User.objects.filter(email=e).last()
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
-                            cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                            cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                             if not hasattr(cus_user, 'profile'):
                                 profile = Profile.objects.create(user=cus_user)
                                 profile.finished_signup = False
@@ -1742,7 +1742,7 @@ def tip_crypto_simple(request, username):
                         us = User.objects.filter(email=e).last()
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
-                            cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                            cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                             if not hasattr(cus_user, 'profile'):
                                 profile = Profile.objects.create(user=cus_user)
                                 profile.finished_signup = False
@@ -1811,7 +1811,7 @@ def surrogacy_crypto(request, username):
                         us = User.objects.filter(email=e).last()
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
-                            cus_user = User.objects.create(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                            cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                             if not hasattr(cus_user, 'profile'):
                                 profile = Profile.objects.create(user=cus_user)
                                 profile.finished_signup = False

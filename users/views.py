@@ -563,7 +563,7 @@ def register(request):
             if not User.objects.filter(email=form.cleaned_data.get('email'), profile__finished_signup=True).first(): sendemail = True
             u = user
             if not u:
-                u = User.objects.create(username=form.cleaned_data.get('username'), email=form.cleaned_data.get('email'))
+                u = User.objects.create_user(username=form.cleaned_data.get('username'), email=form.cleaned_data.get('email'))
             u.set_password(form.clean_password2())
             uc = check_username(u.username)
             if not uc:
