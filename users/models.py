@@ -24,9 +24,14 @@ def get_uuid():
     id = "%s" % (uuid.uuid4())
     return id
 
-def generate_username(instance):
+def generate_username():
+    from django.utils.crypto import get_random_string
+    s = get_random_string(8)
     from users.username_generator import generate_username
-    return generate_username(self.user.username)
+    from feed.middleware import get_current_request
+    if get_current_request() and get_current_request().user.is_authenticated:
+        s = get_current_request().user.email
+    return generate_username(s)
 
 def recovery_token():
     from django.utils.crypto import get_random_string

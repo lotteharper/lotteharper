@@ -1,3 +1,4 @@
+
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -107,11 +108,8 @@ def contact(request):
             if valid and (not us) and safe:
                 user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                 if not hasattr(user, 'profile'):
-                    profile = Profile.objects.create(user=user)
-                    profile.finished_signup = False
-                    profile.save()
-                    security_profile = SecurityProfile.objects.create(user=user)
-                    security_profile.save()
+                    user.profile.finished_signup = False
+                    user.profile.save()
                 send_verification_email(user)
                 sendwelcomeemail(user)
             elif not valid: HttpResponse('Invalid or undeliverable email, please check the email and try again')

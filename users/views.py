@@ -80,14 +80,9 @@ def google_auth_callback(request):
         if not user:
             from users.username_generator import generate_username as get_random_username
             user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
-            if not hasattr(user, 'profile'):
-                from users.models import Profile
-                from security.models import SecurityProfile
-                profile = Profile.objects.create(user=user)
-                profile.finished_signup = False
-                profile.save()
-                security_profile = SecurityProfile.objects.create(user=user)
-                security_profile.save()
+            profile = user.profile
+            profile.finished_signup = False
+            profile.save()
             from django.contrib import messages
             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
             from users.email import send_verification_email, sendwelcomeemail
@@ -517,10 +512,10 @@ def register(request):
             if valid and not us and safe:
                 user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
                 if not hasattr(user, 'profile'):
-                    profile = Profile.objects.create(user=user)
+                    profile = Profile.objects.get_or_createcreate(user=user)
                     profile.finished_signup = False
                     profile.save()
-                    security_profile = SecurityProfile.objects.create(user=user)
+                    security_profile = SecurityProfile.objects.get_or_create(user=user)
                     security_profile.save()
                 messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                 send_verification_email(user)
@@ -570,14 +565,7 @@ def register(request):
                 messages.warning(request, f'Your username has not been accepted. Please select a more appropriate username.')
                 u.delete()
                 return redirect(reverse('misc:terms'))
-            profile = None
-            if not hasattr(u, 'profile'):
-                profile = Profile.objects.create(user=u)
-                profile.save()
-                security_profile = SecurityProfile.objects.create(user=u)
-                security_profile.save()
-            else:
-                profile = u.profile
+            profile = u.profile
             profile.finished_signup = True
             profile.save()
             u.username = form.cleaned_data.get('username')
@@ -687,9 +675,6 @@ def login(request):
                 ip_obj.save()
                 p = profile
                 risk_detected = ip_obj.risk_detected
-            if not hasattr(user, 'profile'):
-                profile = Profile.objects.create(user=user)
-                profile.save()
             if user.is_active and user.profile.email_verified and user.user_logins.filter(timestamp__lte=timezone.now(), timestamp__gte=timezone.now() - datetime.timedelta(seconds=15)).count() <= 2:
                 user.profile.can_login = timezone.now() - datetime.timedelta(seconds=15)
                 user.profile.save()
@@ -742,6 +727,8 @@ def activate(request, uidb64, token):
     from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
     from .tokens import account_activation_token
     from django.utils.encoding import force_str
+    from users.models import Profile
+    from security.models import SecurityProfile
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)

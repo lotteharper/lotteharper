@@ -3,10 +3,10 @@
 <nav class="navbar fixed-top navbar-expand-lg {% if not darkmode %}navbar-light bg-light border-bottom border-dark{% else %}navbar-dark bg-dark{% endif %} p-2 d-flex" id="clemn-navbar">
   <div class="container-fluid clemn-navbar">
     {% if request.user.is_authenticated and not request.user.profile.hide_logo or not request.user.is_authenticated and not hide_logo %}
-    <a style="position: relative; z-index: 1;" class="navbar-brand" href="{% url 'app:app' %}?k={% get_key %}" title="{{ 'The Homepage'|trans }}" rel="nofollow">
+    <a style="position: relative; z-index: 1;" class="navbar-brand" href="{% url 'app:app' %}?k={% get_key %}" title="{{ 'The Homepage'|etrans }}" rel="nofollow">
 	<img src="{{ icon_url }}" alt="{{ the_site_name }}" width="30" height="30" style="border-radius: 50%;">
 	<i style="color: {% if darkmode %}white{% else %}black{% endif %} !important;">{{ the_site_name }}</i>
-	<small class="nav-title" style="color: red !important; position: absolute; top: 12px; left: 45px; z-index: 2;"><small><small><small class="nav-title" style="color: red !important;">ファムベイビー</small></small></small></small>
+	<small class="nav-title" style="color: red !important; position: absolute; top: 12px; left: 45px; z-index: 2;"><small><small><small class="nav-title" style="color: red !important;">{{ the_site_name|translang:"ja" }}</small></small></small></small>
      </a>
     {% endif %}
     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">

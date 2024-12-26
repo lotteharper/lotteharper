@@ -120,12 +120,9 @@ def cart_crypto(request):
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
                         cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                        if not hasattr(cus_user, 'profile'):
-                            profile = Profile.objects.create(user=cus_user)
-                            profile.finished_signup = False
-                            profile.save()
-                            security_profile = SecurityProfile.objects.create(user=cus_user)
-                            security_profile.save()
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
                         messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
@@ -201,14 +198,9 @@ def paypal_checkout(request):
         from django.utils.crypto import get_random_string
         from users.username_generator import generate_username
         user = User.objects.create_user(email=email, username=generate_username(email), password=get_random_string(8))
-        if not hasattr(user, 'profile'):
-            from users.models import Profile
-            from security.models import SecurityProfile
-            profile = Profile.objects.create(user=user)
-            profile.finished_signup = False
-            profile.save()
-            security_profile = SecurityProfile.objects.create(user=user)
-            security_profile.save()
+        profile = user.profile
+        profile.finished_signup = False
+        profile.save()
         from users.email import send_verification_email
         from users.password_reset import send_password_reset_email
         send_verification_email(user)
@@ -260,14 +252,9 @@ def square_checkout(request):
         from django.utils.crypto import get_random_string
         from users.username_generator import generate_username
         user = User.objects.create_user(email=email, username=generate_username(email), password=get_random_string(8))
-        if not hasattr(user, 'profile'):
-            from users.models import Profile
-            from security.models import SecurityProfile
-            profile = Profile.objects.create(user=user)
-            profile.finished_signup = False
-            profile.save()
-            security_profile = SecurityProfile.objects.create(user=user)
-            security_profile.save()
+        profile = user.profile
+        profile.finished_signup = False
+        profile.save()
         from users.email import send_verification_email
         from users.password_reset import send_password_reset_email
         send_verification_email(user)
@@ -529,14 +516,11 @@ def invoice(request):
         from django.utils.crypto import get_random_string
         from users.username_generator import generate_username
         user = User.objects.create_user(email=email, username=generate_username(email), password=get_random_string(8))
-        if not hasattr(user, 'profile'):
-            from users.models import Profile
-            from security.models import SecurityProfile
-            profile = Profile.objects.create(user=user)
-            profile.finished_signup = False
-            profile.save()
-            security_profile = SecurityProfile.objects.create(user=user)
-            security_profile.save()
+        profile = user.profile
+        profile.finished_signup = False
+        profile.save()
+        security_profile = SecurityProfile.objects.create(user=user)
+        security_profile.save()
         from users.email import send_verification_email
         from users.password_reset import send_password_reset_email
         send_verification_email(user)
@@ -763,14 +747,9 @@ def webhook(request):
             from django.utils.crypto import get_random_string
             from users.username_generator import generate_username
             user = User.objects.create_user(email=email, username=generate_username(email), password=get_random_string(8))
-            if not hasattr(user, 'profile'):
-                from users.models import Profile
-                from security.models import SecurityProfile
-                profile = Profile.objects.create(user=user)
-                profile.finished_signup = False
-                profile.save()
-                security_profile = SecurityProfile.objects.create(user=user)
-                security_profile.save()
+            profile = user.profile
+            profile.finished_signup = False
+            profile.save()
             client_reference_id = user.id
             user.profile.stripe_customer_id = stripe_customer_id
             if stripe_price_id in WEBDEV_MONTHLY_PRICE_IDS:
@@ -922,12 +901,9 @@ def monthly_checkout_profile(request):
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
                         cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                        if not hasattr(cus_user, 'profile'):
-                            profile = Profile.objects.create(user=cus_user)
-                            profile.finished_signup = False
-                            profile.save()
-                            security_profile = SecurityProfile.objects.create(user=cus_user)
-                            security_profile.save()
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
                         messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
@@ -989,14 +965,10 @@ def monthly_checkout(request):
                     us = User.objects.filter(email=e).last()
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
-                        cus_user = 
-User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                        if not hasattr(cus_user, 'profile'):
-                            profile = Profile.objects.create(user=cus_user)
-                            profile.finished_signup = False
-                            profile.save()
-                            security_profile = SecurityProfile.objects.create(user=cus_user)
-                            security_profile.save()
+                        cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
                         messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
@@ -1058,12 +1030,9 @@ def onetime_checkout_photo(request):
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
                         cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                        if not hasattr(cus_user, 'profile'):
-                            profile = Profile.objects.create(user=cus_user)
-                            profile.finished_signup = False
-                            profile.save()
-                            security_profile = SecurityProfile.objects.create(user=cus_user)
-                            security_profile.save()
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
                         messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
@@ -1129,12 +1098,9 @@ def onetime_checkout_cart(request):
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
                         cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                        if not hasattr(cus_user, 'profile'):
-                            profile = Profile.objects.create(user=cus_user)
-                            profile.finished_signup = False
-                            profile.save()
-                            security_profile = SecurityProfile.objects.create(user=cus_user)
-                            security_profile.save()
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
                         messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
@@ -1145,7 +1111,7 @@ def onetime_checkout_cart(request):
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?{}".format('cart=t&'),
-                cancel_url=domain_url + "/payments/cancel/"
+                cancel_url=domain_url + "/payments/cancel/",
                 payment_method_types= ["card", "us_bank_account"],
                 customer_email = request.GET.get('email', None),
                 mode = "payment",
@@ -1204,12 +1170,9 @@ def onetime_checkout(request):
                     safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                     if valid and not us and safe:
                         cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                        if not hasattr(cus_user, 'profile'):
-                            profile = Profile.objects.create(user=cus_user)
-                            profile.finished_signup = False
-                            profile.save()
-                            security_profile = SecurityProfile.objects.create(user=cus_user)
-                            security_profile.save()
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
                         messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
@@ -1467,12 +1430,9 @@ def subscribe_bitcoin(request, username):
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
                             cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                            if not hasattr(cus_user, 'profile'):
-                                profile = Profile.objects.create(user=cus_user)
-                                profile.finished_signup = False
-                                profile.save()
-                                security_profile = SecurityProfile.objects.create(user=cus_user)
-                                security_profile.save()
+                            profile = cus_user.profile
+                            profile.finished_signup = False
+                            profile.save()
                             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                             send_verification_email(cus_user)
                             send_registration_push(cus_user)
@@ -1595,12 +1555,9 @@ def buy_photo_crypto(request, username):
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
                             cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                            if not hasattr(cus_user, 'profile'):
-                                profile = Profile.objects.create(user=cus_user)
-                                profile.finished_signup = False
-                                profile.save()
-                                security_profile = SecurityProfile.objects.create(user=cus_user)
-                                security_profile.save()
+                            profile = cus_user.profile
+                            profile.finished_signup = False
+                            profile.save()
                             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                             send_verification_email(cus_user)
                             send_registration_push(cus_user)
@@ -1743,12 +1700,9 @@ def tip_crypto_simple(request, username):
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
                             cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                            if not hasattr(cus_user, 'profile'):
-                                profile = Profile.objects.create(user=cus_user)
-                                profile.finished_signup = False
-                                profile.save()
-                                security_profile = SecurityProfile.objects.create(user=cus_user)
-                                security_profile.save()
+                            profile = cus_user.profile
+                            profile.finished_signup = False
+                            profile.save()
                             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                             send_verification_email(cus_user)
                             send_registration_push(cus_user)
@@ -1812,12 +1766,9 @@ def surrogacy_crypto(request, username):
                         safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
                         if valid and not us and safe:
                             cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
-                            if not hasattr(cus_user, 'profile'):
-                                profile = Profile.objects.create(user=cus_user)
-                                profile.finished_signup = False
-                                profile.save()
-                                security_profile = SecurityProfile.objects.create(user=cus_user)
-                                security_profile.save()
+                            profile = cus_user.profile
+                            profile.finished_signup = False
+                            profile.save()
                             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
                             send_verification_email(cus_user)
                             send_registration_push(cus_user)
