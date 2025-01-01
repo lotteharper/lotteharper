@@ -60,23 +60,13 @@ def google_auth_callback(request):
     from django.conf import settings
     from django.urls import reverse
     authorization_code = None
-    request.GET._mutable = True
-#    get = dict(reversed(list(request.GET.items())))
-    qs = '?'
-    for key, val in request.GET.items():
-        qs = qs + '{}={}&'.format(key, val)
-    url = str(settings.BASE_URL + request.path + str(qs)).replace(' ', '+')[:-1]
-    print(url)
     import json
-#    print('Request was {} to auth callback'.format(request.method))
-#    url = request.POST.get('auth')
-#    if url:
-    url = settings.BASE_URL + request.get_full_path()
-    if url:
-        email, token, refresh = parse_callback_url(request, url)
+    url_working = settings.BASE_URL + request.get_full_path().replace(' ', '%20')
+    if request.method == 'POST':
+        email, token, refresh = parse_callback_url(request, url_working)
         print(email)
         from django.contrib.auth.models import User
-        user = User.objects.filter(email=email).order_by('-profile__last_seen').last()
+        user = User.objects.filter(email=email).order_by('-profile__last_seen').first()
         if not user:
             from users.username_generator import generate_username as get_random_username
             user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
@@ -97,6 +87,7 @@ def google_auth_callback(request):
         from django.contrib import messages
         messages.success(request, 'Successfully linked Google account')
         return redirect(reverse('/'))
+    from django.shortcuts import render
     return render(request, 'users/oauth.html', {'title': 'Google Auth'})
 
 def resolve_multiple_accounts(request, user):
