@@ -1,12 +1,10 @@
-name: Django Deployment
-
-concurrency: production
+# This yml will deploy the software from source
+name: Deploy to an Ubuntu server from source
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - '"main"'
 
 jobs:
   build:
