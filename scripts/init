@@ -1,0 +1,48 @@
+#!/bin/bash
+# This script will build the project from source according to custom names and the public repository by default (it is the counterpart of a private script that simply builds my deployment of the app, you can make it do a similar thing by adding your fork of the repo in the GIT url)
+# Use your SSH key
+SSH_KEY='<SSH key here>'
+# Use the git repo from the project
+GIT_REPO="https://github.com/daisycamber/lotteharper.git"
+# Add your project name and username here
+PROJECT_NAME="yourproject"
+USER_NAME="team"
+GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev  | cut -d. -f1`
+sudo apt-add-repository universe
+sudo apt install -y nano git expect
+wget https://daisycamber.github.io/unix-config/sshd_config
+sudo cp sshd_config /etc/ssh/sshd_config
+#wget https://daisycamber.github.io/unix-config/lockout
+#sudo cp lockout /etc/lockout
+#sudo chmod a+x /etc/lockout
+#echo "sh /etc/lockout" | sudo tee -a /etc/profile
+#echo "session required pam_exec.so seteuid /etc/lockout" | sudo tee -a /etc/pam.d/sshd
+sudo service ssh restart
+sudo service sshd restart
+echo "/root/.ssh/id_rsa" | sudo su root -c "ssh-keygen -t rsa -N ''"
+echo "root ssh key:"
+sudo su root -c "cat /root/.ssh/id_rsa.pub"
+sudo adduser --disabled-password --gecos "" $USER_NAME
+sudo passwd -d $USER_NAME
+sudo usermod -aG sudo $USER_NAME
+USER_RSA="/home/${USER_NAME}/.ssh/id_rsa"
+echo $USER_RSA | su team -c "ssh-keygen -t rsa -N ''"
+cat /home/$USER_NAME/.ssh/id_rsa.pub >> /home/$USER_NAME/.ssh/authorized_keys
+echo $SSH_KEY >> /home/$USER_NAME/.ssh/authorized_keys
+/usr/bin/expect <<EOD
+cd /home/team
+spawn git clone $GIT_REPO
+set timeout -1
+# If copying from a private repo, use a one time token, uncomment the below code
+#expect "Username"
+#send "your-git-email@example.com\n"
+#expect "Password"
+#send "<git otp here>\n"
+#expect eof
+#EOD
+# Convert the software to use the name Makeup Girl, domain mupgirl.com, mupgirl directory and settings (must be the same as above two lines), and the name Daisy with (for example) with your email
+sudo su $USER_NAME -c "mv /home/$USER_NAME/$GIT_PROJ /home/$USER_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "mv /home/$USER_NAME/$PROJECT_NAME/lotteh /home/$USER_NAME/$PROJECT_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com"
+sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"

@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Root SSH key - Needed to push as root"
+sudo cat /root/.ssh/id_rsa.pub
+echo "Team SSH key - Needed to pull as team"
+sudo cat /home/team/.ssh/id_rsa.pub

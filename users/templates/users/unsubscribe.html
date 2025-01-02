@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+{% load app_filters %}
+<h1>{{ 'Success'|etrans }}</h1>
+<h2>{{ 'You are now unsubscribed.'|etrans }}</h2>
+<p>{{ 'To subscribe again, please click the button below.'|etrans }}</p>
+<form method="POST" action="{{ feed }}">
+{% csrf_token %}
+<p><button type="submit" class="btn btn-outline-primary">{{ 'Resubscribe'|etrans }}</button></p>
+</form>
+<p>{{ 'Or, please'|etrans }} <a href="{% url 'users:profile' %}" title="Visit your profile">{{ 'visit your profile'|etrans }}</a>, {{ 'check the box, and submit.'|etrans }}</p>
+<p><a href="{% url 'app:app' %}" class="btn btn-primary" title="See new posts"><i class="bi bi-globe"></i> {{ 'Explore'|etrans }}</a></p>
+{% endblock %}

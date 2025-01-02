@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo stopservices
+redis-cli keys "celery*" | xargs redis-cli DEL
+redis-cli keys "celery*" | xargs redis-cli DEL
+sudo startservices
