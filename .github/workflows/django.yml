@@ -1,4 +1,6 @@
-name: Django CI
+name: Django Deployment
+
+concurrency: production
 
 on:
   push:
