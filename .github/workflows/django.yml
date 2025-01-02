@@ -3,8 +3,9 @@ name: Deploy to an Ubuntu server from source
 
 on:
   push:
-    branches:
-      - '"main"'
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -18,8 +19,8 @@ jobs:
         python-version: [3.7, 3.8, 3.9, 3.11, 3.12]
 
     steps:
-    - name: deploy
     - uses: actions/checkout@v4
+    - name: deploy
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
