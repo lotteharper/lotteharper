@@ -154,9 +154,11 @@
         {% if not dontshowsidebar %}
         	{% include 'sidebar.html' %}
         {% endif %}
+        {% endlinebreakless %}
         {% if not hidenavbar or showfooter %}
         	{% include 'footer.html' %}
         {% endif %}
+        {% linebreakless %}
         <p style="color: red;" id="base-error-message" class="hide"></p>
         </main>
         <audio id="base-audio" hidden></audio>

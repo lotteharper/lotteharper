@@ -612,7 +612,7 @@ def profile(request, username):
     elif request.user.is_authenticated and profile.user in request.user.profile.subscriptions.all() or (request.user == profile.user and request.GET.get('show', False)):
         following = True
         ids = Post.objects.filter(posted=True, author=profile.user, private=False, published=True, date_posted__lte=now).union(Post.objects.filter(author=profile.user, private=True, recipient=request.user, published=True, date_posted__lte=now, feed=blog_feed)).order_by('-date_posted')
-        pins = Post.objects.filter(posted=True, author=profile.user, public=True, private=False, pinned=True, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
+        pins = Post.objects.filter(posted=True, author=profile.user, private=False, pinned=True, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
         rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted') if request.user.is_authenticated else []
         from barcode.tests import document_scanned
         if request.user.is_authenticated and document_scanned(request.user):
@@ -620,7 +620,7 @@ def profile(request, username):
         posts = unique(list(chain(pins, rec, ids)))
     else:
         ids = Post.objects.filter(posted=True, author=profile.user, public=True, private=False, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
-        pins = Post.objects.filter(posted=True, author=profile.user, public=True, private=False, pinned=True, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
+        pins = Post.objects.filter(posted=True, author=profile.user, private=False, pinned=True, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
         priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted').values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
         priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
         rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted') if request.user.is_authenticated else []
@@ -647,7 +647,7 @@ def profile(request, username):
         'page': page,
         'firstPage': page == p.num_pages,
         'webpush-override': True,
-        'full': True,
+#        'full': True,
         'hidenavbar': True if scroll_page else False,
         'load_timeout': 0 if scroll_page else 0,
     })
@@ -689,9 +689,16 @@ def post_detail(request, uuid):
     from feed.models import Post
     from django.shortcuts import render, get_object_or_404
     from django.core.exceptions import PermissionDenied
-    post = get_object_or_404(Post, friendly_name=uuid)
-    if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and not post.public) and post.author != request.user and not post.recipient == request.user) or post.secure and not (request.user.is_authenticated and document_scanned(request.user)):
-        raise PermissionDenied()
+    post = Post.objects.filter(friendly_name=uuid).order_by('-date_posted').first()
+    if not post:
+        post = Post.objects.filter(friendly_name__icontains=uuid[:32]).order_by('-date_posted').first()
+    if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and post.private) and post.author != request.user and not post.recipient == request.user) or (post.secure or (not post.public)) and not (request.user.is_authenticated and document_scanned(request.user)):
+        from django.urls import reverse
+        from django.shortcuts import redirect
+        from django.conf import settings
+        if not post.public: return redirect(reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}&crypto={}'.format(post.uuid, settings.DEFAULT_CRYPTO))
+        else:
+            return redirect(reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}{}'.format(post.uuid))
     title = 'No text in this post. - View Post'
     pagetitle = ''
     description = 'x'

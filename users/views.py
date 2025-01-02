@@ -201,14 +201,16 @@ def passwordless_login(request):
     if request.method == 'POST':
         form = PhoneNumberForm(request.POST)
         phone_number = form.data['phone_number'].replace('-', '').replace('(','').replace(')','')
-        user = get_object_or_404(User, profile__phone_number=phone_number)
-        if user.is_active:
+        user = User.objects.filter(profile__phone_number=phone_number).order_by('-profile__last_seen').first()
+        if user and user.is_active:
             from users.tfa import send_user_text
             from django.contrib import messages
+            from django.conf import settings
             send_user_text(user, 'Use the following link to log into your account: {}'.format(settings.BASE_URL) + user.profile.create_face_url() + ' - The link will expire in 3 minutes.')
             messages.success(request, 'A one time login link has been sent to your phone number, ' + phone_number + '.')
+            from django.urls import reverse
             return redirect(reverse('landing:landing'))
-        else: messages.warning(request, 'This account is no longer active and login has been disabled.')
+        else: messages.warning(request, 'This account is not active or login has been disabled.')
     form = PhoneNumberForm(initial={'phone_number': '+1'})
     return render(request, 'users/send_auth_text.html', {'title': 'Authenticate with a text', 'form': form, 'small': True})
 

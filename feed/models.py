@@ -424,8 +424,9 @@ class Post(models.Model):
         else: return self.get_friendly_name()
 
     def get_friendly_name(self, save=True):
-        if self.friendly_name and save:
-            return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
+        from django.urls import reverse
+#        if self.friendly_name and save:
+#            return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
         from django.utils.html import strip_tags
         from feed.templatetags.app_filters import clean_html
         content = strip_tags(clean_html(self.content)).split('\n')[0]
@@ -434,8 +435,7 @@ class Post(models.Model):
         name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 32) if content.rfind(' ', 20, 32) else 32].strip() if content else 'post').replace(' ', '-').replace('"', '').replace('\'', '').replace('?', '').replace('\\', '').replace('/', '').replace(',', '')).lower()[:255])[:100]
         import random, os, urllib
         from django.conf import settings
-        from django.urls import reverse
-        if Post.objects.filter(friendly_name=name).count() == 0:
+        if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0:
             self.friendly_name = name
             if save: self.save()
             return reverse('feed:post-detail', kwargs={'uuid': name})
@@ -450,7 +450,7 @@ class Post(models.Model):
                     ex = ex + ' {}'.format(random.choice(lines)[:-1])
             name = urllib.parse.quote_plus((((content.split('\n')[0][:content.rfind(' ', 20, 32) if content.rfind(' ', 20, 32) else 32].strip() if content else 'post') + ex).replace(' ', '-')).lower()[:255])[:100]
             file.close()
-            if Post.objects.filter(friendly_name=name).count() == 0: break
+            if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0: break
             words = words + 1
         self.friendly_name = name
         if save: self.save()

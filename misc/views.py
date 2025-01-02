@@ -132,7 +132,7 @@ def get_posts_for_query(request, qs):
     posts = []
     for post, count in pos:
         post = Post.objects.get(id=post)
-        posts = posts + ([post] if post.public or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or request.user.is_authenticated and request.user.profile.vendor else [])
+        posts = posts + ([post] if (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or request.user.is_authenticated and request.user.profile.vendor else [])
     return posts
 
 #@login_required
