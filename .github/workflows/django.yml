@@ -10,14 +10,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: production
+    concurrency: production
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.7, 3.8, 3.9, 3.11, 3.12]
 
     steps:
+    - name: deploy
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
@@ -27,6 +29,6 @@ jobs:
         curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin" | bash /dev/stdin
 #        /home/team/lotteharper/scripts/convert "Awesome App" "yourdomainhere.com" "lotteharper" "Your Name" "youremail@gmail.com" "team"
 #        /home/team/lotteharper/scripts/githubsetup # Note that this requires about 20G of space to install on Linux
-    - name: Configure
+    - name: Set up Python ${{ matrix.python-version }}
       run: |
         python
