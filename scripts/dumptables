@@ -26,6 +26,7 @@ python manage.py dumpdata chat --exclude auth.permission --exclude contenttypes 
 python manage.py dumpdata translate --exclude auth.permission --exclude contenttypes > data/translate.json
 python manage.py dumpdata crypto --exclude auth.permission --exclude contenttypes > data/crypto.json
 python manage.py dumpdata birthcontrol --exclude auth.permission --exclude contenttypes > data/birthcontrol.json
+python manage.py dumpdata survey --exclude auth.permission --exclude contenttypes > data/survey.json
 split -b99M data/security.json data/security.json.
 split -b99M data/users-new.json data/users-new.json.
 rm data/security.json

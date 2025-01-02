@@ -1,12 +1,13 @@
 def verify_payments():
-    import requests, json
+    import requests, json, datetime
     from .models import Invoice
+    from django.utils import timezone
     invoices = Invoice.objects.filter(timestamp__gte=timezone.now() - datetime.timedelta(hours=2)).order_by('-timestamp')
     for invoice in invoices:
         res = False
         if invoice.processor == 'paypal':
             from payments.paypal import get_payment_status
-            res = get_payment_status(invoice.number):
+            res = get_payment_status(invoice.number)
         elif invoice.processor == 'square':
             import requests, json
             from django.conf import settings

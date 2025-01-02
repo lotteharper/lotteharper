@@ -1711,7 +1711,7 @@ def tip_crypto_simple(request, username):
             from lotteh.celery import validate_tip_payment
             validate_tip_payment.apply_async(timeout=60*5, args=(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'),crypto,network),)
             validate_tip_payment.apply_async(timeout=60*10, args=(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'),crypto,network),)
-#            validate_tip_payment(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'), crypto, network)
+            validate_tip_payment(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'), crypto, network)
             from django.urls import reverse
             return redirect(reverse('payments:subscribe-bitcoin-thankyou', kwargs={'username': user.profile.name}))
     from payments.crypto import get_payment_address, get_lightning_address

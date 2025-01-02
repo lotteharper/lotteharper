@@ -464,7 +464,7 @@ def validate_tip_payment(uid, mid, balance, transaction_id, crypto, network):
     user = User.objects.get(id=uid)
     model = User.objects.get(id=mid)
     import sys
-    tip = model.vendor_payments_profile.validate_crypto_transaction(user, sys.float_info.min/settings.MIN_CRYPTO_PERCENTAGE, transaction_id, crypto, network, True)
+    tip = model.vendor_payments_profile.validate_crypto_transaction(user, 0.01, transaction_id, crypto, network, True)
     if tip:
         print('sending tip email')
         from payments.email import send_tip_email
