@@ -16,7 +16,7 @@
 <small>{{ 'Alternatively, scan this QR code'|etrans }}</small>
 <div style="display: flex; justify-content: space-around;"><div id="gameqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
 <hr>
-<p><a title="{{ 'Accept an invite (send this link to your friend)'|etrans }}"  href="{% url 'games:join' %}">{{ 'Accept invite'|etrans }}</a></p>
+<p><a title="{{ 'Accept an invite (send this link to your friend)'|etrans }}"  href="{% url 'games:join' %}">{{ 'Accept invite'|etrans }}</a> <a title="{{ 'Visit the leaderboard'|etrans }}"  href="{% url 'games:leaderboard' %}">{{ 'Leaderboard'|etrans }}</a></p>
 {% endblock %}
 {% block javascript %}
 var gameqrdiv = document.getElementById("gameqrcode");

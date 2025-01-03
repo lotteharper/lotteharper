@@ -17,32 +17,32 @@
 {% endblock %}
 {% block content %}
 <div id="container rounded bg-white shadow col-md-6 mx-auto">
-<legend><i class="bi bi-credit-card-fill"></i> Subscribe to @{{ username }} with Card</legend>
+<legend><i class="bi bi-credit-card-fill"></i> {{ 'Subscribe to'|etrans }} @{{ username }} {{ 'with Card'|etrans }}</legend>
 <div style="display: inline-block;">
 <img align="left" src="{{ model.get_face_blur_url }}" style="width:33%; margin-right: 10px;" class="rounded"></img>
-<img class="mr-2 img-fluid rounded" src="{{ post.get_blur_thumb_url }}" style="float: left; width: 40%; max-width: 400px;" alt="See photos like these"></img>
+<img class="mr-2 img-fluid rounded" src="{{ post.get_blur_thumb_url }}" style="float: left; width: 40%; max-width: 400px;" alt="{{ 'See photos like these'|etrans }}"></img>
 </div>
 <div style="text-align: center;">
-	<img alt="Accepting Visa and Mastercard" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
+	<img alt="{{ 'Accepting Visa and Mastercard'|etrans }}" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
 </div>
 {% include 'payments/_subscription_perks.html' %}
 <p> - {{ profile.name }}</p>
-<b>Items:</b>
+<b>{{ 'Items:'|etrans }}</b>
 <ul>
-<li>Subscription to {{ username }} with {{ the_site_name }} (${{ fee|sub_fee }})</li>
-<li>Billed monthly, until cancellation.{% if not profile.user.vendor_profile.free_trial == '0' %} The first {{ profile.user.vendor_profile.free_trial }} days will be free, with an opportunity to cancel your subscription before a payment is made should you choose to.{% endif %}</li>
+<li>{{ 'Subscription to'|etrans }} {{ username }} {{ 'with'|etrans }} {{ the_site_name }} (${{ fee|sub_fee }})</li>
+<li>{{ 'Billed monthly, until cancellation.'|etrans }}{% if not profile.user.vendor_profile.free_trial == '0' %} {{ 'The first'|etrans }} {{ profile.user.vendor_profile.free_trial }} {{ 'days will be free, with an opportunity to cancel your subscription before a payment is made should you choose to.'|etrans }}{% endif %}</li>
 </ul>
-<b>Info:</b>
-<p>The transaction will display on your bank statement as "{{ statement_descriptor }} SUBS".</p>
-<p>For questions or concerns, please contact {{ the_site_name }} at {{ agent_phone }} or mail to {{ agent_name }} {{ agent_address }}.</p>
-<p>You will be redirected to a checkout page to buy the product. Please enter your credit or debit card information, you will be billed monthly until you cancel through the website, or by email, cancellation service, or any other form of cancellation request.</p>
-<p>You will pay ${{ fee|sub_fee }} USD. Please click the button below to continue.</p>
+<b>{{ 'Info:'|etrans }}</b>
+<p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} SUBS".</p>
+<p>{{ 'For questions or concerns, please contact'|etrans }} {{ the_site_name }} {{ 'at'|etrans }} {{ agent_phone }} {{ 'or mail to'|etrans }} {{ agent_name }} {{ agent_address }}.</p>
+<p>{{ 'You will be redirected to a checkout page to buy the product. Please enter your credit or debit card information, you will be billed monthly until you cancel through the website, or by email, cancellation service, or any other form of cancellation request.'|etrans }}</p>
+<p>{{ 'You will pay'|etrans }} ${{ fee|sub_fee }} USD. {{ 'Please click the button below to continue.'|etrans }}</p>
 {% if request.GET.coupon %}
-<p><legend>You have received a coupon!</legend> - Use coupon code {{ request.GET.coupon }} at checkout to get a discount on your purchase.</p>
+<p><legend>{{ 'You have received a coupon!'|etrans }}</legend> - {{ 'Use coupon code'|etrans }} {{ request.GET.coupon }} {{ 'at checkout to get a discount on your purchase.'|etrans }}</p>
 {% endif %}
 <form id="pay-form" onsubmit="event.preventDefault(); payFee();">
 {{ form|crispy }}
-<button type="submit" class="btn btn-lg btn-outline-success" title="Submit">Submit</button>
+<button type="submit" class="btn btn-lg btn-outline-success" title="{{ 'Submit'|etrans }}">{{ 'Submit'|etrans }}</button>
 </form>
 </div>
 <hr>

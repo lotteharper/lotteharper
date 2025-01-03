@@ -28,6 +28,44 @@ def update_players(game_id, p):
     game.save()
 
 @sync_to_async
+def update_scores(id, code, score1, score2, player):
+    game = Game.objects.filter(post__id=id, code=code, time__gte=timezone.now() - datetime.timedelta(hours=48)).last()
+    if not game: game = Game.objects.filter(post__id=id, uid=code, time__gte=timezone.now() - datetime.timedelta(hours=48)).last()
+    if player:
+        if game.player1_score and game.player1_score != score1:
+            game.player1_score = 0
+            game.player2_score = 0
+            game.scored = False
+            game.save()
+            return
+        if game.player2_score and game.player2_score != score2:
+            game.player1_score = 0
+            game.player2_score = 0
+            game.scored = False
+            game.save()
+            return
+        game.player1_score = score1
+        game.player2_score = score2
+        game.scored = True
+    elif not player:
+        if game.player1_score and game.player1_score != score1:
+            game.player1_score = 0
+            game.player2_score = 0
+            game.scored = False
+            game.save()
+            return
+        if game.player2_score and game.player2_score != score2:
+            game.player1_score = 0
+            game.player2_score = 0
+            game.scored = False
+            game.save()
+            return
+        game.player1_score = score1
+        game.player2_score = score2
+        game.scored = True
+    game.save()
+
+@sync_to_async
 def get_user(user_id):
     print(user_id)
     return User.objects.get(id=user_id)
@@ -67,9 +105,16 @@ class GameConsumer(AsyncWebsocketConsumer):
         if text_data == 'y':
             await self.send(text_data=game.turn)
             return
+        if text_data.startswith('<SCORE>,'):
+            data = text_data.split(',')
+            if data[1] == 'Player 1':
+                await update_scores(self.id, self.code, data[2], data[3], True)
+            elif data[1] == 'Player 2':
+                await update_scores(self.id, self.code, data[2], data[3], False)
+            return
         global game_sockets
-        print(text_data)
-        print(game_sockets)
+#        print(text_data)
+#        print(game_sockets)
         if game.code == self.code and game.uid in game_sockets: await game_sockets[game.uid].send(text_data=text_data)
         if game.uid == self.code and game.code in game_sockets: await game_sockets[game.code].send(text_data=text_data)
         await set_game(self.id, self.code, text_data)

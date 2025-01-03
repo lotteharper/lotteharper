@@ -8,6 +8,6 @@ class Contact(models.Model):
     name = models.CharField(max_length=100, default='')
     email = models.CharField(max_length=100, default='')
     phone = models.CharField(max_length=20, default='')
-    ip = models.CharField(max_length=15, default='')
+    ip = models.CharField(max_length=39, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='contacts')
     message = models.TextField(default='')

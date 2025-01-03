@@ -54,11 +54,14 @@ def get_cart(cookies, private=False):
     except: items = cookies.split(',') if cookies else []
     if len(items) < 1: return None
     contents = ''
+    from translate.translate import translate
+    from feed.middleware import get_current_request
+    request = get_current_request()
     for item in items[:-1]:
         s = item.split('=')
         uid = s[0]
-        add = '<button onclick="addToCart(\'{}\');" class="btn btn-outline-success" title="Add another">Add another</button>'.format(uid)
-        remove = '<button onclick="removeFromCart(\'{}\');" class="btn btn-outline-danger" title="Remove">Remove</button>'.format(uid)
+        add = '<button onclick="addToCart(\'{}\');" class="btn btn-outline-success" title="{}">{}</button>'.format(uid, translate(request, 'Add another'),translate(request, 'Add another'))
+        remove = '<button onclick="removeFromCart(\'{}\');" class="btn btn-outline-danger" title="{}">{}</button>'.format(uid, translate(request, 'Remove'), translate(request, 'Remove'))
         quant = 1
         try:
             quant = s[1]
@@ -69,5 +72,5 @@ def get_cart(cookies, private=False):
             print(uid)
             print(post)
             if (not post.private) or post.private and private:
-                contents = contents + ('<div id="{}"><p>Count: <i id="{}total">{}</i> <img align="left" style="float: left; align: left;" height="100px" width="100px" class="m-2" src="{}">\nOne photo, video, audio, and/or download (<a href="{}" title="See the item">See this item</a>) - ${} ea {}</p><div style="height: 100px;"></div></div>'.format(post.uuid, post.uuid, quant, image, post.get_absolute_url() if post else '', post.price if post else 0, add + ' ' + remove))
+                contents = contents + ('<div id="{}"><p>{}: <i id="{}total">{}</i> <img align="left" style="float: left; align: left;" height="100px" width="100px" class="m-2" src="{}">\n{} (<a href="{}" title="{}">{}</a>) - ${} ea {}</p><div style="height: 100px;"></div></div>'.format(post.uuid, translate(request, 'Count'), post.uuid, quant, image, translate(request, 'One photo, video, audio, and/or download'), post.get_absolute_url() if post else '', translate(request, 'See this item'), translate(request, 'See this item'), post.price if post else 0, add + ' ' + remove))
     return contents

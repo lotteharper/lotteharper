@@ -18,37 +18,37 @@
 {% endblock %}
 {% block content %}
 <div id="container rounded bg-white shadow col-md-6 mx-auto">
-<h1><i class="bi bi-credit-card-fill"></i> Checkout</h1>
-<p style="text-align: right;"><button class="btn btn-sm btn-outline-danger" title="Clear cart" onclick="setCookie('cart', '', 30); window.location.reload();">Clear</button></p>
-<p>Want to pay in crypto? <a href="{% url 'payments:cart-crypto' %}?crypto={{ default_crypto }}" title="{{ 'Shopping Cart'|trans }}" class="btn btn-lg btn-outline-primary"><i class="bi bi-bitcoin"></i> Pay in Crypto</a></p>
+<h1><i class="bi bi-credit-card-fill"></i> {{ 'Checkout'|etrans }}</h1>
+<p style="text-align: right;"><button class="btn btn-sm btn-outline-danger" title="{{ 'Clear cart'|etrans }}" onclick="setCookie('cart', '', 30); window.location.reload();">{{ 'Clear'|etrans }}</button></p>
+<p>{{ 'Want to pay in crypto?'|etrans }} <a href="{% url 'payments:cart-crypto' %}?crypto={{ default_crypto }}" title="{{ 'Shopping Cart'|etrans }}" class="btn btn-lg btn-outline-primary"><i class="bi bi-bitcoin"></i> {{ 'Pay in Crypto'|etrans }}</a></p>
 <div style="text-align: center;">
 	<img alt="Accepting Visa and Mastercard" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
 </div>
 <p class="hide" id="copy-cart">{{ base_url }}/payments/cart/?cart={{ cart }}</p>
-<p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="Refresh cart" onclick="window.location.reload();">Update Cart</button> - <button class="btn btn-sm btn-outline-primary" title="Copy cart" onclick="copyToClipboard('copy-cart');">Copy Cart</button></p>
-<b>Items:</b>
+<p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="Refresh cart" onclick="window.location.reload();">{{ 'Update Cart'|etrans }}</button> - <button class="btn btn-sm btn-outline-primary" title="{{ 'Copy cart'|etrans }}" onclick="copyToClipboard('copy-cart');">{{ 'Copy Cart'|etrans }}</button></p>
+<b>{{ 'Items'|etrans }}:</b>
 {% autoescape off %}
 {% if cart_contents %}
 <p style="white-space: pre-wrap;">{{ cart_contents }}</p>
 {% else %}
-<p>Your cart is currently empty.</p>
+<p>{{ 'Your cart is currently empty.'|etrans }}</p>
 {% endif %}
 {% endautoescape %}
 <ul>
-<li>Total: (${{ fee|sub_fee }})</li>
-<li>Billed once only.</li>
+<li>{{ 'Total:'|etrans }} (${{ fee|sub_fee }})</li>
+<li>{{ 'Billed once only.'|etrans }}</li>
 </ul>
-<b>Info:</b>
-<p>The transaction will display on your bank statement as "{{ statement_descriptor }} SHOP".</p>
-<p>For questions or concerns, please contact {{ the_site_name }} at {{ agent_phone }} or mail to {{ agent_name }} {{ agent_address }}.</p>
-<p>You will pay ${{ fee|sub_fee }} USD. Please enter your credit or debit card information.</p>
+<b>{{ 'Info:'|etrans }}</b>
+<p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} SHOP".</p>
+<p>{{ 'For questions or concerns, please contact'|etrans }} {{ the_site_name }} {{ 'at'|etrans }} {{ agent_phone }} {{ 'or mail to'|etrans }} {{ agent_name }} {{ agent_address }}.</p>
+<p>{{ 'You will pay'|etrans }} ${{ fee|sub_fee }} USD. {{ 'Please enter your credit or debit card information.'|etrans }}</p>
 {% if request.GET.coupon %}
-<p><legend>You have received a coupon!</legend> - Use coupon code <b id="coupon-code">{{ request.GET.coupon }}</b> <button class="btn btn-primary btn-sm" onclick="copyToClipboard('coupon-code');">Copy</button> at checkout to get a discount on your purchase.</p>
+<p><legend>{{ 'You have received a coupon!'|etrans }}</legend> - {{ 'Use coupon code'|etrans }} <b id="coupon-code">{{ request.GET.coupon }}</b> <button class="btn btn-primary btn-sm" onclick="copyToClipboard('coupon-code');">{{ 'Copy'|etrans }}</button> {{ 'at checkout to get a discount on your purchase.'|etrans }}</p>
 {% endif %}
 <hr style="background-color: blue;">
 <form id="pay-form" onsubmit="event.preventDefault(); payFee();">
 {{ form|crispy }}
-<button type="submit" class="btn btn-lg btn-outline-success" title="Submit">Submit</button>
+<button type="submit" class="btn btn-lg btn-outline-success" title="Submit">{{ 'Submit'|etrans }}</button>
 </form>
 </div>
 <hr>

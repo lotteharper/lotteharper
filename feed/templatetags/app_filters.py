@@ -805,3 +805,22 @@ def cryptoformat(amount):
 @register.filter('replspace')
 def replspace(text):
     return str(text).replace(' ', '+')
+
+@register.filter('toint')
+def toint(text):
+    try:
+        return int(text)
+    except: return 0
+
+@register.filter('scoretotal')
+def scoretotal(player):
+    total = 0
+    for game in player.created_games.all():
+        try:
+            total = total + int(game.player1_score)
+        except: pass
+    for game in player.joined_games.all():
+        try:
+            total = total + (game.player2_score)
+        except: pass
+    return total

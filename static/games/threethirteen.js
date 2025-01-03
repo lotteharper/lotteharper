@@ -778,6 +778,11 @@ function stringDeck(deck) {
       }
       dropConfetti();
       stage.update();
+      if(user == player1){
+        send('<SCORE>,' + player1 + ',' + playerscore + ',' + opponentscore + '/');
+      } else {
+        send('<SCORE>,' + player2 + ',' + opponentscore + ',' + playerscore + '/');
+      }
   }
   function prepareForNextRound(){
     preparingForNextRound = true;

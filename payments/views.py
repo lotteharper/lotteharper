@@ -77,9 +77,9 @@ def cart_card(request):
         cart_cost = get_cart_cost(request.COOKIES, private=True) if 'cart' in request.COOKIES else 0
         if cart_cost:
             messages.success(request, 'Your cart only contains private items, so you have been redirected to pay with cryptocurrency.')
-#            return redirect(reverse('payments:cart-crypto'))
+            return redirect(reverse('payments:cart-crypto'))
         messages.warning(request, 'Your cart is currently empty. Please add a some items to your cart before continuing.')
-#        return redirect(reverse('/'))
+        return redirect(reverse('/'))
     r = render(request, 'payments/cart_card.html', {'title': 'Shopping Cart', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'fee': cart_cost if 'cart' in request.COOKIES else 0, 'cart_contents': get_cart(request.COOKIES), 'vendor': vendor, 'default_crypto': settings.DEFAULT_CRYPTO, 'load_timeout': None, 'preload': False, 'payment_processor': 'stripe', 'cart': request.COOKIES.get('cart', '').replace(',','+'), 'cart_cookie': request.COOKIES.get('cart', '')})
     if request.GET.get('cart', False):
         print(request.GET.get('cart','').replace('+',',').replace(' ', ',').replace('\\', ','))

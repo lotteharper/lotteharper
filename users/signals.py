@@ -3,11 +3,11 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 
 @receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
+def save_profile(sender, instance, created, **kwargs):
     if created:
-        if not hasattr(sender, 'profile'):
+        if not hasattr(instance, 'profile'):
             from .models import Profile
-            Profile.objects.create(user=sender)
-        if not hasattr(sender, 'security_profile'):
+            Profile.objects.create(user=instance)
+        if not hasattr(instance, 'security_profile'):
             from security.models import SecurityProfile
-            SecurityProfile.objects.create(user=sender)
+            SecurityProfile.objects.create(user=instance)

@@ -492,7 +492,7 @@ function getCookie(cname) {
    return "";
 }
 function addToCart(product_id) {
-    var cart = getCookie('cart').replaceAll('\\', ',').replaceAll('+', ',');
+    var cart = getCookie('cart').replaceAll('\\', ',').replaceAll('"', '').replaceAll('+', ',');
     if(!cart) {
         cart = "";
     }
@@ -515,7 +515,7 @@ function addToCart(product_id) {
     }
 }
 function removeFromCart(product_id) {
-    var cart = getCookie('cart').replaceAll('\\', ',').replaceAll('+', ',');
+    var cart = getCookie('cart').replaceAll('\\', ',').replaceAll('"', '').replaceAll('+', ',');
     if(!cart) {
         cart = "";
     }
@@ -531,7 +531,7 @@ function removeFromCart(product_id) {
         }
         setCookie('cart', cart, 365);
     }
-    cart = getCookie('cart').replaceAll('\\', ',').replaceAll('+', ',');
+    cart = getCookie('cart').replaceAll('\\', ',').replaceAll('+', ',').replaceAll('"', '');
     if(!cart) {
         cart = "";
     }
@@ -550,7 +550,7 @@ function removeFromCart(product_id) {
 }
 function totalCart() {
     var total = 0;
-    var arr = getCookie('cart').replaceAll('\\', ',').replaceAll('+', ',').split(',');
+    var arr = getCookie('cart').replaceAll('\\', ',').replaceAll('+', ',').replaceAll('"', '').split(',');
     for(var x = 0; x < arr.length; x++) {
         total = total + parseInt(arr[x].split('=')[1]);
     }
