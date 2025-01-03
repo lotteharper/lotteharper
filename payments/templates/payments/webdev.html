@@ -11,18 +11,18 @@
 {% block content %}
 {% load app_filters %}
 {% include 'users/register_modal.html' %}
-<h1>Buy a Custom Website</h1>
-<p>Get a custom website for your business or personal use.</p>
-<legend>Starting at $100</legend>
+<h1>{{ 'Buy a Custom Website'|etrans }}</h1>
+<p>{{ 'Get a custom website for your business or personal use.'|etrans }}</p>
+<legend>{{ 'Starting at'|etrans }} $100</legend>
 <p style="text-align: center;">
 <i class="bi bi-file-earmark" style="font-size: 120px;"></i>
 </p>
 <hr>
-<p>For a monthly plan including ongoing development and support, please leave the box below checked before paying. You will be billed monthly for services (instead of a one time fee) and receive extended work on your website within reasonable accomodation.</p>
+<p>{{ 'For a monthly plan including ongoing development and support, please leave the box below checked before paying. You will be billed monthly for services (instead of a one time fee) and receive extended work on your website within reasonable accomodation.'|etrans }}</p>
 <div class="form-check">
   <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
   <label class="form-check-label" for="flexCheckDefault">
-    Monthly plan with ongoing development and support
+    {{ 'Monthly plan with ongoing development and support'|etrans }}
   </label>
 </div>
 <div class="container">
@@ -31,36 +31,34 @@
 <div class="col-5 m-2 p-2 rounded" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
 <p>{{ 'Tier'|etrans }} {{ forloop.counter|nts|capitalize }}</p>
 <hr>
-<legend>{{ plan.description }}</legend>
+<legend>{{ plan.description|etrans }}</legend>
 <button onclick="monthlyPlan({{plan.price}});" id="monthlyplan{{ plan.price }}" class="monthlyplan btn btn-lg btn-outline-success" title="{{ 'Subscribe to this plan'|etrans }}"><b>${{ plan.price|sub_fee }}</b></button>
 </div>
 {% endfor %}
 </div>
 </div>
 <hr>
-{% blocktrans %}
-<b>Items:</b>
+<b>{{ 'Items:'|etrans }}</b>
 <div class="hide" id="one-time">
 <ul>
-<li>One time payment for web development services provided by {{ the_site_name }}</li>
-<li>Billed once only. Non refundable.</ul>
+<li>{{ 'One time payment for web development services provided by'|etrans }} {{ the_site_name }}</li>
+<li>{{ 'Billed once only. Non refundable.'|etrans }}</ul>
 </ul>
 </div>
 <div id="monthly">
 <ul>
-<li>Monthly fixed-fee payment for web development services provided by {{ the_site_name }}</li>
-<li>Billed monthly until cancellation through the website or by email, phone, or written request.</ul>
+<li>{{ 'Monthly fixed-fee payment for web development services provided by'|etrans }} {{ the_site_name }}</li>
+<li>{{ 'Billed monthly until cancellation through the website or by email, phone, or written request.'|etrans }}</ul>
 </ul>
 </div>
-<p>Buy a custom website developed by {{ the_site_name }}. Consultation and custom design services included, customization services available on request. Website upgrades available. Guaranteed maintenance for at least five years included, additional maintenance available on request.</p>
-<p>By checking out, you agree to the <a href="/terms/" title="Read the terms of service and privacy policy">Terms of Service and Privacy Policy</a>, as well as agree to and and acknowledge the sale as outlined and selected.</p>
-<p>The transaction will display on your bank statement as "{{ statement_descriptor }} WEBDEV".</p>
-<p>You will be redirected to a checkout page to buy. Please enter your credit or debit card information, you will be billed immediatley and services will be provided within one week with communication over email and phone.</p>
+<p>{{ 'Buy a custom website developed by'|etrans }} {{ the_site_name }}. {{ 'Consultation and custom design services included, customization services available on request. Website upgrades available. Guaranteed maintenance for at least five years included, additional maintenance available on request.'|etrans }}</p>
+<p>{{ 'By checking out, you agree to the'|etrans }} <a href="/terms/" title="{{ 'Read the terms of service and privacy policy'|etrans }}">{{ 'Terms of Service and Privacy Policy'|etrans }}</a>, {{ 'as well as agree to and and acknowledge the sale as outlined and selected.'|etrans }}</p>
+<p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} WEBDEV".</p>
+<p>{{ 'You will be redirected to a checkout page to buy. Please enter your credit or debit card information, you will be billed immediatley and services will be provided within one week with communication over email and phone.'|etrans }}</p>
 <form id="pay-form" onsubmit="event.preventDefault(); payFee();">
 {{ form|crispy }}
-<button type="submit" class="btn btn-lg btn-outline-success" title="Submit">Submit</button>
+<button type="submit" class="btn btn-lg btn-outline-success" title="{{ 'Submit'|etrans }}">{{ 'Submit'|etrans }}</button>
 </form>
-{% endblocktrans %}
 <hr>
 {% include 'contact/form.html' %}
 <hr>
