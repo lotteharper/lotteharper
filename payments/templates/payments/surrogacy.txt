@@ -1,3 +1,5 @@
+{% load feed_filters %}
+{% blocktrans %}
 AGREEMENT
 
 This Agreement is made and entered into between {% if parent_name != '' %}{{ parent_name }}{% else %}________________{% endif %} and ________________, (“Intended Parent” or “Intended Parents”), a couple, and {{ mother_name }} (“Surrogate Mother”) and ________________ (“Surrogate Mother’s Partner”), a couple. All of the above-named individuals may be referred to as “the Parties.” {{ the_site_name }} (hereafter “{{ the_site_name }}”) is a {{ business_type }}, organized under the laws of the State of {{ the_state_name }} for the purpose of providing services to intended parents, surrogate mothers and gestational carriers. The term “Child”, as used in this Agreement, shall include all children born as a result of the medical procedures resulting from this Agreement.
@@ -85,15 +87,16 @@ Each Party acknowledges that he or she has read and fully understands this Agree
 
 XXVII. EFFECTIVE DATE
 This contract shall become effective upon signature by all Parties. Dated: {{ the_date }}
+{% endblocktrans %}
 
 __________________________________, Intended Parent
-Dated: {{ the_date }}
+{{ 'Dated'|etrans }}: {{ the_date }}
 
-__________________________________, Intended Parent
-Dated: {{ the_date }}
+__________________________________, {{ 'Intended Parent'|etrans }}
+{{ 'Dated'|etrans }}: {{ the_date }}
 
 __________________________________, Surrogate Mother 
-Dated: {{ the_date }}
+{{ 'Dated'|etrans }}: {{ the_date }}
 
-__________________________________, Surrogate Mother’s Partner 
-Dated: {{ the_date }}
+__________________________________, {{ 'Surrogate Mother\'s Partner'|etrans }} 
+{{ 'Dated'|etrans }}: {{ the_date }}

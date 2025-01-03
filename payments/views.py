@@ -538,12 +538,34 @@ def invoice(request):
     from django.http import HttpResponse
     return HttpResponse(json.dumps(resp)) #['checkoutToken']
 
-def render_agreement(name, parent, mother):
+def render_agreement(name, parent, mother, lang=None):
     from django.conf import settings
+    if lang == None: lang = settings.DEFAULT_LANG
     from django.utils import timezone
     from django.template.loader import render_to_string
     from feed.templatetags.nts import nts
+    class GetParams():
+        lang = None
+        def __init__(self, lang, *args, **kwargs):
+            self.lang = lang
+
+        def get(self, param, other=False):
+            return self.lang
+
+    class DummyUser():
+        is_authenticated = False
+
+    class DummyRequest():
+        GET = None
+        LANGUAGE_CODE = None
+        user = None
+        def __init__(self, lang, *args, **kwargs):
+            self.GET = GetParams(lang)
+            self.LANGUAGE_CODE = lang
+            self.user = DummyUser()
+    request = DummyRequest(lang)
     return render_to_string('payments/surrogacy.txt', {
+        'request': request,
         'the_clinic_name': settings.FERTILITY_CLINIC,
         'the_site_name': settings.SITE_NAME,
         'mother_name': name,
@@ -621,7 +643,10 @@ def surrogacy(request, username):
     vendor = User.objects.get(profile__name=username, profile__vendor=True)
     if vendor.verifications.last(): signature = render_to_string('raw_signature.html', {'theuser': vendor})
     if request.user.is_authenticated and request.user.verifications.last(): parent_signature = render_to_string('raw_signature.html', {'theuser': request.user})
-    agreement = render_agreement(vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user.verifications.last().full_name if request.user.is_authenticated and request.user.verifications.last() else None, vendor).replace('__________________________________, Surrogate Mother', '{}, Surrogate Mother'.format(signature if signature else '__________________________________'), 1).replace('__________________________________, Intended Parent', '{}, Intended Parent'.format(parent_signature if parent_signature else '__________________________________'), 1)
+    from translate.translate import translate
+    inp_t = translate(request, 'Intended Parent')
+    sgm_t = translate(request, 'Surrogate Mother')
+    agreement = render_agreement(vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user.verifications.last().full_name if request.user.is_authenticated and request.user.verifications.last() else None, vendor).replace('__________________________________, Surrogate Mother', '{}, {}'.format(signature if signature else '__________________________________', sgm_t), 1).replace('__________________________________, Intended Parent', '{}, {}'.format(parent_signature if parent_signature else '__________________________________', inp_t), 1)
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     r = render(request, 'payments/surrogacy.html', {'title': 'Surrogacy Plans', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'post': post, 'vendor': vendor, 'agreement': agreement, 'surrogacy_fee': settings.SURROGACY_FEE, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'preload': False})
@@ -942,6 +967,7 @@ def monthly_checkout_profile(request):
         except Exception as e:
             print(str(e))
             return JsonResponse({"error": str(e)})
+
 @csrf_exempt
 def monthly_checkout(request):
     import stripe
