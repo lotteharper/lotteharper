@@ -172,8 +172,8 @@ $('#large-frame').on('load', function() {
 });
 var can_click = false;
 function handleClick(event) {
-	var min_click = window.innerWidth/12;
-	if(window.innerHeight < window.innerWidth) { min_click = window.innerHeight/8; }
+	var min_click = window.innerWidth/5;
+	if(window.innerHeight < window.innerWidth) { min_click = window.innerHeight/5; }
 	if(can_click && event.screenX < min_click) {
 		lastImage();		
 		event.preventDefault();
@@ -258,7 +258,7 @@ function loadNext(status) {
     if(ii > {{ count }} - 1 || ii < 0) return;
     $.ajax({
       type: "POST",
-      url: '/feed/grid/api/' + ii + '/?square=true{% if request.GET.name %}&name={{ request.GET.name }}{% elif profile.name %}&name={{ profile.name }}{% endif %}{% if request.GET.show %}&show=true{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}&time=' + time,
+      url: '/feed/grid/api/' + ii + '/?{% if request.GET.lang %}lang={{ request.GET.lang }}&{% endif %}square=true{% if request.GET.name %}&name={{ request.GET.name }}{% elif profile.name %}&name={{ profile.name }}{% endif %}{% if request.GET.show %}&show=true{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}&time=' + time,
       index: ii,
       sl: sl,
       timeout: 1000 * 60 * 5,
@@ -403,7 +403,7 @@ function handleTouchMove(evt) {
     }
     handleTouch(xUp, yUp);
 }
-var min_diff = 0;
+var min_diff = window.innerWidth/30;
 function handleTouch(xUp, yUp) {
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;

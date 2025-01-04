@@ -33,12 +33,12 @@
 </div>
 {% endblock %}
 {% block javascript %}
-var urls = ["{% url 'feed:profile-grid' profileusername %}",
-"{% url 'feed:profile' profileusername %}?feed=private&embed=t",
-"{% url 'feed:profile' profileusername %}?feed=news&embed=t",
-"{% url 'landing:landing' %}?k={% get_key %}",
-"{% url 'feed:follow' profileusername %}",
-"{% if request.user.is_authenticated and request.user.profile.vendor %}{% url 'go:go' %}{% elif request.user.is_authenticated %}{% url 'users:profile' %}{% elif request.user_signup %}{% url 'users:login' %}?i=t{% else %}{% url 'users:register' %}{% endif %}",];
+var urls = ["{% url 'feed:profile-grid' profileusername %}{% if request.GET.lang %}?lang={{ request.GET.lang }}{% endif %}",
+"{% url 'feed:profile' profileusername %}?feed=private&embed=t{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}",
+"{% url 'feed:profile' profileusername %}?feed=news&embed=t{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}",
+"{% url 'landing:landing' %}?k={% get_key %}{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}",
+"{% url 'feed:follow' profileusername %}{% if request.GET.lang %}?lang={{ request.GET.lang }}{% endif %}",
+"{% if request.user.is_authenticated and request.user.profile.vendor %}{% url 'go:go' %}{% if request.GET.lang %}?lang={{ request.GET.lang }}{% endif %}{% elif request.user.is_authenticated %}{% url 'users:profile' %}{% if request.GET.lang %}?lang={{ request.GET.lang }}{% endif %}{% elif request.user_signup %}{% url 'users:login' %}?i=t{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}{% else %}{% url 'users:register' %}{% if request.GET.lang %}?lang={{ request.GET.lang }}{% endif %}{% endif %}",];
 var srcdoc = '<!DOCTYPE html><p style="white-space: pre-wrap; font-size: 30px; color: #{% if darkmode %}ADD8E6{% else %}00008B{% endif %}; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"><img width="30%" style="max-width: 300px; text-align: center; border-radius: 50%;" src="{{ icon_url }}"></img>\n{{ 'Loading...'|trans }}</p>';
 var oldNumber = {% if request.user_signup %}6{% else %}{{ default_page }}{% endif %};
 var buttons = document.querySelectorAll('#pagebutton');
