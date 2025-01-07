@@ -797,6 +797,8 @@ ADULT_CONTENT = True
 
 BLUR_ONLY_NUDE = True
 
+MULTILINGUAL_SEARCH = True
+
 AD_TEXT = 'Charlotte Harper is a full stack developer living in {}. I use she/her pronouns and build internet enabled software, including apps, games, devices, and other software. This website is a secure Kubernetes at the edge solution where you can visit me and see what I\'m building. Thank you for visiting my webapp.'.format(CITY_STATE)
 
 # Sentry

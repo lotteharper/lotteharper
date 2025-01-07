@@ -135,6 +135,81 @@ def get_posts_for_query(request, qs):
         posts = posts + ([post] if (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or request.user.is_authenticated and request.user.profile.vendor else [])
     return posts
 
+
+
+def get_posts_for_multilingual_query(request, qs):
+    from django.utils import timezone
+    from feed.models import Post
+    from django.conf import settings
+    now = timezone.now()
+    try:
+        now = datetime.datetime.fromtimestamp(int(request.GET.get('time')) / 1000)
+    except: pass
+    from autocorrect import Speller
+    from translate.translate import translate
+    import regex
+    from misc.regex import SEARCH_REGEX
+    from misc.regex import ESCAPED_QUERIES
+    from misc.sitemap import languages
+    posts = []
+    count = 0
+    results = [None] * len(languages)
+    last_threads = []
+    threads = [None] * len(languages)
+    thread_count = 0
+    def get_posts_for_query_lang(qs, lang, results, res_count):
+        pos = []
+        from translate.translate import translate
+        from feed.models import Post
+        import regex
+        from misc.regex import SEARCH_REGEX
+        from misc.regex import ESCAPED_QUERIES
+        qs = translate(None, qs, target=lang)
+        qsplit = qs.split(' ')
+        from django.utils import timezone
+        now = timezone.now()
+        try:
+            now = datetime.datetime.fromtimestamp(int(request.GET.get('time')) / 1000)
+        except: pass
+        psts = Post.objects.filter(content__icontains=qs.lower(), private=False, published=True, date_posted__lte=now)
+        for q in qsplit:
+            psts = psts.union(Post.objects.filter(content__icontains=q.lower(), private=False, published=True, date_posted__lte=now))
+        psts = psts.order_by('-date_posted')
+        for post in psts:
+            count = 0
+            matches = regex.findall(SEARCH_REGEX.format(qs.lower()), post.content.lower(), flags=regex.IGNORECASE | regex.BESTMATCH)
+            count = count + len(matches) * len(qsplit)
+            for q in qsplit:
+                matches = regex.findall(SEARCH_REGEX.format(q.lower()), post.content.lower(), flags=regex.IGNORECASE | regex.BESTMATCH)
+                for match in matches:
+                    if not match in ESCAPED_QUERIES:
+                        count = count + 1
+            if count > 0:
+                pos = pos + [(post.id, count)]
+        results[res_count] = pos
+    for lang in languages:
+        if lang == 'en':
+            spell = Speller()
+            qs = spell(qs)
+        import threading
+        threads[thread_count] = threading.Thread(target=get_posts_for_query_lang, args=(qs, lang, results, thread_count,))
+        threads[thread_count].start()
+        thread_count = thread_count + 1
+    for i in range(len(threads)):
+        if threads[i]: threads[i].join()
+    for pos in results:
+        if pos:
+            pos = sorted(pos, key = lambda x: x[1], reverse=True)
+            for post, count in pos:
+                post = Post.objects.filter(id=post).first()
+                ex = False
+                for p in posts:
+                    if p.id == post.id:
+                        ex = True
+                if not ex and post and (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or (request.user.is_authenticated and request.user.profile.vendor):
+                    posts = posts + [post]
+    return posts
+
 #@login_required
 #@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 @cache_page(60*60*24*30)
@@ -149,7 +224,7 @@ def search(request):
     if not qs:
         messages.warning(request, "Please enter a valid querystring to search {}".format(settings.SITE_NAME))
         qs = ''
-    posts = get_posts_for_query(request, qs)
+    posts = get_posts_for_multilingual_query(request, qs) if settings.MULTILINGUAL_SEARCH else get_posts_for_query(request, qs)
     p = Paginator(posts, 10)
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")

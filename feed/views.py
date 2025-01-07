@@ -324,7 +324,7 @@ def grid_api(request, index):
     else:
         posts = []
         if request.GET.get('q', None):
-            posts = get_posts_for_query(request, request.GET.get('q'))
+            posts = get_posts_for_multilingual_query(request, request.GET.get('q')) if settings.MULTILINGUAL_SEARCH else get_posts_for_query(request, request.GET.get('q'))
             post = posts[index%len(posts)]
         elif request.user.is_authenticated and (post.author in request.user.profile.subscriptions.all() or (request.user == post.author or (post.recipient and post.recipient == request.user))):
             if post.file and not post.image:
