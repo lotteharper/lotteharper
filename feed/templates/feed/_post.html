@@ -15,7 +15,7 @@
     </div>
     {% autoescape off %}    
     {% if request.path == '/search/' %}
-    <p class="article-content">{{ post.content|transauthor:post.id }}</p>
+    <p class="article-content">{{ post.content|transauthor:post.id|tagusers|trimlength }}</p>
     {% elif '***' in post.content  %}
     <p class="article-content">{{ post.content|transauthor:post.id|tagusers|trimlength }}</p>
     {% else %}
