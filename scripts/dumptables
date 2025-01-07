@@ -1,0 +1,33 @@
+#!/bin/bash
+cd /home/team/lotteh
+sudo chown :users -R data/
+sudo chmod -R 775 data/
+source venv/bin/activate
+python manage.py dumpdata chat --exclude auth.permission --exclude contenttypes > data/chat.json
+python manage.py dumpdata feed.post --exclude auth.permission --exclude contenttypes > data/feed-post.json
+python manage.py dumpdata verify --exclude auth.permission --exclude contenttypes > data/verify.json
+python manage.py dumpdata security --exclude auth.permission --exclude contenttypes > data/security.json
+python manage.py dumpdata payments --exclude auth.permission --exclude contenttypes > data/payments.json
+python manage.py dumpdata vendors --exclude auth.permission --exclude contenttypes > data/vendors.json
+python manage.py dumpdata barcode --exclude auth.permission --exclude contenttypes > data/barcode.json
+python manage.py dumpdata webauth --exclude auth.permission --exclude contenttypes > data/webauth.json
+python manage.py dumpdata address --exclude auth.permission --exclude contenttypes > data/address.json
+python manage.py dumpdata auth --exclude auth.permission --exclude contenttypes > data/users-dj.json
+python manage.py dumpdata sessions --exclude auth.permission --exclude contenttypes > data/sessions-dj.json
+python manage.py dumpdata users --exclude auth.permission --exclude contenttypes > data/users-new.json
+python manage.py dumpdata voice --exclude auth.permission --exclude contenttypes > data/voice.json
+python manage.py dumpdata tts --exclude auth.permission --exclude contenttypes > data/tts.json
+python manage.py dumpdata games --exclude auth.permission --exclude contenttypes > data/games.json
+python manage.py dumpdata audio --exclude auth.permission --exclude contenttypes > data/audio.json
+python manage.py dumpdata live --exclude auth.permission --exclude contenttypes > data/live.json
+python manage.py dumpdata contact --exclude auth.permission --exclude contenttypes > data/contact.json
+python manage.py dumpdata payments --exclude auth.permission --exclude contenttypes > data/payments.json
+python manage.py dumpdata chat --exclude auth.permission --exclude contenttypes > data/chat.json
+python manage.py dumpdata translate --exclude auth.permission --exclude contenttypes > data/translate.json
+python manage.py dumpdata crypto --exclude auth.permission --exclude contenttypes > data/crypto.json
+python manage.py dumpdata birthcontrol --exclude auth.permission --exclude contenttypes > data/birthcontrol.json
+python manage.py dumpdata survey --exclude auth.permission --exclude contenttypes > data/survey.json
+split -b99M data/security.json data/security.json.
+split -b99M data/users-new.json data/users-new.json.
+rm data/security.json
+rm data/users-new.json
