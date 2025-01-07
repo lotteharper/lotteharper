@@ -206,7 +206,7 @@ def get_posts_for_multilingual_query(request, qs):
                 for p in posts:
                     if p.id == post.id:
                         ex = True
-                if not ex and post and (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or (request.user.is_authenticated and request.user.profile.vendor):
+                if not ex and (post and (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or (request.user.is_authenticated and request.user.profile.vendor)):
                     posts = posts + [post]
     return posts
 
