@@ -65,6 +65,7 @@
         </ul>
         <form class="d-flex" action="{% url 'misc:search' %}" style="margin-left: auto;">
           <input class="form-control mr-sm-2" type="text" placeholder="{{ 'Search'|etrans }}" aria-label="{{ 'Search'|etrans }}" required id="q" name="q"{% if query %} value="{{ query }}"{% endif %} {% if request.path == '/search/' %}autofocus{% endif %}>
+          <input class="form-control hide" type="text" id="lang" name="lang" value="{{ lang }}">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ 'Search'|etrans }}</button>
         </form>
         <ul class="navbar-nav" style="margin-left: auto;">

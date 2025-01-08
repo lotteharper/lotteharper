@@ -108,8 +108,8 @@ def get_posts_for_query(request, qs):
     from translate.translate import translate
     from misc.regex import SEARCH_REGEX
     from misc.regex import ESCAPED_QUERIES
-    spell = Speller()
-    qs = spell(qs)
+#    spell = Speller()
+#    qs = spell(qs)
     qs = translate(request, qs, target=settings.DEFAULT_LANG)
     qsplit = qs.split(' ')
     posts = Post.objects.filter(content__icontains=qs.lower(), private=False, published=True, date_posted__lte=now)
@@ -187,10 +187,12 @@ def get_posts_for_multilingual_query(request, qs):
             if count > 0:
                 pos = pos + [(post.id, count)]
         results[res_count] = pos
+    lang = request.GET.get('lang') if request.GET.get('lang', None) else request.LANGUAGE_CODE if request else settings.DEFAULT_LANG
+    if lang == 'en':
+        spell = Speller()
+        qs = spell(qs)
+    qs = translate(request, qs, target=settings.DEFAULT_LANG)
     for lang in languages:
-        if lang == 'en':
-            spell = Speller()
-            qs = spell(qs)
         import threading
         threads[thread_count] = threading.Thread(target=get_posts_for_query_lang, args=(qs, lang, results, thread_count,))
         threads[thread_count].start()
@@ -206,7 +208,7 @@ def get_posts_for_multilingual_query(request, qs):
                 for p in posts:
                     if p.id == post.id:
                         ex = True
-                if not ex and (post and (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or (request.user.is_authenticated and request.user.profile.vendor)):
+                if (not ex) and (post and (not post.private) or request.user.is_authenticated and post.author in request.user.profile.subscriptions.all() or (request.user.is_authenticated and request.user.profile.vendor)):
                     posts = posts + [post]
     return posts
 
