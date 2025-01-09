@@ -9,14 +9,14 @@
     <lastmod>{{ date }}</lastmod>
   </url>
   {% endfor %}
-{% for vendor in profiles %}
+{% for vendor in vendors %}
   {% for feed in vendor_feeds %}
   <url>
     <loc>{{ base_url }}/feed/profile/{{ vendor.profile.name }}/?feed={{ feed }}</loc>
     {% for lang in languages %}
     <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}/feed/profile/{{ vendor.profile.name }}/?feed={{ feed }}" />
     {% endfor %}
-    <lastmod>{{ vendor.last_seen|sitemapdate }}</lastmod>
+    <lastmod>{{ vendor.profile.last_seen|sitemapdate }}</lastmod>
   </url>
   {% endfor %}
   {% for url in vendor_urls %}
@@ -25,7 +25,7 @@
     {% for lang in languages %}
     <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}{{ url }}{{ vendor.profile.name }}/" />
     {% endfor %}
-    <lastmod>{{ vendor.last_seen|sitemapdate }}</lastmod>
+    <lastmod>{{ vendor.profile.last_seen|sitemapdate }}</lastmod>
   </url>
   {% endfor %}
 {% endfor %}
@@ -36,7 +36,7 @@
     {% for lang in languages %}
     <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}{{ url }}{{ vendor.profile.name }}/" />
     {% endfor %}
-    <lastmod>{{ vendor.last_seen|sitemapdate }}</lastmod>
+    <lastmod>{{ vendor.profile.last_seen|sitemapdate }}</lastmod>
   </url>
   {% endfor %}
 {% endfor %}

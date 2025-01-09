@@ -1541,7 +1541,7 @@ def buy_photo_crypto(request, username):
     from django.conf import settings
     from django.shortcuts import redirect
     from security.middleware import get_qs
-    if not request.GET.get('crypto'): return redirect(request.path + '?' + get_qs(request.GET) + '&crypto={}'.format(settings.DEFAULT_CRYPTO))
+    if not request.GET.get('crypto'): return redirect(request.path + '?' + get_qs(request.GET) + '&crypto={}'.format(settings.DEFAULT_CRYPTO) + ('&lightning=t' if request.GET.get('lightning', None) else ''))
     crypto = request.GET.get('crypto')
     network = None if not request.GET.get('lightning', False) else 'lightning'
     from django.contrib.auth.models import User
@@ -1555,7 +1555,7 @@ def buy_photo_crypto(request, username):
             uid = Post.objects.filter(author=user, public=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid
         else:
             uid = Post.objects.filter(author=user, private=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid
-        return redirect(request.path + '?crypto={}&id={}'.format(crypto, uid))
+        return redirect(request.path + '?crypto={}&id={}'.format(crypto, uid) + ('&lightning=t' if request.GET.get('lightning', None) else ''))
     id = request.GET.get('id', None)
     post = Post.objects.filter(uuid=id).first()
     if not post:

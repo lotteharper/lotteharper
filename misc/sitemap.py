@@ -14,7 +14,7 @@ vendor_feeds = ['news']
 vendor_urls = ['/feed/grid/',
     '/feed/profile/',
     '/feed/follow/',
-    '/payments/photo/',
+    '/payments/photo/crypto/',
     '/payments/crypto/'
 ]
 
