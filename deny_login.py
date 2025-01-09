@@ -1,4 +1,3 @@
-ID = 2
 import os, sys
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
 import django

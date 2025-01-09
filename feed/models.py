@@ -85,6 +85,10 @@ class Post(models.Model):
 #    def likes(self):
 #        return Profile.objects.filter(likes__in=[self]).count()
 
+    def clone(self):
+        new_kwargs = dict([(fld.name, getattr(old, fld.name)) for fld in old._meta.fields if fld.name != old._meta.pk]);
+        return self.__class__.objects.create(**new_kwargs)
+
     def get_web_url(self):
         from django.conf import settings
         return '{}{}/media/images/{}.png'.format('https://', settings.STATIC_DOMAIN, self.uuid)
