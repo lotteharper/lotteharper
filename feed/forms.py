@@ -1,7 +1,6 @@
 from django import forms
 import datetime
 from .models import Post, Bid, Report
-from feed.middleware import get_current_request
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from django.conf import settings
 from django.utils import timezone
@@ -72,6 +71,7 @@ class PostForm(forms.ModelForm):
     price = forms.CharField(widget=forms.Select(choices=get_pricing()))
 
     def __init__(self, *args, **kwargs):
+        from feed.middleware import get_current_request
         request = get_current_request()
         super(PostForm, self).__init__(*args, **kwargs)
         if not self.instance: self.fields['price'].initial = get_current_request().user.vendor_profile.photo_tip[1:]
@@ -120,6 +120,7 @@ class ScheduledPostForm(forms.ModelForm):
     auction_message = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False)
 
     def __init__(self, *args, **kwargs):
+        from feed.middleware import get_current_request
         request = get_current_request()
         super(ScheduledPostForm, self).__init__(*args, **kwargs)
         if not self.instance: self.fields['price'].initial = get_current_request().user.vendor_profile.photo_tip[1:]
@@ -164,10 +165,13 @@ class UserBidForm(forms.ModelForm):
     user = None
     post = None
     def __init__(self, current, *args, **kwargs):
+        from feed.middleware import get_current_request
         request = get_current_request()
         super(UserBidForm, self).__init__(*args, **kwargs)
         bid_field = self.fields['bid']
-        bid_field.validators.append(MinValueValidator(current, message='Please enter a bid higher than the starting bid.'))
+        from translate.translate import translate
+        bid_field.validators.append(MinValueValidator(current, message=translate(get_current_request(), 'Please enter a bid higher than the starting bid.')))
+        self.fields['bid'].label = translate(get_current_request(), 'Your bid')
 
     class Meta:
         model = Bid
@@ -180,10 +184,13 @@ class BidForm(forms.ModelForm):
     email = forms.EmailField(required=True)
     post = None
     def __init__(self, current, *args, **kwargs):
+        from feed.middleware import get_current_request
         request = get_current_request()
         super(BidForm, self).__init__(*args, **kwargs)
         bid_field = self.fields['bid']
-        bid_field.validators.append(MinValueValidator(current, message='Please enter a bid higher than the starting bid.'))
+        from translate.translate import translate
+        bid_field.validators.append(MinValueValidator(current, message=translate(get_current_request(), 'Please enter a bid higher than the starting bid.')))
+        self.fields['bid'].label = translate(get_current_request(), 'Your bid')
 
     class Meta:
         model = Bid
@@ -198,7 +205,6 @@ class ReportForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReportForm, self).__init__(*args, **kwargs)
 #        self.fields['text'].widget.attrs['maxlength'] = max_field_size
-
     class Meta:
         model = Report
         fields = ('uid', 'text',)

@@ -54,7 +54,7 @@
     {% endif %}
     {% if post.file_bucket %}
     {% if post.paid_file and not request.user in post.paid_users.all and post.file_bucket.name|filetype == 'docx' or post.file_bucket.name|filetype == 'pdf' or post.file_bucket.name|filetype == 'zip' %}
-    <p>This post contains a paid file in .{{ post.file_bucket.name|filetype }} format. Please buy the post in order to download the file.</p>
+    <p> {{ 'This post contains a paid downloadable file in'|etrans }} .{{ post.file_bucket.name|filetype }} {{ 'format. Please buy the post in order to download the file.'|etrans }}</p>
     {% elif post.paid_file and not request.user in post.paid_users.all %}
     <p>Please buy this post to hear the full version of the audio.</p>
     <audio controls style="width: 100%;" preload="metadata" id="audio{{ post.id }}" apid="{{ post.id }}" page="{% if request.GET.page %}{{ request.GET.page }}{% else %}{{ num_pages }}{% endif %}">
@@ -62,7 +62,7 @@
 	Your browser does not support the audio element.
     </audio>
     {% elif not post.paid_file or request.user in post.paid_users.all %}
-    <p>This post contains a downloadable file in .{{ post.file_bucket.name|filetype }} format. <a title="Download this file" href="{{ post.get_file_url}}" class="btn btn-outline-danger btn-sm">Download</a></p>
+    <p>{{ 'This post contains a downloadable file in'|etrans }} .{{ post.file_bucket.name|filetype }} {{ 'format'|etrans }}. <a title="Download this file" href="{{ post.get_file_url}}" class="btn btn-outline-danger btn-sm">Download</a></p>
     {% elif post.file_bucket.name|filetype == 'mp3' %}
     <audio controls style="width: 100%;" preload="metadata" id="audio{{ post.id }}" apid="{{ post.id }}" page="{% if request.GET.page %}{{ request.GET.page }}{% else %}{{ num_pages }}{% endif %}">
   	<source src="{{ post.get_file_url }}" type="audio/mpeg">
@@ -101,7 +101,7 @@
         {% if post.has_auction %}
         <a href="{% url 'feed:auction' post.friendly_name %}" title="{{ 'Bid on this post'|trans }}"><button type="button" class="btn btn-primary"><i class="bi bi-currency-dollar"></i> {{ 'Bid'|etrans }}</button></a>
         {% else %}
-        <button class="btn btn-outline-primary" title="Add this to your cart" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }}</button>
+        <button class="btn btn-outline-primary" title="{{ 'Add this to your cart'|etrans }}" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }}</button>
 {% if not post.private %}        <a href="{% url 'payments:buy-photo-card' post.author.profile.name %}?id={{ post.uuid }}" title="{{ 'Buy this photo'|trans }}"><button type="button" class="btn btn-primary"><i class="bi bi-currency-dollar"></i> {{ 'Buy'|etrans }}</button></a>{% endif %}
         <a href="{% url 'payments:buy-photo-crypto' post.author.profile.name %}?id={{ post.uuid }}&crypto={{ default_crypto }}" title="{{ 'Buy this photo'|trans }}"><button type="button" class="btn btn-primary"><i class="bi bi-currency-bitcoin"></i> {{ 'Buy'|etrans }}</button></a>
         {% endif %}

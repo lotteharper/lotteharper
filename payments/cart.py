@@ -44,6 +44,7 @@ def get_cart_cost(cookies, private=False):
             quant = s[1]
         except: quant = 1
         post = Post.objects.filter(uuid=uid, date_auction__lte=timezone.now()).first()
+        p = post
         if p:
             if (not p.private) or (p.private and private):
                 price = price + ((float(p.price) * (quant if settings.ALLOW_MULTIPLE_SALES else 1)) if ((p and (not p.private)) or (p.private and private)) else 0)
