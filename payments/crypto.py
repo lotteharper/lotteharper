@@ -55,6 +55,7 @@ def get_lightning_address(model, currency, amount, ln=True, tip=False):
 
 def get_payment_address(model, currency, amount, tip=False):
     if currency == 'BTC': return get_lightning_address(model, currency, amount, ln=False, tip=tip)
+    if currency == 'ALPH': currency = 'ETH'
     global addresses
     from django.utils import timezone
     request = get_current_request()

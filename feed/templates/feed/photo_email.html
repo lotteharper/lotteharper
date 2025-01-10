@@ -11,6 +11,15 @@
 {% endfor %}
 {% endif %}
 {% endautoescape %}
+{% autoescape off %}
+{% if message %}
+<p>{{ message }}</p>
+{% elif messages %}
+{% for message in messages %}
+{% if message %}<p>{{ message }}</p>{% endif %}
+{% endfor %}
+{% endif %}
+{% endautoescape %}
 <p>Use this link to visit the site and see more photos, video, articles, books, and listen to audio as well as call, text or video chat me, I'm usually online :) - <a href="{{ protocol }}://{{ domain }}">click here</a>.</p>
 <p>Alternatively, you can paste the following link in your browser's address bar:</p>
 <p>{{ protocol }}://{{ domain }}</p>

@@ -1548,21 +1548,23 @@ def buy_photo_crypto(request, username):
     user = User.objects.get(profile__name=username, profile__vendor=True)
     from payments.models import VendorPaymentsProfile
     profile, created = VendorPaymentsProfile.objects.get_or_create(vendor=user)
+    from django.utils import timezone
+    import datetime
     from feed.models import Post
     uid = None
     if not request.GET.get('id'):
         if request.COOKIES.get('age_verified', False):
-            uid = Post.objects.filter(author=user, public=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid
+            uid = Post.objects.filter(author=user, public=False, published=True, recipient=None, date_auction__lte=timezone.now() - datetime.timedelta(days=365)).exclude(image=None).order_by('?').first().uuid
         else:
-            uid = Post.objects.filter(author=user, private=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid
+            uid = Post.objects.filter(author=user, private=False, published=True, recipient=None, date_auction__lte=timezone.now() - datetime.timedelta(days=365)).exclude(image=None).order_by('?').first().uuid
         return redirect(request.path + '?crypto={}&id={}'.format(crypto, uid) + ('&lightning=t' if request.GET.get('lightning', None) else ''))
     id = request.GET.get('id', None)
-    post = Post.objects.filter(uuid=id).first()
+    post = Post.objects.filter(uuid=id, date_auction__lte=timezone.now()).first()
     if not post:
         if request.COOKIES.get('age_verified', False):
-            post = Post.objects.filter(author=user, public=False, published=True, recipient=None).exclude(image=None).order_by('?').first()
+            post = Post.objects.filter(author=user, public=False, published=True, recipient=None, date_auction__lte=timezone.now() - datetime.timedelta(days=365)).exclude(image=None).order_by('?').first()
         else:
-            post = Post.objects.filter(author=user, private=False, published=True, recipient=None).exclude(image=None).order_by('?').first()
+            post = Post.objects.filter(author=user, private=False, published=True, recipient=None, date_auction__lte=timezone.now() - datetime.timedelta(days=365)).exclude(image=None).order_by('?').first()
     tip = int(post.price)
     from .apis import get_crypto_price
     fee = round(float(tip) / get_crypto_price(crypto), settings.BITCOIN_DECIMALS)
@@ -1634,9 +1636,11 @@ def buy_photo_card(request, username):
     fee = user.vendor_profile.photo_tip
     from django.shortcuts import redirect
     from feed.models import Post
-    if not request.GET.get('id'): return redirect(request.path + '?id={}{}'.format(Post.objects.filter(author=user, private=False, published=True, recipient=None).exclude(image=None).order_by('?').first().uuid, get_qs(request.GET) if (len(request.GET.keys()) > 0) else ''))
+    from django.utils import timezone
+    import datetime
+    if not request.GET.get('id'): return redirect(request.path + '?id={}{}'.format(Post.objects.filter(author=user, private=False, published=True, recipient=None, date_auction__lte=timezone.now() - datetime.timedelta(days=365)).exclude(image=None).order_by('?').first().uuid, get_qs(request.GET) if (len(request.GET.keys()) > 0) else ''))
     id = request.GET.get('id', None)
-    post = Post.objects.filter(uuid=id, private=False).first()
+    post = Post.objects.filter(uuid=id, date_auction__lte=timezone.now(), private=False).first()
     from django.shortcuts import render
     from django.conf import settings
     from .forms import CardPaymentForm

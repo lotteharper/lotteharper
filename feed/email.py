@@ -14,6 +14,7 @@ def send_photo_email(user, post):
         'protocol': 'https',
         'photos': [photo_url],
         'model_name': post.author.profile.name,
+        'message': post.auction_message if post.date_auction > timezone.now() - datetime.timedelta(days=31*3) else 'Thank you again for your purchase.',
     })
     import os
     if post.file and not os.path.exists(post.file.path): post.download_file()
@@ -34,6 +35,7 @@ def send_photos_email(user, posts):
     authenticated = document_scanned(user)
     print(posts)
     import os
+    messages = []
     for photo in posts:
         if photo.file and not os.path.exists(photo.file.path): photo.download_file()
         if authenticated and (photo.private or not photo.public):
@@ -42,6 +44,10 @@ def send_photos_email(user, posts):
         elif not (photo.private or not photo.public):
             if photo.image: photo_urls = photo_urls + [photo.get_image_url()]
             if photo.file: files = files + [photo.file.path]
+        post = photo
+        if post.date_auction > timezone.now() - datetime.timedelta(days=31*3):
+            messages = messages + [post.auction_message]
+    if not messages: messages[0] = 'Thank you again for your purchase.'
     html_message = render_to_string('feed/photo_email.html', {
         'site_name': settings.SITE_NAME,
         'user': user,
@@ -49,6 +55,7 @@ def send_photos_email(user, posts):
         'protocol': 'https',
         'photos': photo_urls,
         'model_name': posts[0].author.profile.name,
+        'messages': messages,
     })
     att = files
     send_html_email(user, 'Your Items From {}, {}'.format(settings.SITE_NAME, user.username), html_message, attachments=att)

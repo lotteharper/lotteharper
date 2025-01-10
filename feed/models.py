@@ -78,6 +78,7 @@ class Post(models.Model):
     confirmation_id = models.TextField(blank=True)
     friendly_name = models.CharField(default='', null=True, blank=True, max_length=512)
     date_auction = models.DateTimeField(default=get_auction_end)
+    auction_message = models.TextField(blank=True)
     paid_file = models.BooleanField(default=False)
     paid_users = models.ManyToManyField(User, related_name='paid_posts', blank=True)
     history = HistoricalRecords()

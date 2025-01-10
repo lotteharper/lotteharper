@@ -869,3 +869,8 @@ def scoretotal(player):
             total = total + (game.player2_score)
         except: pass
     return total
+
+@register.filter('fixalph')
+def fixalph(currency):
+    if currency == 'ALPH': return 'ETH'
+    return currency

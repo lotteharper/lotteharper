@@ -4,6 +4,7 @@ from .models import Post, Bid, Report
 from feed.middleware import get_current_request
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from django.conf import settings
+from django.utils import timezone
 
 def sub_fee(fee):
     import math
@@ -115,6 +116,8 @@ class ScheduledPostForm(forms.ModelForm):
         ('100', '$100'),
     )
     price = forms.CharField(widget=forms.Select(choices=get_pricing()))
+    date_auction = forms.DateField(initial=timezone.now() - datetime.timedelta(days=365), widget=forms.DateInput(attrs={'type': 'date'})) #auto_now=True, auto_now_add=True)
+    auction_message = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False)
 
     def __init__(self, *args, **kwargs):
         request = get_current_request()
@@ -128,6 +131,9 @@ class ScheduledPostForm(forms.ModelForm):
             self.fields['file'].widget.attrs.update({'accept': 'video/*', 'capture': 'user'})
         if request.GET.get('audio'):
             self.fields['file'].widget.attrs.update({'accept': 'audio/*', 'capture': 'user'})
+        if self.instance and not self.instance.date_auction > timezone.now() - datetime.timedelta(days=365):
+            self.fields['auction_message'].widget = forms.HiddenInput()
+        self.fields['date_auction'].label = 'Auction date'
         if self.instance and self.instance.private:
             qs = []
             if self.instance.recipient:
@@ -141,16 +147,15 @@ class ScheduledPostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file')
+        fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file', 'date_auction', 'auction_message')
 
 class UpdatePostForm(ScheduledPostForm):
     image = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}))
     file = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}))
-    date_auction = forms.DateField(initial=datetime.date.today, widget=forms.DateInput(attrs={'type': 'date'})) #auto_now=True, auto_now_add=True)
 
     class Meta:
         model = Post
-        fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file', 'date_auction')
+        fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file', 'date_auction', 'auction_message')
 
 from django.core.validators import MinValueValidator
 

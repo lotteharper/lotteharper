@@ -3,6 +3,7 @@ import requests, json
 prices = {}
 
 def get_crypto_price(crypto):
+    if crypto == 'ALPH': crypto = 'ETH'
     global prices
     from django.utils import timezone
     if crypto in prices:
@@ -14,6 +15,8 @@ def get_crypto_price(crypto):
     url = "https://api.nowpayments.io/v1/estimate?amount=1.0&currency_from={}&currency_to=usd".format(crypto)
     data = requests.get(url, headers={'x-api-key': settings.NOWPAYMENTS_KEY, 'Content-Type': 'application/json; charset=utf-8'})
     data = data.json()
+    import json
+    print(json.dumps(data))
     try:
         price =  float(data['estimated_amount'])
         prices[crypto] = (price, timezone.now())

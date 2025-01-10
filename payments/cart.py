@@ -1,11 +1,12 @@
 def process_cart_purchase(user, cart, private=False):
+    from django.utils import timezone
     from feed.models import Post
     posts = []
     for item in cart.replace('+', ',').split(','):
         s = item.split('=')
         uid = s[0]
         quant = s[1]
-        post = Post.objects.filter(uuid=uid).first()
+        post = Post.objects.filter(uuid=uid, date_auction__lte=timezone.now()).first()
         if not post.private:
             if not post.paid_file:
                 post.recipient = user
@@ -26,6 +27,7 @@ def process_cart_purchase(user, cart, private=False):
     send_photos_email(user, posts)
 
 def get_cart_cost(cookies, private=False):
+    from django.utils import timezone
     from feed.models import Post
     items = ''
     try: items = cookies['cart'].replace('+', ',').split(',') if 'cart' in cookies else cookies.split(',')
@@ -41,13 +43,14 @@ def get_cart_cost(cookies, private=False):
         try:
             quant = s[1]
         except: quant = 1
-        p = Post.objects.filter(uuid=uid).first()
+        post = Post.objects.filter(uuid=uid, date_auction__lte=timezone.now()).first()
         if p:
             if (not p.private) or (p.private and private):
                 price = price + ((float(p.price) * (quant if settings.ALLOW_MULTIPLE_SALES else 1)) if ((p and (not p.private)) or (p.private and private)) else 0)
     return price
 
 def get_cart(cookies, private=False):
+    from django.utils import timezone
     from feed.models import Post
     items = ''
     try: items = cookies['cart'].replace('+', ',').split(',') if 'cart' in cookies else []
@@ -66,7 +69,7 @@ def get_cart(cookies, private=False):
         try:
             quant = s[1]
         except: quant = 1
-        post = Post.objects.filter(uuid=uid).first()
+        post = Post.objects.filter(uuid=uid, date_auction__lte=timezone.now()).first()
         if post:
             image = post.get_image_thumb_url() if not post.private else post.get_blur_thumb_url()
             print(uid)

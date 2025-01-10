@@ -106,10 +106,10 @@ def auction(request, id):
                 sendwelcomeemail(user)
             elif not valid:
                 messages.warning(request, 'Invalid or undeliverable email, please check the email and try again')
-                return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.last().bid if post.bids.count() else settings.MIN_BID + 1, initial={'bid': settings.MIN_BID + 1 if not post.bids.count() else post.bids.last() + 1}) if request.user.is_authenticated else BidForm(post.bids.last().bid if post.bids.count() else settings.MIN_BID + 1, initial={'bid': settings.MIN_BID + 1 if not post.bids.count() else post.bids.last() + 1}), 'current_bid': post.bids.last().bid if post.bids.count() else settings.MIN_BID, 'small': True, 'post': post})
+                return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}) if request.user.is_authenticated else BidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}), 'current_bid': post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), 'small': True, 'post': post})
             elif not safe:
                 messages.warning(request, 'You are using a risky IP address, and your contact request has been denied.')
-                return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.last().bid if post.bids.count() else settings.MIN_BID + 1, initial={'bid': settings.MIN_BID + 1 if not post.bids.count() else post.bids.last() + 1}) if request.user.is_authenticated else BidForm(post.bids.last().bid if post.bids.count() else settings.MIN_BID + 1, initial={'bid': settings.MIN_BID + 1 if not post.bids.count() else post.bids.last() + 1}), 'current_bid': post.bids.last().bid if post.bids.count() else settings.MIN_BID, 'small': True, 'post': post})
+                return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}) if request.user.is_authenticated else BidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}), 'current_bid': post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), 'small': True, 'post': post})
             us = User.objects.filter(email=e).last()
             try:
                 if (post.bids.last().bid if post.bids.count() else settings.MIN_BID) < int(form.cleaned_data['bid']):
@@ -123,7 +123,7 @@ def auction(request, id):
                 print(traceback.format_exc())
                 messages.warning(request, 'Your bid failed.')
         else: messages.warning(request, str(form.errors))
-    return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.last().bid if post.bids.count() else settings.MIN_BID + 1, initial={'bid': settings.MIN_BID + 1 if not post.bids.count() else post.bids.last() + 1}) if request.user.is_authenticated else BidForm(post.bids.last().bid if post.bids.count() else settings.MIN_BID + 1, initial={'bid': settings.MIN_BID + 1 if not post.bids.count() else post.bids.last() + 1}), 'current_bid': post.bids.last().bid if post.bids.count() else settings.MIN_BID, 'small': True, 'post': post})
+    return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}) if request.user.is_authenticated else BidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}), 'current_bid': post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), 'small': True, 'post': post})
 
 @csrf_exempt
 @login_required
@@ -692,7 +692,7 @@ def post_detail(request, uuid):
     post = Post.objects.filter(friendly_name=uuid).order_by('-date_posted').first()
     if not post:
         post = Post.objects.filter(friendly_name__icontains=uuid[:32]).order_by('-date_posted').first()
-    if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and post.private) and post.author != request.user and not post.recipient == request.user) or (post.secure or (not post.public)) and not (request.user.is_authenticated and document_scanned(request.user)):
+    if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and post.private) and post.author != request.user and not post.recipient == request.user) or (post.secure or (post.private)) and not (request.user.is_authenticated and document_scanned(request.user)):
         from django.urls import reverse
         from django.shortcuts import redirect
         from django.conf import settings
