@@ -1,16 +1,13 @@
-import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-import re
-import os
-import sys
+import json
 import select
 import paramiko
 import time
+import asyncio
 from django.conf import settings
 import threading, multiprocessing
 from django.contrib.auth.models import User
 from asgiref.sync import sync_to_async
-import asyncio
 from security.models import Session
 from errors.highlight import highlight_code, highlight_shell
 from shell.run import shell_fix
@@ -75,7 +72,7 @@ def terminal_thread(self, channel):
             if channel.recv_ready():
                 rl, wl, xl = select.select([ channel ], [ ], [ ], 0.0)
                 if len(rl) > 0:
-                    tmp = channel.recv(99999)
+                    tmp = channel.recv(9999)
                     output = output + tmp.decode()
                     read = True
                     asyncio.sleep(0.05)

@@ -49,4 +49,5 @@ languages = ['en',
     'uk',
     'vi',
     'zu',
+    'sq',
 ]

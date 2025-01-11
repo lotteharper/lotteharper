@@ -31,5 +31,6 @@
     <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=uk">українська</a>
     <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=vi">Tiếng Việt</a>
     <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=zu">Zulu</a>
+    <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=sq">shqiptare</a>
   </div>
 </div>

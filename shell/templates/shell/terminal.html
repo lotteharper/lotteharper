@@ -285,9 +285,11 @@ const term = new Terminal({
 	cols: cols,
 	rows: rows,
 	cursorBlink: true,
+    rightClickSelectsWord: true,
+    macOptionClickForcesSelection: true,
 	macOptionIsMeta: true,
 	scrollback: 9999999,
-/*    windowsMode: true,*/
+    windowsMode: true,
     focusOnMouse: false,
     rendererType: 'dom'
 });

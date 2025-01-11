@@ -15,7 +15,7 @@
 {% include 'language.html' %}
 </div>
 {% if user.is_authenticated and post.author == user or user.is_superuser %}
-<a style="float: right;" href="{% url 'feed:post-delete' pk=post.id %}" title="Delete this post"><button type="button" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i> Delete</button></a>
+<a style="float: right;" href="{% url 'feed:post-delete' pk=post.id %}" title="{{ 'Delete this post'|etrans }}"><button type="button" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i> {{ 'Delete'|etrans }}</button></a>
 {% endif %}
 <h1>{{ pagetitle|trans }}</h1>
 <hr>
