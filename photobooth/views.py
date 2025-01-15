@@ -26,7 +26,7 @@ def photo(request, camera):
         'icon': settings.BASE_URL + settings.ICON_URL,
         'url': settings.BASE_URL + request.path +"?time=" + request.GET.get('time', '5'),
     }
-    from pwa_webpush import send_user_notification
+    from webpush import send_user_notification
     try:
         send_user_notification(request.user, payload=payload)
     except: pass

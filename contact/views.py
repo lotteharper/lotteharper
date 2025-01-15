@@ -26,7 +26,7 @@ def send_contact_push(name):
     from security.apis import get_client_ip
     from security.apis import check_raw_ip_risk
     from django.conf import settings
-    from pwa_webpush import send_user_notification
+    from webpush import send_user_notification
     payload = {
         'head': 'New contact on {}'.format(settings.SITE_NAME),
         'body': 'Meet the new contact, "{}", on {}'.format(name, settings.SITE_NAME),

@@ -103,7 +103,7 @@ def message(request, id):
 def notify_user(user, from_email, subject, body):
     from django.conf import settings
     payload = {"head": 'New Mail ({}) - {}'.format(from_email, subject), "body": body[:200] + '' if len(body) <= 200 else '...', "url": settings.BASE_URL + '/mail/message/0/', 'icon': '{}{}'.format(settings.BASE_URL, settings.ICON_URL)}
-    from pwa_webpush import send_user_notification
+    from webpush import send_user_notification
     send_user_notification(user=user, payload=payload, ttl=1000)
 
 def update_notify():

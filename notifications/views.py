@@ -21,8 +21,9 @@ def send_guest_notification(request):
             post = Post.objects.filter(id__in=posts).order_by('?').first()
             payload = {"head": form.cleaned_data.get('head', 'Visit {}'.format(settings.SITE_NAME)), "body": form.cleaned_data.get('body', 'Enjoy your time with {}'.format(settings.SITE_NAME)), 'icon': post.get_face_blur_thumb_url(), 'url': settings.BASE_URL if not url else url}
             messages.success(request, 'Successful push notification - {}'.format(form.cleaned_data.get('head')))
-            from pwa_webpush import send_group_notification
+            from webpush import send_group_notification
+            import traceback
             try:
                 send_group_notification(group_name="guests", payload=payload, ttl=1000)
-            except: pass
+            except: print(traceback.format_exc())
     return render(request, 'notifications/send.html', {'title': 'Send Notification', 'form': NotificationForm()})

@@ -12,7 +12,7 @@ class CryptoTradingProfile(models.Model):
 def notify_user(user, message):
     from django.conf import settings
     payload = {"head": '[Crypto] {}'.format(message), "url": settings.BASE_URL + '/crypto/', 'icon': '{}{}'.format(settings.BASE_URL, settings.ICON_URL)}
-    from pwa_webpush import send_user_notification
+    from webpush import send_user_notification
     send_user_notification(user=user, payload=payload, ttl=1000)
 
 class Bot(models.Model):

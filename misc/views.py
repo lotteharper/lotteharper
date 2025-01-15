@@ -5,6 +5,16 @@ from vendors.tests import is_vendor
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 
+@cache_page(60*60*24*30)
+def webmanifest(request):
+    from django.shortcuts import render
+    return render(request, 'misc/site.webmanifest', {})
+
+@cache_page(60*60*24*30)
+def serviceworker(request):
+    from django.shortcuts import render
+    return render(request, 'misc/serviceworker.js', {})
+
 def map(request):
     from django.shortcuts import render
     from security.models import UserIpAddress, Session
@@ -13,7 +23,6 @@ def map(request):
     for ip in UserIpAddress.objects.all():
         if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude, ip.timestamp.strftime("%m/%d/%Y at %H:%M:%S"), ip.page_loads)];
     return render(request, 'misc/map.html', {'title': 'Visitor Map', 'latlngs': latlngs, 'maps_api_key': settings.GOOGLE_API_KEY})
-
 
 @cache_page(60*60*24*30)
 def adstxt(request):

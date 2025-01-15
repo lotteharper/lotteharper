@@ -86,7 +86,7 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
 #    path('', include('pwa_webpush.urls')),
-    path('webpush/', include('webpush.urls'))
+    path('webpush/', include('webpush.urls')),
     path('summernote/', include('django_summernote.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('allauth.socialaccount.urls')),

@@ -1,5 +1,5 @@
 def routine_push():
-    from pwa_webpush import send_group_notification
+    from webpush import send_group_notification
     from feed.models import Post
     from django.conf import settings
     posts = Post.objects.filter(author__id=settings.MY_ID, enhanced=True, private=False, public=True, published=True, recipient=None).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]

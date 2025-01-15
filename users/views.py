@@ -419,7 +419,7 @@ def profile(request):
         'p_form': p_form,
         'title':'Update Your Profile',
         'medium': True,
-        'webpush_override': True
+        'webpush': {},
     }
     from django.shortcuts import render
     return render(request, 'users/profile.html', context)
@@ -460,7 +460,7 @@ def set_user_cookie(response):
 
 
 def send_registration_push(user):
-    from pwa_webpush import send_user_notification
+    from webpush import send_user_notification
     from django.conf import settings
     from django.urls import reverse
     from django.contrib.auth.models import User

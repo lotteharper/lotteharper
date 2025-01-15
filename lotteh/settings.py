@@ -101,7 +101,7 @@ INSTALLED_APPS = [
 #    'hot',
     'survey',
 #    'mfa',
-    'pwa_webpush',
+#    'pwa_webpush',
     'webpush',
     'notifications',
     'storages',

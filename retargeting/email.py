@@ -7,7 +7,7 @@ def send_retargeting_email():
     from datetime import timedelta
     from django.conf import settings
     from django.template.loader import render_to_string
-    from pwa_webpush import send_group_notification
+    from webpush import send_group_notification
     from users.tfa import send_user_text
     from feed.models import Post
 
@@ -32,7 +32,7 @@ def send_retargeting_emails():
     from datetime import timedelta
     from django.conf import settings
     from django.template.loader import render_to_string
-    from pwa_webpush import send_group_notification
+    from webpush import send_group_notification
     from users.tfa import send_user_text
     from feed.models import Post
 

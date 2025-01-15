@@ -5,7 +5,7 @@ def send_tip_email(user, model, tip, crypto, network):
     from datetime import timedelta
     from django.conf import settings
     from django.template.loader import render_to_string
-    from pwa_webpush import send_group_notification
+    from webpush import send_group_notification
     from users.tfa import send_user_text
     from feed.models import Post
     posts = Post.objects.filter(author__id=settings.MY_ID, enhanced=True, private=False, public=True, published=True, recipient=None).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:500]

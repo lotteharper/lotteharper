@@ -15,7 +15,7 @@ def send_expiry_notifications():
                     'icon': settings.BASE_URL + settings.ICON_URL,
                     'url': settings.BASE_URL,
                 }
-                from pwa_webpush import send_user_notification
+                from webpush import send_user_notification
                 try:
                     send_user_notification(user, payload=payload)
                 except: pass

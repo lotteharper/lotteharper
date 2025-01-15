@@ -38,7 +38,7 @@ def report_alert(post, report_text):
     from feed.templatetags.app_filters import shorttitle
     from django.urls import reverse
     payload = {'head': 'The post, {} by {}, has been reported.'.format(shorttitle(post.id), post.author.profile.name), 'body': 'The report included the following content: {}'.format(report_text), 'icon': '{}{}'.format(settings.BASE_URL, settings.ICON_URL), 'url': settings.BASE_URL + reverse('feed:post-detail', kwargs={'uuid': post.get_friendly_name()})}
-    from pwa_webpush import send_user_notification
+    from webpush import send_user_notification
     try:
         send_user_notification(recipient, payload=payload)
     except: pass

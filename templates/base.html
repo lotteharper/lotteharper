@@ -1,4 +1,4 @@
-{% load static %}{% load app_filters %}{% load feed_filters %}{% load filters %}{% linebreakless %}{% load webpush_notifications %}{% load pwa_webpush %}
+{% load static %}{% load app_filters %}{% load feed_filters %}{% load filters %}{% linebreakless %}{% load webpush_notifications %}
 <!DOCTYPE html>
 <html lang="{{ lang }}">
     <head>
@@ -9,9 +9,9 @@
         {% include 'gtmhead.html' %}
         {% endif %}
         {% if not request.path == '/verify/age/' %}
-        {% progressive_web_app_meta %}
         {% webpush_header %}
         {% endif %}
+        <link rel="manifest" href="/site.webmanifest">
         <meta name="f0f15e690a68424771b0e8f902af3e12e24c2368" content="f0f15e690a68424771b0e8f902af3e12e24c2368"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -253,6 +253,14 @@
         {% if activate_mining and request.path != '/crypto/miner/' %}
         {% include 'miner.html' %}
         {% endif %}
+        <script>
+            if (navigator.serviceWorker) {
+                navigator.serviceWorker.register (
+                    '/serviceworker.js',
+                    {scope: '/'}
+                )
+            }
+        </script>
     </body>
 </html>
 {% endlinebreakless %}
