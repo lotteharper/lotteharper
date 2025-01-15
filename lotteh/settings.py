@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     'survey',
 #    'mfa',
     'pwa_webpush',
+    'webpush',
     'notifications',
     'storages',
     'synthesizer',
