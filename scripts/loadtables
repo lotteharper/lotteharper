@@ -30,5 +30,6 @@ python manage.py loaddata data/chat.json
 python manage.py loaddata data/survey.json
 python manage.py loaddata data/crypto.json
 python manage.py loaddata data/birthcontrol.json
+python manage.py loaddata data/webpush.json
 rm data/security.json
 rm data/users-new.json
