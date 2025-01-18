@@ -41,7 +41,7 @@ class DummyRequest():
 def get_request(reqlist):
     return DummyRequest(reqlist)
 
-def fraud_detect(request, hard=False, dummy=False):
+def fraud_detect(request, hard=False, dummy=False, soft=False):
     if isinstance(request, list): request = get_request(request)
     if dummy: return False
     risk_detected = None
@@ -101,4 +101,4 @@ def fraud_detect(request, hard=False, dummy=False):
         Error.objects.create(user=request.user if request.user.is_authenticated else None, stack_trace=get_current_exception(), notes='Logged by security middleware.')
         set_current_exception(traceback.format_exc())
         print(traceback.format_exc())
-    return risk_detected
+    return risk_detected if (not soft) or hard else False

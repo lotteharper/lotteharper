@@ -32,6 +32,8 @@ class VendorProfile(models.Model):
     hide_profile = models.BooleanField(default=False)
     payout_currency = models.CharField(max_length=10, default='BTC', null=True, blank=True)
     payout_address = models.CharField(max_length=300, default='', null=True, blank=True)
+    bitcoin_address = models.CharField(max_length=300, default='', null=True, blank=True)
+    ethereum_address = models.CharField(max_length=300, default='', null=True, blank=True)
     pitch_adjust = models.IntegerField(default=0)
     address = AddressField(null=True, blank=True)
     insurance_provider = models.CharField(max_length=300, default='', null=True, blank=True)

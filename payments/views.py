@@ -177,7 +177,7 @@ def cart_crypto(request):
         from lotteh.celery import validate_cart_payment
         cart_cookie = request.COOKIES.get('cart') if 'cart' in request.COOKIES else None
         validate_cart_payment.apply_async(timeout=60*15, args=(request.user.id, user.id, float(fee_reduced) if float(fee_reduced) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced),transaction_id,cart_cookie,crypto,network),)
-    r = render(request, 'payments/cart_crypto.html', {'title': 'Checkout with Crypto', 'crypto_address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'cart_contents': get_cart(request.COOKIES, private=True), 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False, 'cart': request.COOKIES.get('cart', '').replace(',','+')})
+    r = render(request, 'payments/cart_crypto.html', {'title': 'Checkout with Crypto', 'crypto_address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'cart_contents': get_cart(request.COOKIES, private=True), 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False, 'cart': request.COOKIES.get('cart', '').replace(',','+'), 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address})
     if request.GET.get('cart', False):
         set_cart(r, combine_cart(request.COOKIES.get('cart', ''), request.GET.get('cart', '').replace('+',',').replace(' ', ',')))
     return r
@@ -1495,7 +1495,7 @@ def subscribe_bitcoin(request, username):
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     from django.shortcuts import render
-    return render(request, 'payments/subscribe_crypto.html', {'title': 'Subscribe with Crypto', 'model': user.profile, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False})
+    return render(request, 'payments/subscribe_crypto.html', {'title': 'Subscribe with Crypto', 'model': user.profile, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address})
 
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
@@ -1532,7 +1532,7 @@ def tip_bitcoin(request, username, tip):
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     from django.shortcuts import render
-    return render(request, 'payments/tip_crypto.html', {'title': 'Tip with Crypto', 'username': username, 'crypto_address': address, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced)}), 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'load_timeout': None, 'preload': False})
+    return render(request, 'payments/tip_crypto.html', {'title': 'Tip with Crypto', 'username': username, 'crypto_address': address, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced)}), 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address})
 
 #@vary_on_cookie
 #@cache_page(60*60*3)
@@ -1620,7 +1620,7 @@ def buy_photo_crypto(request, username):
     if request.user.is_authenticated:
         from lotteh.celery import validate_photo_payment
         validate_photo_payment.apply_async(timeout=60*5, args=(request.user.id, user.id, float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE, transaction_id, id, crypto, network),)
-    r = render(request, 'payments/buy_photo_crypto.html', {'title': 'Buy this item with Crypto', 'username': username, 'crypto_address': address, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'load_timeout': None, 'preload': False})
+    r = render(request, 'payments/buy_photo_crypto.html', {'title': 'Buy this item with Crypto', 'username': username, 'crypto_address': address, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address})
 #    if request.user.is_authenticated: patch_cache_control(r, private=True)
 #    else: patch_cache_control(r, public=True)
     return r
@@ -1706,7 +1706,7 @@ def tip_crypto_simple(request, username):
     profile, created = VendorPaymentsProfile.objects.get_or_create(vendor=user)
     from payments.crypto import get_payment_address
     from payments.apis import get_crypto_price
-    fee = float(10000 if not request.GET.get('tip', None) else request.GET.get('tip')) / get_crypto_price(crypto)
+    fee = float(100 if not request.GET.get('tip', None) else request.GET.get('tip')) / get_crypto_price(crypto)
     fee_reduced = format(float(fee), '.{}f'.format(settings.BITCOIN_DECIMALS)) #fee.split('.')[0] + '.' + fee.split('.')[1][:settings.BITCOIN_DECIMALS]
     from payments.crypto import get_payment_address, get_lightning_address
     if request.GET.get('lightning', None) and crypto != 'BTC': return redirect(request.path + '?lightning=t&crypto=BTC')
@@ -1757,7 +1757,7 @@ def tip_crypto_simple(request, username):
     from lotteh.celery import validate_tip_payment
     if request.user.is_authenticated: validate_tip_payment.apply_async(timeout=60*10, args=(request.user.id, user.id, float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE, transaction_id,crypto,network),)
     from django.shortcuts import render
-    r = render(request, 'payments/tip_crypto_simple.html', {'title': 'Send a Tip in Crypto', 'usd_fee': request.GET.get('tip', None), 'crypto_fee': fee_reduced, 'address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'post': post, 'load_timeout': None, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id})})
+    r = render(request, 'payments/tip_crypto_simple.html', {'title': 'Send a Tip in Crypto', 'usd_fee': request.GET.get('tip', None), 'crypto_fee': fee_reduced, 'address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'post': post, 'load_timeout': None, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address, 'usd_fee': fee})
 #    if request.user.is_authenticated: patch_cache_control(r, private=True)
 #    else: patch_cache_control(r, public=True)
     return r
@@ -1825,4 +1825,4 @@ def surrogacy_crypto(request, username):
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     from django.shortcuts import render
-    return render(request, 'payments/surrogacy_crypto.html', {'title': 'Pay with Crypto', 'model': user.profile, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False})
+    return render(request, 'payments/surrogacy_crypto.html', {'title': 'Pay with Crypto', 'model': user.profile, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': settings.CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address})

@@ -3,6 +3,8 @@
 {% load app_filters %} 
 {% block head %}
 <script type="text/javascript" src="/static/qrcode.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://crypto-js.stripe.com/crypto-onramp-outer.js"></script>
 {% endblock %}
 {% block content %} 
 <div id="container rounded bg-white shadow col-md-6 mx-auto">
@@ -41,11 +43,12 @@
 <li>{{ 'One private'|etrans }} {% if not post.file %}{{ 'photo'|etrans }}{% else %}{{ 'download, video or audio'|etrans }}{% endif %} {{ 'featuring'|etrans }} {{ username }} (${{ usd_fee|sub_fee }})</li>
 <li>Billed once only.</li>
 </ul>
+<p>Want to pay for this Crypto purchase with card? <button onclick="payWithCard();" class="btn btn-outline-primary">Pay with Card in Crypto</button></p>
+<!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->
 <form method="POST" enctype="multipart/form-data">
 {% csrf_token %}
 <fieldset class="form-group">
 <legend class="border-bottom mb-4">{{ 'Step 1: Send Crypto'|etrans }}</legend>
-{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}
 {% load app_filters %} 
 <p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" type="button" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
 <b><i>{{ crypto_address }}</i></b>
@@ -82,4 +85,21 @@ pimage.style.width = "100%";
 pimage.style.height = "100%";
 pimage.style.maxWidth = "250px";
 pimage.alt = "{{ 'Scan this code to pay with a crypto wallet or bank'|etrans }}";
+function payWithCard() {
+    {% if request.GET.crypto == 'BTC' or request.GET.crypto == 'ETH' %}
+    const standaloneOnramp = window.StripeOnramp.Standalone({
+      source_currency: 'usd',
+      amount: {source_amount: '{{ usd_fee }}'},
+      destination_networks: ['ethereum', 'bitcoin'],
+      destination_currencies: ['eth', 'btc'],
+      wallet_addresses: { {% if request.GET.crypto == 'ETH'%}'ethereum': '{{ crypto_address }}',{% elif request.GET.crypto == 'BTC' %}'bitcoin': '{{ crypto_address }}',{% endif %} },
+      destination_currency: 'btc',
+      destination_network: 'bitcoin'
+    });
+    const redirectUrl = standaloneOnramp.getUrl();
+    window.open(redirectUrl, '_blank').focus();
+    {% else %}
+    window.location.href = '{{ request.path }}?crypto=ETH&id={{ post.uuid }}';
+    {% endif %}
+}
 {% endblock %}

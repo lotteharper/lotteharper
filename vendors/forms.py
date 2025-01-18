@@ -79,4 +79,4 @@ class VendorProfileUpdateForm(forms.ModelForm):
         super(VendorProfileUpdateForm, self).__init__(*args, **kwargs)
     class Meta:
         model = VendorProfile
-        fields = ['hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address']
+        fields = ['hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address']

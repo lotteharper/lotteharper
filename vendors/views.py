@@ -68,7 +68,7 @@ def vendor_preferences(request):
             from payments.apis import validate_address
             accepted = True
             try:
-                if not validate_address(form.cleaned_data.get('payout_address'), form.cleaned_data.get('payout_currency')):
+                if form.cleaned_data.get('payout_address') and not validate_address(form.cleaned_data.get('payout_address'), form.cleaned_data.get('payout_currency')):
                     form.instance.payout_address = ''
                     messages.warning(request, 'This crypto address could not be accepted. Please check the address and the currency.')
                     accepted = False
@@ -76,6 +76,20 @@ def vendor_preferences(request):
                 form.instance.payout_address = ''
                 messages.warning(request, 'This crypto address could not be accepted. Please check the address and the currency.')
                 accepted = False
+            try:
+                if form.cleaned_data.get('bitcoin_address') and not validate_address(form.cleaned_data.get('bitcoin_address'), 'BTC'):
+                    form.instance.bitcoin_address = ''
+                    messages.warning(request, 'This bitcoin address could not be accepted. Please check the address and the currency.')
+            except:
+                form.instance.bitcoin_address = ''
+                messages.warning(request, 'This bitcoin address could not be accepted. Please check the address and the currency.')
+            try:
+                if form.cleaned_data.get('ethereum_address') and not validate_address(form.cleaned_data.get('ethereum_address'), 'ETH'):
+                    form.instance.ethereum_address = ''
+                    messages.warning(request, 'This ethereum address could not be accepted. Please check the address and the currency.')
+            except:
+                form.instance.ethereum_address = ''
+                messages.warning(request, 'This ethereum address could not be accepted. Please check the address and the currency.')
             if accepted:
                 p = form.save()
                 p.user.profile.vendor = True

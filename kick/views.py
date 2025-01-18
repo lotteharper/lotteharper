@@ -28,9 +28,10 @@ def reasess_kick(request):
         if form.is_valid():
             ip = get_client_ip(request)
             uips = UserIpAddress.objects.filter(ip_address=ip, risk_detected=True)
+            det = check_ip_risk(uips.first()) if uips.count() > 0 else False
             if uips.count() > 0:
                 for ip_addr in uips:
-                    ip_addr.risk_detected = check_ip_risk(ip_addr)
+                    ip_addr.risk_detected = det
                     ip_addr.save()
                 messages.success(request, 'Your request has been accepted. We have updated {} ips.'.format(number_to_string(uips.count())))
                 return redirect(reverse('users:login'))

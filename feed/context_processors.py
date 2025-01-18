@@ -128,4 +128,6 @@ def feed_context(request):
     context_data['payment_processor'] = settings.PAYMENT_PROCESSOR
     context_data['hiderrm'] = True
     context_data['polling_now'] = timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
+#    context_data['bitcoin_address'] = settings.BITCOIN_WALLET
+#    context_data['ethereum_address'] = settings.ETHEREUM_WALLET
     return context_data

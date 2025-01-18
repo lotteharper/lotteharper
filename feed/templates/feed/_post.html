@@ -62,8 +62,8 @@
 	Your browser does not support the audio element.
     </audio>
     {% elif not post.paid_file or request.user in post.paid_users.all %}
-    <p>{{ 'This post contains a downloadable file in'|etrans }} .{{ post.file_bucket.name|filetype }} {{ 'format'|etrans }}. <a title="Download this file" href="{{ post.get_file_url}}" class="btn btn-outline-danger btn-sm">Download</a></p>
-    {% elif post.file_bucket.name|filetype == 'mp3' %}
+    {% if not post.private or post.public and document_scanned %}<p>{{ 'This post contains a downloadable file in'|etrans }} .{{ post.file_bucket.name|filetype }} {{ 'format'|etrans }}. <a title="Download this file" href="{{ post.get_file_url }}" class="btn btn-outline-danger btn-sm">Download</a></p>{% endif %}
+    {% if post.file_bucket.name|filetype == 'mp3' %}
     <audio controls style="width: 100%;" preload="metadata" id="audio{{ post.id }}" apid="{{ post.id }}" page="{% if request.GET.page %}{{ request.GET.page }}{% else %}{{ num_pages }}{% endif %}">
   	<source src="{{ post.get_file_url }}" type="audio/mpeg">
 	    {{ 'Your browser does not support the audio element.'|etrans }}
@@ -88,6 +88,7 @@
         <source src="{{ post.get_file_url }}" type="video/mp4">
 	    {{ 'Your browser does not support the audio element.'|etrans }}
     </video>
+    {% endif %}
     {% endif %}
     {% endif %}
     {% if post.image_sightengine %}<p>SightEngine {{ 'Image Output'|etrans }} - {{ post.image_sightengine }}</p>{% endif %}

@@ -221,6 +221,9 @@ def private(request, username):
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
+    from barcode.tests import document_scanned
+    ds = False
+    if request.user.is_authenticated and document_scanned(request.user): ds = True
     return render(request, 'feed/private.html', {
         'title': '@' + profile.name + '\'s Private Posts',
         'posts': p.page(page),
@@ -229,7 +232,8 @@ def private(request, username):
         'profile': profile,
         'following': following,
         'preload': True,
-        'load_timeout': 6000
+        'load_timeout': 6000,
+        'document_scanned': ds
     })
 
 def get_qs(rqg):
@@ -541,11 +545,15 @@ def home(request):
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
     from django.shortcuts import render
+    from barcode.tests import document_scanned
+    ds = False
+    if request.user.is_authenticated and document_scanned(request.user): ds = True
     return render(request, 'feed/home.html', {
         'title': 'Your Feed',
         'posts': p.page(page),
         'count': p.count,
         'page_obj': p.get_page(page),
+        'document_scanned': ds,
     })
 
 #@login_required
@@ -635,6 +643,9 @@ def profile(request, username):
     choices = []
     for option in get_pricing_options(settings.PHOTO_CHOICES):
         choices = choices + [['${}'.format(sub_fee(option))]]
+    from barcode.tests import document_scanned
+    ds = False
+    if request.user.is_authenticated and document_scanned(request.user): ds = True
     resp = render(request, 'feed/profile.html' if pages else 'feed/scroll_page.html' if scroll_page else 'feed/scroll.html', {
         'title': '@' + profile.name + '\'s Profile',
         'posts': p.page(page),
@@ -650,6 +661,7 @@ def profile(request, username):
 #        'full': True,
         'hidenavbar': True if scroll_page else False,
         'load_timeout': 0 if scroll_page else 0,
+        'document_scanned': ds,
     })
     if request.user.is_authenticated: patch_cache_control(resp, private=True)
     else: patch_cache_control(resp, public=True)
@@ -673,11 +685,15 @@ def all(request):
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
+    from barcode.tests import document_scanned
+    ds = False
+    if request.user.is_authenticated and document_scanned(request.user): ds = True
     return render(request, 'feed/all.html', {
         'title': 'See All Posts',
         'posts': p.page(page),
         'count': p.count,
         'page_obj': p.get_page(page),
+        'document_scanned': ds
     })
 
 #@login_required
@@ -725,7 +741,10 @@ def post_detail(request, uuid):
         description = 'No description for this post.' + basedescription
     post.content = oc
     from django.shortcuts import render
-    resp = render(request, 'feed/post_detail.html', {'title': title, 'pagetitle': pagetitle, 'post': post})
+    from barcode.tests import document_scanned
+    ds = False
+    if request.user.is_authenticated and document_scanned(request.user): ds = True
+    resp = render(request, 'feed/post_detail.html', {'title': title, 'pagetitle': pagetitle, 'post': post, 'document_scanned': ds, 'description': description})
     if request.user.is_authenticated: patch_cache_control(resp, private=True)
     else: patch_cache_control(resp, public=True)
     return resp
