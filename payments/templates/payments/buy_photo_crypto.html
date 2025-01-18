@@ -33,17 +33,17 @@
     </div>
   </ul>
 </div>
+<button class="btn btn-outline-primary" title="{{ 'Add this to your cart'|etrans }}" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }} <i><b id="total{{ post.uuid }}"></b></i></button>
 </div>
 </div>
 </div>
 </div>
-<p><button class="btn btn-outline-primary" title="{{ 'Add this to your cart'|etrans }}" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }}</button></p>
 <b>Items:</b>
 <ul>
 <li>{{ 'One private'|etrans }} {% if not post.file %}{{ 'photo'|etrans }}{% else %}{{ 'download, video or audio'|etrans }}{% endif %} {{ 'featuring'|etrans }} {{ username }} (${{ usd_fee|sub_fee }})</li>
-<li>Billed once only.</li>
+<li>{{ 'Billed once only.'|etrans }}</li>
 </ul>
-<p>Want to pay for this Crypto purchase with card? <button onclick="payWithCard();" class="btn btn-outline-primary">Pay with Card in Crypto</button></p>
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
 <!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->
 <form method="POST" enctype="multipart/form-data">
 {% csrf_token %}

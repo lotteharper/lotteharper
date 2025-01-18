@@ -30,8 +30,8 @@
 {% csrf_token %}
 <fieldset class="form-group">
 <legend class="border-bottom mb-4">{{ 'Step 1: Send Crypto'|etrans }}</legend>
-<p>Send {{ crypto_fee }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
-<p>Want to pay for this Crypto purchase with card? <button onclick="payWithCard();" class="btn btn-outline-primary" title="Pay with card">Pay with Card in Crypto</button></p>
+<p>{{ 'Send'|etrans }} {{ crypto_fee }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
 <b><i>{{ crypto_address }}</i></b>
 <button class="btn btn-sm btn-info" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button>
 <hr style="background-color: green;">

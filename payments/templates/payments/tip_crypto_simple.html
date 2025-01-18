@@ -47,7 +47,7 @@
 {% else %}
 <p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
 {% endif %}
-<p>Want to pay for this Crypto purchase with card? <button onclick="payWithCard();" class="btn btn-outline-primary" title="Pay with card">Pay with Card in Crypto</button></p>
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
 <b><i>{{ address }}</i></b>
 <button class="btn btn-sm btn-info" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|trans }}</button>
 </div>

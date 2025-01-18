@@ -45,7 +45,7 @@
 <li>{{ 'Billed once only.'|etrans }}</li>
 </ul>
 {% if crypto_address %}
-<p>Want to pay for this Crypto purchase with card? <button onclick="payWithCard();" class="btn btn-outline-primary">Pay with Card in Crypto</button></p>
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
 <!--<p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" type="button" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>-->
 <form method="POST" enctype="multipart/form-data">
 {% csrf_token %}

@@ -27,7 +27,7 @@
 <div style="text-align: center;">
 	<img alt="Accepting Visa and Mastercard" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
 </div>
-<p><button class="btn btn-outline-info" title="{{ 'Add this to your cart'|etrans }}" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }}</button></p>
+<p><button class="btn btn-outline-info" title="{{ 'Add this to your cart'|etrans }}" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }} <i><b id="total{{ post.uuid }}"></b></i></button></p>
 <b>Items:</b>
 <ul>
 <li>{{ 'One private'|etrans }} {% if not post.file %}{{ 'photo'|etrans }}{% else %}{{ 'download, video or audio'|etrans }}{% endif %} {{ 'featuring'|etrans }} {{ username }} (${{ fee|sub_fee }})</li>

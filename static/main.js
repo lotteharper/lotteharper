@@ -509,7 +509,7 @@ function addToCart(product_id) {
         setCookie('cart', cart, 365);
     }
     totalCart();
-    var pid = document.getElementById(product_id + 'total');
+    var pid = document.getElementById('total' + product_id);
     if(pid) {
         pid.innerHTML = total;
     }
@@ -543,7 +543,7 @@ function removeFromCart(product_id) {
         }, 1000);
     }
     totalCart();
-    var pid = document.getElementById(product_id + 'total')
+    var pid = document.getElementById('total' + product_id);
     if(pid) {
         pid.innerHTML = total;
     }

@@ -76,5 +76,5 @@ def get_cart(cookies, private=False):
             print(uid)
             print(post)
             if (not post.private) or post.private and private:
-                contents = contents + ('<div id="{}"><p>{}: <i id="{}total">{}</i> <img align="left" style="float: left; align: left;" height="100px" width="100px" class="m-2" src="{}">\n{} (<a href="{}" title="{}">{}</a>) - ${} ea {}</p><div style="height: 100px;"></div></div>'.format(post.uuid, translate(request, 'Count'), post.uuid, quant, image, translate(request, 'One photo, video, audio, and/or download'), post.get_absolute_url() if post else '', translate(request, 'See this item'), translate(request, 'See this item'), post.price if post else 0, add + ' ' + remove))
+                contents = contents + ('<div id="{}"><p>{}: <i id="total{}">{}</i> <img align="left" style="float: left; align: left;" height="100px" width="100px" class="m-2" src="{}">\n{} (<a href="{}" title="{}">{}</a>) - ${} ea {}</p><div style="height: 100px;"></div></div>'.format(post.uuid, translate(request, 'Count'), post.uuid, quant, image, translate(request, 'One photo, video, audio, and/or download'), post.get_absolute_url() if post else '', translate(request, 'See this item'), translate(request, 'See this item'), post.price if post else 0, add + ' ' + remove))
     return contents
