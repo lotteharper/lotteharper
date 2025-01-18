@@ -12,7 +12,7 @@
 <legend>{{ 'Invite Code:'|etrans }} <b id="#gamecode">{{ code }}</b> <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('#gamecode');">{{ 'Copy'|etrans }}</button></legend>
 <legend>{{ 'Invite URL:'|etrans }} <b id="#gameurl">{{ base_url }}/games/{{ game.post.id }}/{{ code }}/</b> <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('#gameurl');">{{ 'Copy'|etrans }}</button></legend>
 <p>{{ 'Give the other player this code, and have them enter it.'|etrans }}</p>
-<p><button onclick="join();" title="Join the game" class="btn btn-outline-success" id="joinButton">Join Game</button></p>
+<p><button onclick="join();" title="{{ 'Join the game'|etrans }}" class="btn btn-outline-success" id="joinButton">{{ 'Join Game'|etrans }}</button></p>
 <small>{{ 'Alternatively, scan this QR code'|etrans }}</small>
 <div style="display: flex; justify-content: space-around;"><div id="gameqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
 <hr>

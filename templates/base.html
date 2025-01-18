@@ -12,37 +12,37 @@
         {% webpush_header %}
         {% endif %}
         <link rel="manifest" href="/site.webmanifest">
-        <meta name="f0f15e690a68424771b0e8f902af3e12e24c2368" content="f0f15e690a68424771b0e8f902af3e12e24c2368"/>
+        <meta name="f0f15e690a68424771b0e8f902af3e12e24c2368" content="f0f15e690a68424771b0e8f902af3e12e24c2368">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="/media/static/favicon.ico">
         <title>{% if title %}{{ title|trans|capitalize }} - {{ the_site_name }}{% else %}{{ the_site_name }}{% endif %}</title>
         <meta name="description" content="{% if description != None %}{{ description|trans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|etrans }}{% endif %}">
         <meta name="author" content="{{ author_name }}">
-        <meta name="copyright" content="© {{ the_site_name }} {{ currentyear }}" />
-        <meta name="application-name" content="{{ the_site_name }}" />
-        <meta name="twitter:description" content="{% if description != None %}{{ description|etrans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|etrans }}{% endif %}" />
-        <meta name="twitter:title" content="{% if title %}{{ title|trans|capitalize }} - {{ the_site_name }}{% else %}{{ the_site_name }}{% endif %}" />
-        <meta name="twitter:card" content="summary" />
-        <meta property="og:type" content="article" />
+        <meta name="copyright" content="© {{ the_site_name }} {{ currentyear }}">
+        <meta name="application-name" content="{{ the_site_name }}">
+        <meta name="twitter:description" content="{% if description != None %}{{ description|etrans }}{% else %}({{ min_age }}+) {{ myusername }} - {{ base_description|etrans }}{% endif %}">
+        <meta name="twitter:title" content="{% if title %}{{ title|trans|capitalize }} - {{ the_site_name }}{% else %}{{ the_site_name }}{% endif %}">
+        <meta name="twitter:card" content="summary">
+        <meta property="og:type" content="article">
         {% if post %}
         <meta property="og:image" content="{{ post.get_image_url }}">
-        <meta name="pinterest:image" content="{{ post.get_image_url }}"/>
-        <meta name="twitter:image" content="{{ post.get_image_url }}" />
+        <meta name="pinterest:image" content="{{ post.get_image_url }}">
+        <meta name="twitter:image" content="{{ post.get_image_url }}">
         {% elif profile %}
         <meta property="og:image" content="{{ profile.get_image_url }}">
-        <meta name="pinterest:image" content="{{ profile.get_image_url }}"/>
-        <meta name="twitter:image" content="{{ profile.get_image_url }}" />
+        <meta name="pinterest:image" content="{{ profile.get_image_url }}">
+        <meta name="twitter:image" content="{{ profile.get_image_url }}">
         {% elif vendor %}
         <meta property="og:image" content="{{ vendor.profile.get_image_url }}">
-        <meta name="pinterest:image" content="{{ vendor.profile.get_image_url }}"/>
-        <meta name="twitter:image" content="{{ vendor.profile.get_image_url }}" />
+        <meta name="pinterest:image" content="{{ vendor.profile.get_image_url }}">
+        <meta name="twitter:image" content="{{ vendor.profile.get_image_url }}">
         {% elif model %}
         <meta property="og:image" content="{{ model.profile.get_image_url }}">
-        <meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
-        <meta name="twitter:image" content="{{ model.profile.get_image_url }}" />
+        <meta name="pinterest:image" content="{{ model.profile.get_image_url }}">
+        <meta name="twitter:image" content="{{ model.profile.get_image_url }}">
         {% endif %}
-        <link rel="canonical" href="{{ base_url }}{{ request.path }}"/>
+        <link rel="canonical" href="{{ base_url }}{{ request.path }}">
         {% if not bs4 %}
         <link rel="stylesheet" href="/static/main.css">
         {% else %}
@@ -117,10 +117,10 @@
             {% endif %}
             {% include 'navbar.html' %}
         {% endif %}
+        </div>
         {% if request.path != '/' and not full %}
         <div style="height: 10px;"></div>
         {% endif %}
-        </div>
         <main id="main-container" class="container-fluid{% if nopadding %} ml-0 mr-0 px-0 my-0 py-0{% endif %} clemn" style="width: {% if full or request.path|startswith:'/admin/' %}100{% else %}90{% endif %}%;">
         {% if not request.path|startswith:'/admin/' %}
         <div class="col-md-8 py-0 my-0 mx-auto align-self-center" id="django-messages-container">
@@ -136,7 +136,6 @@
         </div>
         {% endif %}
         {% include 'header.html' %}
-        </div>
         <div id="main" class="py-0 my-0 {% if xsmall %}col-sm-3{% elif small %}col-sm-6{% elif medium %}col-md-6{% else %}w-100{% endif %} align-self-center mx-auto{% if nopadding %} px-0 ml-0 mr-0 my-0 py-0{% endif %}">
         {% if request.path != '/accounts/profile/' %}
         <div id="webpush-container" class="hide py-0 my-0">{% webpush_button %}</div>

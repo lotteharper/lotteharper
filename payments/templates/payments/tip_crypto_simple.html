@@ -58,7 +58,7 @@
 <p>{{ 'Buy crypto to send here:'|etrans }} <a href="{{ crypto_provider }}" title="Buy crypto to send">{{ crypto_provider }}</a>, {{ 'or with your crypto bank.'|etrans }}</p>
 <p>{{ 'Optional - Send an anonymous tip, OR add your email for a special thank you from me, whatever amount you send'|etrans }} - <button class="btn btn-primary" onclick="document.getElementById('add-email').classList.remove('hide');">{{ 'Add Email'|etrans }}</button></p>
 <div id="add-email" class="hide fade-in">
-<legend>Add your email for a thankyou</legend>
+<legend>{{ 'Add your email for a thankyou'|etrans }}</legend>
 <form action="{{ request.path }}?{% for key,value in request.GET.items %}{{ key }}={{ value }}&{% endfor %}" method="POST">
 {% csrf_token %}
 {{ form|crispy }}
