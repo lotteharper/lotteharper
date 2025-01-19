@@ -30,6 +30,7 @@
 </div>
 </div>
 <p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
+<div id="onramp-element" style="max-width: 500px" class="mx-auto">
 <!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->
 <form id="payment-form" method="POST" enctype="multipart/form-data">
 {% csrf_token %}
@@ -71,17 +72,15 @@ pimage.style.maxWidth = "250px";
 pimage.alt = "Scan this code to pay with a crypto wallet or bank";
 function payWithCard() {
     {% if request.GET.crypto == 'BTC' or request.GET.crypto == 'ETH' %}
-    const standaloneOnramp = window.StripeOnramp.Standalone({
-      source_currency: 'usd',
-      amount: {source_amount: '{{ usd_fee }}'},
-      destination_networks: ['ethereum', 'bitcoin'],
-      destination_currencies: ['eth', 'btc'],
-      wallet_addresses: { {% if request.GET.crypto == 'ETH'%}'ethereum': '{{ crypto_address }}',{% elif request.GET.crypto == 'BTC' %}'bitcoin': '{{ crypto_address }}',{% endif %} },
-      destination_currency: 'btc',
-      destination_network: 'bitcoin'
+    const onramp = window.StripeOnramp('{{ stripe_key }}');
+    $.ajax({
+        url: '{% url 'payments:crypto-onramp' username %}',
+        method: 'POST',
+        success: function(clientSecret) {
+            onrampSession = onramp.createSession({clientSecret});
+            onrampSession.mount("#onramp-element");
+        }
     });
-    const redirectUrl = standaloneOnramp.getUrl();
-    window.open(redirectUrl, '_blank').focus();
     {% else %}
     window.location.href = '{{ request.path }}?crypto=ETH';
     {% endif %}

@@ -11,6 +11,7 @@ urlpatterns = [
     path('tip/<str:username>/<str:tip>/crypto/', views.tip_bitcoin, name='tip-bitcoin'),
     path('tip/<str:username>/crypto/thankyou/', views.tip_bitcoin_thankyou, name='tip-bitcoin-thankyou'),
     path('crypto/<str:username>/', views.tip_crypto_simple, name='tip-crypto-simple'),
+    path('stripe/crypto/<str:name>/', views.crypto_onramp, name='crypto-onramp'),
 #    path('cancel/<str:username>/', views.cancel_subscription, name='cancel'),
 #    path('cards/', views.card_list, name='cards'),
 #    path('card/<int:id>/', views.card_primary, name='card'),
