@@ -71,10 +71,10 @@ pimage.style.height = "100%";
 pimage.style.maxWidth = "250px";
 pimage.alt = "Scan this code to pay with a crypto wallet or bank";
 function payWithCard() {
-    {% if request.GET.crypto == 'BTC' or request.GET.crypto == 'ETH' %}
+    {% if request.GET.crypto == 'ETH' %}
     const onramp = window.StripeOnramp('{{ stripe_key }}');
     $.ajax({
-        url: '{% url 'payments:crypto-onramp' username %}',
+        url: '{% url 'payments:crypto-onramp' username crypto_address usd_fee %}',
         method: 'POST',
         success: function(clientSecret) {
             onrampSession = onramp.createSession({clientSecret});

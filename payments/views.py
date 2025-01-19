@@ -8,7 +8,7 @@ from django.views.decorators.cache import patch_cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 
 @csrf_exempt
-def crypto_onramp(request, name):
+def crypto_onramp(request, name, address, amount):
     from django.contrib.auth.models import User
     from django.conf import settings
     user = User.objects.get(profile__name=name, profile__vendor=True)
@@ -16,7 +16,7 @@ def crypto_onramp(request, name):
     stripe.api_key = settings.STRIPE_API_KEY
     from django.urls import reverse
     import os, json
-    op = os.popen('curl -X POST https://api.stripe.com/v1/crypto/onramp_sessions -u {} -d "wallet_addresses[ethereum]"="{}"'.format(settings.STRIPE_API_KEY, user.vendor_profile.ethereum_address)).read()
+    op = os.popen('curl -X POST https://api.stripe.com/v1/crypto/onramp_sessions -u {} -d "wallet_addresses[ethereum]"="{}" -d "source_currency"="usd" -d "destination_currency"="eth" -d "destination_network"="ethereum" -d "source_amount"="{}"'.format(settings.STRIPE_API_KEY, user.vendor_profile.ethereum_address if request.GET.get('tip', False) else address, amount)).read()
     out = json.loads(op)
     from django.http import HttpResponse
     return HttpResponse(out['client_secret'])
@@ -1771,7 +1771,7 @@ def tip_crypto_simple(request, username):
     from lotteh.celery import validate_tip_payment
     if request.user.is_authenticated: validate_tip_payment.apply_async(timeout=60*10, args=(request.user.id, user.id, float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE, transaction_id,crypto,network),)
     from django.shortcuts import render
-    r = render(request, 'payments/tip_crypto_simple.html', {'title': 'Send a Tip in Crypto', 'usd_fee': request.GET.get('tip', None), 'crypto_fee': fee_reduced, 'address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'post': post, 'load_timeout': None, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address, 'usd_fee': fee, 'stripe_key': settings.STRIPE_PUBLIC_KEY})
+    r = render(request, 'payments/tip_crypto_simple.html', {'title': 'Send a Tip in Crypto', 'usd_fee': request.GET.get('tip', 100) , 'crypto_fee': fee_reduced, 'address': address, 'currencies': settings.CRYPTO_CURRENCIES, 'username': user.profile.name, 'post': post, 'load_timeout': None, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address, 'stripe_key': settings.STRIPE_PUBLIC_KEY})
 #    if request.user.is_authenticated: patch_cache_control(r, private=True)
 #    else: patch_cache_control(r, public=True)
     return r
