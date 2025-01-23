@@ -10,9 +10,9 @@ ccxt
 numpy
 urllib3
 webauthn
-Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main (root-commit) db733e7] backup
- 6311 files changed, 437894 insertions(+)
+Initialized empty Git repository in /home/team/lotteh/.git/
+[main (root-commit) d63c920] backup
+ 6315 files changed, 437915 insertions(+)
  create mode 100755 ..gitignore.swp
  create mode 100755 .github/workflows/django.yml
  create mode 100755 .gitignore
@@ -314,6 +314,7 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100644 cache/239cb4f6b7dc4c23ef05183c1a676285.djcache
  create mode 100644 cache/24ee08481b1642100f194414684b3cad.djcache
  create mode 100644 cache/26746dc5414b9ce8096e722f48773bfd.djcache
+ create mode 100644 cache/28055a03d27998470950a3a92c8d6bac.djcache
  create mode 100644 cache/29ee1d6cc5091e54cfe685a7697bce09.djcache
  create mode 100644 cache/2b006ccbca2bbbc0bd0f49bd4796fc9d.djcache
  create mode 100644 cache/2b21e7799c2335a075329bbc17e2b16d.djcache
@@ -380,12 +381,14 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100644 cache/5b5cfcaab146435d9c3c44ff3a73bc50.djcache
  create mode 100644 cache/5be2b9ef45efd04cb603c00cd6b1f1a8.djcache
  create mode 100644 cache/5bea9eb58e2d2f2c46eeae7d9e74b83f.djcache
+ create mode 100644 cache/5c79d3d096e594c98ab974131c3f8812.djcache
  create mode 100644 cache/5c79d60361cca5b34692ee909eb31542.djcache
  create mode 100644 cache/5cbbe4016080d0ea8041f70f67dcfb13.djcache
  create mode 100644 cache/5d01df3d78e86d5ac6a59f435c89223f.djcache
  create mode 100644 cache/5d0db93d4d534188f5f5a3e03800f834.djcache
  create mode 100644 cache/5e631be8dbd8b879add525d14fe90162.djcache
  create mode 100644 cache/5ec486ae21f13581b5f0d9ee6620e20c.djcache
+ create mode 100644 cache/5ee54baae61332dd7bcd7f79ab3851f5.djcache
  create mode 100644 cache/5f615913dda0a462088189fb090c4519.djcache
  create mode 100644 cache/5fff9523da9dcc14cccf37d744c842c6.djcache
  create mode 100644 cache/6069b0c32936372f0f319b6405daf723.djcache
@@ -461,9 +464,11 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100644 cache/a3b188898b2942066502d6f1eba5cf19.djcache
  create mode 100644 cache/a3d8101f0cc39ed343f22445afbb07d0.djcache
  create mode 100644 cache/a5a07f9b09d77c749312f7bbfc267bad.djcache
+ create mode 100644 cache/a659da7f3022af130994ab6f36c22ec3.djcache
  create mode 100644 cache/a71225c5c28f5a7ace65fdf4f6952d5f.djcache
  create mode 100644 cache/a7af7fa270e6a0dde951272feb4d6328.djcache
  create mode 100644 cache/ab25fdea27ec91781773cf2fdd83c6b9.djcache
+ create mode 100644 cache/ac21baaee57a249babcb6d53914261f5.djcache
  create mode 100644 cache/ad223edb4b79e1abab7a13d93a6830e2.djcache
  create mode 100644 cache/af92ab23f51a5732e1e4e8caf59a76f0.djcache
  create mode 100644 cache/b063460e23d4f4cae341eaa61962ec94.djcache
@@ -548,6 +553,7 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100644 cache/ef24ac12f146b5bfc71a31927d5ccfd0.djcache
  create mode 100644 cache/f154d9812069d1fb0360ae2ddb12c55a.djcache
  create mode 100644 cache/f164a67f6c966fb3d349690f4fd99780.djcache
+ create mode 100644 cache/f22c568755777942c9540146f8b6a66c.djcache
  create mode 100644 cache/f2ded684d169683bab7e7ef4331f2b2f.djcache
  create mode 100644 cache/f2eb87cee413f738e22dd078135d6c46.djcache
  create mode 100644 cache/f43cb6437a3a8792ac9acfb6916e0d3f.djcache
@@ -796,7 +802,6 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100755 data/games.json
  create mode 100755 data/live.json
  create mode 100755 data/payments.json
- create mode 100644 data/security.json
  create mode 100755 data/security.json.aa
  create mode 100755 data/security.json.ab
  create mode 100755 data/security.json.ac
@@ -825,7 +830,6 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100755 data/security.json.az
  create mode 100755 data/security.json.ba
  create mode 100755 data/security.json.bb
- create mode 100755 data/sessions-dj.json
  create mode 100755 data/survey.json
  create mode 100755 data/translate.json
  create mode 100755 data/tts.json
@@ -6324,6 +6328,4 @@ Reinitialized existing Git repository in /home/team/lotteh/.git/
  create mode 100755 web/tests.py
  create mode 100755 web/views.py
  create mode 100755 write_dovecot.py
-sending incremental file list
-./
-.gitignore
+branch 'main' set up to track 'originlab/main'.

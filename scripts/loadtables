@@ -11,6 +11,7 @@ python manage.py loaddata data/address.json
 python clear_empty_profiles_table.py
 python manage.py loaddata data/users-new.json
 python manage.py loaddata data/feed-post.json
+python manage.py loaddata data/feed-bid.json
 python manage.py loaddata data/chat.json
 python manage.py loaddata data/verify.json
 python manage.py loaddata data/security.json

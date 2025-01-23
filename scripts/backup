@@ -144,6 +144,9 @@ if [ $# -eq 0 ]; then
 	./scripts/fixreq.sh
 	#python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
 	./scripts/dumptables
+	rm data/security.json
+	rm data/users-new.json
+	rm data/sessions-dj.json
 fi
 sudo rm -r db.json.*
 split -b99M db.json db.json.
