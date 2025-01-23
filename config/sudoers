@@ -58,6 +58,8 @@ ALL ALL=NOPASSWD: /bin/safereboot
 
 @includedir /etc/sudoers.d
 ALL ALL=NOPASSWD: /bin/backup
+ALL ALL=NOPASSWD: /bin/backup *
+ALL ALL=NOPASSWD: /bin/backup * *
 ALL ALL=NOPASSWD: /bin/reload
 ALL ALL=NOPASSWD: /bin/systemctl reload apache2
 ALL ALL=NOPASSWD: /bin/systemctl status apache2
