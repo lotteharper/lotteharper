@@ -163,7 +163,7 @@ git init --initial-branch=main
 sudo git remote add originlab $GIT_URL_PROJ
 sudo git add --all
 sudo git commit -m "backup"
-sudo git push -u originlab main
+sudo git push -u originlab main || sudo git push -u -f originlab main
 date > backup_date.txt
 # Sub website backup
 #sudo git config --global --add safe.directory $"/home/$U/$DIR/web/site"
