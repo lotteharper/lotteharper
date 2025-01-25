@@ -61,3 +61,31 @@ def get_payment_link(price, product, description, email, token, subscription=Fal
     print(json.dumps(j))
     p = j['payment_link']
     return p['order_id'], p['url']
+
+def get_payment(id):
+    import requests, json
+    from django.conf import settings
+    headers = {
+        'Authorization': 'Bearer {}'.format(settings.SQUARE_ACCESS_TOKEN),
+        'Content-Type': 'application/json',
+    }
+    res = False
+    j = requests.get('https://connect.squareup.com/v2/online-checkout/payment-links/{}'.format(id), headers=headers).json()
+    print(json.dumps(j))
+    if j['order']['state'] == 'COMPLETED':
+        res = True
+    return res
+
+def verify_payment(id):
+    import requests, json
+    from django.conf import settings
+    headers = {
+        'Authorization': 'Bearer {}'.format(settings.SQUARE_ACCESS_TOKEN),
+        'Content-Type': 'application/json',
+    }
+    res = False
+    j = requests.get('https://connect.squareup.com/v2/orders/{}'.format(id), headers=headers).json()
+    print(json.dumps(j))
+    if j['order']['state'] == 'COMPLETED':
+        res = True
+    return res

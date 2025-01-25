@@ -2,22 +2,15 @@ def verify_payments():
     import requests, json, datetime
     from .models import Invoice
     from django.utils import timezone
-    invoices = Invoice.objects.filter(timestamp__gte=timezone.now() - datetime.timedelta(hours=2)).order_by('-timestamp')
+    invoices = Invoice.objects.filter(timestamp__gte=timezone.now() - datetime.timedelta(hours=24), completed=False).order_by('-timestamp')
     for invoice in invoices:
         res = False
         if invoice.processor == 'paypal':
             from payments.paypal import get_payment_status
             res = get_payment_status(invoice.number)
         elif invoice.processor == 'square':
-            import requests, json
-            from django.conf import settings
-            headers = {
-                'Square-Version': '2024-07-17',
-                'Authorization': 'Bearer {}'.format(settings.SQUARE_ACCESS_TOKEN),
-                'Content-Type': 'application/json',
-            }
-            j = requests.post('https://connect.squareup.com/v2/orders/{}'.format(invoice.number), headers=headers).json()
-            if j['order']['state'] == 'COMPLETED':
+            from payments.square import verify_payment
+            if verify_payment(invoice.number):
                 res = True
         if res:
             user = invoice.user
@@ -69,3 +62,5 @@ def verify_payments():
                 user.profile.save()
                 from payments.models import Subscription
                 if not Subscription.objects.filter(model=vendor, user=user, active=True).last(): Subscription.objects.create(model=vendor, user=user, active=True)
+            invoice.completed = True
+            invoice.save()

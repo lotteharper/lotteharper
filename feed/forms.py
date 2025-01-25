@@ -60,14 +60,6 @@ class PostForm(forms.ModelForm):
     image = MultipleImageField(required=False) #forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True, 'multiple': True}))
     file = MultipleFileField(required=False) #forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True, 'multiple': True}))
     confirmation_id = forms.CharField(widget=forms.HiddenInput(), required=False)
-    PHOTO_CHOICES = (
-        ('5', '$5'),
-        ('10', '$10'),
-        ('20', '$20'),
-        ('25', '$25'),
-        ('50', '$50'),
-        ('100', '$100'),
-    )
     price = forms.CharField(widget=forms.Select(choices=get_pricing()))
 
     def __init__(self, *args, **kwargs):

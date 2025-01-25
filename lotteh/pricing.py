@@ -11,4 +11,4 @@ def get_pricing_options(length=54):
         tickets = tickets + [str(t[x])]
     for x in range(5, int(length)):
         tickets = tickets + [str(t[x%5]) + get_zeroes(int(x/5))]
-    return [5,10,15,20] + tickets
+    return [1,2,3,4,5,10,15,20] + tickets
