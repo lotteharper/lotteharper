@@ -108,10 +108,10 @@ class ProfileUpdateForm(forms.ModelForm):
             'bash': 'Email username'
         }
         widgets = {
-          'status': forms.Textarea(attrs={'rows':3}),
-          'bio': forms.Textarea(attrs={'rows':5}),
-          'wishlist': forms.Textarea(attrs={'rows':1}),
-          'shop_url': forms.Textarea(attrs={'rows':1}),
+            'status': forms.Textarea(attrs={'rows':3}),
+            'bio': forms.Textarea(attrs={'rows':5}),
+            'wishlist': forms.TextInput,
+            'shop_url': forms.TextInput,
         }
 
 class ResendActivationEmailForm(forms.Form):

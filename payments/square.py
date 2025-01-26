@@ -86,6 +86,6 @@ def verify_payment(id):
     res = False
     j = requests.get('https://connect.squareup.com/v2/orders/{}'.format(id), headers=headers).json()
     print(json.dumps(j))
-    if j['order']['state'] == 'COMPLETED':
+    if 'order' in j.keys() and j['order']['state'] == 'OPEN':
         res = True
     return res

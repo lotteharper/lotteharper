@@ -1,16 +1,16 @@
 import talib
 import numpy as np
 
-alt = False
+alt = True
 digits = 0
 
 def fix(digit):
-    return round(digit * 1.0/24 * 6, 2)
+    return round(digit/2.0, 2)
 
 FAST_PERIOD = 12 if not alt else fix(12)
 SLOW_PERIOD = 26 if not alt else fix(26)
-SIGNAL_PERIOD = 9 if not alt else fix(9)
-RSI_PERIOD = 3 if not alt else fix(9)
+SIGNAL_PERIOD = 7 if not alt else fix(7)
+RSI_PERIOD = 7 if not alt else fix(7)
 RSI_OVERBOUGHT = 45
 RSI_OVERSOLD = 55
 

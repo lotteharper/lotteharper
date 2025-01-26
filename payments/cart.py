@@ -4,10 +4,11 @@ def process_cart_purchase(user, cart, private=False):
     posts = []
     for item in cart.replace('+', ',').split(','):
         s = item.split('=')
+        if len(s) < 2: continue
         uid = s[0]
         quant = s[1]
         post = Post.objects.filter(uuid=uid, date_auction__lte=timezone.now()).first()
-        if not post.private:
+        if post and not post.private:
             if not post.paid_file:
                 post.recipient = user
                 post.save()
@@ -15,7 +16,7 @@ def process_cart_purchase(user, cart, private=False):
                 post.paid_users.add(user)
                 post.save()
             posts = posts + [post]
-        elif post.private and document_scanned(user) and private:
+        elif post and post.private and document_scanned(user) and private:
             if not post.paid_file:
                 post.recipient = user
                 post.save()

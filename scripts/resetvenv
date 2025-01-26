@@ -60,6 +60,7 @@ pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
 pip3 install --upgrade requests
 pip3 install googletrans==3.1.0a0
 pip3 install --upgrade "nudenet>=3.4.2"
+pip3 install ta-lib==0.5.0
 cd $DIR
 ./scripts/patchvenv
 for f in $(ls venv/*/*); do

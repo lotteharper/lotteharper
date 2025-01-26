@@ -6,6 +6,7 @@ def send_photo_email(user, post):
     from django.conf import settings
     from django.template.loader import render_to_string
     from feed.models import Post
+    import datetime
     photo_url = post.get_image_url()
     html_message = render_to_string('feed/photo_email.html', {
         'site_name': settings.SITE_NAME,
@@ -29,6 +30,7 @@ def send_photos_email(user, posts):
     from django.conf import settings
     from django.template.loader import render_to_string
     from feed.models import Post
+    import datetime
     photo_urls = []
     files = []
     from barcode.tests import document_scanned
@@ -47,7 +49,7 @@ def send_photos_email(user, posts):
         post = photo
         if post.date_auction > timezone.now() - datetime.timedelta(days=31*3):
             messages = messages + [post.auction_message]
-    if not messages: messages[0] = 'Thank you again for your purchase.'
+    if not messages: messages += ['Thank you again for your purchase.']
     html_message = render_to_string('feed/photo_email.html', {
         'site_name': settings.SITE_NAME,
         'user': user,

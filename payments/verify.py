@@ -2,7 +2,7 @@ def verify_payments():
     import requests, json, datetime
     from .models import Invoice
     from django.utils import timezone
-    invoices = Invoice.objects.filter(timestamp__gte=timezone.now() - datetime.timedelta(hours=24), completed=False).order_by('-timestamp')
+    invoices = Invoice.objects.filter(timestamp__gte=timezone.now() - datetime.timedelta(hours=1), completed=False).order_by('-timestamp')
     for invoice in invoices:
         res = False
         if invoice.processor == 'paypal':
@@ -12,19 +12,24 @@ def verify_payments():
             from payments.square import verify_payment
             if verify_payment(invoice.number):
                 res = True
+                print('Payment verified')
         if res:
+            print('Updating payment')
             user = invoice.user
             from django.contrib.auth.models import User
             from django.conf import settings
             from feed.models import Post
-            from payments.cart import get_card_cost
+            from payments.cart import get_cart_cost
             from django.http import HttpResponse
             product = invoice.product
             price = invoice.price
-            if product == 'cart' and (get_cart_cost(invoice.cart) if invoice.cart else 0) != int(price): return
-            if product == 'post' and Post.objects.filter(uuid=invoice.pid).first().price != str(price): return
-            if product == 'membership' and invoice.vendor.vendor_profile.subscription_fee != price: return
+#            if product == 'cart' and (get_cart_cost(invoice.cart) if invoice.cart else 0) != int(price): return
+#            if product == 'post' and Post.objects.filter(uuid=invoice.pid).first().price != str(price): return
+#            if product == 'membership' and invoice.vendor.vendor_profile.subscription_fee != price: return
             vendor = invoice.vendor
+            from payments.cart import process_cart_purchase
+            if invoice.product == 'cart':
+                process_cart_purchase(user, invoice.cart)
             if invoice.product == 'post':
                 from feed.models import Post
                 post = Post.objects.get(author=vendor, id=invoice.pid)
