@@ -2,6 +2,7 @@ def process_cart_purchase(user, cart, private=False):
     from django.utils import timezone
     from feed.models import Post
     posts = []
+    cart = cart.replace('\\', ',').replace('+', ',').replace('"', '')
     for item in cart.replace('+', ',').split(','):
         s = item.split('=')
         if len(s) < 2: continue
@@ -31,6 +32,7 @@ def get_cart_cost(cookies, private=False):
     from django.utils import timezone
     from feed.models import Post
     items = ''
+    cookies['cart'] = cookies['cart'].replace('\\', ',').replace('+', ',').replace('"', '')
     try: items = cookies['cart'].replace('+', ',').split(',') if 'cart' in cookies else cookies.split(',')
     except: items = cookies.split(',') if cookies else []
     if not items: items = cookies.split(',')
@@ -55,6 +57,7 @@ def get_cart(cookies, private=False):
     from django.utils import timezone
     from feed.models import Post
     items = ''
+    cookies['cart'] = cookies['cart'].replace('\\', ',').replace('+', ',').replace('"', '')
     try: items = cookies['cart'].replace('+', ',').split(',') if 'cart' in cookies else []
     except: items = cookies.split(',') if cookies else []
     if len(items) < 1: return None
