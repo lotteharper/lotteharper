@@ -7,6 +7,11 @@ def useablepath(path):
     # eg /en/test
     return '/'.join(path.split('/')[2:])
 
+@register.filter('char2caps')
+def char2caps(input):
+    if input[0].isalnum(): return input.capitalize()
+    return input[0] + input[1:].capitalize()
+
 @register.filter('islive')
 def islive(profile):
     from feed.middleware import get_current_request

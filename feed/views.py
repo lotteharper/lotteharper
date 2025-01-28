@@ -603,7 +603,7 @@ def profile(request, username):
         now = timezone.now()
     if not request.GET.get('feed', False):
         return redirect(request.path + (get_qs(request.GET) if get_qs(request.GET) else '?') + '&feed=private')
-    blog_feed = request.GET.get('feed')
+    blog_feed = request.GET.get('feed').lower()
     likes = request.GET.get('likes')
     pages = request.GET.get('pages')
     scroll_page = request.GET.get('scroll_page')
