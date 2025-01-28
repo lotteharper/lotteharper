@@ -295,7 +295,7 @@ def square_checkout(request):
     from feed.models import Post
     from payments.cart import get_cart_cost
     if product == 'cart' and float((get_cart_cost(request.COOKIES) if 'cart' in request.COOKIES else 0)) != int(price): return HttpResponse(500)
-    if product == 'post' and Post.objects.filter(uuid=pid).first().price != str(price): return HttpResponse(500)
+    if product == 'post' and Post.objects.filter(id=int(pid)).first().price != str(price): return HttpResponse(500)
     if product == 'membership' and model.vendor_profile.subscription_fee != price: return HttpResponse(500)
     id, link = get_payment_link(int(price), str(product), 'Customer Order - ' + product.capitalize() + ' - ' + product_desc[product], email, token, subscription=False if not sub else True)
     Invoice.objects.create(token=token, user=request.user if request.user.is_authenticated else user, vendor=User.objects.get(id=int(vendor)), number=id, product=product, price=price, pid=pid, processor='square', cart=request.COOKIES['cart'] if 'cart' in request.COOKIES else '')
@@ -1658,7 +1658,7 @@ def buy_photo_card(request, username):
     from django.shortcuts import render
     from django.conf import settings
     from .forms import CardPaymentForm
-    r = render(request, 'payments/buy_photo_card.html', {'title': 'Buy this item with Credit or Debit Card', 'username': username, 'profile': profile, 'fee': post.price, 'post': post, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'load_timeout': None, 'payment_processor': 'stripe'})
+    r = render(request, 'payments/buy_photo_card.html', {'title': 'Buy this item with Credit or Debit Card', 'username': username, 'profile': profile, 'fee': post.price, 'post': post, 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'load_timeout': None, 'payment_processor': 'square'})
     if request.user.is_authenticated: patch_cache_control(r, private=True)
     else: patch_cache_control(r, public=True)
     return r
