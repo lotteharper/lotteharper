@@ -128,10 +128,10 @@ def get_posts_for_query(request, qs):
     pos = []
     for post in posts:
         count = 0
-        matches = regex.findall(SEARCH_REGEX.format(qs.lower()), post.content.lower(), flags=regex.IGNORECASE | regex.BESTMATCH)
+        matches = regex.findall(SEARCH_REGEX.format(qs.lower()), post.content.lower(), flags=regex.IGNORECASE)
         count = count + len(matches) * len(qsplit)
         for q in qsplit:
-            matches = regex.findall(SEARCH_REGEX.format(q.lower()), post.content.lower(), flags=regex.IGNORECASE | regex.BESTMATCH)
+            matches = regex.findall(SEARCH_REGEX.format(q.lower()), post.content.lower(), flags=regex.IGNORECASE) # | regex.BESTMATCH)
             for match in matches:
                 if not match in ESCAPED_QUERIES:
                     count = count + 1
@@ -162,18 +162,20 @@ def get_posts_for_multilingual_query(request, qs):
     from misc.sitemap import languages
     posts = []
     count = 0
-    results = [None] * len(languages)
+    results = [None] * (len(languages) + 1)
     last_threads = []
-    threads = [None] * len(languages)
+    threads = [None] * (len(languages) + 1)
     thread_count = 0
-    def get_posts_for_query_lang(qs, lang, results, res_count):
+    def get_posts_for_query_lang(qs, lang, results, res_count, src):
         pos = []
         from translate.translate import translate
         from feed.models import Post
         import regex
         from misc.regex import SEARCH_REGEX
         from misc.regex import ESCAPED_QUERIES
-        qs = translate(None, qs, target=lang)
+        from django.conf import settings
+        if src != lang:
+            qs = translate(None, qs, target=lang, src=settings.DEFAULT_LANG if not src else src)
         qsplit = qs.split(' ')
         from django.utils import timezone
         now = timezone.now()
@@ -196,14 +198,17 @@ def get_posts_for_multilingual_query(request, qs):
             if count > 0:
                 pos = pos + [(post.id, count)]
         results[res_count] = pos
-    lang = request.GET.get('lang') if request.GET.get('lang', None) else request.LANGUAGE_CODE if request else settings.DEFAULT_LANG
-    if lang == 'en':
-        spell = Speller()
-        qs = spell(qs)
+    oqs = qs
     qs = translate(request, qs, target=settings.DEFAULT_LANG)
+    print('QS is ' + qs)
+    print('OQS is ' + oqs)
+    import threading
+    src = request.LANGUAGE_CODE if request and not request.GET.get('lang', None) else request.GET.get('lang', None) if request.GET.get('lang', None) else settings.DEFAULT_LANG
+    threads[thread_count] = threading.Thread(target=get_posts_for_query_lang, args=(qs, settings.DEFAULT_LANG, results, thread_count, settings.DEFAULT_LANG))
+    threads[thread_count].start()
+    thread_count = thread_count + 1
     for lang in languages:
-        import threading
-        threads[thread_count] = threading.Thread(target=get_posts_for_query_lang, args=(qs, lang, results, thread_count,))
+        threads[thread_count] = threading.Thread(target=get_posts_for_query_lang, args=(oqs, lang, results, thread_count, src))
         threads[thread_count].start()
         thread_count = thread_count + 1
     for i in range(len(threads)):

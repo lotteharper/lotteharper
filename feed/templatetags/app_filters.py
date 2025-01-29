@@ -459,18 +459,25 @@ def highlightsearchquery(text):
     q = request.GET['q']
     from django.conf import settings
     from translate.translate import translate
+    oq = q
     q = translate(request, q, target=settings.DEFAULT_LANG)
     from misc.sitemap import languages
-    threads = [None] * len(languages)
-    results = [None] * len(languages)
+    threads = [None] * (len(languages) + 1)
+    results = [None] * (len(languages) + 1)
     thread_count = 0
-    def highlight_lang(q, lang, text, results, count):
+    def highlight_lang(q, lang, text, results, count, src):
         from translate.translate import translate
-        res = highlight_query_raw(translate(None, q, target=lang), text)
+        from django.conf import settings
+        res = highlight_query_raw(translate(None, q, target=lang, src=src), text)
         results[count] = res
     import threading
+    src = settings.DEFAULT_LANG
+    threads[thread_count] = threading.Thread(target=highlight_lang, args=(q, src, text, results, thread_count, src))
+    threads[thread_count].start()
+    thread_count += 1
+    src = request.LANGUAGE_CODE if request and not request.GET.get('lang', None) else request.GET.get('lang', None) if request.GET.get('lang', None) else settings.DEFAULT_LANG
     for lang in languages:
-        threads[thread_count] = threading.Thread(target=highlight_lang, args=(q, lang, text, results, thread_count, ))
+        threads[thread_count] = threading.Thread(target=highlight_lang, args=(oq, lang, text, results, thread_count, src))
         threads[thread_count].start()
         thread_count += 1
     for i in range(len(threads)):
