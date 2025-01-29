@@ -90,30 +90,33 @@ class Post(models.Model):
         new_kwargs = dict([(fld.name, getattr(old, fld.name)) for fld in old._meta.fields if fld.name != old._meta.pk]);
         return self.__class__.objects.create(**new_kwargs)
 
-    def get_web_url(self):
+    def get_web_url(self, original=False):
         from django.conf import settings
-        return '{}{}/media/images/{}.png'.format('https://', settings.STATIC_DOMAIN, self.uuid)
+        return '{}{}/media/images/{}{}.png'.format('https://', settings.STATIC_DOMAIN, self.uuid, '' if not original else '-priv')
 
-    def get_web_thumb_url(self):
+    def get_web_thumb_url(self, original=False):
         from django.conf import settings
-        return '{}{}/media/images/{}-thumb.png'.format('https://', settings.STATIC_DOMAIN, self.uuid)
+        return '{}{}/media/images/{}{}-thumb.png'.format('https://', settings.STATIC_DOMAIN, self.uuid, '' if not original else '-priv')
 
-    def copy_web(self, force=False):
+    def copy_web(self, force=False, original=False):
         import os, shutil
         from django.conf import settings
         if not self.image: return
-        new_path = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '.png'))
-        if not os.path.exists(new_path) or force:
-            if not os.path.exists(self.image.path): self.download_photo()
+        new_path = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '{}.png'.format('' if not original else '-priv')))
+        if self.image and (force or(not os.path.exists(new_path))):
+            if (not self.image) or not os.path.exists(self.image.path): self.download_photo()
             if not os.path.exists(self.image.path): return
-            shutil.copy(self.image.path, new_path)
-        new_path_thumb = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '-thumb.png'))
-        if self.image_thumbnail and (not os.path.exists(new_path_thumb)) or force:
-            if not os.path.exists(self.image_thumbnail.path):
+            if not original and self.private and (not self.image_censored) or (not os.path.exists(self.image_censored.path)): self.get_blur_url(gen=True)
+            shutil.copy(self.image.path if (self.private and original) else self.image_censored.path if self.private else self.image.path, new_path)
+        new_path_thumb = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '{}-thumb.png'.format('' if not original else '-priv')))
+        if self.image and (force or (not os.path.exists(new_path_thumb))):
+            if not self.private and  not os.path.exists(self.image_thumbnail.path):
                 self.download_thumbnail()
                 self.get_image_thumb_url()
             if not os.path.exists(self.image_thumbnail.path): return
-            shutil.copy(self.image_thumbnail.path, new_path_thumb)
+            if not original and self.private and (not self.image_censored_thumbnail) or (not os.path.exists(self.image_censored_thumbnail.path)):
+                self.get_blur_thumb_url(gen=True)
+            shutil.copy(self.image_thumbnail.path if self.private and original else self.image_censored_thumbnail.path if self.private else self.image_thumbnail.path, new_path_thumb)
 
     def has_auction(self):
         return timezone.now() < self.date_auction
@@ -268,14 +271,14 @@ class Post(models.Model):
         remove_secure.apply_async([full_path], countdown=120)
         return url
 
-    def get_blur_thumb_url(self):
+    def get_blur_thumb_url(self, gen=False):
         from django.conf import settings
         from feed.middleware import get_current_request
         if settings.USE_OFFSITE and self.image_thumb_offsite and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
         import os
 #        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
         try:
-            if self.image_censored_thumbnail_bucket: return self.image_censored_thumbnail_bucket.url
+            if (not gen) and self.image_censored_thumbnail_bucket: return self.image_censored_thumbnail_bucket.url
         except: pass
         full_path = None
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
@@ -283,7 +286,7 @@ class Post(models.Model):
         from feed.logo import add_logo
         import os, shutil
         if not self.image_censored_thumbnail or not os.path.exists(self.image_censored_thumbnail.path) or not os.path.exists(self.image_censored_thumbnail.path):
-            self.get_blur_url()
+            self.get_blur_url(gen)
             new_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, self.image.name, blur=True))
             try:
                 shutil.copy(self.image_censored.path, new_path)

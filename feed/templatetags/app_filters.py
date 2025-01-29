@@ -354,7 +354,7 @@ def stime(thetime):
     from .nts import nts as number_to_string
     from django.utils.dateparse import parse_datetime
     time = parse_datetime(str(thetime))
-    print(time)
+#    print(time)
     if time == None:
         return '---'
     times = time.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:%S').split(':')

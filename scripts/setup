@@ -247,6 +247,7 @@ pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
 pip3 install --upgrade requests
 pip3 install googletrans==3.1.0a0
 pip3 install --upgrade "nudenet>=3.4.2"
+pip3 install nudepy==0.4
 # Install certbot
 echo "Installing certificates"
 sudo snap install core; sudo snap refresh core

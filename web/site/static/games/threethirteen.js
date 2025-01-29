@@ -21,6 +21,7 @@
   var gameIsWon = false;
   var opponentWinsOnNextDiscard = false;
   var gameOverOnNextDiscard = false;
+  var recoveringState = false;
   function docReady(fn) {
     // see if DOM is already available
     if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -121,7 +122,7 @@
     var gameOverOnNextDiscard = false;
     var opponentWinsOnNextDiscard = false;
     let id;
-    let player1;
+    var player1;
     let canvasHeight
   try {
       id = document.getElementById("game_id").innerHTML;
@@ -357,7 +358,7 @@ function drawOpponentHandFaceup(){
           playerHandSuits = nSuits
           drawDiscard();
           drawHand();
-          checkPlayerWin();
+/*          checkPlayerWin();*/
           checkOpponentWin();
           canPlayerDraw = true;
           canPlayerDiscard = false;
@@ -366,11 +367,11 @@ function drawOpponentHandFaceup(){
           }*/
           if(opponentWinsOnNextDiscard){
             opponentWonGame();
-            if(preparingForNextRound){
+/*            if(preparingForNextRound){
             nextRound();
             gameIsWon = false;
             container.removeChild(wonContainer);
-          }
+          }*/
           } else {
             canPlayerDiscard = false;
             canPlayerDraw = false;
@@ -777,6 +778,11 @@ function stringDeck(deck) {
       }
       dropConfetti();
       stage.update();
+      if(user == player1){
+        send('<SCORE>,' + player1 + ',' + playerscore + ',' + opponentscore + '/');
+      } else {
+        send('<SCORE>,' + player2 + ',' + opponentscore + ',' + playerscore + '/');
+      }
   }
   function prepareForNextRound(){
     preparingForNextRound = true;
@@ -846,11 +852,11 @@ function stringDeck(deck) {
       drawHand();
       drawDiscard()
       drawOpponentHand();
-      if(currentRound%2 == 0){
+/*      if(currentRound%2 == 0){
           canPlayerDraw = (user == player1);
       } else {
           canPlayerDraw = (user != player1);
-      }
+      }*/
       setCurrentPlayer(canPlayerDraw);
       setRoundText();
     }
@@ -867,7 +873,7 @@ function stringDeck(deck) {
     if(score == 0){
       gameOverOnNextDiscard = true;
       //console.log("You go out next round")
-//      wonGame();
+      wonGame();
     }
   }
   function checkOpponentWin(){
@@ -1016,11 +1022,11 @@ function opponentDiscard(input){
   canPlayerDiscard = false;
   if(gameOverOnNextDiscard){
      wonGame();
-     if(preparingForNextRound){
+/*     if(preparingForNextRound){
         nextRound();
         gameIsWon = false;
         container.removeChild(wonContainer);
-     }
+     }*/
   }
           /*if(opponentWinsOnNextDiscard){
             opponentWonGame();
@@ -1210,6 +1216,7 @@ function drawDiscard(){
 
   var recovered = false;
   function recoverState(gp){
+    recoveringState = true;
     for(let i = 0; i < gp.length-1; i++){
       console.log("Recovering turn: " + gp[i]);
           sp = gp[i].split(",");
@@ -1224,17 +1231,12 @@ function drawDiscard(){
           } else if(sp[0] == "discard" && sp[2] != user){
             opponentDiscard(sp[1]);
             canPlayerDraw = true;
-          if(preparingForNextRound){
-            nextRound();
-            gameIsWon = false;
-            container.removeChild(wonContainer);
-          }
-/*          if(preparingForNextRound){
-            nextRound();
-            gameIsWon = false;
-            container.removeChild(wonContainer);
-          }*/
-    /*  if(gameIsWon){
+             /* if(preparingForNextRound){
+                nextRound();
+                gameIsWon = false;
+                container.removeChild(wonContainer);
+              }*/
+/*      if(gameIsWon){
               container.removeChild(wonContainer);
               // Start next game
               nextRound();
@@ -1258,20 +1260,21 @@ function drawDiscard(){
             discardSuit = parseInt(theDiscard[1])
             playerDiscard(discardCard, discardSuit);
             canPlayerDiscard = false;
-          if(preparingForNextRound){
+/*          if(preparingForNextRound){
             nextRound();
             gameIsWon = false;
             container.removeChild(wonContainer);
-          }
-          /*if(gameIsWon){
+          }*/
+          if(gameIsWon){
               container.removeChild(wonContainer);
               // Start next game
               nextRound();
               gameIsWon = false;
-            }*/
           }
         }
+      }
     currentTurn = gp.length-1;
+    recoveringState = false;
   }
 
   function readCallback(){
@@ -1306,12 +1309,12 @@ function drawDiscard(){
             opponentDiscard(sp[1]);
             canPlayerDraw = true;
             currentTurn = i+1;
-          if(preparingForNextRound){
+/*          if(preparingForNextRound){
             nextRound();
             gameIsWon = false;
             container.removeChild(wonContainer);
           }
-/*          if(gameIsWon){
+          if(gameIsWon){
               container.removeChild(wonContainer);
               // Start next game
               nextRound();
@@ -1434,17 +1437,25 @@ function drawDiscard(){
       wonText.x = leftbound + 500;
       wonText.y = topbound + 935;
       wonText.textAlign = 'center'
-/*      wonContainer.on("mousedown", function(event) {
-        container.removeChild(wonContainer);
-        // Start next game
-        nextRound();
-        gameIsWon = false;
-      });*/
       drawOpponentHandFaceup();
       prepareForNextRound();
       wonContainer.addChild(wonDialog);
       wonContainer.addChild(wonText);
       container.addChild(wonContainer);
+      if(!recoveringState) {
+          wonContainer.on("mousedown", function(event) {
+            container.removeChild(wonContainer);
+            // Start next game
+            nextRound();
+            gameIsWon = false;
+          });
+      } else {
+        container.removeChild(wonContainer);
+            // Start next game
+            nextRound();
+            gameIsWon = false;
+
+      }
     }
   }
 

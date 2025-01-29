@@ -7,13 +7,13 @@
 {% load feed_filters %}
 {% load app_filters %}
 <h1>{{ post.id|shorttitle|etrans }}</h1>
-<img src="{{ post.author.profile.get_image_url }}" alt="{{ post.author.profile.name }}'s profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
+<img src="{{ post.author.profile.get_image_url }}" alt="{{ post.author.profile.name }}{{ '\'s profile photo'|etrans }}" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>{{ 'By'|etrans }} {{ post.author.profile.name }}</i></p>
 {% autoescape off %}
 <div style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content_compiled|etrans }}{% else %}{{ post.content|etrans }}{% endif %}</div>
 {% include 'banner_ad.html' %}
 {% if post.image %}
-<img width="100%;" height="auto" src="{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}" alt="{{ post.id|shorttitle }} - by {{ post.author.profile.name }}">
+<img width="100%;" height="auto" src="{% if or_image_url %}{{ or_image_url }}{% else %}{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}{% endif %}" alt="{{ post.id|shorttitle }} - {{ 'by'|etrans }} {{ post.author.profile.name }}">
 {% endif %}
 {{ post_links }}
 {% endautoescape %}

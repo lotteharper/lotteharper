@@ -93,8 +93,8 @@ def biometric_verified_skey(user, session_key):
     return user.profile.enable_biometrics or user.webauth_devices.count() == 0 or ((user.biometric.filter(valid=True, session_key=session_key).count() > 0 and user.biometric.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.BIOMETRIC_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
 
 def face_mrz_or_nfc_verified_session_key(user, session_key):
-    print(user.is_authenticated)
-    print(pin_verified_skey(user, session_key))
-    print(recent_face_match_skey(user, session_key))
-    print(mrz_or_nfc_verified_skey(user, session_key))
+#    print(user.is_authenticated)
+#    print(pin_verified_skey(user, session_key))
+#    print(recent_face_match_skey(user, session_key))
+#    print(mrz_or_nfc_verified_skey(user, session_key))
     return user.is_authenticated and ((pin_verified_skey(user, session_key) and (recent_face_match_skey(user, session_key) or mrz_or_nfc_verified_skey(user, session_key))) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)

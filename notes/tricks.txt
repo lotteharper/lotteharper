@@ -11,3 +11,7 @@ Then load:
 Run manage.py loaddata <fixturename> to load your fixture data into the now-empty tables.
 
 manage.py loaddata <app_name>
+
+Git fix: reset last commit (as many times as needed)
+git reset HEAD~
+sudo git reset HEAD~

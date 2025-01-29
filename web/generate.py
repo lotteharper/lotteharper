@@ -1,4 +1,7 @@
-overwrite = True
+overwrite = False
+test_mode = False
+single_lang = False
+force_copy = False
 PRIV_POSTS = 24
 import os, pytz
 from datetime import datetime
@@ -39,7 +42,7 @@ def generate_site():
     from translate.translate import translate
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
-    languages = ['en', 'de', 'fr']
+    if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
     langs = languages
     for lang in langs:
         images = ''
@@ -48,13 +51,13 @@ def generate_site():
         request = DummyRequest(lang)
         request.GET = GetParams(lang)
         set_current_request(request)
-        print(lang)
+#        print(lang)
         try:
             os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
         except: pass
         for post in Post.objects.filter(uploaded=True, public=True, private=False, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted'):
             if post.image and post.image:
-                if post.image and not post.image_offsite: post.copy_web()
+                if post.image and not post.image_offsite: post.copy_web(force=force_copy)
                 img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
                 if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
                 count = count + 1
@@ -78,7 +81,7 @@ def generate_site():
                 from feed.compile import compile
                 compile(post)
                 post = Post.objects.get(id=post.id)
-            if post.image and not post.image_offsite: post.copy_web()
+            if post.image and not post.image_offsite: post.copy_web(force=force_copy)
             img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
             if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url()
             blog = blog + '<div id="feed{}">{}'.format(count, translate(request, post.content_compiled, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, title) if post.image else '')
@@ -121,6 +124,7 @@ def generate_site():
             'monero_address': settings.MONERO_ADDRESS,
             'the_ad_text': settings.AD_TEXT,
             'request': request,
+            'languages': languages,
             'lang': lang
         }
         context['path'] = '/{}/{}'.format(lang, '')
@@ -149,9 +153,9 @@ def generate_site():
         count = 0
         for post in Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted')[:PRIV_POSTS]:
             if post.image and post.image:
-                if post.image and not post.image_offsite: post.copy_web()
-                img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
-                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
+                if post.image: post.copy_web(force=force_copy, original=True)
+                img_url = post.get_web_url(original=True) # post.get_image_url() if post.image_offsite else
+#                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
                 count = count + 1
                 images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
                 images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/feed/post/{}" title="{}">{}</a>'.format(settings.BASE_URL, post.friendly_name, translate(request, 'View post', lang, 'en') + ' - {} by {}'.format(translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
@@ -163,12 +167,11 @@ def generate_site():
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
             file.write(private)
         context['footer'] = False # ...None).exclude(image_offsite=None)
-        for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted'):
+        for post in [] if test_mode else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
                 context['path'] = url
- #               print(url)
                 context['title'] = translate(request, shorttitle(post.id), lang, 'en')
                 context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
                 path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
@@ -185,11 +188,12 @@ def generate_site():
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
                 context['path'] = url
- #               print(url)
-                context['title'] = translate(request, 'Private Photo' + shorttitle(post.id), lang, 'en')
+                if post.image and not post.image_offsite: post.copy_web(force=force_copy, original=True)
+                context['or_image_url'] = post.get_web_url(original=False)
+                context['title'] = translate(request, 'Private Photo', lang, 'en') + ' - ' + translate(request, shorttitle(post.id), lang, 'en')
                 context['post_links'] = '<p>{}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
                 path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
-                if (not os.path.exists(path)) or overwrite:
+                if overwrite or (not os.path.exists(path)):
                     try:
                         index = render_to_string('web/post.html', context)
                         with open(path, 'w') as file:
@@ -197,6 +201,7 @@ def generate_site():
                     except:
                         import traceback
                         print(traceback.format_exc())
+#                    print('Overwriting')
         context['title'] = 'Our Online Experience'
         context['hidenav'] = True
         context['hidefooter'] = True
@@ -204,6 +209,17 @@ def generate_site():
         ad = render_to_string('web/ad.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/ad.html'.format(lang)), 'w') as file:
             file.write(ad)
+        images = None
+        context['path'] = '/{}/404'.format(lang)
+        context['title'] = translate(request, 'Error 404 - File Not Found', lang, 'en')
+        context['hiderrm'] = True
+        context['hidenav'] = False
+        context['hidefooter'] = False
+        path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, '404'))
+        if test_mode or not os.path.exists(path) or overwrite:
+            index = render_to_string('web/404.html', context)
+            with open(path, 'w') as file:
+                file.write(index)
     context['hidenav'] = False
     context['hidefooter'] = False
     urls = ['/', '/news', '/landing','/private','/index','/contact']

@@ -45,7 +45,6 @@ class CurrentUserMiddleware(MiddlewareMixin):
     def process_request(self, request):
         _user.value = request.user
 
-
 def get_current_user():
     try:
         return _user.value if _user.value.is_authenticated else None
