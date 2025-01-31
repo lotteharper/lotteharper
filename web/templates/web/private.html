@@ -122,6 +122,39 @@ document.body.addEventListener('click', function(event) {
 document.body.addEventListener('touchmove', function(event) {
     initialize();
 });
+function patchImage(img, code, alt) {
+    if(!$(img).hasClass('loaded')) {
+      fetch(img.src)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        console.log('alt is ' + new String(alt));
+        var de;
+        if(alt) {
+            de = decrypt_cbc(text.split(",")[1], code);
+        } else {
+            de = decrypt_cbc(text.split(",")[0], code);
+        }
+        if(de && !$(img).hasClass('loaded')) { 
+            img.src = "data:image/png;base64," + de;
+            $(img).addClass("loaded");
+        }
+      })
+      .catch(error => {
+      });
+    }
+}
+function patchEnc(code, alt) {
+    var els = document.getElementsByClassName("loadenc");
+    for(var y = 0; y < els.length; y++){
+        patchImage(els[y], code, alt);
+    }
+}
+var alternate_code = false;
 function decryptPrivateFeed(code=null) {
     var res;
     var dec;
@@ -134,11 +167,13 @@ function decryptPrivateFeed(code=null) {
             return;
         }
         dec = decrypt_cbc(images, res);
+        code = res;
     } else {
         dec = decrypt_cbc(nfc_images, code);
+        alternate_code = true;
     }
     if(dec) {
-        info.innerHTML = '{{ 'Successfully decrypted photos.'|etrans }}';
+       info.innerHTML = '{{ 'Successfully decrypted photos.'|etrans }}';
         images = dec.split('\n');
         setInterval(function() {
             if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {
@@ -156,6 +191,7 @@ function decryptPrivateFeed(code=null) {
                    if(!document.getElementById('div' + new String(ncount)) && images[ncount]) {
                        photoPage.insertAdjacentHTML("beforeend", images[ncount] + '<hr>');
                        garbageDisposal(ncount);
+                        patchEnc(code, alternate_code);
                        ncount = ncount + 1;
                     } else {
                         ncount = ncount + 1;
@@ -168,6 +204,7 @@ function decryptPrivateFeed(code=null) {
                    if(!document.getElementById('div' + new String(lcount)) && images[lcount]) {
                        photoPage.insertAdjacentHTML("afterbegin", images[lcount] + '<hr>');
                        garbageDisposal(lcount);
+                        patchEnc(code, alternate_code);
                        lcount = lcount - 1;
                     } else {
                         lcount = lcount - 1;

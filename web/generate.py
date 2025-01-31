@@ -1,4 +1,4 @@
-overwrite = False
+overwrite = True
 test_mode = False
 single_lang = False
 force_copy = False
@@ -153,11 +153,11 @@ def generate_site():
         count = 0
         for post in Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted')[:PRIV_POSTS]:
             if post.image and post.image:
-                if post.image: post.copy_web(force=force_copy, original=True)
+                if post.image: post.copy_web(force=force_copy, original=True, altcode=nfc_aes)
                 img_url = post.get_web_url(original=True) # post.get_image_url() if post.image_offsite else
 #                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
                 count = count + 1
-                images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
+                images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img class="loadenc" width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
                 images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/feed/post/{}" title="{}">{}</a>'.format(settings.BASE_URL, post.friendly_name, translate(request, 'View post', lang, 'en') + ' - {} by {}'.format(translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
         context['images'] = urllib.parse.quote(encrypt_cbc(images, settings.PRV_AES_KEY))
         context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
@@ -188,7 +188,7 @@ def generate_site():
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
                 context['path'] = url
-                if post.image and not post.image_offsite: post.copy_web(force=force_copy, original=True)
+                if post.image and not post.image_offsite: post.copy_web(force=force_copy, original=False)
                 context['or_image_url'] = post.get_web_url(original=False)
                 context['title'] = translate(request, 'Private Photo', lang, 'en') + ' - ' + translate(request, shorttitle(post.id), lang, 'en')
                 context['post_links'] = '<p>{}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))

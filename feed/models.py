@@ -9,6 +9,12 @@ from django.conf import settings
 
 models.TextField.register_lookup(Length, 'length')
 
+def resize_img(image, scale):
+    import cv2
+    width = int(image.shape[1] * scale)
+    height = int(image.shape[0] * scale)
+    return cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
+
 def b64enctxt(txt):
     import base64, math
     txt = txt[:math.floor(200 * 6/8)]
@@ -92,31 +98,65 @@ class Post(models.Model):
 
     def get_web_url(self, original=False):
         from django.conf import settings
-        return '{}{}/media/images/{}{}.png'.format('https://', settings.STATIC_DOMAIN, self.uuid, '' if not original else '-priv')
+        return '{}{}/media/images/{}{}.{}'.format('https://', settings.STATIC_DOMAIN, self.uuid, '' if not original else '-priv', 'png' if not self.private else 'cbcenc')
 
     def get_web_thumb_url(self, original=False):
         from django.conf import settings
-        return '{}{}/media/images/{}{}-thumb.png'.format('https://', settings.STATIC_DOMAIN, self.uuid, '' if not original else '-priv')
+        return '{}{}/media/images/{}{}-thumb.{}'.format('https://', settings.STATIC_DOMAIN, self.uuid, '' if not original else '-priv', 'png' if not self.private else 'cbcenc')
 
-    def copy_web(self, force=False, original=False):
+    def copy_web(self, force=False, original=False, altcode=None):
         import os, shutil
         from django.conf import settings
         if not self.image: return
-        new_path = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '{}.png'.format('' if not original else '-priv')))
-        if self.image and (force or(not os.path.exists(new_path))):
+        new_path = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '{}.{}'.format('' if not original else '-priv', 'png' if not self.private else 'cbcenc')))
+        new_path_thumb = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '{}-thumb.{}'.format('' if not original else '-priv', 'png' if not self.private else 'cbcenc')))
+        if self.image and self.private and original and (force or (not os.path.exists(new_path)) or (not os.path.exists(new_path_thumb))):
             if (not self.image) or not os.path.exists(self.image.path): self.download_photo()
             if not os.path.exists(self.image.path): return
-            if not original and self.private and (not self.image_censored) or (not os.path.exists(self.image_censored.path)): self.get_blur_url(gen=True)
-            shutil.copy(self.image.path if (self.private and original) else self.image_censored.path if self.private else self.image.path, new_path)
-        new_path_thumb = os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}{}'.format(self.uuid, '{}-thumb.png'.format('' if not original else '-priv')))
-        if self.image and (force or (not os.path.exists(new_path_thumb))):
-            if not self.private and  not os.path.exists(self.image_thumbnail.path):
+            import base64, cv2
+            img = cv2.imread(self.image.path)
+            img = resize_img(img, 0.2)
+            _, buffer = cv2.imencode('.png', img)
+            data = base64.b64encode(buffer).decode('utf-8')
+            from security.crypto import encrypt_cbc
+            import urllib.parse
+            data = urllib.parse.quote(encrypt_cbc(data, settings.PRV_AES_KEY)) + ((',' + urllib.parse.quote(encrypt_cbc(data, altcode))) if altcode else '')
+            with open(new_path, 'w') as file:
+                file.write(data)
+            file.close()
+            if not self.private and ((not self.image_thumbnail) or (not os.path.exists(self.image_thumbnail.path))):
                 self.download_thumbnail()
                 self.get_image_thumb_url()
             if not os.path.exists(self.image_thumbnail.path): return
-            if not original and self.private and (not self.image_censored_thumbnail) or (not os.path.exists(self.image_censored_thumbnail.path)):
+            img = cv2.imread(self.image_thumbnail.path)
+            img = resize_img(img, 0.2)
+            _, buffer = cv2.imencode('.png', img)
+            data = base64.b64encode(buffer).decode('utf-8')
+            data = urllib.parse.quote(encrypt_cbc(data, settings.PRV_AES_KEY)) + ((',' + urllib.parse.quote(encrypt_cbc(data, altcode))) if altcode else '')
+            with open(new_path_thumb, 'w') as file:
+                file.write(data)
+            file.close()
+            return
+        if self.image and (force or(not os.path.exists(new_path))):
+            if (not self.image) or not os.path.exists(self.image.path): self.download_photo()
+            if not os.path.exists(self.image.path): return
+            if not original and self.private and ((not self.image_censored) or (not os.path.exists(self.image_censored.path))): self.get_blur_url(gen=True)
+            shutil.copy(self.image.path if (self.private and original) else self.image_censored.path if self.private else self.image.path, new_path)
+        if self.image and (force or (not os.path.exists(new_path_thumb))):
+            if not self.private and ((not self.image_thumbnail) or (not os.path.exists(self.image_thumbnail.path))):
+                self.download_thumbnail()
+                self.get_image_thumb_url()
+            if not os.path.exists(self.image_thumbnail.path): return
+            if not original and self.private and ((not self.image_censored_thumbnail) or (not os.path.exists(self.image_censored_thumbnail.path))):
                 self.get_blur_thumb_url(gen=True)
-            shutil.copy(self.image_thumbnail.path if self.private and original else self.image_censored_thumbnail.path if self.private else self.image_thumbnail.path, new_path_thumb)
+            self = Post.objects.get(id=self.id)
+            try:
+                shutil.copy(self.image_thumbnail.path if self.private and original else self.image_censored_thumbnail.path if self.private else self.image_thumbnail.path, new_path_thumb)
+            except:
+                self.get_blur_thumb_url(gen=True)
+                self = Post.objects.get(id=self.id)
+                if self.private and ((not self.image_censored_thumbnail) or (not os.path.exists(self.image_censored_thumbnail.path))): return
+                shutil.copy(self.image_thumbnail.path if self.private and original else self.image_censored_thumbnail.path if self.private else self.image_thumbnail.path, new_path_thumb)
 
     def has_auction(self):
         return timezone.now() < self.date_auction
@@ -286,7 +326,7 @@ class Post(models.Model):
         from feed.logo import add_logo
         import os, shutil
         if not self.image_censored_thumbnail or not os.path.exists(self.image_censored_thumbnail.path) or not os.path.exists(self.image_censored_thumbnail.path):
-            self.get_blur_url(gen)
+            self.get_blur_url(gen=gen)
             new_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, self.image.name, blur=True))
             try:
                 shutil.copy(self.image_censored.path, new_path)

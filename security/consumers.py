@@ -40,9 +40,7 @@ def logout_user(user_id, session_key):
     [s.delete() for s in Session.objects.all() if s.get_decoded().get('_auth_user_id') == user.id and s.session_key == session_key]
 
 async def security_event(self):
-    await asyncio.sleep(15)
     auth2 = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
-    print(auth2)
     await self.send(text_data=('y' if auth2 else 'n'))
 
 async def security_thread(self):
