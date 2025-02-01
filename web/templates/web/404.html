@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ 'This page could not be found.'|etrans }}</h1>
 <p><i>{{ 'Consider going back to the'|etrans }} <a href="/" title="{{ 'Home page'|etrans }}">{{ 'home page'|etrans }}</a>.</i></p>
-<img class="mx-auto" style="width: 80%; height: auto" src="{{ model.profile.image_cover_offsite }}" alt="{{ 'My cover photo'|etrans }}">
+<img class="mx-auto" style="width: 80%; height: auto" src="{{ model.profile.get_cover_image_url }}" alt="{{ 'My cover photo'|etrans }}">
 {% include 'banner_ad.html' %}
 {% endblock %}
 {% block javascript %}
