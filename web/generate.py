@@ -1,7 +1,8 @@
-overwrite = True
+overwrite = False
 test_mode = False
 single_lang = False
 force_copy = False
+force_overwrite = True
 PRIV_POSTS = 24
 import os, pytz
 from datetime import datetime
@@ -151,8 +152,8 @@ def generate_site():
         from security.crypto import encrypt_cbc
         images = ''
         count = 0
-        for post in Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted')[:PRIV_POSTS]:
-            if post.image and post.image:
+        for post in Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None).exclude(image=None).order_by('-date_posted')[:settings.PAID_POSTS * 2]:
+            if post.image:
                 if post.image: post.copy_web(force=force_copy, original=True, altcode=nfc_aes)
                 img_url = post.get_web_url(original=True) # post.get_image_url() if post.image_offsite else
 #                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
@@ -164,8 +165,9 @@ def generate_site():
         context['path'] = '/{}/{}'.format(lang, 'private')
         context['title'] = translate(request, 'Private', lang, 'en')
         private = render_to_string('web/private.html', context)
-        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
-            file.write(private)
+        if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite or force_overwrite:
+            with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
+                file.write(private)
         context['footer'] = False # ...None).exclude(image_offsite=None)
         for post in [] if test_mode else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted'):
             if post:
