@@ -60,3 +60,31 @@ def get_next_redirect(request):
         if (not red) and (not request.method == 'POST') and redirect_path(request.path): sync_patch_session(request.user.id, request.session.session_key)
         return False
     return False
+
+def update_session(user_id, skey):
+    from django.contrib.auth.models import User
+    user = User.objects.get(id=int(user_id))
+    if user.is_authenticated:
+        from users.middleware import get_qs, redirect_path
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+        from security.tests import face_mrz_or_nfc_verified_session_key, pin_verified_skey, biometric_verified_skey, otp_verified_skey, vivokey_verified_skey
+        red = False
+        if user.profile.vendor and (not vivokey_verified_skey(user, skey)):
+            red = True
+            return False
+        if  user.profile.vendor and (not face_mrz_or_nfc_verified_session_key(user, skey)):
+            red = True
+            return False
+        if user.profile.vendor and (not biometric_verified_skey(user, skey)):
+            red = True
+            return False
+        if user.profile.vendor and (not otp_verified_skey(user, skey)):
+            red = True
+            return False
+        if user.profile.vendor and (not pin_verified_skey(user, skey)):
+            red = True
+            return False
+        if (not red): sync_patch_session(int(user_id), skey)
+        return False
+    return False

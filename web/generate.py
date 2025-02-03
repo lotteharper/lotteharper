@@ -165,7 +165,7 @@ def generate_site():
         context['path'] = '/{}/{}'.format(lang, 'private')
         context['title'] = translate(request, 'Private', lang, 'en')
         private = render_to_string('web/private.html', context)
-        if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite or force_overwrite:
+        if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
         context['footer'] = False # ...None).exclude(image_offsite=None)

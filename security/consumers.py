@@ -48,6 +48,11 @@ async def security_thread(self):
         await security_event(self)
         await asyncio.sleep(15)
 
+@sync_to_async
+def patch_session(user_id, skey):
+    from security.build import update_session
+    update_session(user_id, skey)
+
 class ModalConsumer(AsyncWebsocketConsumer):
     user_id = None
     session_key = None
@@ -56,6 +61,7 @@ class ModalConsumer(AsyncWebsocketConsumer):
         self.user_id = self.scope['user'].id
         self.session_key = self.scope['session'].session_key
         auth = await get_user(self.scope['user'].id)
+        await patch_session(self.scope['user'].id, self.session_key)
         if not (auth): return
         await self.accept()
         self.connected = True
