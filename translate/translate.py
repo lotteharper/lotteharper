@@ -62,3 +62,15 @@ def translate(request, content, target=None, src=None):
         CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation)
     else: return content
     return text
+
+
+def translate_html(request, html, target=None, src=None):
+    """Translates HTML content to the target language."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, 'html.parser')
+    for tag in soup.find_all(string=True):
+        if tag.parent.name not in ['script', 'style', 'pre', 'code']:
+            print(tag.parent.name)
+            translated = translate(request, tag.string, target=target, src=src)
+            tag.replace_with(translated)
+    return str(soup)

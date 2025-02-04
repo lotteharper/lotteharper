@@ -6,6 +6,7 @@
 <div style="height: 15%; width: 100%;"></div>
 <legend class="article-content mt-5 pt-3">{{ post.id|shorttitle|trans }}</legend>
 <p class="article-content mb-5 pb-5">
+{% blocktrans %}
 {% autoescape off %}
 {% if post.content_compiled %}
 {{ post.content_compiled }}
@@ -13,6 +14,7 @@
 {{ post.content }}
 {% endif %}
 {% endautoescape %}
+{% endblocktrans %}
 </p>
 <hr class="m-5 p-5">
 <hr class="m-5 p-5">

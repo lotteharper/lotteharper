@@ -17,7 +17,9 @@ def crypto_onramp(request, name, address, amount):
     from django.urls import reverse
     import os, json
     op = os.popen('curl -X POST https://api.stripe.com/v1/crypto/onramp_sessions -u {} -d "wallet_addresses[ethereum]"="{}" -d "source_currency"="usd" -d "destination_currency"="eth" -d "destination_network"="ethereum" -d "source_amount"="{}"'.format(settings.STRIPE_API_KEY, user.vendor_profile.ethereum_address if request.GET.get('tip', False) else address, amount)).read()
+    print(op)
     out = json.loads(op)
+    print(json.dumps(out))
     from django.http import HttpResponse
     return HttpResponse(out['client_secret'])
 
