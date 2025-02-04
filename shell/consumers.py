@@ -49,7 +49,7 @@ def get_req(scope):
     user = User.objects.get(id=scope['user'].id)
     ip = scope['client'][0]
     path = scope['path']
-    print(ip)
+#    print(ip)
     s = Session.objects.create(user=user, ip_address=ip, path=path)
     from django.utils import timezone
     import datetime
@@ -88,7 +88,7 @@ def receive_data(self, text_data):
     from security.crypto import decrypt_cbc
     import urllib.parse
     raw = decrypt_cbc(urllib.parse.unquote(text_data), secret=self.key)
-    print(raw)
+ #   print(raw)
     try:
         data = json.loads(raw)
         if 'command' in data.keys(): self.channel.send(data['command'])
@@ -191,7 +191,7 @@ def shell_thread(self, channel):
 def receive_data_shell(self, text_data):
     from security.crypto import encrypt_cbc, decrypt_cbc
     import urllib.parse
-    print('Key: {}'.format(self.key))
+#    print('Key: {}'.format(self.key))
     command = decrypt_cbc(urllib.parse.unquote(text_data), secret=self.key)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)

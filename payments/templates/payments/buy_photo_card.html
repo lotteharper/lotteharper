@@ -33,7 +33,7 @@
 <li>{{ 'One private'|etrans }} {% if not post.file %}{{ 'photo'|etrans }}{% else %}{{ 'download, video or audio'|etrans }}{% endif %} {{ 'featuring'|etrans }} {{ username }} (${{ fee|sub_fee }})</li>
 <li>{{ 'Billed once only.'|etrans }}</li>
 </ul>
-<p><i>{{ 'Want to pay with cryptocurrency instead?'|etrans }}</i> <a href="{% url 'payments:buy-photo-crypto' post.author.profile.name %}?id={{ post.id }}&crypto={{ default_crypto }}" class="btn btn-outline-info" title="{{ 'Pay with crypto'|etrans }}">{{ 'Pay with Cryptocurrency'|etrans }}</a></p>
+<p><i>{{ 'Want to pay with cryptocurrency instead?'|etrans }}</i> <a href="{% url 'payments:buy-photo-crypto' post.author.profile.name %}?id={{ post.uuid }}&crypto={{ default_crypto }}" class="btn btn-outline-info" title="{{ 'Pay with crypto'|etrans }}">{{ 'Pay with Cryptocurrency'|etrans }}</a></p>
 <b>{{ 'Info:'|etrans }}</b>
 <p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} AUDIOVISUAL".</p>
 <p>{{ 'For questions or concerns, please contact'|etrans }} {{ the_site_name }} {{ 'at'|etrans }} {{ agent_phone }} {{ 'or mail to'|etrans }} {{ agent_name }} {{ agent_address }}.</p>
