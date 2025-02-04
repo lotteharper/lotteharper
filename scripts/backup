@@ -26,7 +26,7 @@ cd /home/$U/$DIR
 date > backup_init_date.txt
 sudo cp /home/team/Documents/keylog/log.py scripts/log.py
 sudo cp /var/log/audit/auditd.log log/auditd.log
-sudo cp /var/log/commands.log log/commands.log
+sudo cp /var/log/commands.log* log/
 # TEMPORARY
 sudo rm .git/index.lock
 sudo cp /etc/apache2/sites-available/lotteh-le-ssl.conf config/lotteh-le-ssl.conf

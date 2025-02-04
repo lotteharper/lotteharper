@@ -72,18 +72,23 @@ def update_session(user_id, skey):
         red = False
         if user.profile.vendor and (not vivokey_verified_skey(user, skey)):
             red = True
+            print('vivokey not verified')
             return False
         if  user.profile.vendor and (not face_mrz_or_nfc_verified_session_key(user, skey)):
             red = True
+            print('face mrz or nfc not verified')
             return False
         if user.profile.vendor and (not biometric_verified_skey(user, skey)):
             red = True
+            print('biometric not verified')
             return False
         if user.profile.vendor and (not otp_verified_skey(user, skey)):
             red = True
+            print('otp not verified')
             return False
         if user.profile.vendor and (not pin_verified_skey(user, skey)):
             red = True
+            print('pin not verified')
             return False
         if (not red): sync_patch_session(int(user_id), skey)
         return True
