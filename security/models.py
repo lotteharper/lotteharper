@@ -190,7 +190,7 @@ class Session(models.Model):
     index = models.IntegerField(default=0)
     uuid_key = models.CharField(max_length=36, default='', null=True)
     http_referrer = models.TextField(default='', null=True)
-    content_length = models.TextField(default='', null=True, blank=True)
+    content_length = models.CharField(default='', null=True, blank=True, max_length=24)
     path = models.TextField(default='')
     querystring = models.TextField(default='')
     time = models.DateTimeField(default=timezone.now)

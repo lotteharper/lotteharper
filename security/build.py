@@ -64,7 +64,7 @@ def get_next_redirect(request):
 def update_session(user_id, skey):
     from django.contrib.auth.models import User
     user = User.objects.get(id=int(user_id))
-    if user.is_authenticated:
+    if user:
         from users.middleware import get_qs, redirect_path
         from django.http import HttpResponseRedirect
         from django.urls import reverse
@@ -86,5 +86,6 @@ def update_session(user_id, skey):
             red = True
             return False
         if (not red): sync_patch_session(int(user_id), skey)
-        return False
-    return False
+        return True
+    return True
+
