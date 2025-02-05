@@ -16,6 +16,12 @@ async def find_user_by_socket(socket):
         if user['socket'].uid == socket.uid: return user
     return None
 
+def find_user_by_socket_sync(socket):
+    global connected_users
+    for user in connected_users:
+        if user['socket'].uid == socket.uid: return user
+    return None
+
 def update_username_socket(socket, name):
     global connected_users
     for user in connected_users:
@@ -192,7 +198,10 @@ def update_age(self, user, message):
                     from chat.age import is_nude
                     nude = None
                     nude = is_nude(message['data'])
-                    if nude or (age and age != '?' and int(age) < 13):
+                    other_person = find_user_by_name_sync(self.connected_with)
+                    if 'age' in other_person and other_person['age'] < 18:
+                        ban = True
+                    if ban or (nude and (age and age != '?' and int(age) < 18)) or (age and age != '?' and int(age) < 13):
                         ban_user(self, us['name'])
                         from security.models import UserIpAddress
                         ip = self.scope["client"][0]
@@ -200,6 +209,7 @@ def update_age(self, user, message):
                         for i in ips:
                             i.risk_detected = True
                             i.save()
+                        self.disconnect()
                 except: pass
                 try:
 #                    from chat.age import is_violent
@@ -212,12 +222,14 @@ def update_age(self, user, message):
                         for i in ips:
                             i.risk_detected = True
                             i.save()
+                        self.disconnect()
                 except: pass
 
 class VideoConsumer(AsyncWebsocketConsumer):
     uid = None
     connected = False
     key = None
+    connected_with = None
     async def connect(self):
         self.uid = str(uuid.uuid4())
         self.room_group_name = 'test_room'
@@ -251,8 +263,10 @@ class VideoConsumer(AsyncWebsocketConsumer):
                     await add_connected_user(self, message['name'], message['key'])
             case 'start_call':
                 await forward_message(sender, message)
+                self.connected_with = message['otherPerson']
             case 'end_call':
                 await forward_message(sender, message)
+                self.connected_with = None
                 print('end call ' + text_data)
             case 'webrtc_ice_candidate':
                 await forward_message(sender, message)
