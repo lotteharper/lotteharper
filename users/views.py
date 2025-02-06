@@ -710,6 +710,7 @@ def login(request):
     return render(request,'users/login.html', {'form':form, 'title': title, 'dontshowad': True, 'dontshowsidebar': True, 'small': True, 'email_query_delay': 15})
 
 def activate(request, uidb64, token):
+    from django.urls import reverse
     from django.contrib import messages
     from django.contrib.auth.models import User
     from security.apis import get_client_ip
@@ -722,13 +723,20 @@ def activate(request, uidb64, token):
     from django.utils.encoding import force_str
     from users.models import Profile
     from security.models import SecurityProfile
+    from barcode.tests import barcode_scanned
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     ip = get_client_ip(request)
-    if user is not None and account_activation_token.check_token(user, token) and not check_raw_ip_risk(ip):
+    if user.profile.email_verified and not barcode_scanned(user):
+        messages.success(request, 'You have already verified your email. Please continue to take a photo of your face and scan your ID.')
+        return redirect(reverse('users:login') + '?next=' + reverse('barcode:scan'))
+    elif user.profile.email_verified:
+        messages.success(request, 'You have already verified your email. Please continue to login.')
+        return redirect(reverse('users:login'))
+    elif user is not None and account_activation_token.check_token(user, token) and not check_raw_ip_risk(ip):
         if not user.profile.email_verified:
             from .tfa import send_user_text
             send_user_text(User.objects.get(id=settings.MY_ID), 'Someone new has joined {}.'.format(settings.SITE_NAME))
@@ -738,10 +746,10 @@ def activate(request, uidb64, token):
         user.save()
         sendwelcomeemail(request, user)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
-        return redirect(user.profile.create_face_url())
+        return redirect(user.profile.create_face_url() + '?next=' + reverse('barcode:scan'))
     else:
         messages.success(request, f'Your activation link has expired. Please request a new activation link.')
-        return redirect('verify:verify')
+        return redirect(reverse('users:verify'))
 
 def resend_activation(request):
     from .forms import ResendActivationEmailForm

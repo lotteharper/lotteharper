@@ -207,6 +207,9 @@ DATABASES = {
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
+#        'OPTIONS': {
+#            'timeout': 180,
+#        }
 #        'DISABLE_SERVER_SIDE_CURSORS': True,
     },
     'lotteh2024': {
@@ -216,6 +219,9 @@ DATABASES = {
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
+#        'OPTIONS': {
+#            'timeout': 180,
+#        }
 #        'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 #    'default': {
