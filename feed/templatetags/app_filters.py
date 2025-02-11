@@ -853,6 +853,9 @@ class LinebreaklessNode(Node):
         strip_line_breaks = keep_lazy(six.text_type)(lambda x: x.replace('\n', ''))
         return strip_line_breaks(self.nodelist.render(context).strip())
 
+@register.filter('isoformat')
+def isoformat(thetime):
+    thetime.isoformat()
 
 @register.filter('cryptoformat')
 def cryptoformat(amount):

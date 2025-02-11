@@ -208,8 +208,8 @@
               link.href = url;
               link.download = '{{ site_name }} - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

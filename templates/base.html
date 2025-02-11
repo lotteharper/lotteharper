@@ -170,6 +170,7 @@
         <script src="/static/main-bs4.js"></script>
         {% endif %}
         {% endif %}
+        <a href="#" download id="qrcode-download" class="hide"></a></a>
         {% block javascripts %}{% endblock %}
         <script>
         	{% block javascript %}{% endblock %}
@@ -232,12 +233,11 @@
                 image.style.maxWidth = "160px";
         	image.alt = "{{ 'Share this page by scanning a QR code.'|etrans }}";
                 function downloadQrImage(url, filename) {
-                  const link = document.createElement('a');
+                  const link = document.getElementById('qrcode-download');
                   link.href = url;
+                  link.classList.add('hide');
                   link.download = '{{ the_site_name }} - ' + filename;
-                  document.body.appendChild(link);
                   link.click();
-                  document.body.removeChild(link);
                 }
                 function downloadQr(){
                         downloadQrImage(image.src, 'QR Code');
