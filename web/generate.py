@@ -204,11 +204,11 @@ def generate_site():
                         import traceback
                         print(traceback.format_exc())
 #                    print('Overwriting')
-        context['title'] = ''
+        context['title'] = 'Video Chat'
         context['path'] = '/{}/{}'.format(lang, 'chat')
-        ad = render_to_string('web/xhat.html', context)
-        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/xhat.html'.format(lang)), 'w') as file:
-            file.write(ad)
+        page = render_to_string('web/chat.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/chat.html'.format(lang)), 'w') as file:
+            file.write(page)
         context['title'] = 'Our Online Experience'
         context['hidenav'] = True
         context['hidefooter'] = True

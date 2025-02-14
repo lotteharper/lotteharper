@@ -65,7 +65,7 @@
               <a class="nav-link" href="/pl/landing" title="Odwiedź stronę docelową">Lądowanie</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Czat wideo">Pogawędzić</a>
+              <a class="nav-link" href="/pl/chat" title="Czat wideo">Pogawędzić</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/pl/private" title="Zobacz prywatne zdjęcia za pomocą klucza">Prywatny</a>
@@ -124,7 +124,7 @@
 <h1>Moje Zdjęcia</h1>
 <legend>Daisy</legend>
 <p>Witamy na mojej stronie internetowej! Jestem inżynierem mieszkającym w Seattle. To jest moja osobista strona internetowa. Tworzę strony internetowe, elektronikę, gry wideo i aplikacje. Jestem kobietą zajmującą się technologią, udostępniającą krytyczne oprogramowanie tym, którzy go potrzebują.</p>
-<p style="text-align: center;"><small>Feb. 3, 2025, 3:04 p.m.</small></p>
+<p style="text-align: center;"><small>Feb. 12, 2025, 3:45 p.m.</small></p>
 <p>Odwiedź mój GitHub, aby zobaczyć moje <a href="https://github.com/daisycamber" title="Moje projekty na GitHubie">projektowanie</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -654,8 +654,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

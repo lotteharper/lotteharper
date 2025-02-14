@@ -65,7 +65,7 @@
               <a class="nav-link" href="/vi/landing" title="Truy cập trang đích">Hạ cánh</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Trò chuyện video">Trò chuyện</a>
+              <a class="nav-link" href="/vi/chat" title="Trò chuyện video">Trò chuyện</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/vi/private" title="Xem ảnh riêng tư bằng chìa khóa">Riêng tư</a>
@@ -145,7 +145,7 @@
 </div>
 <div class="row">
 <legend id="contact-message" style="text-color: green; font-color: green; color: green; text-align: center;" class="hide fade-in-fast">Đã gửi tin nhắn.</div>
-<p>Chúng tôi thường trả lời trong vòng mười hai giờ. Hoạt động lần cuối Feb. 3, 2025, 3:06 p.m.</p>
+<p>Chúng tôi thường trả lời trong vòng mười hai giờ. Hoạt động lần cuối Feb. 12, 2025, 3:45 p.m.</p>
 <div class="d-flex"><div class="clockContainer" id="clockContainer1">
         <div class="hour" id="hour1"></div> 
         <div class="minute" id="minute1"></div> 
@@ -153,7 +153,7 @@
 </div> 
 
 <div class="clock-script hide">
-    var d = "15:06:53".split(":");
+    var d = "15:45:45".split(":");
     var hr = parseInt(d[0]);
     var min = parseInt(d[1]);
     var sec = parseInt(d[2]);
@@ -656,8 +656,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

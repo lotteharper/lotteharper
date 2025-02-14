@@ -65,7 +65,7 @@
               <a class="nav-link" href="/tr/landing" title="Açılış sayfasını ziyaret edin">İniş</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Görüntülü sohbet">Sohbet</a>
+              <a class="nav-link" href="/tr/chat" title="Görüntülü sohbet">Sohbet</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/tr/private" title="Özel fotoğrafları bir anahtarla görün">Özel</a>
@@ -145,7 +145,7 @@
 </div>
 <div class="row">
 <legend id="contact-message" style="text-color: green; font-color: green; color: green; text-align: center;" class="hide fade-in-fast">Mesaj gönderildi.</div>
-<p>Genellikle içinde yanıt veririz on iki saat. Son aktif Feb. 3, 2025, 3:04 p.m.</p>
+<p>Genellikle içinde yanıt veririz on iki saat. Son aktif Feb. 12, 2025, 3:45 p.m.</p>
 <div class="d-flex"><div class="clockContainer" id="clockContainer1">
         <div class="hour" id="hour1"></div> 
         <div class="minute" id="minute1"></div> 
@@ -153,7 +153,7 @@
 </div> 
 
 <div class="clock-script hide">
-    var d = "15:04:50".split(":");
+    var d = "15:45:45".split(":");
     var hr = parseInt(d[0]);
     var min = parseInt(d[1]);
     var sec = parseInt(d[2]);
@@ -656,8 +656,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

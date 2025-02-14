@@ -65,7 +65,7 @@
               <a class="nav-link" href="/hi/landing" title="लैंडिंग पृष्ठ पर जाएँ">अवतरण</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="वीडियो चैट">बात करना</a>
+              <a class="nav-link" href="/hi/chat" title="वीडियो चैट">बात करना</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/hi/private" title="एक कुंजी के साथ निजी तस्वीरें देखें">निजी</a>
@@ -121,7 +121,7 @@
 <div id="pg3">
 <legend>लिव विडियो - <a href="https://lotteh.com/live/Daisy/?lang=hi" class="btn btn-outline-info btn-lg">साइट पर जाएँ</a></legend>
 <i>ऊपर दिए गए लिंक पर मेरा लाइव वीडियो देखें</i>
-<img src="https://uglek.s3.amazonaws.com/home/team/lotteh/media/profiles/afc8a20e-02e2-47e2-9ba0-682fd76f45a8-2.jpg?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=gFrWrZbIbedJjrC1JczWEUFSCzg%3D&amp;Expires=1739228601" width="100%" height="auto"></img>
+<img src="https://uglek.s3.amazonaws.com/home/team/lotteh/media/profiles/afc8a20e-02e2-47e2-9ba0-682fd76f45a8-2.jpg?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=YDP9YScBki4VwCWCVNr%2BFnwq7KY%3D&amp;Expires=1740115081" width="100%" height="auto"></img>
 <iframe src="https://lotteh.com/about/?lang=hi" width="100%" height="700px"></iframe>
 </div>
 
@@ -404,8 +404,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

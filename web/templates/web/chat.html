@@ -1,6 +1,104 @@
-{% extends 'base.html' %}
+{% extends 'web/base.html' %}
+{% block head %}
+      <style type="text/css">
+         * {
+	         box-sizing: border-box;
+         }
+         body {
+	         margin: 20 !important;
+	         font-size: 24px !important;
+         }
+         .centered {
+	         display: block;
+	         margin: 0 auto;
+         }
+         .hide {
+	         opacity: 0;
+	         display: none;
+	         visibility: hidden;
+	         pointer-events: none;
+         }
+         .call-button {
+	         padding: 1rem 2rem;
+	         border: none;
+	         border-radius: 3px;
+	         cursor: pointer;
+	         color: white;
+	         background-color: black;
+	         box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+         }
+         .btn {
+	         padding: 1rem 2rem;
+	         border: none;
+	         border-radius: 3px;
+	         cursor: pointer;
+	         box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+         }
+         .btn-light {
+	         padding: 0.2rem 0.3rem !important;
+	         border: 1px;
+	         border-radius: 5px;
+	         cursor: pointer;
+	         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+         }
+         #please-interact {
+	         padding: 1rem 2rem;
+	         border: none;
+	         border-radius: 3px;
+	         cursor: pointer;
+	         color: white;
+	         background-color: black;
+	         box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+         }
+         #video-container {
+	         width: 100%;
+	         min-width: 300px;
+         }
+         #videos {
+	         position: relative;
+         }
+         video {
+	         background-color: black;
+	         border-radius: 3px;
+	         box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+         }
+         #remote-video {
+	         width: 100%;
+         }
+         #mirror-video {
+	         position: absolute;
+	         width: 25vw;
+	         height: 25vw;
+	         bottom: -30px;
+	         right: 0px;
+         }
+         .d-flex {
+	         display: flex;
+         }
+         .justify-content-between {
+	         justify-content: space-between;
+         }
+         .badge {
+	         padding: 0.2rem 0.2rem;
+	         font-size: 16px !important;
+	         border: none;
+	         border-radius: 2px;
+	         cursor: pointer;
+	         box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+         }
+         .btn-xlarge {
+	         padding: 18px 18px;
+	         font-size: 30px;
+	         line-height: normal;
+	         -webkit-border-radius: 8px;
+	         -moz-border-radius: 8px;
+	         border-radius: 8px;
+         }
+      </style>
+{% endblock %}
 {% block content %}
-<legend><b>Qoshlli</b> - Video Chat</legend>
+{% load app_filters %}
+<legend><b>Qoshlli</b> - {{ 'Video Chat'|etrans }}</legend>
       <p id="error-message" class="hide" style="text-color: red;">{{ 'Please enable your camera and microphone in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="{{ 'Reload page'|etrans }}" class="call-button">{{ 'Reload'|etrans }}</button></p>
       <div id="all-div" class="hide">
          <div id="accept-div" class="hide">
@@ -35,4 +133,4 @@
       <script src="/ccv.js" type="text/javascript"></script>
       <script src="/face.js" type="text/javascript"></script>
       <script src="/static/chat.js" type="text/javascript"></script>
-{% endif %}
+{% endblock %}

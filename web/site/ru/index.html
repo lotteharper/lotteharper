@@ -65,7 +65,7 @@
               <a class="nav-link" href="/ru/landing" title="Посетите целевую страницу">Посадка</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Видеочат">Чат</a>
+              <a class="nav-link" href="/ru/chat" title="Видеочат">Чат</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/ru/private" title="Смотрите частные фотографии с ключом">Частный</a>
@@ -124,7 +124,7 @@
 <h1>Мои фотографии</h1>
 <legend>Daisy</legend>
 <p>Добро пожаловать на мой сайт!Я инженер, живущий в Сиэтле.Это мой личный сайт.Я строю веб -сайты, электронику, видеоигры и приложения.Я женщина в области технологий, создавая критическое программное обеспечение, доступное для тех, кому это нужно.</p>
-<p style="text-align: center;"><small>Feb. 3, 2025, 3 p.m.</small></p>
+<p style="text-align: center;"><small>Feb. 12, 2025, 3:45 p.m.</small></p>
 <p>Посетите мой GitHub, чтобы увидеть мой <a href="https://github.com/daisycamber" title="Мои проекты на GitHub">проекты</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -654,8 +654,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

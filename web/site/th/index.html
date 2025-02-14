@@ -65,7 +65,7 @@
               <a class="nav-link" href="/th/landing" title="เยี่ยมชมหน้า Landing Page">การลงจอด</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="วิดีโอแชท">แชท</a>
+              <a class="nav-link" href="/th/chat" title="วิดีโอแชท">แชท</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/th/private" title="ดูรูปภาพส่วนตัวพร้อมคีย์">ส่วนตัว</a>
@@ -124,7 +124,7 @@
 <h1>ภาพถ่ายของฉัน</h1>
 <legend>Daisy</legend>
 <p>ยินดีต้อนรับสู่เว็บไซต์ของฉัน!ฉันเป็นวิศวกรที่อาศัยอยู่ในซีแอตเทิลนี่คือเว็บไซต์ส่วนตัวของฉันฉันสร้างเว็บไซต์อิเล็กทรอนิกส์วิดีโอเกมและแอพฉันเป็นผู้หญิงในการสร้างซอฟต์แวร์ที่สำคัญสำหรับผู้ที่ต้องการ</p>
-<p style="text-align: center;"><small>Feb. 3, 2025, 3 p.m.</small></p>
+<p style="text-align: center;"><small>Feb. 12, 2025, 3:45 p.m.</small></p>
 <p>เยี่ยมชม GitHub ของฉันเพื่อดูไฟล์ <a href="https://github.com/daisycamber" title="โครงการของฉันเกี่ยวกับ GitHub">โครงการ</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -654,8 +654,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

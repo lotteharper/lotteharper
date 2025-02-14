@@ -65,7 +65,7 @@
               <a class="nav-link" href="/vi/landing" title="Truy cập trang đích">Hạ cánh</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Trò chuyện video">Trò chuyện</a>
+              <a class="nav-link" href="/vi/chat" title="Trò chuyện video">Trò chuyện</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/vi/private" title="Xem ảnh riêng tư bằng chìa khóa">Riêng tư</a>
@@ -527,8 +527,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

@@ -62,7 +62,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -116,7 +116,7 @@
 	    
 <h1>This page could not be found.</h1>
 <p><i>Consider going back to the <a href="/" title="Home page">home page</a>.</i></p>
-<img class="mx-auto" style="width: 80%; height: auto" src="https://uglek.s3.amazonaws.com/home/team/lotteh/media/profiles/afc8a20e-02e2-47e2-9ba0-682fd76f45a8-2.jpg?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=miMD4k2Z7XhElUkinX%2F1CE8qG8U%3D&amp;Expires=1739219694" alt="My cover photo">
+<img class="mx-auto" style="width: 80%; height: auto" src="https://uglek.s3.amazonaws.com/home/team/lotteh/media/profiles/afc8a20e-02e2-47e2-9ba0-682fd76f45a8-2.jpg?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=9l4nK0eqTaitUUtWBmhohKzPr3Y%3D&amp;Expires=1740106438" alt="My cover photo">
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -197,7 +197,7 @@ function getLang() {
     return navigator.languages[0]; 
   return navigator.language;
 }
-var allowedLangs = ['en','de','fr','es','pt','ar','da','nl','th','id','ru','ja','th','af','hi','zh-CN','tl','cs','he','it','no','pl','sv','tr','uk','vi','zu','sq',];
+var allowedLangs = ['en',];
 var theLang = getLang();
 if(theLang == 'en-US'){ theLang = 'en'; }
 if(allowedLangs.includes(theLang) && theLang != 'en' && !window.location.pathname.startsWith('/' + thelang + '/')) {
@@ -392,8 +392,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

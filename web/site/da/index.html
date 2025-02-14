@@ -65,7 +65,7 @@
               <a class="nav-link" href="/da/landing" title="Besøg destinationssiden">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Videochat">Snak</a>
+              <a class="nav-link" href="/da/chat" title="Videochat">Snak</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/da/private" title="Se private fotos med en nøgle">Privat</a>
@@ -124,7 +124,7 @@
 <h1>Mine billeder</h1>
 <legend>Daisy</legend>
 <p>Velkommen til min hjemmeside!Jeg er ingeniør, der bor i Seattle.Dette er min personlige hjemmeside.Jeg bygger websteder, elektronik, videospil og apps.Jeg er en kvinde i tech, der stiller kritisk software til rådighed for dem, der har brug for det.</p>
-<p style="text-align: center;"><small>Feb. 3, 2025, 3 p.m.</small></p>
+<p style="text-align: center;"><small>Feb. 12, 2025, 3:45 p.m.</small></p>
 <p>Besøg min github for at se min <a href="https://github.com/daisycamber" title="Mine projekter på Github">projekter</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -654,8 +654,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

@@ -65,7 +65,7 @@
               <a class="nav-link" href="/vi/landing" title="Truy cập trang đích">Hạ cánh</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Trò chuyện video">Trò chuyện</a>
+              <a class="nav-link" href="/vi/chat" title="Trò chuyện video">Trò chuyện</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/vi/private" title="Xem ảnh riêng tư bằng chìa khóa">Riêng tư</a>
@@ -121,7 +121,7 @@
 <div id="pg3">
 <legend>Video trực tiếp - <a href="https://lotteh.com/live/Daisy/?lang=vi" class="btn btn-outline-info btn-lg">Truy cập trang web</a></legend>
 <i>Xem video trực tiếp của tôi tại liên kết ở trên</i>
-<img src="https://uglek.s3.amazonaws.com/home/team/lotteh/media/profiles/afc8a20e-02e2-47e2-9ba0-682fd76f45a8-2.jpg?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=vc3vraZT33xOSMFOr7tNF7DIcJ4%3D&amp;Expires=1739228816" width="100%" height="auto"></img>
+<img src="https://uglek.s3.amazonaws.com/home/team/lotteh/media/profiles/afc8a20e-02e2-47e2-9ba0-682fd76f45a8-2.jpg?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=KO%2FZQ5qq%2Fr2DwIuwlQ0KgHX6xgo%3D&amp;Expires=1740115198" width="100%" height="auto"></img>
 <iframe src="https://lotteh.com/about/?lang=vi" width="100%" height="700px"></iframe>
 </div>
 
@@ -404,8 +404,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

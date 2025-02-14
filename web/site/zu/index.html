@@ -65,7 +65,7 @@
               <a class="nav-link" href="/zu/landing" title="Vakashela ikhasi lokufikela">Ukufika</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Ingxoxo yevidiyo">Xoxa</a>
+              <a class="nav-link" href="/zu/chat" title="Ingxoxo yevidiyo">Xoxa</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/zu/private" title="Bona izithombe eziyimfihlo ngokhiye">Okuyimfihlo</a>
@@ -124,7 +124,7 @@
 <h1>Izithombe Zami</h1>
 <legend>Daisy</legend>
 <p>Siyakwamukela kuwebhusayithi yami! Ngingunjiniyela ohlala e-Seattle. Lena iwebhusayithi yami yomuntu siqu. Ngakha amawebhusayithi, okogesi, imidlalo yevidiyo, nezinhlelo zokusebenza. Ngingowesifazane kwezobuchwepheshe okwenza isofthiwe ebalulekile itholakale kulabo abayidingayo.</p>
-<p style="text-align: center;"><small>Feb. 3, 2025, 3:07 p.m.</small></p>
+<p style="text-align: center;"><small>Feb. 12, 2025, 3:45 p.m.</small></p>
 <p>Vakashela i-GitHub yami ukuze ubone okwami <a href="https://github.com/daisycamber" title="Amaphrojekthi ami ku-GitHub">amaphrojekthi</a>.</p>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -654,8 +654,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

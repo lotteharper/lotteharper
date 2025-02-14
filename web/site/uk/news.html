@@ -65,7 +65,7 @@
               <a class="nav-link" href="/uk/landing" title="Відвідайте цільову сторінку">Посадка</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Відео чат">Чат</a>
+              <a class="nav-link" href="/uk/chat" title="Відео чат">Чат</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/uk/private" title="Дивіться приватні фото з ключем">Приватний</a>
@@ -527,8 +527,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');

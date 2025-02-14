@@ -65,7 +65,7 @@
               <a class="nav-link" href="/ja/landing" title="ランディングページにアクセスしてください">着陸</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="ビデオチャット">チャット</a>
+              <a class="nav-link" href="/ja/chat" title="ビデオチャット">チャット</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/ja/private" title="キー付きのプライベート写真をご覧ください">プライベート</a>
@@ -527,8 +527,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
