@@ -11,31 +11,34 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 1d4de86] backup
- 70 files changed, 74 insertions(+), 1201 deletions(-)
- create mode 100644 cache/07068ca8fd4001526f0273440f945b73.djcache
- create mode 100644 cache/12963e500d947a1494f4520b7ed266ee.djcache
- create mode 100644 cache/1f6e0a307987142b042e97a0397135c3.djcache
- create mode 100644 cache/2044c1e8bdc8eee1ee052f5e72c877af.djcache
- create mode 100644 cache/20ef67847d9c24b01c3bd67068df456a.djcache
- create mode 100644 cache/265def53a570b5027314c340212e6cd7.djcache
- create mode 100644 cache/38118ca1d568afa8c1bbc7804eaf8ff7.djcache
- create mode 100644 cache/42d55ab13cb4306f4485d2116fbf5872.djcache
- create mode 100644 cache/4cd66b02679d818843a33403cab129e9.djcache
- create mode 100644 cache/5c5d17e4b192df85aed11af494a29dab.djcache
- create mode 100644 cache/6416e9fd784ff38786b3f6a91b802b9e.djcache
- create mode 100644 cache/6dfa9140bf1c7c969aa6dbcd0a144949.djcache
- create mode 100644 cache/8889c93baacf5e1d5fdbc3b7048b2321.djcache
- create mode 100644 cache/89625859310b4c5afd2bee2edbd1b77e.djcache
- create mode 100644 cache/8a0ba79774870266cef2002b456fc657.djcache
- create mode 100644 cache/8c9a359ebbea555e1b1d8bf04cb171b2.djcache
- create mode 100644 cache/8ef4c90a1ced7157eade85d904796a9f.djcache
- create mode 100644 cache/904b136f5617d384e55726ce0f547aa8.djcache
- create mode 100644 cache/a5a8b2536922e019ff45d02176f796ef.djcache
- create mode 100644 cache/b3b82a62d91c31026d9e4b4f67f1f382.djcache
- create mode 100644 cache/eac06827cc28053452dbef86e7c489b8.djcache
- create mode 100644 cache/f1c102b9bea633578c4a2fdb3c6ccc11.djcache
- create mode 100644 cache/fb6c5f1f815f8b64d9c39426595c6a65.djcache
+[main 25af864] backup
+ 70 files changed, 54 insertions(+), 45 deletions(-)
+ create mode 100644 cache/02888dd4b9cf3e4e33b19a04d4c41a53.djcache
+ create mode 100644 cache/068dddbe2413c0a5a561fd097ca016ff.djcache
+ create mode 100644 cache/1449a27a28f85714ca703c6bf4a465bb.djcache
+ create mode 100644 cache/156dc3b360e78d993b8f0b4cefce9781.djcache
+ create mode 100644 cache/1bdda3eeeb29c6deed707ccd05dec972.djcache
+ create mode 100644 cache/36fef8ba298de1ee52ac4125cc73cf18.djcache
+ create mode 100644 cache/3f83368f67314e61257aac54ec30e7fc.djcache
+ create mode 100644 cache/42b9356db7cbc5d6d2a0711970e7b453.djcache
+ create mode 100644 cache/43347b0654b2a554702e7046b8763338.djcache
+ create mode 100644 cache/4bd2cdd9bf22ab8e8e099961753dcbd5.djcache
+ create mode 100644 cache/565f577a88efb061db4e3eb165e4f798.djcache
+ create mode 100644 cache/5de3a551cbbb283a1e0fe5dde9fad0d0.djcache
+ create mode 100644 cache/669866be6f9b05dd2082ad012bfa16ee.djcache
+ create mode 100644 cache/749fd9557125cd539a60bfffd83b1c13.djcache
+ create mode 100644 cache/9575ca4361c462e0691e626dbdd209f1.djcache
+ create mode 100644 cache/9ac87680e73f4a67994769b227533157.djcache
+ create mode 100644 cache/9b721b223330f13be29e51a0e559eff2.djcache
+ create mode 100644 cache/a533cd282f9f43d38786df6abb60a2f9.djcache
+ create mode 100644 cache/a8ca1542ab954cad40daf5fa488b2aa2.djcache
+ create mode 100644 cache/ae83a18c841e371eee6d996bfacdf91b.djcache
+ create mode 100644 cache/d77f8fc3e0bd4fc0c4d3a5778759301d.djcache
+ create mode 100644 cache/e43d5acc2607e6a6cf255ba305be9848.djcache
+ create mode 100644 cache/eed9311378afe70e42851cea5566efe8.djcache
+ create mode 100644 cache/f23282416eb5b4b6f8185eebc8cb9879.djcache
+ mode change 100755 => 100644 celery/pid/worker1.pid
+ mode change 100755 => 100644 celery/pid/worker2.pid
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
