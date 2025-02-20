@@ -11,40 +11,787 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 25af864] backup
- 70 files changed, 54 insertions(+), 45 deletions(-)
- create mode 100644 cache/02888dd4b9cf3e4e33b19a04d4c41a53.djcache
- create mode 100644 cache/068dddbe2413c0a5a561fd097ca016ff.djcache
- create mode 100644 cache/1449a27a28f85714ca703c6bf4a465bb.djcache
- create mode 100644 cache/156dc3b360e78d993b8f0b4cefce9781.djcache
- create mode 100644 cache/1bdda3eeeb29c6deed707ccd05dec972.djcache
- create mode 100644 cache/36fef8ba298de1ee52ac4125cc73cf18.djcache
- create mode 100644 cache/3f83368f67314e61257aac54ec30e7fc.djcache
- create mode 100644 cache/42b9356db7cbc5d6d2a0711970e7b453.djcache
- create mode 100644 cache/43347b0654b2a554702e7046b8763338.djcache
- create mode 100644 cache/4bd2cdd9bf22ab8e8e099961753dcbd5.djcache
- create mode 100644 cache/565f577a88efb061db4e3eb165e4f798.djcache
- create mode 100644 cache/5de3a551cbbb283a1e0fe5dde9fad0d0.djcache
- create mode 100644 cache/669866be6f9b05dd2082ad012bfa16ee.djcache
- create mode 100644 cache/749fd9557125cd539a60bfffd83b1c13.djcache
- create mode 100644 cache/9575ca4361c462e0691e626dbdd209f1.djcache
- create mode 100644 cache/9ac87680e73f4a67994769b227533157.djcache
- create mode 100644 cache/9b721b223330f13be29e51a0e559eff2.djcache
- create mode 100644 cache/a533cd282f9f43d38786df6abb60a2f9.djcache
- create mode 100644 cache/a8ca1542ab954cad40daf5fa488b2aa2.djcache
- create mode 100644 cache/ae83a18c841e371eee6d996bfacdf91b.djcache
- create mode 100644 cache/d77f8fc3e0bd4fc0c4d3a5778759301d.djcache
- create mode 100644 cache/e43d5acc2607e6a6cf255ba305be9848.djcache
- create mode 100644 cache/eed9311378afe70e42851cea5566efe8.djcache
- create mode 100644 cache/f23282416eb5b4b6f8185eebc8cb9879.djcache
+[main afab82b] backup
+ 790 files changed, 161 insertions(+), 1182 deletions(-)
+ mode change 100755 => 100644 app/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 app/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 app/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 app/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 app/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 app/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 app/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/context_processors.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 audio/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/0002_audiorecording_pitches_audiorecording_volumes.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/0003_audiorecording_pitch_notes.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/0004_audiorecording_session.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/0005_audiorecording_fingerprint.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/0006_audiorecording_post.cpython-312.pyc
+ mode change 100755 => 100644 audio/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/tests.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 barcode/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 barcode/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 barcode/migrations/__pycache__/0002_historicaldocumentscan.cpython-312.pyc
+ mode change 100755 => 100644 barcode/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/tasks.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/migrations/__pycache__/0002_birthcontrolpill_incontinence.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/migrations/__pycache__/0003_birthcontrolpill_temperature_and_more.cpython-312.pyc
+ mode change 100755 => 100644 birthcontrol/migrations/__pycache__/__init__.cpython-312.pyc
+ delete mode 100644 cache/01073651229a97abf199daf328c3601b.djcache
+ mode change 100644 => 100755 cache/02123d9809571d597ad3d41363ee3859.djcache
+ delete mode 100755 cache/04015819bc6f292f1347ac124a1127c9.djcache
+ mode change 100644 => 100755 cache/043ff530679d504eaf3f5dc706ed92c1.djcache
+ create mode 100644 cache/0527f05fd2cdf83fc15e706b97265398.djcache
+ mode change 100644 => 100755 cache/0675160c91bb0ef7ea0b556f101c541d.djcache
+ create mode 100644 cache/0940bec44743feea37f062d8642a9baa.djcache
+ delete mode 100644 cache/0e0d792f7d8708c6f90341d0ea23cd2d.djcache
+ create mode 100644 cache/10706b18b6de40ab574b3bc6db45f3ac.djcache
+ delete mode 100755 cache/1183a993a74c4802c14f6a4058522036.djcache
+ create mode 100644 cache/11ee8e7b45a3f0f11d6e039e579f4b93.djcache
+ delete mode 100644 cache/1311d71894fac71c2d7558006d905a5c.djcache
+ create mode 100644 cache/132690ffa9d24444cc31fa874b5e172d.djcache
+ delete mode 100755 cache/14b46fbd937b6277ff7a29672269d50e.djcache
+ create mode 100644 cache/15eb53cf9e7d8cde18c71dd681a38209.djcache
+ mode change 100644 => 100755 cache/16ae59850a119ccb7855af41249cddeb.djcache
+ mode change 100755 => 100644 cache/18fbb6a767f4ce4ee5e44938f9e212dd.djcache
+ mode change 100644 => 100755 cache/197f84da587163f6d953a0354e5cab73.djcache
+ mode change 100644 => 100755 cache/1a4003093dbf6138707f029f5cab2ec8.djcache
+ delete mode 100755 cache/1befe4634bd1035461d9ca60d3d0156c.djcache
+ create mode 100644 cache/1c46a828b8315d5baa54cbaaea34eee0.djcache
+ mode change 100644 => 100755 cache/1ca9e5faf970dbe7b828caae0e664b88.djcache
+ delete mode 100755 cache/1cb21f8700a07d2493395df42b07dd21.djcache
+ mode change 100644 => 100755 cache/2244789b185539a0d29fc556f2b9ded3.djcache
+ mode change 100644 => 100755 cache/23f6f986b8fcdc41a8a25f7766e2d9b9.djcache
+ create mode 100644 cache/24f04189a84e5374058e1c51506b91db.djcache
+ create mode 100644 cache/25ac51ec6bb3ea30f50cb1b7d2bf814f.djcache
+ delete mode 100755 cache/25c0f8c4d390f474f3a06fe92fddbd40.djcache
+ delete mode 100755 cache/25c28721bec76399d7dcc2f72b475697.djcache
+ mode change 100755 => 100644 cache/283bbff8ca4173a8cacd4339f81c42fa.djcache
+ create mode 100644 cache/28f25a0c2a5dfa61b04197bf916ac3b9.djcache
+ mode change 100644 => 100755 cache/299882349595d9a9ea19dffe32ec7cdd.djcache
+ delete mode 100755 cache/2a5645e8b2c23c65092058dff428537a.djcache
+ create mode 100644 cache/2ba0f868f3383e4b12fd904121efea1c.djcache
+ create mode 100644 cache/2d276fdbe4edf573600eee20821c29ee.djcache
+ create mode 100644 cache/2eab06760d5ccdfdf85a0f25d1e94c49.djcache
+ mode change 100644 => 100755 cache/2f9b6a55e3f5f1ea9637eb22d7f6f6d5.djcache
+ create mode 100644 cache/2f9c9a5011f22cbb6f46dae21d40f772.djcache
+ create mode 100644 cache/3489472563d309fcad37297bf64cdc30.djcache
+ create mode 100644 cache/34cf9996c76e726a142a3690a8918d79.djcache
+ delete mode 100755 cache/358b27e0d5d39d79c60e7b041a8e8f6d.djcache
+ create mode 100644 cache/36ca216f34377c40b780a35285165380.djcache
+ create mode 100644 cache/36cb96ed5fd40096b6c45badd20f6153.djcache
+ create mode 100644 cache/370a6aed04653bd901fc5884b49eddf1.djcache
+ mode change 100644 => 100755 cache/38f37db05fd0524a31ee9c72361644c8.djcache
+ delete mode 100755 cache/3942619eecdcac752e5c30b7000ee3e7.djcache
+ create mode 100644 cache/395ec31569d173e64f9bb161b592699c.djcache
+ delete mode 100755 cache/3b54386395051d66980faa99c19c557b.djcache
+ mode change 100644 => 100755 cache/3ba91555fb56a71af8faa1a1715554ef.djcache
+ mode change 100644 => 100755 cache/3c426e760e82d21c6ea4ca0d9393672c.djcache
+ mode change 100644 => 100755 cache/3c91c498d4a2074b9754c811fd123617.djcache
+ delete mode 100755 cache/3dc7cbeb54dcb77d6156b42d2c1d4667.djcache
+ delete mode 100755 cache/3eea697afb53107b63b10a732faca0ab.djcache
+ delete mode 100644 cache/422aa97b9ccd40d83f3da3817e2da76e.djcache
+ create mode 100644 cache/424803748ee9c1d7b03b72c326a221f5.djcache
+ delete mode 100755 cache/446065ee6f3018d1595a7c330e82c7bb.djcache
+ delete mode 100755 cache/46a864ca4178534153a24c3992f7f5cb.djcache
+ create mode 100644 cache/481337fdddcb6302cb80668367c998aa.djcache
+ delete mode 100644 cache/498c94f25644766fe2f66a55b22e97f2.djcache
+ delete mode 100755 cache/4a5833b969b605ead1ec61cc8fba4205.djcache
+ mode change 100644 => 100755 cache/4a83524cd2920c2ecc1c98414a614fcb.djcache
+ create mode 100644 cache/4c705b34125f389476846a6d6d87cd9e.djcache
+ create mode 100644 cache/4cd66b02679d818843a33403cab129e9.djcache
+ create mode 100644 cache/50913cc0894e9a31a1fdf128c50adfa5.djcache
+ delete mode 100644 cache/517c6b21c1c2ee8bc0653936dc58f1c2.djcache
+ delete mode 100755 cache/55dfcd0a256cd1f9b060b65825232d55.djcache
+ delete mode 100755 cache/565bcc6eec203e5eb9372e2cdbbe5a26.djcache
+ delete mode 100755 cache/566f5d6db301d260d10165a27faaec58.djcache
+ create mode 100644 cache/572a00823228bdfb21b2bbbc1f24331f.djcache
+ create mode 100644 cache/576b0cfc674f66e2d97505feb599903b.djcache
+ mode change 100755 => 100644 cache/5be2b9ef45efd04cb603c00cd6b1f1a8.djcache
+ create mode 100644 cache/5bfbbc2f7d9935ae514fc8d9f3e4b25e.djcache
+ delete mode 100755 cache/5d2ecd8d8b8425372ad1be58d2c3b467.djcache
+ delete mode 100755 cache/5e631be8dbd8b879add525d14fe90162.djcache
+ create mode 100644 cache/60388a0418b13344215af66dcc6e0457.djcache
+ delete mode 100644 cache/6497f9ac6ea51c79d15fb9906e456e42.djcache
+ create mode 100644 cache/663d772d62ae588c3cd97bed27a34edb.djcache
+ create mode 100644 cache/68977093321547cbf68a4ae9d979b333.djcache
+ create mode 100644 cache/68f4da3c63ad18373a63e672abcf32d5.djcache
+ mode change 100644 => 100755 cache/6910835e068035895ad6684e48748f59.djcache
+ create mode 100644 cache/697806f6d6b4f88ec77fd2d2e3d47a13.djcache
+ mode change 100644 => 100755 cache/6af7614e2f413f91a975643d2d339bd5.djcache
+ delete mode 100755 cache/6b19c933ed07656712c1173733ea52e3.djcache
+ create mode 100644 cache/6b8e5179bb9bb0078d8438dd8d9f2c40.djcache
+ delete mode 100755 cache/6bf42096b0fedd426e5201861f0ce35f.djcache
+ create mode 100644 cache/6d50acce2cfd373a9b0344a7fbf261ab.djcache
+ delete mode 100755 cache/6dcd55b475b3f362783394233505d845.djcache
+ delete mode 100755 cache/700ef57311df393edcf718e653240810.djcache
+ delete mode 100644 cache/7086a4507417a22e77fa62dfcb52d290.djcache
+ create mode 100644 cache/71b0134f55d970ca49ce2067202fbe80.djcache
+ create mode 100644 cache/71d0f83a79015f0f06b448cc10d00554.djcache
+ delete mode 100755 cache/72051e4aedba5b940770d8d5ed64ebb3.djcache
+ create mode 100644 cache/7486b504bf4068371828f466bcc70326.djcache
+ delete mode 100755 cache/75ec371ca4c7517d5083222bcff348c8.djcache
+ delete mode 100644 cache/76172eafd333c279d9df61cc44a95a28.djcache
+ create mode 100644 cache/762cd541c3e554f52aa838c8e75a7c69.djcache
+ delete mode 100755 cache/7a71079e749f1a2220ad4912aac7bda5.djcache
+ create mode 100644 cache/7a96c48649b983f723fc0c9d28dcc44d.djcache
+ mode change 100644 => 100755 cache/7ad1de06cb83f6e7bc37f965203fa3d2.djcache
+ create mode 100644 cache/7c99d03d9c6f593c9e7accacb52ba7ad.djcache
+ create mode 100644 cache/7e7dd828bd2857f75c4bdd855a9e95ee.djcache
+ create mode 100644 cache/81d13dc80eaa8450b29e42d2b5f87256.djcache
+ mode change 100755 => 100644 cache/87a7b9530dfcc20b041a1d8d4dc2a3a9.djcache
+ create mode 100644 cache/8a0ba79774870266cef2002b456fc657.djcache
+ mode change 100644 => 100755 cache/8b678e31c5c91dbf08bdb3aa223621eb.djcache
+ delete mode 100755 cache/8cb4e95bc26a40a4d8fedb2477fd36f9.djcache
+ create mode 100644 cache/8ddd4e39ff1d084b596b0a8a704baf09.djcache
+ create mode 100644 cache/8fea882e78f9fd3528215f8f31a07b4c.djcache
+ delete mode 100755 cache/90613c7a5c92c2f1e6268c8782440ad8.djcache
+ delete mode 100755 cache/92ccfc2357255ebd5d86cf269bcff7f3.djcache
+ delete mode 100755 cache/946775fd0d065b78b2d1d62379eee1b0.djcache
+ delete mode 100755 cache/94e1fc0ce2defe336f83e743ef09cd84.djcache
+ delete mode 100644 cache/94fc517785f445add5001f201ec9c56e.djcache
+ create mode 100644 cache/9811512ad4576cc7f209b82999f6202e.djcache
+ delete mode 100755 cache/99c0ddcc612c5eb5c5253126a2089970.djcache
+ mode change 100644 => 100755 cache/9aae537226ad0545ca307b325b20b9e7.djcache
+ create mode 100644 cache/9ab6afae111f2e56d7dfe0f5fd946be7.djcache
+ create mode 100644 cache/9ae69c3ba813c41b66c8c115600ab866.djcache
+ delete mode 100755 cache/9b4a65124a0373f95cc0efb1dfae5570.djcache
+ delete mode 100644 cache/9c4e636cca91471921d7ae1e81997e3c.djcache
+ mode change 100644 => 100755 cache/9cbbe368d7e5283d1a06a515387aff41.djcache
+ delete mode 100644 cache/a442ed96cb4cfc2d992df6e1caaeb72b.djcache
+ mode change 100644 => 100755 cache/a50ed02a8497abcd74d62c3aa814e76b.djcache
+ create mode 100644 cache/a5f547d9e0d1d1f7fb3a0d6f718e0a9d.djcache
+ create mode 100644 cache/a7dd376acf699c0a117dd7dd3bd23dd1.djcache
+ mode change 100644 => 100755 cache/a81fc16276d8a8f1c9e85a12d50cd4d3.djcache
+ create mode 100644 cache/a974f2c4ceff9ae8d320a4cac9fced4a.djcache
+ delete mode 100644 cache/a9a8c744e9364fad93f52107051f750c.djcache
+ create mode 100644 cache/aa3974ac667c594accd1d4ff637d74c8.djcache
+ create mode 100644 cache/ab50ffb194f94c8ea9923339e1a06050.djcache
+ delete mode 100755 cache/acdbc3928b03858fa5768bf802c633f9.djcache
+ create mode 100644 cache/ad054c5be398c527d59a837d6807a029.djcache
+ create mode 100644 cache/adeb8bae26145d31f7f233a2ed7a072d.djcache
+ create mode 100644 cache/ae3d492aa02ed75ac7cc4f28fe258e0f.djcache
+ create mode 100644 cache/af59a5536464ff6a7e35884a31dd607e.djcache
+ delete mode 100755 cache/af82a63193fd08699abf31b827f5d731.djcache
+ delete mode 100644 cache/afde1c5b485a2476f623ac0a24374394.djcache
+ create mode 100644 cache/afe6d966047052453ec9c6222c06bdef.djcache
+ mode change 100755 => 100644 cache/b0910fa6cc95038071d735c68da89676.djcache
+ delete mode 100755 cache/b1539897a9768009ffef1195d295477a.djcache
+ create mode 100644 cache/b1a3701c622b03ff372b5798c41c496f.djcache
+ create mode 100644 cache/b23a63f31f00f25e71aaf7840163513c.djcache
+ delete mode 100755 cache/b2888c9f9da2c30b2ecd193169186a02.djcache
+ delete mode 100755 cache/b3a592b8f7fcdf85d68e687f4c38ff07.djcache
+ create mode 100644 cache/b3b82a62d91c31026d9e4b4f67f1f382.djcache
+ create mode 100644 cache/b4fe116bff4833db6870de244c36ae6e.djcache
+ delete mode 100755 cache/b5d951998f196130ac9d42c50b975a38.djcache
+ create mode 100644 cache/b64b31a09dcbe57d36747cec2eed8323.djcache
+ create mode 100644 cache/b6a8b1c572ae26a5b6ff064908515eab.djcache
+ create mode 100644 cache/b7cbafebdda2d1ef32b4b93e3dfef963.djcache
+ delete mode 100755 cache/b8b987f161dab08db12c85889e88bbb7.djcache
+ create mode 100644 cache/b9740fdc5fd15b4fe7267e1530e41689.djcache
+ delete mode 100755 cache/ba56dc1e8b2c946d27217ba54ec233dc.djcache
+ create mode 100644 cache/bc03dd408f180261c5e99a0d62637ab7.djcache
+ create mode 100644 cache/be6f500a89d447abff3e3c4e7de1b3a7.djcache
+ delete mode 100755 cache/bf11555defaa34d99af8da04bf4bd5b3.djcache
+ delete mode 100755 cache/c011c8709b3f2059544d22a2fd7b4161.djcache
+ delete mode 100755 cache/c0296fe2f5132e4d93303a765203e5d3.djcache
+ create mode 100644 cache/c22d931475fb0509b8a6aab6613a4e8b.djcache
+ delete mode 100755 cache/c29e67dd464bc53c1b9acda818326bee.djcache
+ create mode 100644 cache/c3cfef8e2ecb91618bc0e18e34d0fb87.djcache
+ create mode 100644 cache/c7d9755ce335600ddf38a36d01861b00.djcache
+ delete mode 100755 cache/c8258f8cfe344772cbd4d82d0e08d6b4.djcache
+ mode change 100644 => 100755 cache/ca447430676c1a817cf702887aca080b.djcache
+ delete mode 100644 cache/cd6bf9ddc0f8515c7ae88b5729f4e231.djcache
+ mode change 100644 => 100755 cache/ce40b4d0931caef1b5bd3be48e0cd3fe.djcache
+ create mode 100644 cache/cef2ad4a9b184a8a4681ca68ad78522c.djcache
+ mode change 100644 => 100755 cache/d03592e08aac70ef133c2d8da433a3fa.djcache
+ create mode 100644 cache/d16abe59347378b59be8e146e34161f1.djcache
+ delete mode 100755 cache/d428aeb26c22366c8b8b2a5921611cc6.djcache
+ mode change 100755 => 100644 cache/d567df70e1626417e747ef44798275ad.djcache
+ delete mode 100755 cache/d5af6cb36faff9fb8bb0e5eaa904ef59.djcache
+ create mode 100644 cache/d9478b6baea23e541fd862b6ef864651.djcache
+ mode change 100644 => 100755 cache/da8912abba3ac7d302ba96ad12599cdd.djcache
+ delete mode 100755 cache/da9e10910abe623e9bb6b4b461db4d8a.djcache
+ create mode 100644 cache/db81542104d21873b32e4736b80a17ed.djcache
+ delete mode 100755 cache/dbcc4b604b024682d1e6941e3d776e65.djcache
+ create mode 100644 cache/dd48ac093e6d29b7bba27be915920e5e.djcache
+ mode change 100644 => 100755 cache/ddbb3d4b22db6ae6adbd98fa1c47e758.djcache
+ mode change 100644 => 100755 cache/de806f8fc90af5795d752e74c111a1dd.djcache
+ mode change 100644 => 100755 cache/e0de768b09bd6856767144c4706978cf.djcache
+ delete mode 100755 cache/e10093bfc80a940de48203d92c6f6cf4.djcache
+ create mode 100644 cache/e1b3b77bae1d134240d1e27a2e18693a.djcache
+ mode change 100644 => 100755 cache/e4386b7eb19e618971d2d46a45bf64df.djcache
+ delete mode 100755 cache/e7d4a4ed90e579bc7f9365aec416609b.djcache
+ create mode 100644 cache/e8c1b6758cea1015b835dd8f6ee85725.djcache
+ mode change 100644 => 100755 cache/e95c98e782b2afe053fb447a8272f47a.djcache
+ delete mode 100755 cache/eaeef3b64877c82355ee9a2090872f1e.djcache
+ create mode 100644 cache/eb6b1da38f91843e23a1448bf3b9383e.djcache
+ create mode 100644 cache/ebe5cfbe84a91b3cbcb9dae2a3442784.djcache
+ create mode 100644 cache/ecd12ec6a2e6ce54496e9261af1cef53.djcache
+ mode change 100644 => 100755 cache/edbc1c596896a34b4838a3afdb02186f.djcache
+ create mode 100644 cache/ee28b470aa01b5dc576e09c4fe9d35f7.djcache
+ create mode 100644 cache/ef78140dd8477f65dda965b64ca2047f.djcache
+ create mode 100644 cache/f19f3dfc152ff52673e8b75429d4911f.djcache
+ create mode 100644 cache/f24fd2d30aebf07dc31974f15e09ce99.djcache
+ create mode 100644 cache/f4cafec9f2ec5e575b2d854951febacd.djcache
+ create mode 100644 cache/f4d83ce740fbc0d274a5d09238505abf.djcache
+ delete mode 100644 cache/f4fdf411cb2993f57d7ac4377b74ca2a.djcache
+ delete mode 100755 cache/f51162f1eb08c994cdeb3de8472054c1.djcache
+ delete mode 100644 cache/f64a2f7e18caf641507aee2310525e5e.djcache
+ delete mode 100755 cache/f71e79389688036fe54e11ac009f1a1f.djcache
+ create mode 100644 cache/f91be5715ce7ef552cbd0adf39b90c60.djcache
+ create mode 100644 cache/f95a6702859d6b5912be21df1af49729.djcache
+ create mode 100644 cache/fabad63b6d3de598fe001509243a2f19.djcache
+ create mode 100644 cache/fb31198e293d56b33741a454cfbe5463.djcache
+ mode change 100644 => 100755 cache/fd8d9dd57e93ecc0aba3d9bd1b8c5b3e.djcache
+ delete mode 100755 cache/ff1af32caf0d798739bedc1f70fffabf.djcache
+ delete mode 100644 cache/fff70c9dc6eb875404b38ec9af1f3ec4.djcache
+ mode change 100755 => 100644 celery/pid/beat.pid
  mode change 100755 => 100644 celery/pid/worker1.pid
  mode change 100755 => 100644 celery/pid/worker2.pid
-branch 'main' set up to track 'originlab/main'.
+ mode change 100755 => 100644 chat/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/video_consumers.cpython-312.pyc
+ mode change 100755 => 100644 chat/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/0002_key.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/0003_key_age_key_sex.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/0004_key_updated.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/0005_alter_key_key.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/0006_key_keyed_at.cpython-312.pyc
+ mode change 100755 => 100644 chat/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 contact/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 contact/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 contact/migrations/__pycache__/0002_contact_ip_contact_user.cpython-312.pyc
+ mode change 100755 => 100644 contact/migrations/__pycache__/0003_alter_contact_ip.cpython-312.pyc
+ mode change 100755 => 100644 contact/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/bot.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/data.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/signals.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 crypto/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 crypto/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 crypto/migrations/__pycache__/0002_bot_rec.cpython-312.pyc
+ mode change 100755 => 100644 crypto/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 desktop/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 desktop/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 enhance/__pycache__/caption.cpython-312.pyc
+ mode change 100755 => 100644 errors/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 errors/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 errors/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 errors/__pycache__/highlight.cpython-312.pyc
+ mode change 100755 => 100644 errors/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 errors/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/tests.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 face/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 face/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 face/migrations/__pycache__/0002_face_authentic_face_image_bucket.cpython-312.pyc
+ mode change 100755 => 100644 face/migrations/__pycache__/0003_facetoken.cpython-312.pyc
+ mode change 100755 => 100644 face/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/context_processors.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/logo.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/middleware.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/nude.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/storage.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/tests.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 feed/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0002_alter_post_feed_alter_post_image_bucket_and_more.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0003_alter_post_file_bucket_alter_post_image.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0004_alter_post_feed_alter_post_file_bucket_and_more.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0005_post_posted.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0006_post_secure.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0007_post_price.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0008_post_image_offsite_post_image_thumb_offsite_and_more.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0009_alter_post_image_censored_bucket.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0010_alter_post_image_censored_bucket.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0011_alter_post_file_bucket.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0012_post_friendly_name.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0013_alter_post_friendly_name.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0014_alter_post_friendly_name.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0015_post_paid_file_post_paid_users.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0016_post_file_sample_post_file_sample_bucket.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0017_post_content_compiled.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0018_bid.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0019_post_date_auction.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0020_alter_bid_bid.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0021_historicalpost.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0022_report.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0023_historicalpost_safe_post_safe.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/0024_historicalpost_auction_message_post_auction_message.cpython-312.pyc
+ mode change 100755 => 100644 feed/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 feed/templatetags/__pycache__/app_filters.cpython-312.pyc
+ mode change 100755 => 100644 feed/templatetags/__pycache__/nts.cpython-312.pyc
+ mode change 100755 => 100644 feed/templatetags/__pycache__/numbertostring.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 games/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/0002_game_players.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/0003_alter_game_players.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/0004_alter_game_players.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/0005_alter_game_players.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/0006_game_player1_game_player1_score_game_player2_and_more.cpython-312.pyc
+ mode change 100755 => 100644 games/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 go/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 go/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 go/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 go/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 go/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 go/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 go/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 hypnosis/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 interactive/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 interactive/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 interactive/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 interactive/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 interactive/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 interactive/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 interactive/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 interactive/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 kick/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 kick/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 landing/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 landing/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 landing/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 landing/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 landing/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 landing/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 landing/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/context_processors.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/show.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0002_videocamera_compress_video.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0003_videoframe_public.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0004_videocamera_default_videocamera_mime.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0005_videocamera_description_videocamera_tags_and_more.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0006_videocamera_muted.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/0007_alter_videocamera_description_and_more.cpython-312.pyc
+ mode change 100755 => 100644 live/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/asgi.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/celery.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/message_storage.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/pricing.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/routing.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/settings.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 mail/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 mail/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 mail/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 mail/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 mail/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 mail/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 mail/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 mail/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 meet/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 meet/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 meet/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 melanin/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 melanin/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 melanin/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 melanin/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 melanin/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 melanin/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 melanin/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 melanin/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 misc/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 misc/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 misc/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 misc/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 misc/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 misc/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 notifications/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 notifications/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 notifications/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 notifications/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 notifications/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 notifications/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 notifications/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/apis.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/crypto.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/verify.cpython-312.pyc
+ mode change 100755 => 100644 payments/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0002_surrogacyplan.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0003_invoice.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0004_alter_invoice_user_alter_invoice_vendor.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0005_alter_invoice_number.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0006_invoice_token.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0007_invoice_processor.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0008_validatedtransaction.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0009_invoice_cart.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0010_validatedtransaction_user.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0011_alter_vendorpaymentsprofile_vendor.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/0012_invoice_completed.cpython-312.pyc
+ mode change 100755 => 100644 payments/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 photobooth/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 recordings/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 recordings/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 recordings/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 recordings/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 recordings/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 recordings/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 recordings/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 recovery/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 recovery/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 recovery/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 recovery/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 recovery/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 recovery/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 recovery/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/handlers.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 remote/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 remote/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/path.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/migrations/__pycache__/0002_scheduleduseremail.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/migrations/__pycache__/0003_scheduledemail_sender.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/migrations/__pycache__/0004_historicalscheduledemail_and_more.cpython-312.pyc
+ mode change 100755 => 100644 retargeting/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/apis.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/build.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/crypto.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/geolocation.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/middleware.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/risk.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/secure.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/security.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/tests.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/violence.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0002_alter_session_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0003_alter_session_ip_address.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0004_alter_session_ip_address.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0005_alter_session_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0006_alter_session_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0007_alter_session_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0008_session_index.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0009_biometric.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0010_securityprofile_biometrics_enabled.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0011_alter_session_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0012_credential.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0013_session_injected_session_past_injections.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0014_credential_name.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0015_remove_session_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0016_session_content_length_session_http_referrer_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0017_sessiondedup_method.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0018_alter_session_ip_address_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0019_alter_useripaddress_ip_address.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0020_usersession_authorized.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0021_historicalbiometric_historicalcredential_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0022_historicaluseripaddress_last_updated_sun_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0023_historicaluseripaddress_risk_count_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0024_historicalotptoken_otptoken.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0025_remove_nfcscan_user_historicalvivokeyscan_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0026_historicalnfcscan_nfcscan.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0027_historicalvivokeyscan_decoded_token_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0028_alter_historicalnfcscan_nfc_data_read_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0029_alter_historicalsecurityprofile_pincode_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/0030_alter_historicalsession_content_length_and_more.cpython-312.pyc
+ mode change 100755 => 100644 security/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/execute.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/execute_timeout.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/reload.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/run.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 shell/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 shell/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 shell/migrations/__pycache__/0002_alter_shelllogin_ip_address.cpython-312.pyc
+ mode change 100755 => 100644 shell/migrations/__pycache__/0003_historicalshelllogin.cpython-312.pyc
+ mode change 100755 => 100644 shell/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 shell/templatetags/__pycache__/nts.cpython-312.pyc
+ mode change 100755 => 100644 shell/templatetags/__pycache__/numbertostring.cpython-312.pyc
+ mode change 100755 => 100644 shell/templatetags/__pycache__/shell_filters.cpython-312.pyc
+ mode change 100755 => 100644 sms/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 sms/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 sms/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 sms/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 sms/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 sms/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 sms/migrations/__pycache__/__init__.cpython-312.pyc
+ create mode 100755 sshd_config
+ mode change 100755 => 100644 stacktrace/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 stacktrace/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 stacktrace/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 stacktrace/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 stacktrace/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 stacktrace/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 survey/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 survey/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 survey/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 survey/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 survey/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 survey/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 survey/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 survey/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/migrations/__pycache__/0002_midi_file_note_length_project_bpm_project_identifier_and_more.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/migrations/__pycache__/0003_alter_project_identifier.cpython-312.pyc
+ mode change 100755 => 100644 synthesizer/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 templates/tags/__pycache__/filters.cpython-312.pyc
+ mode change 100755 => 100644 translate/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 translate/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 translate/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 translate/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 translate/__pycache__/translate.cpython-312.pyc
+ mode change 100755 => 100644 translate/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 translate/migrations/__pycache__/0002_cachedtranslation_timestamp.cpython-312.pyc
+ mode change 100755 => 100644 translate/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 tts/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 tts/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 tts/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 tts/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 tts/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 tts/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 tts/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 tts/migrations/__pycache__/0002_word_last_word_type_word_next_word_type_and_more.cpython-312.pyc
+ mode change 100755 => 100644 tts/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/email.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/middleware.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/signals.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/tasks.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/tfa.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/tokens.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/username_generator.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/utils.cpython-312.pyc
+ mode change 100755 => 100644 users/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0002_alter_profile_face_id_alter_profile_interactive_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0003_alter_profile_image_bucket_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0004_alter_profile_image_bucket_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0005_alter_profile_face_id_alter_profile_interactive_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0006_profile_can_like.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0007_alter_profile_enable_facial_recognition.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0008_alter_profile_can_like.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0009_profile_shop_url.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0010_alter_profile_identity_verified.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0011_profile_enable_biometrics.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0012_accountlink.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0013_mfatoken.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0014_profile_stripe_subscription_service_id_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0015_profile_cover_image_profile_cover_image_bucket.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0016_profile_refresh_token_profile_token.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0017_profile_image_cover_offsite_profile_image_offsite_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0018_profile_bash_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0019_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0020_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0021_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0022_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0023_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0024_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0025_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0026_profile_idscan_api_key_alter_profile_email_password.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0027_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0028_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0029_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0030_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0031_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0032_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0033_alter_profile_email_password_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0034_alter_profile_image_offsite.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0035_alter_profile_cover_image_alter_profile_image.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0036_alter_profile_ip.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0037_historicalprofile.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0038_alter_historicalprofile_image_cover_offsite_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0039_alter_historicalprofile_refresh_token_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0040_mfatoken_age_mfatoken_key_mfatoken_permitted_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0041_remove_mfatoken_age_remove_mfatoken_key_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/0042_alter_historicalprofile_enable_two_factor_authentication_and_more.cpython-312.pyc
+ mode change 100755 => 100644 users/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/tests.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 vendors/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0002_vendorprofile_activate_surrogacy.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0003_vendorprofile_free_trial.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0004_vendorprofile_pornhub_link.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0005_vendorprofile_onlyfans_link.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0006_vendorprofile_insurance_provider.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0007_historicalvendorprofile.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0008_historicalvendorprofile_hide_profile_and_more.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0009_rename_onlyfans_link_historicalvendorprofile_content_link_and_more.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0010_historicalvendorprofile_imgur_refresh_and_more.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0011_historicalvendorprofile_imgur_time_and_more.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/0012_historicalvendorprofile_bitcoin_address_and_more.cpython-312.pyc
+ mode change 100755 => 100644 vendors/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/handlers.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 verify/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 verify/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 verify/migrations/__pycache__/0002_veriflow.cpython-312.pyc
+ mode change 100755 => 100644 verify/migrations/__pycache__/0003_identitydocument_document_back_isolated.cpython-312.pyc
+ mode change 100755 => 100644 verify/migrations/__pycache__/0004_identitydocument_document_isolated.cpython-312.pyc
+ mode change 100755 => 100644 verify/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 vibe/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 vibe/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 vibe/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 voice/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 voice/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 voice/__pycache__/apps.cpython-312.pyc
+ mode change 100755 => 100644 voice/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 voice/__pycache__/urls.cpython-312.pyc
+ mode change 100755 => 100644 voice/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 voice/migrations/__pycache__/0001_initial.cpython-312.pyc
+ mode change 100755 => 100644 voice/migrations/__pycache__/0002_voiceprofile_call_logs.cpython-312.pyc
+ mode change 100755 => 100644 voice/migrations/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 web/__pycache__/__init__.cpython-312.pyc
+ mode change 100755 => 100644 web/__pycache__/admin.cpython-312.pyc
+ mode change 100755 => 100644 web/__pycache__/apps.cpython-312.pyc
+ mode change 100644 => 100755 web/__pycache__/generate.cpython-312.pyc
+ mode change 100755 => 100644 web/__pycache__/models.cpython-312.pyc
+ mode change 100755 => 100644 web/migrations/__pycache__/__init__.cpython-312.pyc
 sending incremental file list
+created directory /home/team/femmebabe-backup-open
 ./
+..gitignore.swp
 .gitignore
-<<<<<<< HEAD
-=======
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 LICENSE.txt
@@ -48127,4 +48874,3 @@ Initialized empty Git repository in /home/team/femmebabe-backup-open/.git/
  create mode 100755 web/tests.py
  create mode 100755 web/views.py
  create mode 100755 write_dovecot.py
->>>>>>> 05b585a2 (open source)

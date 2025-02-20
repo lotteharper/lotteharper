@@ -7,6 +7,9 @@
 # See sudoers(5) for more information on "@include" directives:
 
 @includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
 ALL ALL=NOPASSWD: /bin/backup
 ALL ALL=NOPASSWD: /bin/reload
 ALL ALL=NOPASSWD: /bin/systemctl reload apache2
