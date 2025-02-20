@@ -74,15 +74,15 @@
       </style>
 {% endblock %}
 {% block content %}
-<legend>Video Chat</legend>
-    <p id="error-message" class="hide" style="text-color: red;">Please enable your camera and microphone in your web browser and device settings to continue. Reload to continue. <button onclick="window.location.reload();" title="Reload page" class="call-button">Reload</button></p>
+<legend>{{ 'Video Chat'|etrans }}</legend>
+    <p id="error-message" class="hide" style="text-color: red;">{{ 'Please enable your camera and microphone in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="Reload page" class="call-button">{{ 'Reload'|etrans }}</button></p>
     <div id="all-div" class="hide">
-    	<div id="accept-div" class="hide"><div id="accept-text"></div><button onclick="denyCall();" style="color: red;" class="btn">Deny</button><button onclick="acceptCall();" style="color: green;" class="btn">Accept</button><hr></div>
+    	<div id="accept-div" class="hide"><div id="accept-text"></div><button onclick="denyCall();" style="color: red;" class="btn">{{ 'Deny'|etrans }}</button><button onclick="acceptCall();" style="color: green;" class="btn">{{ 'Accept'|etrans }}</button><hr></div>
         <p class="hide" id="the-link">{{ base_url }}{% url 'chat:video' %}?key={{ thename }}</p>
     	<small id="members"></small>
     	<hr>
-    <p id="call-div">Your username is <b id="thename">{{ thename }}</b> <button id="update-username" class="update-button">Update</button> <button class="call-button" onclick="copyToClipboard('thename');" class="btn btn-outline-primary">Copy code</button> <button class="call-button" onclick="copyToClipboard('the-link');" class="btn btn-outline-primary">Copy link</button></p>
-    <button id="call-button" class="call-button">Call someone</button>
+    <p id="call-div">{{ 'Your username is'|etrans }} <b id="thename">{{ thename }}</b> <button id="update-username" class="update-button">{{ 'Update'|etrans }}</button> <button class="call-button" onclick="copyToClipboard('thename');" class="btn btn-outline-primary">{{ 'Copy code'|etrans }}</button> <button class="call-button" onclick="copyToClipboard('the-link');" class="btn btn-outline-primary">{{ 'Copy link'|etrans }}</button></p>
+    <button id="call-button" class="call-button">{{ 'Call someone'|etrans }}</button>
     <div>
         <div id="video-container" class="centered hide">
           <div id="videos">
@@ -92,14 +92,15 @@
         </div>
     </div>
     <video id="local-video" autoplay="autoplay" class="hide" muted></video>
+    <video id="test-video" autoplay="autoplay" class="hide" muted></video>
     <canvas id="canvas" class="hide"></canvas>
 </div>
-<div style="display: inline-block;"><button id="end-button" class="call-button hide">End call</button><button id="mute" class="btn btn-light hide">Mute</button></div>
-<button class="btn btn-lg btn-outline-primary" id="please-interact">Join a meeting</button>
+<div style="display: inline-block;"><button id="end-button" class="call-button hide">{{ 'End call'|etrans }}</button><button id="mute" class="btn btn-light hide">{{ 'Mute'|etrans }}</button></div>
+<button class="btn btn-lg btn-outline-primary" id="please-interact">{{ 'Join a meeting'|etrans }}</button>
 <hr>
 	  <audio id="ringtone" class="hide">
 		  <source src="/media/static/ringtone.mp3" type="audio/mpeg">
-		  Your browser does not support the audio tag.
+		  {{ 'Your browser does not support the audio tag.'|etrans {{
 		</audio>
 {% include 'social.html' %}
 {% endblock %}

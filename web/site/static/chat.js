@@ -213,7 +213,7 @@ function copyToClipboard(el) {
 	   ck = cs;
 	}
 	var username = cu;
-	theLink.innerHTML = "https://qoshlli.com/?key=" + username;
+	theLink.innerHTML = "https://glamgirlx.com/chat?key=" + username;
 	document.getElementById("thename").innerHTML = username;
 	const socketUrl = 'wss://lotteh.com/ws/chat/video/';
 	
@@ -532,7 +532,32 @@ function stopStream() {
 	   context.restore();
 	   context.save();
 	}
+    var isVideoSetup = false;
 	document.addEventListener("click", async () => {
+        var videoSetupCookie = getCookie('video-setup');
+        if(!videoSetupCookie && !isVideoSetup) {
+           document.addEventListener("click", async () => {
+            navigator
+            .mediaDevices
+            .getUserMedia({ video: true, audio: true})
+            .then((localStream) => {
+              const localVideo = document.getElementById("test-video");
+              localVideo.srcObject = localStream;
+              localVideo.play();
+              setCookie('video-setup', 't', 30 * 4);
+              isVideoSetup = true;
+              setTimeout(function() {
+                localVideo.pause();
+                localVideo.srcObject = null;
+                localStream.getTracks().forEach(track => {
+                  track.stop()
+                  track.enabled = false
+                });
+                stopStream();
+              }, 1000);
+            });
+           });
+        }
 	   if (!videoStarted) {
 	      if (!socket) {
 	         openVideoWebsocket();
@@ -607,7 +632,7 @@ function stopStream() {
 	         'name': input
 	      });
 	      username = input;
-	      theLink.innerHTML = "https://qoshlli.com/?key=" + username;
+	      theLink.innerHTML = "https://glamgirlx.com/chat?key=" + username;
 	      document.getElementById("thename").innerHTML = username;
 	      showElement(pleaseInteract);
 	      hideElement(allDiv);
