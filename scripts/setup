@@ -52,12 +52,12 @@ sudo mount -o remount,size=16G,exec /tmp
 # Update and install
 echo "Update and install packages"
 echo "vm.overcommit_memory = 1" | sudo tee -a /etc/sysctl.conf
-sudo apt update && sudo NEEDRESTART_MODE=a apt upgrade -y
+sudo apt update && sudo NEEDRESTART_MODE=a UCF_FORCE_CONFFOLD=1 apt upgrade -y
 sudo apt purge postgresql-client-14 postgresql-client-common postgresql-common postgresql-contrib postgresql -y
 echo "postfix postfix/mailname string lotteh.com" | sudo debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | sudo debconf-set-selections
 echo "\n" | sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
-echo "\n" | sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache libboost-all-dev g++ make libboost-dev libssl-dev xdotool xvfb python3-xlib redis
+echo "\n" | sudo NEEDRESTART_MODE=a UCF_FORCE_CONFFOLD=1 apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache libboost-all-dev g++ make libboost-dev libssl-dev xdotool xvfb python3-xlib redis
 echo "-a exit,always -F arch=b64 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
 echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
 # Enable ClamAV antivirus
