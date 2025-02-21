@@ -59,7 +59,9 @@ def translate(request, content, target=None, src=None):
             print(traceback.format_exc())
             pass
     if len(text) > 0:
-        CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation)
+        try:
+            CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation)
+        except: pass
     else: return content
     return text
 
@@ -70,7 +72,17 @@ def translate_html(request, html, target=None, src=None):
     soup = BeautifulSoup(html, 'html.parser')
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code']:
-            print(tag.parent.name)
             translated = translate(request, tag.string, target=target, src=src)
             tag.replace_with(translated)
+        elif tag.parent.name in ['pre', 'code']:
+            lines = []
+            for line in tag.string.split('\n'):
+                if len(line.rsplit('#', 1)) > 1:
+                    to_trans = line.rsplit('#', 1)[1]
+                    translated = translate(request, to_trans, target=target, src=src)
+                    line_string = line.rsplit('#', 1)[0] + '#' + translated
+                else: line_string = line
+                lines = lines + [line_string]
+            out = '\n'.join(lines)
+            tag.replace_with(out)
     return str(soup)
