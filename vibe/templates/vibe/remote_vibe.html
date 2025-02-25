@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% block style %}
+html {
+    -ms-touch-action: none;
+    touch-action: none;
+}
+body {
+    overflow: hidden;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+#main {
+    overflow: hidden;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+#main-container {
+    overflow: hidden;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+html, body, main {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+button, b {
+    font-size: 60px;
+}
+{% endblock %}
+{% block head %}
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+{% endblock %}
+{% block content %}
+<div style="height: 60px;"></div>
+<button id="reset" class="btn btn-outline-dark">Reset</button>
+<canvas id="interactive-canvas" style="width: 100vw; height: 85vh;"></canvas>
+{% endblock %}
+{% block javascript %}
+var theCanvas = document.getElementById('interactive-canvas');      
+var socket;
+  var WRITE_INTERVAL = 250;
+  var CIRCLE_RADIUS = window.innerWidth * 0.50;
+  var OFF_RADIUS = CIRCLE_RADIUS * 0.3;
+  var ON_THRESHOLD = 60;
+  var DEAD_ZONE = 3;
+  var OFFSET_MIN = 25;
+  var OFFSET_MOD = 1;
+  var interval = null;
+  var circle = null;
+  var x = 128;
+  var y = 128;
+  var device;
+  var heightFactor = 0.80;
+  var mouseToggle = false;
+const scale = (fromRange, toRange) => {
+    	const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
+        return from =>  (from - fromRange[0]) * d + toRange[0];
+};
+  function init() {
+    var offset = 200;
+    var direction = true;
+    var currVal = 0;
+    var valMod = 0.3;
+    var vals = [];
+    function writeValues() {
+      var data = null;
+  if(Math.abs(128 - y) < DEAD_ZONE && Math.abs(128 - x) < DEAD_ZONE){
+    // Stop it
+        data = new Uint8Array([128, 128, 128, 128, offset]);
+  } else {
+        // Make it smooth - Map values larger
+    var tox = x;
+    if(tox > 128){ // 0-75
+            tox = tox + valMod * vals[currVal%vals.length];
+            tox = scale([128 + 15, 255], [128 + ON_THRESHOLD, 255])(tox);
+    } else if(tox < 128) {
+            tox = tox - valMod * vals[currVal%vals.length];
+            tox = scale([128 - 15, 0], [128 - ON_THRESHOLD, 0])(tox);
+    }
+    var toy = y;
+    if(toy > 128){ // 0-75
+            toy = toy + valMod * vals[currVal%vals.length];
+            toy = scale([128 + 15, 255], [128 + ON_THRESHOLD, 255])(toy);
+        } else if(toy < 128) {
+            toy = toy - valMod * vals[currVal%vals.length];
+            toy = scale([128 - 15, 0], [128 - ON_THRESHOLD, 0])(toy);
+        }
+        data = new Uint8Array([255-parseInt(toy), parseInt(toy), 255-parseInt(tox), parseInt(tox), offset]);
+	  }
+  	  socket.send(new String(255-parseInt(tox)) + ',' + new String(255-parseInt(toy)));
+        currVal++;
+    }
+function openSocket() {
+	socket = new WebSocket("wss://" + window.location.hostname + '/ws/vibe/remote/send/');
+	socket.addEventListener("open", (event) => {
+		console.log("Socket open.");
+		setInterval(writeValues, WRITE_INTERVAL);
+	});
+	socket.addEventListener("close", (event) => {
+		console.log("Socket closed.");
+		setTimeout(function() { openSocket(); }, {{ reload_time }});
+	});
+}
+openSocket();
+    var slider = null;
+    var joystickRadius = 25;
+    let stage = new createjs.Stage("interactive-canvas");
+    createjs.Touch.enable(stage);
+    let container = new createjs.Container();
+    var background = new createjs.Shape();
+    background.graphics.beginFill("#dedede").drawRect(0, 0, window.innerWidth, window.innerHeight);
+    stage.canvas.width = stage.canvas.getBoundingClientRect().width;
+    stage.canvas.height = stage.canvas.getBoundingClientRect().height;
+    stage.addChild(background);
+    stage.addChild(container);
+    var drawContainer = new createjs.Container();
+    var dcbackground = new createjs.Shape();
+    drawContainer.addChild(dcbackground);
+    stage.addChild(drawContainer);
+    const SPLIT_RATIO = 0.8;
+    var rect = {};
+    var rects = [];
+    var numRects = 32;
+    for(var z = 0; z < numRects; z++) {
+        vals[z] = 0;
+    }
+    var rectWidth = parseInt(window.innerWidth/numRects);
+    background.graphics.beginFill("#dedede").drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+    dcbackground.graphics.beginFill("#eb4d4d").drawRect(0, stage.canvas.height * SPLIT_RATIO, stage.canvas.width, stage.canvas.height);
+    function touchHandler(event) {
+        if(event.stageY > (stage.canvas.height * SPLIT_RATIO)) {
+            var curr = parseInt(event.stageX/rectWidth);
+            var rectHeight = stage.canvas.height - event.stageY;
+            if(!rects[curr]) {
+                rects[curr] = new createjs.Shape();
+                rects[curr].graphics.beginFill('#ab0909').drawRect(curr * rectWidth, stage.canvas.height - rectHeight, rectWidth, rectHeight);
+                drawContainer.addChild(rects[curr]);
+            } else {
+                drawContainer.removeChild(rects[curr]);
+                rects[curr] = new createjs.Shape();
+                rects[curr].graphics.beginFill('#ab0909').drawRect(curr * rectWidth, stage.canvas.height - rectHeight, rectWidth, rectHeight);
+                drawContainer.addChild(rects[curr]);
+            }
+            vals[curr] = parseInt(stage.canvas.height - event.stageY);
+            stage.update();
+        }
+    }
+    stage.on("stagemousedown", touchHandler);
+    stage.on("stagemouseup", touchHandler);
+    stage.on("stagemousemove", touchHandler);
+    circle = new createjs.Shape();
+    circle.graphics.beginFill("lightblue").drawCircle(0, 0, joystickRadius);
+    circle.x = stage.canvas.width * 0.5;
+    circle.y = stage.canvas.height * heightFactor * 0.5;
+	var circle2 = new createjs.Shape();
+    circle2.graphics.beginFill("#ffcccb").drawCircle(0, 0, CIRCLE_RADIUS);
+    circle2.x = stage.canvas.width * 0.5;
+    circle2.y = stage.canvas.height * heightFactor * 0.5;
+    stage.addChild(circle2);
+    var circle3 = new createjs.Shape();
+    circle3.graphics.beginFill("#eeaaa9").drawCircle(0, 0, OFF_RADIUS);
+    circle3.x = stage.canvas.width * 0.5;
+    circle3.y = stage.canvas.height * heightFactor * 0.5;
+    stage.addChild(circle3);
+    document.getElementById("reset").onclick = function() {
+    circle.x = stage.canvas.width/2;
+    circle.y = stage.canvas.height * heightFactor / 2;
+        x = (circle.x / stage.canvas.width) * 255;
+        y = 255 - ((circle.y / (stage.canvas.height * heightFactor)) * 255);	    
+        offset = 255;
+    writeValues();
+        stage.update();
+    };
+    stage.on("stagemousedown", function(evt) {
+        mouseToggle = true;
+    })
+    stage.on("stagemouseup", function(evt) {
+        mouseToggle = false;
+    })
+    var HOT_CORNER = 60;
+    stage.on("stagemousemove", function(evt) {
+      if (mouseToggle && evt.stageX > joystickRadius && evt.stageX < (stage.canvas.width - joystickRadius) && evt.stageY > joystickRadius && evt.stageY < (stage.canvas.height * heightFactor - joystickRadius)) {
+        circle.x = evt.stageX;
+        circle.y = evt.stageY;
+        if(circle.x < HOT_CORNER && circle.y < HOT_CORNER) {
+            circle.x = 0;
+            circle.y = 0;
+        }
+        else if(circle.x > stage.canvas.width - HOT_CORNER && circle.y < HOT_CORNER) {
+            circle.x = window.innerWidth;
+            circle.y = 0;
+        }
+        else if(circle.x < HOT_CORNER && circle.y > stage.canvas.height * heightFactor - HOT_CORNER) {
+            circle.x = 0;
+            circle.y = stage.canvas.height * heightFactor;
+        }
+        else if(circle.x > stage.canvas.width - HOT_CORNER && circle.y > stage.canvas.height * heightFactor - HOT_CORNER) {
+            circle.x = stage.canvas.width;
+            circle.y = stage.canvas.height * heightFactor;
+        }
+        x = (circle.x / stage.canvas.width) * 255;
+        y = 255 - ((circle.y / (stage.canvas.height * heightFactor)) * 255);
+        if (direction) {
+          offset += OFFSET_MOD;
+        } else {
+          offset -= OFFSET_MOD;
+        }
+        if (offset > 255) {
+          direction = false;
+          offset = 255;
+        } else if (offset < OFFSET_MIN) {
+          direction = true;
+          offset = OFFSET_MIN;
+        }
+        stage.update();
+      }
+    });
+    stage.addChild(circle);
+    console.log("Initialized")
+    stage.update();
+}
+init();
+{% endblock %}

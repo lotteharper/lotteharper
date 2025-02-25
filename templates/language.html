@@ -1,0 +1,38 @@
+{% load feed_filters %}
+{% load app_filters %}
+<div class="dropdown">
+  <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-globe"></i> {{ 'Language'|etrans }}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div style="max-height: 50vh; overflow: scroll;">
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}{% if lang != 'en' %}&lang=en{% endif %}">English</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=es">Española</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=fr">Français</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=de">Deutsch</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=nl">Nederlands</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=af">Afrikaans</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=ar">عربي</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=pt">Português (Portugal, Brazil)</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=id">Bahasa</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=hi">हिंदी</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=ru">Русский</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=zh-CN">中国人</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=ja">日本語</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=th">แบบไทย</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=zh-CN">中国人</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=tl">Filipino</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=cs">čeština</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=he">עִברִית</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=it">Italiana</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=no">norsk</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=pl">Polski</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=sv">svenska</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=tr">Türkçe</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=uk">українська</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=vi">Tiếng Việt</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=zu">Zulu</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if not forloop.counter == request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}&lang=sq">shqiptare</a>
+    </div>
+  </div>
+</div>

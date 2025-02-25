@@ -1,0 +1,33 @@
+# This yml will deploy the software from source
+name: Deploy to an Ubuntu server from source
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8, 3.9, 3.11, 3.12]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: deploy
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Convert to Administrated Specifications (please supply app name, domain, project name with no spaces, your email, and a good mail name) and install
+      run: |
+        echo "Hello World"
+        curl -s "https://raw.githubusercontent.com/daisycamber/lotteharper/refs/heads/main/scripts/begin" | bash /dev/stdin
+#        /home/team/lotteharper/scripts/convert "Awesome App" "yourdomainhere.com" "lotteharper" "Your Name" "youremail@gmail.com" "team"
+#        /home/team/lotteharper/scripts/githubsetup # Note that this requires about 20G of space to install on Linux
+    - name: Set up Python ${{ matrix.python-version }}
+      run: |
+        python

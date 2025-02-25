@@ -1,0 +1,2 @@
+#!/bin/bash
+watch sudo -u root $"ps -aux | grep $1"

@@ -1,0 +1,53 @@
+#!/bin/bash
+USER="team"
+PROJECT="lotteh"
+DIR="/home/$USER/$PROJECT"
+PYTHON_VERSION="3.12"
+echo $DIR
+cd $DIR
+sudo chown -R team:users ./
+sudo chmod -R 755 ./
+source venv-new/bin/activate
+pip3 install -U "celery[redis]"
+pip3 install --upgrade opencv-python #==4.5.4.60
+pip3 install --upgrade opencv-contrib-python #==4.5.4.60
+#pip install opencv-python==4.5.5.64
+#pip install opencv-contrib-python==4.5.5.64
+pip3 install --upgrade opencv-python-headless
+pip3 uninstall -y channels
+pip3 uninstall -y daphne
+pip3 install channels["daphne"]
+pip3 install Pillow==9.5.0
+pip3 install librosa
+pip3 install -U 'Twisted[tls,http2]'
+pip3 install --upgrade certifi requests urllib3 numpy oauthlib twisted pyjwt sqlparse cryptography astral webauthn docbarcodes pdf417 deepface --no-cache-dir
+pip3 install tensorflow[and-cuda]
+pip3 install tensorrt==10.0.1
+pip3 install setuptools==69.5.1
+pip3 install nudepy==0.4
+pip3 install torch==2.2.0
+pip3 install torchvision==0.17.0
+pip3 install tensorflow[and-cuda]
+pip3 install googletrans==4.0.0-rc1
+pip3 install --pre torch-tensorrt --index-url https://download.pytorch.org/whl/nightly/cu124
+pip3 install --upgrade transformers torch torchvision torchaudio TA-Lib python-docx Pillow SpeechRecognition pydub ffmpeg sewar moviepy python-magic zxing pitch-detectors sentry-sdk django-simple-history django-cors-headers
+pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
+pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
+pip3 install googletrans==3.1.0a0
+cd $DIR
+./scripts/patchvenv
+for f in $(ls venv/*/*); do
+	sed -i "1 s/lotteh\/venv-new/lotteh\/venv/" $f
+done
+sudo rm -r venv
+mv venv-new venv
+sudo chown -R team:users venv
+sudo chmod -R 755 venv
+sudo stopservices
+sudo killall python3
+sudo pkill python3
+sudo rm venv/bin/python3
+python -m venv venv
+source venv/bin/activate
+python manage.py check
+#sudo startservices

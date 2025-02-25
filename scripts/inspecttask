@@ -1,0 +1,2 @@
+#!/bin/bash
+/home/team/lotteh/venv/bin/python -m celery -A lotteh inspect active
