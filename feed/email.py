@@ -5,6 +5,7 @@ def send_photo_email(user, post):
     from datetime import timedelta
     from django.conf import settings
     from django.template.loader import render_to_string
+    from security.crypto import encrypt_cbc
     from feed.models import Post
     import datetime
     photo_url = post.get_image_url()
@@ -15,7 +16,7 @@ def send_photo_email(user, post):
         'protocol': 'https',
         'photos': [photo_url],
         'model_name': post.author.profile.name,
-        'message': post.auction_message if post.date_auction > timezone.now() - datetime.timedelta(days=31*3) else 'Thank you again for your purchase.',
+        'message': encrypt_cbc(self.auction_message, settings.AES_KEY) if post.date_auction > timezone.now() - datetime.timedelta(days=31*3) else 'Thank you again for your purchase.',
     })
     import os
     if post.file and not os.path.exists(post.file.path): post.download_file()
@@ -35,7 +36,7 @@ def send_photos_email(user, posts):
     files = []
     from barcode.tests import document_scanned
     authenticated = document_scanned(user)
-    print(posts)
+#    print(posts)
     import os
     messages = []
     for photo in posts:
@@ -47,8 +48,10 @@ def send_photos_email(user, posts):
             if photo.image: photo_urls = photo_urls + [photo.get_image_url()]
             if photo.file: files = files + [photo.file.path]
         post = photo
+        from security.crypto import decrypt_cbc
+        from django.conf import settings
         if post.date_auction > timezone.now() - datetime.timedelta(days=31*3):
-            messages = messages + [post.auction_message]
+            messages = messages + [decrypt_cbc(post.auction_message, settings.AES_KEY)]
     if not messages: messages += ['Thank you again for your purchase.']
     html_message = render_to_string('feed/photo_email.html', {
         'site_name': settings.SITE_NAME,

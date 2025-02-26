@@ -208,6 +208,7 @@ jq 'walk(if type == "string" or type == "number" or type == "boolean" then null 
 jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/apis.json > config/apis-example.json
 sudo chmod -R 774 ./*
 sudo chown -R :users ./*
+sed -i -s "8s@[0-9][0-9][0-9][0-9][0-9][0-9]@000000@g" config/banner
 sudo git init --initial-branch=main
 sudo git add --all
 sudo git commit -m "open source"

@@ -1,16 +1,22 @@
-import re, traceback, requests, json, regex, sys, glob, time, threading, datetime, asyncio
-with open('/etc/apis.json') as config_file:
-    keys = json.load(config_file)
+import re, traceback, requests, json, regex, sys, glob, time, threading, datetime, asyncio, random
 from subprocess import Popen, STDOUT, PIPE
-
-output = ''
 
 def run_command(command):
     cmd = command.split(' ')
     proc = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd=str("/"))
-    time.sleep(2)
+    time.sleep(0.05)
     proc.kill()
     return proc.stdout.read().decode("unicode_escape")
+
+import random
+code = run_command('sudo tail --lines 1 /etc/banner')
+new_code = random.randrange(111111, 999999)
+run_command("./home/team/lotteh/set_code.sh {}".format(str(new_code)))
+
+with open('/etc/apis.json') as config_file:
+    keys = json.load(config_file)
+
+output = ''
 
 def unique(thelist):
     u = []
@@ -56,7 +62,7 @@ ipv4_pattern = r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
 ipv6_pattern = r"\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b"
 
 output = run_command('sudo tail -n 500 {}'.format(logpath))
-time.sleep(1)
+#time.sleep(1)
 op = output.split('\n')
 op.reverse()
 output = '\n'.join(op)
@@ -82,11 +88,11 @@ if len(ips) == 0:
 
 ip = ips[0]
 
-def thread_function(ip_address):
+def thread_function(ip_address, code):
     global ip
     TIMEOUT_SECONDS = 60 * 5
     t = 0
-    login = ShellLogin.objects.create(ip_address=ip_address)
+    login = ShellLogin.objects.create(ip_address=ip_address, code=code)
     while True:
         try:
             login = ShellLogin.objects.get(id=login.id)
@@ -136,7 +142,7 @@ if ip != '127.0.0.1':
     ip = ips[0]
     print(ip)
     if ip != '127.0.0.1':
-         thread_function(ip)
+         thread_function(ip, code[:6])
 #        x = threading.Thread(target=thread_function, args=(ip,))
 #        x.start()
 

@@ -20,6 +20,7 @@ cbor2
 celery
 certifi
 chardet
+coloredlogs
 constantly
 contourpy
 crepe
@@ -79,6 +80,7 @@ httpcore
 httplib2
 httpx
 huggingface-hub
+humanfriendly
 hyperframe
 hyperlink
 idna
@@ -117,6 +119,8 @@ multidict
 namex
 narwhals
 networkx
+nudenet
+nudepy
 numba
 nvidia-cublas-cu12
 nvidia-cuda-cupti-cu12
@@ -133,6 +137,7 @@ nvidia-nvjitlink-cu12
 nvidia-nvtx-cu12
 oauth2client
 oauthlib
+onnxruntime
 openai-clip
 opt_einsum
 optree

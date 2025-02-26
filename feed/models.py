@@ -3,11 +3,18 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.functions import Length
-import uuid
+import uuid, base64
 from feed.storage import MediaStorage
 from django.conf import settings
 
 models.TextField.register_lookup(Length, 'length')
+
+def is_base64(s):
+    try:
+        base64.b64decode(s)
+        return True
+    except (base64.binascii.Error, UnicodeDecodeError):
+        return False
 
 def resize_img(image, scale):
     import cv2
@@ -806,6 +813,10 @@ class Post(models.Model):
             print('Scheduling write book')
         if (this and ((this.content != self.content) or (not this))) and '***' in self.content and self.posted:
             self.compile_content()
+        from security.crypto import decrypt_cbc
+        if not is_base64(self.auction_message[24:]):
+            from security.crypto import encrypt_cbc
+            self.auction_message = encrypt_cbc(self.auction_message, settings.AES_KEY)
         try:
             super(Post, self).save(*args, **kwargs)
         except: pass

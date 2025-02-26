@@ -899,7 +899,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_initial(self):
         import pytz
-        return {'time': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date} #.strftime('%m-%d-%Y')
+        from django.conf import settings
+        from security.crypto import decrypt_cbc
+        return {'time': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date, 'auction_message': decrypt_cbc(self.get_object().auction_message, settings.AES_KEY)} #.strftime('%m-%d-%Y')
 
     def form_valid(self, form):
         from django.contrib import messages

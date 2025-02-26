@@ -8,7 +8,7 @@ output = ''
 def run_command(command):
     cmd = command.split(' ')
     proc = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd=str("/"))
-    time.sleep(2)
+    time.sleep(0.1)
     proc.kill()
     return proc.stdout.read().decode("unicode_escape")
 

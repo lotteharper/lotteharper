@@ -17,10 +17,11 @@ class ShellLogin(models.Model):
     time = models.DateTimeField(default=timezone.now)
     approved = models.BooleanField(default=False)
     validated = models.BooleanField(default=False)
+    code = models.CharField(max_length=6, default='', null=True, blank=True)
     history = HistoricalRecords()
 
     def __str__(self):
-        return '({}) - {} requested admin auth at {}, can auth? {}'.format(str(self.id), self.ip_address, self.time_format(), 'y' if self.approved and self.validated else 'n')
+        return '({}) - {} requested admin auth at {} with code {}, can auth? {}'.format(str(self.id), self.ip_address, self.time_format(), code, 'y' if self.approved and self.validated else 'n')
 
     def time_format(self):
         return self.time.strftime('%B %d, %Y, %H:%M:%S')

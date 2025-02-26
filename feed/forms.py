@@ -112,11 +112,21 @@ class ScheduledPostForm(forms.ModelForm):
     auction_message = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False)
 
     def __init__(self, *args, **kwargs):
+        from security.crypto import decrypt_cbc
+        from django.conf import settings
         from feed.middleware import get_current_request
         request = get_current_request()
+#        try:
+#            instance = kwargs.get('instance', None)
+#            super(ScheduledPostForm, self).__init__(*args, **kwargs)
+#            kwargs.update(initial={
+#                'auction_message': decrypt_cbc(self.instance.auction_message, settings.AES_KEY)
+##            })
+#        except: pass
         super(ScheduledPostForm, self).__init__(*args, **kwargs)
         if not self.instance: self.fields['price'].initial = get_current_request().user.vendor_profile.photo_tip[1:]
         if get_current_request().GET.get('raw', None): self.fields['content'].widget = forms.Textarea(attrs={'rows': settings.TEXTAREA_ROWS})
+#        self.fields['auction_message'].initial = decrypt_cbc(self.instance.auction_message, settings.AES_KEY)
         self.fields['image'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
         self.fields['file'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
         if request.GET.get('camera'):
@@ -140,7 +150,7 @@ class ScheduledPostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file', 'date_auction', 'auction_message')
+        fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file', 'date_auction')
 
 class UpdatePostForm(ScheduledPostForm):
     image = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}))
