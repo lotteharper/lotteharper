@@ -55,7 +55,7 @@ virtual_transport=lmtp:unix:private/dovecot-lmtp
 smtpd_sasl_path = private/auth
 
 smtpd_recipient_restrictions =
-        reject_rbl_client zen.spamhaus.org,
+#        reject_rbl_client zen.spamhaus.org,
         reject_rbl_client bl.spamcop.net,stop
         reject_rbl_client dnsbl.sorbs.net,
         reject_rbl_client cbl.abuseat.org,
@@ -64,9 +64,9 @@ smtpd_recipient_restrictions =
         permit
 
 smtpd_client_restrictions =
-    reject_rhsbl_helo dbl.spamhaus.org,
-    reject_rhsbl_reverse_client dbl.spamhaus.org,
-    reject_rhsbl_sender dbl.spamhaus.org,
+#    reject_rhsbl_helo dbl.spamhaus.org,
+#    reject_rhsbl_reverse_client dbl.spamhaus.org,
+#    reject_rhsbl_sender dbl.spamhaus.org,
 #    reject_rbl_client zen.spamhaus.org,
     permit_mynetworks,
     permit_sasl_authenticated,
