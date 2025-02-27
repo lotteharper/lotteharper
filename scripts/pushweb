@@ -6,7 +6,9 @@ cd $"/home/$U/$DIR/"
 sudo chown -R :users ./
 sudo chmod -R 775 ./
 source venv/bin/activate
-python generate_site.py
+if [ $# -eq 0 ]; then
+	python generate_site.py
+fi
 cp -r static/games/ web/site/static/
 sudo cp web/site/en/* web/site/
 # Sub website backup

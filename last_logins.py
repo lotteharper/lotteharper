@@ -13,7 +13,7 @@ op = ''
 
 count = 0
 for login in s.order_by('-time'):
-    op = op + '#{} At {} from {}'.format(len(s) - count,login.time.astimezone(pytz.timezone(settings.TIME_ZONE)),login.ip_address) + '\n'
+    op = op + '#{} At {} with code #{} from {}'.format(len(s) - count,login.time.astimezone(pytz.timezone(settings.TIME_ZONE)), login.code, login.ip_address) + '\n'
     count+=1
 
 print(op if op else 'No login found.')
