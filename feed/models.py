@@ -484,10 +484,12 @@ class Post(models.Model):
 #            return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
         from django.utils.html import strip_tags
         from feed.templatetags.app_filters import clean_html
-        content = strip_tags(clean_html(self.content)).split('\n')[0]
+        content = strip_tags(clean_html(self.content)).split('\n')[0].replace('\r', ' ').replace('\n', ' ')
         #if self.friendly_name and not self.content: reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
         import urllib.parse
-        name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 32) if content.rfind(' ', 20, 32) else 32].strip() if content else 'post').replace(' ', '-').replace('"', '').replace('\'', '').replace('?', '').replace('\\', '').replace('/', '').replace(',', '')).lower()[:255])[:100]
+        name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 38) if content.rfind(' ', 20, 38) else 38].strip() if content else 'post').replace(' ', '-').replace('"', '').replace('\'', '').replace('?', '').replace('\\', '').replace('/', '').replace(',', '').replace('‘', '').replace('’', '').replace('‚', '').replace('‛', '').replace('„', '').replace('‟', '').replace('`', '').replace('ˊ', '')).lower()[:255])[:100]
+        import re
+        name = re.sub(r"-+", '-', name)
         import random, os, urllib
         from django.conf import settings
         if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0:
@@ -503,7 +505,8 @@ class Post(models.Model):
                 lines = file.readlines()
                 for x in range(settings.POST_WORDS + words):
                     ex = ex + ' {}'.format(random.choice(lines)[:-1])
-            name = urllib.parse.quote_plus((((content.split('\n')[0][:content.rfind(' ', 20, 32) if content.rfind(' ', 20, 32) else 32].strip() if content else 'post') + ex).replace(' ', '-')).lower()[:255])[:100]
+            name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 38) if content.rfind(' ', 20, 38) else 38].strip() if content else 'post').replace(' ', '-').replace('"', '').replace('\'', '').replace('?', '').replace('\\', '').replace('/', '').replace(',', '').replace('‘', '').replace('’', '').replace('‚', '').replace('‛', '').replace('„', '').replace('‟', '').replace('`', '').replace('ˊ', '')).lower()[:255])[:100]
+            name = re.sub(r"-+", '-', name)
             file.close()
             if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0: break
             words = words + 1

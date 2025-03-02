@@ -69,7 +69,7 @@ def contacts(request):
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
-    return render(request, 'contact/contacts.html', {'title': 'Contacts', 'contacts': p.page(page), 'page_obj': p.get_page(page), 'page': page, 'count': p.count})
+    return render(request, 'contact/contacts.html', {'title': 'Contacts', 'contacts': p.page(page), 'page_obj': p.get_page(page), 'current_page': page, 'count': p.count})
 
 @csrf_exempt
 def contact(request):

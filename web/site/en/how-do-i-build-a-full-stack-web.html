@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How do i build a full stack web app with django?</p><p><br/></p><p>Building a full stack web app with Django involves several steps. Here is a general outline of the process:</p><p><br/></p><p>1. Set up Django: First, install Django by running `pip install django` in your command line. Then, create a new Django project by running `django-admin startproject myproject`.</p><p><br/></p><p>2. Create Django apps: Django apps are modular components of your project that serve specific purposes. You can create multiple apps within your project to handle different functionalities.</p><p><br/></p><p>3. Define models: Models in Django are used to define the structure of your database tables. Create your models by defining classes in the models.py file of each app.</p><p><br/></p><p>4. Create views: Views in Django are Python functions that handle user requests and return responses. Define views for your app by creating functions in the views.py file of each app.</p><p><br/></p><p>5. Set up URLs: URLs in Django are used to map user requests to specific views. Define URL patterns for your app by creating a urls.py file in each app and including them in the main urls.py file of your project.</p><p><br/></p><p>6. Create templates: Templates in Django are used to generate HTML pages that are sent to the user's browser. Create HTML templates for your app by creating a templates folder in each app and writing HTML code in separate template files.</p><p><br/></p><p>7. Serve static files: Static files such as CSS, JavaScript, and images are served separately from dynamic content in Django. Configure the static files settings in your project's settings.py file to serve static files from the static folder in each app.</p><p><br/></p><p>8. Configure the database: Set up your database settings in the settings.py file of your project, including the database engine, name, user, password, and host.</p><p><br/></p><p>9. Migrate the database: Run `python manage.py makemigrations` followed by `python manage.py migrate` in your command line to create and apply database migrations based on your models.</p><p><br/></p><p>10. Run the server: Start the Django development server by running `python manage.py runserver` in your command line. You should now be able to access your web app at `http://127.0.0.1:8000/` in your browser.</p><p><br/></p><p>These are the basic steps to build a full stack web app with Django. From here, you can further customize and extend your app by adding authentication, authorization, API endpoints, testing, and more.</p><div><br/></div></div>
 
-
-
-<p>How do i build a full stack web app with django?</p><p><br></p><p>Building a full stack web app with Django involves several steps. Here is a general outline of the process:</p><p><br></p><p>1. Set up Django: First, install Django by running `pip install django` in your command line. Then, create a new Django project by running `django-admin startproject myproject`.</p><p><br></p><p>2. Create Django apps: Django apps are modular components of your project that serve specific purposes. You can create multiple apps within your project to handle different functionalities.</p><p><br></p><p>3. Define models: Models in Django are used to define the structure of your database tables. Create your models by defining classes in the models.py file of each app.</p><p><br></p><p>4. Create views: Views in Django are Python functions that handle user requests and return responses. Define views for your app by creating functions in the views.py file of each app.</p><p><br></p><p>5. Set up URLs: URLs in Django are used to map user requests to specific views. Define URL patterns for your app by creating a urls.py file in each app and including them in the main urls.py file of your project.</p><p><br></p><p>6. Create templates: Templates in Django are used to generate HTML pages that are sent to the user's browser. Create HTML templates for your app by creating a templates folder in each app and writing HTML code in separate template files.</p><p><br></p><p>7. Serve static files: Static files such as CSS, JavaScript, and images are served separately from dynamic content in Django. Configure the static files settings in your project's settings.py file to serve static files from the static folder in each app.</p><p><br></p><p>8. Configure the database: Set up your database settings in the settings.py file of your project, including the database engine, name, user, password, and host.</p><p><br></p><p>9. Migrate the database: Run `python manage.py makemigrations` followed by `python manage.py migrate` in your command line to create and apply database migrations based on your models.</p><p><br></p><p>10. Run the server: Start the Django development server by running `python manage.py runserver` in your command line. You should now be able to access your web app at `http://127.0.0.1:8000/` in your browser.</p><p><br></p><p>These are the basic steps to build a full stack web app with Django. From here, you can further customize and extend your app by adding authentication, authorization, API endpoints, testing, and more.</p><div><br></div>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

