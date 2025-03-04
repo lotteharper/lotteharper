@@ -1,7 +1,7 @@
 import os, uuid
 from django.conf import settings
 
-FAST_SCALE = 0.06
+FAST_SCALE = 0.03
 
 def get_nude_fast(image_path):
     from PIL import Image
