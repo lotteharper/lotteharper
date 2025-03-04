@@ -7,10 +7,10 @@ if [ $return_code == 1 ]; then
     exit 0
 fi
 if [ $return_code == 2 ]; then
-    exit 1
+    exit 130
 fi
 if [ $return_code == 0 ]; then
     exit 0
 else
-    exit 1
+    exit 130
 fi
