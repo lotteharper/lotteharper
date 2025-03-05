@@ -5,7 +5,8 @@
 <a class="btn btn-outline-secondary btn-lg lightblue" href="{% url 'users:register' %}" title="{{ 'Register'|trans }}" style="color: black !important;">{{ 'Sign Up'|trans }}</a>
 <a class="btn btn-outline-secondary btn-lg pink" href="{% url 'users:login' %}" title="{{ 'Log in'|trans }}" style="color: black !important;">{{ 'Log in'|etrans }}</a>
 <a class="btn btn-primary btn-lg" href="{% url 'payments:subscribe-card' profile.name %}" title="{{ 'Follow this model'|trans }}">{{ 'Follow'|etrans }}</a>
-{% if profile.shop_url %}<a class="btn btn-info btn-lg" href="{{ profile.shop_url }}" title="{{ 'Buy merch'|trans }}">{{ 'Merch'|etrans }}</a>{% endif %}
+{% if profile.shop_url %}<a class="btn btn-info btn-lg" target="_blank" href="{{ profile.shop_url }}" title="{{ 'Buy merch'|trans }}">{{ 'Merch'|etrans }}</a>{% endif %}
+{% if profile.user.vendor_profile.imgur_username %}<a class="btn btn-lg" target="_blank" href="https://imgur.com/user/{{ profile.user.vendor_profile.imgur_username }}/posts" title="{{ 'See my public profile on Imgur'|trans }}">{{ 'My Imgur'|etrans }}</a>{% endif %}
 {% if adult_content %}
 {% if profile.user.vendor_profile.content_link %}<a class="btn btn-secondary btn-lg border border-dark" target="_blank" href="{% url 'verify:age' %}?next={% url 'vendors:content' profile.name %}" title="{{ 'Adult content (for adults 18+)'|trans }}">{{ 'Adult Content'|etrans }}</a>{% endif %}
 {% if profile.user.vendor_profile.video_link %}<a class="btn btn-dark btn-lg border border-dark" target="_blank" href="{% url 'verify:age' %}?next={% url 'vendors:video' profile.name %}" title="{{ 'Adult Video (for adults 18+)'|trans }}">{{ 'Adult Video'|etrans }}</a>{% endif %}

@@ -48,7 +48,7 @@ def resize_image(image_path):
 def get_as_base64(url):
     return base64.b64encode(requests.get(url).content)
 
-def upload_photo(path, key=None):
+def upload_photo(path, key=None, user=None, post=None):
     from io import BytesIO
     buffered1 = BytesIO()
     im1 = get_image(path)
@@ -60,9 +60,16 @@ def upload_photo(path, key=None):
     image2 = base64.b64encode(buffered2.getvalue())
     if not len(image1) > 0: return None, None
     from django.conf import settings
-    return upload(image1, key=key if key else settings.IMGUR_ID) if len(image1) > 0 else None, upload(image2, key=key if key else settings.IMGUR_ID) if len(image2) > 0 else None
+    if user:
+        refresh_imgur(user)
+        key = user.vendor_profile.imgur_token
+    i1 = upload(image1, key=key if key else settings.IMGUR_ID, user=user, post=post) if len(image1) > 0 else None
+    if user:
+        refresh_imgur(user)
+        key = user.vendor_profile.imgur_token
+    i2 = upload(image2, key=key if key else settings.IMGUR_ID, user=user, post=post) if len(image2) > 0 else None
 
-def upload(base64_data, key=None):
+def upload(base64_data, key=None, user=None, post=None):
 #    b64data = 'data:image/png;base64,' + base64_data.decode('utf-8')
     data = {
         'image': base64_data,
@@ -70,11 +77,25 @@ def upload(base64_data, key=None):
         'title': '{} - {}'.format(settings.SITE_NAME, settings.AUTHOR_NAME),
         'description': settings.BASE_DESCRIPTION + ' - from {}'.format(settings.STATIC_DOMAIN),
     }
-    headers = {"Authorization": "Client-ID {}".format(settings.IMGUR_ID if not key else key)}
+    headers = {"Authorization": ("Client-ID" if not key else "Bearer") + " {}".format(settings.IMGUR_ID if not key else key)}
     out = requests.post('https://api.imgur.com/3/image', data=data, headers=headers)
     print(out)
     print(out.text)
     j = out.json()
+    image_id = j['data']['id']
+    try:
+        if user and post:
+            refresh_imgur(user)
+            key = user.vendor_profile.imgur_token
+            headers = {"Authorization": "Bearer {}".format(key)}
+            data = {
+                'title': settings.SITE_NAME + ' | ' + post.content.split('\n')[0][:255],
+                'mature': 0 if post.public and not post.private else 1,
+            }
+            j2 = requests.post('https://api.imgur.com/3/gallery/image/{}'.format(image_id), headers=headers, data=data)
+            print(j2)
+            print(j2.text)
+    except: pass
     if j['status'] == 200:
         return j['data']['link']
     return None
@@ -120,6 +141,25 @@ def upload_photo_cloudinary(path):
 #    print(upload_result["secure_url"])
     return str(upload_result['secure_url']), str(auto_crop_url)
 
+def refresh_imgur(user):
+    refresh_token = user.vendor_profile.imgur_refresh
+    import requests, json
+    from django.conf import settings
+    payload = {
+        'client_id': settings.IMGUR_ID,
+        'client_secret': settings.IMGUR_SECRET,
+        'refresh_token': refresh_token,
+        'grant_type': "refresh_token"
+    }
+    resp = requests.post('https://api.imgur.com/oauth2/token', data=payload)
+    print(resp)
+    print(resp.text)
+    j = resp.json()
+    user.vendor_profile.imgur_refresh = j['refresh_token']
+    user.vendor_profile.imgur_token = j['access_token']
+    user.vendor_profile.save()
+
+
 def upload_post(post):
     import traceback
     from feed.models import Post
@@ -134,8 +174,9 @@ def upload_post(post):
             post = Post.objects.get(id=post.id)
         from django.utils import timezone
         import datetime
+        anonymous = not post.author.vendor_profile.imgur_time > timezone.now() - datetime.timedelta(minutes=60*24*7)
         try:
-            i1, i2 = upload_photo((post.image.path if post.public and not post.private else post.image_censored.path)) #, post.author.vendor_profile.imgur_token if post.author.vendor_profile.imgur_time > timezone.now() - datetime.timedelta(minutes=60) else None)
+            i1, i2 = upload_photo(post.image.path if post.public and not post.private else post.image_censored.path, post.author.vendor_profile.imgur_token if not anonymous else None, post.author if not anonymous else None, post)
             post.image_offsite = i1
             post.image_thumb_offsite = i2
         except OSError:
@@ -154,7 +195,7 @@ def upload_post(post):
                     post = Post.objects.get(id=post.id)
                     post.get_blur_url(True)
                     post = Post.objects.get(id=post.id)
-                i1, i2 = upload_photo(post.image.path if post.public and not post.private else post.image_censored.path)
+                i1, i2 = upload_photo(post.image.path if post.public and not post.private else post.image_censored.path, post.author.vendor_profile.imgur_token if not anonymous else None, post.author if not anonymous else None, post)
                 post.image_offsite = i1
                 post.image_thumb_offsite = i2
             except: print(traceback.format_exc())

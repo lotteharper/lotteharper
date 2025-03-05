@@ -199,16 +199,11 @@ python setup.py develop
 pip install realesrgan
 cd $DIR
 sudo chown -R team:users gfpgan
+cd $DIR
 echo "Installing ta-lib"
-wget https://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
-tar xvzf ta-lib-0.4.0-src.tar.gz
-sudo rm ta-lib-*
-cd ta-lib
-wget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' -O './config.guess'
-wget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' -O './config.sub'
-./configure --prefix=/usr
-make
-sudo make install
+wget https://github.com/ta-lib/ta-lib/releases/download/v0.6.4/ta-lib_0.6.4_amd64.deb
+sudo apt install -y $DIR/ta-lib_0.6.4_amd64.deb
+sudo apt update -y && sudo apt upgrade -y
 cd $DIR
 git clone https://github.com/jselbie/stunserver.git
 cd stunserver
