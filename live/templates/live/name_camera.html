@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load app_filters %}
+{% block content %}
+<legend>{% if form.instance %}{{ 'Update the video camera'|etrans }} "{{ form.instance.name }}"{% else %}{{ 'New video camera'|etrans }}{% endif %}</legend>
+<a href="{% url 'live:choose-camera' %}" title="{{ 'Choose camera'|etrans }}" class="btn btn-outline-primary">{{ 'Choose Camera'|etrans }}</a>
+<form method="POST" action="{{ request.path }}?camera={{ request.GET.camera }}">
+{% csrf_token %}
+{{ form|crispy }}
+<button type="submit" class="btn btn-outline-info">{{ 'Update'|etrans }}</button>
+</form>
+<hr style="color: blue;">
+<div style="display: flex; justify-content: space-around;">
+<a href="{% url 'live:golivevideo' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Go Live'|etrans }}</a>
+<a href="{% url 'live:livevideo' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'Live Feed'|etrans }}</a>
+<a href="{% url 'recordings:recordings' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'See Recordings'|etrans }}</a>
+</div>
+<hr style="color: red;">
+<div style="display: flex; justify-content: space-around;">
+{% include 'live/go_remote.html' %}
+{% include 'live/recording_remote.html' %}
+</div>
+{% endblock %}
+{% block javascript %}
+var live = false;
+var recording = false;
+var liveButton = document.getElementById('golivebutton');
+var recordButton = document.getElementById('recordbutton');
+var recording = {% if camera.recording %}true{% else %}false{% endif %};
+function openSocket() {
+        var socket = new WebSocket("wss://" + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
+        socket.addEventListener("open", (event) => {
+            console.log('Socket open.');
+            setInterval(function() {
+                socket.send('r');
+            }, 1000);
+        });
+        socket.addEventListener("close", (event) => {
+            console.log('Socket closed.');
+            setTimeout(function() {
+                openSocket();
+            }, {{ reload_time }});
+        });
+        socket.addEventListener("message", (event) => {
+            var instructions = event.data.split(',');
+            if(instructions[0] == 'y') {
+                live = true;
+                liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
+            } else if(instructions[0] == 'n') {
+                live = false;
+                liveButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
+            }
+            if(instructions[1] == 'y') {
+                recording = true;
+                recordButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
+            } else {
+                recording = false;
+                recordButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
+            }
+        });
+}
+openSocket();
+{% include 'live/remote.js' %}
+{% endblock %}

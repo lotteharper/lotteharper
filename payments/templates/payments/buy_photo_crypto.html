@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load app_filters %} 
+{% block head %}
+<script type="text/javascript" src="/static/qrcode.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://crypto-js.stripe.com/crypto-onramp-outer.js"></script>
+{% endblock %}
+{% block content %} 
+<div id="container rounded bg-white shadow col-md-6 mx-auto">
+<h1><i class="bi bi-credit-card-fill"></i> {{ 'Buy this'|etrans }} {% if not post.file %}{{ 'photo of'|etrans }}{% else %}{{ 'product from'|etrans }}{% endif %} @{{ username }} {{ 'with Crypto'|etrans }}</h1>
+<div class="container">
+<div class="row">
+<div class="col-md-6">
+{% if post.image and post.public and not post.private %}<img class="mr-2 img-fluid rounded" style="float: left; width: 100%; max-width: 400px; margin-right: 13px;" src="{{ post.get_blur_thumb_url }}" alt="{{ 'Buy this photo for'|etrans }} ${{ fee|sub_fee }} USD"></img>{% elif post.image and post.private or not post.public %}<img class="mr-2 img-fluid rounded" style="float: left; filter: blur(8px); width: 100%; max-width: 400px; margin-right: 13px;" src="{{ post.get_blur_thumb_url }}" alt="{{ 'Buy this photo for'|etrans }} ${{ fee|sub_fee }} USD"></img>{% endif %}
+</div>
+<div class="col-md-6">
+<div style="display: inline-block;">
+<a href="{{ request.path }}?crypto={{ request.GET.crypto }}{% if request.GET.lightning %}&lightning=t{% endif %}" title="{{ 'See another photo'|etrans }}" class="btn btn-outline-dark pink-borders">{{ 'See Another Photo'|etrans }}</a>
+{% if not request.COOKIES.age_verified %}<a href="{% url 'verify:age' %}?next={{ request.path }}?crypto={{ request.GET.crypto }}{% if request.GET.lightning %}&lightning=t{% endif %}" title="{{ 'See private photos'|etrans }}" class="btn btn-outline-dark pink-borders">{{ 'See Private Photos'|etrans }}</a>{% endif %}
+<hr>
+<p>{{ 'This purchase is subject to'|etrans }} <a href="{% url 'misc:terms' %}" title="{{ 'View the terms and coniditons'|etrans }}">{{ 'the terms and conditions and privacy policy'|etrans }}</a> {{ 'of'|etrans }} {{ the_site_name }}.</p>
+<div class="dropdown" style="display: inline-block;">
+    <a class="btn btn-outline-dark pink-borders dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    	<i class="bi bi-currency-bitcoin"></i> {{ 'Change Currency'|etrans }}
+    </a>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div style="max-height: 50vh; overflow: scroll;">
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&id={{ post.uuid }}">BTC (Lightning Network)</a></li>
+	{% for currency in currencies %}
+		<li><a class="dropdown-item" href="{{ request.path }}?crypto={{ currency }}&id={{ post.uuid }}">{{ currency }}</a></li>
+	{% endfor %}
+    </div>
+  </ul>
+</div>
+<button class="btn btn-outline-primary" title="{{ 'Add this to your cart'|etrans }}" onclick="addToCart('{{ post.uuid }}');">{{ 'Add to Cart'|etrans }} <i><b id="total{{ post.uuid }}"></b></i></button>
+</div>
+</div>
+</div>
+</div>
+<b>Items:</b>
+<ul>
+<li>{{ 'One private'|etrans }} {% if not post.file %}{{ 'photo'|etrans }}{% else %}{{ 'download, video or audio'|etrans }}{% endif %} {{ 'featuring'|etrans }} {{ username }} (${{ usd_fee|sub_fee }})</li>
+<li>{{ 'Billed once only.'|etrans }}</li>
+</ul>
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
+<div id="onramp-element" style="max-width: 500px" class="mx-auto"><!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<fieldset class="form-group">
+<legend class="border-bottom mb-4">{{ 'Step 1: Send Crypto'|etrans }}</legend>
+{% load app_filters %} 
+<p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" type="button" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
+<b><i>{{ crypto_address }}</i></b>
+<button class="btn btn-sm btn-info" type="button" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button>
+<hr style="background-color: green;">
+<p>{% if not request.user.is_authenticated %}{{ 'Enter your email and press'|etrans }}{% else %}{{ 'Press'|etrans }}{% endif %} {{ 'the "Send" button to confirm your payment once you have initiated the transfer.'|etrans }}</p>
+{{ form|crispy }}
+<button type="submit" class="btn btn-outline-success">{{ 'Send'|etrans }}</button>
+</form>
+</div>
+<div style="display: flex; justify-content: space-around;"><div id="paymentqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<div style="text-align: center;"><small>{{ 'Scan this QR code to pay with your Crypto wallet or bank'|etrans }}</small></div>
+<hr>
+{% if not request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with'|etrans }} Alephium (ALPH) {{ 'please select'|etrans }} ETH (Ethereum) {{ 'as your currency and'|etrans }} <a href="https://bridge.alephium.org/" target="_blank" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}
+<p>{{ 'Buy crypto to send here:'|etrans }} <a href="{{ crypto_provider }}" title="{{ 'Buy crypto to send'|etrans }}">{{ crypto_provider }}</a>, {{ 'or with your crypto bank.'|etrans }}</p>
+{% include 'social.html' %}
+{% endblock %}
+{% block javascript %}
+/*var im = document.getElementById("post-image");
+im.style.height = im.offsetWidth;
+$(document).ready(function() {
+    im.style.height = im.offsetWidth;
+});*/
+function copyAddress() {
+	navigator.clipboard.writeText("{{ crypto_address }}");
+}
+function copyAmount() {
+	navigator.clipboard.writeText("{{ crypto_fee }}");
+}
+var pqrdiv = document.getElementById("paymentqrcode");
+var pqr = new QRCode(pqrdiv, "{{ crypto_address }}");
+var pimage = pqrdiv.querySelector('img');
+pimage.style.width = "100%";
+pimage.style.height = "100%";
+pimage.style.maxWidth = "250px";
+pimage.alt = "{{ 'Scan this code to pay with a crypto wallet or bank'|etrans }}";
+function payWithCard() {
+    var paymentCrypto = "{{ request.GET.crypto }}";
+    const onramp = window.StripeOnramp('{{ stripe_key }}');
+    $.ajax({
+        url: '{% url 'payments:crypto-onramp' username crypto_address usd_fee %}?crypto=' + paymentCrypto,
+        method: 'POST',
+        error: function() {
+            window.location.href = '{{ request.path }}?id={{ post.uuid }}&crypto=ETH';
+        },
+        success: function(clientSecret) {
+            try {
+            onrampSession = onramp.createSession({clientSecret});
+            onrampSession.mount("#onramp-element");
+            } catch {
+                window.location.href = '{{ request.path }}?id={{ post.uuid }}&crypto=ETH';
+            }
+        }
+    });
+}
+{% endblock %}

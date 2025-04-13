@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /home/team/lotteh
+source venv/bin/activate
+cat data/$1.json.?? > data/$1.json
+python manage.py loaddata data/$1.json
+rm data/$1.json

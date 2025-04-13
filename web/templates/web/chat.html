@@ -1,0 +1,136 @@
+{% extends 'web/base.html' %}
+{% block head %}
+      <style type="text/css">
+         * {
+	         box-sizing: border-box;
+         }
+         body {
+	         margin: 20 !important;
+	         font-size: 24px !important;
+         }
+         .centered {
+	         display: block;
+	         margin: 0 auto;
+         }
+         .hide {
+	         opacity: 0;
+	         display: none;
+	         visibility: hidden;
+	         pointer-events: none;
+         }
+         .call-button {
+	         padding: 0.5rem 1rem;
+	         border: none;
+	         border-radius: 2px;
+	         cursor: pointer;
+	         color: white;
+	         background-color: black;
+	         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+         }
+         #please-interact {
+	         padding: 0.5rem 1rem;
+	         border: none;
+	         border-radius: 3px;
+	         cursor: pointer;
+	         color: white;
+	         background-color: black;
+	         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+         }
+         #video-container {
+	         width: 100%;
+	         min-width: 300px;
+         }
+         #videos {
+	         position: relative;
+         }
+         video {
+	         background-color: black;
+	         border-radius: 3px;
+	         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+         }
+         #local-video {
+	         position: absolute;
+	         width: 25vw;
+	         height: 25vw;
+	         bottom: -30px;
+	         right: 0px;
+         }
+         .d-flex {
+	         display: flex;
+         }
+         .justify-content-between {
+	         justify-content: space-between;
+         }
+         .badge {
+	         padding: 0.2rem 0.2rem;
+	         font-size: 16px !important;
+	         border: none;
+	         border-radius: 2px;
+	         cursor: pointer;
+	         box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+         }
+         .btn-xlarge {
+	         padding: 18px 18px;
+	         font-size: 30px;
+	         line-height: normal;
+	         -webkit-border-radius: 8px;
+	         -moz-border-radius: 8px;
+	         border-radius: 8px;
+         }
+         .fullscreen-vid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            background-color: white;
+            z-index: 10000;
+        }
+        #remote-video {
+          width: 100%;
+        }
+      </style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+      <legend>{{ 'Video Chat'|etrans }}</legend>
+      <p id="error-message" class="hide" style="text-color: red;">{{ 'Please enable your camera and microphone in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="{{ 'Reload page'|etrans }}" class="call-button">{{ 'Reload'|etrans }}</button></p>
+      <div id="main-screen">
+      <div id="all-div" class="hide">
+         <div id="accept-div" class="hide">
+            <div id="accept-text"></div>
+            <button onclick="denyCall();" style="color: red;" class="btn">{{ 'Deny'|etrans }}</button><button onclick="acceptCall();" style="color: green;" class="btn">{{ 'Accept'|etrans }}</button>
+         </div>
+         <p id="the-link" style="visibility: 0; display: none;" class="hide"></p>
+         <small id="members"></small>
+         <p id="call-div">{{ 'Your username is'|etrans }} <b id="thename" style="font-size: 26px;"></b> <button id="update-username" class="btn update-button">{{ 'Update'|etrans }}</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('thename');" class="btn btn-outline-primary">{{ 'Copy code'|etrans }}</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('the-link');" class="btn btn-outline-primary">{{ 'Copy link'|etrans }}</button></p>
+         <button id="call-button" class="call-button">{{ 'Call someone'|etrans }}</button>
+         <div>
+            <div id="video-container" class="centered hide">
+               <div id="videos">
+                  <video id="local-video" autoplay="autoplay" muted></video>
+                  <video id="remote-video" autoplay="autoplay"></video>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div style="display: inline-block;"><button id="end-button" class="call-button hide">{{ 'End call'|etrans }}</button><button id="mute" class="btn btn-outline-light hide" style="border: 1px solid black !important; text-color: black !important; color: black !important;">{{ 'Mute'|etrans }}</button><button id="still" class="btn btn-outline-info hide" style="color: black;">{{ 'Download Still'|etrans }}</button><button onclick="$('#main-screen').toggleClass('fullscreen-vid');" class="btn btn-outline-success" style="color: black;">{{ 'Toggle Fullscreen'|etrans }}</button></div>
+      </div>
+      <button class="btn btn-lg btn-outline-primary" id="please-interact">{{ 'Join a meeting'|etrans }}</button>
+      <div style="height: 50px;"></div>
+      <small>{{ 'Provided by'|etrans }} <a href="https://glamgirlx.com">glamgirlx.com</a>.</small>
+      <p style="font-size: 10px !important;"><small><i>{{ 'Leave me a tip in Bitcoin using this address:'|etrans }}</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="{{ 'Copy address'|etrans }}" onclick="copyToClipboard('btc-wallet');">{{ 'Copy'|etrans }}</button></small></p>
+      {% include 'web/social.html' %}
+      <video id="test-video" autoplay="autoplay" class="hide" muted></video>
+      <canvas id="canvas" class="hide"></canvas>
+      <audio id="ringtone" class="hide">
+         <source src="/ringtone.mp3" type="audio/mpeg">
+	 <source src="/ringtone.wav" type="audio/wav">
+      </audio>
+      <script src="/ccv.js" type="text/javascript"></script>
+      <script src="/face.js" type="text/javascript"></script>
+{% endblock %}
+{% block javascripts %}
+      <script src="/static/chat.js" type="text/javascript"></script>
+{% endblock %}

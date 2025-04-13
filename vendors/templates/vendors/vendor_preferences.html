@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block head %}
+{% if vendor.vendor_profile.video_intro_font %}
+<style>
+@font-face { font-family: 'VendorSpecified'; src: url('{{ vendor.vendor_profile.video_intro_font.url }}'); }
+</style>
+{% endif %}
+{% endblock %}
+{% load crispy_forms_tags %}
+{% load feed_filters %}
+{% block javascripts %}
+{% autoescape off %}
+{{ form.media|removejsig }}
+{% endautoescape %}
+{% endblock %}
+{% block content %}
+        <legend class="border-bottom mb-4">Vendor Settings</legend>
+        <p><img alt="{{ 'Your saved logo used in videos and email'|etrans }}" src="{{ vendor.vendor_profile.logo.url }}" style="width: 30%; max-width: 150px; height: auto;"> - <b>"{{ vendor.profile.name }}"</b> ({{ vendor.verifications.last.full_name }}) <i>{% if vendor == my_profile.user %} - Author{% endif %}{% if vendor.profile.admin %} - Admin{% endif %}</i></p>
+        <h2 style="{% if vendor.vendor_profile.video_intro_font %}font-family: 'VendorSpecified';{% endif %} color: {{ vendor.vendor_profile.video_intro_color }} !important; text-color: {{ vendor.vendor_profile.video_intro_color }} !important;{% if darkmode and vendor.vendor_profile.video_intro_color|blenddark %}background-color: white;{% elif vendor.vendor_profile.video_intro_color|blendbright and not darkmode %}background-color: black;{% endif %}">{{ vendor.vendor_profile.video_intro_text }}</h2>
+        <hr>
+        {% if True or payment_processor == 'stripe' %}	<a class="btn btn-outline-danger" title="Connect your bank account or debit card to get paid" href="{% url 'payments:create-link' %}">Payouts</a>{% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                {{ form|crispy }}
+            </fieldset>
+    	    <p>Please be sure all details are correct before proceeding.</p>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+{% endblock content %}

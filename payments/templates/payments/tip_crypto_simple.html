@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load app_filters %} 
+{% load feed_filters %} 
+{% block head %}
+<script type="text/javascript" src="/static/qrcode.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://crypto-js.stripe.com/crypto-onramp-outer.js"></script>
+{% endblock %}
+{% block content %} 
+<div id="container rounded bg-white shadow col-md-6 mx-auto">
+<h1><i class="bi bi-currency-bitcoin"></i> {{ 'Pay'|etrans }} @{{ username }} {{ 'with'|etrans }} {{ request.GET.crypto }}</h1>
+<div style="display: flex; justify-content: space-around;">
+<img class="rounded" style="float: left; width: 50%; max-width: 400px;" src="{% if request.user.is_authenticated %}{{ post.get_image_url }}{% else %}{{ post.get_face_blur_thumb_url }}{% endif %}" alt="Send crypto to {{ username }}"></img>
+<div style="display: inline-block;">
+<div class="dropdown" style="display: inline-block;">
+    <a class="btn btn-outline-dark pink-borders dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    	<i class="bi bi-currency-bitcoin"></i> {{ 'Change Currency'|etrans }}
+    </a>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div style="max-height: 50vh; overflow: scroll;">
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip={% if request.GET.tip %}{{ request.GET.tip }}{% else %}20{% endif %}">BTC (Lightning Network)</a></li>
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip=1">$1 BTC (Lightning Network)</a></li>
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip=5">$5 BTC (Lightning Network)</a></li>
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip=10">$10 BTC (Lightning Network)</a></li>
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip=20">$20 BTC (Lightning Network)</a></li>
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip=50">$50 BTC (Lightning Network)</a></li>
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC&tip=100">$100 BTC (Lightning Network)</a></li>
+	{% for currency in currencies %}
+		<li><a class="dropdown-item" href="{{ request.path }}?crypto={{ currency }}">{{ currency }}</a></li>
+	{% endfor %}
+    </div>
+  </ul>
+</div>
+</div>
+</div>
+<legend class="border-bottom mb-4">{{ 'Send Crypto'|etrans }}</legend>
+{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}
+<form class="d-flex" action="{{ request.path }}" style="margin-left: auto;">
+    <input class="form-control mr-sm-2" type="number" step="0.01" placeholder="{{ 'Change tip'|trans }}" aria-label="{{ 'Tip'|trans }}" required id="tip" name="tip" {% if request.GET.tip %} value="{{ request.GET.tip }}"{% endif %}>
+    {% if request.GET.lightning %}<input class="hide" type="text" id="lightning" name="lightning" value="{{ request.GET.lightning }}">{% endif %}
+    {% if request.GET.crypto %}<input class="hide" type="text" id="crypto" name="crypto" value="{{ request.GET.crypto }}">{% endif %}
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ 'Tip'|etrans }}</button>
+</form>
+{% if not request.GET.tip %}
+<p>{{ 'Send'|etrans }} {{ request.GET.crypto|fixalph }} {{ 'to the following wallet address:'|etrans }}</p>
+{% else %}
+<p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
+{% endif %}
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
+<div id="onramp-element" style="max-width: 500px" class="mx-auto">
+<b><i>{{ address }}</i></b>
+<button class="btn btn-sm btn-info" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|trans }}</button>
+</div>
+<div style="display: flex; justify-content: space-around;"><div id="paymentqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<div style="text-align: center;"><small>{{ 'Scan this QR code to pay with your Crypto wallet or bank'|etrans }}</small></div>
+<hr>
+{% if not request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with'|etrans }} Alephium (ALPH) {{ 'please select'|etrans }} ETH (Ethereum) {{ 'as your currency and'|etrans }} <a href="https://bridge.alephium.org/" target="_blank" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}
+<p>{{ 'Buy crypto to send here:'|etrans }} <a href="{{ crypto_provider }}" title="Buy crypto to send">{{ crypto_provider }}</a>, {{ 'or with your crypto bank.'|etrans }}</p>
+<p>{{ 'Optional - Send an anonymous tip, OR add your email for a special thank you from me, whatever amount you send'|etrans }} - <button class="btn btn-primary" onclick="document.getElementById('add-email').classList.remove('hide');">{{ 'Add Email'|etrans }}</button></p>
+<div id="add-email" class="hide fade-in">
+<legend>{{ 'Add your email for a thankyou'|etrans }}</legend>
+<form action="{{ request.path }}?{% for key,value in request.GET.items %}{{ key }}={{ value }}&{% endfor %}" method="POST">
+{% csrf_token %}
+{{ form|crispy }}
+<button type="submit" class="btn btn-success" title="{{ 'Add your email and leave a tip for a thank you'|etrans }}">{{ 'Send'|etrans }}</button>
+</form>
+</div>
+<hr>
+{% include 'social.html' %}
+{% endblock %}
+{% block javascript %}
+function copyAddress() {
+	navigator.clipboard.writeText("{{ address }}");
+}
+function copyAmount() {
+	navigator.clipboard.writeText("{{ crypto_fee }}");
+}
+var pqrdiv = document.getElementById("paymentqrcode");
+var pqr = new QRCode(pqrdiv, "{{ address }}");
+var pimage = pqrdiv.querySelector('img');
+pimage.style.width = "100%";
+pimage.style.height = "100%";
+pimage.style.maxWidth = "250px";
+pimage.alt = "{{ 'Scan this code to pay with a crypto wallet or bank'|etrans }}";
+function payWithCard() {
+    var paymentCrypto = "{{ request.GET.crypto }}";
+    const onramp = window.StripeOnramp('{{ stripe_key }}');
+    $.ajax({
+        url: '{% url 'payments:crypto-onramp' username address usd_fee %}?tip=t&crypto=' + paymentCrypto,
+        method: 'POST',
+        error: function() {
+            window.location.href = '{{ request.path }}?{% if request.GET.tip %}tip={{ request.GET.tip }}&{% endif %}crypto=ETH';
+        },
+        success: function(clientSecret) {
+            try {
+            onrampSession = onramp.createSession({clientSecret});
+            onrampSession.mount("#onramp-element");
+            } catch {
+                window.location.href = '{{ request.path }}?{% if request.GET.tip %}tip={{ request.GET.tip }}&{% endif %}crypto=ETH';
+            }
+        }
+    });
+}
+{% endblock %}
+

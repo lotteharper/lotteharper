@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo systemctl status daphne apache2 celery

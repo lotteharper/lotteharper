@@ -1,0 +1,560 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/xterm.min.css">
+<script type="text/javascript" src="/static/xterm.min.js"></script>
+<script type="text/javascript" src="/static/crypto-js.min.js"></script>
+<style>
+.term-focused {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+}
+.fix-overflow {margin: 0; height: 65vh; overflow: hidden}
+</style>
+{% endblock %}
+{% block content %}
+<div id="term-div">
+<div id="terminal" style="width: 100%; height: 100%; white-space: nowrap;"></div>
+<div style="display: inline-block;" class="mb-1">
+<button data-cmd="fireKey('\x1b[1;5A');" onclick="this.blur();fireKey('\x1b[1;5A');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-caret-up-square"></i></button>
+<button data-cmd="fireKey('\x1b[H');" onclick="this.blur();fireKey('\x1b[H');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-skip-start-fill"></i></button>
+<button data-cmd="fireKey('\x1b[D');" onclick="this.blur();fireKey('\x1b[D');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></button>
+<button data-cmd="fireKey('\x1b[A');" onclick="this.blur();fireKey('\x1b[A');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i></button>
+<button data-cmd="fireKey('\x1b[B');" onclick="this.blur();fireKey('\x1b[B');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-down"></i></button>
+<button data-cmd="fireKey('\x1b[C');" onclick="this.blur();fireKey('\x1b[C');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-right"></i></button>
+<button data-cmd="fireKey('\x1b[F');" onclick="this.blur();fireKey('\x1b[F');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-skip-end-fill"></i></button>
+<button data-cmd="fireKey('\x1b[1;5B');" onclick="this.blur();fireKey('\x1b[1;5B');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-caret-down-square"></i></button>
+</div>
+<div style="display: inline-block;">
+<button onclick="fireKey('\x1B');term.focus();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-escape"></i></button>
+<button onclick="fireCommand();term.focus();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-command"></i></button>
+<button onclick="toggleKeyboard();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-terminal"></i></button>
+<button onclick="fireKey('\t');term.focus();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-indent"></i></button>
+<button onclick="fireKey('\x03');term.focus();" class="btn btn-sm btn-outline-secondary">^C</button>
+<button onclick="fireKey('\x18');term.focus();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-circle-fill"></i></button>
+<button onclick="startCopy();" class="btn btn-sm btn-outline-secondary"><i class="bi bi-clipboard-fill"></i></button>
+{% include 'shell/reload.html' %}
+</div>
+</div>
+<hr>
+<div id="keyboard" class="col-sm-6 fade-in-fast hide">
+<div style="display: flex; justify-content: space-around;" class="mb-1">
+<button onclick="fireKey('\t');" class="btn btn-sm btn-outline-secondary"><i class="bi bi-indent"></i></button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('Q');">Q</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('W');">W</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('E');">E</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('R');">R</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('T');">T</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('Y');">Y</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('U');">U</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('I');">I</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('O');">O</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('P');">P</button>
+</div>
+<div style="display: flex; justify-content: space-around;" class="mb-1">
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="toggleCapsLock();">Caps</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('A');">A</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('S');">S</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('D');">D</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('F');">F</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('G');">G</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('H');">H</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('J');">J</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('K');">K</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('L');">L</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('\n');">Ret</button>
+</div>
+<div style="display: flex; justify-content: space-around;" class="mb-1">
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="toggleShift();">Shift</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('Z');">Z</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('X');">X</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('C');">C</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('V');">V</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('B');">B</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('N');">N</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('M');">M</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(',');">,</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('.');">.</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('<');">&lt;</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('>');">&gt;</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('?');">?</button>
+</div>
+<div style="display: flex; justify-content: space-around;" class="mb-1">
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('-');">-</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('=');">=</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('_');">_</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('+');">+</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('[');">[</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(']');">]</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(' ');">___</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('{');">{</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('}');">}</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(';');">;</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(''');">'</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(':');">:</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('"');">"</button>
+</div>
+<div style="display: flex; justify-content: space-around;" class="mb-1">
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('`');">`</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('1');">1</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('2');">2</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('3');">3</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('4');">4</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('5');">5</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('6');">6</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('7');">7</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('8');">8</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('9');">9</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('0');">0</button>
+</div>
+<div style="display: flex; justify-content: space-around;" class="mb-1">
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('!');">!</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('@');">@</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('#');">#</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('$');">$</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('%');">%</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('^');">^</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('&');">&</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('*');">*</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('(');">(</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand(')');">)</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('\');">\</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('|');">|</button>
+<button class="btn btn-sm btn-outline-secondary cmd-key" onclick="callCommand('/');">/</button>
+</div>
+</div>
+<div id="copy-menu" class="hide">
+<div class="form-group">
+    <label for="copy-textarea">Copy this text</label>
+    <textarea class="form-control" id="copy-textarea" rows="20" readonly="false" contenteditable="true"></textarea>
+  </div>
+<button class="btn btn-sm" onclick="document.getElementById('copy-menu').classList.add('hide'); copying = false;">Hide</button>
+</div>
+{% endblock %}
+{% block javascript %}
+{% load feed_filters %}
+const ROWS_CONSTANT = 34;
+const ROWS_CONSTANT_EXP = 21;
+const COLS_CONSTANT = 18.5;
+var copying = false;
+let isPlaying = false;
+var termOpen;
+window.addEventListener('scroll', function() {
+    if(termOpen) window.scrollTo(0,0);
+/*    if(termOpen) setTimeout( () => { window.scrollTo(0,0); }, 250);*/
+    if(termOpen) setTimeout( () => { window.scrollTo(0,0); }, 100);
+});
+const termDiv = document.getElementById('term-div');
+termDiv.addEventListener('scroll', function() {
+    if(termOpen) termDiv.scrollTo(0,0);
+/*    if(termOpen) setTimeout( () => { termDiv.scrollTo(0,0); }, 250);*/
+    if(termOpen) setTimeout( () => { termDiv.scrollTo(0,0); }, 100);
+});
+document.body.addEventListener('scroll', function() {
+    if(termOpen) document.body.scrollTo(0,0);
+/*    if(termOpen) setTimeout( () => { document.body.scrollTo(0,0); }, 250);*/
+    if(termOpen) setTimeout( () => { document.body.scrollTo(0,0); }, 100);
+});
+// left: 37, up: 38, right: 39, down: 40,
+// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+function preventDefault(e) {
+  e.preventDefault();
+}
+function preventDefaultForScrollKeys(e) {
+  if (keys[e.keyCode]) {
+    preventDefault(e);
+    return false;
+  }
+}
+// modern Chrome requires { passive: false } when adding event
+var supportsPassive = false;
+try {
+  window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+    get: function () { supportsPassive = true; } 
+  }));
+} catch(e) {}
+var wheelOpt = supportsPassive ? { passive: false } : false;
+var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
+// call this to Disable
+function disableScroll() {
+  window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
+  window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+  window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+  window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+// call this to Enable
+function enableScroll() {
+  window.removeEventListener('DOMMouseScroll', preventDefault, false);
+  window.removeEventListener(wheelEvent, preventDefault, wheelOpt); 
+  window.removeEventListener('touchmove', preventDefault, wheelOpt);
+  window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+/*["click", "mousemove", "mouseover", "mousemove", "touchmove", "touchstart", "touchend", "focus"].forEach((eventName) => {
+  window.addEventListener(eventName, () => {
+    if(termOpen){
+      enableScroll();
+      window.scrollTo(0,0);
+      document.body.scrollTo(0,0);
+      termDiv.scrollTo(0,0);
+      disableScroll();
+    }
+  });
+});*/
+enableScroll();
+if ('visualViewport' in window) {
+  window.visualViewport.addEventListener('resize', (event) => {
+    if (event.target.height < window.innerHeight && !copying) {
+        window.scrollTo(0,0);
+        document.body.scrollTo(0,0);
+        termDiv.scrollTo(0,0);
+        $("#thefooter").addClass('hide');
+        $("body").addClass('overflow-hidden');
+        $("body").addClass('hide-overflow');
+        $("body").addClass('fix-overflow');
+        window.resizeTo(document.body.innerWidth, document.getElementById('term-div').getBoundingClientRect().height);
+        document.body.style.overflow = 'hidden';
+        document.body.height = '65vh;';
+        document.body.height = document.getElementById('term-div').getBoundingClientRect().height;
+        $("#term-div").addClass('term-focused');
+        for(el of document.getElementsByClassName('hide-on-fs')) {
+            $(el).addClass('hide');
+        }
+        disableScroll();
+        sendResize();
+        termOpen = true;
+    } else {
+        window.scrollTo(0,0);
+        document.body.scrollTo(0,0);
+        termDiv.scrollTo(0,0);
+        $("#thefooter").removeClass('hide');
+        $("body").removeClass('overflow-hidden');
+        $("body").removeClass('hide-overflow');
+        $("body").removeClass('fix-overflow');
+        window.resizeTo(document.body.innerWidth, document.body.getBoundingClientRect().height);
+        document.body.style.overflow = '';
+        document.body.height = '100%;';
+        $("#term-div").removeClass('term-focused');
+        for(el of document.getElementsByClassName('hide-on-fs')) {
+            $(el).removeClass('hide');
+        }
+        enableScroll();
+        sendResize(true);
+        termOpen = false;
+    }
+  });
+}
+/*if ("virtualKeyboard" in navigator) {
+  navigator.virtualKeyboard.addEventListener("geometrychange", (event) => {
+    const { x, y, width, height } = event.target.boundingRect;
+    let keyboardOpen = height > 0;
+    if (keyboardOpen) {
+        $("#term-div").addClass('term-focused');
+        $("#thefooter").addClass('hide');
+        $("body").addClass('overflow-hidden');
+        window.resizeTo(document.body.innerWidth, document.getElementById('term-div').getBoundingClientRect().height);
+        document.body.style.overflow = 'hidden';
+        document.body.height = document.getElementById('term-div').getBoundingClientRect().height;
+        disableScroll();
+        sendResize();
+        termOpen = true;
+    } else {
+        $("#term-div").removeClass('term-focused');
+        $("#thefooter").removeClass('hide');
+        $("body").removeClass('overflow-hidden');
+        window.resizeTo(document.body.innerWidth, document.body.getBoundingClientRect().height);
+        document.body.style.overflow = '';
+        document.body.height = '100%;';
+        enableScroll();
+        sendResize();
+        termOpen = false;
+    }
+  });
+}*/
+var terminalElement = document.getElementById('terminal');
+const isMobileDevice = window.navigator.userAgent.toLowerCase().includes("mobi");
+var rows;
+if(isMobileDevice) {
+    rows = parseInt(window.innerHeight/ROWS_CONSTANT_EXP);
+} else {
+    rows = parseInt(window.innerHeight/COLS_CONSTANT);
+}
+var cols = parseInt(terminalElement.clientWidth/9.2);
+const term = new Terminal({
+	cols: cols,
+	rows: rows,
+	cursorBlink: true,
+    rightClickSelectsWord: true,
+    macOptionClickForcesSelection: true,
+	macOptionIsMeta: true,
+	scrollback: 9999999,
+    windowsMode: true,
+    focusOnMouse: false,
+    rendererType: 'dom'
+});
+let btnHoldCounter;
+function boundRepeatEvent(btn) {
+    btnHoldCounter= setInterval((btn) => {
+            eval(btn.dataset.cmd);
+            term.focus();
+        }
+    , 200, btn);
+}
+var elelist = document.getElementsByTagName("textarea");
+for(var i = 0; i < elelist.length; i++){
+    elelist[i].addEventListener("focus", function(){
+        this.blur();
+    });
+}
+["mousedown", "touchstart"].forEach(event => {
+    for(btn of document.getElementsByTagName('button')) {
+        btn.addEventListener(event, boundRepeatEvent.bind(null, btn));
+    }
+});
+["mouseup", "touchend"].forEach(event => {
+    for(btn of document.getElementsByTagName('button')) {
+        btn.addEventListener(event, () => {
+            clearInterval(btnHoldCounter);
+        });
+    }
+});
+var keyboard = document.getElementById('keyboard');
+var prompt = document.getElementById('prompt');
+var termWebsocket;
+var isCommand = false;
+function toggleKeyboard() { 
+    if(keyboard.classList.contains('hide')) {
+        keyboard.classList.remove('hide');
+    } else {
+        keyboard.classList.add('hide');
+    }
+}
+var capsLock = false;
+function toggleCapsLock() {
+    capsLock = !capsLock;
+}
+var shift = false;
+function toggleShift() {
+    shift = !shift;
+}
+var theEvent;
+function customKeyEventHandler(e) {
+    theEvent = e;
+    if (e.type !== "keyup") {
+      return true;
+    }
+    if (e.ctrlKey && e.shiftKey) {
+      if (key === "v") {
+        navigator.clipboard.readText().then((toPaste) => {
+          term.writeText(toPaste);
+        });
+        return false;
+      } else if (key === "c" || key === "x") {
+        const toCopy = term.getSelection();
+        navigator.clipboard.writeText(toCopy);
+        term.focus();
+        return false;
+      }
+    }
+    return true;
+}
+function callCommand(key) {
+    if(isCommand) {
+        const keyCode = key.toUpperCase().charCodeAt(0);
+        const upper = String.fromCharCode((isMobileDevice)?keyCode:keyCode).toUpperCase();
+        var comd = String.fromCodePoint(keyCode - 64);
+        fireKey(comd);
+        isCommand = false;
+        return false;
+    } else {
+        var result;
+        if(capsLock || shift) {
+            result = key.toUpperCase();
+            if(shift) {
+                shift = false;
+            }
+        } else {
+            result = key.toLowerCase();
+        }
+        sendTermData(result);
+    }
+}
+term.attachCustomKeyEventHandler(customKeyEventHandler);
+let lineBuffer = [];
+let history = [];
+let shellListener = null;
+async function simpleShell(data) {
+  // string splitting is needed to also handle multichar input (eg. from copy)
+  for (let i = 0; i < data.length; ++i) {
+    const c = data[i];
+    if (c === '\r') {  // <Enter> was pressed case
+      term.write('\r\n');
+      if (lineBuffer.length) {
+        // we have something in line buffer, normally a shell does its REPL logic here
+        // for simplicity - just join characters and exec...
+        const command = lineBuffer.join('');
+        lineBuffer.length = 0;
+        history.push(command);
+        try {
+          // tricky part: for interactive sub commands you have to detach the shell listener
+          // temporarily, and re-attach after the command was finished
+          shellListener?.dispose();
+        } catch (e) {
+          // we have no real process separation with STDERR
+          // simply catch any error and output in red
+          const msg = !e ? 'Unknown Error...' : e.message || e;
+          term.write(`\x1b[31m${msg.replace('\n', '\r\n')}\x1b[m`);
+        } finally {
+          // in any case re-attach shell
+          shellListener = term.onData(simpleShell);
+        }
+        term.write('\r\n');
+      }
+    } else if (c === '\x7F') {  // <Backspace> was pressed case
+      if (lineBuffer.length) {
+        // dont delete prompt
+        // this is still wrong for multiline inputs!
+        lineBuffer.pop();
+        term.write('\b \b');
+      }
+    } else if (['\x1b[A', '\x1b[B', '\x1b[C', '\x1b[D'].includes(data.slice(i, i + 3))) {  // <arrow> keys pressed
+      // arrow keys skipped, since no inline editing implemented
+      i += 2;
+    } else {  // push everything else into the line buffer and echo back to user
+      lineBuffer.push(c);
+      term.write(c);
+    }
+  }
+}
+term.open(terminalElement);
+term.write('Connecting to {{ the_site_name }}, please wait...\r\n');
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+var termKey;
+var socketOpen = false;
+function openTermSocket() {
+    term.write('Opening websocket...\r\n');
+    termKey = makeid(16);
+	termWebsocket = new WebSocket("wss://" + window.location.hostname + "/ws/terminal/websocket/?rows=" + rows + "&cols=" + cols + "&token={{ token }}");
+	termWebsocket.onmessage = (event) => {
+        term.write(decrypt_cbc(event.data.replace(' ', '+'), termKey));
+	};
+	termWebsocket.onclose = (event) => {
+		console.log('Socket closed');
+		setTimeout(openTermSocket, 15000);
+        term.write('Socket disconnected.\r\n');
+		socketOpen = false;
+	};
+	termWebsocket.onopen = (event) => {
+		console.log('Socket open');
+        term.write('Socket connected.\r\n');
+        termWebsocket.send(termKey);
+		socketOpen = true;
+	};
+}
+function fireCommand() {
+    isCommand = !isCommand;
+}
+function fireKey(key) {
+	term.focus();
+	sendTermData(key);
+}
+term.onData((data) => {
+	if(!isCommand) {
+        sendTermData(data);
+    }
+    if(isCommand) {
+        isCommand = false;
+        const keyCode = data.toUpperCase().charCodeAt(0);
+        const upper = String.fromCharCode((isMobileDevice)?keyCode:keyCode).toUpperCase();
+        var comd = String.fromCodePoint(keyCode - 64);
+        fireKey(comd);
+    }
+});
+openTermSocket();
+function sendResize(exp=false) {
+    rows;
+    if(isMobileDevice) {
+        if(exp) {
+            rows = parseInt(window.innerHeight/ROWS_CONSTANT_EXP);
+        } else {
+            rows = parseInt(window.innerHeight/ROWS_CONSTANT);
+        }
+    } else {
+        rows = parseInt(window.innerHeight/COLS_CONSTANT);
+    }
+    cols = parseInt(terminalElement.clientWidth/9.2);
+    term.resize(cols, rows);
+    if(termWebsocket.readyState == WebSocket.OPEN) termWebsocket.send(encrypt_cbc(JSON.stringify({message: term.cols + ',' + term.rows}), termKey));
+}
+function sendTermData(data) {
+    if(termWebsocket.readyState == WebSocket.OPEN) termWebsocket.send(encrypt_cbc(JSON.stringify({command: data}), termKey));
+}
+function getBufferWithWrappedLines(term) {
+  const buffer = term.buffer.active;
+  const lines = [];
+  for (let y = 0; y < buffer.length; y++) {
+    let line = buffer.getLine(y);
+    let wrappedLine = line.translateToString(true);
+    while (line.isWrapped) {
+      line = buffer.getLine(y);
+      wrappedLine += line.translateToString(true);
+    }
+    lines.push(wrappedLine + '\n');
+  }
+  return lines.join('');
+}
+function getWrappedLines(term) {
+    var buffer = term.buffer.active;
+       var wrappedLines = [];
+       let currentLine = '';
+       for (var z = 0; z < buffer.length; z++) {
+           var line = buffer.getLine(z);
+           var lineText = line.translateToString(true);
+           if (currentLine.length + lineText.length > term.cols) {
+               z++;
+               wrappedLines.push(currentLine + '\n');
+               currentLine = lineText;
+           } else {
+               currentLine += lineText;
+           }
+       }
+       if (currentLine) {
+           wrappedLines.push(currentLine + '\n');
+       }
+       return wrappedLines.join('\n');
+}
+function getBufferWithWrappedLines2(term) {
+  const buffer = term.buffer.active;
+  var lines = [];
+  for (let y = 0; y < buffer.length; y++) {
+    var line = buffer.getLine(y);
+    var wrappedLine = line.translateToString(true);
+    while (line.isWrapped) {
+      y++;
+      const nextLine = buffer.getLine(y);
+      wrappedLine += nextLine.translateToString(true);
+      line = nextLine;
+    }
+    lines.push(wrappedLine);
+  }
+  return lines.join('\n');
+}
+function startCopy() {
+    document.getElementById('copy-menu').classList.remove('hide');
+    copying = true;
+    enableScroll();
+    document.getElementById('copy-textarea').value = getBufferWithWrappedLines2(term);
+}
+{% include 'crypto.js' %}
+{% endblock %}

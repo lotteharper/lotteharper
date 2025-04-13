@@ -1,0 +1,23 @@
+#!/bin/bash
+echo "Installing ta-lib"
+wget https://github.com/ta-lib/ta-lib/releases/download/v0.6.4/ta-lib_0.6.4_amd64.deb
+sudo apt install -y "/home/team/lotteh/ta-lib_0.6.4_amd64.deb"
+#wget https://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+#tar xvzf ta-lib-0.4.0-src.tar.gz
+#sudo rm ta-lib-*
+#cd ta-lib
+#sed -i -e "s/LIBS\s\=\s\-lpthread\s\-ldl/LIBS = -lpthread -ldl -lm/g" Makefile
+#sed -i -e "s/LIBS\s\=\s\-lpthread\s\-ldl/LIBS = -lpthread -ldl -lm/g" */Makefile
+#sed -i -e "s/LIBS\s\=\s\-lpthread\s\-ldl/LIBS = -lpthread -ldl -lm/g" */*/Makefile
+#sed -i -e "s/LIBS\s\=\s\-lpthread\s\-ldl/LIBS = -lpthread -ldl -lm/g" */*/*/Makefile
+#wget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' -O './config.guess'
+#wget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' -O './config.sub'
+#./configure --prefix=/usr
+#sed -i -e "s/\-lpthread\s\-ldl/-lpthread -ldl -lm/g" "config.status"
+#make
+#sudo make install
+#sudo ln -s /usr/lib/libta_lib.so /usr/lib/libta-lib.so
+#sudo ln -s /usr/lib/libta_lib.a /usr/lib/libta-lib.a
+#sudo ln -s /usr/lib/libta_lib.la /usr/lib/libta-lib.la
+#sudo ln -s /usr/lib/libta_lib.so.a /usr/lib/libta-lib.so.a
+#sudo ln -s /usr/lib/libta_lib.so.la /usr/lib/libta-lib.so.la

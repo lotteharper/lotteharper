@@ -1,0 +1,45 @@
+#!/bin/bash
+cd /home/team/lotteh
+sudo chown :users -R data/
+sudo chmod -R 775 data/
+source venv/bin/activate
+./scripts/dumpapp chat
+./scripts/dumpapp feed.post
+./scripts/dumpapp feed.bid
+./scripts/dumpapp verify
+#./scripts/dumpapp security
+./scripts/dumpapp security.credential
+./scripts/dumpapp security.userlogin
+./scripts/dumpapp security.usersession
+./scripts/dumpapp security.otptoken
+./scripts/dumpapp security.biometric
+./scripts/dumpapp security.pincode
+./scripts/dumpapp security.mrzscan
+./scripts/dumpapp security.nfcscan
+./scripts/dumpapp security.vivokeyscan
+./scripts/dumpapp security.securityprofile
+./scripts/dumpapp security.useripaddress
+./scripts/dumpapp security.session
+#./scripts/dumpapp security.sessiondedup
+./scripts/dumpapp payments
+./scripts/dumpapp vendors
+./scripts/dumpapp barcode
+./scripts/dumpapp webauth
+./scripts/dumpapp address
+./scripts/dumpapp auth
+./scripts/dumpapp users.profile
+./scripts/dumpapp sessions
+./scripts/dumpapp voice
+./scripts/dumpapp tts
+./scripts/dumpapp games
+./scripts/dumpapp audio
+./scripts/dumpapp live
+./scripts/dumpapp contact
+./scripts/dumpapp payments
+./scripts/dumpapp chat
+./scripts/dumpapp translate
+./scripts/dumpapp crypto
+./scripts/dumpapp birthcontrol
+./scripts/dumpapp survey
+./scripts/dumpapp webpush
+./scripts/dumpapp translate
