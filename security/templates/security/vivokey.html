@@ -25,7 +25,7 @@ function writeData() {
         writing = true;
         var formData = new FormData(form);
         $.ajax({
-           url: '{{ request.path }}?{% if request.GET.generate %}generate=t&{% endif %}{% if request.GET.next %}{{ request.GET.next }}{% else %}/go/{% endif %}',
+           url: '{{ request.path }}?{% if request.GET.generate %}generate=t&{% endif %}next={% if request.GET.next %}{{ request.GET.next }}{% else %}/go/{% endif %}',
            data: formData,
            method: 'POST',
            timeout: 60 * 1000,

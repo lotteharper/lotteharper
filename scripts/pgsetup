@@ -6,6 +6,9 @@ sudo chown -R team:users ./
 sudo chmod -R 755 ./
 source venv/bin/activate
 echo "Postgres setup"
+sudo -u postgres psql -U postgres -c "ALTER SYSTEM SET max_connections TO '262121';"
+sudo -u postgres psql -U postgres -c "SELECT pg_reload_conf();"
+sudo systemctl restart postgresql
 sudo -u postgres psql -U postgres -c "DROP DATABASE database WITH (FORCE);"
 sudo -u postgres psql -U postgres -c "CREATE DATABASE database;"
 sudo -u postgres psql -U postgres -c "CREATE USER django WITH PASSWORD 'password';"
