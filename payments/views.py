@@ -120,6 +120,7 @@ def send_custom_invoice(request):
     return render(request, 'payments/send_invoice.html', {'title': 'Send Invoice', 'form': InvoiceForm()})
 
 
+@never_cache
 def pay_invoice(request):
     pid = request.GET.get('pid', None)
     from django.shortcuts import redirect, render
@@ -135,6 +136,100 @@ def pay_invoice(request):
     from django.contrib.auth.models import User
     r = render(request, 'payments/pay_invoice.html', {'title': 'Pay Invoice', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'vendor': invoice.vendor})
     return r
+
+@never_cache
+def pay_invoice_crypto(request):
+    from django.shortcuts import redirect
+    from django.conf import settings
+    if request.method == 'GET' and not request.GET.get('crypto'): return redirect(request.path + '?crypto={}'.format(settings.DEFAULT_CRYPTO))
+    crypto = request.GET.get('crypto')
+    network = None if not request.GET.get('lightning', False) else 'lightning'
+    from django.contrib.auth.models import User
+    user = User.objects.get(id=settings.MY_ID, profile__vendor=True)
+    from payments.models import VendorPaymentsProfile
+    profile, created = VendorPaymentsProfile.objects.get_or_create(vendor=user)
+    from payments.apis import get_crypto_price
+    from payments.cart import get_cart_cost
+    from payments.cart import get_cart
+    from .forms import BitcoinPaymentForm, BitcoinPaymentFormUser
+    from payments.apis import get_crypto_price
+    pid = request.GET.get('pid', None)
+    from django.shortcuts import redirect, render
+    from django.urls import reverse
+    from django.contrib import messages
+    if not pid:
+        messages.warning(request, 'This invoice could not be found')
+        return redirect(reverse('users:login'))
+    from payments.models import Invoice
+    invoice = Invoice.objects.get(pid=int(pid))
+    from django.conf import settings
+    from .forms import CardPaymentForm
+    from django.contrib.auth.models import User
+    if request.method == 'POST':
+        form = BitcoinPaymentForm(request.POST) if not request.user.is_authenticated else BitcoinPaymentFormUser(request.POST)
+        if form.is_valid():
+            from django.contrib import messages
+            messages.success(request, 'We are validating your crypto payment. Please allow up to 15 minutes for this process to take place.')
+            cus_user = User.objects.filter(email=form.cleaned_data.get('email', None)).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+            print(cus_user)
+            if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
+                from email_validator import validate_email
+                e = form.cleaned_data.get('email', None)
+                print(e)
+                if e:
+                    from security.apis import check_raw_ip_risk
+                    from security.models import SecurityProfile
+                    from users.models import Profile
+                    from users.email import send_verification_email, sendwelcomeemail
+                    from users.views import send_registration_push
+                    valid = validate_email(e, check_deliverability=True)
+                    us = User.objects.filter(email=e).last()
+                    safe = not check_raw_ip_risk(ip, soft=True, dummy=False, guard=True)
+                    if valid and not us and safe:
+                        cus_user = User.objects.create_user(email=e, username=get_random_username(e), password=get_random_string(length=8))
+                        profile = cus_user.profile
+                        profile.finished_signup = False
+                        profile.save()
+                        messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+                        send_verification_email(cus_user)
+                        send_registration_push(cus_user)
+                        sendwelcomeemail(cus_user)
+#                    except: pass
+            from lotteh.celery import validate_cart_payment
+            cart_cookie = form.cleaned_data.get('invoice')
+            cart_cost = get_cart_cost(cart_cookie, private=True) if 'cart' in request.COOKIES else 0
+            fee = format(float(cart_cost) / get_crypto_price(crypto), '.{}f'.format(settings.BITCOIN_DECIMALS))
+            fee_reduced = fee.split('.')[0] + '.' + fee.split('.')[1][:settings.BITCOIN_DECIMALS]
+            fee = str(float(cart_cost) / get_crypto_price(crypto))
+            validate_invoice_payment.apply_async(timeout=60*5, args=(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'), invoice.id, crypto, network),)
+            validate_invoice_payment.apply_async(timeout=60*10, args=(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'), invoice.id, crypto, network),)
+#            validate_cart_payment(cus_user.id, user.id, float(form.data['amount']) if float(form.data['amount']) > float(fee_reduced) * settings.MIN_BITCOIN_PERCENTAGE else float(fee_reduced), form.cleaned_data.get('transaction_id'), cart_cookie, crypto, network)
+            from django.http import HttpResponseRedirect
+            from django.urls import reverse
+            return HttpResponseRedirect(reverse('payments:subscribe-bitcoin-thankyou', kwargs={'username': user.profile.name}))
+        else: print(str(form.errors))
+    from payments.cart import get_cart_cost
+    from payments.cart import get_cart
+    if request.method == 'GET' and request.GET.get('lightning', None) and crypto != 'BTC': return redirect(request.path + '?lightning=t&crypto=BTC')
+    from payments.crypto import get_payment_address, get_lightning_address
+    cart_cost = invoice.price
+    from django.shortcuts import render
+    usd_fee = float(cart_cost)
+    fee = float(cart_cost) / get_crypto_price(crypto)
+    fee_reduced = format(fee, '.{}f'.format(settings.BITCOIN_DECIMALS))
+    try:
+        address, transaction_id = get_payment_address(user, crypto, fee) if not request.GET.get('lightning') else get_lightning_address(user, crypto, fee)
+    except:
+        address = None
+        transaction_id = None
+    from feed.models import Post
+    post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
+    post = Post.objects.filter(id__in=post_ids).order_by('?').first()
+    form = BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id, 'invoice': invoice.token}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id, 'invoice': invoice.token})
+    from crypto.currencies import CRYPTO_CURRENCIES
+    r = render(request, 'payments/pay_invoice_crypto.html', {'title': 'Pay Invoice With Crypto', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'vendor': invoice.vendor, 'crypto_address': address, 'currencies': CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False, 'stripe_key': settings.STRIPE_PUBLIC_KEY})
+    return r
+
 
 @csrf_exempt
 def crypto_onramp(request, name, address, amount):

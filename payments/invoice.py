@@ -22,6 +22,9 @@ def process_invoice(invoice):
     from django.template.loader import render_to_string
     from django.conf import settings
     from django.urls import reverse
+    user = invoice.user
+    vendor = invoice.vendor
+    description = invoice.description
     html_email = render_to_string('payments/invoice_paid.html', {
         'user': user,
         'vendor': vendor,
@@ -29,4 +32,3 @@ def process_invoice(invoice):
         'description': description,
     })
     send_html_email(user, 'Invoice for {} (@{}) has been paid'.format(user.email, user.username), html_email)
-

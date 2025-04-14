@@ -362,7 +362,7 @@ def process_recording(id):
     import datetime as dt
     recording = VideoRecording.objects.get(id=id)
     camera = VideoCamera.objects.filter(user=recording.user, name=recording.camera).order_by('-last_frame').first()
-    if not (recording.processing or recording.processed) and (not recording.last_frame or (recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * 6))): # 4 (the number is the gap, a larger number adds more length to the recording with a longer gap
+    if (not (recording.processing or recording.processed)) and (not recording.last_frame or (recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * 6))): # 4 (the number is the gap, a larger number adds more length to the recording with a longer gap
         recording.processing = True
         recording.save()
         for frame in recording.frames.filter(processed=False):
@@ -489,7 +489,6 @@ def validate_photo_payment(uid, mid, balance, transaction_id, post_id, crypto, n
         from barcode.tests import document_scanned
         if p.private and document_scanned(user): send_photo_email(user, p)
 
-
 @app.task
 def validate_cart_payment(uid, mid, balance, transaction_id, cart, crypto, network):
     from django.contrib.auth.models import User
@@ -499,6 +498,14 @@ def validate_cart_payment(uid, mid, balance, transaction_id, cart, crypto, netwo
         from payments.cart import process_cart_purchase
         process_cart_purchase(user, cart, private=True)
 
+@app.task
+def validate_invoice_payment(uid, mid, balance, transaction_id, invoice_id, crypto, network):
+    from django.contrib.auth.models import User
+    user = User.objects.get(id=uid)
+    model = User.objects.get(id=mid)
+    if model.vendor_payments_profile.validate_crypto_transaction(user, balance, transaction_id, crypto, network):
+        from payments.invoice import process_invoice
+        process_invoice(invoice)
 
 @app.task
 def validate_tip_payment(uid, mid, balance, transaction_id, crypto, network):
@@ -716,6 +723,20 @@ def routine_bucket_posts():
             bucket_post(post.id)
             return
 
+@app.task
+def update_surrogacy_plans():
+    from payments.models import SurrogacyPlan
+    from django.conf import settings
+    import datetime
+    from django.conf import timezone
+    from dateutil.relativedelta import relativedelta
+    for plan in SurrogacyPlan.objects.filter(unpaid__gt=0, timestamp__gte=timezone.now() - relativedelta(months=int(settings.SURROGACY_FEE/settings.SURROGACY_INSTALLMENT_SIZE) + 1), completed=False, signed=True).order_by('-timestamp'):
+        from payments.invoice import generate_invoice
+        price = settings.SURROGACY_INSTALLMENT_FEE if plan.unpaid > settings.SURROGACY_INSTALLMENT_FEE else plan.unpaid
+        if price > 0:
+            generate_invoice(plan.mother, plan.expected_parent, price, 'This invoice is for the remaining balance of your surrogacy plan with {}, which is ${}.'.format(plan.mother.profile.name, str(round(price, 2))))
+
+
 app.conf.beat_schedule = {
     'update-subscriptions': {
         'task': 'lotteh.celery.update_subscriptions',
@@ -732,6 +753,10 @@ app.conf.beat_schedule = {
     'idscan-emails': {
         'task': 'lotteh.celery.send_idscan_emails',
         'schedule': crontab(day_of_month='1', hour=12, minute=30),
+    },
+    'surrogacy-plans': {
+        'task': 'lotteh.celery.update_surrogacy_plans',
+        'schedule': crontab(day_of_month='1', hour=5, minute=0),
     },
     'retargeting-emails': {
         'task': 'lotteh.celery.send_emails',

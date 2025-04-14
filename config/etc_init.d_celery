@@ -27,7 +27,7 @@ CELERY_APP="lotteh"
 CELERYD_MULTI="multi"
 
 # Extra command-line arguments to the worker
-CELERYD_OPTS="--time-limit=36000 --concurrency=16"
+CELERYD_OPTS="--time-limit=36000 --concurrency=8"
 
 # - %n will be replaced with the first part of the nodename.
 # - %I will be replaced with the current child process index

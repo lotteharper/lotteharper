@@ -47,7 +47,7 @@
 </form>
 </div>
 <hr>
-{% include 'social.html' %}
+<p>{{ 'Want to pay for this invoice with cryptocurrency?'|etrans }} <a href="{% url 'payments:pay-invoice-crypto' %}{% if request.GET %}?{% for key, val in request.GET.items %}{{ key }}={{ val }}&{% endfor %}{% endif %}" class="btn btn-outline-secondary" title="{{ 'Pay with Cryptocurrency'|etrans }}">{{ 'Pay with Crypto'|etrans }}</a></p>
 {% endblock %}
 {% block javascript %}
 var product = 'invoice';

@@ -5,6 +5,7 @@ app_name='payments'
 
 urlpatterns = [
     path('invoice/', views.pay_invoice, name='pay-invoice'),
+    path('invoice/crypto/', views.pay_invoice_crypto, name='pay-invoice-crypto'),
     path('authorize/', views.authorize, name='authorize'),
     path('send/invoice/', views.send_custom_invoice, name='send-invoice'),
     path('subscribe/crypto/<str:username>/', views.subscribe_bitcoin, name='subscribe-bitcoin'),

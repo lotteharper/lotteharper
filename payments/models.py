@@ -146,9 +146,12 @@ def get_file_path(instance, filename):
 
 class SurrogacyPlan(models.Model):
     id = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     mother = models.ForeignKey(User, related_name='surrogacy_plans', null=True, blank=True, on_delete=models.DO_NOTHING)
     expected_parent = models.ForeignKey(User, related_name='parents_plans', null=True, blank=True, on_delete=models.DO_NOTHING)
     expected_parents_partner = models.ForeignKey(User, related_name='parents_partners_plans', null=True, blank=True, on_delete=models.DO_NOTHING)
     agreement = models.FileField(null=True, blank=True, upload_to=get_file_path, max_length=500)
     signed = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+    unpaid = models.FloatField(default=0.0)
