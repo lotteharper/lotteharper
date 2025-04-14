@@ -1,2 +1,2 @@
 #!/bin/bash
-watch -n 1 sudo -u root $"ps -aux | grep $1 | grep -v '.*\<defunct\>\n'"
+watch -n 1 sudo -u root $"ps -aux | grep $1"

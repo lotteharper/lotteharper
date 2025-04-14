@@ -7,7 +7,7 @@
 <div style="z-index: 1; position: absolute;">
 {% endif %}
 <p id="errormessage" class="hide" style="text-color: red;">Please enable your camera in your web browser and device settings to continue. Reload to continue. <button onclick="window.location.reload();" title="Reload page" class="btn btn-outline-primary">Reload</button></p>
-<video autoplay="true" muted="true" id="video-element" width="{% if request.GET.with %}25{% else %}100{% endif %}%" style="{% if request.GET.with %}position: fixed; bottom: 0;{% endif %} transform: rotateY(180deg);"></video>
+<video autoplay="true" muted="true" id="video-element" width="{% if request.GET.with %}25{% else %}100{% endif %}%" style="{% if request.GET.with %}position: fixed; bottom: 0;{% endif %}{% if not request.GET.back %} transform: rotateY(180deg);{% endif %}"></video>
 {% if request.GET.with %}
 </div>
 {% endif %}

@@ -1,5 +1,5 @@
 # The names of the workers. This example create two workers
-CELERYD_NODES="worker1 worker2 worker3 worker4"
+CELERYD_NODES="worker1 worker2 worker3"
 
 # The name of the Celery App, should be the same as the python file
 # where the Celery tasks are defined

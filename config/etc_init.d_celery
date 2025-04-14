@@ -9,7 +9,7 @@
 
 # Name of nodes to start
 # here we have a single node
-CELERYD_NODES="w1 w2 w3 w4"
+CELERYD_NODES="w1 w2 w3"
 # or we could have three nodes:
 #CELERYD_NODES="w1 w2 w3"
 
@@ -27,7 +27,7 @@ CELERY_APP="lotteh"
 CELERYD_MULTI="multi"
 
 # Extra command-line arguments to the worker
-CELERYD_OPTS="--time-limit=36000 --concurrency=8"
+CELERYD_OPTS="--time-limit=36000 --concurrency=16"
 
 # - %n will be replaced with the first part of the nodename.
 # - %I will be replaced with the current child process index
