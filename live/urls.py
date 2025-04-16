@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('go/', views.golivevideo, name='golivevideo'),
+    path('screencast/', views.screencast, name='screencast'),
     path('confirm/<str:id>/', views.confirm, name='confirm'),
     path('camera/name/', views.name_camera, name='name-camera'),
     path('cameras/', views.choose_live_camera, name='choose-live-camera'),

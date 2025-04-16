@@ -395,6 +395,92 @@ def golivevideo(request):
     from django.shortcuts import render
     return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': True, 'load_timeout': 5000, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket})
 
+@never_cache
+@csrf_exempt
+def screencast(request):
+    from .models import VideoCamera, VideoFrame, VideoRecording
+    from django.core.exceptions import PermissionDenied
+    from .forms import CameraForm
+    import datetime
+    import pytz
+    from django.utils import timezone
+    from django.http import HttpResponse
+    from django.conf import settings
+    from lotteh.celery import delay_remove_frame
+    name = request.GET.get('camera')
+    if not name:
+        name = 'private'
+    camera = None
+    if request.user.is_authenticated:
+        camera = VideoCamera.objects.filter(user=request.user, name=name).order_by('-last_frame').first()
+    else:
+        camera = VideoCamera.objects.get(key=request.GET.get('key', None)) #, recording=False)
+        if not camera.user.profile.vendor: raise PermissionDenied()
+    if not identity_verified(camera.user): raise PermissionDenied()
+    if request.method == 'POST':
+        import shutil
+        from .still import get_still, is_still
+        try:
+            form = CameraForm(request.POST, request.FILES, instance=camera)
+            if not form.is_valid(): print(form.errors)
+            form.instance.last_frame = timezone.now()
+            form.instance.confirmation_id = form.cleaned_data.get('confirmation_id', '')
+            timestamp = datetime.datetime.fromtimestamp(int(form.cleaned_data.get('timestamp')) / 1000, tz=pytz.UTC)
+            camera = form.save()
+            recording = None
+            is_frame_still, error = is_still(camera.frame.path)
+            if camera.recording and not is_frame_still:
+                from live.models import Show
+                show = Show.objects.filter(start__lte=timezone.now() + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).first()
+                recordings = VideoRecording.objects.filter(user=camera.user, camera=camera.name, public=False if Show.objects.filter(start__lte=timezone.now() + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).count() > 0 else True, recipient=show.user if show else None)
+                if recordings.count() == 0:
+                    recording = VideoRecording.objects.create(user=camera.user, camera=camera.name, last_frame=timestamp, public=False if Show.objects.filter(start__lte=timestamp + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).count() > 0 else True, recipient=show.user if show else None).order_by('-last_frame')
+                    recording.save()
+                else:
+                    recording = recordings.first()
+                if recording.last_frame < timezone.now() - datetime.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * 5) or (recording.frames.first() and ((recording.last_frame - recording.frames.first().time_captured).total_seconds() > settings.RECORDING_LENGTH_SECONDS)):
+                    recording = VideoRecording.objects.create(user=camera.user, camera=camera.name, last_frame=timestamp, public=False if Show.objects.filter(start__lte=timezone.now() + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).count() > 0 else True, recipient=show.user if show else None)
+                    recording.compressed = camera.compress_video
+                    recording.save()
+            path = os.path.join(settings.BASE_DIR, 'media/', get_file_path(camera, camera.frame.name))
+            shutil.copy(camera.frame.path, path)
+            frame = VideoFrame.objects.create(user=camera.user, frame=path, compressed=camera.compress_video, time_captured=timestamp, confirmation_id=form.cleaned_data.get('confirmation_id', ''), difference=error)
+            frame.save()
+            if not camera.recording or is_frame_still:
+                delay_remove_frame.apply_async([frame.id], countdown=(settings.LIVE_INTERVAL/1000) * 4)
+            camera.frames.add(frame)
+            camera.frame_count = camera.frame_count + 1
+            camera.mime = frame.frame.name.split('.')[1]
+            camera.save()
+            if recording:
+                recording.frames.add(frame)
+                recording.last_frame = timestamp
+                recording.save()
+                process_recording.apply_async([recording.id], countdown=(settings.LIVE_INTERVAL/1000) * 5)
+            else: print('Not saving frame')
+            process_live.delay(camera.id, frame.id)
+            print('5 second video uploaded')
+            return HttpResponse(status=200)
+        except:
+            import traceback
+            print(traceback.format_exc())
+        return HttpResponse(status=200)
+    from django.shortcuts import redirect
+#    if camera.last_frame > timezone.now() - datetime.timedelta(seconds=settings.LIVE_INTERVAL/1000*2):
+#        import random
+#        return redirect(request.path + '?camera=camera'.format(random.randint(1,99)))
+    if not request.GET.get('disable'):
+        camera.live = True
+        camera.save()
+    from django.utils.crypto import get_random_string
+    camera_key = get_random_string(length=settings.CAMERA_KEY_LENGTH)
+    camera.key = camera_key
+    camera.save()
+    from django.urls import reverse
+    if not request.user.is_authenticated: return redirect(reverse('users:login'))
+    from django.shortcuts import render
+    return render(request, 'live/screencast.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': True, 'load_timeout': 5000, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket})
+
 #@login_required
 #@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 @csrf_exempt

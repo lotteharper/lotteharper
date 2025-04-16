@@ -12,6 +12,7 @@
 <hr style="color: blue;">
 <div style="display: flex; justify-content: space-around;">
 <a href="{% url 'live:golivevideo' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Go Live'|etrans }}</a>
+<a href="{% url 'live:screencast' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Screencast'|etrans }}</a>
 <a href="{% url 'live:livevideo' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'Live Feed'|etrans }}</a>
 <a href="{% url 'recordings:recordings' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'See Recordings'|etrans }}</a>
 </div>
