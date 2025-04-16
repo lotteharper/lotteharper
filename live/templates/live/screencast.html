@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% block head %}
+<style>
+video {
+    width: 100%;
+}
+</style>
+{% endblock %}
 {% block content %}
 <h1>Live Recording</h1>
 <legend>{% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %} camera</legend>
@@ -27,8 +34,8 @@
     <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam</button>
     <button class="btn btn-outline-info" id="startScreenShare" title="Start Screen Share">Start Screen Share</button>
     <button class="btn btn-outline-primary" id="mergeStreams" title="Merge Streams">Merge Streams</button>
-    <button class="btn btn-outline-dark" id="stopAllStreams" title="Stop All Streams">Stop All Streams</button>
-    <button class="btn bnt-outline-danger" id="startRecording" title="Record Resulting Stream">Record Resulting Stream</button>
+    <button class="btn btn-outline-light" id="stopAllStreams" title="Stop All Streams">Stop All Streams</button>
+    <button class="btn btn-outline-danger" id="startRecording" title="Record Resulting Stream">Record Resulting Stream</button>
     <button class="btn btn-outline-warning" id="stopRecording" title="Stop Recording">Stop Recording</button>
   </div>
 <div style="display: flex; justify-content: space-around;">
@@ -178,7 +185,7 @@ let stopAllStreamsBtn = document.getElementById("stopAllStreams");
 let canvasElement = document.createElement("canvas");
 let canvasCtx = canvasElement.getContext("2d");
 let encoderOptions = {
-  mimeType: "video/webm; codecs=vp9"
+  mimeType: "video/webm; codecs=vp8"
 };
 let recordedChunks = [];
 let audioTracks = [];
@@ -346,7 +353,6 @@ function handleDataAvailable(event) {
 }
 
 function download() {
-        mediaChunks.push(event.data);
     	if(live) { mediaRecorder.start(); }
         if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
@@ -354,7 +360,7 @@ function download() {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
         }
         var file = new Blob(recordedChunks, {'type': 'video/webm'});
-	    mediaChunks = [];
+	    recordedChunks = [];
         var formdata = new FormData(form);
 		var utc_timestamp = String(new Date().getTime());
         formdata.append('confirmation_id', String(Math.floor(Math.random() * 1000000000)));
