@@ -34,7 +34,7 @@ video {
     <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam</button>
     <button class="btn btn-outline-info" id="startScreenShare" title="Start Screen Share">Start Screen Share</button>
     <button class="btn btn-outline-primary" id="mergeStreams" title="Merge Streams">Merge Streams</button>
-    <button class="btn btn-outline-light" id="stopAllStreams" title="Stop All Streams">Stop All Streams</button>
+    <button class="btn btn-outline-light" id="stopAllStreams" title="Stop All Streams"{% if not darkmode %} style="color: black !important;">Stop All Streams</button>
     <button class="btn btn-outline-danger" id="startRecording" title="Record Resulting Stream">Record Resulting Stream</button>
     <button class="btn btn-outline-warning" id="stopRecording" title="Stop Recording">Stop Recording</button>
   </div>

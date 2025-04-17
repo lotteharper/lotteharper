@@ -1,4 +1,4 @@
-to_upload = 5
+to_upload = 1
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
 import django
@@ -30,11 +30,11 @@ for recording in VideoRecording.objects.filter(processed=True, uploaded=False).o
                 recording.save()
         except: print(traceback.format_exc())
         try:
-            upload_youtube(camera.user, recording.file.path, profanity.censor(camera.title[:67-len(recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'))]) + ' - ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'), profanity.censor(camera.description) + ' - ' + profanity.censor(recording.transcript[:4000 - 3]), [tag for tag in camera.tags], category='22', privacy_status='public', age_restricted=not recording.public)
+            upload_youtube(camera.user, recording.file.path, profanity.censor(camera.title[:67-len(recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'))]) + ' - ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'), profanity.censor(camera.description) + ' - ' + profanity.censor(recording.transcript[:4000 - 3]), [tag for tag in camera.tags.split(',')], category='22', privacy_status='public', age_restricted=not recording.public)
             recording.uploaded = True
         except:
             recording.uploaded = False
             print(traceback.format_exc())
         recording.save()
         count+=1
-    if count > to_upload: break
+    if count >= to_upload: break

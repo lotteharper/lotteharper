@@ -419,7 +419,7 @@ def process_recording(id):
             import pytz
             try:
                 from better_profanity import profanity
-                upload_youtube(camera.user, recording.file.path, profanity.censor(camera.title[:67-len(recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'))]) + ' - ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'), profanity.censor(camera.description) + ' - ' + profanity.censor(recording.transcript[:4000 - 3].capitalize()), [tag for tag in camera.tags], category='22', privacy_status='public', thumbnail=thumbnail, age_restricted=not recording.public)
+                upload_youtube(camera.user, recording.file.path, profanity.censor(camera.title[:67-len(recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'))]) + ' - ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'), profanity.censor(camera.description) + ' - ' + profanity.censor(recording.transcript[:4000 - 3].capitalize()), [tag for tag in camera.tags.split(',')], category='22', privacy_status='public', thumbnail=thumbnail, age_restricted=not recording.public)
                 recording.uploaded = True
             except:
                 recording.uploaded = False
@@ -673,36 +673,40 @@ def routine_filter():
     from feed.models import Post
     post = Post.objects.filter(published=False).exclude(image=None).last()
     if post:
-        from feed.nude import is_nude_fast
-        from barcode.tests import document_scanned
-        from feed.tests import identity_really_verified
-        if post.image and not os.path.exists(post.image.path) and post.image_bucket: post.download_photo()
-        post = Post.objects.get(id=post.id)
-        if post.image and os.path.exists(post.image.path) and is_nude_fast(post.image.path):
-            post.public = False
-            post.secure = True
-            if settings.NUDITY_FILTER and not identity_really_verified(post.author):
-                os.remove(post.image.path)
-                post.image = None
-            elif settings.NUDITY_FILTER:
-                post.private = True
+        try:
+            from feed.nude import is_nude_fast
+            from barcode.tests import document_scanned
+            from feed.tests import identity_really_verified
+            if post.image and not os.path.exists(post.image.path) and post.image_bucket: post.download_photo()
+            post = Post.objects.get(id=post.id)
+            if post.image and os.path.exists(post.image.path) and is_nude_fast(post.image.path):
                 post.public = False
-            post.save()
-#        from security.safety import is_safe_file, is_safe_image
-#        if (post.image and os.path.exists(post.image.path) and not is_safe_image(post.image.path)) or (post.file and os.path.exists(post.file.path) and not is_safe_file(post.file.path)):
-#            post.safe = False
-#            post.secure = False
-#            try:
-#                if post.image: os.remove(post.image.path)
-#            except: pass
-#            try:
-#                if post.file: os.remove(post.file.path)
-#            except: pass
-#            post.private = True
-#            post.save()
-        else:
-            post.published = True
-            post.save()
+                post.secure = True
+                if settings.NUDITY_FILTER and not identity_really_verified(post.author):
+                    os.remove(post.image.path)
+                    post.image = None
+                elif settings.NUDITY_FILTER:
+                    post.private = True
+                    post.public = False
+                post.save()
+    #        from security.safety import is_safe_file, is_safe_image
+    #        if (post.image and os.path.exists(post.image.path) and not is_safe_image(post.image.path)) or (post.file and os.path.exists(post.file.path) and not is_safe_file(post.file.path)):
+    #            post.safe = False
+    #            post.secure = False
+    #            try:
+    #                if post.image: os.remove(post.image.path)
+    #            except: pass
+    #            try:
+    #                if post.file: os.remove(post.file.path)
+    #            except: pass
+    #            post.private = True
+    #            post.save()
+            else:
+                post.published = True
+                post.save()
+        except:
+            import traceback
+            print(traceback.format_exc())
     return
 
 @app.task
