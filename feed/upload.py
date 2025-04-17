@@ -223,6 +223,6 @@ def upload_post_async():
         if not (post.image_offsite and len(post.image_offsite) > 0) and post.image: # or (post.image and os.path.exists(post.image.path):
             try:
                 upload_post(post)
-                return
             except:
                 print(traceback.format_exc())
+            return
