@@ -5,7 +5,9 @@ import django
 django.setup()
 from django.conf import settings
 from live.models import VideoRecording
-for v in VideoRecording.objects.filter(processed=True):
+from django.utils import timezone
+import datetime
+for v in VideoRecording.objects.filter(last_frame__lte=timezone.now()-datetime.timedelta(minutes=1)):
     if v.frames.count() < MIN_FRAMES:
         print('Deleting recording with {} frames'.format(v.frames.count()))
         v.delete()
