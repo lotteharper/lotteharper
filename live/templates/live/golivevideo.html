@@ -164,7 +164,7 @@ function startup() {
         } else {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
         }
-        var file = new Blob(mediaChunks, {'type': 'video/webm'});
+        var file = new Blob(mediaChunks, {'type': 'video/webm; codecs=vp9'});
 	    mediaChunks = [];
         var formdata = new FormData(form);
 		var utc_timestamp = String(new Date().getTime());
