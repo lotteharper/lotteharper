@@ -1,4 +1,4 @@
-overwrite = False
+overwrite = True
 test_mode = False
 single_lang = False
 force_copy = False
@@ -82,6 +82,7 @@ def generate_site():
         'twitter_link': settings.TWITTER_LINK,
         'instagram_link': settings.INSTAGRAM_LINK,
         'youtube_link': settings.YOUTUBE_LINK,
+        'hiderrm': True,
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
@@ -92,7 +93,7 @@ def generate_site():
         request = DummyRequest(lang)
         request.GET = GetParams(lang)
         set_current_request(request)
-#        print(lang)
+        print(lang)
         context['lang'] = lang
         context['request'] = request
         try:
@@ -183,7 +184,6 @@ def generate_site():
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
         context['footer'] = False # ...None).exclude(image_offsite=None)
-        context['hiderrm'] = False
         for post in [] if False else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
@@ -227,7 +227,6 @@ def generate_site():
         page = render_to_string('web/chat.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/chat.html'.format(lang)), 'w') as file:
             file.write(page)
-        context['hiderrm'] = False
         context['title'] = 'Our Online Experience'
         context['hidenav'] = True
         context['hidefooter'] = True
@@ -238,7 +237,6 @@ def generate_site():
         images = None
         context['path'] = '/{}/404'.format(lang)
         context['title'] = translate(request, 'Error 404 - File Not Found', lang, 'en')
-        context['hiderrm'] = True
         context['hidenav'] = False
         context['hidefooter'] = False
         path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, '404'))
@@ -265,7 +263,6 @@ def generate_site():
     context['lang'] = lang
     context['path'] = '/404'
     context['title'] = 'Error 404 - File Not Found'
-    context['hiderrm'] = True
     path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format('404'))
     if not os.path.exists(path) or overwrite or True:
         index = render_to_string('web/404.html', context)

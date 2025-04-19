@@ -867,7 +867,7 @@ nano users/views.py
             send_verification_email(user)
 # ... (før) Omdirigering (
 </code></pre>Du behøver ikke at tilføje de første og sidste linjer i dette kodestykket, bare sørg for, at registervisningen sender verifikations -e -mailen til brugeren. Det skal se sådan ud:<pre class="language-python"><code>
-# ... beløb
+# ... import
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1820,7 +1820,7 @@ Bemærk, at dette er en masse Jinja, du har muligvis ikke alle disse variabler d
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{user.id}} &lt;/small&gt;
+      &lt;small&gt;# {{User.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplayOffset 10
 # X11USELOCALHOST JA
-# Permittty Ja
+# Pille ja
 PrintMotd no
 # Printlastlog Ja
 # Tcpkeepalive ja
@@ -2001,7 +2001,7 @@ PrintMotd no
 # Klientinterval 0
 # ClientaliveCountMax 3
 # Brugt i
-# Pidfile /hrun/ssshd.pid
+# Pidfile /run/ssshd.pid
 # MaxStartups 10: 30: 100
 # Pemittunl nr
 # Chrootdirectory ingen
@@ -2010,7 +2010,7 @@ PrintMotd no
 # Ingen standard bannersti
 Banner /etc/banner
 
-# Tillad kunden at videregive lokale variabler variabler
+# Tillad klienten at videregive de lokale miljøvariabler
 AcceptEnv LANG LC_*
 
 # Tilsidesættelsestandard for ingen delsystemer
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injicer Pam Config og fjern defekt SSH -konfiguration
-# sudo sed -i '' -e '$ d' /tc/pam.d/ssshd
+# Sudo sed -i '' -og $ d '/etc/pam.d/ssshd
 # Sudo sed -i '' -og $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2492,7 +2492,7 @@ Inden vi kører denne kode, er vi nødt til at ændre indstillingerne til den fi
 110 (mailklient)
 80 (http)
 443<pre class="language-bash"><code>
-# !
+# !/bin/bash
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2868,13 +2868,13 @@ nano config/etc_postfix_master.cf
 # 
 # ================================================ ========================
 # Servicetype privat upriv chroot wakeup maxproc kommando + args
-# (ja) (ja) (nej) (aldrig) (100)
+# (Ja) (ja) (nej) (aldrig) (100)
 # ================================================ ========================
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 postskærm
 # SMTPD PASS - - Y - - SMTPD
 # dnsblog   unix  -       -       y       -       0       dnsblog
-# Tlsproxy Unix - - Y - 0 TLSProxy
+# Tlsproxy unix - - y - 0 tlsproxy
 # Vælg en: Aktivér kun indsendelse for loopback -klienter eller for enhver klient.
 # 127.0.0.1:Submission inet N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2899,7 +2899,7 @@ submission inet n       -       y       -       -       smtpd
 # -O milter_macro_daemon_name = oprindelse
 # Vælg en: Aktivér SMTPS kun for loopback -klienter eller for enhver klient.
 # 127.0.0.1:smtps inet n  -       y       -       -       smtpd
-# smtps     inet  n       -       y       -       -       smtpd
+# SMTPS INET N - Y - - SMTPD
 # -O syslog_name = postfix/smtps
 # -o smtpd_tls_wrappermode = ja
 # -o smtpd_sasl_auth_enable = ja
@@ -2963,7 +2963,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 # Specificer i main.cf en eller flere af følgende:
 # Mailbox_transport = lmtp: inet: localhost
-# virtual_transport = lmtp: inet: localhost
+# Virtual_transport = lmtp: inet: localhost
 # 
 # ================================================ ==================
 # 
@@ -2976,8 +2976,8 @@ maildrop  unix  -       n       n       -       -       pipe
 # ================================================ ==================
 # Gamle eksempel på levering via Cyrus.
 # 
-# Old -Corus Unix - N N - - Rør
-# Flag = r user = cyrus argv =/cyrus/bin/levering -e -m $ {udvidelse} $ {bruger}
+# Old -Cyrus Unix - N N - - Rør
+# flag = r user = cyrus argv =/cyrus/bin/levering -e -m $ {udvidelse} $ {bruger}
 # 
 # ================================================ ==================
 # 
@@ -3012,7 +3012,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Skift til/var/spole/postfix/run/opendkim til at bruge en Unix -stik med
 # postfix i en chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Rundir =/var/spole/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Ukommentere for at specificere en alternativ stikkontakt
@@ -3146,7 +3146,7 @@ service auth-worker {
   # Author -arbejdsprocessen køres som rod som standard, så den kan få adgang til
   # /etc/skygge. Hvis dette ikke er nødvendigt, skal brugeren ændres til
   # $ standard_interal_user.
-  # Bruger = rod
+  # bruger = rod
 }
 
 service dict {
@@ -3161,7 +3161,7 @@ service dict {
 </code></pre>Sørg igen for at udskifte domænet i alle disse filer, femmebabe.com, med det domæne, du valgte. Rediger den næste fil, Dovecot's Config,<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>Og tilføj disse linjer<pre class="language-bash"><code>
-## Dovecot -konfigurationsfil
+## OVECOT -konfigurationsfil
 
 # Hvis du har travlt, kan du se http://wiki2.dovecot.org/quickconfiguration
 
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Vis flere ordrette processtitler (i PS). Viser i øjeblikket brugernavn og
 # IP -adresse. Nyttigt til at se, hvem der faktisk bruger IMAP -processerne
 # (f.eks. Delt postkasser, eller hvis det samme UID bruges til flere konti).
-# Verbose_procitle = nr
+# Verbose_proctitle = nr
 
 # Skulle alle processer dræbes, når Dovecot -masterprocessen lukker ned.
 # At indstille dette til "ingen" betyder, at dovecot kan opgraderes uden
@@ -3251,7 +3251,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;navn&gt;".
 
 dict {
-  # kvote = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # kvote = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 # De fleste af den faktiske konfiguration bliver inkluderet nedenfor. Filnavne er
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Skift til/var/spole/postfix/run/opendkim til at bruge en Unix -stik med
 # postfix i en chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Rundir =/var/spole/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Ukommentere for at specificere en alternativ stikkontakt
@@ -3547,7 +3547,7 @@ Tak fordi du tog dig tid til at læse denne tredje udgave Web Development Guide.
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Købe</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Køb med krypto</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Købe</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Køb med krypto</a></p>
 
 
 <hr>
@@ -3587,7 +3587,7 @@ Tak fordi du tog dig tid til at læse denne tredje udgave Web Development Guide.
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3624,12 +3624,16 @@ Tak fordi du tog dig tid til at læse denne tredje udgave Web Development Guide.
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Efterlad mig et tip i bitcoin ved hjælp af denne adresse:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Kopier adresse" onclick="copyToClipboard('btc-wallet');">Kopi</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Besøg mig på Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Besøg mig på Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Se mig på YouTube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=da" title="Se servicevilkårene">Servicevilkår</a></span></p>
 		    </div>
@@ -3672,32 +3676,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3844,34 +3848,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Del denne side ved at scanne en QR -kode.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

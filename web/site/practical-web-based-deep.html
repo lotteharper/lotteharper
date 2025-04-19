@@ -249,18 +249,7 @@ And to close nano, we can hold down the Control key and press X, then Y to denot
 
 <pre class="language-bash"><code>
 sudo ascript backup
-</code></pre>
-
-
-
-
-
-Now, in nano:
-
-
-
-
-<pre class="language-bash"><code>
+</code></pre>Now, in Nano:<pre class="language-bash"><code>
 sudo cp /usr/bin/backup /path/to/directory/
 sudo cp /usr/bin/ascript /path/to/directory/
 </code></pre>
@@ -1654,7 +1643,7 @@ You don't need to add the first and last lines in that code snippet, just make s
 
 
 <pre class="language-python"><code>
-#  … imports
+# … Amounts
 from .forms import UserRegisterForm
 
 def register(request):
@@ -2536,7 +2525,7 @@ Next, we need URLs representing all of these views in the users URL patters. Edi
 
 
 <pre class="language-python"><code>
-# … Previous Code, Stants
+# … Previous code, imports
 from django.urls import path
 from . import views
 
@@ -2971,7 +2960,7 @@ def mfa(request, username, usertoken):
             is_verified = check_verification_code(user, token, code) #  Check the code
             p.mfa_authenticated = is_verified
             if token_validated: #  If everything
-                if is_verified: #  Is in order
+                if is_verified: # Is in order
                     user.profile.mfa_enabled = True #  Enable MFA (if not already enabled)
                     user.profile.save()
                     auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend') #  Log in the user
@@ -3153,7 +3142,7 @@ Note that this is a lot of jinja, you may not have all of these variables define
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/Small&gt;
+      &lt;small&gt;# {{ user.id }}&lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -3416,7 +3405,7 @@ KbdInteractiveAuthentication no
 # GSSAPIAuthentication no
 # GSSAPICleanupCredentials yes
 # GSSAPIStrictAcceptorCheck yes
-# GSSAPIKeyExchange no
+# Gssapikeyexchange no
 
 #  Set this to 'yes' to enable PAM authentication, account processing,
 #  and session processing. If this is enabled, PAM authentication will
@@ -3435,7 +3424,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplayOffset 10
 # X11UseLocalhost yes
-# Pill Yes
+# PermitTTY yes
 PrintMotd no
 # PrintLastLog yes
 # TCPKeepAlive yes
@@ -3450,7 +3439,7 @@ PrintMotd no
 # ChrootDirectory none
 # Version addendum None
 
-#  no default banner path
+# no default banner path
 Banner /etc/banner
 
 #  Allow client to pass locale environment variables
@@ -3642,7 +3631,7 @@ SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
 #  sudo chmod a+x scripts/usersetup
-# ./scripts/usersetup
+#  ./scripts/usersetup
 # SSH-Keyen
 #  Project directory
 DIR="/home/team/femmebabe"
@@ -3663,7 +3652,7 @@ sudo service rsyslog restart
 # Nano config
 echo "set tabsize 4" &gt;&gt; .nanorc
 echo "set tabstospaces" &gt;&gt; .nanorc
-#  Git config
+# Git config
 echo "Git configuration"
 sudo git config --global user.email "jasper.camber.holton@gmail.com" &amp;&amp; sudo git config --global user.name "Jasper Holton"
 git config --global user.email "jasper.camber.holton@gmail.com"
@@ -3687,7 +3676,7 @@ echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/a
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-# Set hostname
+#  Set hostname
 echo "127.0.0.1 femmebabe" | sudo tee -a /etc/hosts
 sudo hostnamectl set-hostname localhost
 # Setup postgres
@@ -3923,7 +3912,7 @@ sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 #  Inject pam config and remove faulty ssh config
 # sudo sed -i '' -e '$ d' /tc/pam.d/sshd
-# sudo sed -i '' -e '$ d' /etc/profile
+# SUDO SED -I '' -and $ d ' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
 sudo chmod a+x pam.sh
@@ -3972,8 +3961,8 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# sudo a2dismod mpm_worker
-# sudo a2enMod MPM_PreFork
+# Sudo a2dismod mpm_worker
+# sudo a2enmod mpm_prefork
 # Disable Default Site
 sudo a2dissite 000-default
 sudo a2dissite 000-default-le-ssl
@@ -4103,7 +4092,7 @@ echo "postfix postfix/mailname string femmebabe.com" | sudo debconf-set-selectio
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | sudo debconf-set-selections
 sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
 sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache
-# Enable Clamav antivirus
+# Enable Clamav Antivirus
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
@@ -4659,8 +4648,8 @@ Add these lines:
 smtp      inet  n       -       y       -       -       smtpd
 # smtp      inet  n       -       y       -       1       postscreen
 # smtpd     pass  -       -       y       -       -       smtpd
-# DNSBLOG UNIX - - Y - 0 DNSBLOG
-# TLSPROXY UNIX - - Y - 0 TLSPROXY
+# Dnsblog Unix - - Y - 0 Dnsblog
+# tlsproxy  unix  -       -       y       -       0       tlsproxy
 #  Choose one: enable submission for loopback clients only, or for any client.
 # 127.0.0.1:submission inet n -   y       -       -       smtpd
 submission inet n       -       y       -       -       smtpd
@@ -4680,12 +4669,12 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 #   -o smtpd_helo_restrictions=$mua_helo_restrictions
 #   -o smtpd_sender_restrictions=$mua_sender_restrictions
-#   -o smtpd_recipient_restrictions=
+# -o smtpd_recipient_trastrictions =
 #   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
 # -O MILTER_MACRO_DAEmon_Name = Originating
 #  Choose one: enable smtps for loopback clients only, or for any client.
-# 127.0.0.1:SMTPS INET N - Y - - SMTPD
-# SMTPS INET N - Y - - SMTPD
+# 127.0.0.1:smtps inet n  -       y       -       -       smtpd
+# smtps     inet  n       -       y       -       -       smtpd
 # -O Syslog_Name = PostFix/SMTPS
 #   -o smtpd_tls_wrappermode=yes
 #   -o smtpd_sasl_auth_enable=yes
@@ -4749,7 +4738,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 #  Specify in main.cf one or more of the following:
 #   mailbox_transport = lmtp:inet:localhost
-#   virtual_transport = lmtp:inet:localhost
+# Virtual_Transport = LMTP: INET: LocalHost
 # 
 #  ====================================================================
 # 
@@ -4875,7 +4864,7 @@ service imap-login {
   }
   inet_listener imaps {
     # Port = 993
-    # ssl = Yes
+    # ssl = yes
   }
 
   #  Number of connections to handle before starting a new process. Typically
@@ -4884,10 +4873,10 @@ service imap-login {
   # service_count = 1
 
   #  Number of processes to always keep waiting for more connections.
-  # process_min_avail = 0
+  # Process_min_avail = 0
 
   #  If you set service_count=0, you probably need to grow this.
-  # vsz_limit = $ default_vsz_limit
+  # VSZ_LIMI = $ Default_vsz_Limit
 }
 
 service pop3-login {
@@ -4896,7 +4885,7 @@ service pop3-login {
   }
   inet_listener pop3s {
     # Port = 995
-    # ssl = yes
+    # ssl = Yes
   }
 }
 
@@ -4937,7 +4926,7 @@ service pop3 {
 
 service submission {
   #  Max. number of SMTP Submission processes (connections)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service auth {
@@ -4965,7 +4954,7 @@ service auth-worker {
   #  Auth worker process is run as root by default, so that it can access
   #  /etc/shadow. If this isn't necessary, the user should be changed to
   # $ default_interal_user.
-  # user = root
+  # User = root
 }
 
 service dict {
@@ -5002,7 +4991,7 @@ And add these lines
 
 
 <pre class="language-bash"><code>
-##  Dovecot configuration file
+## Ovecot Configuration file
 
 #  If you're in a hurry, see http://wiki2.dovecot.org/QuickConfiguration
 
@@ -5092,7 +5081,7 @@ And add these lines
 # "Proxy :: &lt;Name&gt;".
 
 dict {
-  # quota = MySQL:/andc/dovecot/dovecot-dic-sql.conf.ext
+  # quota = MySQL: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 #  Most of the actual configuration gets included below. The filenames are
@@ -5189,7 +5178,7 @@ OversignHeaders		From
 #  for domain "example.com" with selector "2020" (2020._domainkey.example.com),
 #  using the private key stored in /etc/dkimkeys/example.private. More granular
 #  setup options can be found in /usr/share/doc/opendkim/README.opendkim.
-# Domain Example.com
+# Domain			example.com
 # Selector		2020
 # KeyFile		/etc/dkimkeys/example.private
 
@@ -5298,7 +5287,7 @@ Now, in nano, the text editor, edit this file so it includes your domain name in
 
 
 <pre class="language-bash"><code>
-# ! / bin / Bash
+# !/bin/bash
 # Setup postfix
 cd $DIR
 echo "Mail services configuration"
@@ -5600,7 +5589,7 @@ Thank you for taking the time to read this third edition web development guide. 
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Buy with crypto</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Buy</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Buy with crypto</a></p>
 
 
 <hr>
@@ -5640,7 +5629,7 @@ Thank you for taking the time to read this third edition web development guide. 
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -5677,12 +5666,16 @@ Thank you for taking the time to read this third edition web development guide. 
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Leave me a tip in Bitcoin using this address:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Visit me on Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Visit me on Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Watch me on YouTube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=en" title="See the terms of service">Terms of Service</a></span></p>
 		    </div>
@@ -5897,34 +5890,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Share this page by scanning a QR code.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

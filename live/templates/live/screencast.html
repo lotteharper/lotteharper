@@ -3,6 +3,7 @@
 <style>
 video {
     width: 100%;
+    pointer-events: none;
 }
 </style>
 {% endblock %}
@@ -254,7 +255,7 @@ async function stopAllStreamsFn() {
         } else {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
         }
-
+  clearInterval(captureInterval);
   localCamStream = null;
   localScreenStream = null;
   localOverlayStream = null;
@@ -273,10 +274,10 @@ async function makeComposite() {
     canvasCtx.drawImage(screen, 0, 0, screen.videoWidth, screen.videoHeight);
     canvasCtx.drawImage(
       cam,
-      Math.floor(screen.videoWidth - screen.videoWidth / 4),
-      Math.floor(screen.videoHeight - screen.videoHeight / 4),
-      Math.floor(screen.videoWidth / 4),
-      Math.floor(screen.videoHeight / 4)
+      Math.floor(screen.videoWidth - cam.videoWidth / 4),
+      Math.floor(screen.videoHeight - cam.videoHeight / 4),
+      Math.floor(cam.videoWidth / 4),
+      Math.floor(cam.videoHeight / 4)
     ); // this is just a rough calculation to offset the webcam stream to bottom left
     let imageData = canvasCtx.getImageData(
       0,

@@ -139,13 +139,14 @@
 
 
 
-<div id="0" style="white-space: pre-wrap;">ثلاثة عشر - لعبة بطاقة عبر الإنترنت
-قم بتشغيل ثلاثة ثلاثة عشر مع صديق من خلال النقر على الرابط أدناه لإنشاء رمز دعوة أو الانضمام إلى لعبة.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">دعوة مع الكود</a>
-<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>"title =" انضم إلى لعبة "&gt; انضم إلى اللعبة
-<script src="/static/games/threethirteen.js"></script>
+<div id="0" style="white-space: pre-wrap;">اثنان لاعب لاعب Sudoku على الانترنت مجانا
+العب ألوان تعاونية Sudoku مع صديق مجانًا.<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">دعوة صديق</a>
+<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">انضم إلى لعبة</a>
+<script src="https://lotteh.com/static/games/colordokugames2.js"></script>
+<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
 </div>
 
-<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img0" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/three-thirteen---online-card" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img0" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/two-player-color-sudoku-online" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -171,7 +172,7 @@
 <script src="/static/games/colordoku.js"></script>
 </div>
 
-<div><p>بواسطة Daisy / <a href="/ar/play-color-sudoku-online---free" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/play-color-sudoku-online-free" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=aa66ebbc-2b2c-49f6-afd4-f2b9ad948f8a&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="2" style="white-space: pre-wrap;">التعلم العميق والأمان القائم على الويب القائم على الويب على سبيل المثال
@@ -612,7 +613,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>هذا كل ما نحتاجه للحصول على مستخدم مسجل ، ولكن يجب أن يكون لدينا المزيد من المعلومات. نريد أن نعرف الوقت الذي سجل فيه المستخدم ، والوقت الذي كان عليه آخر مرة على الموقع ، وبعض المعلومات عنها ، مثل السيرة الذاتية ، والمنطقة الزمنية ، وما إلى ذلك أيضًا ، سنحتاج إلى تحديث نموذج التغذية لدينا ، النشر ، لحساب المستخدم النموذج والمنشورات السمة لكل مستخدم. من أجل القيام بذلك ، سنقوم بتحديث النماذج. لنبدأ بتحرير نموذج التغذية. يجب أن يبدو هكذا الآن:<pre class="language-python"><code>
-from django.db import models # ... الواردات
+from django.db import models # ... كميات
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -636,7 +637,7 @@ class Profile(models.Model):
 </code></pre>لاحظ أن هذا النموذج يشبه إلى حد ما نموذج البريد. لدينا استيراد إضافي ، TimeZone ، والذي سيسمح لنا بتعيين الإعدادات الافتراضية على حقول DateTime ، ولدينا أيضًا حرفًا و Textfield مثل المنشور. يساعدنا استخدام كل هذه الطوابع الزمنية على تأمين الموقع وفهم استخدامه ، ودعنا نضع معلومات حول كل مستخدم أو مؤلف على الموقع الإلكتروني. يجب أن يكون OneToOnefield هو الاعتبار البسيط الوحيد ، فهو يتصرف تمامًا مثل المقدمة ولكن مع واحد فقط لكل نموذج لاحق. وبهذه الطريقة ، يكون للمستخدم ملف تعريف واحد فقط ، في حين أنه قد يكون لديه العديد من المنشورات.
 
 الآن ، دعنا نحسن تسجيلات تسجيل الدخول وتسجيل مشاهداتنا لحساب ملف التعريف. أولاً ، قم بتحرير المستخدمين/views.py والتركيز على عرض التسجيل:<pre class="language-python"><code>
-# ... كميات
+# ... الواردات
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1509,7 +1510,7 @@ $('input').change(function(){
  </code></pre>ستلاحظ أن هذا نموذج بسيط إلى حد ما ، ولكن يحتوي على بعض JavaScript الذي ينشر تلقائيًا محتويات النموذج عند تحديثها. من المفيد أن يكون لديك ، لذلك يمكنك إجراء تعديلات دون الحاجة إلى الضغط على الإرسال في كل مرة.
 
 بعد ذلك ، نحتاج إلى عناوين URL التي تمثل كل هذه المشاهدات في URL URL Patters. تحرير المستخدمين/urls.py وأضف هذا الرمز:<pre class="language-python"><code>
-# ... الكود السابق ، المحاكات
+# ... الكود السابق ، والواردات
 from django.urls import path
 from . import views
 
@@ -1821,7 +1822,7 @@ def send_verification_email(user, token):
     token.save()
     send_html_email(user, "Your verification code for {} is {}".format(settings.SITE_NAME, str(code)), "&lt;p&gt;Dear {},&lt;/p&gt;&lt;p&gt;Your verification code for {} is {}. Thank you for using this code to secure your account.&lt;/p&gt;&lt;h2&gt;{}&lt;/h2&gt;&lt;p&gt;Sincerely, {}&lt;/p&gt;".format(user.profile.name, settings.SITE_NAME, str(code), str(code), settings.SITE_NAME))
 </code></pre>لذلك كل هذا يعمل بشكل رائع ، والآن لدينا نظام مصادقة متعدد العوامل يعتمد على رقم هاتف أو بريد إلكتروني لتسجيل الدخول. لكننا نحتاج أيضًا إلى طريقة لإزالة المستخدمين الذين لا يتعاونون مع شروطنا على الأقل. يمكن أن تكون هذه مرسلة البريد العشوائي أو الروبوتات أو أي شخص لا يعني جيدًا لعملنا. ألقِ نظرة على عرض لدي لمراقبة المستخدمين على موقع الويب الخاص بي:<pre class="language-python"><code>
-# المبالغ
+# الواردات
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from .tests import is_superuser_or_vendor # سنحتاج إلى إنشاء هذا الاختبار
@@ -2059,7 +2060,7 @@ PrintMotd no
 # MaxStartups 10: 30: 100
 # pemittunl لا
 # chrootdirectory لا شيء
-# VersionAdendum لا شيء
+# إصدار إضافة لا شيء
 
 # لا يوجد مسار لافتة افتراضي
 Banner /etc/banner
@@ -2116,7 +2117,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !/bin/bash "&gt;&gt;/usr/ألف/$ 1
+    echo "# ! / bin / bash
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2127,7 +2128,7 @@ fi
 </code></pre>تذكر أن هذا البرنامج النصي يأخذ وسيطة ، اسم البرنامج النصي ، بمبلغ 1 دولار. أولاً ، يتحقق ما إذا كان الملف موجودًا ، أو ينشئه بطريقة أخرى ، يضيف السطر الأول لإعلان أن البرنامج النصي هو bash ، ويغير أذوناته ، ويقوم بتحريره ، ويضيف اسمه إلى /etc /ascripts مما يتيح لنا تخزين أسماء البرامج النصية يخلقون. إذا كان الملف موجودًا بالفعل ، فما عليك سوى تغيير الأذونات وتحريره. احفظ الملف ، وبعد ذلك سنقوم بتغيير أذوناته. طالما أننا نستخدم هذا البرنامج النصي ، فلن نضطر إلى القيام بذلك مرة أخرى.<pre class="language-bash"><code>
 sudo chmod a+x /usr/bin/ascript
 </code></pre>ممتاز. الآن دعنا ننشئ برنامج نصي يسمى الإعداد. أولاً ، لا تطغى عليك ، ولكن ألقِ نظرة على الشكل الذي يبدو عليه نص الإعداد. سوف نسير عبر شكل هذا البرنامج النصي في مشروعك ، فلن تحتاج إلى كل شيء في البرنامج النصي لتبدأ به.<pre class="language-bash"><code>
-# !
+# !/بن/باش
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2282,7 +2283,7 @@ cd $DIR
 echo "Creating virtual environment"
 python -m venv venv
 source venv/bin/activate
-# الحصول على تبعيات وبناء
+# احصل على تبعيات وبناء
 echo "Getting and building dependencies, this may take a whike"
 cd $DIR
 git clone https://github.com/sukhitashvili/violence-detection.git
@@ -2354,7 +2355,7 @@ sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --em
 sudo systemctl restart opendkim postfix dovecot
 # نسخ certs
 # sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
-# sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
+# sudo cp /etc/letsencrypt/live/femmebabe.com/cert.pem cert.pem
 # رقعة
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
 cp scripts/pwa_webpush_forms.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pwa_webpush/forms.py"
@@ -2928,7 +2929,7 @@ smtp      inet  n       -       y       -       -       smtpd
 # smtp inet n - y - 1 postscreen
 # SMTPD PASS - - Y - - SMTPD
 # Dnsblog Unix - - y - 0 dnsblog
-# tlsproxy Unix - - y - 0 tlsproxy
+# Tlsproxy Unix - - y - 0 tlsproxy
 # اختر واحدة: تمكين تقديم عملاء Loopback فقط ، أو لأي عميل.
 # 127.0.0.1:Submission Inet N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2948,7 +2949,7 @@ submission inet n       -       y       -       -       smtpd
 # -o smtpd_client_restrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
-# -o smtpd_recipient_trival =
+# -o smtpd_recipient_restrictions =
 # -o SMTPD_RELAY_RESTRICTIONS = permot_sasl_authenticated ، رفض
 # -o milter_macro_daemon_name = نشأ
 # اختر واحدة: تمكين SMTPs لعملاء الاسترجاع فقط ، أو لأي عميل.
@@ -3025,7 +3026,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # حدد أيضًا في main.cf: cyrus_destination_recipient_limit = 1
 # 
 # Cyrus Unix - n n - - الأنابيب
-# flags = drx user = cyrus argv =/cyrus/bin/delive -e -r $ {sender} -M $ {extension} $ {user}
+# flags = drx user = cyrus arg =/cyrus/bin/deliver
 # 
 # ================================================== ==================
 # مثال قديم على التسليم عبر سايروس.
@@ -3066,7 +3067,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # تغيير إلى/var/spool/postfix/run/opendkim لاستخدام مقبس UNIX مع
 # postfix في chroot:
-# Roundir =/var/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # عدم التحديد لتحديد مقبس بديل
@@ -3215,7 +3216,7 @@ service dict {
 </code></pre>مرة أخرى ، تأكد من استبدال المجال في كل هذه الملفات ، Femmebabe.com ، بالمجال الذي حددته. قم بتحرير الملف التالي ، تكوين Dovecot ،<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>وأضف هذه الخطوط<pre class="language-bash"><code>
-## ملف تكوين Dovecot
+## ملف تكوين Ovecot
 
 # إذا كنت في عجلة من أمرك ، راجع http://wiki2.dovecot.org/quickconfiguration
 
@@ -3275,7 +3276,7 @@ nano config/etc_dovecot_dovecot
 # إظهار المزيد من عناوين عملية المطوّل (في PS). يظهر حاليا اسم المستخدم و
 # عنوان IP. مفيد لرؤية من يستخدمون بالفعل عمليات IMAP
 # (على سبيل المثال ، صناديق البريد المشتركة أو إذا تم استخدام نفس UID لحسابات متعددة).
-# Verbose_procitle = لا
+# Verbose_proctitle = لا
 
 # إذا تم قتل جميع العمليات عند إيقاف تشغيل عملية Dovecot Master.
 # إن تعيين هذا إلى "لا" يعني أنه يمكن ترقية DoveCot بدون
@@ -3412,7 +3413,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # تغيير إلى/var/spool/postfix/run/opendkim لاستخدام مقبس UNIX مع
 # postfix في chroot:
-# rundir =/wad/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # عدم التحديد لتحديد مقبس بديل
@@ -3583,42 +3584,41 @@ source venv/bin/activate
 </div>
 
 
-<div><p>بواسطة Daisy / <a href="/ar/practical-web-based-deep" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/practical-web-based-deep" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="3" style="white-space: pre-wrap;">اثنان لاعب لاعب Sudoku على الانترنت مجانا
-العب ألوان تعاونية Sudoku مع صديق مجانًا.<a class="btn btn-info" href="https://lotteh.com/games/two-player-color-sudoku-online/" title="Invite a friend">دعوة صديق</a>
-<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">انضم إلى لعبة</a>
-<script src="https://lotteh.com/static/games/colordokugames2.js"></script>
-<script games="" https:="" lotteh.com="" src="&lt;a href=" static="" title="Visit this link (it will take you outside of Lotte Harper)" twoplayercolordoku.js"="">lotteh.com/static/games/twoplayercolordoku.js</a>"></script>
+<div id="3" style="white-space: pre-wrap;">ثلاثة عشر - لعبة بطاقة عبر الإنترنت
+قم بتشغيل ثلاثة ثلاثة عشر مع صديق من خلال النقر على الرابط أدناه لإنشاء رمز دعوة أو الانضمام إلى لعبة.<a class="btn btn-primary" href="https://lotteh.com/games/three-thirteen---online-card-result-once-single/" title="Invite a friend">دعوة مع الكود</a>
+<a "="" class="btn btn-success" games="" href="&lt;a href=" https:="" lotteh.com="" title="Visit this link (it will take you outside of Lotte Harper)">lotteh.com/games/</a>"title =" انضم إلى لعبة "&gt; انضم إلى اللعبة
+<script src="/static/games/threethirteen.js"></script>
 </div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/c820300b-3430-4988-86fd-e77352fca488.png" id="img3" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/two-player-color-sudoku-online" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=c820300b-3430-4988-86fd-e77352fca488&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><img width="100%" height="auto" src="https://i.imgur.com/8I5qWNu.png" id="img3" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/three-thirteen-online-card-game" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=dd9c654e-2b32-41f1-b4ac-8799e7cfe226&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="4" style="white-space: pre-wrap;"><p>كيف أرتدي kitlock؟</p><p><br/></p><p>1. ابدأ بتنمية شعرك إلى الطول المطلوب. يجب أن يكون شعرك ما لا يقل عن 2-3 بوصات للحصول على أفضل النتائج.</p><p><br/></p><p>2. قسم شعرك إلى أجزاء صغيرة ، حتى باستخدام مشط. سيحدد حجم الأقسام حجم المجدلات الخاصة بك ، لذا تأكد من اختيار الحجم الذي تشعر بالراحة معه.</p><p><br/></p><p>3. ابدأ في خلفية كل قسم من الشعر عن طريق التواء وسحبه بإحكام نحو الجذور. سيؤدي ذلك إلى إنشاء عقدة في الشعر ، والتي ستشكل في نهاية المطاف في المجدل.</p><p><br/></p><p>4. تطبيق الشمع أو هلام على كل قسم من الشعر للمساعدة في الاحتفاظ بالعقدة في مكانها وتشجيع الشعر على حصيرة معًا.</p><p><br/></p><p>5. تابع الخلفية وتواء كل قسم من الشعر حتى تكمل رأسك بالكامل. يمكن أن تكون هذه العملية مستهلكة للوقت ، لذا كن صبورًا واتخذ فترات راحة حسب الحاجة.</p><p><br/></p><p>6. بمجرد أن يتم تلويع جميع شعرك وتراجعه ، دعه يجلس لبضعة أيام للسماح للعقدة بالتشديد وتشكل في المجدل.</p><p><br/></p><p>7. بعد بضعة أيام ، يمكنك البدء في التصميم والحفاظ على درجات المجرات عن طريق غسلها بشامبو خالي من البقايا واستخدام خطاف الكروشيه للمساعدة في تشديد أي عقدة فضفاضة.</p><p><br/></p><p>8. للحفاظ على Dreadlocks تبدو أنيقة ومرتبة ، فكر في استخدام وشاح أو باندانا لتغطيتها عند النوم أو في بيئات قذرة. ستساعد الصيانة والصيانة المنتظمة في الحفاظ على صحة جيدة ونابضة بالحياة.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-wear-deadlock" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=3cf4d1fd-281e-4eda-b99f-e8403f086ae0" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=3cf4d1fd-281e-4eda-b99f-e8403f086ae0&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-wear-deadlock" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=3cf4d1fd-281e-4eda-b99f-e8403f086ae0" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=3cf4d1fd-281e-4eda-b99f-e8403f086ae0&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="5" style="white-space: pre-wrap;"><p>اريد ارتداء المكياج.كيف أرتدي مكياجًا ساحرًا؟</p><p><br/></p><p>عادةً ما يتضمن ارتداء المكياج الساحر ميزات جريئة ومبالغ فيها تعزز جمالك الطبيعي. فيما يلي بعض النصائح حول كيفية تحقيق مظهر ماكياج براقة:</p><p><br/></p><p>1. ابدأ بقاعدة خالية من العيوب من خلال تطبيق التمهيدي والأساس والخافي العيوب حتى خارج لون بشرتك. اضبط قاعدتك بمسحوق شفاف لضمان تغطية طويلة الأمد.</p><p><br/></p><p>2. حدد حواجبك بقلم رصاص أو مسحوق لتأطير وجهك. املأ أي مناطق متناثرة وتشكيل الحواجب لتحقيق مظهر مصقول.</p><p><br/></p><p>3. ضع ظلال العيون المتلألئة في ظل محايد أو معدني على جفونك ، مع التركيز على الزوايا الداخلية ومركز الغطاء لإنشاء تأثير مشرق. استخدم ظلال أغمق في التجعد لإضافة العمق والتعريف.</p><p><br/></p><p>4. قم بربط عينيك بكرول أسود أو بني داكن ، مع التأكد من إنشاء تأثير مجنح للدراما المضافة. انتهى من نظرة العين مع العديد من المعاطف من الماسكارا المزينة أو الرموش الخاطئة لإلقاء نظرة جريئة ومثيرة.</p><p><br/></p><p>5. أضف موسيقى البوب ​​من اللون إلى خديك مع أحمر الخدود بلهجة وردية أو خوخي ، وتطبيقها على تفاح خديك ومزج لأعلى نحو معابدك من أجل تدفق طبيعي.</p><p><br/></p><p>6. أكمل المظهر بلون الشفاه الغامق باللون الأحمر أو البرقوق أو الظل العاري ، اعتمادًا على تفضيلاتك الشخصية. استخدم بطانة الشفاه لتحديد شفتيك ومنع أي ريش أو نزيف.</p><p><br/></p><p>تذكر أن تمزج جميع منتجات المكياج الخاصة بك بسلاسة للحصول على نهاية مصقولة لا تشوبها شائبة. تعد الممارسة والتجريب مفتاح إيجاد مظهر الماكياج الساحر المثالي الذي يناسب أسلوبك وميزاتك الفردية.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/i-want-to-wear-makeup.-how-do-i" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=615a079f-c609-418f-a683-855a2d05c0b0" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=615a079f-c609-418f-a683-855a2d05c0b0&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/i-want-to-wear-makeup.-how-do-i" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=615a079f-c609-418f-a683-855a2d05c0b0" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=615a079f-c609-418f-a683-855a2d05c0b0&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="6" style="white-space: pre-wrap;"><p>لماذا يجب أن أستخدم Apple L في كلمة L؟</p><p><br/></p><p>يمكن أن يؤدي استخدام Apple L في كلمة L إلى تعزيز تجربة المشاهدة بعدة طرق. Apple L عبارة عن جهاز بث شائع يتيح لك الوصول بسهولة إلى برامجك المفضلة ومشاهدة برامجك المفضلة مع الفيديو والصوت عالي الجودة. باستخدام Apple L في كلمة L ، يمكنك الاستمتاع بصور واضحة وصوتية غامرة تجعلك تشعر أنك في منتصف الحركة.</p><p><br/></p><p>بالإضافة إلى ذلك ، توفر Apple L واجهة سهلة الاستخدام تجعل من السهل التنقل من خلال الحلقات ، وقفة المشاهد وإرجاعها ، وتخصيص تجربة المشاهدة الخاصة بك. يمكنك أيضًا الاستفادة من الميزات مثل البحث الصوتي والتوصيات الشخصية لمساعدتك في اكتشاف محتوى جديد للاستمتاع به.</p><p><br/></p><p>بشكل عام ، يمكن أن يوفر لك استخدام Apple L في L Word تجربة تدفق متميزة تتيح لك أن تغمر نفسك تمامًا في عالم العرض الآسر.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/why-should-i-use-an-apple-l-out" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=f4338b17-414b-4672-a227-b7ebaae3b6fc" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=f4338b17-414b-4672-a227-b7ebaae3b6fc&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/why-should-i-use-an-apple-l-out" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=f4338b17-414b-4672-a227-b7ebaae3b6fc" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=f4338b17-414b-4672-a227-b7ebaae3b6fc&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="7" style="white-space: pre-wrap;"><p>لماذا يكون أكثر أمانًا ارتداء قناع في الأماكن العامة؟</p><p><br/></p><p>يعد ارتداء قناع في الأماكن العامة أكثر أمانًا لأنه يساعد على منع انتشار قطرات الجهاز التنفسي الذي يحتوي على فيروسات ، مثل Covid-19. عندما يرتدي شخص لديه فيروس قناعًا ، فإنه يمنع إطلاق قطراته التنفسية في الهواء وربما يصيب الآخرين. بالإضافة إلى ذلك ، فإن ارتداء قناع يمكن أن يحمي مرتديها من استنشاق قطرات الجهاز التنفسي من الآخرين الذين قد يصابون. هذا مهم بشكل خاص في المواقف التي يصعب الحفاظ عليها بالبعيدة الاجتماعية ، كما هو الحال في المساحات الداخلية المزدحمة أو في وسائل النقل العام. بشكل عام ، يعد ارتداء القناع وسيلة بسيطة وفعالة للمساعدة في تقليل نقل الفيروسات وحماية نفسك ومن حولك.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/why-is-it-safer-to-wear-a-mask" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=eac3163d-0524-4f82-ae84-cfa68ea20887" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=eac3163d-0524-4f82-ae84-cfa68ea20887&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/why-is-it-safer-to-wear-a-mask" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=eac3163d-0524-4f82-ae84-cfa68ea20887" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=eac3163d-0524-4f82-ae84-cfa68ea20887&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="8" style="white-space: pre-wrap;"><p>ما هي فوائد شرب الشاي؟</p><p><br/></p><p>لشرب الشاي فوائد صحية عديدة، منها:</p><p><br/></p><p>- غني بالمضادات الأكسدة ، والتي تساعد على حماية الجسم من الجذور الحرة وتقليل خطر الإصابة بأمراض مزمنة مثل السرطان وأمراض القلب.</p><p>- يحتوي على أقل من الكافيين من القهوة ، مما يوفر زيادة طاقة أكثر لطيفة ويقلل من خطر التوتر أو الأرق.</p><p>- قد يحسن صحة القلب عن طريق خفض مستويات الكوليسترول في الدم وتقليل الالتهاب.</p><p>- قد تساعد في فقدان الوزن عن طريق تعزيز التمثيل الغذائي وتعزيز حرق الدهون.</p><p>- قد يحسن الوظيفة المعرفية ويقلل من خطر الإصابة بالأمراض التنكسية العصبية مثل الزهايمر وشلل الرعاش.</p><p>- يساعد على تعزيز الاسترخاء وتقليل مستويات التوتر.</p><p>- قد يحسن الهضم وصحة الأمعاء.</p><p>- يساعد في الحفاظ على رطب الجسم ويمكن أن يساهم في تناول السوائل بشكل عام.</p><p>- يوفر مجموعة واسعة من النكهات والاختلافات لتناسب التفضيلات الفردية.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-of" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=723d644d-586e-4e52-b5be-c49531503ed6" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=723d644d-586e-4e52-b5be-c49531503ed6&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-of" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=723d644d-586e-4e52-b5be-c49531503ed6" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=723d644d-586e-4e52-b5be-c49531503ed6&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -3639,42 +3639,42 @@ source venv/bin/activate
 
 <div id="9" style="white-space: pre-wrap;"><p>كيف يمكنني بناء تطبيق ويب مكدس كامل مع Django؟</p><p><br/></p><p>يتضمن إنشاء تطبيق ويب مكدس كامل باستخدام Django عدة خطوات. فيما يلي مخطط عام للعملية:</p><p><br/></p><p>1. إعداد Django: أولاً ، قم بتثبيت Django عن طريق تشغيل `pip تثبيت Django` في سطر الأوامر الخاص بك. بعد ذلك ، قم بإنشاء مشروع Django جديد عن طريق تشغيل `Django-admin StartProject myProject`.</p><p><br/></p><p>2. إنشاء تطبيقات Django: تطبيقات Django هي مكونات معيارية لمشروعك التي تخدم أغراض محددة. يمكنك إنشاء تطبيقات متعددة داخل مشروعك للتعامل مع وظائف مختلفة.</p><p><br/></p><p>3. تحديد النماذج: يتم استخدام النماذج في Django لتحديد بنية جداول قاعدة البيانات الخاصة بك. قم بإنشاء النماذج الخاصة بك عن طريق تحديد الفئات في ملف models.py لكل تطبيق.</p><p><br/></p><p>4. إنشاء طرق عرض: طرق العرض في Django هي وظائف Python التي تتعامل مع طلبات المستخدم وإرجاع الاستجابات. حدد طرق العرض لتطبيقك عن طريق إنشاء وظائف في ملف Views.py لكل تطبيق.</p><p><br/></p><p>5. إعداد عناوين URL: يتم استخدام عناوين URL في Django لتعيين طلبات المستخدم إلى طرق عرض محددة. حدد أنماط URL لتطبيقك عن طريق إنشاء ملف urls.py في كل تطبيق وتشملها في ملف urls.py الرئيسي لمشروعك.</p><p><br/></p><p>6. إنشاء قوالب: يتم استخدام قوالب في Django لإنشاء صفحات HTML التي يتم إرسالها إلى متصفح المستخدم. قم بإنشاء قوالب HTML لتطبيقك عن طريق إنشاء مجلد قوالب في كل تطبيق وكتابة رمز HTML في ملفات قالب منفصلة.</p><p><br/></p><p>7. تقديم الملفات الثابتة: يتم تقديم الملفات الثابتة مثل CSS و JavaScript والصور بشكل منفصل عن المحتوى الديناميكي في Django. قم بتكوين إعدادات الملفات الثابتة في إعدادات Projects.py لخدمة الملفات الثابتة من المجلد الثابت في كل تطبيق.</p><p><br/></p><p>8. قم بتكوين قاعدة البيانات: قم بإعداد إعدادات قاعدة البيانات الخاصة بك في ملف Settings.Py لمشروعك ، بما في ذلك محرك قاعدة البيانات والاسم والكم كلمة المرور والمضيف.</p><p><br/></p><p>9. قم بترحيل قاعدة البيانات: قم بتشغيل "Python Management.py makemigrations" متبوعًا بـ "Python Manage.py Migrate" في سطر الأوامر الخاص بك لإنشاء وتطبيق ترحيل قاعدة البيانات بناءً على النماذج الخاصة بك.</p><p><br/></p><p>10. قم بتشغيل الخادم: ابدأ خادم Django Development عن طريق تشغيل "Python Management.py Runserver` في سطر الأوامر الخاص بك. يجب أن تكون قادرًا الآن على الوصول إلى تطبيق الويب الخاص بك على `http: //127.0.0.1: 8000/` في متصفحك.</p><p><br/></p><p>هذه هي الخطوات الأساسية لإنشاء تطبيق ويب مكدس كامل مع Django. من هنا ، يمكنك مزيد من تخصيص تطبيقك وتوسيع نطاقه عن طريق إضافة المصادقة ، والترخيص ، ونقاط نهاية واجهة برمجة التطبيقات ، والاختبار ، وأكثر من ذلك.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-build-a-full-stack-web" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-build-a-full-stack-web" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=7126a29e-3064-497d-b8f5-6132bc88e4fb&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="10" style="white-space: pre-wrap;"><p>لقد بدأت للتو في اتخاذ وسائل منع الحمل. ما هي الآثار الجانبية الأكثر شيوعا؟</p><p><br/></p><p>تشمل الآثار الجانبية الأكثر شيوعًا لحبوب منع الحمل:</p><p><br/></p><p>1. الغثيان</p><p>2. حنان الثدي</p><p>3. الصداع</p><p>4. زيادة الوزن</p><p>5. تغيير المزاج</p><p>6. اكتشاف أو نزيف اختراق</p><p>7. التغييرات في الرغبة الجنسية </p><p>8. حب الشباب </p><p>9. الانتفاخ </p><p><br/></p><p>من المهم أن نلاحظ أن كل شخص قد يواجه آثارًا جانبية مختلفة ، وقد لا يختبر بعض الأفراد أيًا على الإطلاق. إذا كان لديك مخاوف بشأن الآثار الجانبية لتحديد النسل ، فمن الأفضل التحدث مع مقدم الرعاية الصحية الخاص بك.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/i-just-started-taking-birth" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=40624d89-863d-4807-9744-644426f2b718" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=40624d89-863d-4807-9744-644426f2b718&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/i-just-started-taking-birth" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=40624d89-863d-4807-9744-644426f2b718" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=40624d89-863d-4807-9744-644426f2b718&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="11" style="white-space: pre-wrap;"><p>كيف يمكنني استضافة خادم ويب من منزلي؟</p><p><br/></p><p>يمكن إجراء استضافة خادم ويب من منزلك باتباع هذه الخطوات:</p><p><br/></p><p>1. اختر برنامج خادم: يمكنك الاختيار من بين خيارات برامج الخادم المختلفة مثل Apache و Nginx و Microsoft Internet Information Services (IIS) ، وما إلى ذلك.</p><p><br/></p><p>2. قم بإعداد عنوان IP ثابت: اتصل بمزود خدمة الإنترنت (ISP) واطلب عنوان IP ثابتًا لاتصالك بالإنترنت. سيضمن ذلك أن يظل موقع الويب الخاص بك متاحًا حتى إذا تغير عنوان IP الخاص بك.</p><p><br/></p><p>3. قم بتكوين جهاز التوجيه الخاص بك: قم بتسجيل الدخول إلى لوحة إدارة جهاز التوجيه الخاص بك والمنفذ 80 (المنفذ الافتراضي لحركة المرور HTTP) إلى عنوان IP الداخلي للخادم الخاص بك. سيسمح هذا بالوصول إلى حركة المرور الخارجية للوصول إلى خادم الويب الخاص بك.</p><p><br/></p><p>4. قم بتثبيت وتكوين برنامج الخادم: قم بتثبيت برنامج الخادم على جهاز الخادم الخاص بك وتكوينه وفقًا لاحتياجاتك ، مثل إعداد المضيفين الظاهري ، وشهادات SSL ، إلخ.</p><p><br/></p><p>5. اختبر موقع الويب الخاص بك: تحقق مما إذا كان موقع الويب الخاص بك متاحًا عن طريق إدخال عنوان IP الثابت في متصفح الويب. يمكنك أيضًا اختباره باستخدام أدوات عبر الإنترنت مثل Pingdom أو GTMetrix.</p><p><br/></p><p>6. اسم المجال وإعداد DNS: قم بتسجيل اسم مجال لموقع الويب الخاص بك وقم بإعداد سجلات DNS للإشارة إلى عنوان IP الثابت.</p><p><br/></p><p>7. التدابير الأمنية: تنفيذ تدابير أمنية مثل جدران الحماية ، والتشفير ، والنسخ الاحتياطية العادية ، وما إلى ذلك ، لحماية خادم الويب الخاص بك من التهديدات الإلكترونية.</p><p><br/></p><p>8. مراقبة وصيانة: مراقبة الخادم الخاص بك بانتظام لمشكلات الأداء وتهديدات الأمان وتحديثات البرامج. حافظ على تحديث برنامج الخادم والتطبيقات الخاصة بك لضمان عمل سلس.</p><p><br/></p><p>يرجى ملاحظة أن استضافة خادم ويب من منزلك قد لا يكون مناسبًا لمواقع المرور العالية أو البيانات الحساسة بسبب مخاطر الأمان المحتملة وعرض النطاق الترددي المحدود. فكر في استخدام خدمة استضافة الويب المهنية لمثل هذه المتطلبات.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-host-a-web-server-from" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=4be51213-23f4-4761-a0e7-af4c8e916af7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=4be51213-23f4-4761-a0e7-af4c8e916af7&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-host-a-web-server-from" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=4be51213-23f4-4761-a0e7-af4c8e916af7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=4be51213-23f4-4761-a0e7-af4c8e916af7&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="12" style="white-space: pre-wrap;"><p>كيف أحصل على الدعاية وحركة المرور العضوية لموقع ويب؟</p><p><br/></p><p>1. تحسين محرك البحث (SEO): قم بتحسين موقع الويب الخاص بك لمحركات البحث لتحسين الرؤية وترتيب صفحات نتائج محرك البحث.</p><p><br/></p><p>2. تسويق المحتوى: قم بإنشاء محتوى قيمة وذات صلة يجذب جمهورك المستهدف ويشاركه. يمكن أن يشمل ذلك منشورات المدونة والمقالات ومقاطع الفيديو والرسوم البيانية وأشكال المحتوى الأخرى.</p><p><br/></p><p>3. تسويق وسائل التواصل الاجتماعي: الترويج لموقع الويب الخاص بك على منصات التواصل الاجتماعي مثل Facebook و Twitter و Instagram و LinkedIn للوصول إلى جمهور أوسع ودفع حركة المرور إلى موقع الويب الخاص بك.</p><p><br/></p><p>4. الإعلان المدفوع: فكر في تشغيل حملات إعلانية مدفوعة على محركات البحث (Google Adwords) ، ومنصات الوسائط الاجتماعية ، ومواقع الويب الأخرى ذات الصلة لدفع حركة المرور المستهدفة إلى موقع الويب الخاص بك.</p><p><br/></p><p>5. التسويق المؤثر: شريك مع المؤثرين في مكانك للمساعدة في الترويج لموقع الويب الخاص بك والوصول إلى جمهور أكبر.</p><p><br/></p><p>6. التسويق عبر البريد الإلكتروني: قم بإنشاء قائمة بريد إلكتروني من المشتركين وأرسل تحديثات وعروض ترويجية منتظمة ومحتوى لإعادة حركة المرور إلى موقع الويب الخاص بك.</p><p><br/></p><p>7. الشبكات: تواصل مع مالكي مواقع الويب الآخرين والمدونين والمؤثرين في مجال عملك للتعاون أو نشر الضيف أو تبادل الروابط لزيادة رؤية موقع الويب الخاص بك.</p><p><br/></p><p>8. العلاقات العامة: تواصل مع الصحفيين والمدونين ووسائل الإعلام لتصوير قصص أو إعلانات جديرة بالملاحظة المتعلقة بموقع الويب الخاص بك لتوليد الدعاية وحركة المرور.</p><p><br/></p><p>9. تدوين الضيف: اكتب منشورات ضيوف عالية الجودة لمواقع الويب الأخرى وقم بتضمين رابط إلى موقع الويب الخاص بك في المؤلف السيرة الذاتية أو المحتوى لقيادة حركة المرور.</p><p><br/></p><p>10. المجتمعات والمنتديات عبر الإنترنت: شارك في المجتمعات والمنتديات عبر الإنترنت المتعلقة بخصمك والتفاعل مع الأعضاء من خلال مشاركة رؤى قيمة ، والإجابة على الأسئلة ، والترويج لموقع الويب الخاص بك عندما تكون ذات صلة.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-get-publicity-and" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=6c5df761-82b0-4a19-afa8-2138e13a0d3b" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=6c5df761-82b0-4a19-afa8-2138e13a0d3b&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-get-publicity-and" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=6c5df761-82b0-4a19-afa8-2138e13a0d3b" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=6c5df761-82b0-4a19-afa8-2138e13a0d3b&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="13" style="white-space: pre-wrap;"><p>لماذا تدخين السجائر خطرة؟</p><p><br/></p><p>تدخين السجائر خطير لعدة أسباب:</p><p><br/></p><p>1. زيادة خطر الإصابة بالسرطان: التدخين هو السبب الرئيسي لأنواع مختلفة من السرطان ، بما في ذلك الرئة والحنجرة والفم وسرطان المثانة.</p><p><br/></p><p>2. مشاكل الجهاز التنفسي: التدخين يضر الرئتين ويمكن أن يؤدي إلى حالات تنفسية مزمنة مثل مرض الانسداد الرئوي المزمن (COPD) وانتفاخ الرئة.</p><p><br/></p><p>3. أمراض القلب: التدخين هو عامل خطر رئيسي لأمراض القلب ، بما في ذلك ارتفاع ضغط الدم ، والنوبات القلبية ، والسكتة الدماغية.</p><p><br/></p><p>4. زيادة خطر الإصابة بالالتهابات: يضعف التدخين الجهاز المناعي ، مما يجعل الأفراد أكثر عرضة للالتهابات مثل الالتهاب الرئوي والتهاب الشعب الهوائية.</p><p><br/></p><p>5. الآثار الضارة على الحمل: يمكن أن يؤدي التدخين أثناء الحمل إلى مضاعفات مثل الولادة المبكرة ، وانخفاض وزن الولادة ، والعيوب الخلقية.</p><p><br/></p><p>6. الدخان السلبي: لا يضر التدخين بالمدخن فحسب ، بل يشكل أيضًا خطرًا صحيًا على من حولهم من خلال التعرض للدخان السلبي.</p><p><br/></p><p>بشكل عام ، يعد تدخين السجائر خطيرًا لأنه يزيد بشكل كبير من خطر الإصابة بظروف صحية خطيرة ويمكن أن يؤدي في النهاية إلى وفاة مبكرة.</p><div><br/></div></div>
+<div id="13" style="white-space: pre-wrap;"><p>لماذا يزرع الناس يزرع NFC في أيديهم؟</p><p><br/></p><p>هناك عدة أسباب تجعل الناس يختارون زرع NFC (الاتصال المجال القريب) في أيديهم:</p><p><br/></p><p>1. الراحة: تتيح غرسات NFC للأفراد الوصول بسهولة إلى المعلومات ، وفتح الأبواب ، وإجراء المدفوعات ، وأداء مهام أخرى بموجة بسيطة من أيديهم. يمكن أن يكون هذا أكثر ملاءمة من حمل المفاتيح أو بطاقات الهوية أو الهواتف الذكية.</p><p><br/></p><p>2. الأمن: يمكن لزراعة NFC توفير طبقة إضافية من الأمان ، لأنها تتطلب الوصول المادي إلى تنشيط جسم الفرد. يمكن أن يساعد ذلك في منع الوصول غير المصرح به إلى الأجهزة أو المعلومات الحساسة.</p><p><br/></p><p>3. التجريب التكنولوجي: يختار بعض الناس زرع رقائق NFC كوسيلة لتجربة التقنيات الناشئة ودمجها في حياتهم اليومية.</p><p><br/></p><p>4. تحديد الهوية الشخصية: يمكن استخدام غرسات NFC لأغراض تحديد الهوية الشخصية ، مثل تخزين المعلومات الطبية أو تفاصيل الاتصال التي يمكن الوصول إليها بسهولة في حالة الطوارئ.</p><p><br/></p><p>5. Biohacking: ينظر بعض الأفراد إلى غرسات NFC كشكل من أشكال التقيد الحيوي ، حيث يزيدون أجسادهم بالتكنولوجيا لتعزيز قدراتهم أو تجاربهم.</p><p><br/></p><p>بشكل عام ، فإن قرار زرع رقائق NFC في أيديهم هو خيار شخصي يختلف من شخص لآخر بناءً على تفضيلاتهم ومعتقداتهم الفردية.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/why-is-smoking-cigarettes" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=2e65968e-58d4-4027-9938-7c9afeb888ac" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=2e65968e-58d4-4027-9938-7c9afeb888ac&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/99bc963a-f2f4-4d42-b090-66a07a7d41b8.png" id="img13" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/why-do-people-implant-nfc-implants-in" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=99bc963a-f2f4-4d42-b090-66a07a7d41b8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=99bc963a-f2f4-4d42-b090-66a07a7d41b8&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="14" style="white-space: pre-wrap;"><p>كيف أكتب منشور مدونة احترافي؟</p><p><br/></p><p>تتضمن كتابة منشور مدونة احترافي عدة خطوات رئيسية لإنشاء محتوى محتوى جيد الصنع وجذاب. فيما يلي بعض النصائح لمساعدتك في كتابة منشور مدونة احترافي:</p><p>1. اختر موضوعًا ذا صلة وجذابة: ابدأ بتحديد موضوع ذي صلة بجمهورك وهو شيء على دراية به وعاطفي. تأكد من أن الموضوع هو شيء من شأنه أن يثير صدى مع قرائك.</p><p>2. إجراء بحث شامل: قبل البدء في الكتابة ، تأكد من إجراء بحث شامل حول الموضوع الذي اخترته. سيساعدك ذلك على جمع المعلومات والإحصاءات والحقائق ذات الصلة لدعم نقاطك وجعل منشور مدونتك أكثر مصداقية.</p><p>3. قم بإنشاء مخطط تفصيلي: تنظيم أفكارك ونقاطك الرئيسية من خلال إنشاء مخطط تفصيلي لنشر مدونتك. سيساعدك ذلك على تنظيم المحتوى الخاص بك بطريقة منطقية ومتماسكة ، مما يسهل على القراء متابعته.</p><p>4. اكتب مقدمة مقنعة: ابدأ منشور مدونتك مع مقدمة قوية وجذابة تجذب انتباه القارئ. استخدم خطافًا لرسم القراء وجعلهم يرغبون في الاستمرار في القراءة.</p><p>5. استخدم لغة واضحة وموجزة: تجنب استخدام المصطلحات أو اللغة التقنية المفرطة في منشور مدونتك. اكتب بطريقة واضحة وموجزة لتسهيل فهم المحتوى الخاص بك لجميع القراء.</p><p>6. قم بتضمين الصور المرئية: العناصر المرئية مثل الصور والرسوم البيانية ومقاطع الفيديو يمكن أن تساعد في تفتيت النص وجعل منشور مدونتك جذابًا بصريًا. يمكنهم أيضًا المساعدة في دعم نقاطك الرئيسية وجعل المحتوى الخاص بك أكثر جاذبية.</p><p>7. التدقيق والتحرير: قبل نشر منشور مدونتك ، تأكد من تصحيحه بشكل كامل وتحريره للأخطاء النحوية والإملاء والتنسيق. فكر في مطالبة زميل أو صديق بمراجعة رسالتك للحصول على التعليقات قبل نشرها.</p><p>8. أضف مكالمة إلى الإجراء: قم بإنهاء منشور مدونتك مع دعوة قوية للعمل الذي يشجع القراء على التعامل مع المحتوى الخاص بك ، مثل الاشتراك في مدونتك أو التعليق أو مشاركة رسالتك على وسائل التواصل الاجتماعي</p><p>باتباع هذه النصائح ، يمكنك إنشاء منشور مدونة احترافي وجذاب يتردد صداها مع جمهورك وتأسيسك كسلطة في مجالك.</p></div>
+<div id="14" style="white-space: pre-wrap;"><p>لماذا تدخين السجائر خطرة؟</p><p><br/></p><p>تدخين السجائر خطير لعدة أسباب:</p><p><br/></p><p>1. زيادة خطر الإصابة بالسرطان: التدخين هو السبب الرئيسي لأنواع مختلفة من السرطان ، بما في ذلك الرئة والحنجرة والفم وسرطان المثانة.</p><p><br/></p><p>2. مشاكل الجهاز التنفسي: التدخين يضر الرئتين ويمكن أن يؤدي إلى حالات تنفسية مزمنة مثل مرض الانسداد الرئوي المزمن (COPD) وانتفاخ الرئة.</p><p><br/></p><p>3. أمراض القلب: التدخين هو عامل خطر رئيسي لأمراض القلب ، بما في ذلك ارتفاع ضغط الدم ، والنوبات القلبية ، والسكتة الدماغية.</p><p><br/></p><p>4. زيادة خطر الإصابة بالالتهابات: يضعف التدخين الجهاز المناعي ، مما يجعل الأفراد أكثر عرضة للالتهابات مثل الالتهاب الرئوي والتهاب الشعب الهوائية.</p><p><br/></p><p>5. الآثار الضارة على الحمل: يمكن أن يؤدي التدخين أثناء الحمل إلى مضاعفات مثل الولادة المبكرة ، وانخفاض وزن الولادة ، والعيوب الخلقية.</p><p><br/></p><p>6. الدخان السلبي: لا يضر التدخين بالمدخن فحسب ، بل يشكل أيضًا خطرًا صحيًا على من حولهم من خلال التعرض للدخان السلبي.</p><p><br/></p><p>بشكل عام ، يعد تدخين السجائر خطيرًا لأنه يزيد بشكل كبير من خطر الإصابة بظروف صحية خطيرة ويمكن أن يؤدي في النهاية إلى وفاة مبكرة.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-write-a-professional" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=16e19f30-c141-4768-a6ba-74229673f7f8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=16e19f30-c141-4768-a6ba-74229673f7f8&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/why-is-smoking-cigarettes" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=2e65968e-58d4-4027-9938-7c9afeb888ac" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=2e65968e-58d4-4027-9938-7c9afeb888ac&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="15" style="white-space: pre-wrap;"><p>ما هي أفضل طريقة لغلي البيض؟</p><p><br/></p><p>إليك طريقة بسيطة لسلق البيض:</p><p><br/></p><p>1. ضع البيض في قدر وتغطيها بالماء البارد.</p><p>2. اجعل الماء يغلي على نار عالية.</p><p>3. بمجرد أن يغلي الماء ، قلل الحرارة إلى انخفاض واترك البيض ينضج لمدة 9-12 دقيقة ، اعتمادًا على مدى عملها جيدًا.</p><p>4. أخرج البيض من الحرارة ونقلها على الفور إلى وعاء من الماء الجليدي ليبرد بسرعة.</p><p>5. بمجرد تبريده ، يمكنك تقشر البيض المسلوق تمامًا والاستمتاع به.</p><div><br/></div></div>
+<div id="15" style="white-space: pre-wrap;"><p>كيف أكتب منشور مدونة احترافي؟</p><p><br/></p><p>تتضمن كتابة منشور مدونة احترافي عدة خطوات رئيسية لإنشاء محتوى محتوى جيد الصنع وجذاب. فيما يلي بعض النصائح لمساعدتك في كتابة منشور مدونة احترافي:</p><p>1. اختر موضوعًا ذا صلة وجذابة: ابدأ بتحديد موضوع ذي صلة بجمهورك وهو شيء على دراية به وعاطفي. تأكد من أن الموضوع هو شيء من شأنه أن يثير صدى مع قرائك.</p><p>2. إجراء بحث شامل: قبل البدء في الكتابة ، تأكد من إجراء بحث شامل حول الموضوع الذي اخترته. سيساعدك ذلك على جمع المعلومات والإحصاءات والحقائق ذات الصلة لدعم نقاطك وجعل منشور مدونتك أكثر مصداقية.</p><p>3. قم بإنشاء مخطط تفصيلي: تنظيم أفكارك ونقاطك الرئيسية من خلال إنشاء مخطط تفصيلي لنشر مدونتك. سيساعدك ذلك على تنظيم المحتوى الخاص بك بطريقة منطقية ومتماسكة ، مما يسهل على القراء متابعته.</p><p>4. اكتب مقدمة مقنعة: ابدأ منشور مدونتك مع مقدمة قوية وجذابة تجذب انتباه القارئ. استخدم خطافًا لرسم القراء وجعلهم يرغبون في الاستمرار في القراءة.</p><p>5. استخدم لغة واضحة وموجزة: تجنب استخدام المصطلحات أو اللغة التقنية المفرطة في منشور مدونتك. اكتب بطريقة واضحة وموجزة لتسهيل فهم المحتوى الخاص بك لجميع القراء.</p><p>6. قم بتضمين الصور المرئية: العناصر المرئية مثل الصور والرسوم البيانية ومقاطع الفيديو يمكن أن تساعد في تفتيت النص وجعل منشور مدونتك جذابًا بصريًا. يمكنهم أيضًا المساعدة في دعم نقاطك الرئيسية وجعل المحتوى الخاص بك أكثر جاذبية.</p><p>7. التدقيق والتحرير: قبل نشر منشور مدونتك ، تأكد من تصحيحه بشكل كامل وتحريره للأخطاء النحوية والإملاء والتنسيق. فكر في مطالبة زميل أو صديق بمراجعة رسالتك للحصول على التعليقات قبل نشرها.</p><p>8. أضف مكالمة إلى الإجراء: قم بإنهاء منشور مدونتك مع دعوة قوية للعمل الذي يشجع القراء على التعامل مع المحتوى الخاص بك ، مثل الاشتراك في مدونتك أو التعليق أو مشاركة رسالتك على وسائل التواصل الاجتماعي</p><p>باتباع هذه النصائح ، يمكنك إنشاء منشور مدونة احترافي وجذاب يتردد صداها مع جمهورك وتأسيسك كسلطة في مجالك.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/whats-the-best-way-to-boil" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=9932a15f-ec23-4d7b-930a-3f824589e663" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=9932a15f-ec23-4d7b-930a-3f824589e663&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-write-a-professional" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=16e19f30-c141-4768-a6ba-74229673f7f8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=16e19f30-c141-4768-a6ba-74229673f7f8&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="16" style="white-space: pre-wrap;"><p>كيف يمكنني إرسال بريد إلكتروني مع قائمة بريد إلكتروني متوافقة وروابط إلغاء الاشتراك؟</p><p><br/></p><p>لإرسال بريد إلكتروني مع قائمة متوافقة ورابط إلغاء الاشتراك أكثر إحكاما ، يجب عليك اتباع هذه الخطوات:</p><p><br/></p><p>1. تأكد من أن قائمة البريد الإلكتروني الخاصة بك متوافقة مع جميع اللوائح ذات الصلة ، مثل قانون CAN SPAM والناتج المحلي الإجمالي. هذا يعني أن جميع المستلمين يجب أن يكونوا قد اختاروا لتلقي رسائل البريد الإلكتروني الخاصة بك وأن لديك موافقتهم الصريحة على الاتصال بهم.</p><p><br/></p><p>2. قم بتضمين رابط واضح وبارز في بريدك الإلكتروني. تأكد من أنه من السهل العثور عليها والنقر عليها ، وأنه يأخذ المستلمين مباشرة إلى صفحة حيث يمكنهم بسهولة إلغاء الاشتراك من قائمتك البريدية.</p><p><br/></p><p>3. لجعل رابط إلغاء الاشتراك "أكثر إحكاما" ، يمكنك استخدام خيار إلغاء الاشتراك في نقرة واحدة. هذا يعني أنه يمكن للمستلمين إلغاء الاشتراك من رسائل البريد الإلكتروني الخاصة بك بنقرة واحدة فقط ، دون الحاجة إلى ملء أي نماذج إضافية أو تقديم أي معلومات شخصية.</p><p><br/></p><p>4. عند إرسال البريد الإلكتروني ، تأكد من تخصيص الرسالة ومعالجة المستلم بالاسم إن أمكن. يمكن أن يساعد ذلك في زيادة المشاركة وجعل البريد الإلكتروني يشعر أكثر صلة بالمستلم.</p><p><br/></p><p>5. قبل إرسال البريد الإلكتروني ، اختبره للتأكد من أن رابط إلغاء الاشتراك يعمل بشكل صحيح وأن البريد الإلكتروني يبدو جيدًا على جميع الأجهزة وعملاء البريد الإلكتروني.</p><p><br/></p><p>من خلال اتباع هذه الخطوات ، يمكنك إرسال بريد إلكتروني مع قائمة متوافقة ورابط إلغاء الاشتراك أكثر إحكاما للتأكد من أن المستلمين لديهم تجربة إيجابية ويمكنهم بسهولة إلغاء الحصول على مزيد من رسائل البريد الإلكتروني منك.</p></div>
+<div id="16" style="white-space: pre-wrap;"><p>ما هي أفضل طريقة لغلي البيض؟</p><p><br/></p><p>إليك طريقة بسيطة لسلق البيض:</p><p><br/></p><p>1. ضع البيض في قدر وتغطيها بالماء البارد.</p><p>2. اجعل الماء يغلي على نار عالية.</p><p>3. بمجرد أن يغلي الماء ، قلل الحرارة إلى انخفاض واترك البيض ينضج لمدة 9-12 دقيقة ، اعتمادًا على مدى عملها جيدًا.</p><p>4. أخرج البيض من الحرارة ونقلها على الفور إلى وعاء من الماء الجليدي ليبرد بسرعة.</p><p>5. بمجرد تبريده ، يمكنك تقشر البيض المسلوق تمامًا والاستمتاع به.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-send-email-with-a" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=134068fd-04d3-42c4-be3c-504e3b9c78f8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=134068fd-04d3-42c4-be3c-504e3b9c78f8&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/whats-the-best-way-to-boil" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=9932a15f-ec23-4d7b-930a-3f824589e663" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=9932a15f-ec23-4d7b-930a-3f824589e663&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -3693,44 +3693,44 @@ source venv/bin/activate
 
 <hr></div>
 
-<div id="17" style="white-space: pre-wrap;"><p>ما هي فوائد أخذ سبيرونولاكتون كامرأة؟</p><p><br/></p><p>غالبًا ما يتم وصف سبيرو أو سبيرونولاكتون للنساء اللاتي يعانين من اختلالات هرمونية. بعض الفوائد المحتملة لأخذ سبيرو تشمل:</p><p><br/></p><p>1. علاج حب الشباب: يمكن أن يساعد سبيرو في تقليل حب الشباب عن طريق تقليل إنتاج الزهم ، والذي يمكن أن يسد المسام ويؤدي إلى هروب.</p><p><br/></p><p>2. الحد من نمو الشعر المفرط: يمكن أن يساعد سبيرو في تقليل نمو الشعر المفرط ، والمعروف باسم التهديد ، من خلال منع آثار هرمونات الأندروجين.</p><p><br/></p><p>3. إدارة اختلالات هرمونية: يمكن استخدام سبيرو لإدارة حالات مثل متلازمة المبيض المتعدد الكيسات (PCOS) أو اختلالات الهرمونية التي قد تسبب مخالفات الحيض أو أعراض أخرى.</p><p><br/></p><p>4. علاج ارتفاع ضغط الدم: سبيرو هو مدر للبول ويمكن أن يساعد في خفض ضغط الدم عن طريق تقليل كمية الملح والماء المحتجز في الجسم.</p><div><br/></div></div>
+<div id="17" style="white-space: pre-wrap;"><p>كيف يمكنني إرسال بريد إلكتروني مع قائمة بريد إلكتروني متوافقة وروابط إلغاء الاشتراك؟</p><p><br/></p><p>لإرسال بريد إلكتروني مع قائمة متوافقة ورابط إلغاء الاشتراك أكثر إحكاما ، يجب عليك اتباع هذه الخطوات:</p><p><br/></p><p>1. تأكد من أن قائمة البريد الإلكتروني الخاصة بك متوافقة مع جميع اللوائح ذات الصلة ، مثل قانون CAN SPAM والناتج المحلي الإجمالي. هذا يعني أن جميع المستلمين يجب أن يكونوا قد اختاروا لتلقي رسائل البريد الإلكتروني الخاصة بك وأن لديك موافقتهم الصريحة على الاتصال بهم.</p><p><br/></p><p>2. قم بتضمين رابط واضح وبارز في بريدك الإلكتروني. تأكد من أنه من السهل العثور عليها والنقر عليها ، وأنه يأخذ المستلمين مباشرة إلى صفحة حيث يمكنهم بسهولة إلغاء الاشتراك من قائمتك البريدية.</p><p><br/></p><p>3. لجعل رابط إلغاء الاشتراك "أكثر إحكاما" ، يمكنك استخدام خيار إلغاء الاشتراك في نقرة واحدة. هذا يعني أنه يمكن للمستلمين إلغاء الاشتراك من رسائل البريد الإلكتروني الخاصة بك بنقرة واحدة فقط ، دون الحاجة إلى ملء أي نماذج إضافية أو تقديم أي معلومات شخصية.</p><p><br/></p><p>4. عند إرسال البريد الإلكتروني ، تأكد من تخصيص الرسالة ومعالجة المستلم بالاسم إن أمكن. يمكن أن يساعد ذلك في زيادة المشاركة وجعل البريد الإلكتروني يشعر أكثر صلة بالمستلم.</p><p><br/></p><p>5. قبل إرسال البريد الإلكتروني ، اختبره للتأكد من أن رابط إلغاء الاشتراك يعمل بشكل صحيح وأن البريد الإلكتروني يبدو جيدًا على جميع الأجهزة وعملاء البريد الإلكتروني.</p><p><br/></p><p>من خلال اتباع هذه الخطوات ، يمكنك إرسال بريد إلكتروني مع قائمة متوافقة ورابط إلغاء الاشتراك أكثر إحكاما للتأكد من أن المستلمين لديهم تجربة إيجابية ويمكنهم بسهولة إلغاء الحصول على مزيد من رسائل البريد الإلكتروني منك.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-of-taking-south-lot-wrote" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=29f57b23-5d66-410c-a404-0f398662e45e" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=29f57b23-5d66-410c-a404-0f398662e45e&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-send-email-with-a" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=134068fd-04d3-42c4-be3c-504e3b9c78f8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=134068fd-04d3-42c4-be3c-504e3b9c78f8&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
-<div id="18" style="white-space: pre-wrap;"><p>لماذا يزرع الناس يزرع NFC في أيديهم؟</p><p><br/></p><p>هناك عدة أسباب تجعل الناس يختارون زرع NFC (الاتصال المجال القريب) في أيديهم:</p><p><br/></p><p>1. الراحة: تتيح غرسات NFC للأفراد الوصول بسهولة إلى المعلومات ، وفتح الأبواب ، وإجراء المدفوعات ، وأداء مهام أخرى بموجة بسيطة من أيديهم. يمكن أن يكون هذا أكثر ملاءمة من حمل المفاتيح أو بطاقات الهوية أو الهواتف الذكية.</p><p><br/></p><p>2. الأمن: يمكن لزراعة NFC توفير طبقة إضافية من الأمان ، لأنها تتطلب الوصول المادي إلى تنشيط جسم الفرد. يمكن أن يساعد ذلك في منع الوصول غير المصرح به إلى الأجهزة أو المعلومات الحساسة.</p><p><br/></p><p>3. التجريب التكنولوجي: يختار بعض الناس زرع رقائق NFC كوسيلة لتجربة التقنيات الناشئة ودمجها في حياتهم اليومية.</p><p><br/></p><p>4. تحديد الهوية الشخصية: يمكن استخدام غرسات NFC لأغراض تحديد الهوية الشخصية ، مثل تخزين المعلومات الطبية أو تفاصيل الاتصال التي يمكن الوصول إليها بسهولة في حالة الطوارئ.</p><p><br/></p><p>5. Biohacking: ينظر بعض الأفراد إلى غرسات NFC كشكل من أشكال التقيد الحيوي ، حيث يزيدون أجسادهم بالتكنولوجيا لتعزيز قدراتهم أو تجاربهم.</p><p><br/></p><p>بشكل عام ، فإن قرار زرع رقائق NFC في أيديهم هو خيار شخصي يختلف من شخص لآخر بناءً على تفضيلاتهم ومعتقداتهم الفردية.</p><div><br/></div></div>
+<div id="18" style="white-space: pre-wrap;"><p>ما هي فوائد أخذ سبيرونولاكتون كامرأة؟</p><p><br/></p><p>غالبًا ما يتم وصف سبيرو أو سبيرونولاكتون للنساء اللاتي يعانين من اختلالات هرمونية. بعض الفوائد المحتملة لأخذ سبيرو تشمل:</p><p><br/></p><p>1. علاج حب الشباب: يمكن أن يساعد سبيرو في تقليل حب الشباب عن طريق تقليل إنتاج الزهم ، والذي يمكن أن يسد المسام ويؤدي إلى هروب.</p><p><br/></p><p>2. الحد من نمو الشعر المفرط: يمكن أن يساعد سبيرو في تقليل نمو الشعر المفرط ، والمعروف باسم التهديد ، من خلال منع آثار هرمونات الأندروجين.</p><p><br/></p><p>3. إدارة اختلالات هرمونية: يمكن استخدام سبيرو لإدارة حالات مثل متلازمة المبيض المتعدد الكيسات (PCOS) أو اختلالات الهرمونية التي قد تسبب مخالفات الحيض أو أعراض أخرى.</p><p><br/></p><p>4. علاج ارتفاع ضغط الدم: سبيرو هو مدر للبول ويمكن أن يساعد في خفض ضغط الدم عن طريق تقليل كمية الملح والماء المحتجز في الجسم.</p><div><br/></div></div>
 
-<div><img width="100%" height="auto" src="https://glamgirlx.com/media/images/99bc963a-f2f4-4d42-b090-66a07a7d41b8.png" id="img18" alt="شراء على"/><p>بواسطة Daisy / <a href="/ar/why-do-people-implant-nfc" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=99bc963a-f2f4-4d42-b090-66a07a7d41b8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=99bc963a-f2f4-4d42-b090-66a07a7d41b8&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-of-taking-south-lot-wrote" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=29f57b23-5d66-410c-a404-0f398662e45e" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=29f57b23-5d66-410c-a404-0f398662e45e&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="19" style="white-space: pre-wrap;"><p>ما الذي يسبب الصداع النصفي وكيف يعاملون؟</p><p><br/></p><p>الصداع النصفي عبارة عن صداع شديد غالبًا ما يكون مصحوبًا بأعراض أخرى مثل الغثيان ، وحساسية الضوء والصوت ، والاضطرابات البصرية. لا يتم فهم السبب الدقيق للصداع النصفي تمامًا ، ولكن يُعتقد أنه مرتبط بالتغيرات في تدفق الدم والمواد الكيميائية في الدماغ.</p><p><br/></p><p>يتضمن علاج الصداع النصفي عادةً مزيجًا من تغييرات نمط الحياة والأدوية والعلاجات البديلة. تشمل بعض خيارات العلاج الشائعة:</p><p><br/></p><p>1. أخذ مسكنات الألم دون وصفة طبية مثل الإيبوبروفين أو الأسيتامينوفين</p><p>2. الأدوية الموصوفة المصممة خصيصًا لعلاج الصداع النصفي ، مثل Triptans و Ergotamines</p><p>3. تجنب المشغلات مثل بعض الأطعمة أو الإجهاد أو قلة النوم أو التغيرات الهرمونية</p><p>4. ممارسة تقنيات الاسترخاء مثل التنفس العميق أو التأمل</p><p>5. تطبيق عبوات ساخنة أو باردة على الرأس أو الرقبة</p><p>6. الحصول على ممارسة الرياضة بانتظام والحفاظ على نظام غذائي صحي</p><p><br/></p><p>من المهم للأفراد الذين يعانون من الصداع النصفي العمل مع مقدم الرعاية الصحية الخاص بهم لوضع خطة علاجية مصممة لتلبية احتياجاتهم ومحفزاتهم المحددة. في بعض الحالات ، قد تكون هناك حاجة إلى مزيج من العلاجات لإدارة الصداع النصفي بشكل فعال وتحسين نوعية الحياة.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/what-causes-migraine-and-how" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=ed51399a-290d-40e4-8402-70d30c9e9bf7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=ed51399a-290d-40e4-8402-70d30c9e9bf7&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/what-causes-migraine-and-how" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=ed51399a-290d-40e4-8402-70d30c9e9bf7" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=ed51399a-290d-40e4-8402-70d30c9e9bf7&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="20" style="white-space: pre-wrap;"><p>ما هي فوائد أخذ البروجسترون؟</p><p><br/></p><p>1. ينظم دورة الحيض: يلعب هرمون البروجسترون دورًا رئيسيًا في تنظيم الدورة الشهرية ويمكن أن يساعد في استعادة التوازن للأفراد الذين لديهم فترات غير منتظمة.</p><p><br/></p><p>2. يدعم الخصوبة: هرمون البروجسترون ضروري للحفاظ على الحمل الصحي من خلال إعداد الرحم لزرع ودعم نمو الجنين.</p><p><br/></p><p>3. يساعد في تحقيق التوازن بين الهرمونات: يعمل هرمون البروجسترون في وئام مع هرمون الاستروجين للحفاظ على التوازن الهرموني في الجسم ، مما يمكن أن يساعد في تخفيف أعراض الاختلالات الهرمونية مثل PMS ، وانقطاع الطمث ، والتكامل.</p><p><br/></p><p>4. يحسن الحالة المزاجية: لقد ثبت أن البروجسترون له تأثير مهدئ على الدماغ ويمكن أن يساعد في تقليل أعراض القلق والاكتئاب.</p><p><br/></p><p>5. يدعم صحة العظام: يعمل البروجسترون مع هرمونات أخرى مثل هرمون الاستروجين والستوستيرون لدعم كثافة العظام وتقليل خطر الإصابة بهشاشة العظام.</p><p><br/></p><p>6. يحسن النوم: يمكن أن يساعد البروجسترون في تنظيم دورة النوم ويحسن جودة النوم.</p><p><br/></p><p>7. يدعم صحة الجلد: يمكن أن يكون للبروجسترون تأثير إيجابي على صحة الجلد من خلال تعزيز إنتاج الكولاجين وتقليل الالتهاب.</p><p><br/></p><p>8. يقلل من خطر الإصابة ببعض السرطانات: لقد ثبت أن البروجسترون له تأثير وقائي ضد أنواع معينة من السرطان ، مثل سرطان بطانة الرحم.</p><p><br/></p><p>من المهم أن نلاحظ أنه ينبغي استخدام البروجسترون تحت إشراف مقدم الرعاية الصحية ، حيث يمكن أن يكون له آثار جانبية وتفاعلات مع الأدوية الأخرى.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-of-taking" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=792a0c0c-bd68-4f2e-a3a4-23bf80331bae" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=792a0c0c-bd68-4f2e-a3a4-23bf80331bae&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-of-taking" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=792a0c0c-bd68-4f2e-a3a4-23bf80331bae" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=792a0c0c-bd68-4f2e-a3a4-23bf80331bae&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="21" style="white-space: pre-wrap;"><p>ما هي فوائد وجود كاميرا أمان؟</p><p><br/></p><p>1. ردع النشاط الإجرامي - يمكن أن تعمل الكاميرات الأمنية كرادع للمجرمين المحتملين ، لأنهم أقل عرضة لارتكاب جريمة إذا كانوا يعلمون أنها تتم مراقبة.</p><p><br/></p><p>2. المراقبة والمراقبة - تتيح لك كاميرات الأمن مراقبة الممتلكات الخاصة بك والتراقب أي نشاط مشبوه في الوقت الفعلي ، مما يساعد على منع السرقة أو التخريب أو الجرائم الأخرى.</p><p><br/></p><p>3. الأدلة في حالة وجود جريمة - في حالة حدوث جريمة مؤسف على الممتلكات الخاصة بك ، يمكن أن توفر لقطات الكاميرا الأمنية أدلة حاسمة لمطالبات إنفاذ القانون ومطالبات التأمين.</p><p><br/></p><p>4. الوصول عن بُعد - تقدم العديد من كاميرات الأمان الآن إمكانيات المشاهدة عن بُعد ، مما يتيح لك التحقق من الممتلكات الخاصة بك من أي مكان باستخدام هاتفك الذكي أو الكمبيوتر.</p><p><br/></p><p>5. راحة البال - يمكن أن يوفر كاميرات أمنية مثبتة راحة البال ، مع العلم أن الممتلكات الخاصة بك يتم رصدها وأن يتم اكتشاف التهديدات المحتملة وتسجيلها.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-to-having" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=5ea08b12-a085-4b4e-b52f-04f8d3e6821c" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=5ea08b12-a085-4b4e-b52f-04f8d3e6821c&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/what-are-the-benefits-to-having" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=5ea08b12-a085-4b4e-b52f-04f8d3e6821c" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=5ea08b12-a085-4b4e-b52f-04f8d3e6821c&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="22" style="white-space: pre-wrap;"><p>كيف ينمو سوق التشفير بهذه السرعة؟</p><p><br/></p><p>هناك العديد من العوامل التي تسهم في النمو السريع لسوق العملة المشفرة. </p><p><br/></p><p>1. زيادة الوعي والتبني: مع إدراك المزيد من الناس بالعملات المشفرة وفوائدهم المحتملة ، نما الطلب على استثمارات العملة المشفرة بشكل كبير. أدى هذا الاهتمام المتزايد إلى زيادة عدد المستخدمين والمستثمرين المشاركين في السوق.</p><p><br/></p><p>2. المشاركة المؤسسية: على مدى السنوات القليلة الماضية ، رأينا عددًا متزايدًا من المستثمرين المؤسسيين ، مثل صناديق التحوط والبنوك والمؤسسات المالية الأخرى ، والمشاركة في سوق العملة المشفرة. وقد أضاف هذا المصداقية إلى السوق وجذب المزيد من المستثمرين.</p><p><br/></p><p>3. التطورات التكنولوجية: جعلت التطورات التكنولوجية في مساحة blockchain من الأسهل إنشاء عملات مشفرة جديدة وتداولها. بالإضافة إلى ذلك ، فإن التطورات في التدابير الأمنية والأطر التنظيمية جعلت السوق أكثر جاذبية للمستثمرين.</p><p><br/></p><p>4. تقلبات السوق: جذبت الطبيعة المتقلبة للغاية لسوق العملة المشفرة التجار والمستثمرين الذين يتطلعون إلى الاستفادة من تقلبات الأسعار وتحقيق أرباح كبيرة في فترة زمنية قصيرة نسبيًا.</p><p><br/></p><p>5. القبول العالمي: يتم قبول العملات المشفرة الآن كشكل من أشكال الدفع من خلال عدد متزايد من التجار والشركات في جميع أنحاء العالم. وقد ساعد ذلك في إضفاء الشرعية على العملات المشفرة كبديل قابل للتطبيق لعملات فيات التقليدية.</p><p><br/></p><p>بشكل عام ، ساهمت هذه العوامل في النمو السريع لسوق العملة المشفرة ومن المحتمل أن تستمر في قيادة توسعها في المستقبل.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-is-the-crypto-market" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=1aaa0f98-077a-4947-99dd-e44d31779be2" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=1aaa0f98-077a-4947-99dd-e44d31779be2&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-is-the-crypto-market" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=1aaa0f98-077a-4947-99dd-e44d31779be2" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=1aaa0f98-077a-4947-99dd-e44d31779be2&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="23" style="white-space: pre-wrap;"><p>هل السكر غير صحي حقا؟</p><p><br/></p><p>يمكن أن يؤدي الاستهلاك المفرط للسكر إلى مختلف القضايا الصحية ، مثل زيادة الوزن والسمنة ومرض السكري وأمراض القلب ومشاكل الأسنان. يوصى بالحد من تناول السكريات المضافة في نظامنا الغذائي للحفاظ على صحة جيدة. ومع ذلك ، لا تعتبر السكريات الطبيعية الموجودة في الفواكه والخضروات ضارة بكميات معتدلة ويمكن أن تكون جزءًا من نظام غذائي صحي. الاعتدال هو المفتاح عندما يتعلق الأمر باستهلاك السكر.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/is-sugar-really-unhealthy" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=6d9e9b96-31a2-4ba7-96c7-5e4f29dc3eb5" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=6d9e9b96-31a2-4ba7-96c7-5e4f29dc3eb5&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/is-sugar-really-unhealthy" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=6d9e9b96-31a2-4ba7-96c7-5e4f29dc3eb5" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=6d9e9b96-31a2-4ba7-96c7-5e4f29dc3eb5&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="24" style="white-space: pre-wrap;"><p>كيف ألتقط أفضل الصور لنفسي؟</p><p><br/></p><p>1. الإضاءة: الضوء الطبيعي هو الأفضل دائمًا لالتقاط الصور. ضع نفسك في مواجهة نافذة أو اذهب للخارج للاستفادة من ضوء الشمس الطبيعي. تجنب الإضاءة العلوية القاسية أو أشعة الشمس المباشرة ، حيث يمكن أن تخلق ظلال غير متوقعة على وجهك.</p><p><br/></p><p>2. الخلفية: اختر خلفية نظيفة ومرتببة لتجنب الانحرافات في صورك. يمكن أن يعمل جدار عادي ، أو إعداد في الهواء الطلق ، أو خلفية بسيطة ، بشكل جيد لتسليط الضوء على نفسك في الصورة.</p><p><br/></p><p>3. تشكل: جرب مع وجود أوضاع مختلفة للعثور على ما يطيل ميزاتك أكثر من غيرها. تجنب الزوايا المحرجة ، وبدلاً من ذلك ، حاول إطالة رقبتك وإمالة رأسك قليلاً لإنشاء مظهر أكثر إغراء.</p><p><br/></p><p>4. التكوين: انتبه إلى تكوين صورك. استخدم قاعدة الثلث عن طريق وضع نفسك خارج المركز في الإطار لإنشاء صورة أكثر جاذبية بصريًا. يمكنك أيضًا تجربة زوايا ووجهات نظر مختلفة لإضافة اهتمام لصورك.</p><p><br/></p><p>5. الابتسامة والتعبير: يمكن للابتسامة الحقيقية أن ترفع صورك على الفور. استرخ وجهك ، فكر في شيء يجعلك سعيدًا ، ودع ابتسامتك الطبيعية تتألق. أيضا ، جرب تعبيرات الوجه المختلفة لنقل مزاج وعواطف مختلفة في صورك.</p><p><br/></p><p>6. استخدم Timer أو Selfie Stick: للحصول على لقطة ثابتة ومؤلفة جيدًا ، فكر في استخدام مؤقت على الكاميرا أو عصا شخصية لتوسيع نطاق وصولك إلى إطار أوسع. سيساعدك هذا على تجنب صور شخصية ضبابية أو غير مرغوب فيها.</p><p><br/></p><p>7. قم بتحرير صورك: بعد التقاط صورك ، استخدم أدوات أو تطبيقات تحرير الصور لتحسين الألوان والإضاءة والمظهر العام لصورك. يمكنك ضبط السطوع والتباين والتشبع لجعل صورك تنبثق.</p><p><br/></p><p>تذكر أن الممارسة تجعلها مثالية ، لذلك لا تخف من التجربة والاستمتاع أثناء التقاط صور لنفسك.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-take-the-best-photos-consonant-thing-it" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=5b6eb9e0-3821-45bf-b7a1-22436a6fb150" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=5b6eb9e0-3821-45bf-b7a1-22436a6fb150&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-take-the-best-photos-consonant-thing-it" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=5b6eb9e0-3821-45bf-b7a1-22436a6fb150" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=5b6eb9e0-3821-45bf-b7a1-22436a6fb150&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -3751,22 +3751,22 @@ source venv/bin/activate
 
 <div id="25" style="white-space: pre-wrap;"><p>كيف أجد عملاء لأعمال تطوير الويب الخاصة بي؟</p><p><br/></p><p>فيما يلي بعض الاستراتيجيات التي يمكنك استخدامها لجذب العملاء لأعمال تطوير الويب الخاصة بك:</p><p><br/></p><p>1. بناء وجود قوي عبر الإنترنت: قم بإنشاء موقع ويب احترافي يعرض خدماتك ومحفظة وشهادات العميل. استخدم قنوات التواصل الاجتماعي للترويج لعملك والتفاعل مع العملاء المحتملين.</p><p><br/></p><p>2. الشبكة: حضور أحداث الصناعة والمؤتمرات والاجتماعات للتواصل مع المهنيين الآخرين في هذا المجال والعملاء المحتملين. انضم إلى المجتمعات والمنتديات عبر الإنترنت المتعلقة بتطوير الويب لتوسيع شبكتك.</p><p><br/></p><p>3. عرض حوافز الإحالة: شجع العملاء الراضين على إحالة خدماتك إلى الآخرين من خلال تقديم خصومات أو حوافز أخرى للإحالات الناجحة.</p><p><br/></p><p>4. التعاون مع الشركات الأخرى: شريك مع وكالات التسويق الرقمي أو مصممي الجرافيك أو غيرهم من المهنيين الذين قد يحتاجون إلى خدمات تطوير الويب لعملائهم.</p><p><br/></p><p>5. الإعلان: استثمر في الإعلانات عبر الإنترنت من خلال Google Adwords أو إعلانات الوسائط الاجتماعية أو عرض الإعلانات للوصول إلى جمهور أوسع.</p><p><br/></p><p>6. التوعية الباردة: تواصل مع العملاء المحتملين مباشرة من خلال البريد الإلكتروني أو الهاتف ، وعرض خدماتك وأعمالك السابقة.</p><p><br/></p><p>7. تسويق المحتوى: قم بإنشاء محتوى قيمة مثل منشورات المدونة أو البيضاء أو الندوات التي تُظهر خبرتك في تطوير الويب وجذب العملاء المحتملين من خلال محركات البحث والوسائط الاجتماعية.</p><p><br/></p><p>8. حضور المعارض التجارية والأحداث: شارك في المعارض التجارية والفعاليات الصناعية للتواصل مع العملاء المحتملين وعرض خدماتك.</p><p><br/></p><p>9. تقديم مشاورات مجانية: تقديم مشاورات مجانية للعملاء المحتملين لمناقشة احتياجاتهم وكيف يمكن أن تساعدهم خدماتك على تحقيق أهدافهم.</p><p><br/></p><p>10. اطلب من المراجعات والشهادات: تشجيع العملاء الراضين على ترك المراجعات والشهادات على موقع الويب الخاص بك أو منصات المراجعة الأخرى لبناء المصداقية وجذب عملاء جدد.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-find-customers-for-my" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=f3f75834-0f4e-476f-8ee4-9969838426a4" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=f3f75834-0f4e-476f-8ee4-9969838426a4&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-find-customers-for-my" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=f3f75834-0f4e-476f-8ee4-9969838426a4" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=f3f75834-0f4e-476f-8ee4-9969838426a4&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="26" style="white-space: pre-wrap;"><p>كيف يمكنني بناء خادم بريد مع Postfix؟</p><p><br/></p><p>لإنشاء خادم بريد مع postfix ، اتبع الخطوات هذه:</p><p><br/></p><p>1. تثبيت PostFix: استخدم Manager Package لتثبيت PostFix على الخادم الخاص بك. على سبيل المثال ، على Debian/Ubuntu ، يمكنك تشغيل `sudo apt-get تثبيت postfix`.</p><p><br/></p><p>2. تكوين postfix: توجد ملفات تكوين postfix في `/etc/postfix/`. ملف التكوين الرئيسي هو `main.cf`. يمكنك تحرير هذا الملف لإعداد خادم البريد الخاص بك وفقًا لمتطلباتك. تتضمن بعض التكوينات الشائعة التي قد تحتاج إلى تعيينها اسم المجال ، وإعدادات ترحيل البريد ، والمجالات الافتراضية ، إلخ.</p><p><br/></p><p>3. إعداد سجلات DNS: لضمان تسليم البريد ، تحتاج إلى إعداد سجلات DNS اللازمة (MX و SPF سجلات) لمجالك. اتصل بمسجل النطاق أو مزود DNS للحصول على المساعدة إذا لزم الأمر.</p><p><br/></p><p>4. تكوين المجالات الافتراضية والمستخدمين: إذا كنت ترغب في استضافة مجالات متعددة على خادم البريد الخاص بك ، فستحتاج إلى تكوين المجالات الافتراضية والمستخدمين. يمكن القيام بذلك باستخدام إعدادات `virtual_alias_maps` و` virtual_mailbox_maps` في ملف تكوين postfix.</p><p><br/></p><p>5. تأمين خادم البريد الخاص بك: تأكد من أن خادم البريد الخاص بك آمن من خلال إعداد قواعد جدار الحماية ، وذلك باستخدام تشفير TLS للبريد الوارد والصادر ، وتنفيذ تدابير أمان أخرى موصى بها لخوادم البريد.</p><p><br/></p><p>6. اختبر خادم البريد الخاص بك: بمجرد إعداد كل شيء ، يجب عليك اختبار خادم البريد الخاص بك عن طريق إرسال واستلام رسائل البريد الإلكتروني للاختبار. استخدم أدوات مثل Telnet أو MailX لإرسال رسائل البريد الإلكتروني يدويًا والتحقق مما إذا كانت قد تم استلامها بنجاح.</p><p><br/></p><p>تذكر أن تحديث خادم البريد الخاص بك وصيانته بشكل دوري للتأكد من تشغيله بسلاسة وأمان. من الجيد أيضًا مراقبة سجلات خادم البريد لأي مشكلات أو نشاط مشبوه.</p></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-build-a-mail-server" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-build-a-mail-server" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="27" style="white-space: pre-wrap;"><p>كيف ألتقط أفضل الصور لنفسي؟</p><p><br/></p><p>1. الإضاءة: الضوء الطبيعي هو الأفضل دائمًا لالتقاط الصور. ضع نفسك في مواجهة نافذة أو اذهب للخارج للاستفادة من ضوء الشمس الطبيعي. تجنب الإضاءة العلوية القاسية أو أشعة الشمس المباشرة ، حيث يمكن أن تخلق ظلال غير متوقعة على وجهك.</p><p><br/></p><p>2. الخلفية: اختر خلفية نظيفة ومرتببة لتجنب الانحرافات في صورك. يمكن أن يعمل جدار عادي ، أو إعداد في الهواء الطلق ، أو خلفية بسيطة ، بشكل جيد لتسليط الضوء على نفسك في الصورة.</p><p><br/></p><p>3. تشكل: جرب مع وجود أوضاع مختلفة للعثور على ما يطيل ميزاتك أكثر من غيرها. تجنب الزوايا المحرجة ، وبدلاً من ذلك ، حاول إطالة رقبتك وإمالة رأسك قليلاً لإنشاء مظهر أكثر إغراء.</p><p><br/></p><p>4. التكوين: انتبه إلى تكوين صورك. استخدم قاعدة الثلث عن طريق وضع نفسك خارج المركز في الإطار لإنشاء صورة أكثر جاذبية بصريًا. يمكنك أيضًا تجربة زوايا ووجهات نظر مختلفة لإضافة اهتمام لصورك.</p><p><br/></p><p>5. الابتسامة والتعبير: يمكن للابتسامة الحقيقية أن ترفع صورك على الفور. استرخ وجهك ، فكر في شيء يجعلك سعيدًا ، ودع ابتسامتك الطبيعية تتألق. أيضا ، جرب تعبيرات الوجه المختلفة لنقل مزاج وعواطف مختلفة في صورك.</p><p><br/></p><p>6. استخدم Timer أو Selfie Stick: للحصول على لقطة ثابتة ومؤلفة جيدًا ، فكر في استخدام مؤقت على الكاميرا أو عصا شخصية لتوسيع نطاق وصولك إلى إطار أوسع. سيساعدك هذا على تجنب صور شخصية ضبابية أو غير مرغوب فيها.</p><p><br/></p><p>7. قم بتحرير صورك: بعد التقاط صورك ، استخدم أدوات أو تطبيقات تحرير الصور لتحسين الألوان والإضاءة والمظهر العام لصورك. يمكنك ضبط السطوع والتباين والتشبع لجعل صورك تنبثق.</p><p><br/></p><p>تذكر أن الممارسة تجعلها مثالية ، لذلك لا تخف من التجربة والاستمتاع أثناء التقاط صور لنفسك.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-take-the-best-photos" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=0b951966-4a67-4040-878c-dc896c86f178" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=0b951966-4a67-4040-878c-dc896c86f178&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-take-the-best-photos" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=0b951966-4a67-4040-878c-dc896c86f178" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=0b951966-4a67-4040-878c-dc896c86f178&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 <div id="28" style="white-space: pre-wrap;"><p>كيف أكتب كتابًا جيدًا؟</p><p><br/></p><p>1. تطوير فكرة أو مفهوم واضحة: قبل البدء في الكتابة ، تأكد من أن لديك فكرة قوية لكتابك. قد تكون هذه مؤامرة أو شخصية أو موضوعًا أو إعدادًا تريد استكشافه في كتاباتك.</p><p><br/></p><p>2. قم بإنشاء مخطط تفصيلي: حدد نقاط المؤامرة الرئيسية والشخصيات وموضوعات كتابك قبل البدء في الكتابة. سيساعدك هذا على البقاء منظمًا وتركيزًا أثناء الكتابة.</p><p><br/></p><p>3. خصص وقتًا مخصصًا للكتابة: إنشاء روتين للكتابة ووضع وقت مخصص كل يوم للعمل على كتابك. سيساعدك هذا على الحفاظ على دوافعهم وإحراز تقدم في كتاباتك.</p><p><br/></p><p>4. فقط ابدأ في الكتابة: في بعض الأحيان ، بدأ الجزء الأصعب في كتابة كتاب. لا تقلق بشأن الكمال في هذه المرحلة ، فقط ابدأ في الكتابة وأسقط أفكارك على الورق.</p><p><br/></p><p>5. انضم إلى مجموعة أو مجتمع للكتابة: فكر في الانضمام إلى مجموعة أو مجتمع للكتابة للحصول على الدعم والتعليقات والتحفيز. يمكن أن تكون الكتابة سعيًا انفراديًا ، لذلك يمكن أن يكون وجود مجتمع من زملائه الكتاب لا يقدر بثمن.</p><p><br/></p><p>6. تحرير ومراجعة: بمجرد الانتهاء من مسودة كتابك ، ارجع ومراجعة وتحريره لتحسين وضوح وكتابك وتدفقه. قد يتضمن ذلك مسودات ومراجعات متعددة قبل أن يكون كتابك جاهزًا للنشر.</p><p><br/></p><p>7. ابحث عن التعليقات: شارك عملك مع الآخرين ، مثل قراء بيتا ، أو مجموعات الكتابة ، أو المحررين المحترفين ، للحصول على ملاحظات حول كتاباتك. يمكن أن يساعدك ذلك في تحديد مجالات التحسين وجعل كتابك أقوى.</p><p><br/></p><p>8. استمر في الكتابة: كتابة كتاب هو ماراثون ، وليس سباق العدو. استمر في المضي قدمًا ، والبقاء متخصصًا ، والاستمرار في العمل على كتابك حتى يكتمل.</p><div><br/></div></div>
 
-<div><p>بواسطة Daisy / <a href="/ar/how-do-i-write-a-good" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/photo/Daisy/?id=295f58c8-1040-49a2-8482-9a257b9e51f8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=295f58c8-1040-49a2-8482-9a257b9e51f8&crypto=ETH" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
+<div><p>بواسطة Daisy / <a href="/ar/how-do-i-write-a-good" title="عرض المشاركة">منظر</a> | <a href="https://lotteh.com/payments/pay/Daisy/?id=295f58c8-1040-49a2-8482-9a257b9e51f8" title="شراء على Lotte Harper">يشتري</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=295f58c8-1040-49a2-8482-9a257b9e51f8&crypto=USDC" title="شراء مع العملة المشفرة Lotte Harper">شراء مع العملة المشفرة</a></p><hr>
 </div>
 
 
@@ -3774,9 +3774,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="شارك على Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Far%2Fnews%3F&quote=Three%20Thirteen%20-%20Online%20Card%20Game&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="شارك على Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Far%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="شارك على Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Three%20Thirteen%20-%20Online%20Card%20Game%20-&url=https://glamgirlx.com/ar/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="شارك على Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/ar/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="مشاركة على Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/ar/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3788,7 +3788,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="مشاركة على Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/ar/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="مشاركة على رديت" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/ar/news?&title=Three%20Thirteen%20-%20Online%20Card%20Game"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="مشاركة على رديت" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/ar/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>
@@ -3806,7 +3806,7 @@ source venv/bin/activate
 </div>
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3843,12 +3843,16 @@ source venv/bin/activate
     </div>
   </div>
 </div>
-</p>
+
         <p><i>اترك لي نصيحة في البيتكوين باستخدام هذا العنوان:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="عنوان النسخ" onclick="copyToClipboard('btc-wallet');">ينسخ</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="قم بزيارتي على Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="قم بزيارتي على Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="شاهدني على يوتيوب" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=ar" title="انظر شروط الخدمة">شروط الخدمة</a></span></p>
 		    </div>
@@ -4062,34 +4066,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "شارك هذه الصفحة عن طريق مسح رمز الاستجابة السريعة.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

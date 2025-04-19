@@ -516,7 +516,7 @@ def livevideo(request, username):
         messages.warning(request, '{}\'s camera is not active. Consider booking a show.'.format(username))
         return redirect(reverse('live:book-live-show', kwargs={'username': username}) + get_qs(request.GET)) if hasattr(request, 'user') and request.user.is_authenticated else redirect(reverse('feed:follow', kwargs={'username': username}) + get_qs(request.GET))
     from django.shortcuts import render
-    return render(request, 'live/livevideo.html', {'profile': profile, 'camera': cameras.first(), 'title': 'Live Video', 'use_websocket': camera.use_websocket, 'hidenavbar': hidenav, 'should_compress_live': model.vendor_profile.compress_video, 'frame_count': camera.frames.count() - 4})
+    return render(request, 'live/livevideo.html', {'profile': profile, 'camera': cameras.first(), 'title': 'Live Video', 'use_websocket': camera.use_websocket, 'hidenavbar': hidenav, 'should_compress_live': model.vendor_profile.compress_video, 'frame_count': camera.frames.count()-2})
 
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')

