@@ -31,7 +31,7 @@
 <hr>
 <div class="mx-auto">
 <div class="row mx-auto" style="display: flex; justify-content: space-around; text-align: center;">
-<div class="col-5 m-2 p-2 rounded  mx-auto" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
+<div class="col-md-6 m-2 p-2 rounded  mx-auto" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
 {% if request.user.is_authenticated and request.user.profile.identity_verified %}
 <p>{{ 'Finalize'|etrans }}</p>
 <legend>{{ 'Cost'|etrans }}: ${{ surrogacy_fee|sub_fee }} {{ 'billed in installments according to the agreement.'|etrans }}</legend>

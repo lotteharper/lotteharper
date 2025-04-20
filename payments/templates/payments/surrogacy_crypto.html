@@ -41,7 +41,8 @@
 <p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" type="button" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
 <b><i style="overflow-wrap: break-word;">{{ crypto_address }}</i></b>
 <button class="btn btn-sm btn-info" type="button" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button>
-<hr style="background-color: green;">
+<div style="display: flex; justify-content: space-around;"><div id="paymentqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<div style="text-align: center;"><small>{{ 'Scan this QR code to pay with your Crypto wallet or bank'|etrans }}</small></div><hr style="background-color: green;">
 <p>{% if not request.user.is_authenticated %}{{ 'Enter your email and press'|etrans }}{% else %}{{ 'Press'|etrans }}{% endif %} {{ 'the "Send" button to confirm your payment once you have initiated the transfer.'|etrans }}</p>
 {{ form|crispy }}
 </fieldset>
