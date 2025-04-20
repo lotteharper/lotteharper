@@ -918,7 +918,7 @@ def surrogacy(request, username):
     agreement = render_agreement(vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user.verifications.last().full_name if request.user.is_authenticated and request.user.verifications.last() else None, vendor).replace('__________________________________, Surrogate Mother', '{}, {}'.format(signature if signature else '__________________________________', sgm_t), 1).replace('__________________________________, Intended Parent', '{}, {}'.format(parent_signature if parent_signature else '__________________________________', inp_t), 1)
     post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
-    r = render(request, 'payments/surrogacy.html', {'title': 'Surrogacy Plans', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'post': post, 'vendor': vendor, 'agreement': agreement, 'surrogacy_fee': settings.SURROGACY_FEE, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'preload': False})
+    r = render(request, 'payments/surrogacy.html', {'title': 'Surrogacy Plans', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'post': post, 'vendor': vendor, 'agreement': agreement, 'surrogacy_fee': settings.SURROGACY_FEE, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'preload': False, 'down_payment': settings.SURROGACY_DOWN_PAYMENT, 'weekly_payment': (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36})
     if request.user.is_authenticated: patch_cache_control(r, private=True)
     else: patch_cache_control(r, public=True)
     return r
@@ -2054,7 +2054,7 @@ def surrogacy_crypto(request, username):
     usd_fee = user.vendor_profile.subscription_fee
     from .forms import BitcoinPaymentForm, BitcoinPaymentFormUser
     from payments.apis import get_crypto_price
-    fee = round(float(settings.SURROGACY_FEE) / get_crypto_price(crypto), settings.BITCOIN_DECIMALS)
+    fee = round(float(settings.SURROGACY_DOWN_PAYMENT) / get_crypto_price(crypto), settings.BITCOIN_DECIMALS)
     fee_reduced = format(fee, '.{}f'.format(settings.BITCOIN_DECIMALS))
     if request.method == 'POST':
         form = BitcoinPaymentForm(request.POST) if not request.user.is_authenticated else BitcoinPaymentFormUser(request.POST)
@@ -2099,4 +2099,4 @@ def surrogacy_crypto(request, username):
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     from django.shortcuts import render
     from crypto.currencies import CRYPTO_CURRENCIES
-    return render(request, 'payments/surrogacy_crypto.html', {'title': 'Pay with Crypto', 'model': user.profile, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address, 'stripe_key': settings.STRIPE_PUBLIC_KEY})
+    return render(request, 'payments/surrogacy_crypto.html', {'title': 'Pay with Crypto', 'model': user.profile, 'surrogacy_fee': settings.SURROGACY_FEE, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address, 'stripe_key': settings.STRIPE_PUBLIC_KEY, 'down_payment': settings.SURROGACY_DOWN_PAYMENT, 'weekly_payment': (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36})

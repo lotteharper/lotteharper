@@ -734,9 +734,9 @@ def update_surrogacy_plans():
     import datetime
     from django.conf import timezone
     from dateutil.relativedelta import relativedelta
-    for plan in SurrogacyPlan.objects.filter(unpaid__gt=0, timestamp__gte=timezone.now() - relativedelta(months=int(settings.SURROGACY_FEE/settings.SURROGACY_INSTALLMENT_SIZE) + 1), completed=False, signed=True).order_by('-timestamp'):
+    for plan in SurrogacyPlan.objects.filter(unpaid__gt=0, timestamp__gte=timezone.now() - relativedelta(weeks=37), completed=False, signed=True).order_by('-timestamp'):
         from payments.invoice import generate_invoice
-        price = settings.SURROGACY_INSTALLMENT_FEE if plan.unpaid > settings.SURROGACY_INSTALLMENT_FEE else plan.unpaid
+        price = (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36
         if price > 0:
             generate_invoice(plan.mother, plan.expected_parent, price, 'This invoice is for the remaining balance of your surrogacy plan with {}, which is ${}.'.format(plan.mother.profile.name, str(round(price, 2))))
 

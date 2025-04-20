@@ -34,7 +34,8 @@
 <div class="col-5 m-2 p-2 rounded  mx-auto" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
 {% if request.user.is_authenticated and request.user.profile.identity_verified %}
 <p>{{ 'Finalize'|etrans }}</p>
-<legend>{{ 'Cost'|etrans }}: ${{ surrogacy_fee|sub_fee }} {{ 'billed once'|etrans }}</legend>
+<legend>{{ 'Cost'|etrans }}: ${{ surrogacy_fee|sub_fee }} {{ 'billed in installments according to the agreement.'|etrans }}</legend>
+<p>The down payment required to begin the plan is ${{ down_payment }}. Payments will be invoiced according to a 36 week term after confirmation of pregnancy. Weekly payment of ${{ weekly_payment|sub_fee }} is required and will be invoiced.</p>
 <div style="display: flex; justify-content: space-around;">
 <form id="pay-form" onsubmit="event.preventDefault(); payFee();">
 {{ form|crispy }}
@@ -54,7 +55,7 @@
 {% if request.user.is_authenticated and request.user.profile.identity_verified %}
 var product = 'surrogacy';
 var pid = {{ vendor.id }};
-var price = {{ surrogacy_fee }};
+var price = {{ down_payment }};
 var vendor = {{ vendor.id }};
 var payForm = document.getElementById('pay-form');
 {% if payment_processor == 'paypal' %}
