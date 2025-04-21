@@ -11,4 +11,4 @@
 #*/10 * * * * sudo systemctl start daphne
 #*/10 * * * * sudo systemctl start celery
 0 * * * * sudo systemctl start clamav-daemon
-0 * * * * sudo systemctl start celery
+*/15 * * * * sudo systemctl start celery
