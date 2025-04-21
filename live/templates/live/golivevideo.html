@@ -175,7 +175,7 @@ function startup() {
         var file = new Blob(mediaChunks, {'type': mimeType});
 	    mediaChunks = [];
         var formdata = new FormData(form);
-		var utc_timestamp = String(new Date().getTime());
+		var utc_timestamp = String(new Date().toISOString());
         formdata.append('confirmation_id', String(Math.floor(Math.random() * 1000000000)));
         formdata.append('timestamp', utc_timestamp);
         var id = formdata.get('confirmation_id');	   

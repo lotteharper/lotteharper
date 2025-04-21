@@ -64,8 +64,11 @@ def update_camera(camera_user, camera_name, camera_data, key=None):
     if not identity_really_verified(camera.user): raise PermissionDenied()
     camera.last_frame = timezone.now()
     camera_data = camera_data.split("&")
-    timestamp = int(camera_data[4].split('=', 1)[1])
-    timestamp = datetime.datetime.utcfromtimestamp(timestamp / 1000) - datetime.timedelta(hours=7) #, tz=pytz.UTC)
+    timestamp = urllib.parse.unquote(camera_data[4].split('=', 1)[1])
+    print(timestamp)
+    timestamp = datetime.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    timestamp = timestamp + datetime.timedelta(minutes=1)
+#    timestamp = datetime.datetime.utcfromtimestamp(timestamp / 1000) - datetime.timedelta(hours=7) #, tz=pytz.UTC)
     frame_data = urllib.parse.unquote(camera_data[5].split('=', 1)[1]).split(',')[1]
     path = os.path.join(settings.MEDIA_ROOT, get_file_path(camera, 'frame.webm'))
     with open(path, "wb") as file:
@@ -86,7 +89,8 @@ def update_camera(camera_user, camera_name, camera_data, key=None):
         else:
             recording = recordings.first()
 #, public=False if Show.objects.filter(start__lte=timezone.now() + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).count() > 0 else True, recipient=show.user if show else None
-        if recording.last_frame < timezone.now() - datetime.timedelta(seconds=int(settings.LIVE_INTERVAL/1000) * 5) or (recording.frames.first() and ((recording.last_frame - recording.frames.first().time_captured).total_seconds() > settings.RECORDING_LENGTH_SECONDS)) or (camera.short_mode and (recording.frames.first() and ((recording.last_frame - recording.frames.first().time_captured).total_seconds() > settings.LIVE_SHORT_SECONDS))):
+        print(timezone.now())
+        if recording.last_frame < timezone.now() - datetime.timedelta(seconds=int(settings.LIVE_INTERVAL/1000) * 5) or (recording.frames.order_by('time_captured').first() and ((recording.last_frame - recording.frames.order_by('time_captured').first().time_captured).total_seconds() > settings.RECORDING_LENGTH_SECONDS)) or (camera.short_mode and (recording.frames.order_by('time_captured').first() and ((recording.last_frame - recording.frames.order_by('time_captured').first().time_captured).total_seconds() > settings.LIVE_SHORT_SECONDS))):
             print('Creating new recording')
             print(recording.last_frame)
             recording = VideoRecording.objects.create(user=camera.user, camera=camera.name, last_frame=timestamp, compressed=camera.user.vendor_profile.compress_video)

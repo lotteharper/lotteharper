@@ -66,7 +66,7 @@ const videoElement = document.querySelector('video');
 videodiv.style.backgroundImage = '{{ still }}';
 video.poster = '{{ still }}';
 {% endwith %}
-const mimeCodec = "video/webm;codecs=vp9,opus";
+const mimeCodec = "video/webm;codecs=vp8,opus";
 var urls = [];
 var queue = [];
 var files = [];
@@ -173,10 +173,10 @@ function reset(){
     			    }, {{ reload_time }});
         		});
 				socket.addEventListener("message", async function(event) {
-                    if(files.length == 4) {
+                    files.push(event.data);
+                    if(files.length == 1) {
                         startStream();
                     }
-                    files.push(event.data);
                     console.log(event.data);
 /*                    urls.push(event.data);
 					await loadVideo(event.data);
