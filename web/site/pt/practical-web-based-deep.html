@@ -430,7 +430,7 @@ def feed(request):
 
 Agora precisamos fazer com que nosso aplicativo pareça melhor, porque por enquanto parece realmente básico. Podemos fazer isso usando CSS, embutido ou em classes vinculadas a cada objeto no documento. CSS é muito bom porque diz tudo na página como deve parecer,e pode fazer com que pareça muito bom. Existem algumas bibliotecas que podem fazer isso, mas minha entrada pessoal é o bootstrap. 
 
-Bootstrap pode ser baixado de seu site,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">Getbootstrap.com/</a>. Uma vez lá, pressione o botão para ler os documentos de instalação e copie o código da seção Incluir via CDN. Você precisará desse código na parte superior do seu documento HTML, em uma tag chamada Head. Além disso, vamos em frente e criar um modelo de base para que não precisemos recriar esses links em cada modelo. 
+Bootstrap pode ser baixado de seu site,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">getbootstrap.com/</a>. Uma vez lá, pressione o botão para ler os documentos de instalação e copie o código da seção Incluir via CDN. Você precisará desse código na parte superior do seu documento HTML, em uma tag chamada Head. Além disso, vamos em frente e criar um modelo de base para que não precisemos recriar esses links em cada modelo. 
 
 Faça um novo diretório chamado modelos com modelos MKDIR e, em seguida, edite modelos/base.html.
 
@@ -547,7 +547,7 @@ class UserRegisterForm(UserCreationForm):
 </code></pre>Então, temos outra forma aqui, que funciona de maneira justa. É um formulário de registro de usuário com um nome de usuário, email e senha, bem como um campo de senha de confirmar. Observe que este formulário não estende os formulários regulares. Um campo é definido da mesma forma e a meta de classe define o modelo que o formulário corresponde ao restante das informações que serão gravadas no formulário. A maior parte disso já existe no Django's Build In UserCeationForm, por isso usaremos isso como base para a classe (aprovada nos parênteses).
 
 Em seguida, examinaremos a visualização para registrar um usuário, agora que temos um formulário e um modelo. Este é um modelform, assim como o da nova visualização do post. Edite usuários/visualizações.py e adicione o seguinte código:<pre class="language-python"><code>
-# … Importações
+# ... valores
 from .forms import UserRegisterForm
 
 def register(request):
@@ -867,7 +867,7 @@ nano users/views.py
             send_verification_email(user)
 # … (Antes) redirecionar (
 </code></pre>Você não precisa adicionar a primeira e a última linhas nesse trecho de código, apenas verifique se a visualização do registro envia o email de verificação para o usuário. Deve ser assim:<pre class="language-python"><code>
-# … Importações
+# ... valores
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1820,7 +1820,7 @@ Observe que isso é muito Jinja, você pode não ter todas essas variáveis ​�
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/mall&gt;
+      &lt;small&gt;# {{user.id}} &lt;/mall&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -2062,7 +2062,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
+    echo "# !
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2804,7 +2804,7 @@ nano config/etc_postfix_main.cf
 # Debian específico: especificar um nome de arquivo causará o primeiro
 # linha desse arquivo a ser usada como nome.  O padrão do Debian
 # é /etc /mailname.
-# Myorigine = /etc /MailName
+# Myorigin = /etc /MailName
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2868,13 +2868,13 @@ nano config/etc_postfix_master.cf
 # 
 # =================================================== =========================
 # Tipo de serviço privado Unn Unsriv chroot wakeup maxproc comando + args
-# (Sim) (sim) (não) (nunca) (100)
+# (sim) (sim) (não) (nunca) (100)
 # =================================================== =========================
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 Post -Screen
 # SMTPD PASS - - Y - - SMTPD
 # Dnsblog Unix - - y - 0 dnsblog
-# tlsproxy Unix - - y - 0 tlsproxy
+# Tlsproxy Unix - - y - 0 tlsproxy
 # Escolha um: Ative o envio apenas para clientes de loopback ou para qualquer cliente.
 # 127.0.0.1:Submission INET N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2894,13 +2894,13 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restictions = $ mua_client_restictions
 # -o smtpd_helo_restictions = $ mua_helo_restictions
 # -o smtpd_sender_restictions = $ mua_sender_restictions
-# -o smtpd_recipient_restictions =
+# -o smtpd_recipient_trival =
 # -o smtpd_relay_restictions = permit_sasl_authenticated, rejeite
 #   -o milter_macro_daemon_name=ORIGINATING
 # Escolha um: Ative SMTPs apenas para clientes de loopback ou para qualquer cliente.
 # 127.0.0.1:SMTPS INET N - Y - - SMTPD
 # SMTPS INET N - Y - - SMTPD
-# -O syslog_name = postfix/smtps
+# -o syslog_name = postfix/smtps
 # -o smtpd_tls_wragermode = sim
 # -o smtpd_sasl_auth_enable = sim
 # -o smtpd_reject_unlisted_recipient = não
@@ -2914,7 +2914,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# qmgr unix n - n 300 1 oqmg
+# Qmgr unix n - n 300 1 oqmgr
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -2963,7 +2963,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 # Especifique em main.cf um ou mais dos seguintes:
 # Mailbox_transport = LMTP: INET: localhost
-# virtual_transport = lmtp: INET: localhost
+# Virtual_transport = lmtp: INET: localhost
 # 
 # =================================================== ==================
 # 
@@ -3012,7 +3012,7 @@ nano config/etc_default_opendkim
 # Daemon_Opts = ""
 # Alterar para/var/spool/postfix/run/opendkim para usar um soquete UNIX com
 # Postfix em um chroot:
-# Rúndir =/was/spool/pósfix/run/opendkim
+# RúnDir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descomamento para especificar um soquete alternativo
@@ -3108,17 +3108,17 @@ service imap {
   # vsz_limit = $ default_vsz_limit
 
   # Máx. Número de processos IMAP (conexões)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service pop3 {
   # Máx. Número de processos POP3 (conexões)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   # Máx. Número de processos de submissão SMTP (conexões)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -3146,7 +3146,7 @@ service auth-worker {
   # O processo do trabalhador auth é executado como root por padrão, para que possa acessar
   # /etc/sombra. Se isso não for necessário, o usuário deve ser alterado para
   # $ default_interal_user.
-  # Usuário = root
+  # usuário = root
 }
 
 service dict {
@@ -3161,7 +3161,7 @@ service dict {
 </code></pre>Mais uma vez, substitua o domínio em todos esses arquivos, femmebabe.com, com o domínio que você selecionou. Edite o próximo arquivo, a configuração de Dovecot,<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>E adicione essas linhas<pre class="language-bash"><code>
-## Arquivo de configuração Ovecot
+## Arquivo de configuração do DOVECOT
 
 # Se você estiver com pressa, consulte http://wiki2.dovecot.org/quickconfiguration
 
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Mostre mais títulos de processo detalhados (no PS). Atualmente mostra o nome de usuário e
 # Endereço IP. Útil para ver quem está realmente usando os processos IMAP
 # (por exemplo, caixas de correio compartilhadas ou se o mesmo UID for usado para várias contas).
-# Verbose_proctle = bem
+# verbose_proctitle = não
 
 # Se todos os processos forem mortos quando o processo master do DOVECOT se desligar.
 # Definir isso como "não" significa que o Dovecot pode ser atualizado sem
@@ -3251,7 +3251,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;nome&gt;".
 
 dict {
-  # Quota = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # Quota = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 # A maior parte da configuração real é incluída abaixo. Os nomes de arquivos são
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_Opts = ""
 # Alterar para/var/spool/postfix/run/opendkim para usar um soquete UNIX com
 # Postfix em um chroot:
-# RúnDir =/var/spool/postfix/run/opendkim
+# Rúndir =/was/spool/pósfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descomamento para especificar um soquete alternativo
@@ -3380,7 +3380,7 @@ touch scripts/postfixsetup
 sudo chmod a+x scripts/postfixsetup
 nano scripts/postfixsetup
 </code></pre>Agora, em Nano, o editor de texto, edite este arquivo para incluir seu nome de domínio em vez do femmebabe.com.<pre class="language-bash"><code>
-# !
+# !/bin/bash
 # Configurar postfix
 cd $DIR
 echo "Mail services configuration"

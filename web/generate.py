@@ -189,6 +189,7 @@ def generate_site():
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
                 context['path'] = url
+                context['or_image_url'] = post.get_web_url(original=False)
                 if post.feed == 'news': context['hiderrm'] = True
                 context['title'] = translate(request, shorttitle(post.id), lang, 'en')
                 context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
@@ -220,7 +221,6 @@ def generate_site():
                     except:
                         import traceback
                         print(traceback.format_exc())
-#                    print('Overwriting')
         context['hiderrm'] = True
         context['title'] = 'Video Chat'
         context['path'] = '/{}/{}'.format(lang, 'chat')

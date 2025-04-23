@@ -1820,7 +1820,7 @@ Beachten Sie, dass dies eine Menge Jinja ist. Möglicherweise haben Sie möglich
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/small&gt;
+      &lt;small&gt;# {{user.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplayOffset 10
 # X11uselocalHost Ja
-# Pille ja
+# Schädlich ja
 PrintMotd no
 # Printlastlog Ja
 # Tcpkeepalive Ja
@@ -2062,7 +2062,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
+    echo "# ! / bin / bash "&gt;&gt; / usr / bin / $ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # PAM -Konfiguration injizieren und fehlerhafte SSH -Konfiguration entfernen
-# sudo sed -i '' -e '$ d' /tc/pam.d/ssshd
+# Sudo sed -i '' -und $ d '/etc/pam.d/ssshd
 # Sudo sed -i '' -und $ d ' /etc /Profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2804,7 +2804,7 @@ nano config/etc_postfix_main.cf
 # Debian spezifisch: Das Angeben eines Dateinamens verursacht den ersten
 # Zeile dieser Datei, die als Name verwendet werden soll.  Der Debian -Standard
 # ist /etc /mailName.
-# myorigin = /etc /mailName
+# Myorigin = /etc /mailName
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2894,7 +2894,7 @@ submission inet n       -       y       -       -       smtpd
 # -O SMTPD_CLIENT_RESTRIKTIONS = $ MUA_CLIENS_RESTRIKTIONEN
 # -O SMTPD_HELO_RESTRIKTIONS = $ MUA_HELO_RESTRIKTIONS
 # -O SMTPD_SENDER_RESTRIKTIONS = $ MUA_SENDER_RESTRIKTIONS
-# -O SMTPD_RECIPIENT_RESTRIKTIONS =
+# -O SMTPD_RECIPIENT_TRASTRICTIONS =
 # -O SMTPD_RELAY_RESTRIKTIONS = CENN_SASL_AUTHENTICATION, Ablehnung
 # -O milter_macro_daemon_name = Ursprung
 # Wählen Sie eine aus: Aktivieren Sie SMTPS nur für Loopback -Clients oder für einen Kunden.
@@ -2977,7 +2977,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # Altes Beispiel für die Lieferung über Cyrus.
 # 
 # Alt -Cyrus Unix - n n - - Pfeife
-# Flags = r user = cyrus argv =/cyrus/bin/liefer -e -m $ {Erweiterung} $ {user}
+# flags = r user = cyrus argv =/cyrus/bin/liefer -e -m $ {Erweiterung} $ {user}
 # 
 # ====================================================== ===================
 # 
@@ -3012,7 +3012,7 @@ nano config/etc_default_opendkim
 # DAEMON_OPTS=""
 # Wechseln Sie zu/var/spool/postfix/run/opendkim, um eine UNIX -Socket mit zu verwenden
 # Postfix in einem Chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Roundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Überzeugung, um einen alternativen Sockel anzugeben
@@ -3108,17 +3108,17 @@ service imap {
   # vsz_limit = $ default_vsz_limit
 
   # Max. Anzahl der IMAP -Prozesse (Verbindungen)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service pop3 {
   # Max. Anzahl der POP3 -Prozesse (Verbindungen)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   # Max. Anzahl der SMTP -Einreichungsprozesse (Verbindungen)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # DAEMON_OPTS=""
 # Wechseln Sie zu/var/spool/postfix/run/opendkim, um eine UNIX -Socket mit zu verwenden
 # Postfix in einem Chroot:
-# Rundir =/war/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Überzeugung, um einen alternativen Sockel anzugeben

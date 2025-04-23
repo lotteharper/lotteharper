@@ -495,6 +495,7 @@ class Post(models.Model):
         import urllib.parse
         name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 38) if content.rfind(' ', 20, 38) else 38].strip() if content else 'post')).lower()[:255])[:100]
         import re
+        name = name.replace('+', '-')
         name = re.sub(r"-+", '-', name)
         import random, os, urllib
         from django.conf import settings
@@ -512,6 +513,7 @@ class Post(models.Model):
                 for x in range(settings.POST_WORDS + words):
                     ex = ex + ' {}'.format(random.choice(lines)[:-1])
             name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 38) if content.rfind(' ', 20, 38) else 38].strip() if content else 'post')).lower()[:255])[:100]
+            name = name.replace('+', '-')
             name = re.sub(r"-+", '-', name)
             file.close()
             if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0: break

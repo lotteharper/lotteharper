@@ -867,7 +867,7 @@ nano users/views.py
             send_verification_email(user)
 # ... (før) Omdirigering (
 </code></pre>Du behøver ikke at tilføje de første og sidste linjer i dette kodestykket, bare sørg for, at registervisningen sender verifikations -e -mailen til brugeren. Det skal se sådan ud:<pre class="language-python"><code>
-# ... import
+# ... beløb
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1849,7 +1849,7 @@ def toggle_user_active(request, pk):
     return HttpResponse('&lt;i class="bi bi-eye-fill"&gt;&lt;/i&gt;' if user.is_active else '&lt;i class="bi bi-eye-slash-fill"&gt;&lt;/i&gt;')
 
 
-# Beløb
+# Import
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DeleteView
 
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplayOffset 10
 # X11USELOCALHOST JA
-# Pille ja
+# Permittty Ja
 PrintMotd no
 # Printlastlog Ja
 # Tcpkeepalive ja
@@ -2062,7 +2062,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !
+    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2358,7 +2358,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injicer Pam Config og fjern defekt SSH -konfiguration
-# Sudo sed -i '' -og $ d '/etc/pam.d/ssshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/ssshd
 # Sudo sed -i '' -og $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2492,7 +2492,7 @@ Inden vi kører denne kode, er vi nødt til at ændre indstillingerne til den fi
 110 (mailklient)
 80 (http)
 443<pre class="language-bash"><code>
-# !/bin/bash
+# !
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2907,7 +2907,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
-# -o smtpd_recipient_trastrictions =
+# -o smtpd_recipient_restrictions =
 # -o smtpd_relay_restrictions = tilladelse_sasl_authenticeret, afvis
 # -O milter_macro_daemon_name = oprindelse
 # 628 inet n - y - - qmqpd
@@ -2963,7 +2963,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 # Specificer i main.cf en eller flere af følgende:
 # Mailbox_transport = lmtp: inet: localhost
-# Virtual_transport = lmtp: inet: localhost
+# virtual_transport = lmtp: inet: localhost
 # 
 # ================================================ ==================
 # 
@@ -3068,7 +3068,7 @@ service imap-login {
   # Process_min_avail = 0
 
   # Hvis du indstiller service_count = 0, er du sandsynligvis nødt til at vokse dette.
-  # Vsz_limi = $ standard_vsz_limit
+  # vsz_limit = $ standard_vsz_limit
 }
 
 service pop3-login {
@@ -3097,7 +3097,7 @@ service lmtp {
   # Opret INET -lytter kun, hvis du ikke kan bruge ovenstående UNIX -stikkontakt
   # inet_lister lmtp {
     # Undgå at gøre LMTP synlig for hele internettet
-    # Adresse =
+    # adresse =
     # port =
   # }
 }
@@ -3251,7 +3251,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;navn&gt;".
 
 dict {
-  # kvote = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
+  # kvote = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 # De fleste af den faktiske konfiguration bliver inkluderet nedenfor. Filnavne er
@@ -3350,7 +3350,7 @@ nano config/etc_default_opendkim
 # /etc/opendkim.conf i stedet.
 # 
 # Tidligere ville man redigere standardindstillingerne her og derefter udføre
-#  /lib/opendkim/opendkim.service.generate to generate systemd override files at
+# /lib/opendkim/opendkim.service.generate for at generere systemd -tilsidesættelse af filer på
 # /etc/systemd/system/opendkim.service.d/override.conf og
 # /etc/tmpfiles.d/opendkim.conf. Selvom dette stadig er muligt, er det nu
 # anbefales at justere indstillingerne direkte i /etc/opendkim.conf.

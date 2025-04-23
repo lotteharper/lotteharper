@@ -1593,7 +1593,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-#         sendwelcomeemail(request, user)
+# Sendwelcomeemail (request, user)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -3142,7 +3142,7 @@ Note that this is a lot of jinja, you may not have all of these variables define
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{ user.id }}&lt;/small&gt;
+      &lt;small&gt;# {{User.id}} &lt;/Small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -3405,7 +3405,7 @@ KbdInteractiveAuthentication no
 # GSSAPIAuthentication no
 # GSSAPICleanupCredentials yes
 # GSSAPIStrictAcceptorCheck yes
-# Gssapikeyexchange no
+# GSSAPIKeyExchange no
 
 #  Set this to 'yes' to enable PAM authentication, account processing,
 #  and session processing. If this is enabled, PAM authentication will
@@ -3433,7 +3433,7 @@ PrintMotd no
 # Clientalive interval 0
 # ClientAliveCountMax 3
 # Usedns in
-# Pidfile /run/sshd.pid
+# Pidfile /hrun/sshd.pid
 # MaxStartups 10:30:100
 # PEMITTUNL NO
 # ChrootDirectory none
@@ -3442,7 +3442,7 @@ PrintMotd no
 # no default banner path
 Banner /etc/banner
 
-#  Allow client to pass locale environment variables
+# Allow customer to pass local variables variables
 AcceptEnv LANG LC_*
 
 #  override default of no subsystems
@@ -3652,7 +3652,7 @@ sudo service rsyslog restart
 # Nano config
 echo "set tabsize 4" &gt;&gt; .nanorc
 echo "set tabstospaces" &gt;&gt; .nanorc
-# Git config
+#  Git config
 echo "Git configuration"
 sudo git config --global user.email "jasper.camber.holton@gmail.com" &amp;&amp; sudo git config --global user.name "Jasper Holton"
 git config --global user.email "jasper.camber.holton@gmail.com"
@@ -3847,7 +3847,7 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo snap install redis
 sudo systemctl enable apache2
 sudo systemctl start apache2
-# Run Certbot
+#  Run certbot
 sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --email jasper.camber.holton@gmail.com
 #  Reload mail server
 sudo systemctl restart opendkim postfix dovecot
@@ -3961,7 +3961,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# Sudo a2dismod mpm_worker
+# sudo a2dismod mpm_worker
 # sudo a2enmod mpm_prefork
 # Disable Default Site
 sudo a2dissite 000-default
@@ -4092,7 +4092,7 @@ echo "postfix postfix/mailname string femmebabe.com" | sudo debconf-set-selectio
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | sudo debconf-set-selections
 sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
 sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache
-# Enable Clamav Antivirus
+# Enable Clamav antivirus
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
@@ -4643,12 +4643,12 @@ Add these lines:
 # 
 #  ==========================================================================
 #  service type  private unpriv  chroot  wakeup  maxproc command + args
-# (YES) (YES) (No) (Never) (100)
+# (Yes) (Yes) (No) (Never) (100)
 #  ==========================================================================
 smtp      inet  n       -       y       -       -       smtpd
 # smtp      inet  n       -       y       -       1       postscreen
-# smtpd     pass  -       -       y       -       -       smtpd
-# Dnsblog Unix - - Y - 0 Dnsblog
+# SMTPD Pass - - Y - - SMTPD
+# DNSBLOG UNIX - - Y - 0 DNSBLOG
 # tlsproxy  unix  -       -       y       -       0       tlsproxy
 #  Choose one: enable submission for loopback clients only, or for any client.
 # 127.0.0.1:submission inet n -   y       -       -       smtpd
@@ -4669,12 +4669,12 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 #   -o smtpd_helo_restrictions=$mua_helo_restrictions
 #   -o smtpd_sender_restrictions=$mua_sender_restrictions
-# -o smtpd_recipient_trastrictions =
+#   -o smtpd_recipient_restrictions=
 #   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
 # -O MILTER_MACRO_DAEmon_Name = Originating
 #  Choose one: enable smtps for loopback clients only, or for any client.
 # 127.0.0.1:smtps inet n  -       y       -       -       smtpd
-# smtps     inet  n       -       y       -       -       smtpd
+# SMTPS INET N - Y - - SMTPD
 # -O Syslog_Name = PostFix/SMTPS
 #   -o smtpd_tls_wrappermode=yes
 #   -o smtpd_sasl_auth_enable=yes
@@ -4689,7 +4689,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# qmgr unix n - n 300 1 oqmg
+# QMGR UNIX N - N 300 1 OQMGR
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -4809,7 +4809,7 @@ Add these lines:
 # Daemon_opts = ""
 #  Change to /var/spool/postfix/run/opendkim to use a Unix socket with
 #  postfix in a chroot:
-# Rundir =/was/spool/postfix/Run/Opendkim
+# Rundir =/Var/Spool/Postfix/Run/Opendkim
 RUNDIR=/run/opendkim
 # 
 #  Uncomment to specify an alternate socket
@@ -4885,7 +4885,7 @@ service pop3-login {
   }
   inet_listener pop3s {
     # Port = 995
-    # ssl = Yes
+    # ssl = yes
   }
 }
 
@@ -4912,7 +4912,7 @@ service lmtp {
 
 service imap {
   #  Most of the memory goes to mmap()ing files. You may need to increase this
-  #  limit if you have huge mailboxes.
+  # Limit if you have huge mailboxes.
   # VSZ_LIMI = $ Default_vsz_Limit
 
   #  Max. number of IMAP processes (connections)
@@ -4921,12 +4921,12 @@ service imap {
 
 service pop3 {
   #  Max. number of POP3 processes (connections)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service submission {
   #  Max. number of SMTP Submission processes (connections)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -5029,7 +5029,7 @@ And add these lines
 #  can use -i &lt;instance_name&gt; to select which instance is used (an alternative
 #  to -c &lt;config_path&gt;). The instance name is also added to Dovecot processes
 #  in ps output.
-# instance_name = dovecot
+# Instance_name = Dovecot
 
 #  Greeting message for clients.
 # login_greeting = Dovecot ready.
@@ -5081,7 +5081,7 @@ And add these lines
 # "Proxy :: &lt;Name&gt;".
 
 dict {
-  # quota = MySQL: /etc/dovecot/dovecot-dict-sql.conf.ext
+  # quota = MySQL:/andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 #  Most of the actual configuration gets included below. The filenames are
@@ -5178,7 +5178,7 @@ OversignHeaders		From
 #  for domain "example.com" with selector "2020" (2020._domainkey.example.com),
 #  using the private key stored in /etc/dkimkeys/example.private. More granular
 #  setup options can be found in /usr/share/doc/opendkim/README.opendkim.
-# Domain			example.com
+# Domain Example.com
 # Selector		2020
 # KeyFile		/etc/dkimkeys/example.private
 
@@ -5243,7 +5243,7 @@ And add these lines
 # Daemon_opts = ""
 #  Change to /var/spool/postfix/run/opendkim to use a Unix socket with
 #  postfix in a chroot:
-# Rundir =/was/spool/postfix/Run/Opendkim
+# Rundir =/Var/Spool/Postfix/Run/Opendkim
 RUNDIR=/run/opendkim
 # 
 #  Uncomment to specify an alternate socket
@@ -5287,7 +5287,7 @@ Now, in nano, the text editor, edit this file so it includes your domain name in
 
 
 <pre class="language-bash"><code>
-# !/bin/bash
+# ! / bin / Bash
 # Setup postfix
 cd $DIR
 echo "Mail services configuration"

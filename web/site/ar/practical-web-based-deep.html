@@ -561,7 +561,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>هذا كل ما نحتاجه للحصول على مستخدم مسجل ، ولكن يجب أن يكون لدينا المزيد من المعلومات. نريد أن نعرف الوقت الذي سجل فيه المستخدم ، والوقت الذي كان عليه آخر مرة على الموقع ، وبعض المعلومات عنها ، مثل السيرة الذاتية ، والمنطقة الزمنية ، وما إلى ذلك أيضًا ، سنحتاج إلى تحديث نموذج التغذية لدينا ، النشر ، لحساب المستخدم النموذج والمنشورات السمة لكل مستخدم. من أجل القيام بذلك ، سنقوم بتحديث النماذج. لنبدأ بتحرير نموذج التغذية. يجب أن يبدو هكذا الآن:<pre class="language-python"><code>
-from django.db import models # ... الواردات
+from django.db import models # ... كميات
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -1458,7 +1458,7 @@ $('input').change(function(){
  </code></pre>ستلاحظ أن هذا نموذج بسيط إلى حد ما ، ولكن يحتوي على بعض JavaScript الذي ينشر تلقائيًا محتويات النموذج عند تحديثها. من المفيد أن يكون لديك ، لذلك يمكنك إجراء تعديلات دون الحاجة إلى الضغط على الإرسال في كل مرة.
 
 بعد ذلك ، نحتاج إلى عناوين URL التي تمثل كل هذه المشاهدات في URL URL Patters. تحرير المستخدمين/urls.py وأضف هذا الرمز:<pre class="language-python"><code>
-# ... الكود السابق ، والواردات
+# ... الرمز السابق ، والواردات
 from django.urls import path
 from . import views
 
@@ -1995,7 +1995,7 @@ UsePAM yes
 X11Forwarding yes
 # x11displayoffset 10
 # X11USELOCALHOST نعم
-# بصياغة نعم
+# حبوب منع الحمل نعم
 PrintMotd no
 # printlastlog نعم
 # tcpkeepalive نعم
@@ -2013,7 +2013,7 @@ PrintMotd no
 # لا يوجد مسار لافتة افتراضي
 Banner /etc/banner
 
-# السماح للعميل بتمرير متغيرات البيئة المحلية
+# السماح للعميل بتمرير متغيرات المتغيرات المحلية
 AcceptEnv LANG LC_*
 
 # تجاوز الافتراضي لعدم وجود أنظمة فرعية
@@ -2361,7 +2361,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # حقن تكوين PAM وإزالة تكوين SSH المعيب
-# sudo sed -i '' و $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # sudo sed -i '' -و $ d ' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2555,7 +2555,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# Ipatables المعوقين
+# تعطيل Iptables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -2807,7 +2807,7 @@ nano config/etc_postfix_main.cf
 # Debian محدد: تحديد اسم الملف سيؤدي إلى الأول
 # سطر من هذا الملف لاستخدامه كاسم.  التخلف عن السداد
 # IS /etc /mailname.
-# myorigin = /etc /mailname
+# myorigine = /etc /mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -3015,7 +3015,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # تغيير إلى/var/spool/postfix/run/opendkim لاستخدام مقبس UNIX مع
 # postfix في chroot:
-# rundir =/wad/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # عدم التحديد لتحديد مقبس بديل
@@ -3196,7 +3196,7 @@ nano config/etc_dovecot_dovecot
 # الاستماع = *، ::
 
 # الدليل الأساسي حيث لتخزين بيانات وقت التشغيل.
-# base_dir =/var/run/doecot/
+# base_dir =/var/run/dovecot/
 
 # اسم هذه الحالة. في الإعداد متعدد الثورات DoVeadm والأوامر الأخرى
 # يمكن استخدام -i &lt;alute_name&gt; لتحديد المثيل المستخدم (بديل
@@ -3254,7 +3254,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;name&gt;".
 
 dict {
-  # الحصص = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # الحصص = mysql: /etc/dovecot/dovecot-dics-sql.conf.ext
 }
 
 # يتم تضمين معظم التكوين الفعلي أدناه. أسماء الملفات
@@ -3361,7 +3361,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # تغيير إلى/var/spool/postfix/run/opendkim لاستخدام مقبس UNIX مع
 # postfix في chroot:
-# rundir =/wad/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # عدم التحديد لتحديد مقبس بديل

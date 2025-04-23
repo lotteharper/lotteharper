@@ -864,7 +864,7 @@ nano users/views.py
             send_verification_email(user)
 # … (Eerder) Redirect (
 </code></pre>U hoeft de eerste en laatste regels niet toe te voegen in dat codefragment, zorg ervoor dat de registerweergave de verificatie -e -mail naar de gebruiker verzendt. Het zou er zo uit moeten zien:<pre class="language-python"><code>
-# ... bedragen
+# … Importeren
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1336,7 +1336,7 @@ nano users/templates/users/mfa_onboarding.html
 Dit ziet er echt goed uit! Zolang alles goed is ingesteld, moeten we berichten kunnen verzenden en de gebruiker inloggen met hun telefoonnummer zodra we de URL -patronen toevoegen. Het laatste wat we moeten instellen is een profielweergave, zodat we ervoor kunnen zorgen dat de gebruiker zijn telefoonnummer kan wijzigen zonder ingelogd te worden. Ook zullen we uiteindelijk een optie "Stop om te stoppen" toe te voegen, zodat de gebruiker kan sms'en "Stop" om zich af te melden voor toekomstige tekstberichten.
 
 Laten we een profielweergave toevoegen aan de gebruikers/views.py. Deze weergave zal de bio, e -mail, gebruikersnaam en telefoonnummer van de gebruiker bijwerken en ons in staat stellen om multi -factor authenticatie mogelijk te maken. Ten eerste hebben we nog twee formulieren nodig in gebruikers/vormen. Py<pre class="language-python"><code>
-# ... Importeren
+# ... bedragen
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -1452,7 +1452,7 @@ $('input').change(function(){
  </code></pre>Je zult merken dat dit een vrij eenvoudige vorm is, maar heeft wat JavaScript erin die automatisch de inhoud van het formulier plaatst terwijl ze worden bijgewerkt. Dit is handig om te hebben, dus u kunt bewerkingen maken zonder elke keer op te dienen.
 
 Vervolgens hebben we URL's nodig die al deze weergaven vertegenwoordigen in de URL -patronen van de gebruikers. Gebruikers/urls.py bewerken en deze code toevoegen:<pre class="language-python"><code>
-# … Vorige code, importeren
+# … Vorige code, import
 from django.urls import path
 from . import views
 
@@ -1989,7 +1989,7 @@ UsePAM yes
 X11Forwarding yes
 # X11displayoffset 10
 # X11uselocalhost Ja
-# Permitty ja
+# Pil ja
 PrintMotd no
 # PrintLastlog ja
 # Tcpkeepalive ja
@@ -2007,7 +2007,7 @@ PrintMotd no
 # Geen standaardbannerpad
 Banner /etc/banner
 
-# Sta de klant in staat om de locale omgevingsvariabelen te passeren
+# Laat de klant lokale variabelen doorgeven
 AcceptEnv LANG LC_*
 
 # Verhaal de standaard van geen subsystemen
@@ -2405,7 +2405,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# Sudo a2dismod mpm_worker
+# sudo a2dismod mpm_worker
 # sudo a2enmod mpm_prefork
 # Schakel de standaardsite uit
 sudo a2dissite 000-default
@@ -2865,11 +2865,11 @@ nano config/etc_postfix_master.cf
 # 
 # ==================================================== =========================
 # Servicetype privé Priv Chroot wake -up maxProc -opdracht + args
-# (ja) (ja) (nee) (nooit) (100)
+# (Ja) (ja) (nee) (nooit) (100)
 # ==================================================== =========================
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP inet n - y - 1 postscreen
-# smtpd pass - - y - - smtpd
+# Smtpd pass - - y - - smtpd
 # DNSBLOG UNIX - - Y - 0 DNSBLOG
 # TlSproxy Unix - - y - 0 tlsproxy
 # Kies er een: Inzending inschakelen voor Loopback -clients alleen of voor een klant.
@@ -2891,7 +2891,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
-# -o smtpd_recipient_trastrictions =
+# -o smtpd_recipient_restrictions = =
 # -o smtpd_relay_restrictions = permit_sasl_authenticeerd, afwijzen
 # -O milter_macro_daemon_name = afkomstig
 # Kies er een: Schakel SMTPS alleen voor loopback -clients in, of voor een client.
@@ -2911,7 +2911,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# Qmgr Unix n - n 300 1 oqmgr
+# Qmgr unix n - n 300 1 oqmg
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -2960,7 +2960,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 # Specificeer in main.cf een of meer van het volgende:
 # mailbox_transport = lmtp: inet: localhost
-# Virtual_transport = lmtp: inet: localhost
+# virtual_transport = lmtp: inet: localhost
 # 
 # ==================================================== ===================
 # 
@@ -3009,7 +3009,7 @@ nano config/etc_default_opendkim
 # Daemon_optts = ""
 # Wijzig naar/var/spool/postfix/run/opendkim om een ​​UNIX -socket te gebruiken met
 # Postfix in een chroot:
-# Rundir =/was/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Uncomment om een ​​alternatieve socket op te geven
@@ -3065,7 +3065,7 @@ service imap-login {
   # Proces_min_avail = 0
 
   # Als u Service_Count = 0 instelt, moet u dit waarschijnlijk laten groeien.
-  # vsz_limit = $ default_vsz_limit
+  # VSZ_LIMI = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3143,7 +3143,7 @@ service auth-worker {
   # AUTH Worker -proces wordt standaard als root uitgevoerd, zodat het toegang heeft
   # /etc/schaduw. Als dit niet nodig is, moet de gebruiker worden gewijzigd in
   # $ default_interal_user.
-  # user = root
+  # User = root
 }
 
 service dict {

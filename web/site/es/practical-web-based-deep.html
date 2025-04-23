@@ -838,7 +838,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# sendwelcomeMail (solicitud, usuario)
+# SendwelcomeMail (solicitud, usuario)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -1992,7 +1992,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplaYoffset 10
 # X11uselocalhost sí
-# Permiso si
+# PermitTTY yes
 PrintMotd no
 # Printlastlog Sí
 # Tcpkeepalive sí
@@ -2010,7 +2010,7 @@ PrintMotd no
 # Sin ruta de banner predeterminada
 Banner /etc/banner
 
-# Permitir que el cliente pase variables de variables locales
+# Permitir que el cliente pase las variables de entorno local
 AcceptEnv LANG LC_*
 
 # anular el valor predeterminado de no subsistemas
@@ -2301,7 +2301,7 @@ sudo systemctl restart opendkim postfix dovecot
 # Copiar certs
 # sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
 # sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
-# Parche
+# Parche venv
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
 cp scripts/pwa_webpush_forms.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pwa_webpush/forms.py"
 cp scripts/webauth_views.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/webauth/views.py"
@@ -2324,7 +2324,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# Sudo chmod 664 db.sqlite3
+# sudo chmod 664 db.sqlite3
 # sudo chown www-data: usuarios db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2408,7 +2408,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2DISMOD MPM_EVENT
-# Sudo a2DISMOD mpm_worker
+# sudo a2DISMOD mpm_worker
 # sudo a2enmod mpm_prefork
 # Deshabilitar el sitio predeterminado
 sudo a2dissite 000-default
@@ -2803,7 +2803,7 @@ nano config/etc_postfix_main.cf
 
 # Debian específico: especificar un nombre de archivo causará el primero
 # línea de ese archivo para ser utilizada como nombre.  El incumplimiento de Debian
-# Es /etc /mailname.
+# es /etc /mailname.
 # myorigin = /etc /mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
@@ -2868,7 +2868,7 @@ nano config/etc_postfix_master.cf
 # 
 # ==================================================== =========================
 # Tipo de servicio Private Undkroot Wakeup MAXPROC Comando + Args
-#                (yes)   (yes)   (no)    (never) (100)
+# (Sí) (sí) (no) (nunca) (100)
 # ==================================================== =========================
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 Postcreen
@@ -2907,7 +2907,7 @@ submission inet n       -       y       -       -       smtpd
 # -O SMTPD_CLIENT_RESTrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o SMTPD_SENDER_RESTrictions = $ mua_sender_restrictions
-# -O SMTPD_RECIPIENT_TRASTRICTIONS =
+# -o SMTPD_RECIPIENT_RESTrictions =
 # -o SMTPD_RELAY_RESTrictions = Permit_Sasl_Authenticated, rechazar
 # -O MILTER_MACRO_DAEMON_NAME = Originario
 # 628 INET N - Y - - QMQPD
@@ -3012,7 +3012,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Cambiar a/var/spool/postfix/run/opendkim para usar un socket unix con
 # Postfix en un chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Rundir =/was/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descopment para especificar un enchufe alternativo
@@ -3108,17 +3108,17 @@ service imap {
   # vsz_limit = $ default_vsz_limit
 
   # Max. Número de procesos IMAP (conexiones)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service pop3 {
   # Max. Número de procesos POP3 (conexiones)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   # Max. Número de procesos de envío SMTP (conexiones)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -3154,7 +3154,7 @@ service dict {
   # Por ejemplo: MODE = 0660, Group = Vmail y Global Mail_Access_Groups = Vmail
   unix_listener dict {
     # Modo = 0600
-    # Usuario =
+    # usuario =
     # grupo =
   }
 }
@@ -3193,7 +3193,7 @@ nano config/etc_dovecot_dovecot
 # Escuchar = *, ::
 
 # Directorio base donde almacenar datos de tiempo de ejecución.
-# base_dir =/var/run/dovecot/
+# Base_dir =/var/run/dovecot/
 
 # Nombre de esta instancia. En la configuración de múltiples instancias DoVeadm y otros comandos
 # puede usar -i &lt;neste_name&gt; para seleccionar qué instancia se usa (una alternativa
@@ -3221,7 +3221,7 @@ nano config/etc_dovecot_dovecot
 # Muestre más títulos de procesos verbosos (en PS). Actualmente muestra nombre de usuario y
 # Dirección IP. Útil para ver quién está usando los procesos IMAP
 # (por ejemplo, buzones compartidos o si se usa el mismo UID para múltiples cuentas).
-# Verbose_proctle = bien
+# verbose_proctitle = no
 
 # En caso de que se maten todos los procesos cuando el proceso maestro de Dovecot se apaga.
 # Establecer esto en "no" significa que Dovecot se puede actualizar sin
@@ -3358,7 +3358,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Cambiar a/var/spool/postfix/run/opendkim para usar un socket unix con
 # Postfix en un chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Rundir =/was/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descopment para especificar un enchufe alternativo

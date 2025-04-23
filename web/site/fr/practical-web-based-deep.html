@@ -438,7 +438,7 @@ def feed(request):
 
 Maintenant, nous devons améliorer notre application, car pour l'instant, il a l'air vraiment basique. Nous pouvons le faire en utilisant CSS, soit en ligne ou dans des classes liées à chaque objet dans le document. CSS est vraiment sympa car il dit tout sur la page à quoi il devrait ressembler,et peut le rendre vraiment beau. Il y a quelques bibliothèques qui peuvent le faire, mais mon retour personnel est bootstrap. 
 
-Bootstrap peut être téléchargé à partir de leur site Web,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">Getbootstrap.com/</a>. Une fois sur place, appuyez sur le bouton pour lire les documents d'installation et copiez le code de la section Inclure via CDN. Vous aurez besoin de ce code en haut de votre document HTML, dans une étiquette appelée Head. Allons également et créons un modèle de base afin que nous n'ayons pas besoin de recréer ces liens dans chaque modèle. 
+Bootstrap peut être téléchargé à partir de leur site Web,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">getbootstrap.com/</a>. Une fois sur place, appuyez sur le bouton pour lire les documents d'installation et copiez le code de la section Inclure via CDN. Vous aurez besoin de ce code en haut de votre document HTML, dans une étiquette appelée Head. Allons également et créons un modèle de base afin que nous n'ayons pas besoin de recréer ces liens dans chaque modèle. 
 
 Faites un nouveau répertoire appelé modèles avec des modèles MKDIR, puis modifiez des modèles / base.html.
 
@@ -1463,7 +1463,7 @@ $('input').change(function(){
  </code></pre>Vous remarquerez qu'il s'agit d'une forme assez simple, mais il y a un peu de javascript qui publie automatiquement le contenu du formulaire lorsqu'ils sont mis à jour. Ceci est utile à avoir, vous pouvez donc effectuer des modifications sans avoir à appuyer sur Soumettre à chaque fois.
 
 Ensuite, nous avons besoin d'URL représentant toutes ces vues dans les motifs URL des utilisateurs. Modifier les utilisateurs / urls.py et ajouter ce code:<pre class="language-python"><code>
-# … Code précédent, importations
+#  … previous code, imports
 from django.urls import path
 from . import views
 
@@ -2004,7 +2004,7 @@ X11Forwarding yes
 PrintMotd no
 # Printlastlog oui
 # Tcpkeepalive Oui
-# Permiterenvironment pas
+# Environnement permit
 # Compression retardée
 # Intervalle client 0
 # ClientaliveCountMax 3
@@ -2013,12 +2013,12 @@ PrintMotd no
 # Maxstartups 10: 30: 100
 # Pemittunl non
 # Chrootdirectory
-# VersionaDendum Aucun
+# Version addendum Aucun
 
 # Pas de chemin de bannière par défaut
 Banner /etc/banner
 
-#  Allow client to pass locale environment variables
+# Permettre au client de passer les variables d'environnement des paramètres régionaux
 AcceptEnv LANG LC_*
 
 # remplacer la valeur par défaut d'aucun sous-système
@@ -2081,7 +2081,7 @@ fi
 </code></pre>N'oubliez pas que ce script prend un argument, le nom du script, à 1 $. Il vérifie d'abord si le fichier existe ou la crée autrement, ajoute la première ligne pour déclarer que le script est bash, modifie ses autorisations, le modifie et ajoute son nom à / etc / ascripts qui nous permet de stocker les noms des scripts que nous créent. Si le fichier existe déjà, modifiez simplement les autorisations et modifiez-la. Enregistrez le fichier, et ensuite nous modifierons ses autorisations. Tant que nous utilisons ce script, nous n'aurons plus à recommencer.<pre class="language-bash"><code>
 sudo chmod a+x /usr/bin/ascript
 </code></pre>Parfait. Créons maintenant un script appelé Configuration. Tout d'abord, pas pour vous submerger, mais jetez un œil à quoi ressemble mon script de configuration. Nous allons parcourir ce à quoi ce script devrait ressembler dans votre projet, vous n'aurez pas besoin de tout dans mon script pour commencer.<pre class="language-bash"><code>
-# ! / bac / bash
+# ! / bin / bash
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2366,7 +2366,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injecter la configuration PAM et supprimer la configuration SSH défectueuse
-# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
 # Sudo sed -i '' -et $ d '/ etc / profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2560,7 +2560,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# IPatables désactivés
+#  Disable iptables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -2610,7 +2610,7 @@ echo "Enabling services"
 sudo systemctl daemon-reload
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-# Activer les modules Apache
+#  Enable apache modules
 echo "Enabling apache2"
 sudo a2enmod rewrite
 sudo a2enmod wsgi
@@ -2812,7 +2812,7 @@ nano config/etc_postfix_main.cf
 # Debian Specific: Spécification d'un nom de fichier provoquera le premier
 # Ligne de ce fichier à utiliser comme nom.  La défaut Debian
 # est / etc / nom.
-# Myorigin = / etc / nom.
+# myorigin = /etc/mailname
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2876,13 +2876,13 @@ nano config/etc_postfix_master.cf
 # 
 # ==============================================. =======================.
 # Type de service Private Upriv Chroot Wakeup MaxProc Commande + Args
-# (Oui) (oui) (non) (jamais) (100)
+# (oui) (oui) (non) (jamais) (100)
 # ==============================================. =======================.
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 PostScreen
-# smtpd pass - - y - - smtpd
+# Smtpd pass - - y - - smtpd
 # Dnsblog unix - - y - 0 dnsblog
-# Tlsproxy unix - - y - 0 tlSproxy
+# tlsproxy unix - - y - 0 tlSproxy
 # Choisissez-en un: activez uniquement la soumission pour les clients de bouclage ou pour tout client.
 # 127.0.0.1: SUBMISSION INET N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2902,7 +2902,7 @@ submission inet n       -       y       -       -       smtpd
 #   -o smtpd_client_restrictions=$mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -o smtpd_recipent_trastracts =
+# -o smtpd_recipent_restrictions =
 # -o smtpd_relay_restrictions = permis_sasl_authenticated, rejeter
 # -O milter_macro_daemon_name = originaire
 # Choisissez-en un: activez uniquement SMTPS pour les clients de Loopback, ou pour tout client.
@@ -2911,14 +2911,14 @@ submission inet n       -       y       -       -       smtpd
 # -O syslog_name = postfix / smtps
 # -o smtpd_tls_wappermode = oui
 # -o smtpd_sasl_auth_enable = oui
-# -O smtpd_reject_unlistted_recipient = non
+# -o smtpd_reject_unlistted_recipient = non
 #   -o smtpd_client_restrictions=$mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -o smtpd_recipent_restrictions =
+# -o smtpd_recipent_trastracts =
 # -o smtpd_relay_restrictions = permis_sasl_authenticated, rejeter
 # -O milter_macro_daemon_name = originaire
-# 628 INET N - Y - - QMQPD
+# 628       inet  n       -       y       -       -       qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
@@ -3020,7 +3020,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Passer à / var / spool / postfix / run / opendendkim pour utiliser une prise Unix avec
 # Postfix dans un chroot:
-# Rundir = / was / spool / postfix / run / opendendkim
+# Rundir = / var / spool / postfix / run / opendendkim
 RUNDIR=/run/opendkim
 # 
 # Décommente pour spécifier une alternative
@@ -3076,7 +3076,7 @@ service imap-login {
   # process_min_avail = 0
 
   # Si vous définissez Service_Count = 0, vous devez probablement augmenter cela.
-  # vsz_limit = $ default_vsz_limit
+  # Vsz_limi = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3113,7 +3113,7 @@ service lmtp {
 service imap {
   # La plupart de la mémoire va aux fichiers mmap () ing. Vous devrez peut-être augmenter cela
   # Limitez si vous avez d'énormes boîtes aux lettres.
-  # vsz_limit = $ default_vsz_limit
+  # Vsz_limi = $ default_vsz_limit
 
   # Max. Nombre de processus IMAP (connexions)
   # process_limit = 1024
@@ -3154,7 +3154,7 @@ service auth-worker {
   # Le processus de travailleur AUTH est exécuté par défaut de racine, afin qu'il puisse accéder
   # / etc / ombre. Si ce n'est pas nécessaire, l'utilisateur doit être modifié en
   # $ default_interal_user.
-  # Utilisateur = racine
+  # utilisateur = racine
 }
 
 service dict {
@@ -3366,7 +3366,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Passer à / var / spool / postfix / run / opendendkim pour utiliser une prise Unix avec
 # Postfix dans un chroot:
-# Rundir = / was / spool / postfix / run / opendendkim
+# Rundir = / var / spool / postfix / run / opendendkim
 RUNDIR=/run/opendkim
 # 
 # Décommente pour spécifier une alternative
