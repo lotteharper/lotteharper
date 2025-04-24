@@ -362,7 +362,7 @@ def process_recording(id):
     import datetime as dt
     recording = VideoRecording.objects.get(id=id)
     camera = VideoCamera.objects.filter(user=recording.user, name=recording.camera).order_by('-last_frame').first()
-    if (not (recording.processing or recording.processed)) and (not recording.last_frame or (recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * 6))): # 4 (the number is the gap, a larger number adds more length to the recording with a longer gap
+    if ((recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * 4))) and (not (recording.processing or recording.processed)): # 4 (the number is the gap, a larger number adds more length to the recording with a longer gap
         recording.processing = True
         recording.save()
         for frame in recording.frames.filter(processed=False):
