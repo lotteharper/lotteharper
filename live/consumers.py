@@ -43,7 +43,7 @@ def get_camera_status(camera_user, camera_name):
     return '{},{},{}'.format('y' if VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first().live else 'n', 'y' if VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first().recording else 'n', 'y' if VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first().muted else 'n')
 
 @sync_to_async
-def update_camera(camera_user, camera_name, camera_data, key=None):
+def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
     from live.models import VideoCamera
     from live.models import get_file_path, VideoFrame, VideoRecording, Show
     import pytz, datetime, os, base64, asyncio, time
@@ -61,6 +61,11 @@ def update_camera(camera_user, camera_name, camera_data, key=None):
         camera = VideoCamera.objects.filter(user__profile__name=camera_user, name=camera_name, key=key).order_by('-last_frame').first()
 #        print('Camera is ' + str(camera))
         if camera and camera.user.profile.vendor != True: raise PermissionDenied()
+    if user_id and not camera:
+        camera = VideoCamera.objects.filter(user__id=int(user_id), name=camera_name).order_by('-last_frame').first()
+#        print('Camera is ' + str(camera))
+        if camera and camera.user.profile.vendor != True: raise PermissionDenied()
+    if not camera: raise PermissionDenied()
     if not identity_really_verified(camera.user): raise PermissionDenied()
     camera.last_frame = timezone.now()
     camera_data = camera_data.split("&")
@@ -129,13 +134,14 @@ class CameraConsumer(AsyncWebsocketConsumer):
     camera_user = None
     camera_name = None
     key = None
+    user_id = None
     async def connect(self):
         self.camera_user = self.scope['url_route']['kwargs']['username']
         self.camera_name = self.scope['url_route']['kwargs']['name']
         from urllib.parse import parse_qs
         query_params = parse_qs(self.scope["query_string"].decode())
         if 'key' in query_params and query_params['key']: self.key = query_params['key'][0]
-#        auth = await get_user(self.scope['user'].id)
+        self.user_id = await get_user(self.scope['user'].id)
 #        auth2 = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
 #        if not (auth and auth2): return
         await self.accept()
@@ -144,7 +150,7 @@ class CameraConsumer(AsyncWebsocketConsumer):
         pass
 
     async def receive(self, text_data):
-        text = await update_camera(self.camera_user, self.camera_name, text_data, self.key)
+        text = await update_camera(self.user_id, self.camera_user, self.camera_name, text_data, self.key)
         await self.send(text_data=text)
 
     pass
