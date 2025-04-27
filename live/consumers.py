@@ -141,7 +141,7 @@ class CameraConsumer(AsyncWebsocketConsumer):
         from urllib.parse import parse_qs
         query_params = parse_qs(self.scope["query_string"].decode())
         if 'key' in query_params and query_params['key']: self.key = query_params['key'][0]
-        self.user_id = await get_user(self.scope['user'].id)
+        self.user_id = self.scope['user'].id
 #        auth2 = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
 #        if not (auth and auth2): return
         await self.accept()
