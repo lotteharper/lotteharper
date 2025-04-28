@@ -30,9 +30,9 @@ if [ "$DOW" -eq 1 ]; then
                 CMD_POST_CREATE_REPO="s/$GUP/$PGU/g"
                 echo "$CMD_POST_CREATE_REPO"
                 sed -i "$CMD_POST_CREATE_REPO" /home/$U/$DIR/config/git
-		GIT_URL_INIT="${GIT_URL_INIT%+*}+$repo_date.git"
+		GIT_URL_INIT_UP="${GIT_URL_INIT%+*}+$repo_date.git"
                 GUP="${GIT_URL_INIT//\//\\/}"
-                PGU="${PROJECT_GIT_URL//\//\\/}"
+                PGU="${GIT_URL_INIT_UP//\//\\/}"
                 CMD_POST_CREATE_REPO="s/$GUP/$PGU/g"
                 echo "$CMD_POST_CREATE_REPO"
                 sed -i "$CMD_POST_CREATE_REPO" /home/$U/$DIR/config/git
