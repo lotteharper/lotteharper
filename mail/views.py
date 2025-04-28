@@ -83,6 +83,7 @@ def inbox(request):
         'mails': mails,
         'count': p.count,
         'page_obj': p.get_page(page),
+        'current_page': page
     })
 
 @login_required

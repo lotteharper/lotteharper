@@ -842,6 +842,7 @@ def render_agreement(name, parent, mother, lang=None):
         'the_state_name': 'Washington',
         'parent_name': parent.verifications.last().full_name if parent and parent.verifications.last() else '________________',
         'surrogacy_fee': nts(settings.SURROGACY_FEE),
+        'surrogacy_fee_sub': settings.SURROGACY_FEE,
         'business_type': settings.BUSINESS_TYPE,
         'the_date': timezone.now().strftime('%B %d, %Y'),
     })
