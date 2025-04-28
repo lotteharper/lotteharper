@@ -423,18 +423,7 @@ mkdir feed/templates/feed
 &lt;/html&gt;
  </code></pre>Il s'agit d'un modèle très simple. Il définit l'ouverture et la fermeture des balises HTML, une balise de type de document, une balise corporelle avec un titre de légende, une balise de rupture qui ajoute une petite ligne à travers l'écran et une boucle pour la boucle qui rend chaque publication dans la liste des messages en tant que paragraphe dans le modèle. C'est tout ce qu'il faut pour rendre les publications, mais il n'y en a pas encore dans la base de données. Créons-nous avec la coquille. Nous pouvons exécuter le shell avec manage.py<pre class="language-bash"><code>
 python manage.py shell
-</code></pre>
-
-
-
-
-
-Now, let's import our post model
-
-
-
-
-<pre class="language-python"><code>
+</code></pre>Maintenant, importons notre modèle de poste<pre class="language-python"><code>
 from feed.models import Post
 </code></pre>Ensuite, nous créerons un article simple avec une chaîne et quitterons le shell. La chaîne peut être n'importe quoi, aussi longtemps que c'est un texte valide.<pre class="language-python"><code>
 Post.objects.create(text='hello world')
@@ -617,7 +606,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>C'est tout ce dont nous avons besoin pour enregistrer un utilisateur, mais nous devons avoir plus d'informations. Nous voulons connaître l'heure à laquelle l'utilisateur s'est inscrit, à quelle heure il était le dernier sur le site, quelques informations à leur sujet, comme une biographie, un fuseau horaire, etc. De plus, nous devrons mettre à jour notre modèle de flux, publier, pour tenir compte de l'utilisateur Modèle et attribut des publications à chaque utilisateur. Pour ce faire, nous mettrons à jour les modèles.py dans les deux applications. Commençons par modifier le modèle de flux. Cela devrait ressembler à ça maintenant:<pre class="language-python"><code>
-from django.db import models # … Des quantités
+from django.db import models # … Importations
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -926,7 +915,7 @@ nano users/views.py
             send_verification_email(user)
 # … (Avant) Rediriger (
 </code></pre>Vous n'avez pas besoin d'ajouter les premières et dernières lignes de cet extrait de code, assurez-vous simplement que la vue du registre envoie l'e-mail de vérification à l'utilisateur. Cela devrait ressembler à ceci:<pre class="language-python"><code>
-# … Des quantités
+# … Importations
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1514,7 +1503,7 @@ $('input').change(function(){
  </code></pre>Vous remarquerez qu'il s'agit d'une forme assez simple, mais il y a un peu de javascript qui publie automatiquement le contenu du formulaire lorsqu'ils sont mis à jour. Ceci est utile à avoir, vous pouvez donc effectuer des modifications sans avoir à appuyer sur Soumettre à chaque fois.
 
 Ensuite, nous avons besoin d'URL représentant toutes ces vues dans les motifs URL des utilisateurs. Modifier les utilisateurs / urls.py et ajouter ce code:<pre class="language-python"><code>
-#  … previous code, imports
+# … Code précédent, STANTS
 from django.urls import path
 from . import views
 
@@ -2051,7 +2040,7 @@ UsePAM yes
 X11Forwarding yes
 # X11displayoffset 10
 # X11useLocalhost Oui
-# Pilule oui
+# Permittty Oui
 PrintMotd no
 # Printlastlog oui
 # Tcpkeepalive Oui
@@ -2178,7 +2167,7 @@ sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt install -y postfix
 sudo NEEDRESTART_MODE=a apt install -y rkhunter clamav-daemon libx264-dev ffmpeg libapache2-mod-wsgi-py3 apache2 cmake python-is-python3 python3-venv python3-pip python3-django expect tesseract-ocr openjdk-8-jdk redis-server libopencv-dev python3-opencv python3-dev libsasl2-dev opendkim opendkim-tools dovecot-core dovecot-pop3d dovecot-imapd auditd procmail libpq-dev postgresql postgresql-contrib libheif-dev snapd git software-properties-common certbot python3-certbot-apache
 echo "-a exit,always -F arch=b64 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
 echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/audit.rules
-# Activer Clamav Antivirus
+#  Enable ClamAV antivirus
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
@@ -2467,7 +2456,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# Sudo a2dismod mpm_worker
+# sudo a2dismod mpm_worker
 # sudo a2enmod mpm_prefork
 #  Disable default site
 sudo a2dissite 000-default
@@ -2862,7 +2851,7 @@ nano config/etc_postfix_main.cf
 
 # Debian Specific: Spécification d'un nom de fichier provoquera le premier
 # Ligne de ce fichier à utiliser comme nom.  La défaut Debian
-#  is /etc/mailname.
+# est / etc / nom.
 # Myorigin = / etc / nom.
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
@@ -2931,7 +2920,7 @@ nano config/etc_postfix_master.cf
 # ==============================================. =======================.
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 PostScreen
-# Smtpd pass - - y - - smtpd
+# smtpd pass - - y - - smtpd
 # Dnsblog unix - - y - 0 dnsblog
 # Tlsproxy unix - - y - 0 tlSproxy
 # Choisissez-en un: activez uniquement la soumission pour les clients de bouclage ou pour tout client.
@@ -2959,7 +2948,7 @@ submission inet n       -       y       -       -       smtpd
 # Choisissez-en un: activez uniquement SMTPS pour les clients de Loopback, ou pour tout client.
 # 127.0.0.1:SMTPS INET N - Y - - SMTPD
 # smtps inet n - y - - smtpd
-# -O syslog_name = postfix / smtps
+# -o syslog_name = postfix / smtps
 # -o smtpd_tls_wappermode = oui
 # -o smtpd_sasl_auth_enable = oui
 # -o smtpd_reject_unlistted_recipient = non
@@ -3163,8 +3152,8 @@ service lmtp {
 
 service imap {
   # La plupart de la mémoire va aux fichiers mmap () ing. Vous devrez peut-être augmenter cela
-  #  limit if you have huge mailboxes.
-  # Vsz_limi = $ default_vsz_limit
+  # Limitez si vous avez d'énormes boîtes aux lettres.
+  # vsz_limit = $ default_vsz_limit
 
   # Max. Nombre de processus IMAP (connexions)
   # process_limit = 1024
@@ -3252,7 +3241,7 @@ nano config/etc_dovecot_dovecot
 # Écouter = *, ::
 
 # Répertoire de base où stocker les données d'exécution.
-# base_dir = / var / run / dovecot /
+# Base_dir = / var / run / dovecot /
 
 # Nom de cette instance. Dans Configuration multi-instance Doveadm et autres commandes
 # peut utiliser -i &lt;stance_name&gt; pour sélectionner quelle instance est utilisée (une alternative
@@ -3280,7 +3269,7 @@ nano config/etc_dovecot_dovecot
 # Afficher plus de titres de processus verbeux (en PS). Affiche actuellement le nom d'utilisateur et
 # Adresse IP. Utile pour voir qui utilise réellement les processus IMAP
 # (par exemple, les boîtes aux lettres partagées ou si le même UID est utilisé pour plusieurs comptes).
-# verbose_proctitle = non
+# verbose_proctitle = no
 
 # Si tous les processus sont tués lorsque le processus de maître Dovecot s'arrête.
 # Définir ceci sur "non" signifie que Dovecot peut être mis à niveau sans
@@ -3363,9 +3352,9 @@ OversignHeaders		From
 # Pour le domaine "Exemple.com" avec sélecteur "2020" (2020._domainkey.example.com),
 # Utilisation de la clé privée stockée dans /etc/dkimkeys/example.private. Plus granulaire
 # Des options de configuration peuvent être trouvées dans /usr/share/doc/opendkim/readme.opendkim.
-# Exemple de domaine.com
+# Domain			example.com
 # Sélecteur 2020
-# KeyFile		/etc/dkimkeys/example.private
+# KeyFile /etc/dkimkeys/example.private
 
 # Dans Debian, OpenDKIM s'exécute en tant qu'utilisateur "OpenDKIM". Un umask de 007 est requis lorsque
 # Utilisation d'une prise locale avec des MTA qui accèdent à la prise comme un non-privilégié
@@ -3728,9 +3717,9 @@ Jouez gratuitement à la couleur collaborative avec un ami.<a class="btn btn-inf
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Partager sur Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Ffr%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Partager sur Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Ffr%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Partager sur Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/fr/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Partager sur Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/fr/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Partager sur Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/fr/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3742,7 +3731,7 @@ Jouez gratuitement à la couleur collaborative avec un ami.<a class="btn btn-inf
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Partager sur Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/fr/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Partager sur Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/fr/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Partager sur Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/fr/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

@@ -46,3 +46,6 @@ sudo su $USER_NAME -c "mv /home/$USER_NAME/$PROJECT_NAME/lotteh /home/$USER_NAME
 sudo su $USER_NAME -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
 sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com" $USER_NAME
 sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
+# Create a superuser so you can authenticate with your app
+DIR_PATH="/home/$USER_NAME/$PROJECT_NAME/"
+${DIR_PATH}venv/bin/python ${DIR_PATH}create_superuser.py "YourUsername" "youremail@example.com" "yourpassword123"

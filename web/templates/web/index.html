@@ -2,6 +2,12 @@
 {% block head %}
 <meta property="og:image" content="{{ model.profile.get_image_url }}">
 <meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+<style>
+iframe { 
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+</style>
 {% endblock %}{% block content %}
 {% load feed_filters %}
 {% load app_filters %}
@@ -12,6 +18,9 @@
 <p>{{ model.profile.bio|trans }}</p>
 <p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
 <p>{{ 'Visit my GitHub to see my'|etrans }} <a href="{{ github_url }}" title="{{ 'My projects on GitHub'|etrans }}">{{ 'projects'|etrans }}</a>.</p>
+{% if model.vendor_profile.video_embed %}{% autoescape off %}
+{{ model.vendor_profile.video_embed }}
+{% endautoescape %}{% endif %}
 {% include 'banner_ad.html' %}
 <hr>
 <div id="photo-page">

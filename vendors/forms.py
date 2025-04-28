@@ -81,7 +81,7 @@ class VendorProfileUpdateForm(forms.ModelForm):
         self.fields['video_intro_font'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
     class Meta:
         model = VendorProfile
-        fields = ['logo', 'video_intro_font', 'video_intro_text', 'video_intro_color', 'hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address', 'usdcoin_address', 'solana_address', 'polygon_address', 'avalanche_address']
+        fields = ['logo', 'video_intro_font', 'video_intro_text', 'video_intro_color', 'hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'video_embed', 'playlist_embed', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address', 'usdcoin_address', 'solana_address', 'polygon_address', 'avalanche_address']
         widgets = {
             'video_intro_color': forms.TextInput(attrs={'type': 'color'}),
         }

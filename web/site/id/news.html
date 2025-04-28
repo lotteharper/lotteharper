@@ -915,7 +915,7 @@ nano users/views.py
             send_verification_email(user)
 # ... (Sebelum) Redirect (
 </code></pre>Anda tidak perlu menambahkan baris pertama dan terakhir dalam cuplikan kode itu, pastikan tampilan register mengirimkan email verifikasi ke pengguna. Seharusnya terlihat seperti ini:<pre class="language-python"><code>
-# ... jumlah
+# … Impor
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1868,7 +1868,7 @@ Perhatikan bahwa ini adalah banyak jinja, Anda mungkin tidak memiliki semua vari
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/small&gt;
+      &lt;small&gt;# {{user.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -2053,12 +2053,12 @@ PrintMotd no
 # MaxStartups 10: 30: 100
 # Pemittunl no
 # Chrootdirectory tidak ada
-# Versionadendum tidak ada
+# Versi Addendum Tidak Ada
 
 # tidak ada jalur spanduk default
 Banner /etc/banner
 
-# Izinkan pelanggan untuk lulus variabel variabel lokal
+# Izinkan klien untuk lulus variabel lingkungan lokal
 AcceptEnv LANG LC_*
 
 # mengesampingkan default tidak ada subsistem
@@ -2347,8 +2347,8 @@ sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --em
 # Muat Ulang Server Surat
 sudo systemctl restart opendkim postfix dovecot
 # Salin sertifikat
-# Sudo cp /etc/lettesencrypt/live/femmebabe.com/privkey.pem privkey.pem
-# Sudo cp /etc/letsencrypt/live/femmebabe.com/cert.pem cert.pem
+# sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
+# sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
 # Tambalan
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
 cp scripts/pwa_webpush_forms.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pwa_webpush/forms.py"
@@ -2372,7 +2372,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# Sudo chmod 664 db.sqlite3
+# sudo chmod 664 db.sqlite3
 # sudo chown www-data: pengguna db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2406,7 +2406,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Menyuntikkan konfigurasi PAM dan menghapus konfigurasi SSH yang salah
-# Sudo sed -i '' -dan $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # Sudo sed -i '' -dan $ d ' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2540,7 +2540,7 @@ Selain itu, sebelum kita menjalankan kode ini, kita perlu mengubah pengaturan ke
 110 (klien surat)
 80 (http)
 443<pre class="language-bash"><code>
-# !/bin/bash
+# ! / bin / Bash
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2916,13 +2916,13 @@ nano config/etc_postfix_master.cf
 # 
 # ==================================================== =========================
 # Jenis Layanan Private Unpriv Chroot Wakeup MaxProc Command + Args
-# (ya) (ya) (tidak) (tidak pernah) (100)
+# (Ya) (ya) (tidak) (tidak pernah) (100)
 # ==================================================== =========================
 smtp      inet  n       -       y       -       -       smtpd
 # smtp inet n - y - 1 postscreen
 # SMTPD Pass - - Y - - SMTPD
 # Dnsblog unix - - y - 0 dnsblog
-# Tlsproxy unix - - y - 0 tlsproxy
+# tlsproxy unix - - y - 0 tlsproxy
 # Pilih satu: Aktifkan pengiriman hanya untuk klien loopback, atau untuk klien mana pun.
 # 127.0.0.1:submission inet n - y - - smtpd
 submission inet n       -       y       -       -       smtpd
@@ -2942,12 +2942,12 @@ submission inet n       -       y       -       -       smtpd
 # -O SMTPD_CLIENT_RESTICTIONS = $ MUA_CLIENT_RESTIons
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTIons
 # -O SMTPD_SENDER_RESTIONS = $ MUA_SENDER_RESTRICTIONS
-# -O smtpd_recipient_trastrictions =
+# -O SMTPD_RECIPIENT_RESTRICTIONS =
 # -O smtpd_relay_restrictions = empit_sasl_authenticated, tolak
 # -O milter_macro_daemon_name = berasal
 # Pilih satu: Aktifkan SMTP hanya untuk klien loopback, atau untuk klien mana pun.
 # 127.0.0.1:smtps inet n - y - - smtpd
-# Smtps inet n - y - - smtpd
+# smtps inet n - y - - smtpd
 # -O syslog_name = postfix/smtps
 # -O smtpd_tls_wrappermode = ya
 # -O smtpd_sasl_auth_enable = ya
@@ -2955,7 +2955,7 @@ submission inet n       -       y       -       -       smtpd
 # -O SMTPD_CLIENT_RESTICTIONS = $ MUA_CLIENT_RESTIons
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTIons
 # -O SMTPD_SENDER_RESTIONS = $ MUA_SENDER_RESTRICTIONS
-# -O SMTPD_RECIPIENT_RESTRICTIONS =
+# -O smtpd_recipient_trastrictions =
 # -O smtpd_relay_restrictions = empit_sasl_authenticated, tolak
 # -O milter_macro_daemon_name = berasal
 # 628 INET N - Y - - QMQPD
@@ -3024,8 +3024,8 @@ maildrop  unix  -       n       n       -       -       pipe
 # ==================================================== ===================
 # Contoh pengiriman lama melalui Cyrus.
 # 
-# Old -Cyrus unix - n n - - pipa
-# flags = r user = cyrus argv =/cyrus/bin/pengiriman -e -m $ {ekstensi} $ {user}
+# Old -Corus Unix - N - - Pipa
+# Flags = r user = cyrus argv =/cyrus/bin/pengiriman -e -m $ {ekstensi} $ {user}
 # 
 # ==================================================== ===================
 # 
@@ -3060,7 +3060,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Ubah ke/var/spool/postfix/run/opendkim untuk menggunakan soket unix dengan
 # Postfix dalam chroot:
-# Rundir =/was/spool/postfix/run/opendkim
+# Roundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Tidak berkomentar untuk menentukan soket alternatif
@@ -3153,7 +3153,7 @@ service lmtp {
 service imap {
   # Sebagian besar memori masuk ke file mmap (). Anda mungkin perlu meningkatkan ini
   # Batasi jika Anda memiliki kotak surat besar.
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 
   # Max. Jumlah proses IMAP (koneksi)
   # Proses_limit = 1024
@@ -3241,13 +3241,13 @@ nano config/etc_dovecot_dovecot
 # Dengarkan = *, ::
 
 # Direktori dasar tempat menyimpan data runtime.
-# base_dir =/var/run/dovecot/
+# base_dir =/var/run/doecot/
 
 # Nama contoh ini. Dalam Multi-Instance Setup Doveadm dan perintah lainnya
 # dapat menggunakan -i &lt;stalle_name&gt; untuk memilih instance mana yang digunakan (alternatif
 # ke -c &lt;igig_path&gt;). Nama contoh juga ditambahkan ke proses dovecot
 # dalam output PS.
-# Instance_name = dovecot
+# instance_name = dovecot
 
 # Pesan Salam untuk Klien.
 # LOGIN_GREETING = DOVECOT SIAP.
@@ -3406,7 +3406,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Ubah ke/var/spool/postfix/run/opendkim untuk menggunakan soket unix dengan
 # Postfix dalam chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Roundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Tidak berkomentar untuk menentukan soket alternatif
@@ -3717,9 +3717,9 @@ Mainkan sudoku warna kolaboratif dengan teman secara gratis.<a class="btn btn-in
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Bagikan di Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fid%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Bagikan di Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fid%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Bagikan di Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/id/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Bagikan di Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/id/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Bagikan di Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/id/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3731,7 +3731,7 @@ Mainkan sudoku warna kolaboratif dengan teman secara gratis.<a class="btn btn-in
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Bagikan di Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/id/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Bagikan di Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/id/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Bagikan di Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/id/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

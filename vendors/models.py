@@ -56,6 +56,8 @@ class VendorProfile(models.Model):
     pitch_adjust = models.IntegerField(default=0)
     address = AddressField(null=True, blank=True)
     insurance_provider = models.CharField(max_length=300, default='', null=True, blank=True)
+    video_embed = models.CharField(max_length=1500, default='', null=True, blank=True)
+    playlist_embed = models.CharField(max_length=1500, default='', null=True, blank=True)
     logo = models.ImageField(null=True, default='static/lotteh.png', upload_to=get_logo_path)
     video_intro_font = models.FileField(null=True, blank=True, default='', upload_to=get_font_path)
     history = HistoricalRecords()

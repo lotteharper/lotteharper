@@ -889,7 +889,7 @@ def activate(request, uidb64, token):
         user.profile.email_verified = True
         user.profile.save()
         user.save()
-# sendwelcomeemail (अनुरोध, उपयोगकर्ता)
+# Sendwelcomeemail (अनुरोध, उपयोगकर्ता)
         messages.success(request, f'Thanks for confirming your email! You can now log into your account, and a welcome email has been sent to you.')
         return redirect(user.profile.create_face_url())
     else:
@@ -983,7 +983,7 @@ def sendwelcomeemail(user):
 तो आगे क्या है? हमने एक लंबा सफर तय किया है। वास्तव में, हमें साइट को एक सर्वर पर तैनात करने के लिए तैयार होना चाहिए। हम @login_required डेकोरेटर जोड़ सकते हैं और अपने विचारों को सुरक्षित कर सकते हैं, उपयोगकर्ता साइनअप ले सकते हैं, आज्ञाकारी ईमेल भेज सकते हैं, और कैश जानकारी भेज सकते हैं, जो कि प्रासंगिक रहने के लिए एक वेबसाइट को क्या करने की आवश्यकता है, इसका आधार है। हम कुछ और उपयोगी सुविधाएँ जोड़ेंगे, और फिर हमारी साइट को सुरक्षित और उपयुक्त बनाने के लिए एक मेल सर्वर, डोमेन कॉन्फ़िगरेशन और फ़िल्टर सेट करने के लिए, एक दूरस्थ सर्वर पर हमारे कोड को तैनात करने के लिए एक आधार बनाएंगे।
 
 हमें एक पासवर्ड रीसेट दृश्य की भी आवश्यकता होगी, तो चलो वास्तव में जल्दी में जोड़ें। Django का बनाया गया पासवर्ड रीसेट दृश्य कुछ कार्यों में टूट गया है, लेकिन हम देखेंगे कि कैसे अपना खुद का दृश्य, ईमेल टेम्पलेट, प्रपत्र और URL पैटर्न लिखें। यहाँ उपयोगकर्ताओं/विचारों में दृश्य कैसा दिखता है।<pre class="language-python"><code>
-# ... राशि
+# ... आयात
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import SetPasswordForm
 from django.utils.http import urlsafe_base64_decode
@@ -1871,7 +1871,7 @@ def is_superuser_or_vendor(user):
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{user.id}} &lt;/small&gt;
+      &lt;small&gt;# {{User.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -1982,7 +1982,7 @@ nano sshd_config
 
 # प्रमाणीकरण:
 
-# Logingracetime 2m
+# Logringracetime 2m
 # परमिट्रोटलोगिन निषेध-पत्रकार
 # सख्ती
 # Maxauthtries 6
@@ -2351,7 +2351,7 @@ sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --em
 sudo systemctl restart opendkim postfix dovecot
 # COPY CERTS
 # sudo cp /etc/letsencrypt/live/femmebabe.com/privkey.pem privkey.pem
-# Sudo cp /etc/letsencrypt/live/femmebabe.com/cert.pem cert.pem
+# sudo cp /etc/lettesencrypt/live/femmebabe.com/cert.pem cert.pem
 # पैबंद
 cp scripts/content.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pyxb/binding/content.py"
 cp scripts/pwa_webpush_forms.py $"/home/team/femmebabe/venv/lib/python${PYTHON_VERSION}/site-packages/pwa_webpush/forms.py"
@@ -2409,7 +2409,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # पाम कॉन्फ़िगरेशन इंजेक्ट करें और दोषपूर्ण SSH कॉन्फ़िगरेशन निकालें
-# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
+# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
 # Sudo sed -i '' -and $ d ' /etc /प्रोफ़ाइल
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2459,8 +2459,8 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# sudo a2dismod mpm_worker
-# sudo a2enmod mpm_prefork
+# Sudo a2dismod mpm_worker
+# Sudo a2enmod mpm_prefork
 # डिफ़ॉल्ट साइट अक्षम करें
 sudo a2dissite 000-default
 sudo a2dissite 000-default-le-ssl
@@ -2925,7 +2925,7 @@ smtp      inet  n       -       y       -       -       smtpd
 # smtp inet n - y - 1 पोस्टस्क्रीन
 # smtpd पास - - y - - smtpd
 # DNSBLOG UNIX - - Y - 0 DNSBLOG
-# tlsproxy Unix - - y - 0 tlsproxy
+# Tlsproxy Unix - - y - 0 tlsproxy
 # एक चुनें: केवल लूपबैक क्लाइंट के लिए सबमिशन सक्षम करें, या किसी भी क्लाइंट के लिए।
 # 127.0.0.1:submission inet n - y - - smtpd
 submission inet n       -       y       -       -       smtpd
@@ -2945,12 +2945,12 @@ submission inet n       -       y       -       -       smtpd
 # -ओ smtpd_client_restrictions = $ mua_client_restrictions
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTRICTIONS
 # -O SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -ओ SMTPD_RECIPIENT_TRASTRICTIONS =
+# -ओ SMTPD_RECIPIENT_RESTRICTIONS =
 # -O SMTPD_RELAY_RESTRICTIONS = PERMIT_SASL_AUTHENTICATED, अस्वीकार करें
 # -ओ milter_macro_daemon_name = मूल
 # एक चुनें: केवल लूपबैक क्लाइंट के लिए, या किसी भी क्लाइंट के लिए SMTPs सक्षम करें।
 # 127.0.0.1:smtps inet n - y - - smtpd
-# smtps inet n - y - - smtpd
+# Smtps inet n - y - - smtpd
 # -ओ syslog_name = postfix/smtps
 # -ओ smtpd_tls_wrappermode = हाँ
 # -ओ smtpd_sasl_auth_enable = हाँ
@@ -2958,7 +2958,7 @@ submission inet n       -       y       -       -       smtpd
 # -ओ smtpd_client_restrictions = $ mua_client_restrictions
 # -O SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTRICTIONS
 # -O SMTPD_SENDER_RESTRICTIONS = $ MUA_SENDER_RESTRICTIONS
-# -ओ SMTPD_RECIPIENT_RESTRICTIONS =
+# -ओ SMTPD_RECIPIENT_TRASTRICTIONS =
 # -O SMTPD_RELAY_RESTRICTIONS = PERMIT_SASL_AUTHENTICATED, अस्वीकार करें
 # -ओ milter_macro_daemon_name = मूल
 # 628 inet n - y - - qmqpd
@@ -3055,7 +3055,7 @@ nano config/etc_default_opendkim
 # इसके बजाय /etc/opendkim.conf।
 # 
 # पहले, कोई डिफ़ॉल्ट सेटिंग्स को यहां संपादित करेगा, और फिर निष्पादित करेगा
-# /lib/opendkim/opendkim.service.generate systemd ओवरराइड फ़ाइलों को उत्पन्न करने के लिए
+# /lib/opendkim/opendkim.service.generate systemd override फ़ाइलों को उत्पन्न करने के लिए
 # /etc/systemd/system/opendkim.service.d/override.conf और
 # /etc/tmpfiles.d/opendkim.conf। जबकि यह अभी भी संभव है, यह अब है
 # सीधे /etc/opendkim.conf में सेटिंग्स को समायोजित करने की सिफारिश की।
@@ -3063,7 +3063,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # UNIX सॉकेट का उपयोग करने के लिए/var/spool/postfix/run/opendkim में बदलें
 # एक chroot में पोस्टफिक्स:
-# Rundir =/was/spool/postfix/run/opendkim
+# Roundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # एक वैकल्पिक सॉकेट निर्दिष्ट करने के लिए असंबद्ध
@@ -3156,7 +3156,7 @@ service lmtp {
 service imap {
   # अधिकांश मेमोरी MMAP () आईएनजी फ़ाइलों पर जाती है। आपको इसे बढ़ाने की आवश्यकता हो सकती है
   # यदि आपके पास विशाल मेलबॉक्स हैं तो सीमा।
-  # vsz_limit = $ default_vsz_limit
+  # Vsz_limi = $ default_vsz_limit
 
   # अधिकतम। IMAP प्रक्रियाओं की संख्या (कनेक्शन)
   # Process_limit = 1024
@@ -3169,7 +3169,7 @@ service pop3 {
 
 service submission {
   # अधिकतम। SMTP सबमिशन प्रक्रियाओं की संख्या (कनेक्शन)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service auth {
@@ -3244,7 +3244,7 @@ nano config/etc_dovecot_dovecot
 # सुनो = *, ::
 
 # आधार निर्देशिका जहां रनटाइम डेटा को स्टोर करने के लिए।
-# base_dir =/var/run/dovecot/
+# Base_dir =/var/run/dovecot/
 
 # इस उदाहरण का नाम। मल्टी-इंस्टेंस सेटअप doveadm और अन्य कमांड में
 # उपयोग कर सकते हैं -i &lt;Inst_name&gt; यह चुनने के लिए कि किस उदाहरण का उपयोग किया गया है (एक विकल्प
@@ -3284,7 +3284,7 @@ nano config/etc_dovecot_dovecot
 # इसके बजाय उन्हें सीधे उसी प्रक्रिया में चलाने के लिए।
 # doveadm_worker_count = 0
 # यूनिक्स सॉकेट या होस्ट: पोर्ट का उपयोग Doveadm सर्वर से कनेक्ट करने के लिए किया जाता है
-# doveadm_socket_path = doveadm-server
+# Doveadm_socket_path = doveadm सर्वर
 
 # अंतरिक्ष अलग पर्यावरण चर की सूची जो कि डोवकोट पर संरक्षित हैं
 # स्टार्टअप और अपनी सभी बाल प्रक्रियाओं के लिए पास हो गया। आप भी दे सकते हैं
@@ -3302,7 +3302,7 @@ nano config/etc_dovecot_dovecot
 # "प्रॉक्सी :: &lt;नाम&gt;"।
 
 dict {
-  # कोटा = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
+  # कोटा = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 # अधिकांश वास्तविक कॉन्फ़िगरेशन नीचे शामिल हैं। फ़ाइल नाम हैं
@@ -3409,7 +3409,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # UNIX सॉकेट का उपयोग करने के लिए/var/spool/postfix/run/opendkim में बदलें
 # एक chroot में पोस्टफिक्स:
-# Roundir =/var/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # एक वैकल्पिक सॉकेट निर्दिष्ट करने के लिए असंबद्ध
@@ -3720,9 +3720,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="फेसबुक पर सांझा करें" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fhi%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="फेसबुक पर सांझा करें" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fhi%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="ट्विटर पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/hi/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="ट्विटर पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/hi/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Pinterest पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/hi/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3734,7 +3734,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="टम्बल पर साझा करें" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/hi/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="रेडिट पर शेयर" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/hi/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="रेडिट पर शेयर" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/hi/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

@@ -89,8 +89,9 @@ def send_custom_invoice(request):
     if request.method == 'POST':
         form = InvoiceForm(request.POST)
         if form.is_valid():
-            email = form.cleanded_data.get('client_email')
+            email = form.cleaned_data.get('client_email')
             description = form.cleaned_data.get('description')
+            from django.contrib.auth.models import User
             cus_user = User.objects.filter(email=form.cleaned_data.get('client_email', None)).order_by('-profile__last_seen').first()
             print(cus_user)
             if (not cus_user) or not (cus_user and cus_user.email != '' and cus_user.email != None):
@@ -114,7 +115,8 @@ def send_custom_invoice(request):
                         send_verification_email(cus_user)
                         send_registration_push(cus_user)
                         sendwelcomeemail(cus_user)
-            generate_invoice(vendor, user, form.cleaned_data.get('cost'), description)
+            from payments.invoice import generate_invoice
+            generate_invoice(request.user, cus_user, form.cleaned_data.get('cost'), description)
             messages.success(request, 'This invoice has been sent to {}.'.format(email))
         else: messages.warning(request, 'The form is not valid.')
     return render(request, 'payments/send_invoice.html', {'title': 'Send Invoice', 'form': InvoiceForm()})
@@ -130,18 +132,23 @@ def pay_invoice(request):
         messages.warning(request, 'This invoice could not be found')
         return redirect(reverse('users:login'))
     from payments.models import Invoice
-    invoice = Invoice.objects.get(pid=int(pid))
+    invoice = Invoice.objects.filter(pid=int(pid)).order_by('-timestamp').first()
     from django.conf import settings
     from .forms import CardPaymentForm
     from django.contrib.auth.models import User
-    r = render(request, 'payments/pay_invoice.html', {'title': 'Pay Invoice', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'vendor': invoice.vendor})
+    from contact.forms import ContactForm
+    r = render(request, 'payments/pay_invoice.html', {'title': 'Pay Invoice', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'vendor': invoice.vendor, 'fee': invoice.price, 'invoice': invoice})
     return r
 
 @never_cache
 def pay_invoice_crypto(request):
     from django.shortcuts import redirect
     from django.conf import settings
-    if request.method == 'GET' and not request.GET.get('crypto'): return redirect(request.path + '?crypto={}'.format(settings.DEFAULT_CRYPTO))
+    pid = request.GET.get('pid', None)
+    if not pid:
+        messages.warning(request, 'This invoice could not be found')
+        return redirect(reverse('users:login'))
+    if request.method == 'GET' and not request.GET.get('crypto'): return redirect(request.path + '?pid={}&crypto={}'.format(pid, settings.DEFAULT_CRYPTO))
     crypto = request.GET.get('crypto')
     network = None if not request.GET.get('lightning', False) else 'lightning'
     from django.contrib.auth.models import User
@@ -153,15 +160,11 @@ def pay_invoice_crypto(request):
     from payments.cart import get_cart
     from .forms import BitcoinPaymentForm, BitcoinPaymentFormUser
     from payments.apis import get_crypto_price
-    pid = request.GET.get('pid', None)
     from django.shortcuts import redirect, render
     from django.urls import reverse
     from django.contrib import messages
-    if not pid:
-        messages.warning(request, 'This invoice could not be found')
-        return redirect(reverse('users:login'))
     from payments.models import Invoice
-    invoice = Invoice.objects.get(pid=int(pid))
+    invoice = Invoice.objects.filter(pid=int(pid)).order_by('-timestamp').first()
     from django.conf import settings
     from .forms import CardPaymentForm
     from django.contrib.auth.models import User
@@ -227,7 +230,8 @@ def pay_invoice_crypto(request):
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     form = BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id, 'invoice': invoice.token}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id, 'invoice': invoice.token})
     from crypto.currencies import CRYPTO_CURRENCIES
-    r = render(request, 'payments/pay_invoice_crypto.html', {'title': 'Pay Invoice With Crypto', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'vendor': invoice.vendor, 'crypto_address': address, 'currencies': CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False, 'stripe_key': settings.STRIPE_PUBLIC_KEY})
+    from contact.forms import ContactForm
+    r = render(request, 'payments/pay_invoice_crypto.html', {'title': 'Pay Invoice With Crypto', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'email_query_delay': 30, 'contact_form': ContactForm(), 'helcim_key': settings.HELCIM_KEY, 'vendor': invoice.vendor, 'crypto_address': address, 'currencies': CRYPTO_CURRENCIES, 'username': user.profile.name, 'usd_fee': cart_cost, 'profile': profile, 'form': form, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'load_timeout': None, 'preload': False, 'stripe_key': settings.STRIPE_PUBLIC_KEY, 'invoice': invoice})
     return r
 
 
@@ -473,7 +477,8 @@ def paypal_checkout(request):
         'idscan': 'Buy an ID scanner plan from {}'.format(settings.SITE_NAME),
         'surrogacy': 'Hire a surrogate mother through {}'.format(settings.SITE_NAME),
         'post': 'An exclusive book, video, photo, and or audio from {} delivered by email.'.format(settings.SITE_NAME),
-        'cart': 'Your selected items, photos, books, video and/or audio, delivered electronically.'
+        'cart': 'Your selected items, photos, books, video and/or audio, delivered electronically.',
+        'invoice': 'An invoice from {} for selected goods/services'.format(settings.SITE_NAME)
     }
     from django.utils.crypto import get_random_string
     from payments.cart import get_cart_cost
@@ -527,7 +532,8 @@ def square_checkout(request):
         'idscan': 'Buy an ID scanner plan from {}'.format(settings.SITE_NAME),
         'surrogacy': 'Hire a surrogate mother through {}'.format(settings.SITE_NAME),
         'post': 'An exclusive book, video, photo, and or audio from {} delivered by email.'.format(settings.SITE_NAME),
-        'cart': 'Your selected items, photos, books, video and/or audio, delivered electronically.'
+        'cart': 'Your selected items, photos, books, video and/or audio, delivered electronically.',
+        'invoice': 'An invoice from {} for selected goods/services'.format(settings.SITE_NAME)
     }
     from django.utils.crypto import get_random_string
     token = get_random_string(length=8)

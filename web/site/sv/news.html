@@ -598,7 +598,7 @@ class UserRegisterForm(UserCreationForm):
 </code></pre>Så vi har en annan form här, som fungerar ganska enkelt. Det är ett användarregisterformulär med ett användarnamn, e -post och lösenord samt ett bekräftelsesfält. Observera att det här formuläret inte förlänger regelbundna former. Formklassen, det är en modellform som innebär att den har en meta. Ett fält definieras precis detsamma, och klass Meta definierar modellen som formuläret motsvarar resten av informationen som kommer att skrivas till formuläret. Det mesta av detta finns redan i Djangos inbyggda usercreationform, så vi kommer att använda det som grund för klassen (passerad i parentesen).
 
 Därefter kommer vi att undersöka vyn för att registrera en användare, nu när vi har ett formulär och en mall. Detta är en Modelform, precis som den i den nya postvyn. Redigera användare/visningar.py och lägg till följande kod:<pre class="language-python"><code>
-# ... import
+# ... belopp
 from .forms import UserRegisterForm
 
 def register(request):
@@ -609,7 +609,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>Det här är allt vi behöver för att få en användare registrerad, men vi borde ha mer information. Vi vill veta den tid som användaren registrerade, vilken tid de sist var på webbplatsen, lite information om dem, som en biografi, tidszon osv. Vi måste också uppdatera vår fodermodell, posta, för att redogöra för användaren Modell och attributinlägg till varje användare. För att göra det kommer vi att uppdatera modellerna.py i båda apparna. Låt oss börja med att redigera matningsmodellen. Det ska se ut så här nu:<pre class="language-python"><code>
-from django.db import models # ... belopp
+from django.db import models # ... import
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -633,7 +633,7 @@ class Profile(models.Model):
 </code></pre>Observera att den här modellen är ganska lik postmodellen. Vi har en ytterligare import, tidszon, som gör att vi kan ställa in standardvärden på DateTime -fälten, och vi har också en karaktär och textfält som inlägget. Att använda alla dessa tidsstämplar hjälper oss att säkra webbplatsen och förstå dess användning, och textfälten låter oss ge information om varje användare eller författare på webbplatsen. OneToonefield bör vara den enda mindre överväganden, den uppför sig exakt samma som en föregångare men med endast en per efterföljande modell. På detta sätt har användaren bara en profil, medan de kan ha många inlägg.
 
 Låt oss nu förbättra vår inloggning och registrera vyer för att redogöra för profilen. Först redigera användare/visningar. Ppy och fokus på registervyn:<pre class="language-python"><code>
-# ... import
+# ... belopp
 from .forms import UserRegisterForm
 
 def register(request):
@@ -1818,7 +1818,7 @@ def send_verification_email(user, token):
     token.save()
     send_html_email(user, "Your verification code for {} is {}".format(settings.SITE_NAME, str(code)), "&lt;p&gt;Dear {},&lt;/p&gt;&lt;p&gt;Your verification code for {} is {}. Thank you for using this code to secure your account.&lt;/p&gt;&lt;h2&gt;{}&lt;/h2&gt;&lt;p&gt;Sincerely, {}&lt;/p&gt;".format(user.profile.name, settings.SITE_NAME, str(code), str(code), settings.SITE_NAME))
 </code></pre>Så allt fungerar bra, nu har vi ett autentiseringssystem med flera faktorer som beror på ett telefonnummer eller e -post för att logga in. Men vi behöver också ett sätt att ta bort, eller åtminstone dölja användare som inte samarbetar med våra villkor. Dessa kan vara spammare, robotar eller alla som inte betyder bra för vårt arbete. Ta en titt på en vy jag har för att övervaka användare på min webbplats:<pre class="language-python"><code>
-# import
+# belopp
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from .tests import is_superuser_or_vendor # Vi måste skapa detta test
@@ -2113,7 +2113,7 @@ sudo nano /usr/bin/ascript
 # ! / BIN / BASH
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
+    echo "# ! / bin / bash "&gt;&gt; / usr / bin / $ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2375,7 +2375,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# sudo chmod 664 db.sqlite3
+# Sudo chmod 664 db.sqlite3
 # sudo chown www-data: användare db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2409,7 +2409,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injicera PAM -konfigurering och ta bort felaktigt SSH -konfiguration
-# sudo sed -i '' -e '$ d' /etc/pam.d/sshd
+# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
 # Sudo sed -i '' -och $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2459,7 +2459,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# sudo a2dismod mpm_worker
+# Sudo a2dismod mpm_worker
 # sudo a2enmod mpm_prefork
 # Inaktivera standardwebbplatsen
 sudo a2dissite 000-default
@@ -2855,7 +2855,7 @@ nano config/etc_postfix_main.cf
 # Debian Specific: Att specificera ett filnamn kommer att orsaka det första
 # raden i den filen som ska användas som namn.  Debian standard
 # är /etc /mailName.
-# Myorigine = /etc /mailName
+# myorigin = /etc /mailName
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2951,10 +2951,10 @@ submission inet n       -       y       -       -       smtpd
 # Välj en: Aktivera SMTPS endast för loopback -klienter eller för någon klient.
 # 127.0.0.1:smtps inet n - y - - SMTPD
 # SMTPS inet n - y - - smtpd
-# -O syslog_name = postfix/smtps
+# -o syslog_name = postfix/smtps
 # -o smtpd_tls_wrappermode = ja
 # -o smtpd_sasl_auth_enable = ja
-# -o smtpd_reject_unlisted_recipient = nej
+# -O smtpd_reject_unlisted_recipient = nej
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 # -o smtpd_helo_restrictions = $ mua_helo_restrictions
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
@@ -3014,7 +3014,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 # Ange i main.cf ett eller flera av följande:
 # Mailbox_Transport = lmtp: inet: localhost
-# virtual_transport = lmtp: inet: localhost
+# Virtual_transport = lmtp: inet: localhost
 # 
 # =================================================== ===================
 # 
@@ -3027,8 +3027,8 @@ maildrop  unix  -       n       n       -       -       pipe
 # =================================================== ===================
 # Gammalt exempel på leverans via Cyrus.
 # 
-# Gammal -Cyrus unix - n n - - rör
-#   flags=R user=cyrus argv=/cyrus/bin/deliver -e -m ${extension} ${user}
+# Old -Corus Unix - n n - - rör
+# flaggor = r user = cyrus argv =/cyrus/bin/leverera -e -m $ {förlängning} $ {användare}
 # 
 # =================================================== ===================
 # 
@@ -3063,7 +3063,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Ändra till/var/spool/postfix/run/opendkim för att använda ett Unix -uttag med
 # Postfix i en chroot:
-# Rundir =/was/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Ummentar för att ange ett alternativt uttag
@@ -3116,7 +3116,7 @@ service imap-login {
   # service_count = 1
 
   # Antal processer för att alltid vänta på fler anslutningar.
-  # process_min_avail = 0
+  # Process_min_avail = 0
 
   # Om du ställer in service_count = 0 måste du förmodligen växa detta.
   # vsz_limit = $ default_vsz_limit
@@ -3164,12 +3164,12 @@ service imap {
 
 service pop3 {
   # Max. Antal POP3 -processer (anslutningar)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   # Max. Antal SMTP -inlämningsprocesser (anslutningar)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service auth {
@@ -3272,7 +3272,7 @@ nano config/etc_dovecot_dovecot
 # Visa mer ordförda processtitlar (i PS). Visar för närvarande användarnamn och
 # IP -adress. Användbart för att se vem som faktiskt använder IMAP -processerna
 # (t.ex. delade brevlådor eller om samma UID används för flera konton).
-# Verbose_proctle = ja
+# verbose_proctitle = nej
 
 # Om alla processer dödas när Dovecot master -process stängs av.
 # Att ställa in detta till "nej" betyder att Dovecot kan uppgraderas utan
@@ -3302,7 +3302,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;namn&gt;".
 
 dict {
-  # kvot = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
+  # kvot = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 # De flesta av den faktiska konfigurationen ingår nedan. Filnamnen är
@@ -3409,7 +3409,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Ändra till/var/spool/postfix/run/opendkim för att använda ett Unix -uttag med
 # Postfix i en chroot:
-# Rundir =/var/spool/postfix/run/opendkim
+# Rundir =/was/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Ummentar för att ange ett alternativt uttag
@@ -3720,9 +3720,9 @@ Spela Collaborative Color Sudoku med en vän gratis.<a class="btn btn-info" href
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Dela på Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fsv%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Dela på Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fsv%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Dela på Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/sv/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Dela på Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/sv/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Dela på Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/sv/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3734,7 +3734,7 @@ Spela Collaborative Color Sudoku med en vän gratis.<a class="btn btn-info" href
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Dela på Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/sv/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Dela på Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/sv/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Dela på Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/sv/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

@@ -5,6 +5,7 @@ force_copy = False
 force_overwrite = False
 disable_langs = False
 end_after_langs = False
+disable_posts = True
 PRIV_POSTS = 24
 import os, pytz
 from datetime import datetime
@@ -184,7 +185,7 @@ def generate_site():
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
         context['footer'] = False # ...None).exclude(image_offsite=None)
-        for post in [] if False else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted'):
+        for post in [] if disable_posts else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
@@ -202,7 +203,7 @@ def generate_site():
                     except:
                         import traceback
                         print(traceback.format_exc())
-        for post in Post.objects.filter(private=True, posted=True, published=True, feed="private").union(Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted')[:settings.PAID_POSTS * 2]:
+        for post in [] if disable_posts else Post.objects.filter(private=True, posted=True, published=True, feed="private").union(Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted')[:settings.PAID_POSTS * 2]:
             if post:
                 path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
                 if overwrite or (not os.path.exists(path)):

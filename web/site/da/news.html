@@ -918,7 +918,7 @@ nano users/views.py
             send_verification_email(user)
 # ... (før) Omdirigering (
 </code></pre>Du behøver ikke at tilføje de første og sidste linjer i dette kodestykket, bare sørg for, at registervisningen sender verifikations -e -mailen til brugeren. Det skal se sådan ud:<pre class="language-python"><code>
-# ... import
+# ... beløb
 from .forms import UserRegisterForm
 
 def register(request):
@@ -2113,7 +2113,7 @@ sudo nano /usr/bin/ascript
 # !
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# !
+    echo "# !/bin/bash "&gt;&gt;/usr/bin/$ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2129,7 +2129,7 @@ SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
 # sudo chmod A+X -scripts/brugersitup
-# ./scripts/usersetup
+# ./scripts/usSetup
 # Ssh-keyen
 # Projektkatalog
 DIR="/home/team/femmebabe"
@@ -2375,7 +2375,7 @@ sudo chmod -R g+rwX ./
 sudo chmod -R g+rX .././
 sudo chmod -R g-rwX ../.ssh
 sudo chmod 774 ./
-# sudo chmod 664 db.sqlite3
+# Sudo chmod 664 db.sqlite3
 # sudo chown www-data: brugere db.sqlite3
 sudo chown -R www-data:www-data media/
 sudo chown www-data:users ./
@@ -2855,7 +2855,7 @@ nano config/etc_postfix_main.cf
 # Debian -specifik: Specificering af et filnavn vil forårsage det første
 # linje af den fil, der skal bruges som navn.  Debian -standard
 # er /etc /mailname.
-# Myorigine = /etc /mailName
+# myorigin = /etc /mailName
 
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
@@ -2924,8 +2924,8 @@ nano config/etc_postfix_master.cf
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 postskærm
 # SMTPD PASS - - Y - - SMTPD
-# Dnsblog unix - - y - 0 dnsblog
-# Tlsproxy unix - - y - 0 tlsproxy
+# dnsblog   unix  -       -       y       -       0       dnsblog
+# Tlsproxy Unix - - Y - 0 TLSProxy
 # Vælg en: Aktivér kun indsendelse for loopback -klienter eller for enhver klient.
 # 127.0.0.1:Submission inet N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2949,8 +2949,8 @@ submission inet n       -       y       -       -       smtpd
 # -o smtpd_relay_restrictions = tilladelse_sasl_authenticeret, afvis
 # -O milter_macro_daemon_name = oprindelse
 # Vælg en: Aktivér SMTPS kun for loopback -klienter eller for enhver klient.
-# 127.0.0.1:smtps inet n - y - - SMTPD
-# smtps     inet  n       -       y       -       -       smtpd
+# 127.0.0.1:smtps inet n  -       y       -       -       smtpd
+# SMTPS INET N - Y - - SMTPD
 # -O syslog_name = postfix/smtps
 # -o smtpd_tls_wrappermode = ja
 # -o smtpd_sasl_auth_enable = ja
@@ -2965,7 +2965,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMGR
+# qmgr unix n - n 300 1 oqmg
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3063,7 +3063,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Skift til/var/spole/postfix/run/opendkim til at bruge en Unix -stik med
 # postfix i en chroot:
-# Rundir =/var/spole/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Ukommentere for at specificere en alternativ stikkontakt
@@ -3119,7 +3119,7 @@ service imap-login {
   # Process_min_avail = 0
 
   # Hvis du indstiller service_count = 0, er du sandsynligvis nødt til at vokse dette.
-  # Vsz_limi = $ standard_vsz_limit
+  # vsz_limit = $ standard_vsz_limit
 }
 
 service pop3-login {
@@ -3197,7 +3197,7 @@ service auth-worker {
   # Author -arbejdsprocessen køres som rod som standard, så den kan få adgang til
   # /etc/skygge. Hvis dette ikke er nødvendigt, skal brugeren ændres til
   # $ standard_interal_user.
-  # bruger = rod
+  # Bruger = rod
 }
 
 service dict {
@@ -3244,7 +3244,7 @@ nano config/etc_dovecot_dovecot
 # Lyt = *, ::
 
 # Basiskatalog, hvor man skal gemme runtime -data.
-# base_dir =/var/run/dovecot/
+# Base_dir =/var/run/dovecot/
 
 # Navn på denne instans. I multi-instans-opsætning Doveadm og andre kommandoer
 # kan bruge -i &lt;instance_name&gt; til at vælge, hvilken forekomst der bruges (et alternativ
@@ -3284,7 +3284,7 @@ nano config/etc_dovecot_dovecot
 # I stedet for at køre dem direkte i den samme proces.
 # doveadm_worker_count = 0
 # UNIX Socket eller vært: Port brugt til oprettelse til DoveAdm -server
-# Doveadm_socket_path = doveadm -server
+# doveadm_socket_path = doveadm-server
 
 # Rum adskilt liste over miljøvariabler, der er bevaret på Dovecot
 # opstart og overført til alle sine børneprocesser. Du kan også give
@@ -3302,7 +3302,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;navn&gt;".
 
 dict {
-  # kvote = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # kvote = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 # De fleste af den faktiske konfiguration bliver inkluderet nedenfor. Filnavne er
@@ -3720,9 +3720,9 @@ Spil samarbejdsfarve Sudoku med en ven gratis.<a class="btn btn-info" href="http
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Del på Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fda%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Del på Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fda%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Del på Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/da/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Del på Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/da/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Del på Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/da/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3734,7 +3734,7 @@ Spil samarbejdsfarve Sudoku med en ven gratis.<a class="btn btn-info" href="http
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Del på Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/da/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Del på Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/da/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Del på Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/da/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

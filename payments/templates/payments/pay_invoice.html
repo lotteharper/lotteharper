@@ -32,7 +32,7 @@
 <li>{{ 'To be paid for products/services as arranged above.'|trans }}</li>
 <li>{{ 'Billed once only.'|etrans }}</li>
 </ul>
-<p><i>{{ 'Want to pay with cryptocurrency instead?'|etrans }}</i> <a href="" class="btn btn-outline-info" title="{{ 'Pay with crypto'|etrans }}">{{ 'Pay with Cryptocurrency'|etrans }}</a></p>
+<p><i>{{ 'Want to pay with cryptocurrency instead?'|etrans }}</i> <a href="{% url 'payments:pay-invoice-crypto' %}{% if request.GET %}?{% for key, val in request.GET.items %}{{ key }}={{ val }}&{% endfor %}{% endif %}" class="btn btn-outline-info" title="{{ 'Pay with crypto'|etrans }}">{{ 'Pay with Cryptocurrency'|etrans }}</a></p>
 <b>{{ 'Info:'|etrans }}</b>
 <p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} INVOICE".</p>
 <p>{{ 'For questions or concerns, please contact'|etrans }} {{ the_site_name }} {{ 'at'|etrans }} {{ agent_phone }} {{ 'or mail to'|etrans }} {{ agent_name }} {{ agent_address }}.</p>

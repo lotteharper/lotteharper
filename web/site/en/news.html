@@ -1105,7 +1105,7 @@ This is all we need to get a user registered, but we should have more informatio
 
 
 <pre class="language-python"><code>
-from django.db import models #  … imports
+from django.db import models # … Amounts
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -1174,7 +1174,7 @@ This simply creates a profile for the user, without filling in any of the inform
 
 
 <pre class="language-python"><code>
-#  … imports
+# … Amounts
 from .models import Profile
 from django.utils import timezone
 import datetime
@@ -1733,7 +1733,7 @@ Now, we'll need to add a form to resend the activation email. In users/forms.py,
 
 
 <pre class="language-python"><code>
-#  … (imports)
+# … (Amounts)
 class ResendActivationEmailForm(forms.Form):
     email = forms.EmailField(required=True)
 </code></pre>
@@ -3123,7 +3123,7 @@ So this all works great, now we have a multi factor authentication system that d
 
 
 <pre class="language-python"><code>
-#  imports
+# amounts
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from .tests import is_superuser_or_vendor #  We will need to create this test
@@ -3495,7 +3495,7 @@ X11Forwarding yes
 PrintMotd no
 # PrintLastLog yes
 # TCPKeepAlive yes
-# Permittuenvironment in
+# Permitserenviron no
 # Compression delayed
 # Clientalive interval 0
 # ClientAliveCountMax 3
@@ -3509,7 +3509,7 @@ PrintMotd no
 #  no default banner path
 Banner /etc/banner
 
-# Allow customer to pass local variables variables
+#  Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
 #  override default of no subsystems
@@ -3517,7 +3517,7 @@ Subsystem	sftp	/usr/lib/openssh/sftp-server
 
 #  Example of overriding settings on a per-user basis
 # Match User anoncvs
-# X11ForWarding no
+# 	X11Forwarding no
 # 	AllowTcpForwarding no
 # Allowetty in
 # 	ForceCommand cvs server
@@ -3657,7 +3657,7 @@ Make sure to use sudo there so you have permissions to edit the file. In the fil
 
 
 <pre class="language-bash"><code>
-# !/bin/bash
+# ! / bin / Bash
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
     echo "# ! / bin / Bash "&gt;&gt; / USR / BIN / $ 1
@@ -3743,7 +3743,7 @@ echo "-a exit,always -F arch=b32 -F euid=0 -S execve" | sudo tee -a /etc/audit/a
 echo "Starting antivirus"
 sudo systemctl enable clamav-daemon
 sudo systemctl start clamav-daemon
-# Set hostname
+#  Set hostname
 echo "127.0.0.1 femmebabe" | sudo tee -a /etc/hosts
 sudo hostnamectl set-hostname localhost
 # Setup postgres
@@ -3848,7 +3848,7 @@ cd $DIR
 echo "Creating virtual environment"
 python -m venv venv
 source venv/bin/activate
-# Get and build Dependencies
+#  Get and build dependencies
 echo "Getting and building dependencies, this may take a whike"
 cd $DIR
 git clone https://github.com/sukhitashvili/violence-detection.git
@@ -3978,7 +3978,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 #  Inject pam config and remove faulty ssh config
-# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# SUDO SED -I '' -and $ d '/etc/pam.d/sshd
 # SUDO SED -I '' -and $ d ' /etc /profile
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -4029,7 +4029,7 @@ sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
 # sudo a2dismod mpm_worker
-# sudo a2enmod mpm_prefork
+# sudo a2enMod MPM_PreFork
 # Disable Default Site
 sudo a2dissite 000-default
 sudo a2dissite 000-default-le-ssl
@@ -4183,7 +4183,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# Disable IPTables
+# Disabled iPatables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -4204,7 +4204,7 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo snap install redis
 sudo systemctl enable apache2
 sudo systemctl start apache2
-#  Run certbot
+# Run Certbot
 sudo certbot --apache --non-interactive --agree-tos --domains femmebabe.com --email &lt;youremail&gt;@gmail.com
 # Set User Settings
 sudo gpasswd -a www-data users
@@ -4710,11 +4710,11 @@ Add these lines:
 # 
 #  ==========================================================================
 #  service type  private unpriv  chroot  wakeup  maxproc command + args
-# (Yes) (Yes) (No) (Never) (100)
+#                (yes)   (yes)   (no)    (never) (100)
 #  ==========================================================================
 smtp      inet  n       -       y       -       -       smtpd
 # smtp      inet  n       -       y       -       1       postscreen
-# SMTPD Pass - - Y - - SMTPD
+# smtpd     pass  -       -       y       -       -       smtpd
 # DNSBLOG UNIX - - Y - 0 DNSBLOG
 # tlsproxy  unix  -       -       y       -       0       tlsproxy
 #  Choose one: enable submission for loopback clients only, or for any client.
@@ -4740,9 +4740,9 @@ submission inet n       -       y       -       -       smtpd
 #   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
 # -O MILTER_MACRO_DAEmon_Name = Originating
 #  Choose one: enable smtps for loopback clients only, or for any client.
-# 127.0.0.1:SMTPS INET N - Y - - SMTPD
-# smtps     inet  n       -       y       -       -       smtpd
-# -o syslog_name = postfix/smtps
+# 127.0.0.1:smtps inet n  -       y       -       -       smtpd
+# SMTPS INET N - Y - - SMTPD
+# -O Syslog_Name = PostFix/SMTPS
 #   -o smtpd_tls_wrappermode=yes
 #   -o smtpd_sasl_auth_enable=yes
 #   -o smtpd_reject_unlisted_recipient=no
@@ -4752,7 +4752,7 @@ submission inet n       -       y       -       -       smtpd
 # -o smtpd_recipient_trastrictions =
 #   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
 # -O MILTER_MACRO_DAEmon_Name = Originating
-# 628 inet n - y - - qmqpd
+# 628 Inet N - Y - - QMQPD
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
@@ -4805,7 +4805,7 @@ maildrop  unix  -       n       n       -       -       pipe
 # 
 #  Specify in main.cf one or more of the following:
 #   mailbox_transport = lmtp:inet:localhost
-#   virtual_transport = lmtp:inet:localhost
+# Virtual_Transport = LMTP: INET: LocalHost
 # 
 #  ====================================================================
 # 
@@ -4813,7 +4813,7 @@ maildrop  unix  -       n       n       -       -       pipe
 #  Also specify in main.cf: cyrus_destination_recipient_limit=1
 # 
 # Cyrus Unix - N N - - Pipe
-# flags = drx user = Cyrus arg =/Cyrus/bin/Deliver -e -r $ {SENDER} -M $ {Extension} $ {User}
+#   flags=DRX user=cyrus argv=/cyrus/bin/deliver -e -r ${sender} -m ${extension} ${user}
 # 
 #  ====================================================================
 #  Old example of delivery via Cyrus.
@@ -4931,7 +4931,7 @@ service imap-login {
   }
   inet_listener imaps {
     # Port = 993
-    # ssl = Yes
+    # ssl = yes
   }
 
   #  Number of connections to handle before starting a new process. Typically
@@ -4983,7 +4983,7 @@ service imap {
   # vsz_limit = $ default_vsz_limit
 
   #  Max. number of IMAP processes (connections)
-  # process_limit = 1024
+  # Process_limit = 1024
 }
 
 service pop3 {
@@ -4993,7 +4993,7 @@ service pop3 {
 
 service submission {
   #  Max. number of SMTP Submission processes (connections)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service auth {
@@ -5090,7 +5090,7 @@ And add these lines
 # Listen = *, ::
 
 #  Base directory where to store runtime data.
-# BASE_DIR =/VAR/RUN/DOVECOT/
+# Base_Dir =/Var/Run/Dovecot/
 
 #  Name of this instance. In multi-instance setup doveadm and other commands
 #  can use -i &lt;instance_name&gt; to select which instance is used (an alternative
@@ -5310,7 +5310,7 @@ And add these lines
 # Daemon_opts = ""
 #  Change to /var/spool/postfix/run/opendkim to use a Unix socket with
 #  postfix in a chroot:
-# Roundir =/VAR/Spool/Postfix/Run/Opendkim
+# Rundir =/was/spool/postfix/Run/Opendkim
 RUNDIR=/run/opendkim
 # 
 #  Uncomment to specify an alternate socket

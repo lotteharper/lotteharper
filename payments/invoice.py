@@ -12,6 +12,7 @@ def generate_invoice(vendor, user, price, description):
         'vendor': vendor,
         'invoice': invoice,
         'description': description,
+        'site_name': settings.SITE_NAME
     })
     send_html_email(user, 'Your invoice from {}'.format(settings.SITE_NAME), html_email)
 
@@ -30,5 +31,6 @@ def process_invoice(invoice):
         'vendor': vendor,
         'invoice': invoice,
         'description': description,
+        'site_name': settings.SITE_NAME
     })
     send_html_email(user, 'Invoice for {} (@{}) has been paid'.format(user.email, user.username), html_email)

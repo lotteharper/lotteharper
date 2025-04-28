@@ -70,19 +70,65 @@ def translate_html(request, html, target=None, src=None):
     """Translates HTML content to the target language."""
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(html, 'html.parser')
+    count = 0
+    if target == None and not request.GET.get('lang', None): target = request.LANGUAGE_CODE
+    elif target == None and request.GET.get('lang', None): target = request.GET.get('lang', None)
+    if target.lower() == src.lower(): return html
+    def thread(target, src, to_trans, count, result):
+        translated = translate(None, to_trans, target=target, src=src)
+        result[count] = translated
+        return
+    SIMULTANEOUS_THREADS = 1000
+    result_soup = []
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code']:
-            translated = translate(request, tag.string, target=target, src=src)
-            tag.replace_with(translated)
+            result_soup += [tag.string]
         elif tag.parent.name in ['pre', 'code']:
             lines = []
             for line in tag.string.split('\n'):
                 if len(line.rsplit('#', 1)) > 1:
                     to_trans = line.rsplit('#', 1)[1]
-                    translated = translate(request, to_trans, target=target, src=src)
+                    result_soup += [to_trans]
+    if not src:
+        src = settings.DEFAULT_LANG
+        try:
+            src = detect(result_soup[0]) if result_soup[0] else settings.DEFAULT_LANG
+            langs = detect_langs(result_soup[0]) if result_soup[0] else [settings.DEFAULT_LANG]
+            for item in langs:
+                if item.lang.startswith(settings.DEFAULT_LANG):
+                    src = settings.DEFAULT_LANG
+                    break
+        except: src = settings.DEFAULT_LANG
+    if len(soup.find_all(string=True)) < 1:
+        return translate(request, html, target=target, src=src)
+    threads = [None] * len(result_soup)
+    result = [None] * len(result_soup)
+    thread_count = 0
+    import threading
+    result_arr = [None] * len(result_soup)
+    while thread_count < len(result_soup):
+        for i in range(SIMULTANEOUS_THREADS):
+            if thread_count < len(result_soup):
+                threads[thread_count] = threading.Thread(target=thread, args=(target, src, result_soup[thread_count], thread_count, result_arr))
+                threads[thread_count].start()
+                thread_count += 1
+        for i in range(len(threads)):
+            if threads[i]: threads[i].join()
+    count = 0
+    for tag in soup.find_all(string=True):
+        if tag.parent.name not in ['script', 'style', 'pre', 'code']:
+            tag.replace_with(result_arr[count])
+            count+=1
+        elif tag.parent.name in ['pre', 'code']:
+            lines = []
+            for line in tag.string.split('\n'):
+                if len(line.rsplit('#', 1)) > 1:
+                    to_trans = line.rsplit('#', 1)[1]
+                    translated = result_arr[count]
                     line_string = line.rsplit('#', 1)[0] + '# ' + translated
-                else: line_string = line
-                lines = lines + [line_string]
-            out = '\n'.join(lines)
-            tag.replace_with(out)
+                    lines += [line_string]
+                    count+=1
+            try:
+                if lines: tag.replace_with('\n'.join(lines))
+            except: pass
     return str(soup)

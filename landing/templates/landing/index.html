@@ -21,6 +21,10 @@
 	<script type="text/javascript" src="/static/qrcode.min.js"></script>
 	<script type="text/javascript" src="/static/jquery-3.7.1.min.js"></script>
 	<style>
+    iframe { 
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
 	.hide {
 	        opacity: 0;
 	        display: none;
@@ -304,6 +308,8 @@
 {% endfor %}
 </div>
 <hr>
+{% if profile.user.vendor_profile.video_embed %}{% autoescape off %}{{ profile.user.vendor_profile.video_embed }}{% endautoescape %}<hr>{% endif %}
+{% if profile.user.vendor_profile.playlist_embed %}{% autoescape off %}{{ profile.user.vendor_profile.playlist_embed }}{% endautoescape %}<hr>{% endif %}
 <div style="display: flex; justify-content: space-around;">
 <p>{{ 'Ready to get started?'|etrans }} <a class="btn btn-lg btn-primary" title="{{ 'See more on the home page'|etrans }}" href="{% url 'app:app' %}">{{ 'Home'|etrans }}</a></p>
 </div>

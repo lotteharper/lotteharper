@@ -481,7 +481,7 @@ def feed(request):
 
 Nyní musíme, aby naše aplikace vypadala lépe, protože prozatím to vypadá opravdu základní. Můžeme to udělat pomocí CSS, buď inline, nebo ve třídách vázaných na každý objekt v dokumentu. CSS je opravdu pěkný, protože to říká vše na stránce, jak by to mělo vypadat,a může to vypadat opravdu dobře. Existuje několik knihoven, které to dokážou, ale moje osobní jít je Bootstrap. 
 
-Bootstrap si můžete stáhnout z jejich webových stránek,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">Getbootstrap.com/</a>. Poté, co je tam, stisknutím tlačítka si přečtěte instalační dokumenty a zkopírujte kód z části zahrnující sekci CDN. Tento kód budete potřebovat v horní části dokumentu HTML ve značce s názvem Head. Pojďme také pokračovat a vytvořit základní šablonu, takže tyto odkazy nemusíme znovu vytvářet v každé šabloně. 
+Bootstrap si můžete stáhnout z jejich webových stránek,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">getbootstrap.com/</a>. Poté, co je tam, stisknutím tlačítka si přečtěte instalační dokumenty a zkopírujte kód z části zahrnující sekci CDN. Tento kód budete potřebovat v horní části dokumentu HTML ve značce s názvem Head. Pojďme také pokračovat a vytvořit základní šablonu, takže tyto odkazy nemusíme znovu vytvářet v každé šabloně. 
 
 Vytvořte nový adresář s názvem šablony pomocí šablon Mkdir a poté upravte šablony/base.html.
 
@@ -2043,7 +2043,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DISPLAYOFFSET 10
 # X11uselocalhost ano
-# Pilulka ano
+# Povolení ano
 PrintMotd no
 # PrintLastLog Ano
 # Tcpkeepalive ano
@@ -2052,7 +2052,7 @@ PrintMotd no
 # Interval klientaive 0
 # CLENTALIVECOUNTMAX 3
 # Použité v
-# Pidfile /run/sshd.pid
+# Pidfile /hrun/sshd.pid
 # MaxStartups 10: 30: 100
 # Pemittunl ne
 # CHROOTDIRECTORY ŽÁDNÝ
@@ -2077,7 +2077,7 @@ PermitRootLogin no
 </code></pre>Nezapomeňte, že soubor uloží Ctrl+X a Y. Dále napíšeme základní skript s názvem Initialize (vše ve výchozím domácím adresáři našeho uživatele).<pre class="language-bash"><code>
 nano initialize
 </code></pre>Přidejte tyto řádky do souboru a nahraďte<key here="">S klíčem SSH jste našli pomocí CAT. (.SSH/ID_RSA.PUB)<pre class="language-bash"><code>
-# !/bin/bash
+# ! / bin / bash
 sudo apt install -y nano git openssh-server
 sudo cp sshd_config /etc/ssh/sshd_config
 sudo service ssh restart
@@ -2409,7 +2409,7 @@ echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
 sudo sh -c "cat config/sudoers &gt;&gt; /etc/sudoers"
 # Injekční konfiguraci PAM a odstraňte vadnou konfiguraci SSH
-# sudo sed -i '' -e '$ d' /tc/pam.d/sshd
+# Sudo sed -i '' -and $ d '/etc/pam.d/sshd
 # Sudo sed -i '' -and $ d ' /etc /profil
 echo "session required pam_exec.so seteuid /home/team/femmebabe/pam.sh" | sudo tee -a /etc/pam.d/sshd
 echo "session required pam_exec.so seteuid /home/team/femmebabe/logout.sh" | sudo tee -a /etc/pam.d/sshd
@@ -2945,7 +2945,7 @@ submission inet n       -       y       -       -       smtpd
 # -O smtpd_client_restrictions = $ mua_client_restrictions
 # -O smtpd_helo_restrictions = $ mua_helo_restrictions
 # -O smtpd_sender_restrictions = $ mua_sender_restrictions
-# -O SMTPD_RECIPIENT_RESTRICTICES =
+# -O SMTPD_RECIPIENT_TRASTRICTIONS =
 # -O smtpd_relay_restrictions = povolení_sasl_authenticated, odmítnout
 # -O milter_macro_daemon_name = původ
 # Vyberte jeden: Povolit SMTPS pouze pro klienty smyčky nebo pro každého klienta.
@@ -2965,7 +2965,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMGR
+# QMGR UNIX N - N 300 1 OQMG
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3119,7 +3119,7 @@ service imap-login {
   # Process_min_avail = 0
 
   # Pokud nastavíte servis_count = 0, pravděpodobně to musíte růst.
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3155,7 +3155,7 @@ service lmtp {
 
 service imap {
   # Většina paměti jde do souborů MMAP (). Možná to budete muset zvýšit
-  # Limit, pokud máte obrovské poštovní schránky.
+  # Omezte, pokud máte obrovské poštovní schránky.
   # Vsz_limi = $ default_vsz_limit
 
   # Max. Počet procesů IMAP (připojení)
@@ -3409,7 +3409,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Změna na/var/cívky/postfix/run/opendkim k použití zásuvky Unix s
 # postfix v chrootu:
-# Rundir =/var/cívka/postfix/run/opendkim
+# Rundir =/WAS/SPOOL/POSTFIX/RUN/OpenDKIM
 RUNDIR=/run/opendkim
 # 
 # Nekonečné zařazení alternativní zásuvky
@@ -3720,9 +3720,9 @@ Hrajte Collaborative Color Sudoku s přítelem zdarma.<a class="btn btn-info" hr
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Sdílejte na Facebooku" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fcs%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Sdílejte na Facebooku" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fcs%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Sdílejte na Twitteru" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/cs/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Sdílejte na Twitteru" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/cs/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Sdílet na Pinterestu" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/cs/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3734,7 +3734,7 @@ Hrajte Collaborative Color Sudoku s přítelem zdarma.<a class="btn btn-info" hr
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Sdílet na Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/cs/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Sdílet na Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/cs/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Sdílet na Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/cs/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

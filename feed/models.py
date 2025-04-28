@@ -822,7 +822,7 @@ class Post(models.Model):
             from lotteh.celery import write_post_book
             write_post_book.delay(self.id)
             print('Scheduling write book')
-        if (this and ((this.content != self.content) or (not this))) and '***' in self.content and self.posted:
+        if (this and ((this.content != self.content) or (not this))) and self.posted:
             self.compile_content()
         from security.crypto import decrypt_cbc
         if not is_base64(self.auction_message[24:]):

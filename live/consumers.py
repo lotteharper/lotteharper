@@ -124,11 +124,19 @@ def get_user(id):
 #    if not (user.profile.vendor or user.is_superuser): return False
     return True
 
+#@sync_to_async
+#def get_auth(user_id, session_key):
+#    from security.tests import face_mrz_or_nfc_verified_session_key
+#    user = User.objects.get(id=int(user_id)) if user_id else None
+#    return face_mrz_or_nfc_verified_session_key(user, session_key)
+
 @sync_to_async
 def get_auth(user_id, session_key):
-    from security.tests import face_mrz_or_nfc_verified_session_key
-    user = User.objects.get(id=int(user_id)) if user_id else None
-    return face_mrz_or_nfc_verified_session_key(user, session_key)
+    from security.models import UserSession
+    sess = UserSession.objects.filter(user__id=user_id, session_key=session_key).order_by('-timestamp')
+    for s in sess:
+        if s.authorized: return True
+    return False
 
 class CameraConsumer(AsyncWebsocketConsumer):
     camera_user = None

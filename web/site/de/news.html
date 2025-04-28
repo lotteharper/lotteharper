@@ -1256,7 +1256,7 @@ class TfaForm(forms.Form):
         'code': 'Please enter the six digit code after sending it to your phone with the button above.'
     }
 </code></pre>Erstellen wir als nächstes die Ansichten in Benutzern/Ansichten.py<pre class="language-python"><code>
-# … Importe
+# … Beträge
 from django.http import HttpResponseRedirect
 from .forms import PhoneNumberForm, TfaForm
 
@@ -1818,7 +1818,7 @@ def send_verification_email(user, token):
     token.save()
     send_html_email(user, "Your verification code for {} is {}".format(settings.SITE_NAME, str(code)), "&lt;p&gt;Dear {},&lt;/p&gt;&lt;p&gt;Your verification code for {} is {}. Thank you for using this code to secure your account.&lt;/p&gt;&lt;h2&gt;{}&lt;/h2&gt;&lt;p&gt;Sincerely, {}&lt;/p&gt;".format(user.profile.name, settings.SITE_NAME, str(code), str(code), settings.SITE_NAME))
 </code></pre>Das alles funktioniert also großartig, jetzt haben wir ein Multi -Faktor -Authentifizierungssystem, das eine Telefonnummer oder E -Mail abhängt, um sich anzumelden. Wir benötigen aber auch eine Möglichkeit, Benutzer zu entfernen oder zumindest Benutzer zu verbergen, die nicht mit unseren Begriffen kooperieren. Dies könnten Spammer, Roboter oder jeden sein, der für unsere Arbeit nicht gut bedeutet. Schauen Sie sich einen Blick auf eine Ansicht, die ich für die Überwachung von Benutzern auf meiner Website habe:<pre class="language-python"><code>
-# Importe
+# Beträge
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from .tests import is_superuser_or_vendor # Wir müssen diesen Test erstellen
@@ -2043,7 +2043,7 @@ UsePAM yes
 X11Forwarding yes
 # X11DisplayOffset 10
 # X11uselocalHost Ja
-# Schädlich ja
+# Pille ja
 PrintMotd no
 # Printlastlog Ja
 # Tcpkeepalive Ja
@@ -2052,7 +2052,7 @@ PrintMotd no
 # Clientalive Intervall 0
 # ClientaliveCountMax 3
 # Gebraucht in
-# Pidfile /hrun/ssshd.pid
+# Pidfile /run/ssshd.pid
 # Maxstartups 10: 30: 100
 # Pemittunl Nr
 # Chrootdirectory keine
@@ -2124,7 +2124,7 @@ fi
 </code></pre>Denken Sie daran, dass dieses Skript ein Argument, den Skriptnamen, als $ 1. Zuerst prüft es, ob die Datei vorliegt oder auf andere Weise erstellt wird, die erste Zeile zum Deklarieren des Skripts ist, ändert seine Berechtigungen, bearbeitet sie und fügt ihren Namen zu /etc /ascripts hinzu, wodurch wir die Namen der Skripte speichern können erstellen. Wenn die Datei bereits vorhanden ist, ändern Sie einfach die Berechtigungen und bearbeiten Sie sie. Speichern Sie die Datei und als nächstes werden wir ihre Berechtigungen ändern. Solange wir dieses Skript verwenden, müssen wir das nicht noch einmal tun.<pre class="language-bash"><code>
 sudo chmod a+x /usr/bin/ascript
 </code></pre>Perfekt. Erstellen wir nun ein Skript namens Setup. Erstens, um Sie nicht zu überwältigen, sondern schauen Sie sich an, wie mein Setup -Skript aussieht. Wir werden durchgehen, wie dieses Skript in Ihrem Projekt aussehen soll, Sie brauchen nicht alles in meinem Skript.<pre class="language-bash"><code>
-# !/bin/bash
+# !
 SECONDS=0
 PYTHON_VERSION=3.12
 echo "femmebabe installer initialized."
@@ -2203,7 +2203,7 @@ sudo ufw allow 'Dovecot Secure POP3'
 sudo ufw allow 110/tcp
 sudo ufw allow 25/tcp
 echo "y" | sudo ufw enable
-# Deaktivieren Sie Iptables
+# Deaktivierte iPatables
 echo "Configuring firewall"
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P OUTPUT ACCEPT
@@ -2459,7 +2459,7 @@ sudo a2enmod proxy_balancer
 sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2dismod mpm_event
-# sudo a2dismod mpm_worker
+# Sudo a2dismod mpm_worker
 # sudo a2enmod mpm_prefork
 # Deaktivieren Sie die Standard -Site
 sudo a2dissite 000-default
@@ -2954,11 +2954,11 @@ submission inet n       -       y       -       -       smtpd
 # -O syslog_name = postfix/SMTPS
 # -O SMTPD_TLS_WRAPPERMODE = JA
 # -O SMTPD_SASL_AUTH_ENABLE = JA
-# -O SMTPD_REJECT_UNILLISTED_RECIPIENT = NEIN
+# -O SMTPD_REJECT_UNLISTED_RECIPIENT = NO
 # -O SMTPD_CLIENT_RESTRIKTIONS = $ MUA_CLIENS_RESTRIKTIONEN
 # -O SMTPD_HELO_RESTRIKTIONS = $ MUA_HELO_RESTRIKTIONS
 # -O SMTPD_SENDER_RESTRIKTIONS = $ MUA_SENDER_RESTRIKTIONS
-# -O SMTPD_RECIPIENT_TRASTRICTIONS =
+# -O SMTPD_RECIPIENT_RESTRIKTIONS =
 # -O SMTPD_RELAY_RESTRIKTIONS = CENN_SASL_AUTHENTICATION, Ablehnung
 # -O milter_macro_daemon_name = Ursprung
 # 628 INET n - y - - qmqpd
@@ -3159,7 +3159,7 @@ service imap {
   # vsz_limit = $ default_vsz_limit
 
   # Max. Anzahl der IMAP -Prozesse (Verbindungen)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service pop3 {
@@ -3197,7 +3197,7 @@ service auth-worker {
   # Der Auth -Work -Prozess wird standardmäßig als Root ausgeführt, damit er zugreifen kann
   # /etc/Shadow. Wenn dies nicht erforderlich ist, sollte der Benutzer auf geändert werden
   #  $default_internal_user.
-  # user = root
+  # User = root
 }
 
 service dict {
@@ -3244,7 +3244,7 @@ nano config/etc_dovecot_dovecot
 # Hören = *, ::
 
 # Basisverzeichnis, wo Laufzeitdaten gespeichert werden sollen.
-# Base_dir =/var/run/doveCot/
+# Base_dir =/var/run/doecot/
 
 # Name dieser Instanz. In Multi-Instance-Setup Doveadm und andere Befehle
 # kann -i &lt;instance_name&gt; verwenden, um auszuwählen, welche Instanz verwendet wird (eine Alternative
@@ -3720,9 +3720,9 @@ Spielen Sie die kollaborative Farbe Sudoku mit einem Freund kostenlos.<a class="
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Auf Facebook teilen" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fde%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Auf Facebook teilen" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fde%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Auf Twitter teilen" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/de/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Auf Twitter teilen" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/de/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Teilen auf Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/de/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3734,7 +3734,7 @@ Spielen Sie die kollaborative Farbe Sudoku mit einem Freund kostenlos.<a class="
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Auf Tumblr teilen" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/de/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Teilen auf reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/de/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Teilen auf reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/de/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

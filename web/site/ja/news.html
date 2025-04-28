@@ -612,7 +612,7 @@ class UserRegisterForm(UserCreationForm):
 </code></pre>ここには別のフォームがありますが、これはかなり単純に機能します。これは、ユーザー名、電子メール、パスワードを備えたユーザーレジスタフォーム、およびパスワードの確認フィールドです。このフォームは通常のforms.formクラスを拡張していないことに注意してください。これは、メタがあることを意味するモデルフォームです。 1つのフィールドは同じように定義され、クラスメタはモデルを定義します。フォームはフォームに書き込まれる残りの情報に対応します。これのほとんどは、すでにDjangoの組み込みのユーザーCreationFormに存在しているため、クラスの基礎としてそれを使用します（括弧内に渡されます）。
 
 次に、フォームとテンプレートができたので、ユーザーを登録するビューを調べます。これは、新しい投稿ビューのようなモデルフォームです。ユーザー/views.pyを編集し、次のコードを追加します。<pre class="language-python"><code>
-# …金額
+# …輸入
 from .forms import UserRegisterForm
 
 def register(request):
@@ -623,7 +623,7 @@ def register(request):
             messages.success(request, 'Welcome to the app, {}.'.format(user.username))
     return render(request, 'users/register.html', {'form': UserRegisterForm})
 </code></pre>これは、ユーザーを登録するために必要なすべてですが、より多くの情報が必要です。ユーザーが登録した時間、サイトで最後になった時間、伝記、タイムゾーンなどの情報についての情報も知りたいです。また、ユーザーを考慮してフィードモデルの投稿を更新する必要があります。各ユーザーへのモデルと属性の投稿。それを行うために、両方のアプリでModels.pyを更新します。フィードモデルを編集することから始めましょう。今はこのように見えるはずです：<pre class="language-python"><code>
-from django.db import models # …輸入
+from django.db import models # …金額
 from django.contrib.auth.models import User
 
 class Post(models.Model):
@@ -1404,7 +1404,7 @@ nano users/templates/users/mfa_onboarding.html
 これは本当によさそうだ！すべてが適切にセットアップされている限り、URLパターンを追加するとすぐに、メッセージを送信し、電話番号でユーザーをログインできるはずです。セットアップする必要がある最後のことはプロファイルビューです。これにより、ユーザーがログインせずに電話番号を変更できることを確認できます。最終的には、「停止する停止」オプションを追加して、ユーザーがテキストできるようにすることをお勧めします。将来のテキストメッセージをオプトアウトする「停止」。
 
 ユーザー/Views.pyにプロファイルビューを追加しましょう。このビューでは、ユーザーのバイオ、電子メール、ユーザー名、電話番号を更新し、マルチファクター認証を有効にすることができます。まず、ユーザー/forms.pyにさらに2つのフォームが必要になります<pre class="language-python"><code>
-# ...輸入
+# ...金額
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -2057,7 +2057,7 @@ UsePAM yes
 X11Forwarding yes
 # x11displayoffset 10
 # x11uselocalhostはい
-# ピルはい
+# 許可はい
 PrintMotd no
 # printlastlogはい
 # tcpkeepaliveはい
@@ -2075,7 +2075,7 @@ PrintMotd no
 # デフォルトのバナーパスはありません
 Banner /etc/banner
 
-# 顧客がローカル変数変数を渡すことを許可します
+# クライアントがロケール環境変数を渡すことを許可します
 AcceptEnv LANG LC_*
 
 # サブシステムなしのデフォルトをオーバーライドします
@@ -2127,7 +2127,7 @@ sudo nano /usr/bin/ascript
 # ！ / bin / bash
 if [ ! -f /usr/bin/$1 ]; then
     sudo touch /usr/bin/$1
-    echo "# ！/bin/bash "&gt;&gt;/usr/bin/$ 1
+    echo "# ！ / bin / bash "&gt;&gt; / bin / $ 1
     sudo chmod a+x /usr/bin/$1
     sudo nano /usr/bin/$1
     echo $1 | sudo tee -a /etc/ascripts
@@ -2972,14 +2972,14 @@ submission inet n       -       y       -       -       smtpd
 # -o smtpd_client_restrictions = $ mua_client_restrictions
 # -o SMTPD_HELO_RESTRICTIONS = $ MUA_HELO_RESTRICTIONS
 # -o smtpd_sender_restrictions = $ mua_sender_restrictions
-# -o SMTPD_RECIPIENT_TRASTRICTIONS =
+# -o SMTPD_REPIPIENT_RESTRICTIONS =
 # -o SMTPD_RELAY_RESTRICTIONS = permit_sasl_authenticated、拒否
 # -o milter_macro_daemon_name = originating
 # 628 inet n -y- qmqpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# Qmgr unix n -n 300 1 oqmgr
+# Qmgr unix n -n 300 1 oqmg
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3077,7 +3077,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # /var/spool/postfix/run/opendkimに変更して、unixソケットを使用します
 # chrootのポストフィックス：
-# rundir =/was/spool/postfix/run/opendkim
+# roundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # 代替ソケットを指定するための障害
@@ -3170,7 +3170,7 @@ service lmtp {
 service imap {
   # ほとんどのメモリは、MMAP（）ingファイルに移動します。これを増やす必要があるかもしれません
   # 巨大なメールボックスがある場合は制限します。
-  # vsz_limit = $ default_vsz_limit
+  # vsz_limi = $ default_vsz_limit
 
   # マックス。 IMAPプロセスの数（接続）
   # process_limit = 1024
@@ -3286,7 +3286,7 @@ nano config/etc_dovecot_dovecot
 # より多くの冗長プロセスタイトル（PS）を表示します。現在、ユーザー名と
 # IPアドレス。誰が実際にIMAPプロセスを使用しているのかを見るのに便利です
 # （たとえば、共有メールボックスまたは複数のアカウントに同じUIDが使用されている場合）。
-# verbose_proctitle = no
+# verbose_procitle = no
 
 # DoveCotマスタープロセスがシャットダウンすると、すべてのプロセスが殺される場合。
 # これを「いいえ」に設定することは、DoveCotをなしでアップグレードできることを意味します
@@ -3316,7 +3316,7 @@ nano config/etc_dovecot_dovecot
 # 「プロキシ:: &lt;Name&gt;」。
 
 dict {
-  # quota = mysql：/etc/dovecot/dovecot-dict-sql.conf.ext
+  # quota = mysql：/andc/dovecot/dovecot-dic-sql.conf.ext
 }
 
 # 実際の構成のほとんどは以下に含まれます。ファイル名はそうです
@@ -3423,7 +3423,7 @@ nano config/etc_default_opendkim
 # daemon_opts = ""
 # /var/spool/postfix/run/opendkimに変更して、unixソケットを使用します
 # chrootのポストフィックス：
-# rundir =/was/spool/postfix/run/opendkim
+# rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # 代替ソケットを指定するための障害
@@ -3734,9 +3734,9 @@ source venv/bin/activate
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Facebookで共有します" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fja%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Facebookで共有します" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fja%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Twitterで共有します" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/ja/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Twitterで共有します" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/ja/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Pinterestで共有します" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/ja/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3748,7 +3748,7 @@ source venv/bin/activate
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="tumblrで共有します" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/ja/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Redditで共有します" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/ja/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Redditで共有します" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/ja/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

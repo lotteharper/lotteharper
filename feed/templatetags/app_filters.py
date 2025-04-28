@@ -99,7 +99,7 @@ def transauthor(content, target):
     from feed.models import Post
     from django.conf import settings
     post = Post.objects.get(id=int(target))
-    return translate_html(get_current_request(), post.content if len(post.content) < settings.POST_READER_LENGTH and not '***' in post.content else post.content_compiled, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.author.profile.language_code if post.author.profile.language_code else None)
+    return translate_html(get_current_request(), content, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.author.profile.language_code if post.author.profile.language_code else None)
 
 @register.filter('transmsg')
 def transmsg(target):

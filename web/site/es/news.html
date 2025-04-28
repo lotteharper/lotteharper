@@ -481,7 +481,7 @@ def feed(request):
 
 Ahora necesitamos hacer que nuestra aplicación se vea mejor, porque por ahora se ve realmente básico. Podemos hacer esto usando CSS, ya sea en línea o en clases vinculadas a cada objeto en el documento. CSS es realmente agradable porque dice todo en la página cómo debería verse,y puede hacer que se vea realmente bien. Hay algunas bibliotecas que pueden hacer esto, pero mi personal personal es Bootstrap. 
 
-Bootstrap se puede descargar desde su sitio web,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">getBootstrap.com/</a>. Una vez allí, presione el botón para leer los documentos de instalación y copie el código de la sección incluir a través de CDN. Necesitará este código en la parte superior de su documento HTML, en una etiqueta llamada Head. Además, sigamos adelante y creemos una plantilla base para que no necesitemos recrear estos enlaces en cada plantilla. 
+Bootstrap se puede descargar desde su sitio web,<a href="https://getbootstrap.com/" id="external-link" title="Visit this link (it will take you outside of Lotte Harper)">GetBootstrap.com/</a>. Una vez allí, presione el botón para leer los documentos de instalación y copie el código de la sección incluir a través de CDN. Necesitará este código en la parte superior de su documento HTML, en una etiqueta llamada Head. Además, sigamos adelante y creemos una plantilla base para que no necesitemos recrear estos enlaces en cada plantilla. 
 
 Haga un nuevo directorio llamado plantillas con plantillas MKDIR y luego edite plantillas/base.html.
 
@@ -1390,7 +1390,7 @@ nano users/templates/users/mfa_onboarding.html
 ¡Esto se ve muy bien! Mientras todo esté configurado correctamente, deberíamos poder enviar mensajes e registrar al usuario con su número de teléfono tan pronto como agregamos los patrones de URL. Lo último que debemos configurar es una vista de perfil para que podamos asegurarnos de que el usuario pueda cambiar su número de teléfono sin haber sido registrado. Además, eventualmente querremos agregar una opción de "parar para dejar de fumar, para que el usuario pueda enviar mensajes de texto. "Detente" para optar por no tener mensajes de texto futuros.
 
 Agreguemos una vista de perfil a los usuarios/vistas. Esta vista actualizará el biografía, el correo electrónico, el nombre de usuario y el número de teléfono del usuario, así como nos permitirá habilitar la autenticación de múltiples factores. Primero, necesitaremos dos formularios más en usuarios/formaciones.<pre class="language-python"><code>
-# ... Importaciones
+# ... cantidades
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -1871,7 +1871,7 @@ Tenga en cuenta que esto es una gran cantidad de jinja, es posible que no tenga 
       &lt;a href="{{ user|document_front }}" class="btn btn-sm btn-outline-primary" title="ID front"&gt;&lt;i class="bi bi-person-badge-fill"&gt;&lt;/i&gt; ID front&lt;/a&gt;
       &lt;a href="{{ user|document_back }}" class="btn btn-sm btn-outline-primary" title="ID back"&gt;&lt;i class="bi bi-upc-scan"&gt;&lt;/i&gt; ID back&lt;/a&gt;
       {% endif %}
-      &lt;small&gt;# {{User.id}} &lt;/small&gt;
+      &lt;small&gt;# {{user.id}} &lt;/small&gt;
       &lt;small&gt;{% if user.profile.subscribed %}Subscribed{% else %}Not subscribed{% endif %}&lt;/small&gt;
     &lt;/div&gt;
     {%if not user.is_superuser %}
@@ -2460,7 +2460,7 @@ sudo a2enmod proxy_http
 sudo a2enmod proxy_wstunnel
 # sudo a2DISMOD MPM_EVENT
 # sudo a2DISMOD mpm_worker
-# Sudo a2enmod mpm_prefork
+# sudo a2enmod mpm_prefork
 # Deshabilitar el sitio predeterminado
 sudo a2dissite 000-default
 sudo a2dissite 000-default-le-ssl
@@ -2919,13 +2919,13 @@ nano config/etc_postfix_master.cf
 # 
 # ==================================================== =========================
 # Tipo de servicio Private Undkroot Wakeup MAXPROC Comando + Args
-# (Sí) (sí) (no) (nunca) (100)
+#                (yes)   (yes)   (no)    (never) (100)
 # ==================================================== =========================
 smtp      inet  n       -       y       -       -       smtpd
 # SMTP INET N - Y - 1 Postcreen
-# pase smtpd - - y - - smtpd
+# Pase smtpd - - y - - smtpd
 # Dnsblog unix - - y - 0 dnsblog
-# Tlsproxy unix - - y - 0 tlsproxy
+# tlsproxy unix - - y - 0 tlsproxy
 # Elija uno: Habilitar envío solo para clientes de bucleback o para cualquier cliente.
 # 127.0.0.1: Submisión Inet N - Y - - SMTPD
 submission inet n       -       y       -       -       smtpd
@@ -2965,7 +2965,7 @@ submission inet n       -       y       -       -       smtpd
 pickup    unix  n       -       y       60      1       pickup
 cleanup   unix  n       -       y       -       0       cleanup
 qmgr      unix  n       -       n       300     1       qmgr
-# QMGR UNIX N - N 300 1 OQMGR
+# QMGR UNIX N - N 300 1 OQMG
 tlsmgr    unix  -       -       y       1000?   1       tlsmgr
 rewrite   unix  -       -       y       -       -       trivial-rewrite
 bounce    unix  -       -       y       -       0       bounce
@@ -3010,11 +3010,11 @@ maildrop  unix  -       n       n       -       -       pipe
 # Las versiones recientes de Cyrus pueden usar la entrada existente "LMTP" Master.CF.
 # 
 # Especificar en cyrus.conf:
-# Lmtp cmd = "lmtpd -a" escucha = "localhost: lmtp" proto = tcp4
+# lmtp cmd = "lmtpd -a" escucha = "localhost: lmtp" proto = tcp4
 # 
 # Especifique en main.cf uno o más de los siguientes:
 # biailbox_transport = lmtp: inet: localhost
-# virtual_transport = lmtp: inet: localhost
+# Virtual_transport = lmtp: inet: localhost
 # 
 # ==================================================== ==================
 # 
@@ -3063,7 +3063,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Cambiar a/var/spool/postfix/run/opendkim para usar un socket unix con
 # Postfix en un chroot:
-# Roundir =/var/spool/postfix/run/opendkim
+# Rundir =/was/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descopment para especificar un enchufe alternativo
@@ -3119,7 +3119,7 @@ service imap-login {
   # Process_min_avail = 0
 
   # Si establece servicio_count = 0, probablemente necesite hacer crecer esto.
-  # Vsz_limi = $ default_vsz_limit
+  # vsz_limit = $ default_vsz_limit
 }
 
 service pop3-login {
@@ -3164,12 +3164,12 @@ service imap {
 
 service pop3 {
   # Max. Número de procesos POP3 (conexiones)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service submission {
   # Max. Número de procesos de envío SMTP (conexiones)
-  # Process_limit = 1024
+  # process_limit = 1024
 }
 
 service auth {
@@ -3197,7 +3197,7 @@ service auth-worker {
   # El proceso de trabajador de autores se ejecuta como root de forma predeterminada, para que pueda acceder
   # /etc/sombra. Si esto no es necesario, el usuario debe cambiarse a
   # $ default_interal_user.
-  # usuario = root
+  # Usuario = root
 }
 
 service dict {
@@ -3212,7 +3212,7 @@ service dict {
 </code></pre>Una vez más, asegúrese de reemplazar el dominio en todos estos archivos, femmebabe.com, con el dominio que seleccionó. Editar el siguiente archivo, configuración de Dovecot,<pre class="language-bash"><code>
 nano config/etc_dovecot_dovecot
 </code></pre>Y agrega estas líneas<pre class="language-bash"><code>
-## Archivo de configuración ovecot
+## Archivo de configuración de Dovecot
 
 # Si tienes prisa, vea http://wiki2.dovecot.org/quickconfiguration
 
@@ -3250,7 +3250,7 @@ nano config/etc_dovecot_dovecot
 # puede usar -i &lt;neste_name&gt; para seleccionar qué instancia se usa (una alternativa
 # a -C &lt;Confact_Path&gt;). El nombre de la instancia también se agrega a los procesos de Dovecot
 # En la salida de PS.
-# Instance_name = dovecot
+# instance_name = dovecot
 
 # Mensaje de saludo para clientes.
 # login_greeting = Dovecot listo.
@@ -3272,7 +3272,7 @@ nano config/etc_dovecot_dovecot
 # Muestre más títulos de procesos verbosos (en PS). Actualmente muestra nombre de usuario y
 # Dirección IP. Útil para ver quién está usando los procesos IMAP
 # (por ejemplo, buzones compartidos o si se usa el mismo UID para múltiples cuentas).
-# verbose_proctitle = no
+# Verbose_proctle = bien
 
 # En caso de que se maten todos los procesos cuando el proceso maestro de Dovecot se apaga.
 # Establecer esto en "no" significa que Dovecot se puede actualizar sin
@@ -3302,7 +3302,7 @@ nano config/etc_dovecot_dovecot
 # "Proxy :: &lt;Name&gt;".
 
 dict {
-  # cuota = mysql: /andc/dovecot/dovecot-dic-sql.conf.ext
+  # cuota = mysql: /etc/dovecot/dovecot-dict-sql.conf.ext
 }
 
 # La mayor parte de la configuración real se incluye a continuación. Los nombres de archivo son
@@ -3409,7 +3409,7 @@ nano config/etc_default_opendkim
 # Daemon_opts = ""
 # Cambiar a/var/spool/postfix/run/opendkim para usar un socket unix con
 # Postfix en un chroot:
-# Rundir =/was/spool/postfix/run/opendkim
+# Rundir =/var/spool/postfix/run/opendkim
 RUNDIR=/run/opendkim
 # 
 # Descopment para especificar un enchufe alternativo
@@ -3720,9 +3720,9 @@ Juega de color colaborativo Sudoku con un amigo gratis.<a class="btn btn-info" h
 </div>
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
-<a title="Compartir en Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fes%2Fnews%3F&quote=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+<a title="Compartir en Facebook" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com%2Fes%2Fnews%3F&quote=Visit%20this%20link%20on%20Glam%20Girl%20X&display=popup&hashtag=#lotteh&redirect_uri=https%3A%2F%2Fglamgirlx.com" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
-<a title="Compartir en Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck.%20-&url=https://glamgirlx.com/es/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+<a title="Compartir en Twitter" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text=Visit%20this%20link%20on%20Glam%20Girl%20X%20-&url=https://glamgirlx.com/es/news?" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
   <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
 </svg></a>
 <a title="Compartir en Pinterest" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url=https://glamgirlx.com/es/news?" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
@@ -3734,7 +3734,7 @@ Juega de color colaborativo Sudoku con un amigo gratis.<a class="btn btn-info" h
 </div>
 <div class="mb-2" style="display: flex; justify-content: space-around;">
 <a title="Compartir en Tumblr" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl=https://glamgirlx.com/es/news?"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
-<a title="Compartir en Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/es/news?&title=A%20woman%20is%20in%20a%20bathroom%20with%20a%20towel%20around%20her%20neck."><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+<a title="Compartir en Reddit" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url=https://glamgirlx.com/es/news?&title=Visit%20this%20link%20on%20Glam%20Girl%20X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
   <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
 </svg></a>

@@ -11,7 +11,7 @@
 <h1><i class="bi bi-currency-bitcoin"></i> {{ the_site_name }} - {{ 'Pay invoice from'|etrans }} @{{ username }} {{ 'with'|etrans }} {{ request.GET.crypto }}</h1>
 <div style="display: inline-block;">
 <img align="left" src="{{ model.get_face_blur_url }}" style="width:33%; margin-right: 10px;" class="rounded"></img>
-<img class="mr-2 img-fluid rounded" src="{{ post.get_blur_thumb_url }}" style="float: left; width: 40%; max-width: 400px;" alt="{{ 'See photos like these'|etrans }}"></img>
+<!-- <img class="mr-2 img-fluid rounded" src="{{ post.get_blur_thumb_url }}" style="float: left; width: 40%; max-width: 400px;" alt="{{ 'See photos like these'|etrans }}"></img>-->
 </div>
 <p>{{ 'This purchase is subject to'|etrans }} <a href="{% url 'payments:surrogacy' username %}" title="{{ 'View the agreement'|etrans }}">{{ 'the agreement'|etrans }}</a> {{ 'on the referring page and'|etrans }} <a href="{% url 'misc:terms' %}" title="{{ 'View the terms and coniditons'|etrans }}">{{ 'the terms and conditions and privacy policy'|etrans }}</a> {{ 'of'|etrans }} {{ the_site_name }}.</p>
 <div style="display: flex; justify-content: space-around;">
@@ -36,11 +36,10 @@
 <li>{{ 'To be paid for products/services as arranged above.'|trans }}</li>
 <li>{{ 'Billed once only.'|etrans }}</li>
 </ul>
-<p><i>{{ 'Want to pay with cryptocurrency instead?'|etrans }}</i> <a href="" class="btn btn-outline-info" title="{{ 'Pay with crypto'|etrans }}">{{ 'Pay with Cryptocurrency'|etrans }}</a></p>
 <b>{{ 'Info:'|etrans }}</b>
 <p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} INVOICE".</p>
 <p>{{ 'For questions or concerns, please contact'|etrans }} {{ the_site_name }} {{ 'at'|etrans }} {{ agent_phone }} {{ 'or mail to'|etrans }} {{ agent_name }} {{ agent_address }}.</p>
-<p>{{ 'You will pay'|etrans }} ${{ fee|sub_fee }} USD.</p>
+<p>{{ 'You will pay'|etrans }} ${{ usd_fee|sub_fee }} USD.</p>
 <p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
 <div id="onramp-element" style="max-width: 500px" class="mx-auto">
 <!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->

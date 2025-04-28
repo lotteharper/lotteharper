@@ -1,2 +1,5 @@
 #!/bin/bash
-sed -i "s@mute\" class=\"btn btn-outline-light hide\"@mute\" class=\"btn btn-outline-light hide\" style=\"border: 1px solid black !important; text-color: black !important; color: black !important;\"@g" web/site/$1/chat.html
+USER_NAME='team'
+PROJECT_NAME='lotteh'
+DIR_PATH="/home/$USER_NAME/$PROJECT_NAME/"
+ls ${DIR_PATH}
