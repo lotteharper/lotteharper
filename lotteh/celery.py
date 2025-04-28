@@ -413,7 +413,8 @@ def process_recording(id):
             try:
                 thumbnail = first_frame.still_bucket.url
             except: pass
-        if camera.upload:
+        from live.duration import get_duration
+        if camera.upload and get_duration(recording.file.path) > 4:
             from recordings.youtube import upload_youtube
             import traceback
             import pytz

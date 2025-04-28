@@ -35,7 +35,7 @@
 {% if request.user.is_authenticated and request.user.profile.identity_verified %}
 <p>{{ 'Finalize'|etrans }}</p>
 <legend>{{ 'Cost'|etrans }}: ${{ surrogacy_fee|sub_fee }} {{ 'billed in installments according to the agreement.'|etrans }}</legend>
-<p>The down payment required to begin the plan is ${{ down_payment }}. Payments will be invoiced according to a 36 week term after confirmation of pregnancy. Weekly payment of ${{ weekly_payment|sub_fee }} is required and will be invoiced.</p>
+<p>The down payment required to begin the plan is ${{ down_payment|elegant_sub_fee }}. Payments will be invoiced according to a 36 week term after confirmation of pregnancy. Weekly payment of ${{ weekly_payment|elegant_sub_fee }} is required and will be invoiced.</p>
 <div style="display: flex; justify-content: space-around;">
 <form id="pay-form" onsubmit="event.preventDefault(); payFee();">
 {{ form|crispy }}

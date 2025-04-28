@@ -271,7 +271,29 @@ def sub_fee(fee):
         for f in range(math.floor(len(str(fee))/3)):
             op = op + str(fee)[3*f+of:3+3*f+of] + ','
         op = op[:-1]
-        return '{}.{}'.format(op, fees[1][:2])
+        return '{}.{}'.format(op, format(float(fees[1][:2]), '.2f'))
+    else:
+        op = ''
+        of = len(str(fee))%3
+        op = op + str(fee)[0:of] + (',' if of > 0 else '')
+        for f in range(math.floor(len(str(fee))/3)):
+            op = op + str(fee)[3*f+of:3+3*f+of] + ','
+        op = op[:-1]
+        return op
+
+@register.filter('sub_fee')
+def elegant_sub_fee(fee):
+    import math
+    fees = str(fee).split('.')
+    if len(fees) > 1:
+        fee = fees[0]
+        op = ''
+        of = len(str(fee))%3
+        op = op + str(fee)[0:of] + (',' if of > 0 else '')
+        for f in range(math.floor(len(str(fee))/3)):
+            op = op + str(fee)[3*f+of:3+3*f+of] + ','
+        op = op[:-1]
+        return '{}.{}'.format(op, format(float(fees[1][:2]), '.1f'))
     else:
         op = ''
         of = len(str(fee))%3
