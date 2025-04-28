@@ -20,7 +20,7 @@ sed -i -e $CMD /home/$U/$DIR/scripts/init
 GIT_URL_INIT=`sed -n '2p' < /home/$U/$DIR/config/git`
 echo $GIT_URL_INIT
 if [ "$DOW" -eq 1 ]; then
-        if [ "$HOD" -eq 2 ]; then
+        if [ "$HOD" -eq 0 ]; then
                 echo "Generating new repo"
                 sudo rm -r celery
                 sudo rm -r .git
