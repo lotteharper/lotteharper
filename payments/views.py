@@ -916,7 +916,7 @@ def surrogacy(request, username):
         messages.warning(request, '@{} is not accepting surrogacy contracts at the moment. Please stay in touch and revisit in the future.'.format(username))
         if request.user.is_authenticated: return redirect(reverse('app:app'))
         else: return redirect(reverse('users:login'))
-    if vendor.verifications.last(): signature = render_to_string('raw_signature.html', {'theuser': vendor})
+    if vendor.verifications.filter(verified=True).last(): signature = render_to_string('raw_signature.html', {'theuser': vendor})
     if request.user.is_authenticated and request.user.verifications.last(): parent_signature = render_to_string('raw_signature.html', {'theuser': request.user})
     from translate.translate import translate
     inp_t = translate(request, 'Intended Parent')
@@ -2057,7 +2057,7 @@ def surrogacy_crypto(request, username):
     from django.urls import reverse
     from payments.models import VendorPaymentsProfile
     profile, created = VendorPaymentsProfile.objects.get_or_create(vendor=user)
-    usd_fee = user.vendor_profile.subscription_fee
+    usd_fee = settings.SURROGACY_DOWN_PAYMENT
     from .forms import BitcoinPaymentForm, BitcoinPaymentFormUser
     from payments.apis import get_crypto_price
     fee = round(float(settings.SURROGACY_DOWN_PAYMENT) / get_crypto_price(crypto), settings.BITCOIN_DECIMALS)
