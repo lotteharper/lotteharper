@@ -73,7 +73,6 @@ def translate_html(request, html, target=None, src=None):
     count = 0
     if target == None and not request.GET.get('lang', None): target = request.LANGUAGE_CODE
     elif target == None and request.GET.get('lang', None): target = request.GET.get('lang', None)
-    if target.lower() == src.lower(): return html
     def thread(target, src, to_trans, count, result):
         translated = translate(None, to_trans, target=target, src=src)
         result[count] = translated
@@ -99,6 +98,7 @@ def translate_html(request, html, target=None, src=None):
                     src = settings.DEFAULT_LANG
                     break
         except: src = settings.DEFAULT_LANG
+    if target and src and target.lower() == src.lower(): return html
     if len(soup.find_all(string=True)) < 1:
         return translate(request, html, target=target, src=src)
     threads = [None] * len(result_soup)
