@@ -1,10 +1,24 @@
 #!/bin/bash
 U="team"
 DIR="lotteh"
+repo_date=$(date '+%Y-%m-%d.%H:%M:%S')
 #  Configure URLs
 GIT_URL_PROJ=`sed -n '1p' < /home/$U/$DIR/config/git`
 GIT_URL_PUB=`sed -n '3p' < /home/$U/$DIR/config/git`
 GIT_URL=`sed -n '4p' < /home/$U/$DIR/config/git`
+PROJECT_GIT_URL="${GIT_URL_PROJ%.*}.$repo_date"
+# Git config
+DOW=$(date +%u)
+HOD=$(date +%H)
+if [ "$DOW" -eq 1 ]; then
+	if [ "$HOD" -eq 0 ]; then
+		sudo rm -r celery
+		sudo rm -r .git
+		git init --initial-branch=main
+		CMD_POST_CREATE_REPO="s/$GIT_URL_PROJ/$PROJECT_GIT_URL/g"
+		sed -i $CMD_POST_CREATE_REPO /home/$U/$DIR/config/git
+	fi
+fi
 echo $GIT_URL
 escaped_url=$(echo "$GIT_URL" | sed 's/\//\\\//g')
 CMD="6s/GIT_REPO.*/GIT_REPO=\"$escaped_url\"/g"
@@ -156,16 +170,6 @@ sudo rm db.json
 rm data/security.json
 rm data/users-new.json
 rm data/sessions-dj.json
-# Git config
-DOW=$(date +%u)
-HOD=$(date +%H)
-if [ "$DOW" -eq 1 ]; then
-	if [ "$HOD" -eq 0 ]; then
-		sudo rm -r celery
-		sudo rm -r .git
-		git init --initial-branch=main
-	fi
-fi
 git init --initial-branch=main
 sudo git remote add originlab $GIT_URL_PROJ
 sudo git add --all
