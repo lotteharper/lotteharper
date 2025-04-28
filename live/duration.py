@@ -1,6 +1,6 @@
 
 def get_duration(video_path):
-    from moviepy.editor import VideoFileClip
+    from moviepy import VideoFileClip
     try:
         clip = VideoFileClip(video_path)
         duration = clip.duration
