@@ -1,0 +1,19 @@
+{% load app_filters %}Dear {{ user.username }},
+
+This email is in regards to an invoice from {{ site_name }} for services as follows.
+
+The below products and/or services are offered for ${{ invoice.price|sub_fee }}:
+
+{{ invoice.cart }}
+
+Please use this link to pay the invoice in full: <a href="{{ pay_url }}" title="Pay the invoice">{{ pay_url }}</a>
+
+Alternatively, you can paste the following link into your address bar:
+
+{{ pay_url }}
+
+Thank you for using {{ site_name }} for your purchase. {{ vendor.name }} looks forward to working with you and awaits payment of the above invoice.
+
+Sincerely,
+
+{{ site_name }}

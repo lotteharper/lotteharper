@@ -1,0 +1,3 @@
+<form style="display: inline-block;" action="{% url 'users:toggle-gift' user.id %}" method="POST" class="publishForm">
+<button class="btn btn-sm btn-outline-success" type="submit">{% if not request.user in user.profile.subscriptions.all %}<i class="bi bi-gift-fill"></i> Gift{% else %}<i class="bi bi-gift"></i> End Gift{% endif %}</button>
+</form>

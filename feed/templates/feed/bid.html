@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load feed_filters %}
+{% load app_filters %}
+{% load crispy_forms_tags %}
+<legend>{{ 'Bid in this auction'|etrans }}</legend>
+<i>{% blocktrans %}The {% if post.bids.count > 0 %}current{% else %}starting{% endif %} bid is{% endblocktrans %} ${{ current_bid|sub_fee }}</i>
+{% if post.bids.count == 0 %}
+<p><small>{{ 'You will be the first to bid.'|etrans }}</small></p>
+{% endif %}
+<p>{{ 'Auction ends on'|etrans }} {{ post.date_auction|date:"F d, Y" }} {{ 'at midnight.'|etrans }}</p>
+<form method="POST">
+{{ form|crispy }}
+<button type="submit" class="btn btn-outline-success" title="Submit">{{ 'Submit bid'|etrans }}</button>
+</form>
+<small>{{ 'All bids are final. The winner will be notified and delivered a link to pay.'|etrans }}</small>
+<img src="{% if post.public %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}" width="100%" height="auto" alt="{{ 'A picture from'|etrans }} @{{ post.author.username }}">
+{% endblock %}

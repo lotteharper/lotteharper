@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link rel="stylesheet" href="/static/highlight.css">
+{% endblock %}
+{% block content %}
+<div id="ready-click">
+<h1>{{ pagetitle }}</h1>
+<p>{{ notes }}</p>
+{% autoescape off %}
+<div id="scroll-container" style="overflow: scroll;">
+<div style="width: 5000px;">
+<div id="command-output" style="word-wrap: break-word; white-space: pre-wrap;">{{ trace }}> </div>
+</div>
+</div>
+<form method="POST" id="command-form">
+<fieldset class="form-group">
+{% csrf_token %}
+{{ form|crispy }}
+</fieldset>
+<hr style="display: none;">
+<div class="form-group float-right" style="float: right;">
+	<button id="send-command" class="btn btn-outline-danger" type="submit">Send Command</button>
+</div>
+</form>
+<div width="100%;">
+	<div style="display: inline-block">
+		<button onclick="window.location.reload();" class="btn btn-sm btn-outline-warning"><i class="bi bi-arrow-clockwise"></i></button>
+		<button id="cancel-button" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-circle-fill"></i></button>
+	</div>
+	<div style="display: inline-block; margin: auto;">
+		<div style="display: inline-block; margin: auto;">
+			<button onclick="lastCommand();" class="btn btn-sm btn-outline-info" style="text-align: center;"><i class="bi bi-arrow-up"></i></button>
+			<button onclick="nextCommand();" class="btn btn-sm btn-outline-info" style="text-align: center;"><i class="bi bi-arrow-down"></i></button>
+		</div>
+	</div>
+</div>
+<hr>
+</div>
+{% endautoescape %}
+{% endblock %}
+{% block javascript %}
+var shellWebsocket;
+var firstTap = true;
+var form = $("#command-form")[0];
+$("#cancel-button").on("click", function() {
+    document.getElementById('id_input').value = ''; 
+});
+$("#ready-click").on("click", function() {
+	if(firstTap) {
+		firstTap = false;
+		$("#command-form:input:enabled:visible:first").focus();
+		$("#command-form:input:enabled:visible:first").click();
+	}
+});
+var commands = [];
+var index = 0;
+var commandCount = 0;
+var field = document.getElementById('id_input');
+function nextCommand() {
+	if(index < commands.length-1) {
+		index++
+		field.value = commands[index];
+	} else {
+		if(index < commands.length) index++;
+		field.value = '';	
+	}
+}
+function lastCommand() {
+	if(index > 0) {
+		index--;
+		field.value = commands[index];
+	}
+}
+var defaultConsoleLog;
+defaultConsoleLog = console.log;
+function sendCommand() {
+	var command = field.value;
+	commands[commandCount] = command;
+	commandCount++;
+    var output = '';
+    var op = '';
+    try {
+        console.log = (...args) => {
+          const now = new Date();
+          const timestamp = now.toLocaleTimeString();
+          const formattedMessage = `[${timestamp}] ${args.join(" ")}`;
+          originalConsoleLog(formattedMessage);
+        };
+/*        console.log = function(arguments) {
+            if(arguments.length == 1 || typeof arguments == 'string' || typeof arguments == 'integer' || typeof arguments == 'float') {
+                op = op + new String(arguments);
+                return;
+            }
+            for(let i = 0; i < arguments.length; i++) {
+                op = op + new String(arguments[i]);
+                if(i < arguments.length - 1) op = op + ' ';
+            }
+        }*/
+        var cmdout = eval(command);
+        output = output + (op == '' ? '' : op + '\n') + (cmdout == null ? '' : cmdout + '\n');
+    } catch (e) {
+       output = output + "Error Type: " + e.name + '\n';
+       output = output + "Error Message: " + e.message + '\n';
+       output = output + "Stack Trace: " + e.stack + '\n';
+    }
+	document.getElementById("command-output").insertAdjacentHTML("beforeend", output + '\n');
+	{% if request.GET.scroll %}window.scrollBy(0,10000);{% endif %}
+}
+document.getElementById("send-command").onclick = function(e) {
+	e.preventDefault();
+	sendCommand();
+	form.reset();
+	index = commands.length;
+};
+window.addEventListener('keydown', function(event) {
+	if(event.keyCode == '38') {
+		lastCommand();
+	} else if(event.keyCode == '40') {
+		nextCommand();
+	}/* else if(event.keyCode == '13') {
+		sendCommand();
+		form.reset();
+	}*/
+});
+{% endblock %}

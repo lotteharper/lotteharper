@@ -1,0 +1,160 @@
+#!/bin/bash
+SECONDS=0
+PORT=45783
+echo "lotteh installer initialized."
+# sudo chmod a+x scripts/usersetup
+# ./scripts/usersetup
+# ssh-keygen
+# Project directory
+DIR="/home/team/lotteh"
+USER="team"
+GIT_URL="git@gitlab.com:jasperholton/lotteh2024-11-20.git"
+cd $DIR
+# Setup database in postgres
+echo "Postgres setup"
+sudo -u postgres psql -U postgres -c "CREATE USER django WITH PASSWORD 'password';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE django SET client_encoding TO 'utf8';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE django SET default_transaction_isolation TO 'read committed';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE django SET timezone TO 'UTC';"
+sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE database TO django;"
+sudo -u postgres psql -U postgres -c "GRANT ALL ON SCHEMA public TO django;"
+sudo -u postgres psql -U postgres -c "ALTER DATABASE database OWNER TO django;"
+# Run migrations
+echo "Running migrations, this should be quick"
+python manage.py check
+python manage.py makemigrations
+python manage.py migrate --run-syncdb
+python manage.py makemigrations
+python manage.py migrate
+echo "Loading data, this may take a while"
+#python manage.py loaddata db.json
+#python manage.py sqlflush feed.post
+#python manage.py loaddata data/feed-post.json
+cd $DIR
+source venv/bin/activate
+# Setup database
+echo "Building database from backup, this may take a while."
+cat db.json.?? > db.json
+echo "Loading data, this may take a while"
+python manage.py loaddata db.json
+./scripts/loadtables
+sudo systemctl start apache2 daphne celery celerybeat
+echo "Setup crontab/sudoers configuration"
+sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
+sudo sh -c "cat config/sudoers >> /etc/sudoers"
+# Inject pam config and remove faulty ssh config
+#sudo sed -i '' -e '$ d' /etc/pam.d/sshd
+#sudo sed -i '' -e '$ d' /etc/profile
+echo "session required pam_exec.so seteuid /home/team/lotteh/pam.sh" | sudo tee -a /etc/pam.d/sshd
+echo "session required pam_exec.so seteuid /home/team/lotteh/logout.sh" | sudo tee -a /etc/pam.d/sshd
+sudo mkdir /var/log/jump
+sudo chown team:users /var/log/jump
+echo "ForceCommand /usr/bin/jump" | sudo tee -a /etc/ssh/sshd_config
+echo $"Port ${PORT}" | sudo tee -a /etc/ssh/sshd_config
+echo "AddressFamily any" | sudo tee -a /etc/ssh/sshd_config
+echo "ListenAddress 0.0.0.0" | sudo tee -a /etc/ssh/sshd_config
+echo "ListenAddress ::" | sudo tee -a /etc/ssh/sshd_config
+sudo ufw allow $PORT
+sudo ufw reload
+sudo chmod a+x pam.sh
+sudo rm /etc/ssh/sshd_config.d/50-cloud-init.conf
+# Copy bin scripts and set permissions
+echo "Copying scripts"
+sudo cp /home/$USER/$DIR/config/ascripts /etc/ascripts
+sudo cp config/banner /etc/banner
+cd /usr/bin/
+sudo chmod a+x activate
+sudo chmod a+x backup
+sudo chmod a+x ascript
+# Reload and enable services
+echo "Enabling services"
+sudo systemctl daemon-reload
+sudo systemctl enable daphne.service
+sudo systemctl enable celery.service
+sudo systemctl enable celerybeat.service
+sudo systemctl enable clamav-daemon
+sudo systemctl enable stun
+sudo systemctl start stun
+sudo systemctl start daphne.service
+sudo systemctl start celery.service
+sudo systemctl start celerybeat.service
+sudo systemctl start clamav-daemon
+# Enable apache modules
+echo "Enabling apache2"
+sudo a2enmod rewrite
+sudo a2enmod wsgi
+sudo a2enmod headers
+sudo a2enmod ssl
+sudo a2enmod proxy
+sudo a2enmod proxy_balancer
+sudo a2enmod proxy_http
+sudo a2enmod proxy_wstunnel
+#sudo a2dismod mpm_event
+#sudo a2dismod mpm_worker
+#sudo a2enmod mpm_prefork
+# Disable default site
+sudo a2dissite 000-default
+sudo a2dissite 000-default-le-ssl
+# Enable our site
+sudo a2ensite lotteh-le-ssl
+# Reload daemon and restart apache, postfix and opendkim
+sudo systemctl daemon-reload
+sudo systemctl restart apache2
+sudo systemctl restart opendkim postfix
+sudo systemctl start daphne
+# Set permissions
+sudo chown -R :www-data /var/www/
+sudo chown -R :www-data /var/www/.deepface
+# Swap configuration
+echo "Allocating swap, this may take a while"
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo fallocate -l 8G /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1024 count=8388608
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
+sudo swapon --show
+# Init caption engine
+echo "Initializing routine caption"
+/home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
+/home/team/lotteh/venv/bin/python /home/team/lotteh/setup_mail.py
+#echo "Setting user password"
+#sudo usermod --password $(echo team | openssl passwd -1 -stdin) team
+# Show ipv6 and opendkim for domain configuration
+echo "COPY the below information to domain configuration."
+hostname -I
+ip a | grep inet
+ip -6 addr | grep "scope link"
+sudo cat /etc/opendkim/keys/lotteh.com/sendonly.txt | tr -d '\n' | sed 's/\s//g' | awk -F'[)(]' '{print $2}' | sed '0,/""/{s/""//}'
+sudo systemctl stop apache2 daphne celery celerybeat
+# Set hostname
+sudo hostnamectl set-hostname lotteh.com
+# Update hosts
+echo "127.0.0.1 lotteh.com" | sudo tee -a /etc/hosts
+#sudo hostnamectl set-hostname localhost
+# Setup completed
+echo "Pre-boot setup completed in"
+wc -l scripts/setup
+echo "lines of code."
+echo "Total time:"
+duration=$SECONDS
+echo "$((duration / 60)) minutes and $((duration % 60)) seconds elapsed."
+echo "TODO:"
+echo "- COPY above IPv6 address to domain DNS configuration"
+echo "- COPY domain key to domain DNS configuration"
+echo "- ADD new git repository with git remote add originlab <repo>."
+echo "- OPEN port 25"
+echo "- INSTALL antivirus as per reccomendations"
+echo "- TEST"
+echo "If neccesary,"
+echo "- DEBUG"
+echo "- FIX setup and backup scripts"
+echo "- Fix server"
+echo ""
+echo "Thank you for using the lotteh installer. Have a great day!"
+echo "Goodbye."
+# Reboot safely
+sudo systemctl stop apache2 daphne celery celerybeat
+sudo reboot

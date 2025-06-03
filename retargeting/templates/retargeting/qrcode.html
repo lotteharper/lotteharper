@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block head %}
+<script type="text/javascript" src="/static/qrcode.min.js"></script>
+{% endblock %}
+{% block content %}
+{% load feed_filters %}
+<legend>{{ 'Generate a QR Code'|etrans }}</legend>
+<p>{{ 'Supply a link in the form below to generate.'|etrans }}</p>
+<input class="form-control mr-sm-2" type="text" placeholder="{{ base_url }}" aria-label="{{ base_url }}" id="text-input" autofocus>
+<button onclick="downloadQr();" class="btn btn-primary" title="Download code">{{ 'Download'|etrans }}</button>
+<hr>
+<div style="display: flex; justify-content: space-around;"><div id="qrcode" style="border: 15px solid white; border-radius: 5px;"></div></div>
+{% endblock %}
+{% block javascript %}
+var qrdiv = document.getElementById("qrcode");
+var qr = new QRCode(qrdiv, "{{ base_url }}");
+var image = qrdiv.querySelector('img');
+image.style.width = "100%";
+image.style.maxWidth = "400px";
+const input = document.querySelector('#text-input');
+var textValue = "{{ base_url }}";
+var textUpdated = false;
+input.addEventListener('input', (event) => {
+	textValue = event.target.value;
+	textUpdated = true;
+});
+setInterval(function() {
+	if(textUpdated) {
+		qr.makeCode(textValue);
+		textUpdated = false;
+	}
+}, 1000);
+function downloadImage(url, filename) {
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = '{{ the_site_name }} - ' + filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+function getBase64Image(img) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, img.clientWidth + 40, img.clientHeight + 40);
+                    bsfctx.drawImage(img, 20, 20, img.clientWidth, img.clientHeight);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+/*                    bsfcanvas.classList.add('hide');*/
+                    return dataURL; /*.replace(/^data:image\/(png|jpg);base64,/, "");*/
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = '{{ the_site_name }} - ' + filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    downloadQrImage(getBase64Image(document.getElementById('qrcode').querySelector('img')), 'QR Code.png');
+                }
+                /*{% include 'download_qr.js' %}*/
+                qrdiv.onclick = downloadQr;
+{% endblock %}

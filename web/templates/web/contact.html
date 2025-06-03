@@ -1,0 +1,18 @@
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+{% endblock %}{% block content %}
+{% load app_filters %}
+{% load feed_filters %}
+<div id="pg2">
+<legend>{{ 'Contact'|etrans }}</legend>
+<p>{{ the_ad_text|etrans }}</p>
+{% include 'contact/form.html' %}
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% endblock %}

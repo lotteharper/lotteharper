@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load feed_filters %}
+{% block content %}
+<div id="container rounded bg-white shadow col-md-6 mx-auto">
+{% blocktrans %}
+<h1>Thank you!</h1>
+<p>Thank you for subscribing. Your subscription is being verified. Please wait 5 minutes and then refresh the page to continue, or return back to this page. Thank you for your patience while the transaction is being verified.</p>
+{% endblocktrans %}
+{% if not user.is_authenticated or not user|barcodescanned %}
+{% blocktrans %}
+<p>If this is an age restricted purchase, and your account is new or you have not scanned your ID, you will need to follow the links in your email to activate your account and set your password as well as <a href="{% url 'barcode:scan' %}" title="Scan your ID before continuing">scan your ID before continuing</a> please.</p>
+{% endblocktrans %}
+{% endif %}
+</div>
+{% endblock %}
+{% block javascript %}
+setTimeout(function() {
+	window.location.reload();
+}, 1000 * 60 * 5); // 5 minutes
+{% endblock %}
