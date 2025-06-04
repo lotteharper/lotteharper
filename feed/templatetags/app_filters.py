@@ -2,6 +2,11 @@ from django import template
 
 register = template.Library()
 
+@register.filter('markdowntohtml')
+def markdowntohtml(input):
+    import markdown
+    return markdown.markdown(input)
+
 @register.filter('get_answered_surveys')
 def get_answered_surveys(user_id):
     from django.contrib.auth.models import User
@@ -28,7 +33,7 @@ def scoretotals(user):
 
 @register.filter('isabook')
 def isabook(postcont):
-    return True if '***' in postcont else False
+    return True if '```' in postcont else False
 
 @register.filter('getelementbyindex')
 def getelementbyinex(thearr, index):
@@ -873,20 +878,43 @@ def highlightcode(value):
     if not value: return value
     if not settings.USE_PRISM: return value
     op = []
-    v = value.replace('‘','\'').replace('’','\'').split('***')
+    v = re.split('(```)', value.replace('‘','\'').replace('’','\'')) #.split('```')
+    language = ''
+    nextislang = False
+    nextiscode = False
+    language = ''
+    codeortext = False
     for t in v:
-        split = re.split('\*[\w\.]+\*', t)
-        language = '\n'
+        if t == '': continue
+        if t == '```':
+            codeortext = not codeortext
+            continue
+#        if t == '```' and not (nextislang or nextiscode):
+#            nextislang = True
+#            nextiscode = False
+#            language = ''
+#            text = ''
+#            code = ''
+#            continue
+#        elif t == '```' and nextislang:
+#            nextislang = False
+#            continue
+        language = ''
+        text = ''
+        code = ''
         try:
-            language = t[len(split[0]):len(t)-len(split[1])][1:-1].lower()
+            if codeortext:
+                language = t.split('\n')[0].replace('\r', '') if len(t) > 0 else False
+                code = t.split('\n', 1)[1] if len(t.split('\n', 1)[1]) > 0 else False
+            else:
+                text = t
         except: pass
         if language == 'html': language = 'markup'
-        code = split[1] if len(split) > 1 else False
-        if code:
-            op = op + [{'text': split[0], 'lang': language, 'code': html.escape(code) if language != 'markup' else '<!-- {} -->'.format(code)}]
+        if code and language:
+            op = op + [{'text': text, 'lang': language, 'code': html.escape(code) if language != 'markup' else '<!-- {} -->'.format(code)}]
 #            op = op + [language,]'<pre><code class="language-{}">'.format(language if language != 'html' else 'markup') + '{% autoescape on %}' + code + '{% endautoescape %}</code></pre>'
-        else:
-            op = op + [{'text': split[0]}]
+        elif text:
+            op = op + [{'text': text}]
     return op
 
 @register.filter(name='marksafe')

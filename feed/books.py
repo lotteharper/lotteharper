@@ -4,23 +4,36 @@ def generate_post_book(post):
     path = os.path.join(settings.BASE_DIR, 'media/books/', '{}.docx'.format(str(uuid.uuid4())))
     return generate_book(post.content, path)
 
+
 def generate_code_book(value, lang='en', src='en'):
     from django.conf import settings
     if not value: return value
     if not settings.USE_PRISM: return value
     import re, html
+    from django.utils.html import strip_tags
     op = []
     title = value.split('\n')[0]
-    v = value.replace('‘','\'').replace('’','\'').split('***')
-    from django.utils.html import strip_tags
+    v = re.split('(```)', value.replace('‘','\'').replace('’','\'')) #.split('```')
+    language = ''
+    nextislang = False
+    nextiscode = False
+    language = ''
+    codeortext = False
     for t in v:
-        split = re.split('\*[\w\.]+\*', t)
-        language = '\n'
+        if t == '': continue
+        if t == '```':
+            codeortext = not codeortext
+            continue
+        language = ''
+        text = ''
+        code = ''
         try:
-            language = t[len(split[0]):len(t)-len(split[1])][1:-1].lower()
-        except: pass
+            if codeortext:
+                language = t.split('\n')[0].replace('\r', '') if len(t) > 0 else False
+                code = t.split('\n', 1)[1] if len(t.split('\n', 1)[1]) > 0 else False
+            else:
+                text = t
         if language == 'html': language = 'markup'
-        code = split[1] if len(split) > 1 else False
         if code:
             lines = []
             for line in code.split('\n'):
@@ -32,7 +45,7 @@ def generate_code_book(value, lang='en', src='en'):
                 lines = lines + [line_string]
             out = '\n'.join(lines)
             op = op + [{'text': translate(None, strip_tags(split[0]), target=lang, src=src), 'lang': language, 'code': html.escape(out) if language != 'markup' else '<!-- {} -->'.format(out)}]
-        else:
+        elif text:
             op = op + [{'text': translate(None, strip_tags(split[0]), target=lang, src=src}]
     from django.template.loader import render_to_string
     return render_to_string('feed/book.html', {'value': op}), title
@@ -59,6 +72,7 @@ def generate_book(text, out_path_docx):
             text = re.sub('\s' + key + '\,', ' ' + value + ',', text)
         text = re.sub('(?P<get>\\.|!|;|:)[ \t]+(?P<put>\\w)', '\\g<get> \\g<put>', text)
         return text
+
     from docx import Document
 #    from htmldocx import HtmlToDocx
     document = Document()
@@ -90,7 +104,6 @@ def generate_book(text, out_path_docx):
     document.add_heading(title, 0)
 
     text = text.replace('‘','\'').replace('’','\'')
-    text_split = text.split('***')
 
     def create_element(name):
         return OxmlElement(name)
@@ -134,21 +147,44 @@ def generate_book(text, out_path_docx):
     font.size = Pt(font_size)
 
     def add_paragraph(line):
-        paragraph = document.add_paragraph(line)
+        from django.utils.html import strip_tags
+        import markdown
+        paragraph = document.add_paragraph(strip_tags(markdown.markdown(line)))
         paragraph.style = document.styles['Normal']
 
     image_count = 0
 
     images = []
-    for t in text_split:
-        split = re.split('\*[\w\.]+\*', t)
-        language = '\n'
+    import re
+    v = re.split('(```)', text) #.split('```')
+    language = ''
+    codeortext = False
+    for t in v:
+        if t == '': continue
+        if t == '```':
+            codeortext = not codeortext
+            continue
+#        if t == '```' and not (nextislang or nextiscode):
+#            nextislang = True
+#            nextiscode = False
+#            language = ''
+#            text = ''
+#            code = ''
+#            continue
+#        elif t == '```' and nextislang:
+#            nextislang = False
+#            continue
+        language = ''
+        text = ''
+        code = ''
         try:
-            language = t[len(split[0]):len(t)-len(split[1])][1:-1].lower()
-        except: pass
-        for line in split[0].split('\n'):
-            paragraph = add_paragraph(spell(line))
-        code = split[1] if len(split) > 1 else False
+            if codeortext:
+                language = t.split('\n')[0].replace('\r', '') if len(t) > 0 else False
+                code = t.split('\n', 1)[1] if len(t.split('\n', 1)[1]) > 0 else False
+            else:
+                text = t
+                for line in text.split('\n'):
+                    paragraph = add_paragraph(spell(line))
         if code:
             run = True
             while run:

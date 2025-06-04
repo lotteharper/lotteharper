@@ -23,11 +23,13 @@
 <hr class="m-5 p-5">
 </div>
 </div>
+</div>
 <div class="bg-white bottom-readerbar py-0 my-0 hide" id="bnav{{ post.id }}">
 <div style="display: flex; justify-content: space-around;">
 <div class="btn btn-outline-primary" onclick="toggleReader('{{ post.id }}');" style="color: black !important;">{{ 'Close'|etrans }}</div>
 <i {% if darkmode %} style="color: black !important;"{% endif %}>{{ 'Page'|etrans }} <i id="pagecount{{ post.id }}"{% if darkmode %} style="color: black !important;"{% endif %}> 1</i></i>
 {% include 'jumptobookpage.html' %}
+</div>
 </div>
 </div>
 </div>

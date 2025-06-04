@@ -905,7 +905,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         from django.shortcuts import render
         from django.http import HttpResponseRedirect
         self.object = self.get_object()
-        if '***' in self.get_object().content and not request.GET.get('raw', None): return HttpResponseRedirect(request.path + '?raw=t')
+        if '```' in self.get_object().content and not request.GET.get('raw', None): return HttpResponseRedirect(request.path + '?raw=t')
         return render(request, self.template_name, self.get_context_data())
 
     def get_context_data(self, **kwargs):

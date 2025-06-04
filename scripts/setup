@@ -248,7 +248,7 @@ pip3 install --pre torch-tensorrt --index-url https://download.pytorch.org/whl/n
 pip3 install --upgrade transformers torch torchvision torchaudio TA-Lib python-docx Pillow SpeechRecognition pydub ffmpeg sewar moviepy python-magic zxing pitch-detectors sentry-sdk django-simple-history django-cors-headers numpy
 pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
 pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
-pip3 install -r reqs.txt --use-deprecated=legacy-resolver --use-pep517
+pip3 install -r reqs.txt
 pip3 install --upgrade requests
 pip3 install googletrans==3.1.0a0
 pip3 install --upgrade "nudenet>=3.4.2"

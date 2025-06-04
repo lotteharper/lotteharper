@@ -670,7 +670,7 @@ class Post(models.Model):
         try:
             from feed.text import is_safe_text, censor
             if not is_safe_text(self.content):
-                if len(self.content) > settings.POST_READER_LENGTH: self.content = censor(self.content)
+                if len(self.content) < settings.POST_READER_LENGTH: self.content = censor(self.content)
                 else: self.public = False
             this = Post.objects.filter(id=self.id).first()
             super(Post, self).save(*args, **kwargs)
@@ -818,16 +818,16 @@ class Post(models.Model):
         if (not this or (this.content != self.content)): # and self.content and len(self.content) > 32:
             self.friendly_name = ''
             self.get_friendly_name(save=False)
-        if (this and ((this.content != self.content) or (not this))) and len(self.content) > settings.POST_READER_LENGTH and '***' in self.content and self.posted:
+        if (this and ((this.content != self.content) or (not this))) and len(self.content) > settings.POST_READER_LENGTH and '```' in self.content and self.posted:
             from lotteh.celery import write_post_book
             write_post_book.delay(self.id)
             print('Scheduling write book')
-        if (this and ((this.content != self.content) or (not this))) and self.posted:
-            self.compile_content()
         from security.crypto import decrypt_cbc
         if not is_base64(self.auction_message[24:]):
             from security.crypto import encrypt_cbc
             self.auction_message = encrypt_cbc(self.auction_message, settings.AES_KEY)
+#        if (this and ((this.content != self.content) or (not this))) and self.posted:
+#            self.compile_content()
         try:
             super(Post, self).save(*args, **kwargs)
         except: pass
