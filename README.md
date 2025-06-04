@@ -72,7 +72,8 @@ sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
 __Simply run the script in any Debian-like Bash shell, I recommend Ubuntu. Make sure to edit the names in the end and beginning of this file according to what you would like to call your deployment of this app.__
 
 Please note that this code is being maintained and may not always function. If it does not install and become operational immediatley, please use the following commands in order:
-(Inside the virtual environment and project directory)```
+(Inside the virtual environment and project directory)
+```
 pip3 install -r reqs.txt
 # Check for install errors and fix
 python manage.py check
