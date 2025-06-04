@@ -15,11 +15,11 @@
     </div>
     {% autoescape off %}    
     {% if request.path == '/search/' %}
-    <p class="article-content">{{ post.content|trimlength|transauthor:post.id|tagusers|highlightsearchquery }}</p>
+    <p class="article-content">{{ post.content|trimlength|markdowntohtml|transauthor:post.id|tagusers|highlightsearchquery }}</p>
     {% elif post.content|isabook %}
     <p class="article-content">{{ post.content_compiled|trimlength|transauthor:post.id|tagusers }}</p>
     {% else %}
-    <p class="article-content">{{ post.content|trimlength|transauthor:post.id|addhttpstodomains|embedlinks|tagusers }}</p>
+    <p class="article-content">{{ post.content|trimlength|markdowntohtml|transauthor:post.id|addhttpstodomains|embedlinks|tagusers }}</p>
     {% endif %}
     {% if post.content|isabook %}
     {% include 'reader.html' %}
