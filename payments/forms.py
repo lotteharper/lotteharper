@@ -91,7 +91,6 @@ class BitcoinPaymentFormUser(forms.Form):
         from feed.middleware import get_current_request
         r = get_current_request()
         from translate.translate import translate
-        self.fields['email'].label = translate(r, 'Your email for the invoice', src='en')
         self.fields['transaction_id'].widget = forms.HiddenInput()
         self.fields['amount'].widget = forms.HiddenInput()
         self.fields['invoice'].widget = forms.HiddenInput()
