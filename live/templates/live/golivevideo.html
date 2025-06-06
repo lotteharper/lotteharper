@@ -243,15 +243,15 @@ async function makeComposite() {
     canvasElement.setAttribute("width", `${cam.videoWidth}px`);
     canvasElement.setAttribute("height", `${cam.videoHeight}px`);
     canvasCtx.clearRect(0, 0, cam.videoWidth, cam.videoHeight);
- {% if not request.GET.back %}   canvasCtx.scale(-1, 1);{% endif %}
+    {% if request.GET.mirror and not request.GET.back %}   canvasCtx.scale(-1, 1);{% endif %}
     canvasCtx.drawImage(
       cam,
-      {% if not request.GET.back %}-Math.floor(cam.videoWidth){% else %}0{% endif %},
+      {% if request.GET.mirror and not request.GET.back %}-Math.floor(cam.videoWidth){% else %}0{% endif %},
       0,
       Math.floor(cam.videoWidth),
       Math.floor(cam.videoHeight),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
-{% if not request.GET.back %}    canvasCtx.resetTransform();{% endif %}
+    {% if request.GET.mirror and not request.GET.back %}    canvasCtx.resetTransform();{% endif %}
     {% if camera.embed_logo and camera.user.vendor_profile.logo %}
     const logoSize = parseInt(cam.videoWidth / 13);
     canvasCtx.drawImage(

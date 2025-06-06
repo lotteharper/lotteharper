@@ -12,10 +12,12 @@ def get_transcript(filename):
         audio_data = r.record(source)
         # recognize (convert from speech to text)
         try:
-            text = r.recognize_google(audio_data)
+            text = r.recognize_google(audio_data, show_all=True)
             os.remove(path)
             return text, fingerprint
         except:
+            import traceback
+            print(traceback.format_exc())
             return '', fingerprint
 
 def get_wav_transcript(path):
