@@ -17,9 +17,7 @@
       <hr>-->
 	<div style="display: flex; justify-content: space-around;">
 		<a href="{% url 'vendors:preferences' %}" class="btn btn-primary">{{ 'Vendor Preferences'|etrans }}</a>
-		{% if request.path == '/accounts/profile/' %}
 		{% webpush_button with_class="btn btn-outline-info" %}
-		{% endif %}
 	</div>
 	<hr>
 	{% else %}

@@ -216,7 +216,7 @@ def logout_visitor(request):
     from django.contrib.auth import logout
     if request.user.is_authenticated:
         from security.build import async_build_session
-        asnc_build_session(request.user.id, request.session.session_key)
+        async_build_session(request.user.id, request.session.session_key)
     logout(request)
     return render(request, 'users/logout.html', {'small': True, 'title': 'You have been logged out of {}'.format(settings.SITE_NAME)})
 

@@ -311,29 +311,26 @@ function startup() {
   });
 }
 startup();
-function openSocket() {
-        var socket = new WebSocket("wss://" + window.location.hostname + '/ws/photobooth/remote/{{ request.user.profile.name }}/{{ start_time }}/');
-        socket.addEventListener("open", (event) => {
+function openpSocket() {
+        var psocket = new WebSocket("wss://" + window.location.hostname + '/ws/photobooth/{{ request.user.profile.name }}/{{ camera.name }}/');
+        psocket.addEventListener("open", (event) => {
             console.log('Socket open.');
-            setInterval(function() {
-                socket.send('i');
-            }, 1000);
         });
-        socket.addEventListener("close", (event) => {
+        psocket.addEventListener("close", (event) => {
             console.log('Socket closed.');
             setTimeout(function() {
-                openSocket();
+                openpSocket();
             }, {{ reload_time }});
         });
-        socket.addEventListener("message", (event) => {
+        psocket.addEventListener("message", (event) => {
             var i = parseInt(event.data);
-	    if(i >= 0) {
-		setTimeout(function() {
-            	socket.send('-1');
-		    captureImage();
-		}, i * 1000);
-	    }
+    	    if(i >= 0) {
+        		setTimeout(function() {
+                	psocket.send('-1');
+            	    captureImage();
+            	}, i * 1000);
+    	    }
         });
 }
-openSocket();
+openpSocket();
 {% endblock %}

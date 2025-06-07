@@ -509,7 +509,7 @@ PWA_APP_LANG = 'en-US'
 WEBPUSH_SETTINGS = {
     "VAPID_PUBLIC_KEY": keys['VAPID_PUBLIC_KEY'],
     "VAPID_PRIVATE_KEY": keys['VAPID_PRIVATE_KEY'],
-    "VAPID_ADMIN_EMAIL": "jasper.camber.holton@gmail.com"
+    "VAPID_ADMIN_EMAIL": "lotte.grace.harper@gmail.com"
 }
 
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'serviceworker.js')

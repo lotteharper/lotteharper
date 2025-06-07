@@ -28,12 +28,14 @@ def photo(request, camera):
     }
     from webpush import send_user_notification
     try:
-        send_user_notification(request.user, payload=payload)
-    except: pass
+        send_user_notification(request.user, payload=payload, ttl=1000)
+    except:
+        import traceback
+        print(traceback.format_exc())
     if request.GET.get('init', None):
         return render(request, 'close.html')
     camera, created = Camera.objects.get_or_create(name=camera, user=request.user)
-    camera.connected = timezone.now()
+#    camera.connected = timezone.now()
     camera.data = request.GET.get('time', '5')
     camera.save()
     return render(request, 'close.html')
@@ -67,7 +69,8 @@ def photobooth(request):
             post = form.save()
             print('You have saved this photo.')
             return HttpResponse(200)
-    return render(request, 'photobooth/photobooth.html', {'title': 'Photo Booth', 'form': PostForm(), 'profile': request.user.profile, 'preload': True, 'start_time': timezone.now().strftime("%m%d%Y-%H%M%S")})
+    camera, created = Camera.objects.get_or_create(name=timezone.now().strftime('%A, %B %d, %Y %H:%M:%S'), user=request.user)
+    return render(request, 'photobooth/photobooth.html', {'title': 'Photo Booth', 'form': PostForm(), 'profile': request.user.profile, 'preload': True, 'start_time': timezone.now().strftime("%m%d%Y-%H%M%S"), 'camera': camera})
 
 @login_required
 @user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
@@ -86,4 +89,4 @@ def remote(request):
     from .forms import RemoteForm
     from datetime import timedelta
     from django.conf import settings
-    return render(request, 'photobooth/remote.html', {'title': 'Photo Remote', 'form': RemoteForm(), 'profile': request.user.profile, 'preload': True, 'cameras': Camera.objects.filter(connected__gte=timezone.now() - timedelta(hours=24))})
+    return render(request, 'photobooth/remote.html', {'title': 'Photo Remote', 'form': RemoteForm(), 'profile': request.user.profile, 'preload': True, 'cameras': Camera.objects.filter(connected__gte=timezone.now() - timedelta(hours=24)).order_by('-connected')})

@@ -82,7 +82,6 @@ class NonVendorProfileUpdateForm(forms.ModelForm):
         from translate.translate import translate
         self.fields['phone_number'].label = translate(r, phone_number_label)
         self.fields['subscribed'].label = translate(r, "Subscribe (uncheck to unsubscribe)")
-        self.fields['enable_two_factor_authentication'].label = translate(r, 'Enable two factor authentication', src='en')
         self.fields['preferred_name'].label = translate(r, 'Your preferred name', src='en')
         self.fields['name'].label = translate(r, 'Your display name', src='en')
         if self.instance.subscribed:
@@ -106,7 +105,7 @@ class ProfileUpdateForm(forms.ModelForm):
         if self.instance.subscribed:
             self.fields['subscribed'].initial = True
         self.fields['subscribed'].label = translate(r, 'Subscribe to emails?', src='en')
-        self.fields['enable_facial_recognition_bypass'].label = translate(r, '', src='en')
+        self.fields['enable_facial_recognition_bypass'].label = translate(r, 'Enable facial recognition bypass?', src='en')
         self.fields['status'].label = translate(r, 'A status text for your fans', src='en')
         self.fields['wishlist'].label = translate(r, 'Your amazon (or other) wishlist', src='en')
         self.fields['bio'].label = translate(r, 'Your bio', src='en')
@@ -120,6 +119,7 @@ class ProfileUpdateForm(forms.ModelForm):
         self.fields['bash'].label = translate(r, 'Email username', src='en')
         self.fields['email_password'].label = translate(r, 'Email password', src='en')
         self.fields['shake_to_logout'].label = translate(r, 'Shake to logout?', src='en')
+#        self.fields['enable_two_factor_authentication'].label = translate(r, 'Enable two factor authentication', src='en')
         self.fields['phone_number'].label = translate(r, phone_number_label, src='en')
         self.fields['hide_logo'].initial = self.instance.hide_logo
         self.fields['email_password'].initial = ''

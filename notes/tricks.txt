@@ -21,3 +21,7 @@ pkill -9 -f path/to/my_script.py
 # Root's crontab
 MAILTO=someone@example.com
 0 0 * * * /usr/bin/somescript
+
+# Reset webpush
+from webpush.models import SubscriptionInfo
+SubscriptionInfo.objects.all().delete()

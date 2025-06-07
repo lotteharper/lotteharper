@@ -23,30 +23,27 @@
 {% block javascript %}
 {% if request.GET.camera %}
 var form = document.getElementById("id_time");
-var socket;
+var psocket;
 var device = document.getElementById("use-device");
 form.onchange = function() {
     device.href = "{% url 'photobooth:photo' request.GET.camera %}?init=t&time=" + form.value;
 }
 function capture() {
-	socket.send(form.value);
+	psocket.send(new String(form.value));
 }
-function openSocket() {
-	socket = new WebSocket("wss://" + window.location.hostname + '/ws/photobooth/{{ request.user.profile.name }}/{{ request.GET.camera }}/');
-        socket.addEventListener("open", (event) => {
+function openpSocket() {
+	psocket = new WebSocket("wss://" + window.location.hostname + '/ws/photobooth/remote/{{ request.user.profile.name }}/{{ request.GET.camera }}/');
+        psocket.addEventListener("open", (event) => {
             console.log('Socket open.');
-            setInterval(function() {
-                socket.send('i');
-            }, 1000);
         });
-        socket.addEventListener("close", (event) => {
+        psocket.addEventListener("close", (event) => {
             console.log('Socket closed.');
             setTimeout(function() {
-                openSocket();
+                openpSocket();
             }, {{ reload_time }});
         });
 }
-openSocket();
+openpSocket();
 var started = false;
 const gamepads = [];
 function jump(pad) {

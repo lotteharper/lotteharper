@@ -35,7 +35,6 @@ def send_retargeting_emails():
     from webpush import send_group_notification
     from users.tfa import send_user_text
     from feed.models import Post
-
     posts = Post.objects.filter(author__id=settings.MY_ID, enhanced=True, private=False, public=True, published=True, recipient=None).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=posts).exclude(image_offsite=None).order_by('?').first()
     photo_url = post.image_offsite
