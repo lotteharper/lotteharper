@@ -22,20 +22,24 @@ MIME_CHOICES = [['mp4; codecs="avc1.42E01E, mp4a.40.2"','mp4; codecs="avc1.42E01
 
 PRIVACY_CHOICES = [['public','public'], ['unlisted','unlisted'], ['private','private']]
 
+MICROPHONE_CHOICES = [['default', 'default'], ['echo cancellation', 'echo cancellation'], ['communication', 'communication']]
+
 class NameCameraForm(forms.ModelForm):
     name = forms.CharField(required=True, min_length=1)
     mimetype = forms.CharField(widget=forms.Select(choices=MIME_CHOICES))
     width = forms.CharField(widget=forms.Select(choices=WIDTH_CHOICES))
     privacy_status = forms.CharField(widget=forms.Select(choices=PRIVACY_CHOICES))
+    microphone = forms.CharField(widget=forms.Select(choices=MICROPHONE_CHOICES))
     def __init__(self, *args, **kwargs):
         super(NameCameraForm, self).__init__(*args, **kwargs)
-        self.fields['echo_cancellation'].initial = self.instance.echo_cancellation
+#        self.fields['echo_cancellation'].initial = self.instance.echo_cancellation
         self.fields['use_websocket'].initial = self.instance.use_websocket
         self.fields['compress_video'].initial = self.instance.use_websocket
         from feed.middleware import get_current_request
         r = get_current_request()
         from translate.translate import translate
         self.fields['name'].label = translate(r, 'Camera name', src='en')
+        self.fields['microphone'].label = translate(r, 'Configure microphone', src='en')
         self.fields['mimetype'].label = translate(r, 'Camera mimetype', src='en')
         self.fields['width'].label = translate(r, 'Video resolution', src='en')
         self.fields['use_websocket'].label = translate(r, 'Use a websocket?', src='en')
@@ -56,7 +60,7 @@ class NameCameraForm(forms.ModelForm):
 
     class Meta:
         model = VideoCamera
-        fields = ('name', 'mimetype', 'width', 'use_websocket', 'echo_cancellation', 'compress_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'embed_logo', 'live', 'recording', 'upload', 'privacy_status', 'title', 'description', 'tags')
+        fields = ('name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'embed_logo', 'live', 'recording', 'upload', 'privacy_status', 'title', 'description', 'tags')
 
 class LiveShowForm(forms.ModelForm):
     choice = forms.CharField()
