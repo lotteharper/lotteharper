@@ -237,7 +237,7 @@ function uploadImage(image){
         var formdata = new FormData(form);
         formdata.append('image', new File([file], 'image.png'));
         $.ajax({
-		url: window.location.href + '&token={{ auth_token }}',
+		url: window.location.href + '?token={{ auth_token }}',
 		type: "POST",
 		data: formdata,
 		processData: false,

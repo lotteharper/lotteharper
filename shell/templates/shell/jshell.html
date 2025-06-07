@@ -81,22 +81,15 @@ function sendCommand() {
     var output = '';
     var op = '';
     try {
+        function originalConsoleLog(message) {
+            op = op + message;
+        }
         console.log = (...args) => {
           const now = new Date();
           const timestamp = now.toLocaleTimeString();
           const formattedMessage = `[${timestamp}] ${args.join(" ")}`;
           originalConsoleLog(formattedMessage);
         };
-/*        console.log = function(arguments) {
-            if(arguments.length == 1 || typeof arguments == 'string' || typeof arguments == 'integer' || typeof arguments == 'float') {
-                op = op + new String(arguments);
-                return;
-            }
-            for(let i = 0; i < arguments.length; i++) {
-                op = op + new String(arguments[i]);
-                if(i < arguments.length - 1) op = op + ' ';
-            }
-        }*/
         var cmdout = eval(command);
         output = output + (op == '' ? '' : op + '\n') + (cmdout == null ? '' : cmdout + '\n');
     } catch (e) {

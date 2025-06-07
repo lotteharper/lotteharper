@@ -19,6 +19,7 @@ class VerificationForm(forms.ModelForm):
     attest = forms.BooleanField()
     def __init__(self, *args, **kwargs):
         super(VerificationForm, self).__init__(*args, **kwargs)
+        from feed.middleware import get_current_request
         r = get_current_request()
         from translate.translate import translate
         self.fields['document'].required = True
@@ -34,8 +35,15 @@ class VerificationForm(forms.ModelForm):
         self.fields['birthday'].label = translate(r, 'Tell me your birthday (as the day is shown on your ID)')
         self.fields['birthday'].initial = get_past_date()
         self.fields['attest'].label = translate(r, 'I confirm and attest to my own good character and compliance with the law as well as the policies listed on this website.')
-        i = [('Woman','Woman'), ('Man','Man'), ('Heat','Heat')]
-        s = [('Woman','Woman'), ('Man','Man'), ('Missile','Missile')]
+        self.fields['i_am_a'].label = translate(r, 'I am a', src='en')
+        self.fields['seeking'].label = translate(r, 'Seeking', src='en')
+        self.fields['signature'].label = translate(r, 'Your signature', src='en')
+        i = [['woman','woman'], ['man','man'], ['other', 'other'], ['heat','heat']]
+        s = [['woman','woman'], ['man','man'],  ['other', 'other'], ['missile','missile']]
+        for c in i:
+            c[1] = translate(r, c[1], src='en').capitalize()
+        for c in s:
+            c[1] = translate(r, c[1], src='en').capitalize()
         self.fields['i_am_a'].widget = forms.Select(choices=i)
         self.fields['seeking'].widget = forms.Select(choices=s)
         if get_current_request().GET.get('camera'):

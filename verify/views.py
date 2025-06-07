@@ -273,7 +273,7 @@ def verify(request):
     from django.conf import settings
     from .verify import validate_id
     from lotteh.celery import pend_id_verification
-    if request.user.faces.count() == 0:
+    if request.user.faces.filter(authorized=True, authentic=True).count() == 0:
         messages.warning(request, 'Please take a photo of your face to continue.')
         return redirect(request.user.profile.create_face_url())
     if request.user.profile.identity_verified or request.user.profile.identity_verifying:

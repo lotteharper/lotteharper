@@ -57,6 +57,7 @@ def photobooth(request):
     from .forms import RemoteForm
     from datetime import timedelta
     from django.conf import settings
+    import os
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -66,6 +67,15 @@ def photobooth(request):
             form.instance.content = request.GET.get('content', '')
             if request.GET.get('recipient') and User.objects.filter(profile__name=request.GET.get('recipient')).first():
                 form.instance.recipient = User.objects.get(profile__name=request.GET.get('recipient'))
+            files = request.FILES.getlist('image')
+            if len(files) > 0:
+                f = files[0]
+                from feed.models import get_image_path
+                path = os.path.join(settings.MEDIA_ROOT, get_image_path(form.instance, f.name))
+                with open(path, 'wb+') as file:
+                    for chunk in f.chunks():
+                        file.write(chunk)
+                    form.instance.image = path
             post = form.save()
             print('You have saved this photo.')
             return HttpResponse(200)

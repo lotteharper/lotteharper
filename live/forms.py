@@ -3,8 +3,6 @@ import datetime, pytz
 from django.utils import timezone
 from live.models import VideoCamera, Show
 from users.models import Profile
-from django.conf import settings
-from feed.middleware import get_current_user, get_current_request
 from translate.translate import translate
 
 class CameraForm(forms.ModelForm):
@@ -24,6 +22,7 @@ PRIVACY_CHOICES = [['public','public'], ['unlisted','unlisted'], ['private','pri
 
 MICROPHONE_CHOICES = [['default', 'default'], ['echo cancellation', 'echo cancellation'], ['communication', 'communication']]
 
+
 class NameCameraForm(forms.ModelForm):
     name = forms.CharField(required=True, min_length=1)
     mimetype = forms.CharField(widget=forms.Select(choices=MIME_CHOICES))
@@ -38,13 +37,18 @@ class NameCameraForm(forms.ModelForm):
         from feed.middleware import get_current_request
         r = get_current_request()
         from translate.translate import translate
+        for c in MICROPHONE_CHOICES:
+            c[1] = translate(r, c[1], src='en').capitalize()
+        self.fields['microphone'].widget = forms.Select(choices=MICROPHONE_CHOICES)
+        for c in PRIVACY_CHOICES:
+            c[1] = translate(r, c[1], src='en').capitalize()
+        self.fields['privacy_status'].widget = forms.Select(choices=PRIVACY_CHOICES)
         self.fields['name'].label = translate(r, 'Camera name', src='en')
         self.fields['microphone'].label = translate(r, 'Configure microphone', src='en')
         self.fields['mimetype'].label = translate(r, 'Camera mimetype', src='en')
         self.fields['width'].label = translate(r, 'Video resolution', src='en')
         self.fields['use_websocket'].label = translate(r, 'Use a websocket?', src='en')
         self.fields['compress_video'].label = translate(r, 'Enable zip compression?', src='en')
-        self.fields['echo_cancellation'].label = translate(r, 'Enable echo cancellation?', src='en')
         self.fields['adjust_pitch'].label = translate(r, 'Adjust video pitch as specified in vendor settings?', src='en')
         self.fields['animate_video'].label = translate(r, 'Animate the video with AnimeGAN? (GPU required)', src='en')
         self.fields['short_mode'].label = translate(r, 'Enable short mode for <1min videos?', src='en')
@@ -66,6 +70,9 @@ class LiveShowForm(forms.ModelForm):
     choice = forms.CharField()
     def __init__(self, *args, **kwargs):
         super(LiveShowForm, self).__init__(*args, **kwargs)
+        from feed.middleware import get_current_request
+        r = get_current_request()
+        from translate.translate import translate
         self.fields['choice'].label = translate(get_current_request(), 'Choose a time for the private show')
         user = self.instance.user
         CHOICES = list()
@@ -89,6 +96,7 @@ class ChooseCameraForm(forms.Form):
         r = get_current_request()
         from translate.translate import translate
         self.fields['choice'].label = translate(r, 'Choose a camera to begin', src='en')
+        from feed.middleware import get_current_user
         user = get_current_user()
         cams = VideoCamera.objects.filter(user=user).order_by('-last_frame')
         cameras = []

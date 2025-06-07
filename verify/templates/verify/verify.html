@@ -9,19 +9,19 @@
 {% endblock %}
 {% block content %}
 <div id="container rounded bg-white shadow col-md-6 mx-auto">
-<h1>{{ 'Verify Your Identity'|trans }}</h1>
+<h1>{{ 'Verify Your Identity'|etrans }}</h1>
 <p>{{ the_site_name }} {{ 'requires you to verify your identity before you can begin using the app. This step verifies your age with a few photos, and keeps the site safer.'|trans }} <i>{% blocktrans %}You must be at least 21 years old to use this part of the site.{% endblocktrans %}</i></p>
-<p>{{ 'Please use an ID with a barcode including your name, birthday, and ID number.'|trans }}</p>
-<p>{{ 'Please take a photo of the front and back of your ID for this upload. You can do this using a professional camera or your smartphone. I recommend saving the scans, you can go directly to your and'|trans }} <a href="{% url 'barcode:scan' %}?download=true" title="{{ 'Scan your ID'|trans }}">{{ 'save scans of your ID'|trans }}</a> {{ 'or'|trans }} <a href="?camera=true" title="{{ 'Scan your ID from your camera'|trans }}">{{ 'scan your ID from your camera'|trans }}</a>.</p>
+<p>{{ 'Please use an ID with a barcode including your name, birthday, and ID number.'|etrans }}</p>
+<p>{{ 'Please take a photo of the front and back of your ID for this upload. You can do this using a professional camera or your smartphone. I recommend saving the scans, you can go directly to your and'|trans }} <a href="{% url 'barcode:scan' %}?download=true" title="{{ 'Scan your ID'|trans }}">{{ 'save scans of your ID'|trans }}</a> {{ 'or'|trans }} <a href="?camera=true" title="{{ 'Scan your ID from your camera'|trans }}">{{ 'scan your ID from your camera'|etrans }}</a>.</p>
 <form method="POST" enctype="multipart/form-data">
 	{% csrf_token %}
 	<fieldset class="form-group">
-	<legend class="border-bottom mb-4">{{ 'Upload Your ID'|trans }}</legend>
+	<legend class="border-bottom mb-4">{{ 'Upload Your ID'|etrans }}</legend>
 		{{ form|crispy }}
 	</fieldset>
-	<small>{% blocktrans %}By completing this form and signing above, as well as pressing the button below, you confirm that you are at least {{ min_age }} years of age today, born on or before {{ past_date }}, and you swear you are not using the site in a public place, not in a manner that humiliates or defames any of our models or violates the law, and you agree to the Terms of Use and Privacy Policy listed below, in the footer of this website.{% endblocktrans %} <i>{{ 'If you do not meet these conditions, you will be dismissed from the site.'|trans }}</i> {{ 'Thank you for your cooperation.'|trans }}</small>
+	<small>{% blocktrans %}By completing this form and signing above, as well as pressing the button below, you confirm that you are at least {{ min_age }} years of age today, born on or before {{ past_date }}, and you swear you are not using the site in a public place, not in a manner that humiliates or defames any of our models or violates the law, and you agree to the Terms of Use and Privacy Policy listed below, in the footer of this website.{% endblocktrans %} <i>{{ 'If you do not meet these conditions, you will be dismissed from the site.'|trans }}</i> {{ 'Thank you for your cooperation.'|etrans }}</small>
 	<hr style="background-color: blue;">
-	<button type="submit" id="verify-button" class="btn btn-outline-danger">{{ 'Verify'|trans }}</button>
+	<button type="submit" id="verify-button" class="btn btn-outline-danger">{{ 'Verify'|etrans }}</button>
 </form>
 </script>
 </div>
