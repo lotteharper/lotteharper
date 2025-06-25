@@ -1,0 +1,2 @@
+sudo rm /home/team/lotteh/cache/*
+htcacheclean -p /var/cache/apache2 -l 1024M

@@ -1,0 +1,9 @@
+#!/bin/bash
+cd /home/team/lotteh/
+source venv/bin/activate
+#python generate_chat.py
+cp web/site/en/* web/site/
+cd web/site
+sudo git add --all
+sudo git commit -m "updates"
+sudo git push -u origin main

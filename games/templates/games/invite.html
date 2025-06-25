@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load feed_filters %}
+{% block head %}
+<script src="/static/qrcode.min.js" type="text/javascript"></script>
+{% endblock %}
+{% block content %}
+<legend>{{ 'Invite a Friend'|etrans }}</legend>
+<p><i>{{ game.post.id|shorttitle|trans }}</i></p>
+<div style="display: flex; justify-content: space-around;">
+<img src="{{ post.get_image_thumb_url }}" alt="{{ game.post.id|shorttitle|trans }}" style="width: 60%;"/>
+</div>
+<legend>{{ 'Invite Code:'|etrans }} <b id="#gamecode">{{ code }}</b> <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('#gamecode');">{{ 'Copy'|etrans }}</button></legend>
+<legend>{{ 'Invite URL:'|etrans }} <b id="#gameurl">{{ base_url }}/games/{{ game.post.id }}/{{ code }}/</b> <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('#gameurl');">{{ 'Copy'|etrans }}</button></legend>
+<p>{{ 'Give the other player this code, and have them enter it.'|etrans }}</p>
+<p><button onclick="join();" title="{{ 'Join the game'|etrans }}" class="btn btn-outline-success" id="joinButton">{{ 'Join Game'|etrans }}</button></p>
+<small>{{ 'Alternatively, scan this QR code'|etrans }}</small>
+<div style="display: flex; justify-content: space-around;"><div id="gameqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<hr>
+<p><a title="{{ 'Accept an invite (send this link to your friend)'|etrans }}"  href="{% url 'games:join' %}">{{ 'Accept invite'|etrans }}</a> ⚬ <a title="{{ 'Visit the leaderboard'|etrans }}"  href="{% url 'games:leaderboard' %}">{{ 'Leaderboard'|etrans }}</a></p>
+{% endblock %}
+{% block javascript %}
+var gameqrdiv = document.getElementById("gameqrcode");
+var gameqr = new QRCode(gameqrdiv, "{{ base_url }}/games/{{ game.post.id }}/{{ code }}/");
+var gameimage = gameqrdiv.querySelector('img');
+gameimage.style.width = "100%";
+gameimage.style.height = "100%";
+gameimage.style.maxWidth = "160px";
+gameimage.alt = "{{ 'Share this page by scanning a QR code.'|etrans }}";
+function openSocket() {
+	socket = new WebSocket("wss://" + window.location.hostname + '/ws/games/{{ game.post.id }}/{{ game.code }}/');
+	socket.addEventListener("open", (event) => {
+		console.log('Socket open.');
+		setInterval(function() {
+			socket.send('x');
+		}, 1000);
+	});
+	socket.addEventListener("message", (event) => {
+		if(event.data != '') {
+			document.getElementById('joinButton').disabled = false;
+		}
+	});
+	socket.addEventListener("close", (event) => {
+		console.log('Socket closed.');
+		setTimeout(function() {
+			openSocket();
+		}, {{ reload_time }});
+	});
+}
+/*openSocket();*/
+function join() {
+	window.location.href = '{% url 'games:play' game.post.id game.uid %}';
+}
+{% endblock %}

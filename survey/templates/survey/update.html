@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load app_filters %}
+{% load feed_filters %}
+<legend>{{ 'Update Survey'|etrans }} <a href="{% url 'survey:surveys' %}" class="btn btn-sm btn-outline-info" style="float: right;">{{ 'Surveys'|etrans }}</a></legend>
+<form method="POST" id="survey-form">
+	{% csrf_token %}
+	{{ form|crispy }}
+	<button type="submit" id="submit-button" class="btn btn-outline-info pink-borders">{{ 'Submit'|etrans }}</button>
+</form>
+{% endblock %}
+{% block javascript %}
+$('#survey-form').on('submit', function(){
+/*        document.getElementById('submit-button').disabled = true;*/
+});
+{% endblock %}

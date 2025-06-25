@@ -1,0 +1,37 @@
+{% load feed_filters %}
+{% load app_filters %}
+<div class="dropdown">
+  <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-globe"></i> {{ 'Language'|etrans }}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div style="max-height: 50vh; overflow: scroll;">
+        <a class="dropdown-item" href="/en/{{ path|useablepath }}">English</a>
+        <a class="dropdown-item" href="/es/{{ path|useablepath }}">Española</a>
+        <a class="dropdown-item" href="/fr/{{ path|useablepath }}">Français</a>
+        <a class="dropdown-item" href="/de/{{ path|useablepath }}">Deutsch</a>
+        <a class="dropdown-item" href="/nl/{{ path|useablepath }}">Nederlands</a>
+        <a class="dropdown-item" href="/af/{{ path|useablepath }}">Afrikaans</a>
+        <a class="dropdown-item" href="/ar/{{ path|useablepath }}">عربي</a>
+        <a class="dropdown-item" href="/pt/{{ path|useablepath }}">Português (Portugal, Brazil)</a>
+        <a class="dropdown-item" href="/id/{{ path|useablepath }}">Bahasa</a>
+        <a class="dropdown-item" href="/hi/{{ path|useablepath }}">हिंदी</a>
+        <a class="dropdown-item" href="/ru/{{ path|useablepath }}">Русский</a>
+        <a class="dropdown-item" href="/ja/{{ path|useablepath }}">日本語</a>
+        <a class="dropdown-item" href="/th/{{ path|useablepath }}">แบบไทย</a>
+        <a class="dropdown-item" href="/zh-CN/{{ path|useablepath }}">中国人</a>
+        <a class="dropdown-item" href="/tl/{{ path|useablepath }}">Filipino</a>
+        <a class="dropdown-item" href="/cs/{{ path|useablepath }}">čeština</a>
+        <a class="dropdown-item" href="/he/{{ path|useablepath }}">עִברִית</a>
+        <a class="dropdown-item" href="/it/{{ path|useablepath }}">Italiana</a>
+        <a class="dropdown-item" href="/no/{{ path|useablepath }}">norsk</a>
+        <a class="dropdown-item" href="/pl/{{ path|useablepath }}">Polski</a>
+        <a class="dropdown-item" href="/sv/{{ path|useablepath }}">svenska</a>
+        <a class="dropdown-item" href="/tr/{{ path|useablepath }}">Türkçe</a>
+        <a class="dropdown-item" href="/uk/{{ path|useablepath }}">українська</a>
+        <a class="dropdown-item" href="/vi/{{ path|useablepath }}">Tiếng Việt</a>
+        <a class="dropdown-item" href="/zu/{{ path|useablepath }}">Zulu</a>
+        <a class="dropdown-item" href="/sq/{{ path|useablepath }}">shqiptare</a>
+    </div>
+  </div>
+</div>
