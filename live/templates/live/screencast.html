@@ -49,8 +49,8 @@ video {
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
 {% include 'live/go_remote.html' %}
 {% endif %}
-<a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
 {% include 'live/mute_remote.html' %}
+<a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
 {% include 'live/recording_remote.html' %}
 {% endif %}
