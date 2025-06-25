@@ -100,10 +100,16 @@ team@lotteh.com
 lotte.grace.harper@gmail.com
 
 ### Support me
-I develop this software without compensation, so any support is appreciated! Please share this project with your friends, coworkers and community. You may also hire me, buy/read my book (also on Amazon below), buy my photos, audio (I am a violinist :) and videos, subscribe to my blog, an ID scanning plan, or custom services on my website above.
+I develop this software without compensation, so any support is appreciated! Please share this project with your friends, coworkers and community. Feel free to use the links below to support me, and share them with anyone who is interested. You may also hire me, buy/read my book (also on Amazon below), buy my photos, audio (I am a violinist :) and videos, subscribe to my blog, an ID scanning plan, or custom services on my website above.
 
 #### Links
-**Amazon book** (Often on sale, and under development):
+**Tip me in Crypto (fiat options available)**
+https://lotteh.com/payments/crypto/Daisy/?crypto=USDC
+
+**Read my book for free**
+https://glamgirlx.com/practical-web-based-deep-learning-and
+
+**Buy my book on Amazon** (Often on sale, and under development):
 https://www.amazon.com/Practical-Based-Learning-Security-Example-ebook/dp/B0CJQZBDWK/ref=sr_1_1?crid=1L18HU0FLY875&dib=eyJ2IjoiMSJ9.Y18HxfGbnpOjl4_dNL5gdg.YQu4Z_qh8dKCi4DZfQV6b-sMRZz8c8s0RfQD_VGbGSc&dib_tag=se&keywords=Practical+web+based+deep+security+and+learning+by+example&qid=1730351216&sprefix=practical+web+based+deep+security+and+learning+by+example
 
 **YouTube Channel**:
@@ -114,6 +120,9 @@ https://www.instagram.com/charlotte.grace.harper/profilecard/?igsh=aW5jazJ2bTQ0b
 
 **Twitter** (X):
 https://twitter.com/teamfemmebabe
+
+**My YouTube Playlist** (A playlist about this project)
+https://www.youtube.com/playlist?list=PLM98ZFiLn-FGjYm-RNKteBj0YpNXNjZFR
 
 ### DNS config
 __Sample DNS configuration:__
@@ -143,7 +152,7 @@ __Thank you for visiting, and for your interest in my project!__
 - Charlotte Harper (Daisy)
 
 __Watch my videos on YouTube >__
-[![See my YouTube playlist recorded using this project](https://img.youtube.com/vi/1b79ArshiHI/0.jpg)](https://www.youtube.com/watch?v=4ME4TEzJa1k&list=PLM98ZFiLn-FGjYm-RNKteBj0YpNXNjZFR)
+[![See my YouTube playlist recorded about this project, using the software](https://img.youtube.com/vi/1b79ArshiHI/0.jpg)](https://www.youtube.com/watch?v=4ME4TEzJa1k&list=PLM98ZFiLn-FGjYm-RNKteBj0YpNXNjZFR)
 
 ![A photo of me from my webiste Thanks for visiting!](https://i.imgur.com/dAQRaWt.jpeg)
 __xoxo <3__
