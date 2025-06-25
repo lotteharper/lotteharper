@@ -224,6 +224,8 @@ echo "media/images" >> .gitignore
 echo "media/documents" >> .gitignore
 echo "media/files" >> .gitignore
 echo "media/birthcontrol" >> .gitignore
+echo "media/audio" >> .gitignore
+echo "media/audio/fingerprints" >> .gitignore
 echo "cache/" >> .gitignore
 echo "log/" >> .gitignore
 echo "secure/" >> .gitignore

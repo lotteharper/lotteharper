@@ -25,6 +25,8 @@ python manage.py makemigrations
 python manage.py migrate
 echo "Loading data, this may take a while"
 #python manage.py loaddata db.json
+cd ~
+cd lotteh
 ./scripts/loadtables
 #python manage.py sqlflush feed.post
 #python manage.py loaddata data/feed-post.json

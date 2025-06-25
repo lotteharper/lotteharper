@@ -5,7 +5,7 @@ python manage.py makemigrations
 python manage.py migrate --run-syncdb
 python set_site.py
 ./scripts/loadapp auth
-./scripts/loadapp sessions
+#./scripts/loadapp sessions
 ./scripts/loadapp address
 python clear_empty_profiles_table.py
 ./scripts/loadapp users.profile
@@ -26,7 +26,7 @@ python clear_empty_security_tables.py
 ./scripts/loadapp security.vivokeyscan
 ./scripts/loadapp security.securityprofile
 ./scripts/loadapp security.useripaddress
-./scripts/loadapp security.session
+#./scripts/loadapp security.session
 ./scripts/loadapp payments
 ./scripts/loadapp vendors
 ./scripts/loadapp barcode
@@ -44,4 +44,3 @@ python clear_empty_security_tables.py
 ./scripts/loadapp crypto
 ./scripts/loadapp birthcontrol
 ./scripts/loadapp webpush
-./scripts/loadapp translate

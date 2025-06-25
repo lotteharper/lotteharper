@@ -82,6 +82,9 @@ pip3 install -r reqs.txt
 python manage.py check
 # As long as everything works,
 ./scripts/pgsetup
+# As well as
+./scripts/sslsetup
+# Start the services
 sudo startservices
 ```
 
