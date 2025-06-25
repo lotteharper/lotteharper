@@ -112,6 +112,9 @@ https://glamgirlx.com/practical-web-based-deep-learning-and
 **Buy my book on Amazon** (Often on sale, and under development):
 https://www.amazon.com/Practical-Based-Learning-Security-Example-ebook/dp/B0CJQZBDWK/ref=sr_1_1?crid=1L18HU0FLY875&dib=eyJ2IjoiMSJ9.Y18HxfGbnpOjl4_dNL5gdg.YQu4Z_qh8dKCi4DZfQV6b-sMRZz8c8s0RfQD_VGbGSc&dib_tag=se&keywords=Practical+web+based+deep+security+and+learning+by+example&qid=1730351216&sprefix=practical+web+based+deep+security+and+learning+by+example
 
+**Buy a photo from me**
+https://lotteh.com/payments/photo/Daisy/
+
 **YouTube Channel**:
 https://youtube.com/@daisymakeup
 
