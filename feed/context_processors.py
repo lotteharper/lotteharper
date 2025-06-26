@@ -107,7 +107,8 @@ def feed_context(request):
     context_data['current_time_digits'] = timezone.now().strftime('%A %B %d, %Y - %H:%M:%S')
     h = int(datetime.now().astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H'))
     context_data['clock_color'] = '#ffcccb' if h >= 9 and h < 21 else 'lightblue'
-    if hasattr(request, 'user') and request.user.is_authenticated and ip != None and ip.latitude != None and ip.longitude != None:
+    if ip != None and ip.latitude != None and ip.longitude != None:
+# hasattr(request, 'user') and request.user.is_authenticated and
         async_get_sun.delay(user.id, request.user.is_authenticated, ip.ip_address)
         sunset = ip.sunset
         sunrise = ip.sunrise

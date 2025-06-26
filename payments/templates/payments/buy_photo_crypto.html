@@ -38,7 +38,7 @@
 </div>
 </div>
 </div>
-<b>Items:</b>
+<b>{{ 'Items:'|etrans }}</b>
 <ul>
 <li>{{ 'One private'|etrans }} {% if not post.file %}{{ 'photo'|etrans }}{% else %}{{ 'download, video or audio'|etrans }}{% endif %} {{ 'featuring'|etrans }} {{ username }} (${{ usd_fee|sub_fee }})</li>
 <li>{{ 'Billed once only.'|etrans }}</li>

@@ -20,11 +20,11 @@
 <div id="container rounded bg-white shadow col-md-6 mx-auto">
 <h1><i class="bi bi-credit-card-fill"></i> {{ 'Pay this invoice with card'|trans }}</h1>
 <div style="text-align: center;">
-	<img alt="Accepting Visa and Mastercard" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
+	<img alt="{{ 'Accepting Visa and Mastercard'|etrans }}" style="height: auto; width: 80%; max-width: 90px;" height="auto" src="/media/static/visa-mastercard.png"></img>
 </div>
-<p>This invoice is for the below products/services.</p>
-<p>{{ invoice.cart }}</p>
-<b>Items:</b>
+<p>{{ 'This invoice is for the below products/services.'|etrans }}</p>
+<p>{{ invoice.cart|trans }}</p>
+<b>{{ 'Items:'|etrans }}</b>
 <ul>
 <li>{{ 'To be paid for products/services as arranged above.'|trans }}</li>
 <li>{{ 'Billed once only.'|etrans }}</li>

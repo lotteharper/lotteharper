@@ -33,7 +33,7 @@ def survey(request, id):
     answer.survey = surv
     answer.save()
     if request.method == 'POST':
-        form = SurveyForm(surv, request.POST, instance=answer)
+        form = SurveyForm(request.POST, instance=answer, survey=surv)
         if form.is_valid():
             answer = form.save()
             answer.completed = True
@@ -45,7 +45,7 @@ def survey(request, id):
             return HttpResponse('You have finished the survey. You will be redirected soon, thank you for your input.')
         else: messages.warning(request, str(form.errors))
     return render(request, 'survey/survey.html', {
-        'form': SurveyForm(surv),
+        'form': SurveyForm(survey=surv),
         'full': True
     })
 
@@ -78,15 +78,14 @@ def update(request, id):
     if id != 'new':
         surv = get_object_or_404(Survey, id=int(id))
     if request.method == 'POST':
-        form = UpdateSurveyForm(None, request.POST)
+        form = UpdateSurveyForm(request.POST, surv=None)
         if form.is_valid():
-            nsurv = form.save()
-            surv.delete()
+            surv = form.save()
             messages.success(request, 'This survey was updated.')
             from django.urls import reverse
-            return redirect(reverse('survey:update', kwargs={'id': nsurv.id}))
+            return redirect(reverse('survey:update', kwargs={'id': surv.id}))
     print(surv)
-    form = UpdateSurveyForm(surv)
+    form = UpdateSurveyForm(surv=surv)
 #initial={'priority': surv.priority, 'question': surv.question, 'answers_seperated': surv.answers_seperated}
     context = {
         'title': 'Update Survey',

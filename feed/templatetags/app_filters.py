@@ -2,6 +2,16 @@ from django import template
 
 register = template.Library()
 
+@register.filter('getfaviconfromurl')
+def getfaviconfromurl(input_url):
+    protocol = input_url.split('//')[0] + '//'
+    return protocol + input_url.split('//')[1].split('/')[0] + '/favicon.ico'
+
+@register.filter('getdomainfromurl')
+def getdomainfromurl(input_url):
+    protocol = input_url.split('//')[0] + '//'
+    return input_url.split('//')[1].split('/')[0]
+
 @register.filter('fixerrors')
 def fixerrors(input):
     return input.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")

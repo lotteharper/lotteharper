@@ -179,9 +179,10 @@ class UserBidForm(forms.ModelForm):
     bid = forms.IntegerField(required=True)
     user = None
     post = None
-    def __init__(self, current, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         from feed.middleware import get_current_request
         request = get_current_request()
+        current = kwargs.pop('current', None)
         super(UserBidForm, self).__init__(*args, **kwargs)
         bid_field = self.fields['bid']
         from translate.translate import translate
@@ -198,9 +199,10 @@ class BidForm(forms.ModelForm):
     bid = forms.IntegerField(required=True)
     email = forms.EmailField(required=True)
     post = None
-    def __init__(self, current, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         from feed.middleware import get_current_request
         request = get_current_request()
+        current = kwargs.pop('current', None)
         super(BidForm, self).__init__(*args, **kwargs)
         bid_field = self.fields['bid']
         from translate.translate import translate

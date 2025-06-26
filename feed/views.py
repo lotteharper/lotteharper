@@ -87,7 +87,7 @@ def auction(request, id):
     from users.email import sendwelcomeemail
     post = get_object_or_404(Post, friendly_name=id)
     if request.method == 'POST':
-        form = UserBidForm(request.POST) if request.user.is_authenticated else BidForm(request.POST)
+        form = UserBidForm(request.POST, current=post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price)) if request.user.is_authenticated else BidForm(request.POST, current=post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price))
         if form.is_valid():
             ip = get_client_ip(request)
             e = form.cleaned_data.get('email', None) if not request.user.is_authenticated else request.user.email
@@ -121,7 +121,7 @@ def auction(request, id):
                 print(traceback.format_exc())
                 messages.warning(request, 'Your bid failed.')
         else: messages.warning(request, str(form.errors))
-    return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}) if request.user.is_authenticated else BidForm(post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}), 'current_bid': post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), 'small': True, 'post': post})
+    return render(request, 'feed/bid.html', {'title': 'Auction', 'form': UserBidForm(current=post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}) if request.user.is_authenticated else BidForm(current=post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), initial={'bid': int(post.price) if not post.bids.count() else post.bids.order_by('-bid').first().bid + 1}), 'current_bid': post.bids.order_by('-bid').first().bid if post.bids.count() else int(post.price), 'small': True, 'post': post})
 
 @csrf_exempt
 @login_required
@@ -290,6 +290,7 @@ def grid_api(request, index):
             ids = Post.objects.filter(posted=True, author=profile.user, private=False, published=True, recipient=None, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
             pins = Post.objects.filter(posted=True, author=profile.user, private=False, public=True, pinned=True, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
             rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []
+            from barcode.tests import document_scanned
             if request.user.is_authenticated and document_scanned(request.user):
                 ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
             posts = unique(list(chain(pins, rec, ids)))
@@ -399,12 +400,14 @@ def profile_grid(request, username):
         posts = request.user.profile.likes.filter(posted=True, author=profile.user, private=False, published=True, public=False, feed=settings.DEFAULT_FEED).union(request.user.profile.likes.filter(author=profile.user, private=True, recipient=request.user, published=True, feed=settings.DEFAULT_FEED)).exclude(image=None, feed='blog').order_by('-date_posted')
     elif request.user.is_authenticated and (profile.user in request.user.profile.subscriptions.all() or (request.user == profile.user and request.GET.get('show', False))):
         following = True
-        ids = list(Post.objects.filter(posted=True, author=profile.user, private=False, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
-        pins = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=True, pinned=True, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
-        rec = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else [])
+        ids = Post.objects.filter(posted=True, author=profile.user, private=False, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
         from barcode.tests import document_scanned
         if request.user.is_authenticated and document_scanned(request.user):
             ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
+        ids = list(ids)
+        pins = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=True, pinned=True, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
+        rec = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else [])
+        from barcode.tests import document_scanned
         posts = unique(list(chain(pins, rec, ids)))
     else:
         ids = list(Post.objects.filter(posted=True, author=profile.user, public=True, private=False, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))

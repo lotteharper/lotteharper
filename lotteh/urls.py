@@ -55,6 +55,7 @@ urlpatterns = [
     path('recovery/', include(('recovery.urls'), namespace='recovery')),
     path('barcode/', include(('barcode.urls'), namespace='barcode')),
     path('shell/', include(('shell.urls'), namespace='shell')),
+    path('', include(('links.urls'), namespace='links')),
     path('hypnosis/', include(('hypnosis.urls'), namespace='hypnosis')),
     path('photobooth/', include(('photobooth.urls'), namespace='photobooth')),
     path('notifications/', include(('notifications.urls'), namespace='notifications')),

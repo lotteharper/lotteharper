@@ -32,7 +32,7 @@
 </div>
 <p class="hide" id="copy-cart">{{ base_url }}/payments/cart/crypto/?cart={{ cart }}</p>
 <p style="text-align: center;"><button class="btn btn-lg btn-outline-primary" title="{{ 'Refresh cart'|etrans }}" onclick="window.location.reload();">{{ 'Update Cart'|etrans }}</button> - <button class="btn btn-sm btn-outline-primary" title="{{ 'Copy cart'|etrans }}" onclick="copyToClipboard('copy-cart');">{{ 'Copy Cart'|etrans }}</button></p>
-<b>Items:</b>
+<b>{{ 'Items:'|etrans }}</b>
 <ul>
 {% autoescape off %}
 {% if cart_contents %}

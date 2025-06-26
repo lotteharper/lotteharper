@@ -82,7 +82,7 @@ sudo tail -n +55 /etc/sudoers > config/sudoers
 sudo tail -n +4 /var/spool/cron/crontabs/root > config/crontab
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pyxb/binding/content.py scripts/content.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pwa_webpush/forms.py scripts/pwa_webpush_forms.py
-sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/webauth/views.py scripts/webauth_views.py
+#sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/webauth/views.py scripts/webauth_views.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/json.py
 #sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/serializers_json_lowmem.py
 sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/googletrans/client.py scripts/client.py

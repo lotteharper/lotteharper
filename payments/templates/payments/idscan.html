@@ -33,7 +33,7 @@ print(json.dumps(result))
 </code></pre>
 <p>{{ 'Generate an authenticity result from an image of the back of an ID (the barcode).'|etrans }}</p>
 <pre><code class="language-python"># {{ 'Extract the data from the ID'|etrans }}
-from docbarcodes.extract import process_document # See https://pypi.org/project/docbarcodes/
+from docbarcodes.extract import process_document # {{ 'See'|etrans }} https://pypi.org/project/docbarcodes/
 # {{ 'Simple barcode reading'|etrans }}
 barcodes_raw, barcodes_combined = process_document('document_back.png')
 data = barcodes_raw['BarcodesRaw'][0]['raw']
@@ -52,7 +52,7 @@ print(json.dumps(result))
 <p>{{ 'Generate an authenticity result from an image of the front of an ID (the text).'|etrans }}</p>
 <pre><code class="language-python"># {{ 'Extract the data from the ID'|etrans }}
 from PIL import Image
-import pytesseract # See https://pypi.org/project/pytesseract/
+import pytesseract # {{ 'See'|etrans }} https://pypi.org/project/pytesseract/
 # Simple image to string
 data = pytesseract.image_to_string(Image.open('document_front.png'))
 

@@ -4,7 +4,8 @@ from feed.middleware import get_current_user
 
 class UpdateSurveyForm(forms.ModelForm):
     question = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}))
-    def __init__(self, surv, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        surv = kwargs.pop('surv', None)
         super(UpdateSurveyForm, self).__init__(*args, *kwargs)
 #        if ins:
         from feed.middleware import get_current_request
@@ -27,7 +28,8 @@ class SurveyForm(forms.ModelForm):
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'survey-large-text'}),
     )
-    def __init__(self, surv, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        surv = kwargs.pop('surv', None)
         super(SurveyForm, self).__init__(*args, *kwargs)
         from feed.middleware import get_current_request
         r = get_current_request()

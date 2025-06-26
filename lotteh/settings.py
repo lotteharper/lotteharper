@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     'meet',
     'django_extensions',
     'desktop',
+    'links',
 #    '',
 ]
 
@@ -776,7 +777,7 @@ GITHUB_URL = 'https://github.com/daisycamber'
 LINKEDIN_URL = 'https://www.linkedin.com/in/charlotte-grace-harper/'
 INSTAGRAM_LINK = 'https://instagram.com/yourlocalfemme'
 TWITTER_LINK = 'https://twitter.com/teamfemmebabe'
-YOUTUBE_LINK = 'https://youtube.com/@daisymakeup'
+YOUTUBE_LINK = 'https://youtube.com/@MissSheast'
 
 # Static site
 STATIC_SITE_URL = 'https://' + STATIC_DOMAIN
@@ -802,7 +803,7 @@ UPLOAD_INTERVAL = 4000
 
 # ID Scanner
 MIN_CONFIDENCE = 90
-BANNED_ID_TYPES = ['SexOffenderCard']
+BANNED_ID_TYPES = ['SexOffenderCard', 'ViolentOffenderCard']
 ENABLE_AGECHECKER = False
 USE_IDWARE = True
 BARCODE_SIZE = 300

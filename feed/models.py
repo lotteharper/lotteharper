@@ -829,9 +829,9 @@ class Post(models.Model):
             self.auction_message = encrypt_cbc(self.auction_message, settings.AES_KEY)
 #        if (this and ((this.content != self.content) or (not this))) and self.posted:
 #            self.compile_content()
-        try:
-            super(Post, self).save(*args, **kwargs)
-        except: pass
+#        try:
+#            super(Post, self).save(*args, **kwargs)
+#        except: pass
 
     def delete(self):
         if self.image:

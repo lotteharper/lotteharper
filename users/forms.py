@@ -65,6 +65,11 @@ class UserRegisterForm(forms.Form):
         self.fields['password2'].label = translate(r, 'Enter the same password, for verification', src='en')
         self.fields['captcha'].label = translate(r, 'Please fill out this field to verify you are human', src='en')
 
+    error_messages = {
+        'password_mismatch': 'The entered passwords do not match.'
+    }
+
+
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     class Meta:
@@ -180,7 +185,7 @@ class SetPasswordForm(forms.Form):
         from translate.translate import translate
         from feed.middleware import get_current_request
         r = get_current_request()
-        self.fields['new_password2'].error_messages['password_mismatch'] = translate(r, 'The two password fields do not match.', lang='en')
+        self.fields['new_password2'].error_messages['password_mismatch'] = translate(r, 'The two password fields do not match.', src='en')
         self.fields['new_password1'].label = translate(r, 'New password', src='en')
         self.fields['new_password2'].label = translate(r, 'New password confirmation', src='en')
 
@@ -201,3 +206,7 @@ class SetPasswordForm(forms.Form):
         if commit:
             self.user.save()
         return self.user
+
+    error_messages = {
+        'password_mismatch': 'The entered passwords do not match.'
+    }
