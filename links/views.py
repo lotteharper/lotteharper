@@ -13,18 +13,18 @@ def links(request, username):
     from .forms import LinksForm
     from django.contrib import messages
     user = User.objects.filter(profile__name=username).order_by('-profile__last_seen').first()
-    if request.user.is_authenticated and request.user.profile.vendor:
-        links = SharedLink.objects.filter(user=request.user).order_by('-created')
+    if request.user.is_authenticated and request.user.profile.vendor and not request.GET.get('show', False):
+        links = SharedLink.objects.filter(user=request.user).order_by('created')
         if request.method == 'POST':
             form = LinksForm(request.POST, links=links)
             if form.is_valid():
                 counter = 0
                 from django.utils import timezone
-                while form.cleaned_data.get('link{}'.format(counter)) or form.cleaned_data.get('description{}'.format(counter)):
+                for counter in range(0, links.count() + 2):
                     link = form.cleaned_data.get('link{}'.format(counter))
                     desc = form.cleaned_data.get('description{}'.format(counter))
                     color = form.cleaned_data.get('color{}'.format(counter))
-                    l = links[counter] if counter < len(links) - 1 else False
+                    l = links[counter] if counter < links.count() else False
                     if not l:
                         l = SharedLink.objects.create(user=request.user)
                     if l.description != desc:
@@ -36,7 +36,7 @@ def links(request, username):
                     if l.color != color:
                         l.color = color
                         l.updated = timezone.now()
-                    if (l.url == '' and l.description == '') or not (l.url or l.description):
+                    if (l.url == '') or not (l.url):
                         l.delete()
                     else:
                         l.save()
@@ -48,16 +48,18 @@ def links(request, username):
             'title': 'Your links',
             'links': links,
             'form': LinksForm(links=links),
-            'links_user': request.user
+            'links_user': request.user,
+            'user_mode': True,
         })
         patch_cache_control(response, private=True)
         return response
     else:
-        links = SharedLink.objects.filter(user=user).order_by('-created')
+        links = SharedLink.objects.filter(user=user).order_by('created')
         response = render(request, 'links/links.html', {
             'title': '@{}\'s links'.format(user.profile.name),
             'links': links,
-            'links_user': user
+            'links_user': user,
+            'user_mode': False,
         })
         patch_cache_control(response, public=True)
         return response

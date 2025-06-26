@@ -5,9 +5,9 @@
 {% block content %}
 {% load app_filters %}
 {% load crispy_forms_tags %}
-<legend>
-{% if request.user.is_authenticated and request.user.profile.vendor and request.user == links_user %}{{ 'Your links'|etrans }}{% else %}@{{ links_user.profile.name }}'s {{ 'links'|etrans }}{% endif %}</legend>
-{% if request.user.is_authenticated and request.user.profile.vendor and request.user == links_user %}
+<legend>{% if request.user.is_authenticated and request.user.profile.vendor and request.user == links_user %}{{ 'Your links'|etrans }}{% else %}@{{ links_user.profile.name }}'s {{ 'links'|etrans }}{% endif %}</legend>
+{% if user_mode %}
+<a href="{% url 'links:links' request.user.profile.name %}?show=true" title="{{ 'See your links'|etrans }}" class="btn btn-outline-info">{{ 'See your links'|etrans }}</a>
 <form method="POST">
 {% csrf_token %}
 {{ form|crispy }}
@@ -15,6 +15,7 @@
 </form>
 {% else %}
 <div style="display: flex; justify-content: space-around;"><img src="{{ links_user.profile.get_image_url }}" style="border-radius: 50%; width: 250px;" alt="{{ links_user.profile.bio|trans }}"></div>
+{% include 'language.html' %}
 <hr style="visibility: hidden;">
 <div style="display: inline-block;">
 {% for link in links %}

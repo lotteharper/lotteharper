@@ -25,12 +25,19 @@ class LinksForm(forms.Form):
             field_name = 'description{}'.format(index)
             self.fields[field_name] = forms.CharField(label=translate(r, 'Description', src='en') + ' {}'.format(index), required=False, initial=item.description)
             field_name = 'color{}'.format(index)
-            self.fields[field_name] = forms.CharField(label=translate(r, 'Color', src='en') + ' {}'.format(index), widget=forms.TextInput(attrs={'type': 'color'}), initial=item.color)
+            self.fields[field_name] = forms.CharField(label=translate(r, 'Color', src='en') + ' {}'.format(index), widget=forms.TextInput(attrs={'type': 'color'}), initial=item.color, required=False)
             ind = index
         index = ind + 1
         field_name = 'link{}'.format(index)
-        self.fields[field_name] = forms.CharField(label=translate(r, 'Link', src='en') + ' {}'.format(index), required=False, initial=item.url, widget=forms.TextInput(attrs={'autocorrect': 'off', 'spellcheck': 'false', 'autocapitalize': 'none'}))
+        self.fields[field_name] = forms.CharField(label=translate(r, 'Link', src='en') + ' {}'.format(index), required=False, initial='', widget=forms.TextInput(attrs={'autocorrect': 'off', 'spellcheck': 'false', 'autocapitalize': 'none'}))
         field_name = 'description{}'.format(index)
         self.fields[field_name] = forms.CharField(label=translate(r, 'Description', src='en') + ' {}'.format(index), required=False)
         field_name = 'color{}'.format(index)
-        self.fields[field_name] = forms.CharField(label=translate(r, 'Color', src='en') + ' {}'.format(index), widget=forms.TextInput(attrs={'type': 'color'}), initial=get_random_color())
+        self.fields[field_name] = forms.CharField(label=translate(r, 'Color', src='en') + ' {}'.format(index), widget=forms.TextInput(attrs={'type': 'color'}), initial=get_random_color(), required=False)
+        index = index + 1
+        field_name = 'link{}'.format(index)
+        self.fields[field_name] = forms.CharField(label=translate(r, 'Link', src='en') + ' {}'.format(index), required=False, initial='', widget=forms.TextInput(attrs={'autocorrect': 'off', 'spellcheck': 'false', 'autocapitalize': 'none'}))
+        field_name = 'description{}'.format(index)
+        self.fields[field_name] = forms.CharField(label=translate(r, 'Description', src='en') + ' {}'.format(index), required=False)
+        field_name = 'color{}'.format(index)
+        self.fields[field_name] = forms.CharField(label=translate(r, 'Color', src='en') + ' {}'.format(index), widget=forms.TextInput(attrs={'type': 'color'}), initial=get_random_color(), required=False)
