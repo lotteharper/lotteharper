@@ -157,5 +157,8 @@ __Thank you for visiting, and for your interest in my project!__
 __Watch my videos on YouTube >__
 [![See my YouTube playlist recorded about this project, using the software](https://img.youtube.com/vi/1b79ArshiHI/0.jpg)](https://www.youtube.com/watch?v=4ME4TEzJa1k&list=PLM98ZFiLn-FGjYm-RNKteBj0YpNXNjZFR)
 
+#### Scan or click this code to visit my shared links <3
+[![Scan or click here to visit my shared links](https://i.imgur.com/WJ8gHin.png)](https://lotteh.com/@Daisy)
+
 ![A photo of me from my webiste Thanks for visiting!](https://i.imgur.com/dAQRaWt.jpeg)
 __xoxo <3__
