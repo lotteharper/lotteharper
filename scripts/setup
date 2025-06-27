@@ -72,7 +72,7 @@ sudo systemctl restart postgresql
 sudo systemctl start postgresql
 # Setup database in postgres
 echo "Postgres setup"
-sudo -u postgres psql -U postgres -c "ALTER SYSTEM SET max_connections TO '25000';"
+sudo -u postgres psql -U postgres -c "ALTER SYSTEM SET max_connections TO '50000';"
 sudo -u postgres psql -U postgres -c "SELECT pg_reload_conf();"
 sudo systemctl restart postgresql
 sudo systemctl reload postgresql

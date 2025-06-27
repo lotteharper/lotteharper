@@ -15,6 +15,7 @@ video {
 {% block content %}
 <h1>{{ 'Live Recording'|etrans }}</h1>
 <legend>{% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %} {{ 'camera'|etrans }}</legend>
+<div style="text-align: center;" id="rec-status"></div>
 <div id="container">
 {% if request.GET.with %}
 <div style="z-index: 1; position: absolute;">
@@ -59,7 +60,6 @@ video {
 {% include 'live/recording_remote.html' %}
 {% endif %}
 </div>
-<div style="text-align: center;" id="rec-status"></div>
 {% include 'live/camera_settings_frame.html' %}
 {% endblock %}
 {% block javascript %}

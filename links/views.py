@@ -13,6 +13,7 @@ def links(request, username):
     from .forms import LinksForm
     from django.contrib import messages
     user = User.objects.filter(profile__name=username).order_by('-profile__last_seen').first()
+    if not user: user = User.objects.filter(profile__name__icontains=username).order_by('-profile__last_seen').first()
     if request.user.is_authenticated and request.user.profile.vendor and not request.GET.get('show', False):
         links = SharedLink.objects.filter(user=request.user).order_by('created')
         if request.method == 'POST':
