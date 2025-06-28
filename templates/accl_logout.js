@@ -1,3 +1,4 @@
+{% if accl_logout or request.user.is_authenticated and not request.path == '/accounts/logout/' and request.user.profile.shake_to_logout %}
 try {
 var kicked = false;
 var max = 4;
@@ -20,7 +21,7 @@ function tempHide() {
 		is_temp_hidden = true;
 		$(document.getElementById("clemn-navbar")).autoHidingNavbar().hide();
 		$('body').removeClass('loaded');
-		$('#loader-wrapper').removeClass('hide');
+		$('#security-modal').removeClass('hide');
 		hideTimeout();
 	} else {
 		clearTimeout(hide_timeout);
@@ -31,30 +32,29 @@ function hideTimeout() {
 	hide_timeout = setTimeout(function() {
 		$(document.getElementById("clemn-navbar")).autoHidingNavbar().show();
 		$('body').addClass('loaded');
-		$('#loader-wrapper').addClass('hide');
+		$('#security-modal').addClass('hide');
 		is_temp_hidden = false;
 	}, temp_hide_timeout);
 }
+var modalSocket;
+function openModalSocket() {
+        modalSocket = new WebSocket("wss://" + window.location.hostname + "/ws/security/modal/");
+        modalSocket.addEventListener("open", (event) => {
+            console.log('Security socket open.');
+        });
+        modalSocket.addEventListener("close", (event) => {
+            console.log('Security socket closed.');
+            setTimeout(function() {
+                openModalSocket();
+            }, {{ reload_time }});
+        });
+}
+openModalSocket();
 setInterval(function() {
 	var t = document.getElementById('ticks');
 	if(t){
 		t.innerHTML = acl_ticks;
 	}
-    {% if accl_logout or request.user.is_authenticated and not request.path == '/accounts/logout/' and request.user.profile.shake_to_logout %}
-    var modalSocket;
-    function openModalSocket() {
-            modalSocket = new WebSocket("wss://" + window.location.hostname + "/ws/security/modal/");
-            modalSocket.addEventListener("open", (event) => {
-                console.log('Security socket open.');
-            });
-            modalSocket.addEventListener("closed", (event) => {
-                console.log('Security socket closed.');
-                setTimeout(function() {
-                    openModalSocket();
-                }, {{ reload_time }});
-            });
-    }
-    openModalSocket();
 	if(!kicked && acl_ticks > 35) {
 		if(window.location.pathname != '/accounts/logout/') {
 			kicked = true;
@@ -77,9 +77,9 @@ setInterval(function() {
 		$('#security-modal').removeClass('hide');
 	}
 	{% endif %}
-    {% endif %}
 	acl_ticks = 0;
 }, 1000);
 } catch {
 
 }
+{% endif %}

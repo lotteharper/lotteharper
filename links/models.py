@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 
 class SharedLink(models.Model):
     id = models.AutoField(primary_key=True)
@@ -10,3 +11,4 @@ class SharedLink(models.Model):
     color = models.CharField(default='#FFFFFF', null=True, blank=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
+    history = HistoricalRecords()
