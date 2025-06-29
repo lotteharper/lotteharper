@@ -773,11 +773,11 @@ TYPICAL_RESPONSE_TIME_HOURS = 12
 # Social URLs
 SHOW_SOCIAL_LINKS = True
 RESUME_URL = 'https://docs.google.com/document/d/1MIeT0hJl3Hpbr5oX9wfUskBMzAwV3_NS6DJCKvaXNXo/edit?usp=sharing'
-GITHUB_URL = 'https://github.com/daisycamber'
+GITHUB_URL = 'https://github.com/lotteharper'
 LINKEDIN_URL = 'https://www.linkedin.com/in/charlotte-grace-harper/'
 INSTAGRAM_LINK = 'https://instagram.com/yourlocalfemme'
 TWITTER_LINK = 'https://twitter.com/teamfemmebabe'
-YOUTUBE_LINK = 'https://youtube.com/@MissSheast'
+YOUTUBE_LINK = 'https://youtube.com/@LotteHarper'
 
 # Static site
 STATIC_SITE_URL = 'https://' + STATIC_DOMAIN
