@@ -56,6 +56,7 @@ video {
 {% endif %}
 {% include 'live/mute_remote.html' %}
 <a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
+<button onclick="window.location.reload();" title="{{ 'Reload the page to stop the stream and create a new video'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-clockwise"></i></button>
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
 {% include 'live/recording_remote.html' %}
 {% endif %}
@@ -79,7 +80,7 @@ $(updateCameraToggle).on('click', function() {
 function generateRandomString(length = 6) {
   return Math.random().toString(36).substring(2, 2 + length);
 }
-const CAMERA_ID = generateRandomString(8);
+var CAMERA_ID = generateRandomString(8);
 const MINUTES_PER_LOGO = 5;
 var captureInterval;
 var liveButton = document.getElementById('golivebutton');
@@ -109,6 +110,7 @@ var retryCount = {};
 var mediaSocket;
 function openMediaSocket() {
         {% if use_websocket %}
+        if(mediaSocket && mediaSocket.readyState == WebSocket.OPEN) mediaSocket.close();
         mediaSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/camera/{{ camera.user.profile.name }}/{{ camera.name }}/' + CAMERA_ID + '/?key={% if request.GET.key %}{{ request.GET.key }}{% else %}{{ camera.key }}{% endif %}');
         mediaSocket.addEventListener("open", (event) => {
                 console.log('Media socket open.');
@@ -180,7 +182,7 @@ function openRemoteSocket() {
             }
         });
 }
-openMediaSocket();
+/*openMediaSocket();*/
 openRemoteSocket();
 document.getElementById('golivebutton').onclick = function(evt) {
     live = !live;
@@ -241,6 +243,8 @@ const cancelVideoFrame = function(id) {
 };
 async function startWebcamFn() {
   if(!localCamStream) {
+      CAMERA_ID = generateRandomString(8);
+      openMediaSocket();
       localCamStream = await navigator.mediaDevices.getUserMedia({
         video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: {{ camera.width }} },  frameRate: { ideal: 30 } },
         audio: {% if camera.microphone == 'communications' %}deviceId: { ideal: "communications" }{% elif camera.microphone == 'default' %}true{% elif camera.microphone == 'echo cancellation' %}{ echoCancellation: true, }{% endif %},
