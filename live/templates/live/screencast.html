@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
 <style>
-<link rel="preload" as="image" href="{{ camera.user.vendor_profile.logo.url }}">
+{% if camera.user.vendor_profile.logo %}<link rel="preload" as="image" href="{{ camera.user.vendor_profile.logo.url }}">{% endif %}
 video {
     width: 100%;
     pointer-events: none;
@@ -76,7 +76,7 @@ $(updateCameraToggle).on('click', function() {
 });
 function generateRandomString(length = 6) {
   return Math.random().toString(36).substring(2, 2 + length);                                                           }
-const CAMERA_ID = generateRandomString(8);
+var CAMERA_ID = generateRandomString(8);
 const MINUTES_PER_LOGO = 5;
 var liveButton = document.getElementById('golivebutton');
 var recordButton = document.getElementById('recordbutton');
@@ -295,8 +295,9 @@ async function stopAllStreamsFn() {
   mediaWrapperDiv.innerHTML = "";
   document.getElementById("pipOverlayStream").style.border = "none";
 }
+const baseAlpha = {{ logo_alpha }};
 var logo = new Image();
-logo.src = "{{ camera.user.vendor_profile.logo.url }}";
+{% if camera.user.vendor_profile.logo %}logo.src = "{{ camera.user.vendor_profile.logo.url }}";{% endif %}
 async function makeComposite() {
   if (cam && screen) {
     canvasCtx.save();
@@ -314,6 +315,7 @@ async function makeComposite() {
       Math.floor(cam.videoHeight / 4 * scaleConst),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
     {% if camera.embed_logo and camera.user.vendor_profile.logo %}
+    canvasCtx.globalAlpha = baseAlpha;
     const logoSize = parseInt(screen.videoWidth / 13);
     canvasCtx.drawImage(
         logo,
@@ -322,20 +324,23 @@ async function makeComposite() {
         logoSize,
         logoSize
     );
+    canvasCtx.globalAlpha = 1;
     {% if camera.user.vendor_profile.video_intro_text %}
     currentTime = new Date().getTime()/1000;
     if(currentTime - recordingStartTime < 1) {
-        canvasCtx.globalAlpha = (currentTime - recordingStartTime);
+        canvasCtx.globalAlpha = (currentTime - recordingStartTime) * baseAlpha;
         canvasCtx.font = new String(parseInt(screen.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
         canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(screen.videoWidth/13) + 20, screen.videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime < 14) {
+        canvasCtx.globalAlpha = baseAlpha;
         canvasCtx.font = new String(parseInt(screen.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
         canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(screen.videoWidth/13) + 20, screen.videoHeight - logoSize/2.7);
+        canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime < 15) {
-        canvasCtx.globalAlpha = 15 - (currentTime - recordingStartTime);
+        canvasCtx.globalAlpha = (15 - (currentTime - recordingStartTime)) * baseAlpha;
         canvasCtx.font = new String(parseInt(screen.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
         canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(screen.videoWidth/13) + 20, screen.videoHeight - logoSize/2.7);

@@ -65,6 +65,7 @@ class VendorProfile(models.Model):
     video_embed = models.CharField(max_length=1500, default='', null=True, blank=True)
     playlist_embed = models.CharField(max_length=1500, default='', null=True, blank=True)
     logo = models.ImageField(null=True, default='static/lotteh.png', upload_to=get_logo_path)
+    logo_alpha = models.FloatField(default=settings.DEFAULT_CAMERA_ALPHA)
     video_intro_font = models.FileField(null=True, blank=True, default='', upload_to=get_font_path)
     history = HistoricalRecords()
 

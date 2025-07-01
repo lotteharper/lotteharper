@@ -74,6 +74,7 @@ class VendorProfileUpdateForm(forms.ModelForm):
     photo_tip = forms.CharField(widget=forms.Select(choices=PHOTO_CHOICES))
     free_trial = forms.CharField(widget=forms.Select(choices=TRIAL_CHOICES))
     payout_address = forms.CharField(max_length=300)
+    logo_alpha = forms.FloatField(min_value=0.1, max_value=1)
     pitch_adjust = forms.IntegerField(required=False)
     def __init__(self, *args, **kwargs):
         super(VendorProfileUpdateForm, self).__init__(*args, **kwargs)
@@ -99,6 +100,14 @@ class VendorProfileUpdateForm(forms.ModelForm):
         self.fields['subscription_fee'].label = translate(r, 'Your subscription fee', src='en')
         self.fields['free_trial'].label = translate(r, 'Free trial options', src='en')
         self.fields['photo_tip'].label = translate(r, 'Default pricing', src='en')
+        self.fields['logo_alpha'] = forms.FloatField(
+            min_value=0.1,
+            max_value=1,
+            error_messages={
+                'min_value': translate(r, 'Alpha cannot be less than 0.1', src='en'),
+                'max_value': translate(r, 'Alpha cannot be greater than 1', src='en')
+            })
+        self.fields['logo_alpha'].label = translate(r, 'Video intro & logo alpha (0.1-1)', src='en')
         self.fields['payout_currency'].label = translate(r, 'Payout currency', src='en')
         self.fields['payout_address'].label = translate(r, 'Payout address', src='en')
         self.fields['bitcoin_address'].label = translate(r, 'Bitcoin (BTC) address', src='en')
@@ -115,7 +124,7 @@ class VendorProfileUpdateForm(forms.ModelForm):
 
     class Meta:
         model = VendorProfile
-        fields = ['logo', 'video_intro_font', 'video_intro_text', 'video_intro_color', 'hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'video_embed', 'playlist_embed', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address', 'usdcoin_address', 'solana_address', 'trump_address', 'polygon_address', 'avalanche_address', 'bitcoin_cash_address', 'litecoin_address', 'usdtether_address', 'dogecoin_address']
+        fields = ['logo', 'video_intro_font', 'video_intro_text', 'video_intro_color', 'logo_alpha', 'hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'video_embed', 'playlist_embed', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address', 'usdcoin_address', 'solana_address', 'trump_address', 'polygon_address', 'avalanche_address', 'bitcoin_cash_address', 'litecoin_address', 'usdtether_address', 'dogecoin_address']
         labels = {
             'usdcoin_address': 'USDCoin address',
             'usdtether_address': 'USD Tether address',

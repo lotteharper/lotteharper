@@ -771,7 +771,7 @@ def reset_chat_camera_keys():
     from chat.models import Key
     from django.utils import timezone
     import datetime
-    for key in Key.objects.filter(created_at__lte=timezone.now()-datetime.timedelta(days=365)):
+    for key in Key.objects.filter(created_at__lte=timezone.now()-datetime.timedelta(days=28)):
         key.delete()
 
 app.conf.beat_schedule = {

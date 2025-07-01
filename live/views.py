@@ -400,7 +400,7 @@ def golivevideo(request):
     from django.urls import reverse
     if not request.user.is_authenticated: return redirect(reverse('users:login'))
     from django.shortcuts import render
-    return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket})
+    return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha})
 
 @never_cache
 @csrf_exempt
@@ -486,7 +486,7 @@ def screencast(request):
     from django.urls import reverse
     if not request.user.is_authenticated: return redirect(reverse('users:login'))
     from django.shortcuts import render
-    return render(request, 'live/screencast.html', {'title': 'Screencast', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket})
+    return render(request, 'live/screencast.html', {'title': 'Screencast', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha})
 
 #@login_required
 #@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
