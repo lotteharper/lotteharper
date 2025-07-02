@@ -4,7 +4,7 @@ from langdetect import detect, detect_langs
 from googletrans import Translator
 from translate.languages import SELECTOR_LANGUAGES
 
-MAX_TRANS = 1000
+MAX_TRANS = 500
 
 def translate(request, content, target=None, src=None):
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
