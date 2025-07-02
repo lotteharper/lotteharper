@@ -42,7 +42,10 @@ def translate(request, content, target=None, src=None):
 #    print(content)
 #    print(src)
 #    print(lang_code)
-    if not lang_code in SELECTOR_LANGUAGES.keys(): return content
+    if not lang_code in SELECTOR_LANGUAGES.keys():
+        from django.contrib import messages
+        if request: messages.warning(request, 'You have selected a language not yet available for translation. Please change the "lang=" parameter in the URL to a valid two character language code for Google Translate API such as "en", "es" or "de", or <a href="/" title="Return home and clear the lang parameter for now">click here to return home</a>.')
+        return content
     from .models import CachedTranslation
     trans = CachedTranslation.objects.filter(src_content=content, src=lang, dest=lang_code).order_by('timestamp').first()
     if trans: return trans.dest_content
