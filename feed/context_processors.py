@@ -9,6 +9,7 @@ from security.apis import get_client_ip
 from misc.views import current_time
 from django.utils import timezone
 from security.tests import face_mrz_or_nfc_verified
+from feed.languages import selector_languages
 
 def utc_to_local(utc_dt, local_tz):
     local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
@@ -28,6 +29,7 @@ def feed_context(request):
     try:
         context_data['lang'] = request.LANGUAGE_CODE if not request.GET.get('lang', None) else request.GET.get('lang')
     except: context_data['lang'] = settings.DEFAULT_LANG
+    context_data['selector_languages'] = selector_languages
     context_data['use_prism'] = settings.USE_PRISM
     context_data['use_allauth'] = settings.USE_ALLAUTH
     context_data['icon_url'] = settings.ICON_URL

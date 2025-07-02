@@ -103,8 +103,13 @@ var unconfirmedFrames = [];
 var videoFrames = {};
 var retryCount = {};
 var mediaSocket;
+var mediaSocketReconnectTimeout;
 function openMediaSocket() {
         {% if use_websocket %}
+        if(mediaSocketReconnectTimeout) {
+            clearTimeout(mediaSocketReconnectTimeout);
+            mediaSocketReconnectTimeout = null;
+        }
         if(mediaSocket && mediaSocket.readyState == WebSocket.OPEN) mediaSocket.close();
         mediaSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/camera/{{ camera.user.profile.name }}/{{ camera.name }}/' + CAMERA_ID + '/?key={% if request.GET.key %}{{ request.GET.key }}{% else %}{{ camera.key }}{% endif %}');
         mediaSocket.addEventListener("open", (event) => {
@@ -112,7 +117,7 @@ function openMediaSocket() {
         });
         mediaSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
-                setTimeout(function() {
+                mediaSocketReconnectTimeout = setTimeout(function() {
                         openMediaSocket();
                 }, {{ reload_time }});
         });

@@ -15,7 +15,8 @@ vendor_urls = ['/feed/grid/',
     '/feed/profile/',
     '/feed/follow/',
     '/payments/photo/crypto/',
-    '/payments/crypto/'
+    '/payments/crypto/',
+    '/@'
 ]
 
 surrogate_urls = ['/surrogacy/',

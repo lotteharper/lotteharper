@@ -21,9 +21,9 @@
   {% endfor %}
   {% for url in vendor_urls %}
   <url>
-    <loc>{{ base_url }}{{ url }}{{ vendor.profile.name }}/</loc>
+    <loc>{{ base_url }}{{ url }}{{ vendor.profile.name }}{% if not url == '/@' %}/{% endif %}</loc>
     {% for lang in languages %}
-    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}{{ url }}{{ vendor.profile.name }}/" />
+    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}{{ url }}{{ vendor.profile.name }}{% if not url == '/@' %}/{% endif %}" />
     {% endfor %}
     <lastmod>{{ vendor.profile.last_seen|sitemapdate }}</lastmod>
   </url>
