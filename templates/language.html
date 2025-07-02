@@ -7,7 +7,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <div style="max-height: 50vh; overflow: scroll;">
 {% for next_language, text_to_render in selector_languages.items %}
-        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if forloop.counter0 < request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}{% if request.GET.lang != next_language %}lang={{ next_language }}{% endif %}">{{ text_to_render }}</a>
+        <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'lang' %}{{ key }}={{ value }}{% if forloop.counter0 < request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}{% if request.GET.lang != next_language %}lang={{ next_language }}{% endif %}">{{ text_to_render|etranslang:next_language|caps }}</a>
 {% endfor %}
     </div>
   </div>

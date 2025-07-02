@@ -46,9 +46,11 @@ def generate_site():
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
     if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
+    from translate.languages import SELECTOR_LANGUAGES
     langs = languages
     context = {
         'site_name': settings.STATIC_SITE_NAME,
+        'selector_languages': SELECTOR_LANGUAGES,
         'the_site_name': settings.STATIC_SITE_NAME,
         'static_url': settings.STATIC_SITE_URL,
         'site_url': settings.BASE_URL,

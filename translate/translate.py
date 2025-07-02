@@ -2,6 +2,7 @@ from django.conf import settings
 import traceback
 from langdetect import detect, detect_langs
 from googletrans import Translator
+from translate.languages import SELECTOR_LANGUAGES
 
 MAX_TRANS = 1000
 
@@ -41,6 +42,7 @@ def translate(request, content, target=None, src=None):
 #    print(content)
 #    print(src)
 #    print(lang_code)
+    if not lang_code in SELECTOR_LANGUAGES.keys(): return content
     from .models import CachedTranslation
     trans = CachedTranslation.objects.filter(src_content=content, src=lang, dest=lang_code).order_by('timestamp').first()
     if trans: return trans.dest_content
