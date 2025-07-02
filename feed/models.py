@@ -152,11 +152,14 @@ class Post(models.Model):
         if self.image and (force or (not os.path.exists(new_path_thumb))):
             if not self.private and ((not self.image_thumbnail) or (not os.path.exists(self.image_thumbnail.path))):
                 self.download_thumbnail()
-                self.get_image_thumb_url()
-            if not os.path.exists(self.image_thumbnail.path): self.download_thumbnail()
+                self.get_image_thumb_url(gen=True)
+            if (self.image_thumbnail and not os.path.exists(self.image_thumbnail.path)): self.download_thumbnail()
+            if (not self.image_thumbnail): self.get_image_thumb_url(gen=True)
             if not original and self.private and ((not self.image_censored_thumbnail) or (not os.path.exists(self.image_censored_thumbnail.path))):
                 self.get_blur_thumb_url(gen=True)
-            self = Post.objects.get(id=self.id)
+            p = Post.objects.filter(id=self.id)
+            if p.count() < 1: return None
+            self = p.first()
             try:
                 shutil.copy(self.image_thumbnail.path if self.private and original else self.image_censored_thumbnail.path if self.private else self.image_thumbnail.path, new_path_thumb)
             except:
@@ -227,18 +230,18 @@ class Post(models.Model):
         remove_secure.apply_async([full_path], countdown=settings.REMOVE_SECURE_TIMEOUT_SECONDS)
         return url
 
-    def get_image_thumb_url(self):
+    def get_image_thumb_url(self, gen=False):
         from django.conf import settings
         from feed.middleware import get_current_request
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         import os
-        if settings.USE_OFFSITE and self.image_thumb_offsite and self.public and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
-        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
-        if self.image_thumbnail_bucket: return self.image_thumbnail_bucket.url
+        if (not gen) and settings.USE_OFFSITE and self.image_thumb_offsite and self.public and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
+        if (not gen) and os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
+        if (not gen) and self.image_thumbnail_bucket: return self.image_thumbnail_bucket.url
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         from feed.logo import add_logo
         import os, shutil
-        if not self.image_thumbnail or not os.path.exists(self.image_thumbnail.path):
+        if not (self.image_thumbnail and os.path.exists(self.image_thumbnail.path)):
             new_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, self.image.name, blur=True))
             try:
                 shutil.copy(self.image.path, new_path)
