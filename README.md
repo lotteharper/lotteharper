@@ -302,7 +302,8 @@ Questions? [Contact me at GlamGirlX.com](https://glamgirlx.com/contact)
 __Thank you for visiting, and for your interest in my project!__
 - Charlotte Harper (Daisy)
 
-__Watch my videos on YouTube >__
+__Watch my videos on YouTube with a click or tap of the link below__
+
 [![See my YouTube playlist recorded about this project, using the software](https://img.youtube.com/vi/1b79ArshiHI/0.jpg)](https://www.youtube.com/watch?v=4ME4TEzJa1k&list=PLM98ZFiLn-FGjYm-RNKteBj0YpNXNjZFR)
 
 #### Scan or click/tap this code to visit my shared links <3

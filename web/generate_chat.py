@@ -4,7 +4,7 @@ single_lang = False
 force_copy = False
 force_overwrite = False
 disable_langs = False
-end_after_langs = True
+end_after_langs = False
 PRIV_POSTS = 24
 import os, pytz
 from datetime import datetime
@@ -96,7 +96,7 @@ def generate_site():
         request = DummyRequest(lang)
         request.GET = GetParams(lang)
         set_current_request(request)
-#        print(lang)
+        print(lang)
         context['lang'] = lang
         context['request'] = request
         try:
@@ -123,26 +123,9 @@ def generate_site():
     request = DummyRequest(lang)
     request.GET = GetParams(lang)
     set_current_request(request)
-    context['lang'] = lang
-    context['path'] = '/404'
-    context['title'] = 'Error 404 - File Not Found'
-    context['hiderrm'] = True
-    path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format('404'))
-    if not os.path.exists(path) or overwrite or True:
-        index = render_to_string('web/404.html', context)
-        with open(path, 'w') as file:
-            file.write(index)
     context['hidenav'] = True
     context['hidefooter'] = True
     context['show_ads'] = False
-    context['title'] = 'Recovery'
-    context['path'] = '/recovery'
-    context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
-    context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
-    context['activate_mining'] = False
-    recovery = render_to_string('web/recovery.html', context)
-    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
-        file.write(recovery)
     for post in context['posts']:
         urls = urls + [post.friendly_name]
     sitemapcontext = {'base_url': settings.STATIC_SITE_URL, 'languages': languages, 'urls': urls, 'date': timezone.now().strftime('%Y-%m-%d')}

@@ -108,6 +108,8 @@ SELECTOR_LANGUAGES = {
     'zu': 'zulu',
 }
 
+
+# Old (not in use)
 selector_languages_old = {
     'en': 'English (Generic)',
     'en-US': 'English (US)',
