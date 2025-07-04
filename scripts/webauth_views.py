@@ -84,7 +84,7 @@ class Registration(LoginRequiredMixin, View):
             expected_challenge=challenge,
             expected_origin=settings.WEBAUTH_ORIGIN,
             expected_rp_id=settings.WEBAUTH_RP_ID,
-            require_user_verification=False,
+            require_user_verification=settings.WEBAUTHN_USER_VERIFICATION_REQUIRED,
         )
         WebAuthDevice.objects.create(
             user=request.user,
@@ -152,7 +152,7 @@ class Verification(LoginRequiredMixin, View):
                     expected_origin=settings.WEBAUTH_ORIGIN,
                     credential_public_key=device.public_key,
                     credential_current_sign_count=device.sign_count,
-                    require_user_verification=False,
+                    require_user_verification=settings.WEBAUTHN_USER_VERIFICATION_REQUIRED,
                 )
                 break
             except:

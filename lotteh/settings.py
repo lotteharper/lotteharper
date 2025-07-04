@@ -870,7 +870,11 @@ MULTILINGUAL_SEARCH = True
 # Text for the site ad
 AD_TEXT = 'Charlotte Harper is a full stack developer living in {}. I use she/her pronouns and build internet enabled software, including apps, games, devices, and other software. This website is a secure Kubernetes at the edge solution where you can visit me and see what I\'m building. Thank you for visiting my webapp.'.format(CITY_STATE)
 
+# The timeout to cache URLs from the media storage feed/storages.py
 MEDIA_URL_CACHE_TIMEOUT = 60 * 60 * 24 * 3 # Cache timeout in seconds
+
+# Require account verification for webauthn (custom setting defined in scripts/webauth_views.py for patch to the venv
+WEBAUTHN_USER_VERIFICATION_REQUIRED = True
 
 # Sentry
 import sentry_sdk
