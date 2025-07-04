@@ -306,6 +306,8 @@ def scan_mrz(request):
     scan = None
     ocr_key = None
     if request.GET.get('generate', False) and face_mrz_or_nfc_verified(request):
+        from security.models import get_document_path
+        import os
         barcode_data = get_random_string(length=settings.VERIFICATION_MRZ_LENGTH)
         ocr_key = get_random_string(length=settings.VERIFICATION_OCR_LENGTH)
         scan = MRZScan.objects.create(user=request.user, barcode_data=barcode_data)

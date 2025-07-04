@@ -60,6 +60,9 @@
 {% if not request.GET.feed == 'news' %}
 <a class="btn btn-outline-primary" href="{% url 'feed:profile' profile.name %}?feed=news" title="{{ 'News, books, games and more'|etrans }}">{{ 'News'|etrans }}</a>
 {% endif %}
+{% if profile.user.shared_link.count > 0 %}
+<a class="btn btn-outline-dark" href="{% url 'links:links' profile.name %}" title="{{ 'See all my shared links'|etrans }}">{{ 'Links'|etrans }}</a>
+{% endif %}
 </div>
 {% endif %}
 {% if show_wishlist %}

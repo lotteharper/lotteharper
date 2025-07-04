@@ -7,7 +7,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <div style="max-height: 50vh; overflow: scroll;">
         {% for next_language, text_to_render in selector_languages.items %}
-        <a class="dropdown-item" href="/{{ next_language }}/{{ path|useablepath }}" title="{{ 'Read the site in '|etrans }} {{ text_to_render|etranslang:next_language }}">{{ text_to_render|etranslang:next_language|caps }}</a>
+        <a class="dropdown-item" href="/{{ next_language }}/{{ path|useablepath }}" title="{{ 'Read the site in'|etrans }} {{ text_to_render|etranslang:next_language }}">{{ text_to_render|etranslang:next_language }}</a>
         {% endfor %}
     </div>
   </div>

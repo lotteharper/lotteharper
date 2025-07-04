@@ -3,7 +3,8 @@
 [![Landing Page](https://img.shields.io/badge/Landing_Page-About_my_work-purple)](https://lotteh.com/landing/)
 [![Visit my Website](https://img.shields.io/badge/Visit_my_website-See_my_work_in_action-blue)](https://glamgirlx.com)
 [![Static Badge](https://img.shields.io/badge/Open_Source_❤️-See_my_project-pink)
-![Static Badge](https://img.shields.io/badge/Full_Stack-Linux-green)](https://github.com/daisycamber/lotteharper)
+![Static Badge](https://img.shields.io/badge/Full_Stack-Linux-green)](https://github.com/lotteharper/lotteharper)
+[![Static Badge](https://img.shields.io/badge/Links-See_my_links-red)](https://lotteh.com/@Daisy)
 [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/2225373/charlotte-harper)
 [![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white)
@@ -51,7 +52,7 @@
 ![Square Badge](https://img.shields.io/badge/Square-3E4348?logo=square&logoColor=fff&style=for-the-badge)
 ![Dovecot Badge](https://img.shields.io/badge/Dovecot-54BCAB?logo=dovecot&logoColor=fff&style=for-the-badge)
 ![Google Badge](https://img.shields.io/badge/Google-4285F4?logo=google&logoColor=fff&style=for-the-badge)
-![Nike Badge](https://img.shields.io/badge/Nike-111?logo=nike&logoColor=fff&style=for-the-badge)](https://glamgirlx.com)
+![Nike Badge](https://img.shields.io/badge/Nike-111?logo=nike&logoColor=fff&style=for-the-badge)
 ![Netflix Badge](https://img.shields.io/badge/Netflix-E50914?logo=netflix&logoColor=fff&style=for-the-badge)
 ![Ars Technica Badge](https://img.shields.io/badge/Ars%20Technica-FF4E00?logo=arstechnica&logoColor=fff&style=for-the-badge)
 ![Binance Badge](https://img.shields.io/badge/Binance-F0B90B?logo=binance&logoColor=fff&style=for-the-badge)
@@ -124,6 +125,7 @@
 ![Markdown Badge](https://img.shields.io/badge/Markdown-000?logo=markdown&logoColor=fff&style=for-the-badge)
 ![X Badge](https://img.shields.io/badge/X-000?logo=x&logoColor=fff&style=for-the-badge)
 ![YouTube Badge](https://img.shields.io/badge/YouTube-F00?logo=youtube&logoColor=fff&style=for-the-badge)
+](https://glamgirlx.com)
 
 ![NASA Badge](https://glamgirlx.com/media/static/NASA-small.png)
 ![FBI Badge](https://glamgirlx.com/media/static/FBI-small.svg.png)
@@ -303,7 +305,7 @@ __Thank you for visiting, and for your interest in my project!__
 __Watch my videos on YouTube >__
 [![See my YouTube playlist recorded about this project, using the software](https://img.youtube.com/vi/1b79ArshiHI/0.jpg)](https://www.youtube.com/watch?v=4ME4TEzJa1k&list=PLM98ZFiLn-FGjYm-RNKteBj0YpNXNjZFR)
 
-#### Scan or click this code to visit my shared links <3
+#### Scan or click/tap this code to visit my shared links <3
 [![Scan or click here to visit my shared links](https://i.imgur.com/WJ8gHin.png)](https://lotteh.com/@Daisy)
 
 ![A photo of me from my webiste Thanks for visiting!](https://i.imgur.com/dAQRaWt.jpeg)

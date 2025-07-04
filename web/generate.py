@@ -64,6 +64,8 @@ def generate_site():
         'model_name': User.objects.get(id=settings.MY_ID).profile.name,
         'model': User.objects.get(id=settings.MY_ID),
         'my_profile': User.objects.get(id=settings.MY_ID).profile,
+        'links': User.objects.get(id=settings.MY_ID).shared_link.all(),
+        'links_user': User.objects.get(id=settings.MY_ID),
         'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
         'contact_form': ContactForm(),
         'github_url': settings.GITHUB_URL,
@@ -161,6 +163,11 @@ def generate_site():
         contact = render_to_string('web/contact.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/contact.html'.format(lang)), 'w') as file:
             file.write(contact)
+        context['path'] = '/{}/{}'.format(lang, 'links')
+        context['title'] = translate(request, 'My Links', lang, 'en')
+        links = render_to_string('web/links.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/links.html'.format(lang)), 'w') as file:
+            file.write(links)
         context['path'] = '/{}/{}'.format(lang, 'landing')
         context['title'] = translate(request, 'Landing', lang, 'en')
         landing = render_to_string('web/landing.html', context)
@@ -258,7 +265,7 @@ def generate_site():
     context['request'] = request
     context['hidenav'] = False
     context['hidefooter'] = False
-    urls = ['', 'news', 'landing','private','index','contact']
+    urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
     images = None
     lang = 'en'
     request = DummyRequest(lang)

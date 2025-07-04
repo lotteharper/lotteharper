@@ -41,7 +41,8 @@ def generate_site():
     global overwrite
     global priv_posts
     from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
-    from misc.sitemap import languages
+    from translate.languages import SELECTOR_LANGUAGES
+    languages = SELECTOR_LANGUAGES.keys()
     from translate.translate import translate
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
@@ -80,7 +81,11 @@ def generate_site():
         'monero_address': settings.MONERO_ADDRESS,
         'the_ad_text': settings.AD_TEXT,
         'languages': languages,
-        'hiderrm': True
+        'twitter_link': settings.TWITTER_LINK,
+        'instagram_link': settings.INSTAGRAM_LINK,
+        'youtube_link': settings.YOUTUBE_LINK,
+        'show_social_links': True,
+        'hiderrm': True,
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
@@ -108,12 +113,11 @@ def generate_site():
     request = DummyRequest(lang)
     request.GET = GetParams(lang)
     set_current_request(request)
-#        print(lang)
     context['lang'] = lang
     context['request'] = request
     context['hidenav'] = False
     context['hidefooter'] = False
-    urls = ['', 'news', 'landing','private','index','contact']
+    urls = ['','news','landing','private','index','contact','chat','links']
     images = None
     lang = 'en'
     request = DummyRequest(lang)
