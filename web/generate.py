@@ -49,7 +49,7 @@ def generate_site():
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
     if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
-    langs = languages #SELECTOR_LANGUAGES.keys() # languages
+    langs = list(languages) #SELECTOR_LANGUAGES.keys() # languages
     context = {
         'site_name': settings.STATIC_SITE_NAME,
         'selector_languages': SELECTOR_LANGUAGES,
@@ -64,7 +64,7 @@ def generate_site():
         'model_name': User.objects.get(id=settings.MY_ID).profile.name,
         'model': User.objects.get(id=settings.MY_ID),
         'my_profile': User.objects.get(id=settings.MY_ID).profile,
-        'links': User.objects.get(id=settings.MY_ID).shared_link.all(),
+        'shared_links': User.objects.get(id=settings.MY_ID).shared_link.order_by('created'),
         'links_user': User.objects.get(id=settings.MY_ID),
         'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
         'contact_form': ContactForm(),
@@ -92,7 +92,7 @@ def generate_site():
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
-    for lang in langs if not disable_langs else []:
+    for lang in langs[langs.index('hi'):] if not disable_langs else []:
         images = ''
         init_images = ''
         count = 0
@@ -165,9 +165,9 @@ def generate_site():
             file.write(contact)
         context['path'] = '/{}/{}'.format(lang, 'links')
         context['title'] = translate(request, 'My Links', lang, 'en')
-        links = render_to_string('web/links.html', context)
+        links_page = render_to_string('web/links.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/links.html'.format(lang)), 'w') as file:
-            file.write(links)
+            file.write(links_page)
         context['path'] = '/{}/{}'.format(lang, 'landing')
         context['title'] = translate(request, 'Landing', lang, 'en')
         landing = render_to_string('web/landing.html', context)
