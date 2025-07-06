@@ -103,7 +103,7 @@ window.onmessage = function(event){
     }
 };
 var live = false;
-var recording = {% if camera.recording %}true{% else %}false{% endif %};
+var recording = false;
 var unconfirmedFrames = [];
 var videoFrames = {};
 var retryCount = {};
@@ -116,12 +116,13 @@ function openMediaSocket() {
             mediaSocketReconnectTimeout = null;
         }
         if(mediaSocket && mediaSocket.readyState == WebSocket.OPEN) mediaSocket.close();
-        mediaSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/camera/{{ camera.user.profile.name }}/{{ camera.name }}/' + CAMERA_ID + '/?key={% if request.GET.key %}{{ request.GET.key }}{% else %}{{ camera.key }}{% endif %}');
+        mediaSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/camera/{{ camera.user.profile.name }}/{{ camera.name }}/?key={% if request.GET.key %}{{ request.GET.key }}{% else %}{{ camera.key }}{% endif %}');
         mediaSocket.addEventListener("open", (event) => {
                 console.log('Media socket open.');
         });
         mediaSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
+                if(mediaSocketReconnectTimeout) clearTimeout(mediaSocketReconnectTimeout);
                 mediaSocketReconnectTimeout = setTimeout(function() {
                         openMediaSocket();
                 }, {{ reload_time }});
@@ -149,54 +150,7 @@ function openMediaSocket() {
         });
         {% endif %}
 }
-function openRemoteSocket() {
-        var remoteSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
-        remoteSocket.addEventListener("open", (event) => {
-            console.log('Socket open.');
-        });
-        remoteSocket.addEventListener("close", (event) => {
-            console.log('Socket closed.');
-            setTimeout(function() {
-                openRemoteSocket();
-            }, {{ reload_time }});
-        });
-        remoteSocket.addEventListener("message", (event) => {
-            var instructions = event.data.split(',');
-            if(instructions[0] == 'y' && mediaRecorder.state != 'recording') {
-                live = true;
-                mediaRecorder.start();
-            liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
-            } else if(instructions[0] == 'n' && mediaRecorder.state == 'recording') {
-                live = false;
-                mediaRecorder.stop();
-                liveButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
-            }
-            if(instructions[1] == 'y') {
-                    recording = true;
-                recordButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
-            } else {
-                recording = false;
-                recordButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
-            }
-            if(instructions[2] == 'y') {
-                muted = true;
-                muteButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
-            } else {
-                muted = false;
-                muteButton.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
-            }
-        });
-}
-/*openMediaSocket();*/
-openRemoteSocket();
-document.getElementById('golivebutton').onclick = function(evt) {
-    live = !live;
-    if(live) {
-        mediaRecorder.start();
-    } else {
-        mediaRecorder.stop();
-    }
-};
+openMediaSocket();
 var form = document.getElementById('live-form');
 var data;
 var mediaChunks = [];
@@ -249,7 +203,6 @@ const cancelVideoFrame = function(id) {
 async function startWebcamFn() {
   if(!localCamStream) {
       CAMERA_ID = generateRandomString(8);
-      openMediaSocket();
       localCamStream = await navigator.mediaDevices.getUserMedia({
         video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: {{ camera.width }} },  frameRate: { ideal: 30 } },
         audio: {% if camera.microphone == 'communications' %}deviceId: { ideal: "communications" }{% elif camera.microphone == 'default' %}true{% elif camera.microphone == 'echo cancellation' %}{ echoCancellation: true, }{% endif %},
@@ -383,7 +336,7 @@ async function startRecordingFn() {
       captureInterval = setInterval(capture, {{ video_interval }});
   }
 }
-function stopRecordingFn() {
+async function stopRecordingFn() {
     if(live) {
         live = false;
         if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
@@ -445,6 +398,48 @@ function handleDataAvailable(event) {
     download();
   } else {}
 }
+var cameraon = false;
+function openRemoteSocket() {
+        var remoteSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
+        remoteSocket.addEventListener("open", (event) => {
+            console.log('Remote socket open.');
+        });
+        remoteSocket.addEventListener("close", (event) => {
+            console.log('Remote socket closed.');
+            setTimeout(function() {
+                openRemoteSocket();
+            }, {{ reload_time }});
+        });
+        remoteSocket.addEventListener("message", (event) => {
+            var instructions = event.data.split(',');
+            if(instructions[0] == 'y' && !cameraon) {
+                cameraon = true;
+                startWebcamFn();
+                liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
+            } else if(instructions[0] == 'n' && cameraon) {
+                cameraon = false;
+                stopAllStreamsFn();
+                liveButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
+            }
+            if(instructions[1] == 'y' && !recording) {
+                recording = true;
+                setTimeout(startRecordingFn, 3000);
+                recordButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
+            } else if(instructions[1] == 'n' && recording) {
+                recording = false;
+                stopRecordingFn();                
+                recordButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
+            }
+            if(instructions[2] == 'y' && !muted) {
+                muted = true;
+                muteButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            } else if(instructions[2] == 'n' && muted) {
+                muted = false;
+                muteButton.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
+            }
+        });
+}
+openRemoteSocket();
 
 function download() {
         if(live) { mediaRecorder.start(); }
@@ -459,6 +454,7 @@ function download() {
         var utc_timestamp = String(new Date().toISOString());
         formdata.append('confirmation_id', String(Math.floor(Math.random() * 1000000000)));
         formdata.append('timestamp', utc_timestamp);
+        formdata.append('viduid', CAMERA_ID);
         var id = formdata.get('confirmation_id');
         {% if use_websocket %}
         {% if should_compress_live %}

@@ -28,7 +28,7 @@ websocket_urlpatterns = [
     path('ws/shell/websocket/', shell_consumers.ShellConsumer.as_asgi()),
     path('ws/remote/', remote_consumers.RemoteConsumer.as_asgi()),
     path('ws/live/remote/<str:username>/<str:name>/', live_consumers.RemoteConsumer.as_asgi()),
-    path('ws/live/camera/<str:username>/<str:name>/<str:id>/', live_consumers.CameraConsumer.as_asgi()),
+    path('ws/live/camera/<str:username>/<str:name>/', live_consumers.CameraConsumer.as_asgi()),
     path('ws/live/video/<str:username>/<str:name>/', live_consumers.VideoConsumer.as_asgi()),
     path('ws/photobooth/remote/<str:username>/<str:name>/', photobooth_consumers.PhotoboothRemoteConsumer.as_asgi()),
     path('ws/photobooth/<str:username>/<str:name>/', photobooth_consumers.PhotoboothConsumer.as_asgi()),

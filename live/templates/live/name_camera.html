@@ -24,48 +24,58 @@
 <hr style="color: red;">
 <div style="display: flex; justify-content: space-around;">
 {% include 'live/go_remote.html' %}
+{% include 'live/mute_remote.html' %}
 {% include 'live/recording_remote.html' %}
 </div>
 {% endif %}
 {% endblock %}
 {% block javascript %}
+{% if not request.GET.hidenavbar %}
 var live = false;
 var recording = false;
+var muted = false;
 var liveButton = document.getElementById('golivebutton');
 var recordButton = document.getElementById('recordbutton');
+var muteButton = document.getElementById('mutebutton');
 var recording = {% if camera.recording %}true{% else %}false{% endif %};
-function openSocket() {
-        var socket = new WebSocket("wss://" + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
-        socket.addEventListener("open", (event) => {
-            console.log('Socket open.');
-            setInterval(function() {
-                socket.send('r');
-            }, 1000);
+var cameraon = false;
+function openRemoteSocket() {
+        var remoteSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
+        remoteSocket.addEventListener("open", (event) => {
+            console.log('Remote socket open.');
         });
-        socket.addEventListener("close", (event) => {
-            console.log('Socket closed.');
+        remoteSocket.addEventListener("close", (event) => {
+            console.log('Remote socket closed.');
             setTimeout(function() {
-                openSocket();
+                openRemoteSocket();
             }, {{ reload_time }});
         });
-        socket.addEventListener("message", (event) => {
+        remoteSocket.addEventListener("message", (event) => {
             var instructions = event.data.split(',');
-            if(instructions[0] == 'y') {
-                live = true;
+            if(instructions[0] == 'y' && !cameraon) {
+                cameraon = true;
                 liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
-            } else if(instructions[0] == 'n') {
-                live = false;
+            } else if(instructions[0] == 'n' && cameraon) {
+                cameraon = false;
                 liveButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
             }
-            if(instructions[1] == 'y') {
+            if(instructions[1] == 'y' && !recording) {
                 recording = true;
                 recordButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
-            } else {
+            } else if(instructions[1] == 'n' && recording) {
                 recording = false;
                 recordButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
             }
+            if(instructions[2] == 'y' && !muted) {
+                muted = true;
+                muteButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            } else if(instructions[2] == 'n' && muted) {
+                muted = false;
+                muteButton.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
+            }
         });
 }
-openSocket();
+openRemoteSocket();
 {% include 'live/remote.js' %}
+{% endif %}
 {% endblock %}
