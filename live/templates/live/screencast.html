@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
-<style>
 {% if camera.user.vendor_profile.logo %}<link rel="preload" as="image" href="{{ camera.user.vendor_profile.logo.url }}">{% endif %}
+<style>
 video {
     width: 100%;
     pointer-events: none;
@@ -427,8 +427,6 @@ async function attachToDOM(id, stream) {
   let videoElem = document.createElement("video");
   if(id == 'justWebcam') { {% if request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }
   videoElem.id = id;
-  videoElem.width = 640;
-  videoElem.height = 360;
   videoElem.autoplay = true;
   videoElem.muted = true;
   videoElem.volume = 0;
