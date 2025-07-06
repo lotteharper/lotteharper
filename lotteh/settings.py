@@ -215,18 +215,18 @@ DATABASES = {
         },
 #        'DISABLE_SERVER_SIDE_CURSORS': True,
     },
-    'lotteh2024': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lotteh2024',
-        'USER': 'django',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
+#    'lotteh2024': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'lotteh2024',
+#        'USER': 'django',
+#        'PASSWORD': 'password',
+#        'HOST': 'localhost',
+#        'PORT': '',
 #        'OPTIONS': {
 #            'timeout': 180,
 #        }
 #        'DISABLE_SERVER_SIDE_CURSORS': True,
-    }
+#    }
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': BASE_DIR / 'db.sqlite3',

@@ -91,9 +91,6 @@
         #remote-video {
           width: 100%;
         }
-        .btn {
-            font-size: 24px !important;
-        }
       </style>
 {% endblock %}
 {% block content %}
@@ -107,7 +104,7 @@
             <button onclick="denyCall();" style="color: red;" class="btn">{{ 'Deny'|etrans }}</button><button onclick="acceptCall();" style="color: green;" class="btn">{{ 'Accept'|etrans }}</button>
          </div>
          <p id="the-link" style="visibility: 0; display: none;" class="hide"></p>
-         <small id="members"></small>
+         <p id="members"></p>
          <p id="call-div">{{ 'Your username is'|etrans }} <b id="thename" style="font-size: 26px;"></b> <button id="update-username" class="btn update-button">{{ 'Update'|etrans }}</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('thename');" class="btn btn-outline-primary">{{ 'Copy code'|etrans }}</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('the-link');" class="btn btn-outline-primary">{{ 'Copy link'|etrans }}</button></p>
          <button id="call-button" class="call-button">{{ 'Call someone'|etrans }}</button>
          <div>
@@ -123,8 +120,6 @@
       </div>
       <button class="btn btn-lg btn-outline-primary" id="please-interact">{{ 'Join a meeting'|etrans }}</button>
       <div style="height: 50px;"></div>
-      <small>{{ 'Provided by'|etrans }} <a href="https://glamgirlx.com">glamgirlx.com</a>.</small>
-      <p style="font-size: 10px !important;"><small><i>{{ 'Leave me a tip in Bitcoin using this address:'|etrans }}</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="{{ 'Copy address'|etrans }}" onclick="copyToClipboard('btc-wallet');">{{ 'Copy'|etrans }}</button></small></p>
       {% include 'web/social.html' %}
       <video id="test-video" autoplay="autoplay" class="hide" muted></video>
       <canvas id="canvas" class="hide"></canvas>

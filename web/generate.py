@@ -92,7 +92,7 @@ def generate_site():
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
-    for lang in langs[langs.index('hi'):] if not disable_langs else []:
+    for lang in langs[langs.index('jw'):] if not disable_langs else []:
         images = ''
         init_images = ''
         count = 0
@@ -265,7 +265,6 @@ def generate_site():
     context['request'] = request
     context['hidenav'] = False
     context['hidefooter'] = False
-    urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
     images = None
     lang = 'en'
     request = DummyRequest(lang)
@@ -290,9 +289,19 @@ def generate_site():
     recovery = render_to_string('web/recovery.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
         file.write(recovery)
-    for post in context['posts']:
+    urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(private=False, published=True, posted=True, feed='news')).union(Post.objects.filter(posted=True, private=False, feed='private', published=True)).order_by('-date_posted').order_by('-pinned')
+    for post in posts:
         urls = urls + [post.friendly_name]
     sitemapcontext = {'base_url': settings.STATIC_SITE_URL, 'languages': languages, 'urls': urls, 'date': timezone.now().strftime('%Y-%m-%d')}
     index = render_to_string('web/sitemap.xml', sitemapcontext)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'sitemap.xml'), 'w') as file:
         file.write(index)
+    import time
+    serviceworker_context = {
+        'urls': urls,
+        'version_code': time.time(),
+    }
+    serviceworkerjs = render_to_string('web/serviceworker.js', serviceworker_context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'serviceworker.js'), 'w') as file:
+        file.write(serviceworkerjs)

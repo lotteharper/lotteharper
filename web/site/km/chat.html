@@ -21,7 +21,6 @@
          }
          body {
 	         margin: 20 !important;
-	         font-size: 24px !important;
          }
          .centered {
 	         display: block;
@@ -36,6 +35,7 @@
          .call-button {
 	         padding: 0.5rem 1rem;
 	         border: none;
+	         font-size: 24px !important;
 	         border-radius: 2px;
 	         cursor: pointer;
 	         color: white;
@@ -45,6 +45,7 @@
          #please-interact {
 	         padding: 0.5rem 1rem;
 	         border: none;
+	         font-size: 24px !important;
 	         border-radius: 3px;
 	         cursor: pointer;
 	         color: white;
@@ -170,7 +171,7 @@
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit" title="ស្វែងរកគេហទំព័ររបស់ខ្ញុំ, lotteh.com">ការឆេកឆេ</button>
             </form>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#" title="តែងតែឥតគិតថ្លៃ - បង្កើតគណនីដើម្បីគាំទ្រខ្ញុំ">ដេលមានសេរីផាប</a>
+              <a class="nav-link" href="/links" title="មើលតំណដែលខ្ញុំកំពុងចែករំលែក">តំណភ្ជាប់របស់ខ្ញុំ</a>
             </li>
             <li class="nav-item align-middle">
               <small><i><a class="text-dark nav-link" style="vertical-align: middle;" id="current-time">
@@ -216,7 +217,7 @@
             <button onclick="denyCall();" style="color: red;" class="btn">របកេក</button><button onclick="acceptCall();" style="color: green;" class="btn">តតយល</button>
          </div>
          <p id="the-link" style="visibility: 0; display: none;" class="hide"></p>
-         <small id="members"></small>
+         <p id="members"></p>
          <p id="call-div">ឈ្មោះអ្នកប្រើរបស់អ្នកគឺ <b id="thename" style="font-size: 26px;"></b> <button id="update-username" class="btn update-button">ធេវីអាេយយរមយរ</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('thename');" class="btn btn-outline-primary">ច្បាប់ចម្លង</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('the-link');" class="btn btn-outline-primary">ចម្លងតំណ</button></p>
          <button id="call-button" class="call-button">ហៅនរណាម្នាក់</button>
          <div>
@@ -232,8 +233,6 @@
       </div>
       <button class="btn btn-lg btn-outline-primary" id="please-interact">ចូលរួមការប្រជុំមួយ</button>
       <div style="height: 50px;"></div>
-      <small>ផ្តល់ដោយ <a href="https://glamgirlx.com">glamgirlx.com</a>.</small>
-      <p style="font-size: 10px !important;"><small><i>ទុកឱ្យខ្ញុំព័ត៌មានជំនួយមួយនៅក្នុង bitcoin ដោយប្រើអាសយដ្ឋាននេះ:</i> <b id="btc-wallet">3KhDWoSve2N627RiW8grj6XrsoPT7d6qyE</b> <button class="btn btn-sm btn-info" title="ចម្លងអាសយដ្ឋាន" onclick="copyToClipboard('btc-wallet');">ការចម្លង</button></small></p>
       
 <div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 bg-white">
 <div class="mb-2" style="display: flex; justify-content: space-around;">
@@ -289,27 +288,27 @@
         
         <a class="dropdown-item" href="/af/chat" title="អានគេហទំព័រនៅក្នុង Afrikaans">Afrikaans</a>
         
-        <a class="dropdown-item" href="/sq/chat" title="អានគេហទំព័រនៅក្នុង shqip">Shqip</a>
+        <a class="dropdown-item" href="/sq/chat" title="អានគេហទំព័រនៅក្នុង shqip">shqip</a>
         
         <a class="dropdown-item" href="/am/chat" title="អានគេហទំព័រនៅក្នុង አማርኛ">አማርኛ</a>
         
         <a class="dropdown-item" href="/ar/chat" title="អានគេហទំព័រនៅក្នុង عربي">عربي</a>
         
-        <a class="dropdown-item" href="/hy/chat" title="អានគេហទំព័រនៅក្នុង հայ">Հայ</a>
+        <a class="dropdown-item" href="/hy/chat" title="អានគេហទំព័រនៅក្នុង հայ">հայ</a>
         
-        <a class="dropdown-item" href="/az/chat" title="អានគេហទំព័រនៅក្នុង azərbaycanlı">Azərbaycanlı</a>
+        <a class="dropdown-item" href="/az/chat" title="អានគេហទំព័រនៅក្នុង azərbaycanlı">azərbaycanlı</a>
         
-        <a class="dropdown-item" href="/eu/chat" title="អានគេហទំព័រនៅក្នុង euskara">Euskara</a>
+        <a class="dropdown-item" href="/eu/chat" title="អានគេហទំព័រនៅក្នុង euskara">euskara</a>
         
-        <a class="dropdown-item" href="/be/chat" title="អានគេហទំព័រនៅក្នុង беларускі">Беларускі</a>
+        <a class="dropdown-item" href="/be/chat" title="អានគេហទំព័រនៅក្នុង беларускі">беларускі</a>
         
         <a class="dropdown-item" href="/bn/chat" title="អានគេហទំព័រនៅក្នុង বাঙালি">বাঙালি</a>
         
-        <a class="dropdown-item" href="/bs/chat" title="អានគេហទំព័រនៅក្នុង bosanski">Bosanski</a>
+        <a class="dropdown-item" href="/bs/chat" title="អានគេហទំព័រនៅក្នុង bosanski">bosanski</a>
         
         <a class="dropdown-item" href="/bg/chat" title="អានគេហទំព័រនៅក្នុង Български">Български</a>
         
-        <a class="dropdown-item" href="/ca/chat" title="អានគេហទំព័រនៅក្នុង calalan">Calalan</a>
+        <a class="dropdown-item" href="/ca/chat" title="អានគេហទំព័រនៅក្នុង calalan">calalan</a>
         
         <a class="dropdown-item" href="/ceb/chat" title="អានគេហទំព័រនៅក្នុង Cebuano">Cebuano</a>
         
@@ -321,23 +320,23 @@
         
         <a class="dropdown-item" href="/co/chat" title="អានគេហទំព័រនៅក្នុង Corsu">Corsu</a>
         
-        <a class="dropdown-item" href="/hr/chat" title="អានគេហទំព័រនៅក្នុង hrvatski">Hrvatski</a>
+        <a class="dropdown-item" href="/hr/chat" title="អានគេហទំព័រនៅក្នុង hrvatski">hrvatski</a>
         
-        <a class="dropdown-item" href="/cs/chat" title="អានគេហទំព័រនៅក្នុង čeština">Čeština</a>
+        <a class="dropdown-item" href="/cs/chat" title="អានគេហទំព័រនៅក្នុង čeština">čeština</a>
         
         <a class="dropdown-item" href="/da/chat" title="អានគេហទំព័រនៅក្នុង Dansk">Dansk</a>
         
         <a class="dropdown-item" href="/nl/chat" title="អានគេហទំព័រនៅក្នុង Nederlands">Nederlands</a>
         
-        <a class="dropdown-item" href="/en/chat" title="អានគេហទំព័រនៅក្នុង english">English</a>
+        <a class="dropdown-item" href="/en/chat" title="អានគេហទំព័រនៅក្នុង english">english</a>
         
         <a class="dropdown-item" href="/eo/chat" title="អានគេហទំព័រនៅក្នុង Esperanto">Esperanto</a>
         
-        <a class="dropdown-item" href="/et/chat" title="អានគេហទំព័រនៅក្នុង eesti">Eesti</a>
+        <a class="dropdown-item" href="/et/chat" title="អានគេហទំព័រនៅក្នុង eesti">eesti</a>
         
         <a class="dropdown-item" href="/tl/chat" title="អានគេហទំព័រនៅក្នុង Pilipino">Pilipino</a>
         
-        <a class="dropdown-item" href="/fi/chat" title="អានគេហទំព័រនៅក្នុង suomalainen">Suomalainen</a>
+        <a class="dropdown-item" href="/fi/chat" title="អានគេហទំព័រនៅក្នុង suomalainen">suomalainen</a>
         
         <a class="dropdown-item" href="/fr/chat" title="អានគេហទំព័រនៅក្នុង Français">Français</a>
         
@@ -349,7 +348,7 @@
         
         <a class="dropdown-item" href="/de/chat" title="អានគេហទំព័រនៅក្នុង Deutsch">Deutsch</a>
         
-        <a class="dropdown-item" href="/el/chat" title="អានគេហទំព័រនៅក្នុង ελληνικά">Ελληνικά</a>
+        <a class="dropdown-item" href="/el/chat" title="អានគេហទំព័រនៅក្នុង ελληνικά">ελληνικά</a>
         
         <a class="dropdown-item" href="/gu/chat" title="អានគេហទំព័រនៅក្នុង ગુજરાત">ગુજરાત</a>
         
@@ -357,7 +356,7 @@
         
         <a class="dropdown-item" href="/ha/chat" title="អានគេហទំព័រនៅក្នុង Hausa">Hausa</a>
         
-        <a class="dropdown-item" href="/haw/chat" title="អានគេហទំព័រនៅក្នុង ʻŌlelo Hawaiʻi">ʻōlelo hawaiʻi</a>
+        <a class="dropdown-item" href="/haw/chat" title="អានគេហទំព័រនៅក្នុង ʻŌlelo Hawaiʻi">ʻŌlelo Hawaiʻi</a>
         
         <a class="dropdown-item" href="/iw/chat" title="អានគេហទំព័រនៅក្នុង עִברִית">עִברִית</a>
         
@@ -367,17 +366,17 @@
         
         <a class="dropdown-item" href="/hmn/chat" title="អានគេហទំព័រនៅក្នុង Hmoob">Hmoob</a>
         
-        <a class="dropdown-item" href="/hu/chat" title="អានគេហទំព័រនៅក្នុង magyar">Magyar</a>
+        <a class="dropdown-item" href="/hu/chat" title="អានគេហទំព័រនៅក្នុង magyar">magyar</a>
         
         <a class="dropdown-item" href="/is/chat" title="អានគេហទំព័រនៅក្នុង Íslenskt">Íslenskt</a>
         
-        <a class="dropdown-item" href="/ig/chat" title="អានគេហទំព័រនៅក្នុង igbo">Igbo</a>
+        <a class="dropdown-item" href="/ig/chat" title="អានគេហទំព័រនៅក្នុង igbo">igbo</a>
         
         <a class="dropdown-item" href="/id/chat" title="អានគេហទំព័រនៅក្នុង Indonesia">Indonesia</a>
         
-        <a class="dropdown-item" href="/ga/chat" title="អានគេហទំព័រនៅក្នុង (de chuid) na hÉireann">(de chuid) na héireann</a>
+        <a class="dropdown-item" href="/ga/chat" title="អានគេហទំព័រនៅក្នុង (de chuid) na hÉireann">(de chuid) na hÉireann</a>
         
-        <a class="dropdown-item" href="/it/chat" title="អានគេហទំព័រនៅក្នុង italiano">Italiano</a>
+        <a class="dropdown-item" href="/it/chat" title="អានគេហទំព័រនៅក្នុង italiano">italiano</a>
         
         <a class="dropdown-item" href="/ja/chat" title="អានគេហទំព័រនៅក្នុង 日本語">日本語</a>
         
@@ -385,25 +384,25 @@
         
         <a class="dropdown-item" href="/kn/chat" title="អានគេហទំព័រនៅក្នុង ಕನ್ನಡಿ">ಕನ್ನಡಿ</a>
         
-        <a class="dropdown-item" href="/kk/chat" title="អានគេហទំព័រនៅក្នុង қазақ">Қазақ</a>
+        <a class="dropdown-item" href="/kk/chat" title="អានគេហទំព័រនៅក្នុង қазақ">қазақ</a>
         
         <a class="dropdown-item" href="/km/chat" title="អានគេហទំព័រនៅក្នុង ខ្មែរ">ខ្មែរ</a>
         
         <a class="dropdown-item" href="/ko/chat" title="អានគេហទំព័រនៅក្នុង 한국인">한국인</a>
         
-        <a class="dropdown-item" href="/ku/chat" title="អានគេហទំព័រនៅក្នុង Kurdî (Kurmancî)">Kurdî (kurmancî)</a>
+        <a class="dropdown-item" href="/ku/chat" title="អានគេហទំព័រនៅក្នុង Kurdî (Kurmancî)">Kurdî (Kurmancî)</a>
         
         <a class="dropdown-item" href="/ky/chat" title="អានគេហទំព័រនៅក្នុង Кыргызча">Кыргызча</a>
         
         <a class="dropdown-item" href="/lo/chat" title="អានគេហទំព័រនៅក្នុង ພາສາລາວ">ພາສາລາວ</a>
         
-        <a class="dropdown-item" href="/la/chat" title="អានគេហទំព័រនៅក្នុង latine">Latine</a>
+        <a class="dropdown-item" href="/la/chat" title="អានគេហទំព័រនៅក្នុង latine">latine</a>
         
-        <a class="dropdown-item" href="/lv/chat" title="អានគេហទំព័រនៅក្នុង latviešu">Latviešu</a>
+        <a class="dropdown-item" href="/lv/chat" title="អានគេហទំព័រនៅក្នុង latviešu">latviešu</a>
         
         <a class="dropdown-item" href="/lt/chat" title="អានគេហទំព័រនៅក្នុង Lietuvos">Lietuvos</a>
         
-        <a class="dropdown-item" href="/lb/chat" title="អានគេហទំព័រនៅក្នុង lëtzebuergesch">Lëtzebuergesch</a>
+        <a class="dropdown-item" href="/lb/chat" title="អានគេហទំព័រនៅក្នុង lëtzebuergesch">lëtzebuergesch</a>
         
         <a class="dropdown-item" href="/mk/chat" title="អានគេហទំព័រនៅក្នុង Македонијан">Македонијан</a>
         
@@ -419,7 +418,7 @@
         
         <a class="dropdown-item" href="/mr/chat" title="អានគេហទំព័រនៅក្នុង मराठी">मराठी</a>
         
-        <a class="dropdown-item" href="/mn/chat" title="អានគេហទំព័រនៅក្នុង монгол">Монгол</a>
+        <a class="dropdown-item" href="/mn/chat" title="អានគេហទំព័រនៅក្នុង монгол">монгол</a>
         
         <a class="dropdown-item" href="/my/chat" title="អានគេហទំព័រនៅក្នុង မြန်မာ (မြန်မာ)">မြန်မာ (မြန်မာ)</a>
         
@@ -433,21 +432,21 @@
         
         <a class="dropdown-item" href="/fa/chat" title="អានគេហទំព័រនៅក្នុង فارسی">فارسی</a>
         
-        <a class="dropdown-item" href="/pl/chat" title="អានគេហទំព័រនៅក្នុង polski">Polski</a>
+        <a class="dropdown-item" href="/pl/chat" title="អានគេហទំព័រនៅក្នុង polski">polski</a>
         
-        <a class="dropdown-item" href="/pt/chat" title="អានគេហទំព័រនៅក្នុង português">Português</a>
+        <a class="dropdown-item" href="/pt/chat" title="អានគេហទំព័រនៅក្នុង português">português</a>
         
         <a class="dropdown-item" href="/pa/chat" title="អានគេហទំព័រនៅក្នុង ਪੰਜਾਬੀ">ਪੰਜਾਬੀ</a>
         
         <a class="dropdown-item" href="/ro/chat" title="អានគេហទំព័រនៅក្នុង România">România</a>
         
-        <a class="dropdown-item" href="/ru/chat" title="អានគេហទំព័រនៅក្នុង русский">Русский</a>
+        <a class="dropdown-item" href="/ru/chat" title="អានគេហទំព័រនៅក្នុង русский">русский</a>
         
-        <a class="dropdown-item" href="/sm/chat" title="អានគេហទំព័រនៅក្នុង gagana Samoa">Gagana samoa</a>
+        <a class="dropdown-item" href="/sm/chat" title="អានគេហទំព័រនៅក្នុង gagana Samoa">gagana Samoa</a>
         
-        <a class="dropdown-item" href="/gd/chat" title="អានគេហទំព័រនៅក្នុង Gàidhlig na h-Alba">Gàidhlig na h-alba</a>
+        <a class="dropdown-item" href="/gd/chat" title="អានគេហទំព័រនៅក្នុង Gàidhlig na h-Alba">Gàidhlig na h-Alba</a>
         
-        <a class="dropdown-item" href="/sr/chat" title="អានគេហទំព័រនៅក្នុង српски">Српски</a>
+        <a class="dropdown-item" href="/sr/chat" title="អានគេហទំព័រនៅក្នុង српски">српски</a>
         
         <a class="dropdown-item" href="/st/chat" title="អានគេហទំព័រនៅក្នុង Sesotho">Sesotho</a>
         
@@ -457,19 +456,19 @@
         
         <a class="dropdown-item" href="/si/chat" title="អានគេហទំព័រនៅក្នុង සිංහල">සිංහල</a>
         
-        <a class="dropdown-item" href="/sk/chat" title="អានគេហទំព័រនៅក្នុង slovenský">Slovenský</a>
+        <a class="dropdown-item" href="/sk/chat" title="អានគេហទំព័រនៅក្នុង slovenský">slovenský</a>
         
         <a class="dropdown-item" href="/sl/chat" title="អានគេហទំព័រនៅក្នុង Slovenski">Slovenski</a>
         
         <a class="dropdown-item" href="/so/chat" title="អានគេហទំព័រនៅក្នុង Soomaali">Soomaali</a>
         
-        <a class="dropdown-item" href="/es/chat" title="អានគេហទំព័រនៅក្នុង español">Español</a>
+        <a class="dropdown-item" href="/es/chat" title="អានគេហទំព័រនៅក្នុង español">español</a>
         
         <a class="dropdown-item" href="/su/chat" title="អានគេហទំព័រនៅក្នុង Sundanese">Sundanese</a>
         
         <a class="dropdown-item" href="/sw/chat" title="អានគេហទំព័រនៅក្នុង Kiswahili">Kiswahili</a>
         
-        <a class="dropdown-item" href="/sv/chat" title="អានគេហទំព័រនៅក្នុង svensk">Svensk</a>
+        <a class="dropdown-item" href="/sv/chat" title="អានគេហទំព័រនៅក្នុង svensk">svensk</a>
         
         <a class="dropdown-item" href="/tg/chat" title="អានគេហទំព័រនៅក្នុង Тоҷик">Тоҷик</a>
         
@@ -481,25 +480,25 @@
         
         <a class="dropdown-item" href="/tr/chat" title="អានគេហទំព័រនៅក្នុង Türkçe">Türkçe</a>
         
-        <a class="dropdown-item" href="/uk/chat" title="អានគេហទំព័រនៅក្នុង український">Український</a>
+        <a class="dropdown-item" href="/uk/chat" title="អានគេហទំព័រនៅក្នុង український">український</a>
         
         <a class="dropdown-item" href="/ur/chat" title="អានគេហទំព័រនៅក្នុង اردو">اردو</a>
         
         <a class="dropdown-item" href="/ug/chat" title="អានគេហទំព័រនៅក្នុង ئۇيغۇر">ئۇيغۇر</a>
         
-        <a class="dropdown-item" href="/uz/chat" title="អានគេហទំព័រនៅក្នុង o&#x27;zbek tili">O&#x27;zbek tili</a>
+        <a class="dropdown-item" href="/uz/chat" title="អានគេហទំព័រនៅក្នុង o&#x27;zbek tili">o&#x27;zbek tili</a>
         
-        <a class="dropdown-item" href="/vi/chat" title="អានគេហទំព័រនៅក្នុង Việt Nam">Việt nam</a>
+        <a class="dropdown-item" href="/vi/chat" title="អានគេហទំព័រនៅក្នុង Việt Nam">Việt Nam</a>
         
         <a class="dropdown-item" href="/cy/chat" title="អានគេហទំព័រនៅក្នុង Gymreig">Gymreig</a>
         
-        <a class="dropdown-item" href="/xh/chat" title="អានគេហទំព័រនៅក្នុង isiXhosa">Isixhosa</a>
+        <a class="dropdown-item" href="/xh/chat" title="អានគេហទំព័រនៅក្នុង isiXhosa">isiXhosa</a>
         
         <a class="dropdown-item" href="/yi/chat" title="អានគេហទំព័រនៅក្នុង יידיש">יידיש</a>
         
         <a class="dropdown-item" href="/yo/chat" title="អានគេហទំព័រនៅក្នុង Yoruba">Yoruba</a>
         
-        <a class="dropdown-item" href="/zu/chat" title="អានគេហទំព័រនៅក្នុង IsiZulu">Isizulu</a>
+        <a class="dropdown-item" href="/zu/chat" title="អានគេហទំព័រនៅក្នុង IsiZulu">IsiZulu</a>
         
     </div>
   </div>

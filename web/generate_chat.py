@@ -42,7 +42,7 @@ def generate_site():
     global priv_posts
     from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
     from translate.languages import SELECTOR_LANGUAGES
-    languages = SELECTOR_LANGUAGES.keys()
+    languages = list(SELECTOR_LANGUAGES.keys())
     from translate.translate import translate
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
@@ -89,7 +89,7 @@ def generate_site():
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
-    for lang in langs if not disable_langs else []:
+    for lang in langs[:langs.index('id')] if not disable_langs else []:
         images = ''
         init_images = ''
         count = 0
