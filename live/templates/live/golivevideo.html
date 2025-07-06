@@ -510,7 +510,7 @@ function download() {
                    $.ajax(this);
                },
                success: (data) => {
-                   $.ajax({
+/*                   $.ajax({
                         url: '/live/confirm/' + id + '/',
                         method: 'POST',
                         success: function(data) {
@@ -518,7 +518,7 @@ function download() {
                                     $.ajax(this);
                             }
                         },
-                    });
+                    });*/
                 },
             }).done(function(respond){
                 console.log(respond);
@@ -544,7 +544,7 @@ function download() {
                 $.ajax(this);
             },
             success: (data) => {
-                $.ajax({
+/*                $.ajax({
                    url: '/live/confirm/' + id + '/',
                     method: 'POST',
                     success: function(data) {
@@ -552,7 +552,7 @@ function download() {
                             $.ajax(this);
                         }
                     },
-                });
+                });*/
             },
         }).done(function(respond){
             console.log(respond);
