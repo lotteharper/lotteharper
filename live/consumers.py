@@ -72,7 +72,7 @@ def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
     timestamp = urllib.parse.unquote(camera_data[4].split('=', 1)[1])
 #    print(timestamp)
     timestamp = datetime.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
-    timestamp = timestamp + datetime.timedelta(minutes=1)
+#    timestamp += datetime.timedelta(minutes=1)
     videouid = urllib.parse.unquote(camera_data[5])
 #    timestamp = datetime.datetime.utcfromtimestamp(timestamp / 1000) - datetime.timedelta(hours=7) #, tz=pytz.UTC)
     frame_data = urllib.parse.unquote(camera_data[6].split('=', 1)[1]).split(',')[1]

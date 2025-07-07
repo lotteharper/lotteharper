@@ -390,9 +390,9 @@ def golivevideo(request):
 #    if camera.last_frame > timezone.now() - datetime.timedelta(seconds=settings.LIVE_INTERVAL/1000*2):
 #        import random
 #        return redirect(request.path + '?camera=camera'.format(random.randint(1,99)))
-    if not request.GET.get('disable'):
-        camera.live = True
-        camera.save()
+#    if not request.GET.get('disable'):
+#        camera.live = True
+#        camera.save()
     from django.utils.crypto import get_random_string
     camera_key = get_random_string(length=settings.CAMERA_KEY_LENGTH)
     camera.key = camera_key
@@ -476,9 +476,9 @@ def screencast(request):
 #    if camera.last_frame > timezone.now() - datetime.timedelta(seconds=settings.LIVE_INTERVAL/1000*2):
 #        import random
 #        return redirect(request.path + '?camera=camera'.format(random.randint(1,99)))
-    if not request.GET.get('disable'):
-        camera.live = True
-        camera.save()
+#    if not request.GET.get('disable'):
+#        camera.live = True
+#        camera.save()
     from django.utils.crypto import get_random_string
     camera_key = get_random_string(length=settings.CAMERA_KEY_LENGTH)
     camera.key = camera_key

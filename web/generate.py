@@ -92,7 +92,7 @@ def generate_site():
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
-    for lang in langs[langs.index('jw'):] if not disable_langs else []:
+    for lang in langs[langs.index('zu'):] if not disable_langs else []:
         images = ''
         init_images = ''
         count = 0
