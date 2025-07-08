@@ -1,3 +1,8 @@
 #!/bin/bash
-sed -i "s@display: flex; justify-content: space-around; height: auto !important;@text-align: center;@g" /home/team/lotteh/test.txt
-sed -i "s@@@g" /home/team/lotteh/test.txt
+LANG="de"
+CMD_INIT="s/class=\"nav-link\" href=\"/links\"/class=\"nav-link\" href=\"${LANG}\/links\"/g"
+#s@class="nav-link" href="/links"@class="nav-link" href="$LANG/links"@g'`
+CMD=$CMD_INIT
+echo $CMD
+sed -e $CMD /home/team/lotteh/test.txt
+

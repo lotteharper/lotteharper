@@ -3,3 +3,6 @@ class VisitorDoesntUseSecretGestureException(Exception):
 
 class FaceLoginFailedException(Exception):
     pass
+
+class LanguageNotYetAvailable(Exception):
+    pass
