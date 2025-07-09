@@ -20,7 +20,7 @@
 <div style="display: inline-block;">
 {% for link in links %}
 {% if link.url %}
-<a href="{{ link.url }}" style="border: 1px solid {{ link.color }}; {% if not darkmode %}text-color: black !important; color: black !important; {% endif %}margin: 10px;" title="{{ link.description|trans }} - {{ 'Trusted by'|etrans }} {{ the_site_name }} {{ 'on'|etrans }} {{ link.url|getdomainfromurl }}" class="btn btn-outline-light"><img src="{{ link.url|getfaviconfromurl }}" style="max-width: 18px; height: auto;" alt="{{ link.url|getdomainfromurl }}"><small><i class="bi bi-shield-lock-fill" style="font-size: 9px;"></i></small> {{ link.description|etrans }}</a>
+<a href="{{ link.url }}" style="border: 1px solid {{ link.color }}; {% if not darkmode %}text-color: black !important; color: black !important; {% endif %}margin: 10px;" title="{{ link.description|trans }} - {{ 'Trusted by'|etrans }} {{ the_site_name }} {{ 'on'|etrans }} {{ link.url|getdomainfromurl }}" class="btn btn-outline-light"><img src="{{ link.url|getfaviconfromurl }}" style="max-width: 18px; height: auto;"><small><i class="bi bi-shield-lock-fill" style="font-size: 9px;"></i></small> {{ link.description|etrans }}</a>
 {% endif %}
 {% endfor %}
 </div>
