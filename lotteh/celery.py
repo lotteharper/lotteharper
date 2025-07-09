@@ -238,8 +238,8 @@ def process_live(camera_id, frame_id):
         frame.safe = True
     if not frame.safe and settings.NUDITY_CENSOR:
         op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
-        from security.censor_video import censor_video_nude
-        censor_video_nude(frame.frame.path, op_path, scale=settings.NUDITY_CENSOR_SCALE)
+        from security.censor_video import censor_video_nude, censor_video_nude_fast
+        censor_video_nude_fast(frame.frame.path, op_path, scale=settings.NUDITY_CENSOR_SCALE)
         os.remove(frame.frame.path)
         frame.frame = op_path
         frame.save()
