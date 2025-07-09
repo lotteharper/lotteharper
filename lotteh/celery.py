@@ -232,7 +232,17 @@ def process_live(camera_id, frame_id):
 #    camera.save()
     try:
         frame.safe = not is_nude_fast(frame.still.path) if frame.still and os.path.exists(frame.still.path) else True
-    except: frame.safe = True
+    except:
+        import traceback
+        print(traceback.format_exc())
+        frame.safe = True
+    if not frame.safe and settings.NUDITY_CENSOR:
+        op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
+        from security.censor_video import censor_video_nude
+        censor_video_nude(frame.frame.path, op_path, scale=settings.NUDITY_CENSOR_SCALE)
+        os.remove(frame.frame.path)
+        frame.frame = op_path
+        frame.save()
     if not frame.safe and settings.NUDITY_FILTER: # or not is_safe_image(frame.still.path):
         frame.public = False
         frame.processed = True

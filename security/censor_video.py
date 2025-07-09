@@ -1,4 +1,4 @@
-FREQUENCY = 200
+FREQUENCY = 1
 AVERAGE = 100
 EXTRA = 1
 MIN_TEXT = 4
@@ -12,11 +12,25 @@ def censor_video_all(input_file, output_file, scale=1):
     os.remove(path)
     return output_file
 
+def get_width(img):
+    import cv2
+    h, w, c = img.shape
+    return w
+
+MIN_BC = 30
+
+MIN_BC_NUDE = 60
+
 def censor_video_nude(input_file, output_file, scale=1):
+    from django.conf import settings
+    import cv2, traceback, math
     from nudenet import NudeDetector
     detector = NudeDetector()
 #    print(dets)
     banned_nudity = [
+        "FACE_FEMALE",
+        "FACE_MALE",
+        "BELLY_EXPOSED",
         "FEMALE_GENITALIA_COVERED",
         "BUTTOCKS_EXPOSED",
         "FEMALE_BREAST_EXPOSED",
@@ -29,36 +43,57 @@ def censor_video_nude(input_file, output_file, scale=1):
     ]
     import cv2, pytesseract
     import numpy as np
-    from moviepy import *
-    clip = VideoFileClip(input_file)
+    import moviepy as mp
+    clip = mp.VideoFileClip(input_file)
     vidcap = cv2.VideoCapture(input_file)
     vidcap.set(cv2.CAP_PROP_POS_MSEC, FREQUENCY)
+    vidcap.set(cv2.CAP_PROP_FPS, FREQUENCY)
+    new_fps = vidcap.get(cv2.CAP_PROP_FPS)
+    print(f"Original FPS: {new_fps}")
+    print(FREQUENCY)
     index = 0
+    vs = 42
+    has_frames = True
+    bc = 30
+    count = 0
+    first = False
+    transparent_img = None
+    x1 = 0
+    y1 = 0
+    w = 0
+    h = 0
     while has_frames:
         has_frames, image = vidcap.read()
         if has_frames:
-            dim = (int(image.shape[0] * scale), int(image.shape[1] * scale), image.shape[2])
-            small_image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
-            transparent_img = np.zeros((image.shape[0], image.shape[1], image.shape[2]), dtype=np.uint8)
-            dets = detector.detect(small_image)
-            for det in dets:
-                if not det['class'] in banned_nudity and not settings.BLUR_ALL_NUDE:
-                    continue
-                if not should: continue
-                box = det['box']
-                x1 = int(box[0]/scale - vs)
-                y1 = int(box[1]/scale - vs)
-                x2 = int(box[2]/scale + box[0] + vs)
-                y2 = int(box[3]/scale + box[1] + vs)
-                if x1 < 0: x1 = 0
-                if y1 < 0: y1 = 0
-                if y2 > image.shape[0]: y2 = image.shape[0]
-                if x2 > image.shape[1]: x2 = image.shape[1]
-                part = image[y1:y2, x1:x2]
-                part = cv2.GaussianBlur(part, (bc + 1,bc + 1), bc*2)
-                transparent_imag[y1:y2, x1:x2] = part
-            im = ImageClip(transparent_img, duration=FREQUENCY/1000.0)
-            clip = CompositeVideoClip([clip, im.set_start(index * FREQUENCY).with_duration(FREQUENCY)])
+            print(index)
+            if not first:
+                first = True
+                bc = math.floor(get_width(image)/1000) * 2
+                if bc < MIN_BC: bc = MIN_BC_NUDE
+                vs = math.floor(get_width(image)/1000) * 5
+            if index%10 == 0:
+                dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
+                small_image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+                transparent_img = np.zeros((image.shape[0], image.shape[1], image.shape[2]), dtype=np.uint8)
+                dets = detector.detect(small_image)
+                for det in dets:
+     #               print(det['class'])
+                    if (not det['class'] in banned_nudity) and (not settings.BLUR_ALL_NUDE):
+                        continue
+                    box = det['box']
+    #                print(box)
+                    x1 = int(box[0]/scale - vs)
+                    y1 = int(box[1]/scale - vs)
+                    w = int(box[2]/scale + box[0] + vs*2)
+                    h = int(box[3]/scale + box[1] + vs*2)
+                    if x1 < 0: x1 = 0
+                    if y1 < 0: y1 = 0
+                    if y1+h > image.shape[0]: h-=(y1+h-image.shape[0])
+                    if x1+w > image.shape[1]: w-=(w1+w-image.shape[1])
+            finished = cv2.blur(image[y1:y1+h, x1:x1+w], (AVERAGE, AVERAGE))
+            transparent_img[y1:y1+h, x1:x1+w] = finished
+            im = mp.ImageClip(transparent_img, duration=1.0/FREQUENCY)
+            clip = mp.CompositeVideoClip([clip, im.with_start(index * 1.0/FREQUENCY).with_duration(1.0/FREQUENCY)])
         index = index + 1
     clip.write_videofile(output_path)
 
@@ -66,15 +101,17 @@ def censor_video_nude(input_file, output_file, scale=1):
 def censor_video_text(input_file, output_file, scale=1):
     import cv2, pytesseract
     import numpy as np
-    from moviepy import *
-    clip = VideoFileClip(input_file)
+    import moviepy as mp
+    clip = mp.VideoFileClip(input_file)
     vidcap = cv2.VideoCapture(input_file)
-    vidcap.set(cv2.CAP_PROP_POS_MSEC, FREQUENCY)
+    vidcap.set(cv2.CAP_PROP_FPS, FREQUENCY)
+#    vidcap.set(cv2.CAP_PROP_POS_MSEC, FREQUENCY)
     index = 0
+    has_frames = True
     while has_frames:
         has_frames, image = vidcap.read()
         if has_frames:
-            dim = (int(image.shape[0] * scale), int(image.shape[1] * scale), image.shape[2])
+            dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
             small_image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
             transparent_img = np.zeros((image.shape[0], image.shape[1], image.shape[2]), dtype=np.uint8)
             data = pytesseract.image_to_data(small_image, output_type='dict')
@@ -96,7 +133,8 @@ def censor_video_text(input_file, output_file, scale=1):
                 if x + w > image.shape[1]: x = image.shape[1]
                 img = cv2.blur(image[y:y+h, x:x+w], (AVERAGE, AVERAGE))
                 transparent_img[y:y+h, x:x+w] = img
-                im = ImageClip(transparent_img, duration=FREQUENCY/1000.0)
-                clip = CompositeVideoClip([clip, im.set_start(index * FREQUENCY).with_duration(FREQUENCY)])
+                im = mp.ImageClip(transparent_img, duration=FREQUENCY/1000.0)
+                clip = mp.CompositeVideoClip([clip, im.with_start(index * FREQUENCY).with_duration(FREQUENCY)])
         index = index + 1
     clip.write_videofile(output_path)
+

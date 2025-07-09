@@ -876,6 +876,10 @@ MEDIA_URL_CACHE_TIMEOUT = 60 * 60 * 24 * 3 # Cache timeout in seconds
 # Require account verification for webauthn (custom setting defined in scripts/webauth_views.py for patch to the venv
 WEBAUTHN_USER_VERIFICATION_REQUIRED = True
 
+# Censor nudity in video
+NUDITY_CENSOR = False
+NUDITY_CENSOR_SCALE = 1
+
 # Sentry
 import sentry_sdk
 sentry_sdk.init(
