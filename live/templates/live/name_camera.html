@@ -14,11 +14,12 @@
 {% if not request.GET.hidenavbar %}
 <hr style="color: blue;">
 {% blocktrans %}
+<p><i>Use the buttons below to record media to the site with your webcam.</i></p>
 <div style="display: flex; justify-content: space-around;">
-<a href="{% url 'live:golivevideo' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Go Live'|etrans }}</a>
-<a href="{% url 'live:screencast' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Screencast'|etrans }}</a>
-<a href="{% url 'live:livevideo' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'Live Feed'|etrans }}</a>
-<a href="{% url 'recordings:recordings' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'See Recordings'|etrans }}</a>
+<a href="{% url 'live:golivevideo' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Record webcam'|etrans }}</a>
+<a href="{% url 'live:screencast' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Record screencast'|etrans }}</a>
+<a href="{% url 'live:livevideo' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'Live video'|etrans }}</a>
+<a href="{% url 'recordings:recordings' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'See recordings'|etrans }}</a>
 {% endblocktrans %}
 </div>
 <hr style="color: red;">

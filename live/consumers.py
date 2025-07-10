@@ -113,9 +113,9 @@ def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
         recording.last_frame = timestamp
         recording.save()
 #        print('recording')
-        process_recording.apply_async([recording.id, embed_logo], countdown=(settings.LIVE_INTERVAL/1000) * 16)
+        process_recording.apply_async([recording.id, embed_logo], countdown=(settings.LIVE_INTERVAL/1000) * 6)
 #    else: print('Not saving frame')
-    process_live.apply_async([camera.id, frame.id], countdown=(settings.LIVE_INTERVAL/1000) * 12)
+    process_live.apply_async([camera.id, frame.id], countdown=(settings.LIVE_INTERVAL/1000) * 4)
     return frame.confirmation_id
 
 @sync_to_async

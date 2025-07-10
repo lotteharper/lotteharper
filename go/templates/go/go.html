@@ -47,16 +47,21 @@
 <hr style="background-color: orange;">
 <b>Live Video</b>
 <div style="display: flex; justify-content: space-around;">
-	<a href="{% url 'live:golivevideo' %}?camera=private" class="btn btn-outline-success" title="Go live"><i class="bi bi-camera-video-fill"></i> Go live</a>
-	<a href="{% url 'live:name-camera' %}?camera=private" class="btn btn-outline-secondary" title="Live remote control"><i class="bi bi-toggle-on"></i> Live Remote</a>
-        <a class= "btn btn-outline-danger" href="{% url 'recordings:recordings' request.user.profile.name %}?all=true"><i class="bi bi-person-video2"></i> Video</a>
+	<a href="{% url 'live:golivevideo' %}?camera=private" class="btn btn-outline-success" title="Record webcam"><i class="bi bi-camera-video-fill"></i> Record webcam</a>
+	<a href="{% url 'live:screencast' %}?camera=private" class="btn btn-outline-success" title="Record screencast"><i class="bi bi-camera-video-fill"></i> Record screencast</a>
+	<a href="{% url 'live:name-camera' %}?camera=private" class="btn btn-outline-secondary" title="Webcam remote control"><i class="bi bi-toggle-on"></i> Live Remote</a>
 </div>
 <div style="display: flex; justify-content: space-around;">
 	<a href="{% url 'live:choose-live-camera' %}" class="btn btn-outline-success" title="Go live"><i class="bi bi-camera-video-fill"></i> Live Camera</a>
 	<a href="{% url 'live:choose-camera' %}" class="btn btn-outline-secondary" title="Live remote control"><i class="bi bi-toggle-on"></i> Camera Settings</a>
 	<a href="{% url 'live:name-camera' %}?camera=new" class="btn btn-outline-info" title="New live camera"><i class="bi bi-node-plus-fill"></i> New Camera</a>
-        <a class="btn btn-outline-info" href="{% url 'users:youtube' %}"><i class="bi bi-youtube"></i> Youtube Auth</a>
 </div>
+<div style="display: flex; justify-content: space-around;">
+<a class="btn btn-outline-info" href="{% url 'users:youtube' %}" title="Authenticate with YouTube to upload video"><i class="bi bi-youtube"></i> Youtube Auth</a>
+    <a class="btn btn-outline-danger" href="{% url 'recordings:recordings' request.user.profile.name %}?all=true" title="All your recordings"><i class="bi bi-person-video2"></i> Video</a>
+</div>
+<hr style="background-color: orange;">
+<b>Vibrator and show schedule</b>
 <div>
 <a class="btn btn-outline-dark pink-borders" href="{% url 'live:shows' %}"><i class="bi bi-calendar-fill"></i> Schedule</a>
 <a class="btn btn-outline-secondary" href="{% url 'vibe:vibe' %}" title="Use a massager"  style="text-color: black;"><i class="bi bi-heart-pulse-fill"></i> Vibe</a>

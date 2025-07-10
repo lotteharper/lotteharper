@@ -435,6 +435,9 @@ ETHEREUM_WALLET = config['ETHEREUM_WALLET']
 # Vivokey cryptobionics JWT API key
 VIVOKEY_KEY = config['VIVOKEY_KEY']
 
+# YouTube Data API v3 Key
+YOUTUBE_KEY = config['YOUTUBE_KEY']
+
 # Image host key
 IMAGE_HOST_KEY = keys['IMAGE_HOST_KEY']
 

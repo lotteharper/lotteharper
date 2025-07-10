@@ -38,11 +38,11 @@ def recordings(request, username):
     recordings = None
     private_recordings = None
     if model == request.user and request.GET.get('all'):
-        recordings = VideoRecording.objects.filter(user__profile__name=username, public=True, processed=True, safe=not document_scanned(request.user)).order_by('-last_frame')
+        recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, safe=not document_scanned(request.user)).order_by('-last_frame')
     elif model == request.user and request.GET.get('camera'):
-        recordings = VideoRecording.objects.filter(user__profile__name=username, public=True, processed=True, camera=request.GET.get('camera'), safe=not document_scanned(request.user)).order_by('-last_frame')
+        recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, camera=request.GET.get('camera'), safe=not document_scanned(request.user)).order_by('-last_frame')
     else:
-        recordings = VideoRecording.objects.filter(user__profile__name=username, public=True, processed=True, camera='private', safe=not document_scanned(request.user)).order_by('-last_frame')
+        recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, camera='private', safe=not document_scanned(request.user)).order_by('-last_frame')
     private_recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, recipient=request.user, safe=not document_scanned(request.user)).order_by('-last_frame')
     recordings = list(chain(private_recordings, recordings))
     p = Paginator(recordings, 10)
@@ -83,42 +83,10 @@ def recording(request, uuid):
     from security.security import fraud_detect
     from itertools import chain
     recordings = VideoRecording.objects.filter(uuid=uuid, processed=True)
-    private_recordings = VideoRecording.objects.filter(uuid=uuid, processed=True, recipient=request.user, safe=not document_scanned(request.user))
+    private_recordings = VideoRecording.objects.filter(uuid=uuid, processed=True, recipient=request.user)
     recording = list(chain(private_recordings, recordings))[0]
-    if not recording.public and recording.user != request.user:
-        raise PermissionDenied()
     if not recording and uuid == 'last':
         recording = VideoRecording.objects.filter(user=request.user).last()
-    model = recording.user
-    if request.user != model and recording.camera != 'private':
-        messages.warning(request, 'You need to follow {} before you can see their interactive feed.'.format(username))
-        return redirect(reverse('feed:follow', kwargs={'username': username}))
-    if (not model in request.user.profile.subscriptions.all()) and not model == request.user and not request.user.profile.vendor:
-        messages.warning(request, 'You need to follow {} before you can see their interactive feed.'.format(username))
-        return redirect(reverse('feed:follow', kwargs={'username': username}))
-    choices = None
-    if request.user == recording.user:
-        if not recording.file and not recording.file_processed:
-            path = os.path.join(settings.BASE_DIR, 'media', get_file_path(None, 'file.webm'))
-            from live.concat import concat
-            recording.file = concat(recording, path)
-            recording.save()
-        try:
-            choices, created = Choices.objects.get_or_create(user=request.user, interactive=recording.interactive)
-        except:
-            choices = None
-    if request.method == 'POST' and request.user == recording.user:
-        interactive_form = RecordingInteractiveForm(request.POST, instance=recording)
-        recording = interactive_form.save()
-        if recording.interactive != '':
-            choices, created = Choices.objects.get_or_create(user=request.user, interactive=recording.interactive)
-        choices_form = ChoicesCreateForm(request.POST, instance=choices)
-        choices_form.save()
-        messages.success(request, 'You have updated this recording\'s interactive to \"{}\".'.format(interactive_form.instance.interactive))
-    interactive_form = RecordingInteractiveForm(instance=recording)
-    choices_form = ChoicesCreateForm(instance=choices)
-    if request.user == recording.user:
-        return render(request, 'recordings/recording.html', {'title': 'Recording', 'recording': recording, 'interactive_form': interactive_form, 'choices_form': choices_form})
     return render(request, 'recordings/recording.html', {'title': 'Recording', 'recording': recording})
 
 @login_required

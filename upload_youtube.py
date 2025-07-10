@@ -21,7 +21,8 @@ for recording in VideoRecording.objects.filter(processed=True, uploaded=False).o
     camera = cameras.first()
     thumbnail = None
     from live.duration import get_duration
-    if camera.upload and recording.file and get_duration(recording.file.path) > settings.LIVE_INTERVAL/1000 * 1.5:
+    # camera.upload and
+    if recording.file and get_duration(recording.file.path) > settings.LIVE_INTERVAL/1000 * 1.5:
         try:
             if not (recording.file and os.path.exists(recording.file.path)):
                 print('Getting file from bucket for upload')
@@ -37,6 +38,7 @@ for recording in VideoRecording.objects.filter(processed=True, uploaded=False).o
         try:
             upload_youtube(
                 camera.user,
+                recording,
                 recording.file.path,
                 profanity.censor(camera.title[:70]),
                 profanity.censor(camera.description) + ' - ' + profanity.censor(recording.transcript[:4000]) +  ' - ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'),

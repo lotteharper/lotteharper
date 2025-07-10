@@ -15,19 +15,16 @@
 {% if recording.camera != 'private' %}
 <a style="float: right;" href="{% url 'recordings:recording-delete' recording.id %}" class="btn btn-sm btn-outline-danger" title="Delete this recording">Delete</a>
 {% endif %}
-{% if request.user == recording.user and recording.camera == 'private' %}
-<form method="POST">
-{% csrf_token %}
-{{ interactive_form|crispy }}
-<p><i style="color: green";>+</i> <a href="{% url 'interactive:option-add' %}" target="popup" onclick="window.open('{% url 'interactive:option-add' %}','popup','width=600,height=500'); return false;">Add more options</a></p>
-{{ choices_form|crispy }}
-<button type="submit" class="btn btn-outline-success">Submit</button>
-</form>
-{% endif %}
 <div id="videoDiv" class="nopadding" style="overflow: hidden; width: 100%; background-position: center; background-size: cover;">
+{% if recording.youtube_embed %}
+{% autoescape off %}
+{{ recording.youtube_embed }}
+{% endautoescape %}
+{% else %}
 <video id="video" preload="auto" width="100%" controls autoplay>
 	<source src="{{ recording.get_file_url }}{% if request.GET.index %}#t={{ request.GET.index|recordingindex }}{% endif %}" type="video/webm">
 </video>
+{% endif %}
 </div>
 <p><b>Transcript:</b> {{ recording.transcript }}</p>
 <canvas id="canvas" width="100" height="100" style="position: absolute; display: none; visibility: hidden;">

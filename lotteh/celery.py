@@ -434,6 +434,7 @@ def process_recording(id, embed_logo):
                 from recordings.youtube import upload_youtube
                 upload_youtube(
                     camera.user,
+                    recording,
                     recording.file.path,
                     profanity.censor(camera.title[:70]),
                     profanity.censor(camera.description) + ' - ' + profanity.censor(recording.transcript[:4000]) +  ' - ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'),

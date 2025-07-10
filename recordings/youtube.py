@@ -4,6 +4,16 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
+def get_youtube_embed(youtube_id):
+    from django.conf import settings
+    import requests, json
+    response = requests.get('https://www.googleapis.com/youtube/v3/videos?part=player&id={}&key={}'.format(youtube_id, settings.YOUTUBE_KEY))
+    j = json.loads(response.text)
+    e = j['items'][0]['player']['embedHtml']
+    em = e.split('src', 1)[1]
+    embed = '<iframe width="100%" style="aspect-ratio: 16 / 9;" src' + em
+    return embed
+
 def load_credentials(filename):
     from django.conf import settings
     import os, pickle
@@ -44,7 +54,7 @@ def save_credentials(creds, filename):
     f.close()
     return
 
-def upload_youtube(user, file_path, title, description, tags, category='22', privacy_status='public', thumbnail=None, age_restricted=False):
+def upload_youtube(user, recording, file_path, title, description, tags, category='22', privacy_status='public', thumbnail=None, age_restricted=False):
     # Video options
     from django.urls import reverse
     from django.conf import settings
@@ -193,6 +203,12 @@ def upload_youtube(user, file_path, title, description, tags, category='22', pri
           status, response = insert_request.next_chunk()
           if response is not None:
             if 'id' in response:
+              print('Successful upload.')
+              print(response)
+              id = response['id']
+              recording.youtube_id = id
+              recording.youtube_embed = get_youtube_embed(id)
+              recording.save()
               pass
             else:
               exit("The upload failed with an unexpected response: %s" % response)

@@ -2,11 +2,10 @@ from django import forms
 import datetime
 from django.conf import settings
 from .models import CryptoTradingProfile, Bot
-
-TRADING_CRYPTO = settings.CRYPTO_CURRENCIES
+from .currencies import CRYPTO_CURRENCIES
 
 CHOICES = list()
-for choice in TRADING_CRYPTO:
+for choice in CRYPTO_CURRENCIES:
     CHOICES.append((choice, choice))
 
 class NewBotForm(forms.Form):

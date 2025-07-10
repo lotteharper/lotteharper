@@ -40,9 +40,9 @@ def is_nude(image_path):
     detector = NudeDetector()
     dets = detector.detect(image_path)
     banned_nudity = [
-        "FACE_FEMALE",
-        "FACE_MALE",
-        "BELLY_EXPOSED",
+#        "FACE_FEMALE",
+#        "FACE_MALE",
+#        "BELLY_EXPOSED",
         "FEMALE_GENITALIA_COVERED",
         "BUTTOCKS_EXPOSED",
         "FEMALE_BREAST_EXPOSED",

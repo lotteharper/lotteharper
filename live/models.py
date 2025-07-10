@@ -323,6 +323,8 @@ class VideoRecording(models.Model):
     uuid = models.CharField(max_length=100, default=uuid4)
     camera = models.CharField(max_length=100, default=DEFAULT_CAMERA_NAME)
     camera_id = models.CharField(max_length=21, default='', null=True, blank=True)
+    youtube_id = models.CharField(max_length=255, default='', null=True, blank=True)
+    youtube_embed = models.TextField(default='', null=True, blank=True)
     last_frame = models.DateTimeField(default=timezone.now)
     compressed = models.BooleanField(default=False)
     public = models.BooleanField(default=True)
