@@ -145,7 +145,7 @@ class VideoFrame(models.Model):
         if self.still_bucket: return self.still_bucket.url
         from live.still import get_still
         if not self.still or not os.path.exists(self.still.path):
-            path = os.path.join(settings.BASE_DIR, 'media', get_still_path(self, self.frame.name + '.png' if camera.mimetype.startswith('mp4') else '.jpg'))
+            path = os.path.join(settings.BASE_DIR, 'media', get_still_path(self, self.frame.name + '.png' if str(self.frame.path).endswith('mp4') else '.jpg'))
             get_still(self.frame.path, path)
             self.still = path
             from feed.nude import is_nude_fast
