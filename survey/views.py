@@ -81,6 +81,8 @@ def update(request, id):
         form = UpdateSurveyForm(request.POST, surv=None)
         if form.is_valid():
             surv = form.save()
+            q = surv.question
+            Survey.objects.filter(question=surv.question).exclude(id__in=[surv.id]).delete()
             messages.success(request, 'This survey was updated.')
             from django.urls import reverse
             return redirect(reverse('survey:update', kwargs={'id': surv.id}))

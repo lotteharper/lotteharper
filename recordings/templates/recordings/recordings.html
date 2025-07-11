@@ -29,6 +29,9 @@
 {% if frame.still_thumbnail_bucket %}<img class="frame" data-name="{{ forloop.counter }}" src="{{ frame.still_thumbnail_bucket.url }}" width="150px" alt="Frame {{ forloop.counter|nts }}" data-url="{% url 'recordings:recording' recording.uuid %}" data-index="{{ forloop.counter }}"></img>{% endif %}
 {% endfor %}
 </div>
+{% autoescape off %}
+{{ recording.youtube_embed }}
+{% endautoescape %}
 <p><b>Transcript:</b> {{ recording.transcript }}</p>
 <hr style="background-color: blue;">
 {% endfor %}
