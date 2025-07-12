@@ -99,7 +99,7 @@ class NameCameraForm(forms.ModelForm):
 
     class Meta:
         model = VideoCamera
-        fields = ('name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording', 'upload', 'category', 'privacy_status', 'title', 'description', 'tags')
+        fields = ('upload', 'title', 'category', 'privacy_status', 'description', 'tags', 'name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
 
 # 'vad_mode',
 
