@@ -837,7 +837,7 @@ STATEMENT_DESCRIPTOR = 'LOTTEH.COM'
 EMAIL_ICON_URL = '/email/static/logo.png'
 
 # Session update query interval
-SESSION_UPDATE_SECONDS = 5
+SESSION_UPDATE_SECONDS = 10
 
 # Minimum crypto payment percentage
 MIN_CRYPTO_PERCENTAGE = 90

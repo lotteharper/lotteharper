@@ -174,9 +174,11 @@ async def run_remote(self):
         text_data = await get_camera_status(self.camera_user, self.camera_name)
         if self.camera_user in remotes and self.camera_name in remotes[self.camera_user]:
             for sock in remotes[self.camera_user][self.camera_name]:
-                if sock != self: await sock.send(text_data=text_data)
+                if sock != self:
+                    await sock.send(text_data=text_data)
+                    asyncio.sleep(1)
 #                print(text_data)
-        asyncio.sleep(3)
+        asyncio.sleep(2)
 
 class RemoteConsumer(AsyncWebsocketConsumer):
     camera_user = None
