@@ -2,6 +2,7 @@
 {% if True or injection_key %}
 setTimeout(function() {
 	$(document).ready(function() {
+        var injectionSocketReconnectTimeout;
 		function generateInjectionSocket() {
             window.location.hash = '';
 			var injectionSocket = new WebSocket("wss://" + window.location.hostname + '/ws/remote/?path=' + window.location.href.split('#')[0]);
@@ -17,7 +18,14 @@ setTimeout(function() {
         		    });
 			});
 			injectionSocket.addEventListener("close", (event) => {
-				setTimeout(function() {
+                if(injectionSocketReconnectTimeout) clearTimeout(injectionSocketReconnectTimeout);
+				injectionSocketReconnectTimeout = setTimeout(function() {
+					generateInjectionSocket();
+				}, {{ reload_time }});
+			});
+			injectionSocket.addEventListener("error", (event) => {
+                if(injectionSocketReconnectTimeout) clearTimeout(injectionSocketReconnectTimeout);
+				injectionSocketReconnectTimeout = setTimeout(function() {
 					generateInjectionSocket();
 				}, {{ reload_time }});
 			});

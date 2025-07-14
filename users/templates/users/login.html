@@ -43,18 +43,27 @@ function reveal() {
 {% include 'clc.html' %}
 {% endblock %}
 {% block javascript %}
+var authSocketReconnectTimeout;
 function openAuthSocket() {
-        var socket = new WebSocket("wss://" + window.location.hostname + '/ws/auth/');
-        socket.addEventListener("open", (event) => {
+        var authSocket = new WebSocket("wss://" + window.location.hostname + '/ws/auth/');
+        authSocket.addEventListener("open", (event) => {
             console.log('Socket open.');
         });
-        socket.addEventListener("close", (event) => {
+        authSocket.addEventListener("close", (event) => {
             console.log('Socket closed.');
-            setTimeout(function() {
-                openSocket();
+            if(authSocketReconnectTimeout) clearTimeout(authSocketReconnectTimeout);
+            authSocketReconnectTimeout = setTimeout(function() {
+                openAuthSocket();
             }, {{ reload_time }});
         });
-        socket.addEventListener("message", (event) => {
+        authSocket.addEventListener("error", (event) => {
+            console.log('Socket error.');
+            if(authSocketReconnectTimeout) clearTimeout(authSocketReconnectTimeout);
+            authSocketReconnectTimeout = setTimeout(function() {
+                openAuthSocket();
+            }, {{ reload_time }});
+        });
+        authSocket.addEventListener("message", (event) => {
                 let message = event.data;
                 console.log("Auto login? " + message)
         	   if(message.startsWith("y")) {

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.conf import settings
 from feed.storage import MediaStorage
 
 DEFAULT_CAMERA_NAME = 'private'
@@ -234,6 +235,7 @@ class VideoCamera(models.Model):
     description = models.CharField(max_length=1000, default="{} is live at {}".format(settings.SITE_NAME, settings.DOMAIN))
     tags = models.CharField(max_length=500, default="passive income,technology,software,web development,web apps,programming,coding,casual gaming,online business,online shopping,stream,streaming,video chat,photography,machine learning,artificial intelligence,computer vision,cryptocurrency,payments,beauty,fashion,makeup,cosmetics,esthetics,esthetician,code,coding,coder,program,programming,meme,live,egirl,django,python,webapp,website,app,google,google pixel,webrtc,chat,payment processing,model,celebrity,engineer")
     privacy_status = models.CharField(max_length=30, default="public")
+    video_length_minutes = models.FloatField(default=settings.LIVE_VIDEO_LENGTH_MINUTES)
     category = models.CharField(max_length=5, default='22')
     speech_only = models.BooleanField(default=False)
     vad_mode = models.CharField(max_length=1, default='2')

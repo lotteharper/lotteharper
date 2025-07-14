@@ -91,7 +91,7 @@ def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
     recording = None
     if camera.recording and not is_frame_still:
         show = Show.objects.filter(start__lte=timezone.now() + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).first()
-        recordings = VideoRecording.objects.filter(user=camera.user, camera=camera.name, processing=False, camera_id=videouid).order_by('-last_frame')
+        recordings = VideoRecording.objects.filter(user=camera.user, camera=camera.name, processing=False, camera_id=videouid, last_frame__gte=timezone.now()-datetime.timedelta(minutes=camera.video_length_minutes)).order_by('-last_frame')
 # , public=False if Show.objects.filter(start__lte=timestamp + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).count() > 0 else True, recipient=show.user if show else None
         if recordings.count() == 0:
             recording = VideoRecording.objects.create(user=camera.user, camera=camera.name, last_frame=timestamp, camera_id=videouid)
@@ -99,7 +99,7 @@ def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
         else:
             recording = recordings.first()
 #, public=False if Show.objects.filter(start__lte=timezone.now() + datetime.timedelta(minutes=settings.LIVE_SHOW_LENGTH_MINUTES), start__gte=timezone.now()).count() > 0 else True, recipient=show.user if show else None
-        if recording.last_frame < timezone.now() - datetime.timedelta(seconds=int(settings.LIVE_INTERVAL/1000) * 5) or (recording.frames.order_by('time_captured').first() and ((recording.last_frame - recording.frames.order_by('time_captured').first().time_captured).total_seconds() > settings.RECORDING_LENGTH_SECONDS)) or (camera.short_mode and (recording.frames.order_by('time_captured').first() and ((recording.last_frame - recording.frames.order_by('time_captured').first().time_captured).total_seconds() > settings.LIVE_SHORT_SECONDS))):
+        if recording.last_frame < timezone.now() - datetime.timedelta(seconds=int(settings.LIVE_INTERVAL/1000) * 5) or (recording.frames.order_by('time_captured').first() and ((recording.last_frame - recording.frames.order_by('time_captured').first().time_captured).total_seconds() > camera.video_length_minutes * 60.0)) or (camera.short_mode and (recording.frames.order_by('time_captured').first() and ((recording.last_frame - recording.frames.order_by('time_captured').first().time_captured).total_seconds() > settings.LIVE_SHORT_SECONDS))):
             recording = VideoRecording.objects.create(user=camera.user, camera=camera.name, last_frame=timestamp, camera_id=videouid)
             recording.save()
     if is_frame_still or (not camera.recording):

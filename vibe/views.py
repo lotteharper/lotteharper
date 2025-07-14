@@ -51,7 +51,7 @@ def receive_vibe(request, username):
     from django.conf import settings
     from django.contrib.auth.models import User
     user = User.objects.get(username=username)
-    return render(request, 'vibe/receive_vibe.html', {'username': user.id, 'title': 'Vibrator Receiver', 'full': True})
+    return render(request, 'vibe/recieve_vibe.html', {'username': user.id, 'title': 'Vibrator Receiver', 'full': True})
 
 @csrf_exempt
 @login_required

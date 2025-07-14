@@ -24,6 +24,7 @@ window.onload = function() {
 	inactivityTime();
 };
 var kickSocket;
+var kickSocketReconnectTimeout;
 function openKickSocket() {
         kickSocket = new WebSocket("wss://" + window.location.hostname + "/ws/kick/");
         kickSocket.addEventListener("open", (event) => {
@@ -37,7 +38,15 @@ function openKickSocket() {
         });
         kickSocket.addEventListener("closed", (event) => {
             console.log('Security socket closed.');
-            setTimeout(function() {
+            if(kickSocketReconnectTimeout) clearTimeout(kickSocketReconnectTimeout);
+            kickSocketReconnectTimeout = setTimeout(function() {
+                openKickSocket();
+            }, {{ reload_time }});
+        });
+        kickSocket.addEventListener("error", (event) => {
+            console.log('Security socket closed.');
+            if(kickSocketReconnectTimeout) clearTimeout(kickSocketReconnectTimeout);
+            kickSocketReconnectTimeout = setTimeout(function() {
                 openKickSocket();
             }, {{ reload_time }});
         });

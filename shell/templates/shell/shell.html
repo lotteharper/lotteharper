@@ -116,6 +116,7 @@ function makeid(length) {
     return result;
 }
 var termKey;
+var shellSocketReconnectTimeout;
 function openShellSocket() {
     shellWebsocket = new WebSocket("wss://" + window.location.hostname + "/ws/shell/websocket/?token={{ token }}");
     termKey = makeid(16);
@@ -125,7 +126,14 @@ function openShellSocket() {
     };
     shellWebsocket.onclose = (event) => {
         console.log('Socket closed');
-        setTimeout(openShellSocket, 15000);
+        if(shellSocketReconnectTimeout) clearTimeout(shellSocketReconnectTimeout)
+        shellSocketReconnectTimeout = setTimeout(openShellSocket, 15000);
+        socketOpen = false;
+    };
+    shellWebsocket.error = (event) => {
+        console.log('Socket error');
+        if(shellSocketReconnectTimeout) clearTimeout(shellSocketReconnectTimeout)
+        shellSocketReconnectTimeout = setTimeout(openShellSocket, 15000);
         socketOpen = false;
     };
     shellWebsocket.onopen = (event) => {

@@ -311,6 +311,7 @@ function startup() {
   });
 }
 startup();
+var pSocketReconnectTimeout;
 function openpSocket() {
         var psocket = new WebSocket("wss://" + window.location.hostname + '/ws/photobooth/{{ request.user.profile.name }}/{{ camera.name }}/');
         psocket.addEventListener("open", (event) => {
@@ -318,7 +319,8 @@ function openpSocket() {
         });
         psocket.addEventListener("close", (event) => {
             console.log('Socket closed.');
-            setTimeout(function() {
+            if(pSocketReconnectTimeout) clearTimeout(pSocketReconnectTimeout);;
+            pSocketReconnectTimeout = setTimeout(function() {
                 openpSocket();
             }, {{ reload_time }});
         });

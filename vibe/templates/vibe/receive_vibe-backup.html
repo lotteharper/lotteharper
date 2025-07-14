@@ -132,20 +132,28 @@ const scale = (fromRange, toRange) => {
     circle3.x = stage.canvas.width * 0.5;
     circle3.y = stage.canvas.height * heightFactor * 0.5;
     stage.addChild(circle3);
-function openSocket() {
-    var socket = new WebSocket("wss://" + window.location.hostname + '/ws/vibe/remote/receive/{{ username }}/');
-	socket.addEventListener("open", (event) => {
+
+var vibeSocketReconnectTimeout;
+function openVibeSocket() {
+    var vibeSocket = new WebSocket("wss://" + window.location.hostname + '/ws/vibe/remote/receive/{{ username }}/');
+	vibeSocket.addEventListener("open", (event) => {
 		console.log("Socket opened.");
 	});
-	socket.addEventListener("close", (event) => {
+	vibeSocket.addEventListener("close", (event) => {
 		console.log("Socket closed.");
-		setTimeout(function() { openSocket(); }, {{ reload_time }});
+		if(vibeSocketReconnectTimeout) clearTimeout(vibeSocketReconnectTimeout);
+        vibeSocketReconnectTimeout = setTimeout(function() { openVibeSocket(); }, {{ reload_time }});
 	});
-	socket.addEventListener("message", (event) => {
+	vibeSocket.addEventListener("error", (event) => {
+		console.log("Socket error.");
+		if(vibeSocketReconnectTimeout) clearTimeout(vibeSocketReconnectTimeout);
+        vibeSocketReconnectTimeout = setTimeout(function() { openVibeSocket(); }, {{ reload_time }});
+	});
+	vibeSocket.addEventListener("message", (event) => {
 		input = event.data;
 	});
 }
-openSocket();
+openVibeSocket();
     stage.addChild(circle);
     console.log("Initialized")
     stage.update();

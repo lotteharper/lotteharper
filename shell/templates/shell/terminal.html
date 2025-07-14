@@ -442,6 +442,7 @@ function makeid(length) {
 }
 var termKey;
 var socketOpen = false;
+var termSocketReconnectTimeout;
 function openTermSocket() {
     term.write('Opening websocket...\r\n');
     termKey = makeid(16);
@@ -451,7 +452,15 @@ function openTermSocket() {
 	};
 	termWebsocket.onclose = (event) => {
 		console.log('Socket closed');
-		setTimeout(openTermSocket, 15000);
+        if(termSocketReconnectTimeout) clearTimeout(termSocketReconnectTimeout);
+		termSocketReconnectTimeout = setTimeout(openTermSocket, 15000);
+        term.write('Socket disconnected.\r\n');
+		socketOpen = false;
+	};
+	termWebsocket.onerror = (event) => {
+		console.log('Socket error');
+        if(termSocketReconnectTimeout) clearTimeout(termSocketReconnectTimeout);
+		termSocketReconnectTimeout = setTimeout(openTermSocket, 15000);
         term.write('Socket disconnected.\r\n');
 		socketOpen = false;
 	};

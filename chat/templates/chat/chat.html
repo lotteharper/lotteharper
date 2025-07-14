@@ -44,24 +44,27 @@ messageForm.addEventListener("submit", function(e) {
 });
 {% if request.GET.page == None or request.GET.page == '1' %}
 var msgs = document.getElementById("user-messages");
-function openSocket() {
-        var socket = new WebSocket("wss://" + window.location.hostname + '/ws/chat/text/{{ profile.name }}/');
-        socket.addEventListener("open", (event) => {
+var chatSocket;
+var chatSocketReconnectTimeout;
+function openChatSocket() {
+        chatSocket = new WebSocket("wss://" + window.location.hostname + '/ws/chat/text/{{ profile.name }}/');
+        chatSocket.addEventListener("open", (event) => {
             console.log('Socket open.');
         });
-        socket.addEventListener("close", (event) => {
+        chatSocket.addEventListener("close", (event) => {
             console.log('Socket closed.');
-            setTimeout(function() {
-                openSocket();
+            if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+            chatSocketReconnectTimeout = setTimeout(function() {
+                openChatSocket();
             }, {{ reload_time }});
         });
-        socket.addEventListener("message", (event) => {
+        chatSocket.addEventListener("message", (event) => {
     	    if(msgs.innerHTML != event.data) {
                 notify();
 	            msgs.innerHTML = event.data;
             }
         });
 }
-openSocket();
+openChatSocket();
 {% endif %}
 {% endblock %}
