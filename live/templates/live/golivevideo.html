@@ -128,6 +128,13 @@ function openMediaSocket() {
                         openMediaSocket();
                 }, {{ reload_time }});
         });
+        mediaSocket.addEventListener("error", (event) => {
+                console.log('Socket error.');
+                if(mediaSocketReconnectTimeout) clearTimeout(mediaSocketReconnectTimeout);
+                mediaSocketReconnectTimeout = setTimeout(function() {
+                        openMediaSocket();
+                }, {{ reload_time }});
+        });
         mediaSocket.addEventListener("message", (event) => {
         return;
                 if(unconfirmedFrames.includes(event.data)) {
@@ -399,6 +406,7 @@ function handleDataAvailable(event) {
     download();
   } else {}
 }
+var remoteSocketReconnectTimeout;
 var cameraon = false;
 function openRemoteSocket() {
         var remoteSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
@@ -407,7 +415,15 @@ function openRemoteSocket() {
         });
         remoteSocket.addEventListener("close", (event) => {
             console.log('Remote socket closed.');
-            setTimeout(function() {
+            if(remoteSocketReconnectTimeout) clearTimeout(remoteSocketReconnectTimeout);
+            remoteSocketReconnectTimeout = setTimeout(function() {
+                openRemoteSocket();
+            }, {{ reload_time }});
+        });
+        remoteSocket.addEventListener("error", (event) => {
+            console.log('Remote socket error.');
+            if(remoteSocketReconnectTimeout) clearTimeout(remoteSocketReconnectTimeout);
+            remoteSocketReconnectTimeout = setTimeout(function() {
                 openRemoteSocket();
             }, {{ reload_time }});
         });
