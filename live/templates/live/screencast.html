@@ -51,11 +51,7 @@ video {
 {% include 'live/go_remote.html' %}
 {% endif %}
 {% include 'live/mute_remote.html' %}
-{% if request.path == '/live/go/' %}
-<a href="{% url 'live:screencast' %}?camera={{ request.GET.camera }}" title="{{ 'Switch to screencasting mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video3"></i></a>
-{% else %}
-<a href="{% url 'live:golivevideo' %}{% if request.GET.camera %}?camera={{ request.GET.camera }}{% endif %}" title="{{ 'Switch to video mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video3"></i></a>
-{% endif %}
+<a href="{% url 'live:golivevideo' %}{% if request.GET.camera %}?camera={{ request.GET.camera }}{% endif %}" title="{{ 'Switch to video mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video"></i></a>
 <a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
 <button onclick="window.location.reload();" title="{{ 'Reload the page to stop the stream and create a new video'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-clockwise"></i></button>
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
