@@ -37,13 +37,15 @@ def recordings(request, username):
         page = int(request.GET.get('page', ''))
     recordings = None
     private_recordings = None
+    from django.db.models import Count
+    recordings_annotated = VideoRecording.objects.annotate(num_frames=Count('frames'))
     if model == request.user and request.GET.get('all'):
-        recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, safe=not document_scanned(request.user)).order_by('-last_frame')
+        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     elif model == request.user and request.GET.get('camera'):
-        recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, camera=request.GET.get('camera'), safe=not document_scanned(request.user)).order_by('-last_frame')
+        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera=request.GET.get('camera'), safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     else:
-        recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, camera='private', safe=not document_scanned(request.user)).order_by('-last_frame')
-    private_recordings = VideoRecording.objects.filter(user__profile__name=username, processed=True, recipient=request.user, safe=not document_scanned(request.user)).order_by('-last_frame')
+        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera='private', safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
+    private_recordings = recordings_annotated.filter(user__profile__name=username, processed=True, recipient=request.user, safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     recordings = list(chain(private_recordings, recordings))
     p = Paginator(recordings, 10)
     if page > p.num_pages or page < 1:
