@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified, minor_identity_verified
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,7 @@ def interactive(key):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def call_recordings(request):
     from django.conf import settings
@@ -52,7 +52,7 @@ def call_recordings(request):
     return render(request, 'voice/calls.html', {'title': 'Phone Calls', 'urls': urls})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def option_add(request):
     from django.shortcuts import render
@@ -91,7 +91,7 @@ def option_add(request):
     return render(request, 'voice/add_option.html', {'form': ChoiceCreateForm(), 'hidenavbar': hidenavbar, 'small': True})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def recordings(request):
     from django.shortcuts import render
@@ -136,7 +136,7 @@ def recordings(request):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def recording(request, id):
     from django.shortcuts import render
@@ -146,7 +146,7 @@ def recording(request, id):
     from django.utils import timezone
     from django.contrib.auth.decorators import user_passes_test
     from vendors.tests import is_vendor
-    from feed.tests import identity_verified
+    from feed.tests import pediatric_identity_verified
     from vendors.tests import is_vendor
     from django.contrib.sessions.models import Session
     from live.models import VideoRecording
@@ -202,8 +202,7 @@ def voice(request):
     from django.urls import reverse
     from django.utils import timezone
     from django.contrib.auth.decorators import user_passes_test
-    from vendors.tests import is_vendor
-    from feed.tests import identity_verified
+    from feed.tests import pediatric_identity_verified
     from vendors.tests import is_vendor
     from django.contrib.sessions.models import Session
     from live.models import VideoRecording

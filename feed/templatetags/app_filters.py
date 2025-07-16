@@ -2,6 +2,11 @@ from django import template
 
 register = template.Library()
 
+@register.filter('adult_identity_verified')
+def adult_identity_verified(user):
+    from feed.tests import adult_identity_verified as aiv
+    return aiv(user)
+
 @register.filter('getfaviconfromurl')
 def getfaviconfromurl(input_url):
     protocol = input_url.split('//')[0] + '//'

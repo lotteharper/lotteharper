@@ -15,7 +15,7 @@ def get_camera_data(camera_user, camera_name, index, request_user):
     import base64, asyncio
     import urllib.parse
     from urllib.parse import parse_qs
-    from feed.tests import identity_really_verified
+    from feed.tests import pediatric_identity_verified
     from django.shortcuts import get_object_or_404
     from users.models import Profile
     profile = get_object_or_404(Profile, name=camera_user, identity_verified=True, vendor=True)
@@ -52,7 +52,7 @@ def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
     from django.conf import settings
     import urllib.parse
     from urllib.parse import parse_qs
-    from feed.tests import identity_really_verified
+    from feed.tests import pediatric_identity_verified
     from live.still import is_still
     from lotteh.celery import process_live, process_recording, delay_remove_frame
     from django.core.exceptions import PermissionDenied
@@ -66,7 +66,7 @@ def update_camera(user_id, camera_user, camera_name, camera_data, key=None):
 #        print('Camera is ' + str(camera))
         if camera and camera.user.profile.vendor != True: raise PermissionDenied()
     if not camera: raise PermissionDenied()
-    if not identity_really_verified(camera.user): raise PermissionDenied()
+    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     camera.last_frame = timezone.now()
     camera_data = camera_data.split("&")
     timestamp = urllib.parse.unquote(camera_data[4].split('=', 1)[1])

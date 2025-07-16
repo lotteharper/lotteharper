@@ -712,13 +712,13 @@ def routine_filter():
         try:
             from feed.nude import is_nude_fast
             from barcode.tests import document_scanned
-            from feed.tests import identity_really_verified
+            from feed.tests import minor_identity_verified
             if post.image and not os.path.exists(post.image.path) and post.image_bucket: post.download_photo()
             post = Post.objects.get(id=post.id)
             if post.image and os.path.exists(post.image.path) and is_nude_fast(post.image.path):
                 post.public = False
                 post.secure = True
-                if settings.NUDITY_FILTER and not identity_really_verified(post.author):
+                if settings.NUDITY_FILTER and not minor_identity_verified(post.author):
                     os.remove(post.image.path)
                     post.image = None
                 elif settings.NUDITY_FILTER:

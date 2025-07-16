@@ -2,7 +2,7 @@ from face.tests import is_superuser_or_vendor
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 
 def getbody(message):
     body = None

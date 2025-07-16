@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from face.tests import is_superuser_or_vendor
 from django.views.decorators.csrf import csrf_exempt
 
@@ -16,7 +16,7 @@ def generate_session(request):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def sessions(request):
     from django.shortcuts import render
@@ -39,7 +39,7 @@ def sessions(request):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def injection(request):
     from django.shortcuts import render, redirect

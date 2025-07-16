@@ -1,15 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache, cache_page
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control
 from django.views.decorators.vary import vary_on_cookie
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def add_post(request, id):
     from feed.models import Post
@@ -26,7 +26,7 @@ def add_post(request, id):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def publish(request, id):
     from django.shortcuts import get_object_or_404
@@ -44,7 +44,7 @@ def publish(request, id):
 @csrf_exempt
 @never_cache
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def confirm(request, id):
     from .models import AudioRecording

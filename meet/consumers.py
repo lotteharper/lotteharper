@@ -12,7 +12,7 @@ import base64, asyncio
 import urllib.parse
 from urllib.parse import parse_qs
 from django.core.exceptions import PermissionDenied
-from feed.tests import identity_really_verified
+from feed.tests import pediatric_identity_verified
 from meet.models import Meeting
 
 @sync_to_async

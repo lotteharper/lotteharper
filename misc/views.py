@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from feed.tests import identity_verified
 from vendors.tests import is_vendor
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page

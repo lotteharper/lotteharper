@@ -723,9 +723,6 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         'SCOPE': [
             'email',
-            'https://www.googleapis.com/auth/youtube',
-            'https://www.googleapis.com/auth/youtube.force-ssl',
-            'https://www.googleapis.com/auth/youtube.upload'
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
@@ -734,7 +731,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 SESSION_COOKIE_DOMAIN = DOMAIN
-USE_ALLAUTH = False
+USE_ALLAUTH = True
 
 # Company/Agent info
 UBI = '604-691-289'
@@ -850,9 +847,9 @@ VOICE_FEED = 'blog'
 USE_OFFSITE = True
 
 # Id scan is valid for (hours)
-ID_VALID_HOURS = 24 * 30 * 6
+ID_VALID_HOURS = 24 * 30 * 12
 # Signature valid for
-SIG_VALID_HOURS = 24 * 30 * 6
+SIG_VALID_HOURS = 24 * 30 * 12
 
 # Multiple sales of one product
 ALLOW_MULTIPLE_SALES = False

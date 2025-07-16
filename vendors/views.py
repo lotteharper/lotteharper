@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified, identity_really_verified
+from feed.tests import pediatric_identity_verified, minor_identity_verified
+from barcode.tests import minor_document_scanned, pediatric_document_scanned
 
 def video(request, username):
     from .models import VendorProfile
@@ -26,7 +27,7 @@ def content(request, username):
     return redirect('/' if not profile.content_link else profile.content_link)
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def send_bitcoin(request):
     from .models import VendorPaymentsProfile
@@ -35,7 +36,7 @@ def send_bitcoin(request):
     return render(request, 'vendors/send_bitcoin.html', {'title': 'Crypto', 'info': profile.get_crypto_balances()})
 
 @login_required
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def onboarding(request):
     from django.shortcuts import redirect
     from django.urls import reverse
@@ -49,7 +50,7 @@ def onboarding(request):
     return redirect(reverse('feed:profile', kwargs={'username': request.user.username}))
 
 @login_required
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def vendor_preferences(request):
     from django.shortcuts import redirect
     from django.urls import reverse
@@ -59,9 +60,9 @@ def vendor_preferences(request):
     from django.contrib import messages
     v, created = VendorProfile.objects.get_or_create(user=request.user)
     v.save()
-    form = VendorProfileUpdateForm(instance=v)
+    form = VendorProfileUpdateForm(instance=v, user=request.user)
     if request.method == 'POST':
-        form = VendorProfileUpdateForm(request.POST, request.FILES, instance=request.user.vendor_profile)
+        form = VendorProfileUpdateForm(request.POST, request.FILES, instance=request.user.vendor_profile, user=request.user)
         if form.is_valid():
             form.instance.user = request.user
             from payments.apis import validate_address
@@ -129,6 +130,7 @@ def vendor_preferences(request):
             if form.instance.video_intro_font and not (form.instance.video_intro_font.name.rsplit('.', 1)[1] == 'ttf'):
                 messages.warning(request, 'The font you uploaded is not valid because the extension is wrong. Please upload a valid OpenType font in .ttf format.')
                 accepted = False
+            if form.instance.activate_surrogacy and not minor_document_scanned(request.user): p.activate_surrogacy = False
             p = form.save()
             if p.video_intro_font and not (p.video_intro_font.name.rsplit('.', 1)[1] == 'ttf' and validate_ttf(p.video_intro_font.path)):
                 messages.warning(request, 'The font you uploaded is not valid. Please upload a valid OpenType font in .ttf format.')

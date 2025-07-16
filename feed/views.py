@@ -2,9 +2,7 @@ use_bs4 = False
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
-from .tests import identity_verified
 from vendors.tests import is_vendor
-from barcode.tests import document_scanned
 from django.views.decorators.cache import patch_cache_control
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import (
@@ -17,6 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from feed.tests import minor_identity_verified, pediatric_identity_verified
+from barcode.tests import minor_document_scanned, pediatric_document_scanned
+
 
 basedescription = '{} is an app for adults.'.format(settings.SITE_NAME)
 
@@ -29,6 +30,7 @@ def sub_fee(fee):
         op = op + str(fee)[3*f+of:3+3*f+of] + ','
     op = op[:-1]
     return op
+
 
 def report_alert(post, report_text):
     from django.contrib.auth.models import User
@@ -125,7 +127,7 @@ def auction(request, id):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def like(request, uuid):
     from django.shortcuts import get_object_or_404
     from django.utils import timezone
@@ -148,7 +150,7 @@ def like(request, uuid):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def publish(request, pk):
     from django.shortcuts import get_object_or_404
@@ -175,7 +177,7 @@ def publish(request, pk):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def pin(request, pk):
     from django.shortcuts import get_object_or_404
@@ -191,14 +193,14 @@ def pin(request, pk):
     return HttpResponse('<i class="bi bi-pin-angle-fill"></i>' if post.pinned else '<i class="bi bi-pin-fill"></i>')
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def tip(request, username, tip):
     from django.shortcuts import redirect
     from django.urls import reverse
     return redirect(reverse('payments:tip-bitcoin', kwargs={'username': username, 'tip': tip}))
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def private(request, username):
     from users.models import Profile
@@ -219,9 +221,9 @@ def private(request, username):
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
-    from barcode.tests import document_scanned
+    from barcode.tests import minor_document_scanned
     ds = False
-    if request.user.is_authenticated and document_scanned(request.user): ds = True
+    if request.user.is_authenticated and minor_document_scanned(request.user): ds = True
     return render(request, 'feed/private.html', {
         'title': '@' + profile.name + '\'s Private Posts',
         'posts': p.page(page),
@@ -290,8 +292,8 @@ def grid_api(request, index):
             ids = Post.objects.filter(posted=True, author=profile.user, private=False, published=True, recipient=None, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
             pins = Post.objects.filter(posted=True, author=profile.user, private=False, public=True, pinned=True, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
             rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []
-            from barcode.tests import document_scanned
-            if request.user.is_authenticated and document_scanned(request.user):
+            from barcode.tests import minor_document_scanned
+            if request.user.is_authenticated and minor_document_scanned(request.user):
                 ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
             posts = unique(list(chain(pins, rec, ids)))
             post = posts[index%len(posts)]
@@ -401,13 +403,12 @@ def profile_grid(request, username):
     elif request.user.is_authenticated and (profile.user in request.user.profile.subscriptions.all() or (request.user == profile.user and request.GET.get('show', False))):
         following = True
         ids = Post.objects.filter(posted=True, author=profile.user, private=False, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
-        from barcode.tests import document_scanned
-        if request.user.is_authenticated and document_scanned(request.user):
+        from barcode.tests import minor_document_scanned
+        if request.user.is_authenticated and minor_document_scanned(request.user):
             ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
         ids = list(ids)
         pins = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=True, pinned=True, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
         rec = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else [])
-        from barcode.tests import document_scanned
         posts = unique(list(chain(pins, rec, ids)))
     else:
         ids = list(Post.objects.filter(posted=True, author=profile.user, public=True, private=False, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
@@ -454,7 +455,7 @@ def secure_photo(request, filename):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def rotate(request, pk, direction):
     from django.core.exceptions import PermissionDenied
@@ -479,7 +480,7 @@ def rotate(request, pk, direction):
     return redirect(post.get_absolute_url())
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def subscriptions(request):
     from users.models import Profile
     from django.contrib import messages
@@ -502,7 +503,7 @@ def subscriptions(request):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def unfollow(request, username):
     from django.shortcuts import render, get_object_or_404
     from django.contrib.auth.models import User
@@ -537,8 +538,10 @@ def follow(request, username):
     })
 #    return redirect(reverse('feed:profile', kwargs={'username': username}))
 
+from barcode.tests import pediatric_document_scanned
+
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_document_scanned, login_url='/verify/', redirect_field_name='next')
 def home(request):
     from django.core.paginator import Paginator
     from feed.models import Post
@@ -552,9 +555,9 @@ def home(request):
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
     from django.shortcuts import render
-    from barcode.tests import document_scanned
+    from barcode.tests import minor_document_scanned
     ds = False
-    if request.user.is_authenticated and document_scanned(request.user): ds = True
+    if request.user.is_authenticated and minor_document_scanned(request.user): ds = True
     return render(request, 'feed/home.html', {
         'title': 'Your Feed',
         'posts': p.page(page),
@@ -631,8 +634,8 @@ def profile(request, username):
         ids = Post.objects.filter(posted=True, author=profile.user, private=False, published=True, date_posted__lte=now).union(Post.objects.filter(author=profile.user, private=True, recipient=request.user, published=True, date_posted__lte=now, feed=blog_feed)).order_by('-date_posted')
         pins = Post.objects.filter(posted=True, author=profile.user, private=False, pinned=True, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
         rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted') if request.user.is_authenticated else []
-        from barcode.tests import document_scanned
-        if request.user.is_authenticated and document_scanned(request.user):
+        from barcode.tests import minor_document_scanned
+        if request.user.is_authenticated and minor_document_scanned(request.user):
             ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
         posts = unique(list(chain(pins, rec, ids)))
     else:
@@ -653,9 +656,9 @@ def profile(request, username):
     choices = []
     for option in get_pricing_options(settings.PHOTO_CHOICES):
         choices = choices + [['${}'.format(sub_fee(option))]]
-    from barcode.tests import document_scanned
+    from barcode.tests import minor_document_scanned
     ds = False
-    if request.user.is_authenticated and document_scanned(request.user): ds = True
+    if request.user.is_authenticated and minor_document_scanned(request.user): ds = True
     resp = render(request, 'feed/profile.html' if pages else 'feed/scroll_page.html' if scroll_page else 'feed/scroll.html', {
         'title': '@' + profile.name + '\'s Profile',
         'posts': p.page(page),
@@ -678,15 +681,15 @@ def profile(request, username):
     return resp
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_document_scanned, login_url='/verify/', redirect_field_name='next')
 def all(request):
     from django.core.paginator import Paginator
     from django.contrib import messages
     from feed.models import Post
     from django.shortcuts import render
-    if not request.user.profile.identity_verified:
+    if not pediatric_document_scanned(user):
         messages.warning(request, 'You need to verify your identity before you may see this page.')
-        return redirect(reverse("verify:verify"))
+        return redirect(reverse("barcode:scan"))
     page = 1
     if(request.GET.get('page', None) != None):
         page = int(request.GET.get('page', ''))
@@ -695,9 +698,9 @@ def all(request):
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1
-    from barcode.tests import document_scanned
+    from barcode.tests import minor_document_scanned
     ds = False
-    if request.user.is_authenticated and document_scanned(request.user): ds = True
+    if request.user.is_authenticated and minor_document_scanned(request.user): ds = True
     return render(request, 'feed/all.html', {
         'title': 'See All Posts',
         'posts': p.page(page),
@@ -722,8 +725,8 @@ def post_detail(request, uuid):
         post = Post.objects.filter(friendly_name__icontains=uuid[:24]).order_by('-date_posted').first()
     if not post:
         post = Post.objects.filter(friendly_name__icontains=uuid[:15]).order_by('-date_posted').first()
-    from barcode.tests import document_scanned
-    if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and post.private) and post.author != request.user and not post.recipient == request.user) or (post.secure or (post.private)) and not (request.user.is_authenticated and document_scanned(request.user)):
+    from barcode.tests import minor_document_scanned
+    if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and post.private) and post.author != request.user and not post.recipient == request.user) or (post.secure or (post.private)) and not (request.user.is_authenticated and minor_document_scanned(request.user)):
         from django.urls import reverse
         from django.shortcuts import redirect
         from django.conf import settings
@@ -756,9 +759,9 @@ def post_detail(request, uuid):
         description = 'No description for this post.' + basedescription
     post.content = oc
     from django.shortcuts import render
-    from barcode.tests import document_scanned
+    from barcode.tests import minor_document_scanned
     ds = False
-    if request.user.is_authenticated and document_scanned(request.user): ds = True
+    if request.user.is_authenticated and minor_document_scanned(request.user): ds = True
     context = {'title': title, 'pagetitle': pagetitle, 'post': post, 'document_scanned': ds, 'description': description}
     if post.private or not post.public: context['show_ads'] = False
     resp = render(request, 'feed/post_detail.html', context)
@@ -768,7 +771,7 @@ def post_detail(request, uuid):
 
 @never_cache
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 @csrf_exempt
 def new_post_confirm(request, id):
@@ -781,7 +784,7 @@ def new_post_confirm(request, id):
 
 @never_cache
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def new_post(request):
     from django.contrib import messages
@@ -933,7 +936,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         post = self.get_object()
-        if identity_verified(self.request.user) and is_vendor(self.request.user) and self.request.user == post.author:
+        if minor_identity_verified(self.request.user) and is_vendor(self.request.user) and self.request.user == post.author:
             return True
         return False
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 
 def get_password_reset_url(self):
     from django.shortcuts import render

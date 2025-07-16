@@ -17,7 +17,7 @@ def process_cart_purchase(user, cart, private=False):
                 post.paid_users.add(user)
                 post.save()
             posts = posts + [post]
-        elif post and post.private and document_scanned(user) and private:
+        elif post and post.private and minor_document_scanned(user) and private:
             if not post.paid_file:
                 post.recipient = user
                 post.save()

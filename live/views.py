@@ -4,11 +4,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
-from feed.tests import identity_verified
+from feed.tests import minor_identity_verified, pediatric_identity_verified
 from vendors.tests import is_vendor
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def choose_live_camera(request):
     from .forms import ChooseCameraForm
@@ -23,7 +23,7 @@ def choose_live_camera(request):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def choose_camera(request):
     from .forms import ChooseCameraForm
@@ -37,7 +37,7 @@ def choose_camera(request):
     return render(request, 'live/choose_camera.html', {'title': 'Choose Camera', 'form': ChooseCameraForm()})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def name_camera(request):
     from .forms import NameCameraForm
@@ -61,7 +61,7 @@ def name_camera(request):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def shows(request):
     from .models import Show
     shows = Show.objects.filter(model=request.user, end__gte=timezone.now()).order_by('start')
@@ -73,7 +73,7 @@ def shows(request):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 @csrf_exempt
 def book_show(request, username):
     from django.contrib.auth.models import User
@@ -110,7 +110,7 @@ def book_show(request, username):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def still(request, filename):
     from django.core.exceptions import PermissionDenied
     import os
@@ -142,7 +142,7 @@ def file_iterator(file_name, chunk_size=8192, offset=0, length=None):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @csrf_exempt
 def stream_secure_video(request, filename):
   u = int(filename.split('.')[0].split('-')[-1])
@@ -199,7 +199,7 @@ def video_frame(request, username):
   return HttpResponse(reverse('live:stream-video', kwargs={'filename': filename}))
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @csrf_exempt
 def stream_video(request, filename):
   import os, re
@@ -250,7 +250,7 @@ LIVE_UPDATE_SECONDS = 1
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def remote(request):
     from .models import VideoCamera
@@ -287,7 +287,7 @@ def mute(request):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def record_remote(request):
     from .models import VideoCamera
@@ -336,7 +336,7 @@ def golivevideo(request):
     else:
         camera = VideoCamera.objects.get(key=request.GET.get('key', None)) #, recording=False)
         if not camera.user.profile.vendor: raise PermissionDenied()
-    if not identity_verified(camera.user): raise PermissionDenied()
+    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     if request.method == 'POST':
         import shutil
         from .still import get_still, is_still
@@ -423,7 +423,7 @@ def screencast(request):
     else:
         camera = VideoCamera.objects.get(key=request.GET.get('key', None)) #, recording=False)
         if not camera.user.profile.vendor: raise PermissionDenied()
-    if not identity_verified(camera.user): raise PermissionDenied()
+    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     if request.method == 'POST':
         import shutil
         from .still import get_still, is_still
@@ -526,7 +526,7 @@ def livevideo(request, username):
     return render(request, 'live/livevideo.html', {'profile': profile, 'camera': cameras.first(), 'title': 'Live Video', 'use_websocket': camera.use_websocket, 'hidenavbar': hidenav, 'should_compress_live': model.vendor_profile.compress_video, 'frame_count': camera.frames.count()-1})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @csrf_exempt
 def last_frame_video(request, username):
     from .models import VideoCamera

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import patch_cache_control
 from django.views.decorators.vary import vary_on_cookie
@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_page
 
 @cache_page(60*60*24)
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def go(request):
     from django.shortcuts import render

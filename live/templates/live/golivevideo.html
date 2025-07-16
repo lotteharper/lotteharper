@@ -431,7 +431,7 @@ function openRemoteSocket() {
             var instructions = event.data.split(',');
             if(instructions[0] == 'y' && !cameraon) {
                 cameraon = true;
-                startWebcamFn();
+                setTimeout(startWebcamFn, 1000);
                 liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
             } else if(instructions[0] == 'n' && cameraon) {
                 cameraon = false;

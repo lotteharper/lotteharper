@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from face.tests import is_superuser_or_vendor
 
 def qrcode(request):
@@ -9,7 +9,7 @@ def qrcode(request):
     return render(request, 'retargeting/qrcode.html', {'title': 'QR Code', 'description': 'Generate a QR code'})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def emails(request):
     from django.shortcuts import render
@@ -20,7 +20,7 @@ def emails(request):
     return render(request, 'retargeting/emails.html', {'title': 'Scheduled Emails', 'emails': emails})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def send_email(request):
     from django.shortcuts import render

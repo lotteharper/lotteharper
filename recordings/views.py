@@ -1,14 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
-from vendors.tests import is_vendor
+from feed.tests import pediatric_identity_verified, minor_identity_verified
+from barcode.tests import minor_document_scanned
 from django.views.decorators.csrf import csrf_exempt
-from barcode.tests import document_scanned
-from vendors.tests import is_vendor
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+#@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def recordings(request, username):
     from live.models import VideoRecording
     from django.shortcuts import render
@@ -28,6 +26,7 @@ def recordings(request, username):
     from django.core.exceptions import PermissionDenied
     from security.security import fraud_detect
     from itertools import chain
+    from barcode.tests import minor_document_scanned as document_scanned
     model = User.objects.get(profile__name=username)
     if (not model in request.user.profile.subscriptions.all()) and not model == request.user and not request.user.profile.vendor:
         messages.warning(request, 'You need to follow {} before you can see their interactive feed.'.format(username))
@@ -40,11 +39,11 @@ def recordings(request, username):
     from django.db.models import Count
     recordings_annotated = VideoRecording.objects.annotate(num_frames=Count('frames'))
     if model == request.user and request.GET.get('all'):
-        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
+        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, safe=not minor_document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     elif model == request.user and request.GET.get('camera'):
-        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera=request.GET.get('camera'), safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
+        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera=request.GET.get('camera'), safe=not minor_document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     else:
-        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera='private', safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
+        recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera='private', safe=not minor_document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     private_recordings = recordings_annotated.filter(user__profile__name=username, processed=True, recipient=request.user, safe=not document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     recordings = list(chain(private_recordings, recordings))
     p = Paginator(recordings, 10)
@@ -60,7 +59,7 @@ def recordings(request, username):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording(request, uuid):
     from live.models import VideoRecording
     from django.shortcuts import render
@@ -92,7 +91,7 @@ def recording(request, uuid):
     return render(request, 'recordings/recording.html', {'title': 'Recording', 'recording': recording})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording_frame(request, uuid):
     from live.models import VideoRecording
     from django.shortcuts import render
@@ -179,7 +178,7 @@ def idle_frame(username):
     return frame
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording_idle(request, username):
     from live.models import VideoRecording
     from django.shortcuts import render
@@ -224,6 +223,6 @@ class RecordingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         recording = self.get_object()
-        if identity_verified(self.request.user) and is_vendor(self.request.user) and ((not recording.camera == 'private' and self.request.user == recording.user) or (self.request.user.is_superuser and not recording.user.is_superuser)) and not fraud_detect(self.request, True):
+        if pediatric_identity_verified(self.request.user) and is_vendor(self.request.user) and ((not recording.camera == 'private' and self.request.user == recording.user) or (self.request.user.is_superuser and not recording.user.is_superuser)) and not fraud_detect(self.request, True):
             return True
         return False

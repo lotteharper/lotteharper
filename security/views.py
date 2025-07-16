@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from .tests import recent_face_match
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from webauth.decorators import webauth_required
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -279,7 +279,7 @@ def modal(request):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def shake(request):
     if request.method == 'POST':
@@ -488,7 +488,7 @@ def delete_all_unexpired_sessions_for_user(user, session_to_omit=None):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def logout_everyone(request):
     if not (request.user.profile.admin or request.user.is_superuser):
         return redirect(reverse('landing:landing'))
@@ -501,7 +501,7 @@ def logout_everyone(request):
     return redirect(reverse('landing:landing'))
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def logout_everyone_but_user(request):
     from django.urls import reverse
     from django.shortcuts import redirect

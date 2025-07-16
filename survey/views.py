@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import user_passes_test
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from face.tests import is_superuser_or_vendor
 from vendors.tests import is_vendor
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def has_completed_survey(request):
     from django.http import HttpResponse
     from .models import Survey, Answer
@@ -17,7 +17,7 @@ def has_completed_survey(request):
     return HttpResponse('t')
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def survey(request, id):
     from django.shortcuts import render, redirect, get_object_or_404
     from django.urls import reverse
@@ -50,7 +50,7 @@ def survey(request, id):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def answer(request):
     from django.shortcuts import render, redirect
     from django.urls import reverse
@@ -67,7 +67,7 @@ def answer(request):
         else: return redirect(next if next else reverse('landing:landing'))
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def update(request, id):
     from survey.forms import UpdateSurveyForm
@@ -96,7 +96,7 @@ def update(request, id):
     return render(request, 'survey/update.html', context)
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def surveys(request):
     from django.shortcuts import render

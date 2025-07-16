@@ -1,15 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from barcode.tests import document_scanned
 from vendors.tests import is_vendor
-from feed.tests import identity_verified, identity_really_verified
+from feed.tests import pediatric_identity_verified, minor_identity_verified
+from barcode.tests import minor_document_scanned
 from django.contrib.auth.decorators import user_passes_test
 
 # Create your views here.
 
 @login_required
 #@user_passes_test(document_scanned, login_url='/barcode/', redirect_field_name='next')
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def vibe(request):
     from django.shortcuts import render, redirect
     from django.urls import reverse
@@ -21,7 +21,7 @@ def vibe(request):
 @csrf_exempt
 @login_required
 #@user_passes_test(document_scanned, login_url='/barcode/', redirect_field_name='next')
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_document_scanned, login_url='/verify/', redirect_field_name='next')
 def remote_vibe(request):
     from django.shortcuts import render, redirect
     from django.urls import reverse
@@ -42,7 +42,7 @@ def remote_vibe(request):
 
 @login_required
 #@user_passes_test(document_scanned, login_url='/barcode/', redirect_field_name='next')
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def receive_vibe(request, username):
     from django.shortcuts import render, redirect
     from django.urls import reverse
@@ -56,7 +56,7 @@ def receive_vibe(request, username):
 @csrf_exempt
 @login_required
 #@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def recieve_vibe_setting(request, username):
     from django.shortcuts import render, redirect
     from django.urls import reverse

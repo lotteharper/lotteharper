@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import user_passes_test
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from vendors.tests import is_vendor
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -45,7 +45,7 @@ def video(request): #, username):
     return render(request, 'chat/video.html', {'title': 'Video Chat', 'profile': profile, 'thename': generate_username(), 'full': True})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def chat_self(request):
     from django.shortcuts import render, redirect, get_object_or_404
     from django.urls import reverse
@@ -62,7 +62,7 @@ def chat_self(request):
     return redirect(reverse('chat:chat', kwargs={'username': request.user.profile.name}))
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def chat(request, username):
     from django.shortcuts import render, redirect, get_object_or_404
     from django.urls import reverse
@@ -133,7 +133,7 @@ def chat(request, username):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def has_message(request, username):
     from django.shortcuts import render, redirect, get_object_or_404
     from django.urls import reverse
@@ -171,7 +171,7 @@ def has_message(request, username):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def raw(request, username):
     from django.shortcuts import render, redirect, get_object_or_404
     from django.urls import reverse

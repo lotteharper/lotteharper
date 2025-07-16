@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import minor_identity_verified, pediatric_identity_verified
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def photo(request, camera):
     from django.shortcuts import render
@@ -41,7 +41,7 @@ def photo(request, camera):
     return render(request, 'close.html')
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def photobooth(request):
     from django.shortcuts import render
@@ -83,7 +83,7 @@ def photobooth(request):
     return render(request, 'photobooth/photobooth.html', {'title': 'Photo Booth', 'form': PostForm(), 'profile': request.user.profile, 'preload': True, 'start_time': timezone.now().strftime("%m%d%Y-%H%M%S"), 'camera': camera})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def remote(request):
     from django.shortcuts import render

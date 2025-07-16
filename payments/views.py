@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified, identity_really_verified
+from feed.tests import pediatric_identity_verified, minor_identity_verified, adult_identity_verified
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
@@ -79,8 +79,7 @@ def authorize(request):
 
 
 @login_required
-@user_passes_test(is_vendor)
-@user_passes_test(identity_really_verified)
+@user_passes_test(pediatric_identity_verified)
 def send_custom_invoice(request):
     from payments.forms import InvoiceForm
     from django.shortcuts import render, redirect
@@ -951,7 +950,7 @@ def surrogacy_info(request, username):
 
 
 @login_required
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def connect_account(request):
     from django.shortcuts import redirect
     from .stripe import create_connected_account
@@ -1556,7 +1555,7 @@ def onetime_checkout_surrogacy(request):
             return JsonResponse({"error": str(e)})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def card_list(request):
     from .models import PaymentCard
     from django.shortcuts import render
@@ -1564,7 +1563,7 @@ def card_list(request):
     return render(request, 'payments/payment_cards.html', {'title': 'Payment Cards', 'cards': cards, 'preload': False})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def card_primary(request, id):
     from django.http import HttpResponse
     from payments.models import PaymentCard
@@ -1580,7 +1579,7 @@ def card_primary(request, id):
     return HttpResponse('<i class="bi bi-pin-angle-fill"></i>' if card.primary else '<i class="bi bi-pin-fill"></i>')
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def card_delete(request, id):
     from django.http import HttpResponse
     from payments.models import PaymentCard
@@ -1593,7 +1592,7 @@ def card_delete(request, id):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def cancel_subscription(request, username):
     from django.contrib.auth.models import User
     from django.shortcuts import redirect
@@ -1646,7 +1645,7 @@ def subscribe_card(request, username):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def tip_card(request, username, tip):
     from django.contrib.auth.models import User
     from .forms import CardNumberForm, CardInfoForm
@@ -1788,7 +1787,7 @@ def tip_bitcoin_thankyou(request, username):
     return render(request, 'payments/tip_bitcoin_thankyou.html', {'title': 'Thanks - {}', 'profile': user.profile, 'preload': False})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def tip_bitcoin(request, username, tip):
     from django.conf import settings
     from django.shortcuts import redirect
@@ -1934,7 +1933,7 @@ def buy_photo_card(request, username):
     return r
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def charge_card(request):
     user = request.user
@@ -2048,7 +2047,7 @@ def tip_crypto_simple(request, username):
     return r
 
 @login_required
-@user_passes_test(identity_really_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(adult_identity_verified, login_url='/verify/', redirect_field_name='next')
 def surrogacy_crypto(request, username):
     from django.shortcuts import redirect
     from django.conf import settings
@@ -2110,3 +2109,4 @@ def surrogacy_crypto(request, username):
     from django.shortcuts import render
     from crypto.currencies import CRYPTO_CURRENCIES
     return render(request, 'payments/surrogacy_crypto.html', {'title': 'Pay with Crypto', 'model': user.profile, 'surrogacy_fee': settings.SURROGACY_FEE, 'username': username, 'vendor_profile': profile, 'profile': profile, 'form': BitcoinPaymentForm(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}) if not request.user.is_authenticated else BitcoinPaymentFormUser(initial={'amount': str(fee_reduced), 'transaction_id': transaction_id}), 'crypto_address': address, 'crypto_fee': fee_reduced, 'usd_fee': usd_fee, 'currencies': CRYPTO_CURRENCIES, 'post': post, 'model': user.profile, 'load_timeout': None, 'preload': False, 'bitcoin_address': user.vendor_profile.bitcoin_address, 'ethereum_address': user.vendor_profile.ethereum_address, 'stripe_key': settings.STRIPE_PUBLIC_KEY, 'down_payment': settings.SURROGACY_DOWN_PAYMENT, 'weekly_payment': (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36})
+

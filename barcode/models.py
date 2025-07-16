@@ -26,6 +26,7 @@ class DocumentScan(models.Model):
     barcode_data_processed = models.TextField(default='')
     side = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
+    subjective = models.BooleanField(default=False)
     birthday = models.DateTimeField(default=timezone.now)
     expiry = models.DateTimeField(default=timezone.now)
     foreign = models.BooleanField(default=False)

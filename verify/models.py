@@ -69,6 +69,7 @@ class IdentityDocument(models.Model):
     expiry = models.DateTimeField(default=timezone.now)
     expire_date = models.DateTimeField(default=timezone.now)
     verified = models.BooleanField(default=False)
+    subjective = models.BooleanField(default=False)
 
     def get_base64_front(self, key):
         import urllib.parse

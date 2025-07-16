@@ -42,7 +42,13 @@ def scan_id(scan_path, instance):
     if birthday > get_past_date().replace(tzinfo=utc):
         return False
     subject = document['Subject'] if 'Subject' in document else None
-    if settings.REQUIRE_SUBJECTION and subject and not (subject == 'Y' or subject == 'y'): return False
+    if subject and not (subject == 'Y' or subject == 'y'):
+        instance.subjective = False
+        instance.save()
+        if settings.REQUIRE_SUBJECTION: return False
+    else:
+        instance.subjective = True
+        instance.save()
     if result['Success'] and int(result['Confidence']) > settings.MIN_CONFIDENCE:
         instance.verified = True
         instance.save()

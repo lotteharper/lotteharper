@@ -2,12 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import minor_identity_verified
 from vendors.tests import is_vendor
 from django.views.decorators.csrf import csrf_exempt
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def add_option(request):
     from .forms import ChoiceCreateForm
@@ -25,7 +25,7 @@ def add_option(request):
 
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def interactive(request, username):
     from django.urls import reverse
     from django.contrib import messages
@@ -42,7 +42,7 @@ def interactive(request, username):
     })
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def interactive_frame(request, username):
     from live.models import VideoRecording
     from django.core.paginator import Paginator
@@ -56,7 +56,7 @@ def interactive_frame(request, username):
     return recording.file_processed.url
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def forms(request, username):
     from django.urls import reverse
     from django.utils import timezone
@@ -92,7 +92,7 @@ def forms(request, username):
 
 @csrf_exempt
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(minor_identity_verified, login_url='/verify/', redirect_field_name='next')
 def recording(request, username):
     from django.urls import reverse
     from live.models import VideoRecording

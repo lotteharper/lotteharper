@@ -2,7 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from face.tests import is_superuser_or_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 
 def send_contact_push(name):
     from django.shortcuts import render
@@ -37,7 +37,7 @@ def send_contact_push(name):
     except: pass #print(traceback.format_exc())
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_superuser_or_vendor)
 def contacts(request):
     from django.shortcuts import render

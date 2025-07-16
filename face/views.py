@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from .tests import is_superuser_or_vendor
 from django.views.decorators.csrf import csrf_exempt
 
@@ -54,7 +54,7 @@ def secure_photo(request, filename):
     return HttpResponse(image_data, content_type="image/{}".format(ext))
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 def all_faces(request):
     from django.urls import reverse
     from django.shortcuts import render, redirect, get_object_or_404

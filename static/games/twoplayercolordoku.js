@@ -489,6 +489,7 @@ function is_legal_move(col, row, value) {
   }
 
   var startedGame = false;
+  var gameSocketReloadTimeout;
   function openGameSocket() {
         gameSocket = new WebSocket("wss://" + window.location.hostname + '/ws/games/' + postUuid + '/' + gameCode + '/');
         gameSocket.addEventListener("open", (event) => {
@@ -508,7 +509,15 @@ function is_legal_move(col, row, value) {
         });
         gameSocket.addEventListener("closed", (event) => {
             console.log('Socket closed.');
-            setTimeout(function() {
+            if(gameSocketReloadTimeout) clearTimeout(gameSocketReloadTimeout);
+            gameSocketReloadTimeout = setTimeout(function() {
+                openGameSocket();
+            }, 10000);
+        });
+        gameSocket.addEventListener("error", (event) => {
+            console.log('Socket closed.');
+            if(gameSocketReloadTimeout) clearTimeout(gameSocketReloadTimeout);
+            gameSocketReloadTimeout = setTimeout(function() {
                 openGameSocket();
             }, 10000);
         });

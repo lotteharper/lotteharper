@@ -1,4 +1,4 @@
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt

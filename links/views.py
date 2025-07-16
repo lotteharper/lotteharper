@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from barcode.tests import document_scanned
+from barcode.tests import pediatric_document_scanned
 from django.views.decorators.cache import patch_cache_control, cache_page
 from django.views.decorators.vary import vary_on_cookie
 

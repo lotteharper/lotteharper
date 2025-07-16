@@ -77,6 +77,7 @@ class VendorProfileUpdateForm(forms.ModelForm):
     logo_alpha = forms.FloatField(min_value=0.1, max_value=1)
     pitch_adjust = forms.IntegerField(required=False)
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None')
         super(VendorProfileUpdateForm, self).__init__(*args, **kwargs)
         self.fields['logo'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
         self.fields['video_intro_font'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
@@ -121,6 +122,7 @@ class VendorProfileUpdateForm(forms.ModelForm):
         self.fields['litecoin_address'].label = translate(r, 'Litcoin (LTC) address', src='en')
         self.fields['usdtether_address'].label = translate(r, 'USDTether (USDT) address', src='en')
         self.fields['dogecoin_address'].label = translate(r, 'DogeCoin (DOGE) address', src='en')
+        if not minor_document_scanned(user): self.fields.pop('activate_surrogacy')
 
     class Meta:
         model = VendorProfile

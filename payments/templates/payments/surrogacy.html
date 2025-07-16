@@ -33,7 +33,7 @@
 <div class="mx-auto">
 <div class="row mx-auto" style="display: flex; justify-content: space-around; text-align: center;">
 <div class="col-md-6 m-2 p-2 rounded  mx-auto" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
-{% if request.user.is_authenticated and request.user.profile.identity_verified %}
+{% if request.user.is_authenticated and request.user|adult_identity_verified %}
 <p>{{ 'Finalize'|etrans }}</p>
 <legend>{{ 'Cost'|etrans }}: ${{ surrogacy_fee|sub_fee }} {{ 'billed in installments following a down payment according to the agreement.'|etrans }}</legend>
 <p>{{ 'The down payment required to begin the plan is'|etrans }} ${{ down_payment|elegant_sub_fee }}. {{ 'Payments will be invoiced according to a 36 week term after confirmation of pregnancy. Weekly payment of'|etrans }} ${{ weekly_payment|sub_fee }} {{ 'in 36 weekly payments is required and will be invoiced according to the agreement. Please note that this agreement is not final until completion of digital verification including ID scan and facial recognition with'|etrans }} {{ the_site_name }} {{ 'of all signing parties pursuant to this agreement, as well as all payment as arranged.'|etrans }}</p>

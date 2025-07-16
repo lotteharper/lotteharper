@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from vendors.tests import is_vendor

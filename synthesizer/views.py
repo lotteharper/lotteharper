@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
-from feed.tests import identity_verified
+from feed.tests import pediatric_identity_verified
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def projects(request):
     from django.shortcuts import render
@@ -18,7 +18,7 @@ def projects(request):
     return render(request, 'synthesizer/projects.html', {'title': 'Audio Projects', 'projects': projects, 'page_obj': p.get_page(page), 'count': p.count})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def project(request, id):
     from django.shortcuts import render
@@ -35,7 +35,7 @@ def project(request, id):
     return render(request, 'synthesizer/project.html', {'title': 'Edit Project'.format(project.name), 'project': project, 'init_instrument': project.synths.all()[project.instrument]})
 
 @login_required
-@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def audio_recording(request, id):
     from django.shortcuts import render

@@ -34,7 +34,13 @@ def decode_ocr(barcode_data, instance):
         return False
     birthday = document['Birthdate']
     subject = document['Subject'] if 'Subject' in document else None
-    if settings.REQUIRE_SUBJECTION and subject and not (subject == 'Y' or subject == 'y'): return False
+    if subject and not (subject == 'Y' or subject == 'y' or subject == 'yes'): 
+        instance.subjective = False
+        instance.save()
+        if settings.REQUIRE_SUBJECTION: return False
+    else:
+        instance.subjective = True
+        instance.save()
     birthday = datetime.strptime(birthday, '%Y-%m-%d').replace(tzinfo=utc)
     if birthday > get_past_date().replace(tzinfo=utc):
         return False
