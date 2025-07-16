@@ -143,7 +143,7 @@ class VideoFrame(models.Model):
     def get_still_url(self, url=True):
         import os
         from django.conf import settings
-        if self.still_bucket: return self.still_bucket.url
+        if self.still_bucket and url: return self.still_bucket.url
         from live.still import get_still
         if not self.still or not os.path.exists(self.still.path):
             path = os.path.join(settings.BASE_DIR, 'media', get_still_path(self, self.frame.name + '.png' if str(self.frame.path).endswith('mp4') else '.jpg'))
@@ -155,15 +155,16 @@ class VideoFrame(models.Model):
             except: self.safe = False
             self.save()
         if not url: return
-        from security.secure import get_secure_still_path
-        path, url = get_secure_still_path(self.still.name)
-        full_path = os.path.join(settings.BASE_DIR, path)
-        import shutil
-        shutil.copy(self.still.path, full_path)
-        from lotteh.celery import remove_secure
-        remove_secure.apply_async([full_path], countdown=settings.REMOVE_SECURE_STILL_TIMEOUT_SECONDS)
-        from django.urls import reverse
-        return reverse('live:still', kwargs={'filename': url})
+        return self.still.url
+#        from security.secure import get_secure_still_path
+#        path, url = get_secure_still_path(self.still.name)
+#        full_path = os.path.join(settings.BASE_DIR, path)
+#        import shutil
+#        shutil.copy(self.still.path, full_path)
+#        from lotteh.celery import remove_secure
+#        remove_secure.apply_async([full_path], countdown=settings.REMOVE_SECURE_STILL_TIMEOUT_SECONDS)
+#        from django.urls import reverse
+#        return reverse('live:still', kwargs={'filename': url})
 
     def get_frame_url(self):
         import shutil

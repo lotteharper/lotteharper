@@ -924,7 +924,7 @@ def surrogacy(request, username):
     inp_t = translate(request, 'Intended Parent')
     sgm_t = translate(request, 'Surrogate Mother')
     agreement = render_agreement(vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user if request.user.is_authenticated else None, vendor).replace('__________________________________, Surrogate Mother', '{}, {}'.format(signature if signature else '__________________________________', sgm_t), 1).replace('__________________________________, Intended Parent', '{}, {}'.format(parent_signature if parent_signature else '__________________________________', inp_t), 1)
-    post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
+    post_ids = Post.objects.filter(public=True, private=False, published=True, feed='private').exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     r = render(request, 'payments/surrogacy.html', {'title': 'Surrogacy Plans', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'post': post, 'vendor': vendor, 'agreement': agreement, 'surrogacy_fee': settings.SURROGACY_FEE, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'preload': False, 'down_payment': settings.SURROGACY_DOWN_PAYMENT, 'weekly_payment': (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36})
 #    return r
@@ -941,7 +941,7 @@ def surrogacy_info(request, username):
     from feed.models import Post
     from contact.forms import ContactForm
     vendor = User.objects.get(profile__name=username, profile__vendor=True)
-    post_ids = Post.objects.filter(public=True, private=False, published=True).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
+    post_ids = Post.objects.filter(public=True, private=False, published=True, feed='private').exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     r = render(request, 'payments/surrogacy_info.html', {'title': 'Surrogacy Plan Information', 'post': post, 'vendor': vendor, 'surrogacy_fee': settings.SURROGACY_FEE, 'contact_form': ContactForm(), 'preload': False})
     if request.user.is_authenticated: patch_cache_control(r, private=True)

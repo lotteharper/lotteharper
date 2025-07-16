@@ -213,11 +213,6 @@ def process_live(camera_id, frame_id):
             frame.save()
     frame.get_still_url(False)
     frame = VideoFrame.objects.get(id=frame_id)
-    if not frame.still_bucket and frame.still and os.path.exists(frame.still.path):
-        path = os.path.join(settings.MEDIA_ROOT, get_still_path(frame, frame.still.path))
-        shutil.copy(frame.still.path, path)
-        camera.still = path
-        camera.save()
     if camera.mimetype.split(';')[0] != 'mp4': #not camera.default:
         path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
         run_command('ffmpeg -i {} -crf 0 -c:v libx264 {}'.format(frame.frame.path, path))
@@ -230,13 +225,13 @@ def process_live(camera_id, frame_id):
         frame.contains_speech = detect_speech(frame.frame.path, camera.vad_mode)
 #    camera.mime = frame.frame.name.split('.')[1]
 #    camera.save()
-    try:
-        frame.safe = not is_nude_fast(frame.still.path) if frame.still and os.path.exists(frame.still.path) else True
-    except:
-        import traceback
-        print(traceback.format_exc())
-        frame.safe = True
-    if not frame.safe and settings.NUDITY_CENSOR:
+#    try:
+#        frame.safe = not is_nude_fast(frame.still.path) if frame.still and os.path.exists(frame.still.path) else True
+#    except:
+#        import traceback
+#        print(traceback.format_exc())
+#        frame.safe = True
+    if settings.NUDITY_CENSOR and not frame.safe:
         op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
         from security.censor_video import censor_video_nude, censor_video_nude_fast
         censor_video_nude_fast(frame.frame.path, op_path, scale=settings.NUDITY_CENSOR_SCALE)
@@ -409,7 +404,7 @@ def process_recording(id, embed_logo):
             recording.file_processed = recording.file.path
         thumbnail = None
         first_frame = recording.frames.first()
-        if camera.upload and first_frame.animate_video and first_frame.still and os.path.exists(first_frame.still.path):
+        if False and camera.upload and os.path.exists(first_frame.still.path):
             from live.models import get_still_path
             path = os.path.join(settings.BASE_DIR, 'media', get_still_path(first_frame, 'file.png'))
             from feed.anime import convert_photo_anime
@@ -421,12 +416,12 @@ def process_recording(id, embed_logo):
             recording.thumbnail_bucket = path
             os.remove(path)
             thumbnail = recording.thumbnail_bucket.url
-        else:
-            try:
-                thumbnail = first_frame.still_bucket.url
-            except: pass
+#        else:
+#            try:
+#                thumbnail = first_frame.still_bucket.url
+#            except: pass
         from live.duration import get_duration
-        if camera.upload and get_duration(recording.file.path) > settings.LIVE_INTERVAL/1000 * 1.5:
+        if camera.upload and get_duration(recording.file.path) > (7.5 if (settings.LIVE_INTERVAL/1000 * 1.5) <= 7.5 else (settings.LIVE_INTERVAL/1000 * 1.5)):
             import traceback
             import pytz
             try:
