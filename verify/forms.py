@@ -6,7 +6,7 @@ def get_past_date(age=None):
     import datetime
     from dateutil.relativedelta import relativedelta
     from django.conf import settings
-    return datetime.datetime.now() - relativedelta(years=settings.MIN_AGE_VERIFIED if not age else age)
+    return datetime.datetime.now() - relativedelta(years=settings.MIN_AGE if not age else age)
 
 from feed.middleware import get_current_user
 
