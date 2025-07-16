@@ -63,6 +63,8 @@ def censor_video_nude(input_file, output_file, scale=1):
     h = 0
     while has_frames:
         has_frames, image = vidcap.read()
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = rgb_image
         if has_frames:
             print(index)
             if not first:
@@ -140,6 +142,8 @@ def censor_video_nude_fast(input_file, output_file, scale=1):
     h = 0
     while has_frames:
         has_frames, image = vidcap.read()
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = rgb_image
         if has_frames:
             print(index)
             if not first:
@@ -187,6 +191,8 @@ def censor_video_text(input_file, output_file, scale=1):
     has_frames = True
     while has_frames:
         has_frames, image = vidcap.read()
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = rgb_image
         if has_frames:
             dim = (int(image.shape[1] * scale), int(image.shape[0] * scale))
             small_image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
