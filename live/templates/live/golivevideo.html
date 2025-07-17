@@ -136,7 +136,7 @@ function openMediaSocket() {
                 }, {{ reload_time }});
         });
         mediaSocket.addEventListener("message", (event) => {
-        return;
+                /*return;
                 if(unconfirmedFrames.includes(event.data)) {
                         var index = unconfirmedFrames.indexOf(event.data);
                         console.log('Frame posted');
@@ -145,7 +145,7 @@ function openMediaSocket() {
                         videoFrames[event.data] = null;
                 } else {
                         if(retryCount[event.data] < 5) {
-                                /*mediaSocket.send(videoFrames[event.data]);*/
+                                mediaSocket.send(videoFrames[event.data]);
                                 console.log('Sending capture again');
                         } else {
                                 console.log('Forfeiting capture');
@@ -154,7 +154,7 @@ function openMediaSocket() {
                         }
                         if(!(event.data in retryCount)) retryCount[event.data] = 0;
                         retryCount[event.data] = retryCount[event.data] + 1;
-                }
+                }*/
         });
         {% endif %}
 }

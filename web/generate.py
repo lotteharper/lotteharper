@@ -92,7 +92,7 @@ def generate_site():
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
-    for lang in langs[langs.index('zu'):] if not disable_langs else []:
+    for lang in langs if not disable_langs else []: # langs[langs.index('zu'):]
         images = ''
         init_images = ''
         count = 0
@@ -150,26 +150,31 @@ def generate_site():
         context['links'] = links
         context['path'] = '/{}/{}'.format(lang, '')
         context['title'] = translate(request, 'My Photos', lang, 'en')
+        context['description'] = 'My photos | ' + settings.BASE_DESCRIPTION
         index = render_to_string('web/index.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/index.html'.format(lang)), 'w') as file:
             file.write(index)
         context['path'] = '/{}/{}'.format(lang, 'news')
         context['title'] = translate(request, 'News', lang, 'en')
+        context['description'] = 'News and articles | ' + settings.BASE_DESCRIPTION
         news = render_to_string('web/news.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
             file.write(news)
         context['path'] = '/{}/{}'.format(lang, 'contact')
         context['title'] = translate(request, 'Contact', lang, 'en')
+        context['description'] = 'Contact me | ' + settings.BASE_DESCRIPTION
         contact = render_to_string('web/contact.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/contact.html'.format(lang)), 'w') as file:
             file.write(contact)
         context['path'] = '/{}/{}'.format(lang, 'links')
         context['title'] = translate(request, 'My Links', lang, 'en')
+        context['description'] = 'Links I am sharing | ' + settings.BASE_DESCRIPTION
         links_page = render_to_string('web/links.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/links.html'.format(lang)), 'w') as file:
             file.write(links_page)
         context['path'] = '/{}/{}'.format(lang, 'landing')
         context['title'] = translate(request, 'Landing', lang, 'en')
+        context['description'] = 'Landing page | ' + settings.BASE_DESCRIPTION
         landing = render_to_string('web/landing.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/landing.html'.format(lang)), 'w') as file:
             file.write(landing)
@@ -189,13 +194,14 @@ def generate_site():
         context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
         context['path'] = '/{}/{}'.format(lang, 'private')
         context['hiderrm'] = True
+        context['description'] = 'Private photos | ' + settings.BASE_DESCRIPTION
         context['title'] = translate(request, 'Private', lang, 'en')
         private = render_to_string('web/private.html', context)
         if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
         context['footer'] = False # ...None).exclude(image_offsite=None)
-        for post in [] if disable_posts else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted'):
+        for post in [] if disable_posts else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed='news')).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
@@ -203,6 +209,7 @@ def generate_site():
                 context['or_image_url'] = post.get_web_url(original=False)
                 if post.feed == 'news': context['hiderrm'] = True
                 context['title'] = translate(request, shorttitle(post.id), lang, 'en')
+                context['description'] = 'See this article | ' + (post.content[:120].replace('\n', '').replace('\r', '') + '...') if len(post.content.replace('\n', '').replace('\r', '')) > 120 else post.content.replace('\n', '').replace('\r', '')
                 context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
                 path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
                 if (not os.path.exists(path)) or overwrite:
@@ -219,6 +226,7 @@ def generate_site():
                 if overwrite or (not os.path.exists(path)):
                     url = '/{}/{}'.format(lang, post.friendly_name)
                     context['post'] = post
+                    context['description'] = 'See this photo | ' + (post.content[:120].replace('\n', '').replace('\r', '') + '...') if len(post.content.replace('\n', '').replace('\r', '')) > 120 else post.content.replace('\n', '').replace('\r', '')
                     context['path'] = url
                     context['hiderrm'] = True
                     if post.image and not post.image_offsite: post.copy_web(force=force_copy, original=False)
@@ -234,6 +242,7 @@ def generate_site():
                         print(traceback.format_exc())
         context['hiderrm'] = True
         context['title'] = 'Video Chat'
+        context['description'] = 'Video chat | ' + settings.BASE_DESCRIPTION
         context['path'] = '/{}/{}'.format(lang, 'chat')
         page = render_to_string('web/chat.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/chat.html'.format(lang)), 'w') as file:
@@ -241,12 +250,14 @@ def generate_site():
         context['title'] = 'Our Online Experience'
         context['hidenav'] = True
         context['hidefooter'] = True
+        context['description'] = 'About our site | ' + settings.BASE_DESCRIPTION
         context['path'] = '/{}/{}'.format(lang, 'ad')
         ad = render_to_string('web/ad.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/ad.html'.format(lang)), 'w') as file:
             file.write(ad)
         images = None
         context['path'] = '/{}/404'.format(lang)
+        context['description'] = '404 File Not Found | ' + settings.BASE_DESCRIPTION
         context['title'] = translate(request, 'Error 404 - File Not Found', lang, 'en')
         context['hidenav'] = False
         context['hidefooter'] = False
@@ -273,6 +284,7 @@ def generate_site():
     context['lang'] = lang
     context['path'] = '/404'
     context['title'] = 'Error 404 - File Not Found'
+    context['description'] = '404 File Not Found | ' + settings.BASE_DESCRIPTION
     path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format('404'))
     if not os.path.exists(path) or overwrite or True:
         index = render_to_string('web/404.html', context)
@@ -285,6 +297,7 @@ def generate_site():
     context['path'] = '/recovery'
     context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
     context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
+    context['recovery'] = 'Recovery app | ' + settings.BASE_DESCRIPTION
     context['activate_mining'] = False
     recovery = render_to_string('web/recovery.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:

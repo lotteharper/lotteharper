@@ -493,8 +493,8 @@ def logout_everyone(request):
     if not (request.user.profile.admin or request.user.is_superuser):
         return redirect(reverse('landing:landing'))
     from security.secure import secure_remove_dir
-    secure_remove_dir('secure/media/')
-    secure_remove_dir('secure/video/')
+#    secure_remove_dir('secure/media/')
+#    secure_remove_dir('secure/video/')
     for user in User.objects.all():
         delete_all_unexpired_sessions_for_user(user)
         user.profile.tfa_authenticated = False
@@ -509,10 +509,9 @@ def logout_everyone_but_user(request):
     from security.secure import secure_remove_dir
     if not (request.user.profile.admin or request.user.is_superuser):
         return redirect(reverse('landing:landing'))
-    secure_remove_dir('secure/media/')
-    secure_remove_dir('secure/video/')
-    for user in User.objects.all():
-        if user != request.user:
-            delete_all_unexpired_sessions_for_user(user)
-            user.profile.tfa_authenticated = False
+#    secure_remove_dir('secure/media/')
+#    secure_remove_dir('secure/video/')
+    user = User.objects.get(id=request.user.id)
+    delete_all_unexpired_sessions_for_user(user)
+#            user.profile.tfa_authenticated = False
     return redirect(reverse('landing:landing'))

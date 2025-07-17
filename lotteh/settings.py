@@ -878,7 +878,7 @@ MEDIA_URL_CACHE_TIMEOUT = 60 * 60 * 24 * 3 # Cache timeout in seconds
 WEBAUTHN_USER_VERIFICATION_REQUIRED = True
 
 # Censor nudity in video
-NUDITY_CENSOR = True
+NUDITY_CENSOR = False
 NUDITY_CENSOR_SCALE = 0.3
 
 # Sentry
