@@ -243,6 +243,7 @@ class VideoCamera(models.Model):
     embed_logo = models.BooleanField(default=True)
     adjust_pitch = models.BooleanField(default=False)
     animate_video = models.BooleanField(default=False)
+    censor_video = models.BooleanField(default=False)
     upload = models.BooleanField(default=False)
     bucket = models.BooleanField(default=False)
     muted = models.BooleanField(default=False)

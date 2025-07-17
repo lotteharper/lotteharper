@@ -87,6 +87,7 @@ class NameCameraForm(forms.ModelForm):
         self.fields['animate_video'].label = translate(r, 'Animate the video with AnimeGAN? (GPU required)', src='en')
         self.fields['short_mode'].label = translate(r, 'Enable short mode for <1min videos?', src='en')
         self.fields['embed_logo'].label = translate(r, 'Embed the logo?', src='en')
+        self.fields['censor_video'].label = translate(r, 'Censor video where appropriate?', src='en')
         self.fields['live'].label = translate(r, 'Camera on?', src='en')
         self.fields['recording'].label = translate(r, 'Recording on?', src='en')
         self.fields['upload'].label = translate(r, 'Upload?', src='en')
@@ -100,7 +101,7 @@ class NameCameraForm(forms.ModelForm):
 
     class Meta:
         model = VideoCamera
-        fields = ('upload', 'title', 'category', 'privacy_status', 'description', 'tags', 'video_length_minutes', 'name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
+        fields = ('upload', 'title', 'category', 'privacy_status', 'description', 'tags', 'video_length_minutes', 'name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'censor_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
 
 # 'vad_mode',
 

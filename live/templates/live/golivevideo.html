@@ -63,8 +63,20 @@ video {
 {% endif %}
 </div>
 {% include 'live/camera_settings_frame.html' %}
+{% if nudity_censor %}
+<canvas id="cvcanvas" style="display: none;"></canvas>
+{% endif %}
+{% endblock %}
+{% block javascripts %}
+{% if nudity_censor %}
+<script src="/static/js/nude.js"></script>
+{% endif %}
 {% endblock %}
 {% block javascript %}
+{% if nudity_censor %}
+var overlay;
+nude.init();
+{% endif %}
 var updateCameraToggle = document.getElementById('update-camera-toggle');
 var cameraSettings = document.getElementById('camera-settings');
 var cameraUpdateOpen = false;
@@ -162,8 +174,28 @@ openMediaSocket();
 var form = document.getElementById('live-form');
 var data;
 var mediaChunks = [];
+{% if nudity_censor %}
+var censorVideo = false;
+const cvcanvas = document.getElementById('cvcanvas');
+const cvctx = cvcanvas.getContext('2d');
+{% endif %}
 function capture(){
         mediaRecorder.stop();
+        {% if nudity_censor %}
+        if(overlay) {
+            setTimeout(function() {
+                cvcanvas.width = Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }});
+                cvcanvas.height = Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }});
+                cvctx.clearRect(0,0, Math.trunc(cvcanvas.width * {{ nudity_censor_scale }}), Math.trunc(cvcanvas.height * {{ nudity_censor_scale }}));
+                cvctx.drawImage(pipOverlayStream, 0, 0, Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }}), Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }}));
+                nude.load(cvcanvas);
+                nude.scan(function(result){ 
+                    censorVideo = result;
+                    console.log(result ? "Nudity found in video." : "Not nude");
+                });
+            }, 0);
+        }
+        {% endif %}
 }
 const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
 let localCamStream,
@@ -235,6 +267,11 @@ async function makeComposite() {
     canvasElement.setAttribute("height", `${cam.videoHeight}px`);
     canvasCtx.clearRect(0, 0, cam.videoWidth, cam.videoHeight);
     {% if request.GET.mirror and not request.GET.back %}   canvasCtx.scale(-1, 1);{% endif %}
+    {% if nudity_censor %}
+    if(censorVideo) {
+        canvasCtx.filter = 'blur({{ nudity_censor_px }}px)';
+    }
+    {% endif %}
     canvasCtx.drawImage(
       cam,
       {% if request.GET.mirror and not request.GET.back %}-Math.floor(cam.videoWidth){% else %}0{% endif %},
@@ -242,6 +279,7 @@ async function makeComposite() {
       Math.floor(cam.videoWidth),
       Math.floor(cam.videoHeight),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
+    canvasCtx.filter = '';
     {% if request.GET.mirror and not request.GET.back %}    canvasCtx.resetTransform();{% endif %}
     {% if camera.embed_logo and camera.user.vendor_profile.logo %}
     canvasCtx.globalAlpha = baseAlpha;
@@ -342,6 +380,7 @@ async function startRecordingFn() {
       console.log("recorder started");
       document.getElementById("pipOverlayStream").style.border = "4px solid red";
       captureInterval = setInterval(capture, {{ video_interval }});
+      
   }
 }
 async function stopRecordingFn() {
