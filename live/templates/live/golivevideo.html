@@ -63,19 +63,16 @@ video {
 {% endif %}
 </div>
 {% include 'live/camera_settings_frame.html' %}
-{% if nudity_censor %}
-<canvas id="cvcanvas" style="display: none;"></canvas>
-{% endif %}
 {% endblock %}
 {% block javascripts %}
 {% if nudity_censor %}
-<script src="/static/js/nude.js"></script>
+<script src="/static/js/tensorflow.min.js"></script>
+<script src="/static/js/nsfwjs.min.js"></script>
 {% endif %}
 {% endblock %}
 {% block javascript %}
 {% if nudity_censor %}
 var overlay;
-nude.init();
 {% endif %}
 var updateCameraToggle = document.getElementById('update-camera-toggle');
 var cameraSettings = document.getElementById('camera-settings');
@@ -178,22 +175,32 @@ var mediaChunks = [];
 var censorVideo = false;
 const cvcanvas = document.getElementById('cvcanvas');
 const cvctx = cvcanvas.getContext('2d');
+var nsfwjsmodel;
+nsfwjs.load('/static/js/models/mobilenet_v2/').then(function(model) {
+    nsfwjsmodel = model;
+});
 {% endif %}
+function detectVideo() {
+        cvcanvas.width = Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }});
+        cvcanvas.height = Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }});
+        cvctx.clearRect(0,0, Math.trunc(cvcanvas.width * {{ nudity_censor_scale }}), Math.trunc(cvcanvas.height * {{ nudity_censor_scale }}));
+        cvctx.drawImage(pipOverlayStream, 0, 0, Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }}), Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }}));
+        nsfwjsmodel.classify(cvcanvas, 1).then(function (predictions) {
+            console.log(predictions[0]);
+            if(predictions[0].className == 'Porn' && predictions[0].probability > 0.92) {
+                console.log('Nude');
+                censorVideo = true;
+            } else {
+                console.log('not nude');
+                censorVideo = false;
+            }
+        });
+}
 function capture(){
         mediaRecorder.stop();
         {% if nudity_censor %}
         if(overlay) {
-            setTimeout(function() {
-                cvcanvas.width = Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }});
-                cvcanvas.height = Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }});
-                cvctx.clearRect(0,0, Math.trunc(cvcanvas.width * {{ nudity_censor_scale }}), Math.trunc(cvcanvas.height * {{ nudity_censor_scale }}));
-                cvctx.drawImage(pipOverlayStream, 0, 0, Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }}), Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }}));
-                nude.load(cvcanvas);
-                nude.scan(function(result){ 
-                    censorVideo = result;
-                    console.log(result ? "Nudity found in video." : "Not nude");
-                });
-            }, 0);
+            setTimeout(detectVideo, 0);
         }
         {% endif %}
 }
@@ -317,13 +324,15 @@ async function makeComposite() {
     }
     {% endif %}
     {% endif %}
-    let imageData = canvasCtx.getImageData(
-      0,
-      0,
-      cam.videoWidth,
-      cam.videoHeight
-    ); // this makes it work
-    canvasCtx.putImageData(imageData, 0, 0); // properly on safari/webkit browsers too
+    try {
+      let imageData = canvasCtx.getImageData(
+        0,
+        0,
+        cam.videoWidth,
+        cam.videoHeight
+      ); // this makes it work
+      canvasCtx.putImageData(imageData, 0, 0); // properly on safari/webkit browsers too
+    } catch {}
     canvasCtx.restore();
     rafId = requestVideoFrame(makeComposite);
   }
@@ -368,6 +377,11 @@ async function mergeStreamsFn() {
         // localCamStream.getAudioTracks().map(track => { track.enabled = false });
         // localScreenStream.getAudioTracks().map(track => { track.enabled = false });
     } catch {}
+    {% if nudity_censor %}
+    if(overlay) {
+        setTimeout(detectVideo, 3000);
+    }
+    {% endif %}
   }
 }
 var recordingStartTime;

@@ -90,7 +90,7 @@ def generate_site():
         'youtube_link': settings.YOUTUBE_LINK,
         'hiderrm': True,
     }
-    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
     for lang in langs if not disable_langs else []: # langs[langs.index('zu'):]
         images = ''
@@ -146,6 +146,7 @@ def generate_site():
                 blog = blog + '<hr>'
             links[count] = blog
             count = count + 1
+        print('Main paths (blog,contact,index,etc) lang={}'.format(lang))
         context['blog'] = blog
         context['links'] = links
         context['path'] = '/{}/{}'.format(lang, '')
@@ -178,6 +179,7 @@ def generate_site():
         landing = render_to_string('web/landing.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/landing.html'.format(lang)), 'w') as file:
             file.write(landing)
+        print('Encryption')
         import urllib.parse
         from security.crypto import encrypt_cbc
         images = ''
@@ -200,7 +202,6 @@ def generate_site():
         if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
-        context['footer'] = False # ...None).exclude(image_offsite=None)
         for post in [] if disable_posts else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed='news')).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
@@ -212,7 +213,8 @@ def generate_site():
                 context['description'] = 'See this article | ' + (post.content[:120].replace('\n', '').replace('\r', '') + '...') if len(post.content.replace('\n', '').replace('\r', '')) > 120 else post.content.replace('\n', '').replace('\r', '')
                 context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
                 path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
-                if (not os.path.exists(path)) or overwrite:
+                print(path)
+                if overwrite or (not os.path.exists(path)):
                     try:
                         index = render_to_string('web/post.html', context)
                         with open(path, 'w') as file:
@@ -233,6 +235,7 @@ def generate_site():
                     context['or_image_url'] = post.get_web_url(original=False)
                     context['title'] = translate(request, 'Private Photo', lang, 'en') + ' - ' + translate(request, shorttitle(post.id), lang, 'en')
                     context['post_links'] = '<p>{}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+                    print(path)
                     try:
                         index = render_to_string('web/post.html', context)
                         with open(path, 'w') as file:
@@ -240,6 +243,7 @@ def generate_site():
                     except:
                         import traceback
                         print(traceback.format_exc())
+        print('Remaining paths (chat,about,404,etc) lang={}'.format(lang))
         context['hiderrm'] = True
         context['title'] = 'Video Chat'
         context['description'] = 'Video chat | ' + settings.BASE_DESCRIPTION
