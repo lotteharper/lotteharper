@@ -63,6 +63,9 @@ video {
 {% endif %}
 </div>
 {% include 'live/camera_settings_frame.html' %}
+{% if nudity_censor %}
+<canvas id="cvcanvas" style="display: none;"></canvas>
+{% endif %}
 {% endblock %}
 {% block javascripts %}
 {% if nudity_censor %}
