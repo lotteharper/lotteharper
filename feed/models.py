@@ -482,7 +482,7 @@ class Post(models.Model):
         if self.friendly_name: return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
         else: return self.get_friendly_name()
 
-    def get_friendly_name(self, save=True):
+    def get_friendly_name(self):
         from django.urls import reverse
 #        if self.friendly_name and save:
 #            return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
@@ -503,9 +503,7 @@ class Post(models.Model):
         import random, os, urllib
         from django.conf import settings
         if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0:
-            self.friendly_name = name
-            if save: self.save()
-            return reverse('feed:post-detail', kwargs={'uuid': name})
+            return name
         words = 0
         import random
         if self.image: random.seed(self.image_hash)
@@ -521,9 +519,7 @@ class Post(models.Model):
             file.close()
             if Post.objects.filter(friendly_name=name).exclude(id__in=[self.id]).count() == 0: break
             words = words + 1
-        self.friendly_name = name
-        if save: self.save()
-        return reverse('feed:post-detail', kwargs={'uuid': name})
+        return name
 
     def clear_censor(self):
         import os
@@ -675,7 +671,7 @@ class Post(models.Model):
             self.content = self.content.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
             if not is_safe_text(self.content):
                 if len(self.content) < settings.POST_READER_LENGTH: self.content = censor(self.content)
-                else: self.public = False
+#                else: self.public = False
             this = Post.objects.filter(id=self.id).first()
             super(Post, self).save(*args, **kwargs)
             if (not this or this.private != self.private or this.public != self.public or this.image != self.image):
@@ -819,9 +815,6 @@ class Post(models.Model):
         if (not this or this.private != self.private or this.public != self.public or this.image != self.image) and self.image:
             from lotteh.celery import upload_post
             upload_post.delay(self.id)
-        if (not this or (this.content != self.content)): # and self.content and len(self.content) > 32:
-            self.friendly_name = ''
-            self.get_friendly_name(save=False)
         if (this and ((this.content != self.content) or (not this))) and len(self.content) > settings.POST_READER_LENGTH and '```' in self.content and self.posted:
             from lotteh.celery import write_post_book
             write_post_book.delay(self.id)
@@ -830,6 +823,8 @@ class Post(models.Model):
         if not is_base64(self.auction_message[24:]):
             from security.crypto import encrypt_cbc
             self.auction_message = encrypt_cbc(self.auction_message, settings.AES_KEY)
+        if ((not this) or (this.content != self.content)): # and self.content and len(self.content) > 32:
+            self.friendly_name = self.get_friendly_name()
 #        if (this and ((this.content != self.content) or (not this))) and self.posted:
 #            self.compile_content()
 #        try:

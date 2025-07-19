@@ -137,7 +137,7 @@ def translate_html(request, html, target=None, src=None):
     count = 0
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code'] and tag.string:
-            tag.string.replace_with(result_arr[count])
+            tag.string.replace_with(result_arr[count] if result_arr[count] else '')
             count+=1
         elif tag.parent.name in ['pre', 'code'] and tag.string:
             lines = []
@@ -145,7 +145,7 @@ def translate_html(request, html, target=None, src=None):
                 if len(line.rsplit('#', 1)) > 1:
                     to_trans = line.rsplit('#', 1)[1]
                     translated = result_arr[count]
-                    line_string = line.rsplit('#', 1)[0] + '# ' + translated
+                    line_string = line.rsplit('#', 1)[0] + '# ' + translated if translated else ''
                     lines += [line_string]
                     count+=1
             try:
@@ -153,10 +153,10 @@ def translate_html(request, html, target=None, src=None):
             except: pass
     for tag in soup.find_all('a'):
         if 'title' in tag.attrs:
-            tag['title'] = result_arr[count]
+            tag['title'] = result_arr[count] if result_arr[count] else ''
             count+=1
     for tag in soup.find_all('img'):
         if 'alt' in tag.attrs:
-            tag['alt'] = result_arr[count]
+            tag['alt'] = result_arr[count] if result_arr[count] else ''
             count+=1
     return str(soup).replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")

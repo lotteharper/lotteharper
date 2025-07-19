@@ -138,5 +138,5 @@ selector_languages_old = {
     'uk': 'українська',
     'vi': 'Tiếng Việt',
     'zu': 'Zulu',
-    'sq': 'shqiptare'
+    'sq': 'shqip'
 }

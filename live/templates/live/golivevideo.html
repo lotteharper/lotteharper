@@ -186,7 +186,7 @@ nsfwjs.load('/static/js/models/mobilenet_v2/').then(function(model) {
 function detectVideo() {
         cvcanvas.width = Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }});
         cvcanvas.height = Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }});
-        cvctx.clearRect(0,0, Math.trunc(cvcanvas.width * {{ nudity_censor_scale }}), Math.trunc(cvcanvas.height * {{ nudity_censor_scale }}));
+        cvctx.clearRect(0, 0, cvcanvas.width, cvcanvas.height);
         cvctx.drawImage(pipOverlayStream, 0, 0, Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }}), Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }}));
         nsfwjsmodel.classify(cvcanvas, 1).then(function (predictions) {
             console.log(predictions[0]);

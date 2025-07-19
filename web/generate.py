@@ -90,7 +90,7 @@ def generate_site():
         'youtube_link': settings.YOUTUBE_LINK,
         'hiderrm': True,
     }
-    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
     for lang in langs if not disable_langs else []: # langs[langs.index('zu'):]
         images = ''
@@ -202,7 +202,7 @@ def generate_site():
         if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
-        for post in [] if disable_posts else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed='news')).order_by('-date_posted'):
+        for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
                 context['post'] = post
@@ -210,7 +210,7 @@ def generate_site():
                 context['or_image_url'] = post.get_web_url(original=False)
                 if post.feed == 'news': context['hiderrm'] = True
                 context['title'] = translate(request, shorttitle(post.id), lang, 'en')
-                context['description'] = 'See this article | ' + (post.content[:120].replace('\n', '').replace('\r', '') + '...') if len(post.content.replace('\n', '').replace('\r', '')) > 120 else post.content.replace('\n', '').replace('\r', '')
+                context['description'] = 'See this article | ' + (post.content[:120].replace('\n', ' ').replace('\r', '') + '...') if len(post.content.replace('\n', ' ').replace('\r', '')) > 120 else post.content.replace('\n', ' ').replace('\r', '')
                 context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
                 path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
                 print(path)
@@ -228,7 +228,7 @@ def generate_site():
                 if overwrite or (not os.path.exists(path)):
                     url = '/{}/{}'.format(lang, post.friendly_name)
                     context['post'] = post
-                    context['description'] = 'See this photo | ' + (post.content[:120].replace('\n', '').replace('\r', '') + '...') if len(post.content.replace('\n', '').replace('\r', '')) > 120 else post.content.replace('\n', '').replace('\r', '')
+                    context['description'] = 'See this photo | ' + (post.content[:120].replace('\n', ' ').replace('\r', '') + '...') if len(post.content.replace('\n', ' ').replace('\r', '')) > 120 else post.content.replace('\n', ' ').replace('\r', '')
                     context['path'] = url
                     context['hiderrm'] = True
                     if post.image and not post.image_offsite: post.copy_web(force=force_copy, original=False)
