@@ -130,7 +130,7 @@ class Post(models.Model):
             data = urllib.parse.quote(encrypt_cbc(data, settings.PRV_AES_KEY)) + ((',' + urllib.parse.quote(encrypt_cbc(data, altcode))) if altcode else '')
             with open(new_path, 'w') as file:
                 file.write(data)
-            file.close()
+                file.close()
             if not self.private and ((not self.image_thumbnail) or (not os.path.exists(self.image_thumbnail.path))):
                 self.download_thumbnail()
                 self.get_image_thumb_url()
@@ -142,7 +142,7 @@ class Post(models.Model):
             data = urllib.parse.quote(encrypt_cbc(data, settings.PRV_AES_KEY)) + ((',' + urllib.parse.quote(encrypt_cbc(data, altcode))) if altcode else '')
             with open(new_path_thumb, 'w') as file:
                 file.write(data)
-            file.close()
+                file.close()
             return
         if self.image and (force or(not os.path.exists(new_path))):
             if (not self.image) or not os.path.exists(self.image.path): self.download_photo()

@@ -155,30 +155,35 @@ def generate_site():
         index = render_to_string('web/index.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/index.html'.format(lang)), 'w') as file:
             file.write(index)
+            file.close()
         context['path'] = '/{}/{}'.format(lang, 'news')
         context['title'] = translate(request, 'News', lang, 'en')
         context['description'] = 'News and articles | ' + settings.BASE_DESCRIPTION
         news = render_to_string('web/news.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
             file.write(news)
+            file.close()
         context['path'] = '/{}/{}'.format(lang, 'contact')
         context['title'] = translate(request, 'Contact', lang, 'en')
         context['description'] = 'Contact me | ' + settings.BASE_DESCRIPTION
         contact = render_to_string('web/contact.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/contact.html'.format(lang)), 'w') as file:
             file.write(contact)
+            file.close()
         context['path'] = '/{}/{}'.format(lang, 'links')
         context['title'] = translate(request, 'My Links', lang, 'en')
         context['description'] = 'Links I am sharing | ' + settings.BASE_DESCRIPTION
         links_page = render_to_string('web/links.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/links.html'.format(lang)), 'w') as file:
             file.write(links_page)
+            file.close()
         context['path'] = '/{}/{}'.format(lang, 'landing')
         context['title'] = translate(request, 'Landing', lang, 'en')
         context['description'] = 'Landing page | ' + settings.BASE_DESCRIPTION
         landing = render_to_string('web/landing.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/landing.html'.format(lang)), 'w') as file:
             file.write(landing)
+            file.close()
         print('Encryption')
         import urllib.parse
         from security.crypto import encrypt_cbc
@@ -202,6 +207,7 @@ def generate_site():
         if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
             with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
                 file.write(private)
+                file.close()
         for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted'):
             if post:
                 url = '/{}/{}'.format(lang, post.friendly_name)
@@ -219,6 +225,7 @@ def generate_site():
                         index = render_to_string('web/post.html', context)
                         with open(path, 'w') as file:
                             file.write(index)
+                            file.close()
                     except:
                         import traceback
                         print(traceback.format_exc())
@@ -240,6 +247,7 @@ def generate_site():
                         index = render_to_string('web/post.html', context)
                         with open(path, 'w') as file:
                             file.write(index)
+                            file.close()
                     except:
                         import traceback
                         print(traceback.format_exc())
@@ -251,6 +259,7 @@ def generate_site():
         page = render_to_string('web/chat.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/chat.html'.format(lang)), 'w') as file:
             file.write(page)
+            file.close()
         context['title'] = 'Our Online Experience'
         context['hidenav'] = True
         context['hidefooter'] = True
@@ -259,6 +268,7 @@ def generate_site():
         ad = render_to_string('web/ad.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/ad.html'.format(lang)), 'w') as file:
             file.write(ad)
+            file.close()
         images = None
         context['path'] = '/{}/404'.format(lang)
         context['description'] = '404 File Not Found | ' + settings.BASE_DESCRIPTION
@@ -270,6 +280,7 @@ def generate_site():
             index = render_to_string('web/404.html', context)
             with open(path, 'w') as file:
                 file.write(index)
+                file.close()
     if end_after_langs: return
     lang = 'en'
     request = DummyRequest(lang)
@@ -294,6 +305,7 @@ def generate_site():
         index = render_to_string('web/404.html', context)
         with open(path, 'w') as file:
             file.write(index)
+            file.close()
     context['hidenav'] = True
     context['hidefooter'] = True
     context['show_ads'] = False
@@ -306,6 +318,7 @@ def generate_site():
     recovery = render_to_string('web/recovery.html', context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
         file.write(recovery)
+        file.close()
     urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(private=False, published=True, posted=True, feed='news')).union(Post.objects.filter(posted=True, private=False, feed='private', published=True)).order_by('-date_posted').order_by('-pinned')
     for post in posts:
@@ -314,6 +327,7 @@ def generate_site():
     index = render_to_string('web/sitemap.xml', sitemapcontext)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'sitemap.xml'), 'w') as file:
         file.write(index)
+        file.close()
     import time
     serviceworker_context = {
         'urls': urls,
@@ -322,3 +336,4 @@ def generate_site():
     serviceworkerjs = render_to_string('web/serviceworker.js', serviceworker_context)
     with open(os.path.join(settings.BASE_DIR, 'web/site/', 'serviceworker.js'), 'w') as file:
         file.write(serviceworkerjs)
+        file.close()
