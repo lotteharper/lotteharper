@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ pagetitle }}</h1>
+<p>{{ notes }}</p>
+<p><button class="btn btn-outline-info" href="{% url 'app:app' %}" title="Return to the homepage">Return home</button></p>
+<img class="mx-auto" style="width: 100%; max-width: 800px; height: auto" src="{{ model.profile.get_cover_image_url }}" alt="{{ 'My cover photo'|etrans }}">
+{% if trace %}
+<p style="white-space: pre-wrap;">{{ trace }}</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+{% if payment_processor == 'helcim' %}
+<script type="text/javascript" src="https://secure.helcim.app/helcim-pay/services/start.js"></script>
+{% elif payment_processor == 'stripe' %}
+<script src="https://js.stripe.com/v3/"></script>
+{% endif %}
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+{% load feed_filters %}
+<h1>{{ 'Buy a Surrogacy Plan'|etrans }}</h1>
+<p>{{ 'Conceive a child carried by'|etrans }} {{ vendor.profile.name }}, {{ 'according to the agreement below.'|etrans }}</p>
+{% include 'language.html' %}
+<div style="display: flex; justify-content: space-around;">
+<img class="rounded" style="float: left; width: 50%; max-width: 400px;" src="{% if request.user.is_authenticated %}{{ post.get_image_url }}{% else %}{{ post.get_face_blur_thumb_url }}{% endif %}" alt="{{ 'Conceive a child carried by'|etrans }} {{ vendor.profile.name }}"></img>
+</div>
+<div style="white-space: pre-wrap;">
+{% blocktrans %}
+{% autoescape off %}
+{{ agreement }}
+{% endautoescape %}
+{% endblocktrans %}
+</div>
+<hr>
+<p>{{ 'Surrogacy services are provided according to the agreement above. If you do not agree to the agreement, please do not continue. You will need to create an account and verify your identity as well as add your signature in order to make the payment.'|etrans }}</p>
+<p>{{ 'After finalizing, copies of this agreement with signatures will be sent out to the surrogate mother and intended parent making the payment pursuant to this agreement.'|etrans }}</p>
+<p>{{ 'By finalizing this agreement and making a payment, you agree to the'|etrans }} <a href="/terms/" title="{{ 'Read the terms of service and privacy policy'|etrans }}">{{ 'Terms of Service and Privacy Policy'|etrans }}</a>, {{ 'and the agreement above, as well as agree to and and acknowledge the sale as outlined and selected, as well as the plan described.'|etrans }}</p>
+<p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} SURROGACY".</p>
+<p>{{ 'You will be redirected to a checkout page to make the payment. Please enter your credit or debit card information, you will be billed upon completion of checkout.'|etrans }}</p>
+<hr>
+<div class="mx-auto">
+<div class="row mx-auto" style="display: flex; justify-content: space-around; text-align: center;">
+<div class="col-md-6 m-2 p-2 rounded  mx-auto" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
+{% if request.user.is_authenticated and request.user|adult_identity_verified %}
+<p>{{ 'Finalize'|etrans }}</p>
+<legend>{{ 'Cost'|etrans }}: ${{ surrogacy_fee|sub_fee }} {{ 'billed in installments following a down payment according to the agreement.'|etrans }}</legend>
+<p>{{ 'The down payment required to begin the plan is'|etrans }} ${{ down_payment|elegant_sub_fee }}. {{ 'Payments will be invoiced according to a 36 week term after confirmation of pregnancy. Weekly payment of'|etrans }} ${{ weekly_payment|sub_fee }} {{ 'in 36 weekly payments is required and will be invoiced according to the agreement. Please note that this agreement is not final until completion of digital verification including ID scan and facial recognition with'|etrans }} {{ the_site_name }} {{ 'of all signing parties pursuant to this agreement, as well as all payment as arranged.'|etrans }}</p>
+<div style="display: flex; justify-content: space-around;">
+<form id="pay-form" onsubmit="event.preventDefault(); payFee();">
+{{ form|crispy }}
+<button type="submit" class="btn btn-lg btn-outline-success" title="{{ 'Submit'|etrans }}">{{ 'Card & Bank'|etrans }}</button>
+</form>
+<i>{{ 'Or, if you prefer, continue with crypto,'|etrans }} </i>
+<button onclick="window.location.href='{% url 'payments:surrogacy-crypto' vendor.profile.name %}';" class="btn btn-lg btn-outline-success" title="{{ 'Check out securely with cryptocurrency such as Bitcoin, Ethereum, and many other supported options.'|etrans }}">{{ 'Cryptocurrency'|etrans }}</button>
+{% elif request.user.is_authenticated %}
+<button onclick="window.location.href='{% url 'verify:verify' %}?next={% url 'payments:surrogacy-checkout' vendor.profile.name %}';" class="btn btn-lg btn-outline-success" title="{{ 'Verify your identity in order to submit payment'|etrans }}">{{ 'Verify your Identity'|etrans }}</button>
+{% else %}
+<button onclick="window.location.href='{% url 'users:login' %}?next={% url 'verify:verify' %}?next={% url 'payments:surrogacy-checkout' vendor.profile.name %}';" class="btn btn-lg btn-outline-success" title="{{ 'Login to verify your identity and complete payment'|etrans }}">{{ 'Log in'|etrans }}</button>
+<i> {{ 'Or'|etrans }} </i>
+<button onclick="window.location.href='{% url 'users:register' %}?next={% url 'verify:verify' %}?next={% url 'payments:surrogacy-checkout' vendor.profile.name %}';" class="btn btn-lg btn-outline-success" title="{{ 'Create an account to continue to verify and complete payment'|etrans }}">{{ 'Create Account'|etrans }}</button>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+<hr>
+{% endblock %}
+{% block javascript %}
+{% if request.user.is_authenticated and request.user.profile.identity_verified %}
+var product = 'surrogacy';
+var pid = {{ vendor.id }};
+var price = {{ down_payment }};
+var vendor = {{ vendor.id }};
+var payForm = document.getElementById('pay-form');
+{% if payment_processor == 'paypal' %}
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+    $.ajax({
+        url: '{{ base_url }}{% url 'payments:paypal-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
+        method:'POST',
+        success: function(data) {
+            if(data.startsWith(window.location.protocol + '//')) {
+                window.location.href = data;
+            } else { console.log('Invalid response from server.'); }
+        },
+    });
+}
+{% elif payment_processor == 'square' %}
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};    
+    $.ajax({
+        url: '{{ base_url }}{% url 'payments:square-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
+        method:'POST',
+        success: function(data) {
+            if(data.startsWith(window.location.protocol + '//')) {
+                window.location.href = data;
+            } else { console.log('Invalid response from server.'); }
+        },
+    });
+}
+{% elif payment_processor == 'helcim' %}
+var checkoutToken;
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};    
+    $.ajax({
+        url: '{{ base_url }}{% url 'payments:invoice' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
+        method:'POST',
+        success: function(data) {
+            var j = JSON.parse(data);
+            checkoutToken = j.checkoutToken;
+            $(document.getElementById("clemn-navbar")).autoHidingNavbar().hide();
+            appendHelcimPayIframe(j.checkoutToken);
+        },
+    });
+}
+window.addEventListener('message', (event) => {
+  const helcimPayJsIdentifierKey = 'helcim-pay-js-' + checkoutToken;
+  if(event.data.eventName === helcimPayJsIdentifierKey){
+    if(event.data.eventStatus === 'ABORTED'){
+      console.error('Transaction failed!', event.data.eventMessage);
+    }
+    if(event.data.eventStatus === 'SUCCESS'){
+      validateResponse(event.data.eventMessage)
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+    }
+  }
+});
+function validateResponse(eventMessage) {
+  const payload = {
+    'rawDataResponse': eventMessage.data,
+  };
+  return fetch('{{ base_url }}/payments/helcim/', {body: payload, method: "POST"});
+}
+{% elif payment_processor == 'stripe' %}
+var stripe = Stripe('{{ stripe_pubkey }}');
+function payFee(){
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};    
+    fetch("/payments/surrogacy/checkout/finalize/payment/?vendor={{ vendor.id }}")
+    .then((result) => {
+        return result.json();
+    })
+    .then((data) => {
+        return stripe.redirectToCheckout({ sessionId: data.sessionId });
+    });
+}
+{% endif %}
+{% endif %}
+{% endblock %}

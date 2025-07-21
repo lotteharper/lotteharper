@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block head %}
+<script type="text/javascript" src="/static/qrcode.min.js"></script>
+<link rel="stylesheet" href="/static/clock/clock.css">
+{% endblock %}
+{% block styles %}
+.fullscreen-video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: 99;
+}
+#toggle-fullscreen {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 200;
+}
+{% endblock %}
+{% block content %}
+{% load feed_filters %}
+{% include 'banner_ad.html' %}
+<legend id="pleaseinteract">{{ 'Please interact with the document to begin the live feed.'|trans }}</legend>
+{% if not hidenavbar %}
+<h1>@{{ profile.name }}'s {{ 'Live Video'|trans }}</h1>
+<legend>{{ request.GET.camera }} {{ 'camera'|trans }}</legend>
+{% endif %}
+{% with camera as content %}
+{% include 'clock.html' %}
+{% endwith %}
+<div id="lastFrame"></div>
+<div id="videoDiv" class="nopadding" style="overflow: hidden; width: 100%; background-position: center; background-size: cover;">
+<video id="video" preload="auto" width="100%" class="video"></video>
+</div>
+{% if not hidenavbar %}
+<legend class="text-center">{{ 'Chat'|trans }}</legend>
+<iframe src="/chat/{{ profile.name }}/?hidenavbar=t" width="100%" height="500px"></iframe>
+{% endif %}
+<canvas id="canvas" width="100" height="100" style="position: absolute; display: none; visibility: hidden;"></canvas>
+<link rel="preload" as="video" id="link-preload">
+<div id="toggle-fullscreen">
+<button class="btn btn-outline-info" onclick="toggleFullscreen();" title="{{ 'Toggle Fullscreen'|trans }}">{{ 'Fullscreen'|trans }}</button>
+</div>
+{% include 'social.html' %}
+{% endblock %}
+{% block javascript %}
+var idle_timeout;
+var idle = true;
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else if (document.exitFullscreen) {
+    document.exitFullscreen();
+  }
+  $('.video').toggleClass('fullscreen-video');
+}
+{% if request.GET.fullscreen %}
+$('.video').toggleClass('fullscreen-video');
+/*toggleFullscreen();*/
+{% endif %}
+var videodiv = document.getElementById('videoDiv');
+const videoElement = document.querySelector('video');
+{% with camera.get_still_url as still %}
+videodiv.style.backgroundImage = '{{ still }}';
+video.poster = '{{ still }}';
+{% endwith %}
+const mimeCodec = 'video/{% autoescape off %}{{ camera.mimetype }}{% endautoescape %}';
+var urls = [];
+var queue = [];
+var files = [];
+let currentFileIndex = 0;
+let mediaSource;
+var mediaInterval;
+function getSourceBufferLength(sourceBuffer) {
+  if (!sourceBuffer || !sourceBuffer.buffered || sourceBuffer.buffered.length === 0) {
+    return 0;
+  }
+  const buffered = sourceBuffer.buffered;
+  const lastRange = buffered.length - 1;
+  return buffered.end(lastRange) - buffered.start(0);
+}
+var updateIndex = 0;
+function startStream() {
+    if ("MediaSource" in window && MediaSource.isTypeSupported(mimeCodec)) {
+      mediaSource = new MediaSource();
+      console.log(mediaSource.readyState); // closed
+      videoElement.src = URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener("sourceopen", sourceOpen);
+    } else {
+      console.error("Unsupported MIME type or codec: ", mimeCodec);
+    }
+    function sourceOpen() {
+      console.log(this.readyState); // open
+      var sourceBuffer = mediaSource.addSourceBuffer(mimeCodec);
+      sourceBuffer.mode = 'sequence';
+     var lastBufferedLength = {{ video_interval }}/1000;
+    function setMediaInterval() {
+     function mediaStream() {
+         try {
+                {% if camera.compress_video  %}
+                const vidBlob = await (await fetch(files[currentFileIndex++])).blob();
+                        var zip = new JSZip();
+                        zip.loadAsync(vidBlob).then(function(zip) {
+                                object.keys(zip.files).forEach(function(filename){
+                                        var content = zip.files[filename];
+                                                content.async('ArrayBuffer').then(function(vidBuff) {
+                                sourceBuffer.addEventListener("updateend", () => {
+                                  videoElement.play();
+                                  lastBufferedLength = getSourceBufferLength(this);
+                                  console.log(mediaSource.readyState); // ended
+                                });
+                                sourceBuffer.appendBuffer(vidBuff);
+                                        });
+                                });
+                        });
+                {% else %}
+                  fetchAB(files[currentFileIndex++], (buf) => {
+                    sourceBuffer.addEventListener("updateend", () => {
+                      videoElement.play();
+                      lastBufferedLength = getSourceBufferLength(this);
+                      console.log(mediaSource.readyState); // ended
+                    });
+                    console.log(buf);
+/*                    if(buf && buf.byteLength < 5000) return;*/
+                    sourceBuffer.appendBuffer(buf);
+                  });
+            {% endif %}
+              } catch {
+                clearInterval(mediaInterval);
+                setTimeout(function(){
+                    setMediaInterval();
+                }, {{ reload_time }});
+                currentFileIndex--;
+              }
+        }
+        if(mediaInterval) clearInterval(mediaInterval);
+        mediaInterval = setInterval(mediaStream, lastBufferedLength * 1000);
+     }
+    setMediaInterval();
+    }
+    function fetchAB(url, cb) {
+      if(!url) {
+          currentFileIndex--;
+          return;
+      }
+      console.log(url);
+      const xhr = new XMLHttpRequest();
+      xhr.open("get", url);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = () => {
+        cb(xhr.response);
+      };
+      xhr.send();
+    }
+}
+
+var alreadyOpen = false;
+var first = true;
+var index = {{ frame_count }} - 3;
+var isReset = false;
+function load(){
+        var url = "/live/{{ profile.name }}/frame/?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}&index=" + index;
+        $.get(url, function(data){
+        files.push(data);
+        });
+    index++;
+}
+function reset(){
+        var pi = document.getElementById("pleaseinteract");
+        pi.style.height = "0px";
+        pi.style.visibility = "hidden";
+        if(!isReset) {
+                isReset = true;
+                {% if camera.use_websocket %}
+                        function openSocket() {
+                        var socket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/video/{{ camera.user.profile.name }}/{% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}/?index=' + index);
+                        socket.addEventListener("open", (event) => {
+                            console.log('Socket open.');
+                        });
+                        socket.addEventListener("close", (event) => {
+                            console.log('Socket closed.');
+                            setTimeout(function() {
+                                openSocket();
+                            }, {{ reload_time }});
+                        });
+                                socket.addEventListener("message", async function(event) {
+                    if(files.length == 2) {
+                        startStream();
+                    }
+                    files.push(event.data);
+                    console.log(event.data);
+/*                    urls.push(event.data);
+                                        await loadVideo(event.data);
+                    videoElement.src = event.data;
+                    videoElement.play(); */
+                                });
+                        }
+                        openSocket();
+                {% else %}
+                setInterval(load, {{ video_interval }});
+                {% endif %}
+        }
+}
+document.querySelector('body').addEventListener('mousedown', reset);
+document.querySelector('body').addEventListener('touchstart', reset);
+document.querySelector('body').addEventListener('keydown', reset);
+window.addEventListener('scroll', reset);
+videoElement.addEventListener("pause", (event) => {event.target.play();});
+{% endblock %}

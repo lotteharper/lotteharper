@@ -1,0 +1,30 @@
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}">
+<meta name="pinterest:image" content="{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}"/>
+{% endblock %}
+{% block content %}
+{% load feed_filters %}
+{% load app_filters %}
+<h1>{{ post.id|shorttitle|etrans }}</h1>
+<img src="{{ post.author.profile.get_image_url }}" alt="{{ post.author.profile.name }}{{ '\'s profile photo'|etrans }}" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
+<p><i>{{ 'By'|etrans }} {{ post.author.profile.name }}</i></p>
+{% autoescape off %}
+<div style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content|transauthor:post.id|tagusers|trimlength }}{% else %}{{ post.content|transauthor:post.id|addhttpstodomains|embedlinks|trimlength }}{% endif %}</div>
+{% if post.content|charcountreader %}
+{% include 'reader.html' %}
+{% endif %}
+{% include 'banner_ad.html' %}
+{% if post.image %}
+<img width="100%;" height="auto" src="{% if or_image_url %}{{ or_image_url }}{% else %}{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}{% endif %}" alt="{{ post.id|shorttitle }} - {{ 'by'|etrans }} {{ post.author.profile.name }}">
+{% endif %}
+{{ post_links }}
+{% endautoescape %}
+<hr>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block javascript %}
+{% autoescape off %}
+{% endautoescape %}
+{% include 'reader.js' %}
+{% endblock %}

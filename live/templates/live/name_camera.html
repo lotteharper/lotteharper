@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load app_filters %}
+{% block content %}
+<legend>{% if form.instance %}{{ 'Update the video camera'|etrans }} "{{ form.instance.name }}"{% else %}{{ 'New video camera'|etrans }}{% endif %}</legend>
+{% if not request.GET.hidenavbar %}
+<a href="{% url 'live:choose-camera' %}" title="{{ 'Choose camera'|etrans }}" class="btn btn-outline-primary">{{ 'Choose Camera'|etrans }}</a>
+{% endif %}
+<form method="POST">
+<button type="submit" class="btn btn-outline-info">{{ 'Save'|etrans }}</button>
+{% csrf_token %}
+{{ form|crispy }}
+<button type="submit" class="btn btn-outline-info">{{ 'Update'|etrans }}</button>
+</form>
+{% if not request.GET.hidenavbar %}
+<hr style="color: blue;">
+{% blocktrans %}
+<p><i>Use the buttons below to record media to the site with your webcam.</i></p>
+<div style="display: flex; justify-content: space-around;">
+<a href="{% url 'live:golivevideo' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Record webcam'|etrans }}</a>
+<a href="{% url 'live:screencast' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Record screencast'|etrans }}</a>
+<a href="{% url 'live:livevideo' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'Live video'|etrans }}</a>
+<a href="{% url 'recordings:recordings' request.user.profile.name %}?camera={{ form.instance.name }}" class="btn btn-outline-danger">{{ 'See recordings'|etrans }}</a>
+{% endblocktrans %}
+</div>
+<hr style="color: red;">
+<div style="display: flex; justify-content: space-around;">
+{% include 'live/go_remote.html' %}
+{% include 'live/mute_remote.html' %}
+{% include 'live/recording_remote.html' %}
+</div>
+{% endif %}
+{% endblock %}
+{% block javascript %}
+{% if not request.GET.hidenavbar %}
+var live = false;
+var recording = false;
+var muted = false;
+var liveButton = document.getElementById('golivebutton');
+var recordButton = document.getElementById('recordbutton');
+var muteButton = document.getElementById('mutebutton');
+var recording = {% if camera.recording %}true{% else %}false{% endif %};
+var cameraon = false;
+function openRemoteSocket() {
+        var remoteSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
+        remoteSocket.addEventListener("open", (event) => {
+            console.log('Remote socket open.');
+        });
+        remoteSocket.addEventListener("close", (event) => {
+            console.log('Remote socket closed.');
+            setTimeout(function() {
+                openRemoteSocket();
+            }, {{ reload_time }});
+        });
+        remoteSocket.addEventListener("message", (event) => {
+            var instructions = event.data.split(',');
+            if(instructions[0] == 'y' && !cameraon) {
+                cameraon = true;
+                liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
+            } else if(instructions[0] == 'n' && cameraon) {
+                cameraon = false;
+                liveButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
+            }
+            if(instructions[1] == 'y' && !recording) {
+                recording = true;
+                recordButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
+            } else if(instructions[1] == 'n' && recording) {
+                recording = false;
+                recordButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
+            }
+            if(instructions[2] == 'y' && !muted) {
+                muted = true;
+                muteButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            } else if(instructions[2] == 'n' && muted) {
+                muted = false;
+                muteButton.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
+            }
+        });
+}
+openRemoteSocket();
+{% include 'live/remote.js' %}
+{% endif %}
+{% endblock %}

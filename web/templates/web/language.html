@@ -1,0 +1,14 @@
+{% load feed_filters %}
+{% load app_filters %}
+<div class="dropdown">
+  <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-globe"></i> {{ 'Language'|etrans }}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div style="max-height: 50vh; overflow: scroll;">
+        {% for next_language, text_to_render in selector_languages.items %}
+        <a class="dropdown-item" href="/{{ next_language }}/{{ path|useablepath }}" title="{{ 'Read the site in'|etrans }} {{ text_to_render|etranslang:next_language }}">{{ text_to_render|etranslang:next_language }}</a>
+        {% endfor %}
+    </div>
+  </div>
+</div>

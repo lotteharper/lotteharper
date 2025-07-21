@@ -1,0 +1,41 @@
+#!/bin/bash
+U="team"
+DIR="lotteh"
+repo_date=$(date '+%Y\-%m\-%d.%H:%M:%S')
+#  Configure URLs
+GIT_URL_PROJ=`sed -n '1p' < /home/$U/$DIR/config/git`
+GIT_URL_PUB=`sed -n '3p' < /home/$U/$DIR/config/git`
+GIT_URL=`sed -n '4p' < /home/$U/$DIR/config/git`
+PROJECT_GIT_URL="${GIT_URL_PROJ%%.+}+$repo_date.git"
+# Git config
+DOW=$(date +%u)
+echo $DOW
+HOD=$(date +%H)
+echo $HOD
+echo $GIT_URL
+escaped_url=$(echo "$GIT_URL" | sed 's/\//\\\//g')
+CMD="6s/GIT_REPO.*/GIT_REPO=\"$escaped_url\"/g"
+echo $CMD
+sed -i -e $CMD /home/$U/$DIR/scripts/init
+GIT_URL_INIT=`sed -n '2p' < /home/$U/$DIR/config/git`
+echo $GIT_URL_INIT
+if [ "$DOW" -eq 1 ]; then
+        if [ "$HOD" -eq 2 ]; then
+                echo "Generating new repo"
+                sudo rm -r celery
+                sudo rm -r .git
+                git init --initial-branch=main
+                GUP="${GIT_URL_PROJ//\//\\/}"
+                PGU="${PROJECT_GIT_URL//\//\\/}"
+                CMD_POST_CREATE_REPO="s/$GUP/$PGU/g"
+                echo "$CMD_POST_CREATE_REPO"
+                sed -i "$CMD_POST_CREATE_REPO" /home/$U/$DIR/config/git
+		        GIT_URL_INIT_UP="${GIT_URL_INIT%.*}.$repo_date.git"
+                GUP="${GIT_URL_INIT//\//\\/}"
+                PGU="${GIT_URL_INIT_UP//\//\\/}"
+                CMD_POST_CREATE_REPO="s/$GUP/$PGU/g"
+                echo "$CMD_POST_CREATE_REPO"
+                sed -i "$CMD_POST_CREATE_REPO" /home/$U/$DIR/config/git
+                GIT_URL_INIT="$GIT_URL_INIT_UP"
+        fi
+fi

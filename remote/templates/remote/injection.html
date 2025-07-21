@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<legend>Inject into session</legend>
+<p class="article-content"><b>{{ session.time }}</b> <i>{{ session.path }}</i></p>
+<p class="article-content">{{ session.uuid_key }} - {{ session.ip_address }}</p>
+<form method="POST">
+{% csrf_token %}
+{{ form|crispy }}
+<button class="btn btn-outline-danger" type="submit">Inject</button>
+</form>
+{% for injection in past_injections %}
+<p><b>{{ injection.time }}</b></p>
+<b>Last</b>
+<p id="injection{{ injection.id }}" style="white-space: pre-wrap;">{{ injection.injection }}</p>
+<button onclick="copyToArea('injection{{ injection.id }}')" title="Copy injection">Copy</button>
+<b>All</b>
+<p id="p-injection{{ injection.id }}" style="white-space: pre-wrap;">{{ injection.past_injections }}</p>
+<button onclick="copyToArea('p-injection{{ injection.id }}')" title="Copy injection">Copy</button>
+<hr>
+{% endfor %}
+{% endblock %}
+{% block javascript %}
+function escapeHTML(html) {
+    return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+}
+var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+    // Match everything outside of normal chars and " (quote character)
+    NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+/**
+ * Escapes all potentially dangerous characters, so that the
+ * resulting string can be safely inserted into attribute or
+ * element text.
+ * @param value
+ * @returns {string} escaped text
+ */
+function encodeEntities(value) {
+  return value.
+    replace(/&/g, '&amp;').
+    replace(SURROGATE_PAIR_REGEXP, function(value) {
+      var hi = value.charCodeAt(0);
+      var low = value.charCodeAt(1);
+      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+    }).
+    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
+      return '&#' + value.charCodeAt(0) + ';';
+    }).
+    replace(/</g, '&lt;').
+    replace(/>/g, '&gt;');
+}
+function htmlspecialchars_decode(str) {
+    var map = {
+        "&amp;": "&",
+        "&lt;": "<",
+        "&gt;": ">",
+        "&quot;": "\"",
+        "&#39;": "'"
+    };
+    return str.replace(/(&amp;|&lt;|&gt;|&quot;|&#39;)/g, function(m) { return map[m]; });
+}
+var input = document.getElementById('id_injection');
+function copyToArea(element) {
+	var el = document.getElementById(element);
+    var escaped = new Option(el.innerHTML).innerHTML;
+	input.value = htmlspecialchars_decode(el.innerHTML);
+}
+{% endblock %}

@@ -1,0 +1,46 @@
+#!/bin/bash
+cd /home/team/lotteh
+source venv/bin/activate
+python manage.py makemigrations
+python manage.py migrate --run-syncdb
+python set_site.py
+./scripts/loadapp auth
+#./scripts/loadapp sessions
+./scripts/loadapp address
+python clear_empty_profiles_table.py
+./scripts/loadapp users.profile
+./scripts/loadapp feed.post
+./scripts/loadapp feed.bid
+./scripts/loadapp chat
+./scripts/loadapp verify
+python clear_empty_security_tables.py
+#./scripts/loadapp security
+./scripts/loadapp security.credential
+./scripts/loadapp security.userlogin
+./scripts/loadapp security.usersession
+./scripts/loadapp security.otptoken
+./scripts/loadapp security.biometric
+./scripts/loadapp security.pincode
+./scripts/loadapp security.mrzscan
+./scripts/loadapp security.nfcscan
+./scripts/loadapp security.vivokeyscan
+./scripts/loadapp security.securityprofile
+./scripts/loadapp security.useripaddress
+#./scripts/loadapp security.session
+./scripts/loadapp payments
+./scripts/loadapp vendors
+./scripts/loadapp barcode
+./scripts/loadapp webauth
+./scripts/loadapp voice
+./scripts/loadapp tts
+./scripts/loadapp games
+./scripts/loadapp audio
+./scripts/loadapp live
+./scripts/loadapp translate
+./scripts/loadapp contact
+./scripts/loadapp payments
+./scripts/loadapp chat
+./scripts/loadapp survey
+./scripts/loadapp crypto
+./scripts/loadapp birthcontrol
+./scripts/loadapp webpush

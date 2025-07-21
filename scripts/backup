@@ -1,0 +1,248 @@
+#!/bin/bash
+U="team"
+DIR="lotteh"
+repo_date=$(date '+%Y\-%m\-%d.%H:%M:%S')
+#  Configure URLs
+GIT_URL_PROJ=`sed -n '1p' < /home/$U/$DIR/config/git`
+GIT_URL_PUB=`sed -n '3p' < /home/$U/$DIR/config/git`
+GIT_URL=`sed -n '4p' < /home/$U/$DIR/config/git`
+PROJECT_GIT_URL="${GIT_URL_PROJ%_*}_$repo_date.git"
+# Git config
+DOW=$(date +%u)
+echo $DOW
+HOD=$(date +%H)
+echo $HOD
+echo $GIT_URL
+escaped_url=$(echo "$GIT_URL" | sed 's/\//\\\//g')
+CMD="6s/GIT_REPO.*/GIT_REPO=\"$escaped_url\"/g"
+echo $CMD
+sed -i -e $CMD /home/$U/$DIR/scripts/init
+GIT_URL_INIT=`sed -n '2p' < /home/$U/$DIR/config/git`
+echo $GIT_URL_INIT
+#if [ "$DOW" -eq 1 ]; then
+#        if [ "$HOD" -eq 2 ]; then
+#                echo "Generating new repo"
+#                sudo rm -r celery
+#                sudo rm -r .git
+#                git init --initial-branch=main
+#                GUP="${GIT_URL_PROJ//\//\\/}"
+#                PGU="${PROJECT_GIT_URL//\//\\/}"
+#                CMD_POST_CREATE_REPO="s/$GUP/$PGU/g"
+#                echo "$CMD_POST_CREATE_REPO"
+#                sed -i "$CMD_POST_CREATE_REPO" /home/$U/$DIR/config/git
+#		GIT_URL_INIT_UP="${GIT_URL_INIT%_*}_$repo_date.git"
+#                GUP="${GIT_URL_INIT//\//\\/}"
+#                PGU="${GIT_URL_INIT_UP//\//\\/}"
+#                CMD_POST_CREATE_REPO="s/$GUP/$PGU/g"
+#                echo "$CMD_POST_CREATE_REPO"
+#                sed -i "$CMD_POST_CREATE_REPO" /home/$U/$DIR/config/git
+#        fi
+#fi
+GIT_URL_PROJ=`sed -n '1p' < /home/$U/$DIR/config/git`
+escaped_url_init=$(echo "$GIT_URL_INIT" | sed 's/\//\\\//g')
+CMD_INIT="3s/GIT_REPO.*/GIT_REPO=\"$escaped_url_init\"/g"
+echo $CMD_INIT
+sed -i -e $CMD_INIT /home/$U/$DIR/scripts/initialize
+PYTHON_VERSION="3.12"
+git config --global --add safe.directory $"/home/$U/$DIR"
+cd /usr/bin
+while read p; do
+  cp /usr/bin/$p /home/$U/$DIR/scripts/$p
+done < /etc/ascripts
+cd /home/$U/$DIR
+date > backup_init_date.txt
+sudo cp /home/team/Documents/keylog/log.py scripts/log.py
+sudo cp /var/log/audit/auditd.log log/auditd.log
+sudo cp /var/log/commands.log* log/
+# TEMPORARY
+sudo rm .git/index.lock
+sudo cp /etc/apache2/sites-available/lotteh-le-ssl.conf config/lotteh-le-ssl.conf
+sudo cp /etc/default/celery config/etc_default_celery
+sudo cp /etc/init.d/celery config/etc_init.d_celery
+sudo cp /etc/init.d/celerybeat config/etc_init.d_celerybeat
+sudo cp /etc/postfix/main.cf config/etc_postfix_main.cf
+sudo cp /etc/postfix/master.cf config/etc_postfix_master.cf
+sudo cp /etc/dovecot/conf.d/10-auth.conf config/etc_dovecot_conf.d_10-auth.conf
+sudo cp /etc/dovecot/conf.d/10-mail.conf config/etc_dovecot_conf.d_10-mail.conf
+sudo cp /etc/dovecot/conf.d/10-master.conf config/etc_dovecot_conf.d_10-master.conf
+sudo cp /etc/dovecot/dovecot.conf config/etc_dovecot_dovecot.conf
+sudo cp /etc/dovecot/passwd config/etc_dovecot_passwd
+sudo cp /etc/default/opendkim config/etc_default_opendkim
+sudo cp /etc/opendkim.conf config/etc_opendkim.conf
+sudo cp /etc/systemd/system/celery.service config/etc_systemd_system_celery.service
+sudo cp /etc/systemd/system/stun.service config/etc_systemd_system_stun.service
+sudo cp /etc/systemd/system/daphne.service config/etc_systemd_system_daphne.service
+sudo cp /etc/systemd/system/celerybeat.service config/etc_systemd_system_celerybeat.service
+sudo cp /etc/systemd/system/keylog.service config/etc_systemd_system_keylog.service
+sudo cp /etc/postgresql/16/main/postgresql.conf config/postgresql.conf
+sudo cp /etc/apis.json config/apis.json
+sudo cp /etc/config.json config/config.json
+sudo cp /etc/X11/Xwrapper.config config/Xwrapper.config
+sudo tail -n +55 /etc/sudoers > config/sudoers
+sudo tail -n +4 /var/spool/cron/crontabs/root > config/crontab
+sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pyxb/binding/content.py scripts/content.py
+sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/pwa_webpush/forms.py scripts/pwa_webpush_forms.py
+#sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/webauth/views.py scripts/webauth_views.py
+sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/json.py
+#sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py scripts/serializers_json_lowmem.py
+sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/googletrans/client.py scripts/client.py
+sudo cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/nude.py scripts/nude.py
+#cp /home/team/lotteh/venv/lib/python$PYTHON_VERSION/site-packages/googletrans/client.py scripts/googletrans_client.py
+sudo cp /home/team/lotteh/violence-detection/requirements.txt config/vd-requirements.txt
+sudo cp /home/team/lotteh/violence-detection/model.py config/vd-model.py
+sudo cp /etc/pam.d/sshd config/etc_pam.d_sshd
+sudo cp /etc/pam.d/login config/etc_pam.d_login
+sudo cp /etc/banner config/banner
+sudo chmod -R a+rwx config/
+sudo chmod -R a+rwx scripts/
+sudo cp /var/mail/* mailbox/
+sudo cp /etc/ascripts /home/$U/$DIR/config/ascripts
+source venv/bin/activate
+#python generate_site.py
+sudo chown -R :users /home/team/lotteh/web/site/media
+python make_email_list.py
+pip freeze > requirements.txt
+sed -i '/opencv-/d' requirements.txt
+sed -i '/dlib/d' requirements.txt
+sed -i '/backports.zoneinfo/d' requirements.txt
+sed -i '/-e\sgit\+/d' requirements.txt
+sed -i '/-e\s\/home\/team\/lotteh\/GFPGAN\+/d' requirements.txt
+sed -i '/typing_extensions/d' requirements.txt
+sed -i '/asgiref/d' requirements.txt
+sed -i '/librosa/d' requirements.txt
+sed -i '/pydantic/d' requirements.txt
+sed -i '/tensorflow/d' requirements.txt
+sed -i '/tensorrt-libs/d' requirements.txt
+sed -i '/cryptography/d' requirements.txt
+sed -i '/charset/d' requirements.txt
+sed -i '/channels/d' requirements.txt
+sed -i '/cffi/d' requirements.txt
+sed -i '/basicsr/d' requirements.txt
+sed -i '/click/d' requirements.txt
+sed -i '/click-repl/d' requirements.txt
+sed -i '/click-didyoumean/d' requirements.txt
+sed -i '/autocorrect/d' requirements.txt
+sed -i '/cachetools/d' requirements.txt
+sed -i '/daphne/d' requirements.txt
+sed -i '/attrs/d' requirements.txt
+sed -i '/ccxt/d' requirements.txt
+sed -i '/autobahn/d' requirements.txt
+sed -i '/automat/d' requirements.txt
+sed -i '/audioread/d' requirements.txt
+sed -i '/audioread/d' requirements.txt
+sed -i '/async-timeout/d' requirements.txt
+sed -i '/addict/d' requirements.txt
+sed -i '/aiodns/d' requirements.txt
+sed -i '/aiohttp/d' requirements.txt
+sed -i '/http-ece/d' requirements.txt
+sed -i '/paramiko/d' requirements.txt
+sed -i '/py-vapid/d' requirements.txt
+sed -i '/pyopenssl/d' requirements.txt
+sed -i '/python-u2flib-server/d' requirements.txt
+sed -i '/pywebpush/d' requirements.txt
+sed -i '/service-identity/d' requirements.txt
+sed -i '/fido2/d' requirements.txt
+sed -i '/docbarcodes/d' requirements.txt
+sed -i '/webauthn/d' requirements.txt
+sed -i '/numpy/d' requirements.txt
+sed -i '/urllib3/d' requirements.txt
+sed -i '/pytorch-triton/d' requirements.txt
+sed -i '/torch_tensorrt/d' requirements.txt
+sed -i '/jpype1/d' requirements.txt
+sed -i '/twilio/d' requirements.txt
+sed -i '/setuptools/d' requirements.txt
+sed -i '/Flask/d' requirements.txt
+sed -i '/aiohappyeyeballs/d' requirements.txt
+#sed -i '//d' requirements.txt
+echo "setuptools==58.2.0" | tee -a requirements.txt
+echo "twilio" | tee -a requirements.txt
+echo "autocorrect" | tee -a requirements.txt
+echo "paramiko" | tee -a requirements.txt
+echo "ccxt" | tee -a requirements.txt
+echo "numpy" | tee -a requirements.txt
+echo "urllib3" | tee -a requirements.txt
+echo "webauthn" | tee -a requirements.txt
+#echo "" | tee -a requirements.txt
+#echo "typing_extensions" | tee -a requirements.txt
+#echo "asgiref" | tee -a requirements.txt
+#echo "pydantic" | tee -a requirements.txt
+#echo "python-utils" | tee -a requirements.txt
+#echo "tensorflow" | tee -a requirements.txt
+if [ $# -eq 0 ]; then
+	./scripts/fixreq.sh
+	#python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
+	./scripts/dumptables
+	rm data/security.json
+	rm data/users-new.json
+	rm data/sessions-dj.json
+fi
+sudo rm -r db.json.*
+split -b99M db.json db.json.
+#python manage.py dumpdata auth.user --exclude auth.permission --exclude contenttypes > data/users.json
+sudo rm db.json
+rm data/security.json
+rm data/users-new.json
+rm data/sessions-dj.json
+git init --initial-branch=main
+sudo git remote add originlab $GIT_URL_PROJ
+sudo git add --all
+sudo git commit -m "backup"
+if [ $# -eq 2 ]; then
+	sudo git push -u -f originlab main
+else
+	sudo git push -u originhub main || sudo git push -u -f originlab main
+fi
+date > backup_date.txt
+# Sub website backup
+#sudo git config --global --add safe.directory $"/home/$U/$DIR/web/site"
+#cd $"/home/$U/$DIR/web/site/"
+#sudo rm -r .git
+#sudo git init --initial-branch=main
+#sudo git add --all
+#sudo git commit -m "website updates"
+#sudo git remote add origin git@github.com:daisycamber/glamgirlx.git
+#sudo git push -u origin main
+#sudo rm -r .git
+date=$(date '+%Y-%m-%d_%H:%M:%S')
+diropen=$"lotteh-backup-open"
+cd $"/home/$U/$DIR"
+rsync -av ./ $"/home/$U/$diropen" --exclude venv --exclude .git --exclude celery --exclude GFPGAN --exclude dlib --exclude media/images --exclude media/documents --exclude media/face --exclude media/files --exclude media/live --exclude media/voice --exclude media/secure --exclude db.json
+sudo git config --global --add safe.directory $"/home/$U/$diropen"
+cd $"/home/$U/$diropen"
+echo "db.json.*" >> .gitignore
+echo "client_secret.json" >> .gitignore
+echo "client_secrets.json" >> .gitignore
+echo "client_secret*" >> .gitignore
+echo "mailbox/" >> .gitignore
+echo "data/" >> .gitignore
+echo "scripts/initialize" >> .gitignore
+echo "config/etc_dovecot_passwd" >> .gitignore
+echo "config/etc_dovecot_users" >> .gitignore
+echo "config/config.json" >> .gitignore
+echo "config/apis.json" >> .gitignore
+echo "media/images" >> .gitignore
+echo "media/documents" >> .gitignore
+echo "media/files" >> .gitignore
+echo "media/birthcontrol" >> .gitignore
+echo "media/audio" >> .gitignore
+echo "media/audio/fingerprints" >> .gitignore
+echo "cache/" >> .gitignore
+echo "log/" >> .gitignore
+echo "secure/" >> .gitignore
+echo "email/" >> .gitignore
+echo "celerybeat-schedule/" >> .gitignore
+jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/config.json > config/config-example.json
+jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/apis.json > config/apis-example.json
+sudo chmod -R 774 ./*
+sudo chown -R :users ./*
+sed -i -s "8s@[0-9][0-9][0-9][0-9][0-9][0-9]@000000@g" config/banner
+git init --initial-branch=main
+git add --all
+git commit -m "open source"
+git remote add originhub $GIT_URL_PUB
+if [ $# -eq 2 ]; then
+	git push -u -f originhub main
+else
+	git push -u originhub main
+fi
+cd $"/home/$U"

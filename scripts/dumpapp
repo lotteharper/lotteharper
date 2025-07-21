@@ -1,0 +1,8 @@
+#!/bin/bash
+cd /home/team/lotteh
+sudo chown :users -R data/
+sudo chmod -R 775 data/
+source venv/bin/activate
+python manage.py dumpdata $1 --exclude auth.permission --exclude contenttypes > data/$1.json
+split -b99M data/$1.json data/$1.json.
+rm data/$1.json

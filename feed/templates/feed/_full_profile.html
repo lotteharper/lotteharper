@@ -1,0 +1,102 @@
+{% load app_filters %}
+{% load feed_filters %}
+{% if request.GET.page == None or request.GET.page == '1' %}
+{% if not user.is_authenticated or not profile.user in request.user.profile.subscriptions.all and not profile.user == user %}
+{% include 'banner_ad.html' %}
+{% endif %}
+{% if profile.cover_image and profile.cover_image.name != 'default.png' %}<p style="text-align:center;"><img id="profile-cover" class="center rounded mx-auto" style="width: 100%; max-width: 900px; height: auto;" height="auto" src="{{ profile.get_cover_image_url }}"></p>{% endif %}
+{% if not user.is_authenticated or not profile.user in request.user.profile.subscriptions.all %}
+<div style="display: flex; justify-content: space-around;">
+<form action="{% url 'payments:subscribe-card' profile.name %}" method="GET">
+<button type="submit" class="btn btn-lg btn-outline-primary" style="white-space: pre-wrap;">{{ 'Subscribe'|etrans }}
+(${{ profile.user.vendor_profile.subscription_fee|sub_fee }})
+{{ 'Live, +more'|trans }}
+</button>
+</form>
+<form action="{% url 'payments:subscribe-bitcoin' profile.name %}" method="GET">
+<button type="submit" class="btn btn-lg btn-outline-primary" style="white-space: pre-wrap;">{{ 'Subscribe'|etrans }}
+(${{ profile.user.vendor_profile.subscription_fee|sub_fee }})
+{{ '(With crypto)'|trans }}
+</button>
+</form>
+</div>
+<p><small>{% if profile.user.vendor_profile.free_trial != '0' %}{{ 'Subscribe for'|etrans }} {{ profile.user.vendor_profile.free_trial }} {{ 'days free, then'|etrans }} ${{ profile.user.vendor_profile.subscription_fee|sub_fee }}{% else %}{{ 'Subscribe for'|etrans }} ${{ profile.user.vendor_profile.subscription_fee|sub_fee }}{% endif %} {{ 'monthly.'|etrans }}</small></p>
+{% endif %}
+{% if user.is_authenticated %}
+<hr style="background-color: red;">
+{% if False %}
+<div style="display: flex; justify-content: space-around;">
+<a href="{% url 'live:livevideo' profile.name %}?camera=private" class="btn btn-outline-secondary" title="{{ 'Private live Show'|etrans }}">{{ 'Live'|etrans }}</a>
+<a href="{% url 'recordings:recordings' profile.name %}" class="btn btn-outline-danger" title="{{ 'Live recordings'|etrans }}">{{ 'Recordings'|etrans }}</a>
+<!--<a href="{% url 'interactive:interactive' profile.name %}" class="btn btn-outline-success" title="Interactive recordings">Interact</a>-->
+<a href="{% url 'live:book-live-show' profile.name %}" class="btn btn-outline-warning" title="{{ 'Book a live show'|etrans }}">{{ 'Show'|etrans }}</a>
+<a href="{% url 'vibe:remote' %}" class="btn btn-outline-danger" title="{{ 'Massager remote'|etrans }}">{{ 'Massager'|etrans }}</a>
+</div>
+{% endif %}
+{% endif %}
+<hr style="background-color: green;">
+<div style="display: flex; justify-content: space-around;">
+<a href="{% url 'audio:recordings' %}?model={{ profile.name }}" class="btn btn-outline-danger" title="{{ 'Audio recordings'|etrans }}">{{ 'Audio'|etrans }}</a>
+{% if user.is_authenticated %}
+<a class="btn btn-outline-primary" href="{% url 'chat:chat' profile.name %}" title="{{ 'Live chat'|etrans }}">{{ 'Chat'|etrans }}</a>
+<a href="{% url 'face:faces' %}?model={{ profile.name }}" class="btn btn-outline-info" title="{{ 'All login photos'|etrans }}">{{ 'Faces'|etrans }}</a>
+{% endif %}
+{% include 'language.html' %}
+</div>
+{% if user.is_authenticated %}
+<hr style="background-color: blue;">
+<div style="display: flex; justify-content: space-around;">
+{% if request.GET.likes %}
+<a class="btn btn-outline-success" href="{{ request.path }}" title="{{ 'All posts, not just what you like'|etrans }}">{{ 'All posts'|etrans }}</a>
+{% else %}
+<a class="btn btn-outline-success" href="{{ request.path }}?likes=true" title="{{ 'Posts you like'|etrans }}">{{ 'Likes'|etrans }}</a>
+{% endif %}
+{% if not request.path|startswith:"/feed/grid/" %}
+<a class="btn btn-outline-secondary" href="{% url 'feed:profile-grid' profile.name %}" title="{{ 'Image grid'|etrans }}">{{ 'Grid'|etrans }}</a>
+{% endif %}
+{% if not request.path|startswith:"/feed/profile/" %}
+<a class="btn btn-outline-primary" href="{% url 'feed:profile' profile.name %}" title="{{ 'Full profile'|etrans }}">{{ 'Profile'|etrans }}</a>
+{% endif %}
+{% if not request.GET.feed == 'news' %}
+<a class="btn btn-outline-primary" href="{% url 'feed:profile' profile.name %}?feed=news" title="{{ 'News, books, games and more'|etrans }}">{{ 'News'|etrans }}</a>
+{% endif %}
+{% if profile.user.shared_link.count > 0 %}
+<a class="btn btn-outline-dark" href="{% url 'links:links' profile.name %}" title="{{ 'See all my shared links'|etrans }}">{{ 'Links'|etrans }}</a>
+{% endif %}
+</div>
+{% endif %}
+{% if show_wishlist %}
+<hr style="background-color: pink;">
+<div style="display: flex; justify-content: space-around;">
+<a style="margin-right: 10px;" class="btn btn-outline-primary mr-1" title="My Amazon (or other) wishlist" href="{{ profile.wishlist }}"><i class="bi bi-bag-heart-fill"></i> {{ 'My Wishlist'|etrans }}</a>
+<small class="padding-left: 10px;">{{ 'Ship to'|etrans }} <i class="bi bi-box2-heart-fill"></i> <i id="wishlist-address">{{ profile.user.vendor_profile.address }}</i> <button onclick="copyToClipboard('wishlist-address');" class="btn btn-sm btn-outline-info">{{ 'Copy'|etrans }}</button></small>
+</div>
+{% endif %}
+<hr style="background-color: purple;" class="mb-5">
+<p style="text-align:center;"><img class="center rounded mx-auto" style="width: 70%; max-width: 700px;" src="{% if profile.user in request.user.profile.subscriptions.all %}{{ profile.get_image_url }}{% else %}{{ profile.get_face_blur_url }}{% endif %}"></p>
+<h1 style="text-align:center;">@{{ profile.name }}</h1>
+<legend style="text-align: center;"><a href="tel:{{ main_phone|phone_number }}" title="{{ 'Call my phone,'|etrans }} {{ main_phone|phone_number }}"><i class="bi bi-telephone-outbound-fill"></i> {{ main_phone|phone_number }}</a></legend>
+<legend>{% blocktrans %}My pronouns are {{ profile.user.vendor_profile.pronouns|pronouns }}{% endblocktrans %}</legend>
+{% with profile.user as theuser %}
+{% include 'signature.html' %}
+{% endwith %}
+<p>{{ profile.id|transbio }}</p>
+<p style="text-align:center;"><small class="text-muted">{{ 'Last Seen'|etrans }}: {{ profile.last_seen|date:"F d, Y" }} {{ profile.last_seen|time:"H:i" }}</small> - <small class="text-muted"> {{ 'Joined'|etrans }}: {{ profile.date_joined|date:"F d, Y" }} {{ profile.date_joined|time:"H:i" }}</small></p>
+<div class="d-flex">{% with profile as content %}{% include 'clock.html' %}{% endwith %}</div>
+{% if user.is_authenticated %}
+<div style="text-align:center;">
+{% if False and profile|islive %}
+<h2>{{ 'Live Feed'|etrans }}</h2>
+<iframe id="live" src="/live/{{ profile.name }}/?hidenavbar=t{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}" width="100%" height="400px"></iframe>
+{% endif %}
+<h3>{{ 'Chat'|etrans }}</h3>
+<iframe class="nopadding" src="/chat/{{ profile.name }}/?hidenavbar=t{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}" width="100%" height="500px"></iframe>
+</div>
+{% if not request.GET.likes %}
+<p>{{ 'Displaying all public posts.'|etrans }}</p>
+{% else %}
+<p>{{ 'Displaying posts you like.'|etrans }} <a href="{{ request.path }}" class="btn btn-sm btn-outline-success" title="{{ 'All posts by'|etrans }} {{ profile.name }}">{{ 'See everything'|etrans }}</a></p>
+{% endif %}
+{% endif %}
+<hr style="background-color: pink;" class="mb-5">
+{% endif %}
