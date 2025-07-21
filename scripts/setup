@@ -266,20 +266,9 @@ echo "Installing certificates"
 #sudo snap install core; sudo snap refresh core
 #sudo snap install --classic certbot
 #sudo ln -s /snap/bin/certbot /usr/bin/certbot
-sudo a2ensite 000-default
-sudo systemctl reload apache2
-sudo systemctl enable apache2
-sudo systemctl start apache2
-sudo systemctl reload apache2
-# Run certbot
-sudo certbot --apache --non-interactive --agree-tos --domains lotteh.com --email jasper.camber.holton@gmail.com
-# Reload mail server
-sudo systemctl restart opendkim postfix dovecot
 # Copy certs
 #sudo cp /etc/letsencrypt/live/lotteh.com/privkey.pem privkey.pem
 #sudo cp /etc/letsencrypt/live/lotteh.com/cert.pem cert.pem
-sudo cp -Lrv /etc/letsencrypt/live/lotteh.com/ keys
-sudo chown -R team:users keys
 # Patch venv
 cd $DIR
 ./scripts/patchvenv
@@ -386,6 +375,8 @@ python manage.py loaddata db.json
 ./scripts/loadtables
 # Fix venv again
 cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
+# Fix ssl
+./scripts/sslsetup
 sudo systemctl start apache2 daphne celery celerybeat
 echo "Setup crontab/sudoers configuration"
 sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -

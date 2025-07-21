@@ -1,0 +1,7 @@
+#!/bin/bash
+cd /home/team/
+sudo rm -r lotteh/data/*
+#git clone git@gitlab.com:charlotte-harper/lotteh2025-06-24.git
+sudo cp -r lotteh2025-06-24/data/* lotteh/data/
+cd lotteh
+/home/team/lotteh/scripts/loadtables
