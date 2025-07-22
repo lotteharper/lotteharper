@@ -421,7 +421,7 @@ async function startRecordingFn() {
   if(!live) {
     if(!localCamStream) {
       await startWebcamFn();
-      await new Promise(r => setTimeout(r, 2000));
+      await new Promise(r => setTimeout(r, 4000));
     }
     recordingStartTime = new Date().getTime()/1000;
     live = true;
