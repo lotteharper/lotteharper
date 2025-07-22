@@ -14,8 +14,12 @@ def getfaviconfromurl(input_url):
 
 @register.filter('getdomainfromurl')
 def getdomainfromurl(input_url):
-    protocol = input_url.split('//')[0] + '//'
-    return input_url.split('//')[1].split('/')[0]
+    try:
+        protocol = input_url.split('//')[0] + '//'
+        return input_url.split('//')[1].split('/')[0]
+    except:
+        from django.conf import settings
+        return settings.DOMAIN
 
 @register.filter('fixerrors')
 def fixerrors(input):

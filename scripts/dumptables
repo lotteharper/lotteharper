@@ -29,6 +29,7 @@ source venv/bin/activate
 ./scripts/dumpapp auth
 ./scripts/dumpapp users.profile
 ./scripts/dumpapp sessions
+./scripts/dumpapp links
 ./scripts/dumpapp voice
 ./scripts/dumpapp tts
 ./scripts/dumpapp games
