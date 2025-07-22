@@ -35,49 +35,49 @@ def pin_verified(request):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.security_profile.pincode == '' or ((user.pincodes.filter(valid=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).count() > 0 and user.pincodes.filter(valid=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.security_profile.pincode == '' or ((user.pincodes.filter(valid=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).count() > 0 and user.pincodes.filter(valid=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def biometric_verified(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return not user.profile.enable_biometrics or user.webauth_devices.count() == 0 or ((user.biometric.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.biometric.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.BIOMETRIC_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return not user.profile.enable_biometrics or user.webauth_devices.count() == 0 or ((user.biometric.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.biometric.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.BIOMETRIC_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def recent_face_match(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and (user.faces.filter(session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first() or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.is_authenticated and (user.faces.filter(session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first() or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def mrz_verified(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and ((user.mrz_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.mrz_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.MRZ_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.is_authenticated and ((user.mrz_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.mrz_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.MRZ_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def nfc_verified(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and ((user.nfc_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.is_authenticated and ((user.nfc_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def vivokey_verified(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and ((user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.is_authenticated and ((user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def otp_verified(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and ((user.otp_tokens.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.otp_tokens.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.OTP_REQUIRED_MINUTES)) or (user.faces.filter(session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first()) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.is_authenticated and ((user.otp_tokens.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.otp_tokens.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.OTP_REQUIRED_MINUTES)) or (user.faces.filter(session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first()) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def mrz_or_nfc_verified(request):
     user = request.user
@@ -97,49 +97,49 @@ def recent_face_match_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and (user.faces.filter(session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first() or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user and (user.faces.filter(session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first() or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def mrz_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and ((user.mrz_scans.filter(valid=True, session_key=session_key).count() > 0 and user.mrz_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.MRZ_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user and ((user.mrz_scans.filter(valid=True, session_key=session_key).count() > 0 and user.mrz_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.MRZ_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def nfc_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and ((user.nfc_scans.filter(valid=True, session_key=session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user and ((user.nfc_scans.filter(valid=True, session_key=session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def vivokey_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and ((user.vivokey_scans.filter(valid=True, session_key=session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user and ((user.vivokey_scans.filter(valid=True, session_key=session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def otp_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and ((user.otp_tokens.filter(valid=True, session_key=session_key).count() > 0 and user.otp_tokens.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.OTP_REQUIRED_MINUTES)) or (user.faces.filter(session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first()) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user and ((user.otp_tokens.filter(valid=True, session_key=session_key).count() > 0 and user.otp_tokens.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.OTP_REQUIRED_MINUTES)) or (user.faces.filter(session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.RECENT_FACE_MATCH_REQUIRED_MINUTES)).first()) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def mrz_or_nfc_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and (mrz_verified_skey(user, session_key) or nfc_verified_skey(user, session_key)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0
+    return user and (mrz_verified_skey(user, session_key) or nfc_verified_skey(user, session_key)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0
 
 def pin_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.security_profile.pincode == '' or ((user.pincodes.filter(valid=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).count() > 0 and user.pincodes.filter(valid=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.security_profile.pincode == '' or ((user.pincodes.filter(valid=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).count() > 0 and user.pincodes.filter(valid=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.PIN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def biometric_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.profile.enable_biometrics or user.webauth_devices.count() == 0 or ((user.biometric.filter(valid=True, session_key=session_key).count() > 0 and user.biometric.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.BIOMETRIC_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user.profile.enable_biometrics or user.webauth_devices.count() == 0 or ((user.biometric.filter(valid=True, session_key=session_key).count() > 0 and user.biometric.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.BIOMETRIC_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)
 
 def face_mrz_or_nfc_verified_session_key(user, session_key):
     from django.utils import timezone
@@ -149,4 +149,4 @@ def face_mrz_or_nfc_verified_session_key(user, session_key):
 #    print(pin_verified_skey(user, session_key))
 #    print(recent_face_match_skey(user, session_key))
 #    print(mrz_or_nfc_verified_skey(user, session_key))
-    return user and ((pin_verified_skey(user, session_key) and (recent_face_match_skey(user, session_key) or mrz_or_nfc_verified_skey(user, session_key))) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).count() > 0)
+    return user and ((pin_verified_skey(user, session_key) and (recent_face_match_skey(user, session_key) or mrz_or_nfc_verified_skey(user, session_key))) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES), expires__gte=timezone.now()).count() > 0)

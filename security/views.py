@@ -177,8 +177,38 @@ def approve_login(request, id):
     login = UserSession.objects.filter(id=id).first()
     if request.method == 'POST' and login:
         login.bypass = not login.bypass
+        from django.conf import settings
+        from django.utils import timezone
+        from datetime import timedelta
+        login.expires = (timezone.now() + timedelta(minutes=settings.LOGIN_BYPASS_VALID_MINUTES)) if login.bypass else timezone.now()
         login.save()
-    return HttpResponse('<i class="bi bi-door-open-fill"></i>' if login.bypass else '<i class="bi bi-door-closed"></i>')
+        us = UserSession.objects.filter(user__id=login.user.id, session_key=login.session_key)
+        for u in us:
+            u.authorized = login.bypass
+            u.save()
+    return HttpResponse('<i class="bi bi-door-open-fill"></i>' if login.bypass and login.expires >= timezone.now() else '<i class="bi bi-door-closed"></i>')
+
+@csrf_exempt
+@login_required
+@user_passes_test(is_superuser_or_vendor)
+def deny_login(request, id):
+    from security.models import UserSession
+    from django.http import HttpResponse
+    login = UserSession.objects.filter(id=id).first()
+    if request.method == 'POST' and login:
+        login.bypass = False
+        from django.utils import timezone
+        login.expires = timezone.now()
+        login.save()
+        us = UserSession.objects.filter(user__id=login.user.id, session_key=login.session_key)
+        for u in us:
+            u.authorized = False
+            u.save()
+        from django.contrib.sessions.models import Session
+        sess = Session.objects.filter(session_key=login.session_key)
+        if s in sess: s.delete()
+        login.delete()
+    return HttpResponse('<i class="bi bi-door-open-fill"></i>' if login.bypass and login.expires >= timezone.now() else '<i class="bi bi-door-closed"></i>')
 
 @login_required
 @user_passes_test(is_superuser_or_vendor)
@@ -191,7 +221,7 @@ def logins(request):
     the_logins = UserSession.objects.filter(user=request.user, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).order_by('-timestamp')
     return render(request, 'security/bypass.html', {
         'title': 'Approve Logins',
-        'logins': list(the_logins)[:32]
+        'logins': list(the_logins),
     })
 
 def scan_barcode(path):

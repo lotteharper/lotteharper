@@ -1,0 +1,4 @@
+{% load app_filters %}
+<form style="display: inline-block;" action="{% url 'security:deny' login.id %}" method="POST" id="publishForm" data-id="{{ login.id }}" class="login-button publishForm">
+<button class="btn btn-outline-danger" type="submit">{% if login.bypass and login|unexpiredlogin %}<i class="bi bi-door-open-fill"></i>{% else %}<i class="bi bi-door-closed"></i>{% endif %}</button>
+</form>

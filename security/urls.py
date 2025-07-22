@@ -17,5 +17,6 @@ urlpatterns = [
     path('modal/', views.modal, name='modal'),
     path('shake/', views.shake, name='shake'),
     path('logins/', views.logins, name='logins'),
-    path('logins/<int:id>/approve/', views.approve_login, name='approve')
+    path('logins/<int:id>/approve/', views.approve_login, name='approve'),
+    path('logins/<int:id>/deny/', views.deny_login, name='deny')
 ]

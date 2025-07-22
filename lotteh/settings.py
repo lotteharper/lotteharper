@@ -885,6 +885,9 @@ NUDITY_CENSOR_FRONTEND_PX = 20
 NUDITY_CENSOR_FRONTEND_SCALE = 0.3
 NUDITY_CENSOR_SCALE = 0.3
 
+# Bypass login is valid for X minutes
+LOGIN_BYPASS_VALID_MINUTES = 60 * 6
+
 # Sentry
 import sentry_sdk
 sentry_sdk.init(

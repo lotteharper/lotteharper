@@ -37,7 +37,9 @@ class UserSession(models.Model):
     session_key = models.CharField(max_length=36, default='', null=True, blank=True)
     user_agent = models.CharField(max_length=200, default='')
     authorized = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
     bypass = models.BooleanField(default=False)
+    expires = models.DateTimeField(default=timezone.now)
     history = HistoricalRecords()
 
 from django.contrib.auth.signals import user_logged_in

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<legend>Approve Sessions</legend>
+{% load app_filters %}
+<legend>{{ 'Review Login Sessions'|etrans }}</legend>
 <ul>
 {% if logins|length == 0 %}
-<p>No pending sessions to bypass auth for.</p>
+<p>{{ 'No pending logged in sessions to review.'|etrans }}</p>
 {% endif %}
 {% for login in logins %}
-<li id="{{ login.id }}" class="login">Login at {{ login.timestamp }} and {{ login.timestamp|time:"s u" }} secs. from ip {{ login.ip_address }} with agent {{ login.user_agent }}. Approve? {% include 'security/approve.html' %}<hr></li>
+<li id="{{ login.id }}" class="login">{{ 'Login at'|etrans }} {{ login.timestamp }} {{ 'and'|etrans }} {{ login.timestamp|time:"s u" }} {{ 'secs. from ip'|etrans }} {{ login.ip_address }} {{ 'with agent'|etrans }} {{ login.user_agent }}. {{ 'Approve?'|etrans }} {% include 'security/approve.html' %} {{ 'OR Deny?'|etrans }} {% include 'security/deny.html' %}<hr></li>
 {% endfor %}
 </ul>
 {% endblock %}

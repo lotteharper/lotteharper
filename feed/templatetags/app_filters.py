@@ -2,6 +2,14 @@ from django import template
 
 register = template.Library()
 
+@register.filter('unexpiredlogin')
+def unexpiredlogin(login):
+    import datetime
+    from django.conf import settings
+    from django.utils import timezone
+    return login.expires >= timezone.now()
+# + datetime.timedelta(settings.LOGIN_BYPASS_VALID_MINUTES)
+
 @register.filter('adult_identity_verified')
 def adult_identity_verified(user):
     from feed.tests import adult_identity_verified as aiv

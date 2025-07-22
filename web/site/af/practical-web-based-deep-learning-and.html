@@ -1773,17 +1773,21 @@ N/A<we'll add="" later="" this=""></we'll></p>
   # Toestemmings (bv. 0777 laat almal volle toestemmings toe).
   # Auth -werkersproses word standaard as wortel uitgevoer, sodat dit toegang kan kry
   # /etc/skaduwee. As dit nie nodig is nie, moet die gebruiker verander word na
-
-
-
-
+  # $ default_internal_user.
+  # Gebruiker = wortel
+  # As DICT -instaanbediener gebruik word, moet e -posprosesse toegang tot die sok hê.
+  # Byvoorbeeld: modus = 0660, groep = Vmail en Global Mail_access_Groups = Vmail
     # modus = 0600
-
-</code></pre><p></p><pre class="language-bash"><code>nano config/etc_dovecot_dovecot
-</code></pre><p></p><pre class="language-bash"><code>
+    # Gebruiker =
+    # groep =</code></pre>
+<p>Maak weereens seker dat u die domein in al hierdie lêers, femmebabe.com, vervang met die domein wat u gekies het. Wysig die volgende lêer, Dovecot's Config,</p>
+<pre class="language-bash"><code>nano config/etc_dovecot_dovecot
+</code></pre>
+<p>En voeg hierdie lyne by</p>
+<pre class="language-bash"><code>## Dovecot -konfigurasielêer
 # As u haastig is, sien http://wiki2.dovecot.org/quickconfiguration
 # "Doveconf -N" -opdrag gee 'n skoon uitset van die veranderde instellings. Gebruik dit
-
+# In plaas daarvan om lêers te kopieer en te plak wanneer u na die Dovecot -poslys gepos word.
 # '# 'Karakter en alles nadat dit as opmerkings behandel word. Ekstra ruimtes
 # en oortjies word geïgnoreer. As u een van hierdie eksplisiete wil gebruik, plaas die
 # value inside quotes, eg.: key = "# char en agterruimte "
@@ -2062,7 +2066,6 @@ exit()
 <div class="pb-1 container rounded"><p class="pt-3">https://glamgirlx.com/af/practical-web-based-deep-learning-and - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="Share this page by copying the link"><i class="bi bi-clipboard-plus"></i> Kopie skakel</button></p></div>
 <hr>
 <div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
-<div style="text-align: center;"><small>(Klik of tik om die prentjie af te laai)</small></div>
 <div>Professionele vermaak, foto&#x27;s, video&#x27;s, klank, lewende stroom en toevallige spel, sowel as ID -skandering, webontwikkeling en surrogasiedienste.</div>
 </div>
 
