@@ -389,6 +389,10 @@ async function mergeStreamsFn() {
 }
 var recordingStartTime;
 async function startRecordingFn() {
+  if(!localCamStream) {
+    await startWebcamFn();
+    await new Promise(r => setTimeout(r, 2000));
+  }
   if(!live) {
       recordingStartTime = new Date().getTime()/1000;
       live = true;

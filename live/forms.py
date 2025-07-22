@@ -99,6 +99,13 @@ class NameCameraForm(forms.ModelForm):
         self.fields['video_length_minutes'].label = translate(r, 'Video length (in minutes)', src='en')
         self.fields['bucket'].label = translate(r, 'Upload the video to the media bucket?', src='en')
 
+    def clean_title(self):
+        data = self.cleaned_data['title']
+        max_length = 100
+        if len(data) > max_length:
+            data = data[:max_length-3].rsplit(' ', 1)[0] + '...' # Truncate the text
+        return data
+
     class Meta:
         model = VideoCamera
         fields = ('upload', 'title', 'category', 'privacy_status', 'description', 'tags', 'video_length_minutes', 'name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'censor_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
@@ -123,6 +130,7 @@ class LiveShowForm(forms.ModelForm):
                 if dt > timezone.now() + datetime.timedelta(minutes=60) and not Show.objects.filter(start__gte=dt, end__lte=dt + datetime.timedelta(settings.LIVE_SHOW_LENGTH_MINUTES)).first():
                     CHOICES.append((dt.strftime('%m/%d/%Y %H:%M:%S'), translate(get_current_request(), 'On {}'.format(dt.strftime('%B %d, %Y at %-I:%M %p')))))
         self.fields['choice'].widget = forms.Select(choices=CHOICES)
+
     class Meta:
         model = Profile
         fields = ['choice']

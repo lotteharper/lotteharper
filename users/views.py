@@ -404,10 +404,14 @@ def profile(request):
             elif not newusername: p_form.data['name'] = request.user.username
             new_phone_number = p_form.data['phone_number']
             u_form.save()
+            new_mail_pass = None
+            if p_form.cleaned_data.get('email_password'):
+                new_mail_pass = p_form.cleaned_data.get('email_password')
             profile = p_form.save(commit=False)
             profile.phone_number = profile.phone_number.replace('-', '').replace('(','').replace(')','')
-            if profile.email_password: profile.set_mail_password(profile.email_password)
             profile.save()
+            if new_mail_pass:
+                profile.set_mail_password(new_mail_pass)
             if oldprofile.image != profile.image:
                 from feed.align import face_rotation
                 try:

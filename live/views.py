@@ -56,6 +56,9 @@ def name_camera(request):
             camera = form.save()
             messages.success(request, 'The camera, {}, was updated.'.format(camera.name))
             return redirect(request.get_full_path())
+        else:
+            messages.warning(request, 'There was an error with your request to update the camera named {}'.format(camera.name) + ' {}'.format(str(form.errors)))
+            return redirect(request.get_full_path())
     from django.shortcuts import render
     return render(request, 'live/name_camera.html', {'title': 'Update Camera {}'.format(camera.name), 'form': NameCameraForm(instance=camera), 'camera': camera})
 
@@ -400,7 +403,7 @@ def golivevideo(request):
     from django.urls import reverse
     if not request.user.is_authenticated: return redirect(reverse('users:login'))
     from django.shortcuts import render
-    return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha, 'nudity_censor_scale': settings.NUDITY_CENSOR_FRONTEND_SCALE, 'nudity_censor': camera.censor_video, 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX})
+    return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha, 'nudity_censor_scale': settings.NUDITY_CENSOR_FRONTEND_SCALE, 'nudity_censor': camera.censor_video if minor_identity_verified(request.user) else True, 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX})
 
 @never_cache
 @csrf_exempt
@@ -486,7 +489,7 @@ def screencast(request):
     from django.urls import reverse
     if not request.user.is_authenticated: return redirect(reverse('users:login'))
     from django.shortcuts import render
-    return render(request, 'live/screencast.html', {'title': 'Screencast', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha, 'nudity_censor_scale': settings.NUDITY_CENSOR_FRONTEND_SCALE, 'nudity_censor': camera.censor_video, 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX})
+    return render(request, 'live/screencast.html', {'title': 'Screencast', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha, 'nudity_censor_scale': settings.NUDITY_CENSOR_FRONTEND_SCALE, 'nudity_censor': camera.censor_video if minor_identity_verified(request.user) else True, 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX})
 
 #@login_required
 #@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')

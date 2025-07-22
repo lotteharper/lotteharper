@@ -11,7 +11,7 @@ def get_auth(user_id, session_key):
     return False
 
 @sync_to_async
-def get_user_name(id)
+def get_user_name(id):
     from django.contrib.auth.models import User
     try:
         user = User.objects.get(id=int(id))
