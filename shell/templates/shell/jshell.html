@@ -97,7 +97,7 @@ function sendCommand() {
        output = output + "Error Message: " + e.message + '\n';
        output = output + "Stack Trace: " + e.stack + '\n';
     }
-	document.getElementById("command-output").insertAdjacentHTML("beforeend", output + '\n');
+	document.getElementById("command-output").insertAdjacentHTML("beforeend", command + '\n' + output + '\n> ');
 	{% if request.GET.scroll %}window.scrollBy(0,10000);{% endif %}
 }
 document.getElementById("send-command").onclick = function(e) {

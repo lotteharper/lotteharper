@@ -15,7 +15,8 @@
     <li><a class="dropdown-item" href="{% url 'feed:profile' request.user.profile.name %}?show=true">Private Profile</a></li>
     <li><a class="dropdown-item" href="{% url 'feed:profile-grid' request.user.profile.name %}">Public Grid</a></li>
     <li><a class="dropdown-item" href="{% url 'feed:profile-grid' request.user.profile.name %}?show=true">Private Grid</a></li>
-    <li><a class="dropdown-item" href="{% url 'feed:private' request.user.profile.name  %}?show=true">Private Posts</a></li>
+    <li><a class="dropdown-item" href="{% url 'feed:private' request.user.profile.name  %}">Private Posts (Redacted)</a></li>
+    <li><a class="dropdown-item" href="{% url 'feed:private' request.user.profile.name  %}?show=true">Private Posts (Full)</a></li>
   </ul>
 </div>
 <div class="dropdown" style="display: inline-block;">

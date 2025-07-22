@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'hypnosis',
     'photobooth',
     'address',
+    'stream',
 #    'hot',
     'survey',
 #    'mfa',

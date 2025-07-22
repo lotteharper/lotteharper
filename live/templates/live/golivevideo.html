@@ -84,8 +84,8 @@ $(updateCameraToggle).on('click', function() {
     cameraUpdateOpen = !cameraUpdateOpen;
     if(cameraUpdateOpen) {
         cameraSettings.height = '600px';
-        cameraSettings.src = '{{ base_url }}{% url 'live:name-camera' %}?camera={{ camera.name }}&hidenavbar=t{% if request.GET.lang %}&lang={{ lang }}{% endif %}';
-        cameraSettings.contentWindow.location.reload();
+/*        cameraSettings.src = '{{ base_url }}{% url 'live:name-camera' %}?camera={{ camera.name }}&hidenavbar=t{% if request.GET.lang %}&lang={{ lang }}{% endif %}';
+        cameraSettings.contentWindow.location.reload();*/
     } else {
         cameraSettings.height = '0px';
     }

@@ -124,7 +124,7 @@ def get_user(id):
         user = User.objects.get(id=int(id))
     except: return False
 #    if not (user.profile.vendor or user.is_superuser): return False
-    return True
+    return user
 
 #@sync_to_async
 #def get_auth(user_id, session_key):
@@ -229,6 +229,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
         try:
             self.user = await get_user(self.scope['user'].id)
         except: pass
+        await get_auth(self.scope['user'].id, self.scope['session'].session_key)
         self.camera_user = self.scope['url_route']['kwargs']['username']
         self.camera_name = self.scope['url_route']['kwargs']['name']
         from urllib.parse import parse_qs

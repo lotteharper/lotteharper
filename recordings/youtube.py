@@ -4,14 +4,15 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-def get_youtube_embed(youtube_id):
-    from django.conf import settings
-    import requests, json
-    response = requests.get('https://www.googleapis.com/youtube/v3/videos?part=player&id={}&key={}'.format(youtube_id, settings.YOUTUBE_KEY))
-    j = json.loads(response.text)
-    e = j['items'][0]['player']['embedHtml']
-    em = e.split('src', 1)[1]
-    embed = '<iframe width="100%" style="aspect-ratio: 16 / 9;" src' + em
+def get_youtube_embed(youtube_id, autoplay=False):
+#    from django.conf import settings
+#    import requests, json
+#    response = requests.get('https://www.googleapis.com/youtube/v3/videos?part=player&id={}&key={}'.format(youtube_id, settings.YOUTUBE_KEY))
+#    j = json.loads(response.text)
+#    print(j)
+#    e = j['items'][0]['player']['embedHtml']
+#    em = e.split('src', 1)[1]
+    embed = '<iframe width="100%" style="aspect-ratio: 16 / 9;" src="https://www.youtube.com/embed/{}?autoplay={}&controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'.format(youtube_id, '1' if autoplay else '0')
     return embed
 
 def load_credentials(filename):
@@ -206,7 +207,10 @@ def upload_youtube(user, recording, file_path, title, description, tags, categor
               print('Successful upload.')
               print(response)
               id = response['id']
+              print(id)
               recording.youtube_id = id
+              import time
+              time.sleep(5)
               recording.youtube_embed = get_youtube_embed(id)
               recording.save()
               pass

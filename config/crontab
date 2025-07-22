@@ -1,7 +1,7 @@
 #MAILTO=team@lotteh.com
 0 4 * * 1 sudo apt-get update && sudo apt-get upgrade -y && sudo reboot
 0 0 1 * * sudo certbot renew --quiet
-#*/5 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
+*/5 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
 #0 */3 * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/upload_post.py
 */5 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/crypto_trading.py
 0 0 * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/clear_defunct_audio.py

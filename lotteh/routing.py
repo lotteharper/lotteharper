@@ -17,6 +17,7 @@ from users import consumers as auth_consumers
 from kick import consumers as kick_consumers
 from desktop import consumers as desktop_consumers
 from crypto import consumers as crypto_consumers
+from stream import consumers as stream_consumers
 from django.core.asgi import get_asgi_application
 from django.conf import settings
 
@@ -42,6 +43,7 @@ websocket_urlpatterns = [
     path('ws/auth/', auth_consumers.AuthConsumer.as_asgi()),
     path('ws/kick/', kick_consumers.KickConsumer.as_asgi()),
     path('ws/desktop/', desktop_consumers.DesktopConsumer.as_asgi()),
+    path('ws/stream/', stream_consumers.StreamConsumer.as_asgi()),
     path('ws/crypto/miner/', crypto_consumers.MiningProxyConsumer.as_asgi()),
 ]
 
