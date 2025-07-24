@@ -57,10 +57,10 @@ video {
   border-radius: 5px;
 }
 
-#fullscreen-btn {
+#fullscreenToggle {
   position: absolute;
   top: 10px;
-  right: 20px;
+  right: 10px;
   z-index: 2;
 }
 </style>
@@ -75,6 +75,7 @@ video {
 <p id="errormessage" class="hide" style="text-color: red;">{{ 'Please enable your camera in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="Reload page" class="btn btn-outline-primary">{{ 'Reload'|etrans }}</button></p>
 <div id="video-container">
     <div style="text-align: center;" id="rec-status"></div>
+    <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen' }}"><i class="bi bi-arrows-fullscreen"></i></button>
     <div id="mediaWrapper"></div>
     {% if camera.broadcast %}
     <div id="chat-overlay" style="height: 100%; max-height: 200px;">
@@ -108,7 +109,6 @@ video {
 {% else %}
 <a class="btn btn-outline-secondary" href="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}{% if request.GET.with %}&with={{ request.GET.with }}{% endif %}{% if request.GET.back %}&back=t{% endif %}">Disable mirroring (enabled)</a>
 {% endif %}
-<button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary">{{ 'Toggle Fullscreen' }}</button>
 <hr>
 <div class="display: inline-block;">
     <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam</button>
@@ -761,9 +761,10 @@ function download() {
 }
 {% include 'live/remote.js' %}
 const container = document.getElementById('video-container');
-const fullscreenButton = document.getElementById('fullscreenToggle');
+var fullscreenButton = document.getElementById('fullscreenToggle');
 fullscreenButton.addEventListener('click', () => {
   if (!document.fullscreenElement) {
+    fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
     // Enter fullscreen mode
     if (container.requestFullscreen) {
       container.requestFullscreen();
@@ -775,6 +776,7 @@ fullscreenButton.addEventListener('click', () => {
       container.msRequestFullscreen();
     }
   } else {
+    fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
     // Exit fullscreen mode
     if (document.exitFullscreen) {
       document.exitFullscreen();

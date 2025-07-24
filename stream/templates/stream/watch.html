@@ -43,10 +43,10 @@
   border-radius: 5px;
 }
 
-#fullscreen-btn {
+#fullscreenToggle {
   position: absolute;
   top: 10px;
-  right: 20px;
+  right: 10px;
   z-index: 2;
 }
 </style>
@@ -56,6 +56,7 @@
 {% load feed_filters %}
     <h2>{{ 'Viewing'|etrans }} {{ vendor.profile.name }}'s {{ 'Broadcast'|etrans }}</h2>
     <div id="video-container">
+    <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
         <video style="width: 100%;" id="remoteVideo" autoplay playsinline></video>
         <div id="chat-overlay" style="height: 100%; max-height: 200px;">
             <div id="chatbox" style="overflow-y: scroll; width: 100%; height: 100%; max-height: 180px;"></div>
@@ -67,16 +68,16 @@
             </div>
         </div>
     </div>
-    <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary">{{ 'Toggle Fullscreen'|etrans }}</button>
 {% include 'social.html' %}
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
 const container = document.getElementById('video-container');
 const video = document.getElementById('remoteVideo');
-const fullscreenButton = document.getElementById('fullscreenToggle');
+var fullscreenButton = document.getElementById('fullscreenToggle');
 fullscreenButton.addEventListener('click', () => {
   if (!document.fullscreenElement) {
+    fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
     // Enter fullscreen mode
     if (container.requestFullscreen) {
       container.requestFullscreen();
@@ -88,6 +89,7 @@ fullscreenButton.addEventListener('click', () => {
       container.msRequestFullscreen();
     }
   } else {
+    fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
     // Exit fullscreen mode
     if (document.exitFullscreen) {
       document.exitFullscreen();
