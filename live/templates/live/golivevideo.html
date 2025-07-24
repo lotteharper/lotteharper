@@ -22,11 +22,18 @@ video {
   display: block;
 }
 
+#rec-status {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+}
+
 #chat-overlay {
   position: absolute;
   bottom: 10px; /* Above controls */
   right: 10px;
   width: 300px;
+  max-width: 90%;
   max-height: 60%;
   background: rgba(0,0,0,0.5);
   color: #fff;
@@ -61,13 +68,13 @@ video {
 {% block content %}
 <h1>{{ 'Live Recording'|etrans }}</h1>
 <legend>{% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %} {{ 'camera'|etrans }}</legend>
-<div style="text-align: center;" id="rec-status"></div>
 <div id="container">
 {% if request.GET.with %}
 <div style="z-index: 1; position: absolute;">
 {% endif %}
 <p id="errormessage" class="hide" style="text-color: red;">{{ 'Please enable your camera in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="Reload page" class="btn btn-outline-primary">{{ 'Reload'|etrans }}</button></p>
 <div id="video-container">
+    <div style="text-align: center;" id="rec-status"></div>
     <div id="mediaWrapper"></div>
     {% if camera.broadcast %}
     <div id="chat-overlay" style="height: 100%; max-height: 200px;">
@@ -145,8 +152,10 @@ Array.from(document.getElementsByClassName('update-camera-toggle')).forEach(func
         cameraUpdateOpen = !cameraUpdateOpen;
         if(cameraUpdateOpen) {
             cameraSettings.height = '600px';
+            $('#hide-dupe').removeClass('hide');
         } else {
-                cameraSettings.height = '0px';
+            cameraSettings.height = '0px';
+            $('#hide-dupe').addClass('hide');
         }
     });
 });
@@ -634,9 +643,9 @@ openRemoteSocket();
 function download() {
         if(live) { mediaRecorder.start(); }
         if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
+            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-fill"></i>';
         } else {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
+            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle"></i>';
         }
         var file = new Blob(recordedChunks, {'type': 'video/' + '{% autoescape off %}{{ camera.mimetype }}{% endautoescape %}'.split(';')[0]});
         recordedChunks = [];
