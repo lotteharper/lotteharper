@@ -37,6 +37,7 @@ video {
 {% else %}
 <a class="btn btn-outline-secondary" href="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}{% if request.GET.with %}&with={{ request.GET.with }}{% endif %}&back=true">Back Facing Camera</a>
 {% endif %}
+<button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary">{{ 'Toggle Fullscreen'|etrans }}</button>
 <hr>
 <div class="display: inline-block;">
     <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam</button>
@@ -60,7 +61,6 @@ video {
 </div>
 {% endblocktrans %}
 {% include 'live/camera_settings_frame.html' %}
-  <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary">{{ 'Toggle Fullscreen'|etrans }}</button>
 {% if camera.broadcast %}
   <h3>{{ 'Chat'|etrans }}</h3>
   <div id="chatbox" style="overflow-y: scroll; height: 250px;"></div>
@@ -88,18 +88,19 @@ var overlay;
 var updateCameraToggle = document.getElementById('update-camera-toggle');
 var cameraSettings = document.getElementById('camera-settings');
 var cameraUpdateOpen = false;
-$(updateCameraToggle).on('click', function() {
-    cameraUpdateOpen = !cameraUpdateOpen;
-    if(cameraUpdateOpen) {
-        cameraSettings.height = '600px';
-/*        cameraSettings.src = '{{ base_url }}{% url 'live:name-camera' %}?camera={{ camera.name }}&hidenavbar=t{% if request.GET.lang %}&lang={{ lang }}{% endif %}';
-        cameraSettings.contentWindow.location.reload();*/
-    } else {
-        cameraSettings.height = '0px';
-    }
+Array.from(document.getElementsByClassName('update-camera-toggle')).forEach(function (element) {
+    $(element).on('click', function() {
+        cameraUpdateOpen = !cameraUpdateOpen;
+        if(cameraUpdateOpen) {
+            cameraSettings.height = '600px';
+        } else {
+            cameraSettings.height = '0px';
+        }
+    });
 });
 function generateRandomString(length = 6) {
-  return Math.random().toString(36).substring(2, 2 + length);                                                           }
+  return Math.random().toString(36).substring(2, 2 + length);
+}
 var CAMERA_ID = generateRandomString(8);
 const MINUTES_PER_LOGO = 5;
 var liveButton = document.getElementById('golivebutton');
@@ -276,7 +277,7 @@ async function startWebcamFn() {
 async function startScreenShareFn() {
   if(!localScreenStream) {
   localScreenStream = await navigator.mediaDevices.getDisplayMedia({
-    video: { width: {ideal: {{ camera.width }} },  frameRate: { ideal: 15 } },
+    video: { width: {ideal: {{ camera.width }} },  frameRate: { ideal: {{ fps }} } },
     audio: {echoCancellation: {% if camera.echo_cancellation %}true{% else %}false{% endif %},},
   }).catch((error) => {
     console.log(error);

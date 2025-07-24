@@ -1,3 +1,4 @@
 {% load app_filters %}
+<button class="btn btn-outline-secondary update-camera-toggle">{{ 'Toggle settings'|etrans }}</button>
 <iframe src="{% url 'live:name-camera' %}?camera={{ camera.name }}&hidenavbar=t{% if request.GET.lang %}&lang={{ lang }}{% endif %}" width="100%" height="0px" id="camera-settings"></iframe>
-<button class="btn btn-outline-secondary" id="update-camera-toggle">{{ 'Toggle settings'|etrans }}</button>
+<button class="btn btn-outline-secondary update-camera-toggle">{{ 'Toggle settings'|etrans }}</button>

@@ -249,6 +249,7 @@ class VideoCamera(models.Model):
     muted = models.BooleanField(default=False)
     broadcast = models.BooleanField(default=False)
     short_mode = models.BooleanField(default=False)
+    framerate = models.IntegerField(default=30)
 
     def __str__(self):
         import pytz

@@ -99,6 +99,7 @@ class NameCameraForm(forms.ModelForm):
         self.fields['video_length_minutes'].label = translate(r, 'Video length (in minutes)', src='en')
         self.fields['bucket'].label = translate(r, 'Upload the video to the media bucket?', src='en')
         self.fields['broadcast'].label = translate(r, 'Broadcast the video?', src='en')
+        self.fields['framerate'].label = translate(r, 'Video framerate', src='en')
 
     def clean_title(self):
         data = self.cleaned_data['title']
@@ -109,7 +110,7 @@ class NameCameraForm(forms.ModelForm):
 
     class Meta:
         model = VideoCamera
-        fields = ('upload', 'title', 'category', 'privacy_status', 'description', 'tags', 'video_length_minutes', 'broadcast', 'name', 'mimetype', 'width', 'microphone', 'use_websocket', 'compress_video', 'censor_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
+        fields = ('upload', 'broadcast', 'title', 'category', 'privacy_status', 'description', 'tags', 'video_length_minutes', 'name', 'mimetype', 'width', 'framerate', 'microphone', 'use_websocket', 'compress_video', 'censor_video', 'adjust_pitch', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
 
 # 'vad_mode',
 
