@@ -7,8 +7,9 @@
 {% load feed_filters %}
     <h2>{{ 'Viewing'|etrans }} {{ vendor.profile.name }}'s {{ 'Broadcast'|etrans }}</h2>
     <video style="width: 100%;" id="remoteVideo" autoplay playsinline></video>
+    <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary">{{ 'Toggle Fullscreen'|etrans }}</button>
     <h3>{{ 'Chat'|etrans }}</h3>
-    <div id="chatbox"></div>
+    <div id="chatbox" style="overflow-y: scroll; height: 250px;"></div>
     <div class="input-group mb-3">
     <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type a message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
     <div class="input-group-append">
@@ -19,11 +20,50 @@
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
-const signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ vendor.profile.name }}/");
-const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
-let pc;
-let broadcasterId = null;
-signalingSocket.onmessage = async (event) => {
+const video = document.getElementById('remoteVideo');
+const fullscreenButton = document.getElementById('fullscreenToggle');
+fullscreenButton.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    // Enter fullscreen mode
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    } else if (video.mozRequestFullScreen) { // Firefox
+      video.mozRequestFullScreen();
+    } else if (video.webkitRequestFullscreen) { // Chrome, Safari and Opera
+      video.webkitRequestFullscreen();
+    } else if (video.msRequestFullscreen) { // IE/Edge
+      video.msRequestFullscreen();
+    }
+  } else {
+    // Exit fullscreen mode
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+      document.msExitFullscreen();
+    }
+  }
+});
+var signalingSocket;
+var signalingSocketReconnectTimeout;
+function openSignalingSocket() {
+    signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ vendor.profile.name }}/");
+    signalingSocket.onerror = (event) => {
+        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
+        signalingSocketReconnectTimeout = setTimeout(function() {
+            openSignalingSocket();
+        }, {{ reload_time }});
+    };
+    signalingSocket.onclose = (event) => {
+        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
+        signalingSocketReconnectTimeout = setTimeout(function() {
+            openSignalingSocket();
+        }, {{ reload_time }});
+    };
+    signalingSocket.onmessage = async (event) => {
     let data = JSON.parse(event.data);
     if (data.type === "offer") {
         broadcasterId = data.from;
@@ -44,23 +84,51 @@ signalingSocket.onmessage = async (event) => {
     else if (data.type === "candidate") {
         if (pc) await pc.addIceCandidate(data.candidate);
     }
-};
-    const chatSocket = new WebSocket(
+    else if (data.type === "broadcaster_online") {
+        signalingSocket.close();
+        openSignalingSocket();
+    }
+    };
+}
+openSignalingSocket();
+const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
+let pc;
+let broadcasterId = null;
+function getRandomInt(min, max) {
+  min = Math.ceil(min); // Ensure min is an integer (rounds up)
+  max = Math.floor(max); // Ensure max is an integer (rounds down)
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+const guestID = new String(getRandomInt(0,99));
+var chatSocket;
+var chatSocketReconnectTimeout;
+function openChatSocket() {
+    chatSocket = new WebSocket(
         "wss://" + window.location.host + "/ws/chat/{{ vendor.profile.name }}/"
     );
+    chatSocket.onerror = function() {
+        if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+    };
+    chatSocket.onclose = function() {
+        if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+    };
     chatSocket.onmessage = function(event) {
         let data = JSON.parse(event.data);
         let chatbox = document.getElementById('chatbox');
         chatbox.innerHTML += `<div><b>${data.username}:</b> ${data.message}</div>`;
     };
-    function sendChat() {
-        let input = document.getElementById('chatinput');
-        chatSocket.send(JSON.stringify({
-            message: input.value,
-            username: "{% if request.user.is_authenticated %}{{ request.user.profile.name }}{% else %}Guest{% endif %}"
-        }));
-        input.value = "";
-    }
+}
+openChatSocket();
+function sendChat() {
+    let input = document.getElementById('chatinput');
+    chatSocket.send(JSON.stringify({
+        message: input.value,
+        username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
+    }));
+    input.value = "";
+}
 const inputField = document.getElementById('chatinput');
 inputField.addEventListener('keydown', function(event) {     
     if (event.keyCode === 13) { // 13 is the keyCode for the Enter key

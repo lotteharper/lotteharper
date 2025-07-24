@@ -347,7 +347,9 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
 
         # Determine if this connection is the broadcaster (logged in as <channel_name>)
         user = self.scope["user"]
-        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param
+        username = await get_user_name(self.scope['user'].id)
+        auth = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
+        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param and username == self.channel_name_param and auth
 
         # Add to group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -362,9 +364,17 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
                     "viewer_channel": self.channel_name,
                 }
             )
+        elif self.is_broadcaster:
+            await self.channel_layer.group_send(
+                self.room_group_name, {"type": "broadcaster_online"}
+            )
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        if self.is_broadcaster:
+            await self.channel_layer.group_send(
+                self.room_group_name, {"type": "broadcaster_offline"}
+            )
 
     async def receive(self, text_data):
         data = json.loads(text_data)

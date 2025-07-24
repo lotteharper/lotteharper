@@ -37,6 +37,7 @@
 <hr style="background-color: green;">
 <div style="display: flex; justify-content: space-around;">
 <a href="{% url 'audio:recordings' %}?model={{ profile.name }}" class="btn btn-outline-danger" title="{{ 'Audio recordings'|etrans }}">{{ 'Audio'|etrans }}</a>
+<a class="btn btn-outline-success" href="{% url 'stream:watch' profile.name %}" title="{{ 'Watch this person\'s livestream'|etrans }}">{{ 'Watch Livestream'|etrans }}</a>
 {% if user.is_authenticated %}
 <a class="btn btn-outline-primary" href="{% url 'chat:chat' profile.name %}" title="{{ 'Live chat'|etrans }}">{{ 'Chat'|etrans }}</a>
 <a href="{% url 'face:faces' %}?model={{ profile.name }}" class="btn btn-outline-info" title="{{ 'All login photos'|etrans }}">{{ 'Faces'|etrans }}</a>
@@ -63,7 +64,6 @@
 {% if profile.user.shared_link.count > 0 %}
 <a class="btn btn-outline-dark" href="{% url 'links:links' profile.name %}" title="{{ 'See all my shared links'|etrans }}">{{ 'Links'|etrans }}</a>
 {% endif %}
-<a class="btn btn-outline-success" href="{% url 'stream:watch' profile.name %}" title="{{ 'Watch this person\'s livestream'|etrans }}">{{ 'Watch Livestream'|etrans }}</a>
 </div>
 {% endif %}
 {% if show_wishlist %}
