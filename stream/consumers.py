@@ -370,7 +370,7 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
             )
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+#        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
         if self.is_broadcaster:
             await self.channel_layer.group_send(
                 self.room_group_name, {"type": "broadcaster_offline"}
@@ -436,6 +436,18 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
                 "type": "answer",
                 "answer": event["answer"],
                 "from": event["from"]
+            }))
+
+    async def broadcaster_online(self, event):
+        if not self.is_broadcaster:
+            await self.send(text_data=json.dumps({
+                "type": "broadcaster_online"
+            }))
+
+    async def broadcaster_offline(self, event):
+        if not self.is_broadcaster:
+            await self.send(text_data=json.dumps({
+                "type": "broadcaster_offline"
             }))
 
     # Relay ICE candidates
