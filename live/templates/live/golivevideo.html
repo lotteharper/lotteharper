@@ -396,6 +396,59 @@ async function mergeStreamsFn() {
         setTimeout(detectVideo, 3000);
     }
     {% endif %}
+{% if camera.broadcast %}
+var signalingSocket;
+var signalingSocketReconnectTimeout;
+function openSignalingSocket() {
+    signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ request.user.profile.name }}/");
+    signalingSocket.onerror = (event) => {
+        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
+        signalingSocketReconnectTimeout = setTimeout(function() {
+            openSignalingSocket();
+        }, {{ reload_time }});
+    };
+    signalingSocket.onclose = (event) => {
+        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
+        signalingSocketReconnectTimeout = setTimeout(function() {
+            openSignalingSocket();
+        }, {{ reload_time }});
+    };
+    signalingSocket.onmessage = async (event) => {
+        let data = JSON.parse(event.data);
+        if (data.type === "answer") {
+            let pc = peers[data.from];
+            if (pc) await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+        }
+        else if (data.type === "candidate") {
+            let pc = peers[data.from];
+            if (pc) await pc.addIceCandidate(data.candidate);
+        }
+        else if (data.type === "new_viewer") {
+            // Call handleViewer with the viewer's channel name
+            handleViewer(data.id);
+        }
+    };
+}
+openSignalingSocket();
+
+const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
+let peers = {};
+// When a viewer connects, create a peer connection and send offer
+function handleViewer(id) {
+    let pc = new RTCPeerConnection(stunConfig);
+    peers[id] = pc;
+    localOverlayStream.getTracks().forEach(track => pc.addTrack(track, localOverlayStream));
+    pc.onicecandidate = e => {
+        if (e.candidate) {
+            signalingSocket.send(JSON.stringify({type:"candidate", candidate:e.candidate, to:id}));
+        }
+    };
+    pc.createOffer().then(offer => {
+        pc.setLocalDescription(offer);
+        signalingSocket.send(JSON.stringify({type:"offer", offer, to:id}));
+    });
+}
+{% endif %}
   }
 }
 var recordingStartTime;
@@ -677,57 +730,6 @@ fullscreenButton.addEventListener('click', () => {
   }
 });
 {% if camera.broadcast %}
-var signalingSocket;
-var signalingSocketReconnectTimeout;
-function openSignalingSocket() {
-    signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ request.user.profile.name }}/");
-    signalingSocket.onerror = (event) => {
-        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
-        signalingSocketReconnectTimeout = setTimeout(function() {
-            openSignalingSocket();
-        }, {{ reload_time }});
-    };
-    signalingSocket.onclose = (event) => {
-        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
-        signalingSocketReconnectTimeout = setTimeout(function() {
-            openSignalingSocket();
-        }, {{ reload_time }});
-    };
-    signalingSocket.onmessage = async (event) => {
-        let data = JSON.parse(event.data);
-        if (data.type === "answer") {
-            let pc = peers[data.from];
-            if (pc) await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
-        }
-        else if (data.type === "candidate") {
-            let pc = peers[data.from];
-            if (pc) await pc.addIceCandidate(data.candidate);
-        }
-        else if (data.type === "new_viewer") {
-            // Call handleViewer with the viewer's channel name
-            handleViewer(data.id);
-        }
-    };
-}
-openSignalingSocket();
-
-const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
-let peers = {};
-// When a viewer connects, create a peer connection and send offer
-function handleViewer(id) {
-    let pc = new RTCPeerConnection(stunConfig);
-    peers[id] = pc;
-    localOverlayStream.getTracks().forEach(track => pc.addTrack(track, localOverlayStream));
-    pc.onicecandidate = e => {
-        if (e.candidate) {
-            signalingSocket.send(JSON.stringify({type:"candidate", candidate:e.candidate, to:id}));
-        }
-    };
-    pc.createOffer().then(offer => {
-        pc.setLocalDescription(offer);
-        signalingSocket.send(JSON.stringify({type:"offer", offer, to:id}));
-    });
-}
 var chatSocket;
 var chatSocketReconnectTimeout;
 function openChatSocket() {
