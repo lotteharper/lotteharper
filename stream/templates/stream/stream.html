@@ -20,7 +20,7 @@
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
-const video = document.getElementById('remoteVideo');
+const video = document.getElementById('localVideo');
 const fullscreenButton = document.getElementById('fullscreenToggle');
 fullscreenButton.addEventListener('click', () => {
   if (!document.fullscreenElement) {
