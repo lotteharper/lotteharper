@@ -247,6 +247,7 @@ class VideoCamera(models.Model):
     upload = models.BooleanField(default=False)
     bucket = models.BooleanField(default=False)
     muted = models.BooleanField(default=False)
+    broadcast = models.BooleanField(default=False)
     short_mode = models.BooleanField(default=False)
 
     def __str__(self):
