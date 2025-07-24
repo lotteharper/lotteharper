@@ -305,3 +305,133 @@ class StreamConsumer(AsyncWebsocketConsumer):
 #            case 'age':
 #                await update_age(self, sender, message)
 #                await send_updates(self)
+
+import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'chat_{self.room_name}'
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': data['message'],
+                'username': data.get('username', 'Anonymous')
+            }
+        )
+
+    async def chat_message(self, event):
+        await self.send(text_data=json.dumps({
+            'message': event['message'],
+            'username': event['username']
+        }))
+
+import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        # Get channel name from URL
+        self.channel_name_param = self.scope['url_route']['kwargs']['channel_name']
+        self.room_group_name = f"webrtc_{self.channel_name_param}"
+
+        # Determine if this connection is the broadcaster (logged in as <channel_name>)
+        user = self.scope["user"]
+        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param
+
+        # Add to group
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        await self.accept()
+
+        # If viewer, notify broadcaster of new connection
+        if not self.is_broadcaster:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "new_viewer",
+                    "viewer_channel": self.channel_name,
+                }
+            )
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+
+        # Broadcaster sends offer
+        if self.is_broadcaster and data.get("type") == "offer":
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "broadcast_offer",
+                    "offer": data["offer"],
+                    "broadcaster": self.channel_name,
+                    "to": data.get("to"),  # viewer's channel_name
+                }
+            )
+        # Viewer sends answer to broadcaster
+        elif not self.is_broadcaster and data.get("type") == "answer":
+            await self.channel_layer.send(
+                data["to"],  # broadcaster's channel_name
+                {
+                    "type": "broadcast_answer",
+                    "answer": data["answer"],
+                    "from": self.channel_name,
+                }
+            )
+        # ICE candidate relay
+        elif data.get("type") == "candidate":
+            await self.channel_layer.send(
+                data["to"],
+                {
+                    "type": "broadcast_candidate",
+                    "candidate": data["candidate"],
+                    "from": self.channel_name,
+                }
+            )
+
+    # Notify broadcaster of a new viewer
+    async def new_viewer(self, event):
+        if self.is_broadcaster:
+            await self.send(text_data=json.dumps({
+                "type": "new_viewer",
+                "id": event["viewer_channel"]
+            }))
+
+    # Send offer from broadcaster to a viewer
+    async def broadcast_offer(self, event):
+        # Only send to the intended viewer
+        if not self.is_broadcaster and self.channel_name == event.get("to"):
+            await self.send(text_data=json.dumps({
+                "type": "offer",
+                "offer": event["offer"],
+                "from": event["broadcaster"]
+            }))
+
+    # Send answer from viewer to broadcaster
+    async def broadcast_answer(self, event):
+        if self.is_broadcaster:
+            await self.send(text_data=json.dumps({
+                "type": "answer",
+                "answer": event["answer"],
+                "from": event["from"]
+            }))
+
+    # Relay ICE candidates
+    async def broadcast_candidate(self, event):
+        await self.send(text_data=json.dumps({
+            "type": "candidate",
+            "candidate": event["candidate"],
+            "from": event["from"]
+        }))

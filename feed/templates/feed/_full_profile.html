@@ -63,6 +63,7 @@
 {% if profile.user.shared_link.count > 0 %}
 <a class="btn btn-outline-dark" href="{% url 'links:links' profile.name %}" title="{{ 'See all my shared links'|etrans }}">{{ 'Links'|etrans }}</a>
 {% endif %}
+<a class="btn btn-outline-success" href="{% url 'stream:watch' profile.name %}" title="{{ 'Watch this person\'s livestream'|etrans }}">{{ 'Watch Livestream'|etrans }}</a>
 </div>
 {% endif %}
 {% if show_wishlist %}

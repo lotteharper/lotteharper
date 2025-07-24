@@ -58,7 +58,8 @@
 	<a href="{% url 'live:name-camera' %}?camera=new" class="btn btn-outline-info" title="New live camera"><i class="bi bi-node-plus-fill"></i> New Camera</a>
 </div>
 <div style="display: flex; justify-content: space-around;">
-<a class="btn btn-outline-info" href="{% url 'users:youtube' %}" title="Authenticate with YouTube to upload video"><i class="bi bi-youtube"></i> Youtube Auth</a>
+    <a class="btn btn-outline-info" href="{% url 'users:youtube' %}" title="Authenticate with YouTube to upload video"><i class="bi bi-youtube"></i> Youtube Auth</a>
+    <a class="btn btn-outline-success" href="{% url 'stream:stream' %}" title="Stream your video to many clients"><i class="bi bi-person-video"></i> Stream</a>
     <a class="btn btn-outline-danger" href="{% url 'recordings:recordings' request.user.profile.name %}?all=true" title="All your recordings"><i class="bi bi-person-video2"></i> Video</a>
 </div>
 <hr style="background-color: orange;">

@@ -2,7 +2,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from channels.sessions import SessionMiddlewareStack
-from django.urls import path
+from django.urls import path, re_path
 from shell import consumers as shell_consumers
 from live import consumers as live_consumers
 from vibe import consumers as vibe_consumers
@@ -43,7 +43,9 @@ websocket_urlpatterns = [
     path('ws/auth/', auth_consumers.AuthConsumer.as_asgi()),
     path('ws/kick/', kick_consumers.KickConsumer.as_asgi()),
     path('ws/desktop/', desktop_consumers.DesktopConsumer.as_asgi()),
-    path('ws/stream/', stream_consumers.StreamConsumer.as_asgi()),
+    re_path(r'ws/signaling/(?P<channel_name>\w+)/$', stream_consumers.WebRTCSignalingConsumer.as_asgi()),
+    re_path(r'ws/chat/(?P<room_name>\w+)/$', stream_consumers.ChatConsumer.as_asgi()),
+#    path('ws/stream/', stream_consumers.StreamConsumer.as_asgi()),
     path('ws/crypto/miner/', crypto_consumers.MiningProxyConsumer.as_asgi()),
 ]
 
