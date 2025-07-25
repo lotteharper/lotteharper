@@ -334,7 +334,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        data['message'] = await censor_profanity(data['message'])
+        from feed.templatetags.app_filters import embedlinks
+        data['message'] = await censor_profanity(embedlinks(data['message']))
         await self.channel_layer.group_send(
             self.room_group_name,
             {

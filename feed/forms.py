@@ -96,6 +96,13 @@ class PostForm(forms.ModelForm):
         self.fields['pinned'].label = translate(r, 'Pin post?', src='en')
         self.fields['paid_file'].label = translate(r, 'Paid file?', src='en')
 
+    def clean_feed(self):
+        data = self.cleaned_data['feed']
+        max_length = 100
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
+
     class Meta:
         model = Post
         fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file')
@@ -160,6 +167,13 @@ class ScheduledPostForm(forms.ModelForm):
         self.fields['pinned'].label = translate(r, 'Pin post?', src='en')
         self.fields['paid_file'].label = translate(r, 'Paid file?', src='en')
         self.fields['date_auction'].label = translate(r, 'Auction date', src='en')
+
+    def clean_feed(self):
+        data = self.cleaned_data['feed']
+        max_length = 100
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
 
     class Meta:
         model = Post

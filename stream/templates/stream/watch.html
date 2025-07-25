@@ -61,7 +61,7 @@
     <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
         <video style="width: 100%;" id="remoteVideo" autoplay playsinline></video>
         <div id="chat-overlay">
-            <div id="chatbox">{% for message in vendor.stream_messages|recent_stream_messages:3 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} (Streamer){% endif %}{% else %}Guest{% endif %}:</b> {{ message.message }}</div>{% endfor %}</div>
+{% autoescape off %}            <div id="chatbox">{% for message in vendor.stream_messages|recent_stream_messages:3 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} (Streamer){% endif %}{% else %}Guest{% endif %}:</b> {{ message.message }}</div>{% endfor %}</div>{% endautoescape %}
             <div class="input-group mb-3">
                 <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type your message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
                 <div class="input-group-append">
@@ -74,6 +74,8 @@
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
+var chatSocket;
+var chatSocketReconnectTimeout;
 $(document).ready(function() {
     var streamBegan = false;
     Object.keys(window).forEach(key => {
@@ -171,8 +173,6 @@ $(document).ready(function() {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         const guestID = new String(getRandomInt(0,99));
-        var chatSocket;
-        var chatSocketReconnectTimeout;
         function openChatSocket() {
             chatSocket = new WebSocket(
                 "wss://" + window.location.host + "/ws/chat/{{ vendor.profile.name }}/"
@@ -193,14 +193,6 @@ $(document).ready(function() {
             };
         }
         openChatSocket();
-        function sendChat() {
-            let input = document.getElementById('chatinput');
-            chatSocket.send(JSON.stringify({
-                message: input.value,
-                username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
-            }));
-            input.value = "";
-        }
         const inputField = document.getElementById('chatinput');
         inputField.addEventListener('keydown', function(event) {     
             if (event.keyCode === 13) { // 13 is the keyCode for the Enter key
@@ -212,4 +204,14 @@ $(document).ready(function() {
         chatbox.scrollBy(0, 9999999);
     }
 });
+function sendChat() {
+    let input = document.getElementById('chatinput');
+    if(input.value != "") {
+        chatSocket.send(JSON.stringify({
+            message: input.value,
+            username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
+        }));
+        input.value = "";
+    }
+}
 {% endblock %}

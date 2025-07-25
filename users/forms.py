@@ -94,6 +94,20 @@ class NonVendorProfileUpdateForm(forms.ModelForm):
         if self.instance.enable_two_factor_authentication and not settings.ENFORCE_TFA:
             self.fields['enable_two_factor_authentication'].initial = True
 
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        max_length = 50
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
+
+    def clean_preferred_name(self):
+        data = self.cleaned_data['preferred_name']
+        max_length = 50
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
+
     class Meta:
         model = Profile
         fields = ['phone_number','enable_two_factor_authentication' if not settings.ENFORCE_TFA else 'phone_number', 'subscribed', 'preferred_name', 'name']
@@ -132,6 +146,20 @@ class ProfileUpdateForm(forms.ModelForm):
         self.fields['image'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
         self.fields['cover_image'].widget.attrs.update({'style': 'width:100%;padding:25px;border-style:dashed;border-radius:10px;'})
         self.fields['email_password'].help_text = translate(r, 'Please fill in this field to change your email password.', src='en')
+
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        max_length = 50
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
+
+    def clean_preferred_name(self):
+        data = self.cleaned_data['preferred_name']
+        max_length = 50
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
 
     class Meta:
         model = Profile

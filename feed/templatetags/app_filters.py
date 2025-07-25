@@ -714,7 +714,7 @@ def embedlinks(value):
         for url in urls:
             plus = ' (it\'s on {})'.format(settings.SITE_NAME)
             ex = ''
-            if not url[8:17].lower() == settings.DOMAIN.lower():
+            if url[8:8+len(settings.DOMAIN.lower())].lower() != settings.DOMAIN.lower():
                 plus = ' (it will take you outside of {})'.format(settings.SITE_NAME)
                 ex = ' id=\"external-link\"'
             if url.endswith('.') or url.endswith(',') or url.endswith('!'):

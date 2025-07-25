@@ -54,6 +54,8 @@ class NameCameraForm(forms.ModelForm):
     privacy_status = forms.CharField(widget=forms.Select(choices=PRIVACY_CHOICES))
     microphone = forms.CharField(widget=forms.Select(choices=MICROPHONE_CHOICES))
     category = forms.CharField(widget=forms.Select(choices=CATEGORY_CHOICES))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 7}))
+    tags = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
 #    vad_mode = forms.CharField(widget=forms.Select(choices=VAD_CHOICES))
     def __init__(self, *args, **kwargs):
         super(NameCameraForm, self).__init__(*args, **kwargs)
@@ -104,6 +106,27 @@ class NameCameraForm(forms.ModelForm):
     def clean_title(self):
         data = self.cleaned_data['title']
         max_length = 100
+        if len(data) > max_length:
+            data = data[:max_length-3].rsplit(' ', 1)[0] + '...' # Truncate the text
+        return data
+
+    def clean_tags(self):
+        data = self.cleaned_data['tags']
+        max_length = 500
+        if len(data) > max_length:
+            data = data[:max_length].rsplit(',', 1)[0]
+        return data
+
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        max_length = 100
+        if len(data) > max_length:
+            data = data[:max_length]
+        return data
+
+    def clean_description(self):
+        data = self.cleaned_data['description']
+        max_length = 2000
         if len(data) > max_length:
             data = data[:max_length-3].rsplit(' ', 1)[0] + '...' # Truncate the text
         return data

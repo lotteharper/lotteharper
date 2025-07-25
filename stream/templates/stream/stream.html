@@ -58,7 +58,7 @@
   <div id="video-container">
       <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
       <video style="width: 100%;" id="localVideo" autoplay muted playsinline></video>
-      <div id="chatbox"></div>
+{% autoescape off %}      <div id="chatbox"></div>{% endautoescape %}
       <div class="input-group mb-3">
         <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type a message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
         <div class="input-group-append">

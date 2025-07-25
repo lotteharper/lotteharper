@@ -80,7 +80,7 @@ video {
     <div id="mediaWrapper"></div>
     {% if camera.broadcast %}
     <div id="chat-overlay">
-        <div id="chatbox">{% for message in camera.user.stream_messages|recent_stream_messages:1 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} (Streamer){% endif %}{% else %}Guest{% endif %}:</b> {{ message.message }}</div>{% endfor %}</div>
+{% autoescape off %}        <div id="chatbox">{% for message in camera.user.stream_messages|recent_stream_messages:1 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} (Streamer){% endif %}{% else %}Guest{% endif %}:</b> {{ message.message }}</div>{% endfor %}</div>{% endautoescape %}
         <div class="input-group mb-3">
             <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type your message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
             <div class="input-group-append">
@@ -260,7 +260,7 @@ function detectVideo() {
         cvctx.drawImage(pipOverlayStream, 0, 0, Math.trunc(overlay.videoWidth * {{ nudity_censor_scale }}), Math.trunc(overlay.videoHeight * {{ nudity_censor_scale }}));
         nsfwjsmodel.classify(cvcanvas, 1).then(function (predictions) {
             console.log(predictions[0]);
-            if(predictions[0].className == 'Porn' && predictions[0].probability > 0.92) {
+            if(predictions[0].className == 'Porn' && predictions[0].probability > 0.95) {
                 console.log('Nude');
                 censorVideo = true;
             } else {
@@ -809,14 +809,16 @@ function openChatSocket() {
     };
 }
 openChatSocket();
-    function sendChat() {
-        let input = document.getElementById('chatinput');
+function sendChat() {
+    let input = document.getElementById('chatinput');
+    if(input.value != "") {
         chatSocket.send(JSON.stringify({
             message: input.value,
             username: "@{{ request.user.profile.name }} (Streamer)"
         }));
         input.value = "";
     }
+}
 const inputField = document.getElementById('chatinput');
 inputField.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) { // 13 is the keyCode for the Enter key
