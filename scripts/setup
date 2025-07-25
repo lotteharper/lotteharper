@@ -393,6 +393,7 @@ echo $"Port ${PORT}" | sudo tee -a /etc/ssh/sshd_config
 echo "AddressFamily any" | sudo tee -a /etc/ssh/sshd_config
 echo "ListenAddress 0.0.0.0" | sudo tee -a /etc/ssh/sshd_config
 echo "ListenAddress ::" | sudo tee -a /etc/ssh/sshd_config
+echo "Banner /etc/banner" | sudo tee -a /etc/ssh/sshd_config
 sudo ufw allow $PORT
 sudo ufw reload
 sudo chmod a+x pam.sh
