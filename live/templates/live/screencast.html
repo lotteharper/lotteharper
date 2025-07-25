@@ -354,11 +354,7 @@ async function stopAllStreamsFn() {
     ...(localOverlayStream ? localOverlayStream.getTracks() : [])
   ].map((track) => track.stop());
   live = false;
-  if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-      document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
-  } else {
-      document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
-  }
+  document.getElementById("rec-status").innerHTML = '';
   if(captureInterval) clearInterval(captureInterval);
   localOverlayStream = null;
   localCamStream = null;

@@ -317,6 +317,11 @@ def create_stream_message(user_id, vendor_name, message):
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+@sync_to_async
+def censor_profanity(text):
+    from better_profanity import profanity
+    return profanity.censor(text)
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -329,6 +334,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
+        data['message'] = await censor_profanity(data['message'])
         await self.channel_layer.group_send(
             self.room_group_name,
             {

@@ -1,15 +1,7 @@
 {% extends 'base.html' %}
-{% load app_filters %}
 {% block head %}
 {% if camera.user.vendor_profile.logo %}<link rel="preload" as="image" href="{{ camera.user.vendor_profile.logo.url }}">{% endif %}
 <style>
-video {
-    width: 100%;
-    pointer-events: none;
-}
-{% if camera.user.vendor_profile.video_intro_font %}
-@font-face { font-family: 'VendorSpecified'; src: url('{{ camera.user.vendor_profile.video_intro_font.url }}'); }
-{% endif %}
 #video-container {
   position: relative;
   width: 100%; /* or 100vw for responsive fullscreen */
@@ -20,12 +12,6 @@ video {
   width: 100%;
   height: auto;
   display: block;
-}
-
-#rec-status {
-    position: absolute;
-    top: 5px;
-    left: 50%;
 }
 
 #chat-overlay {
@@ -58,27 +44,40 @@ video {
   border-radius: 5px;
 }
 
+#rec-status {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+}
 #fullscreenToggle {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
 }
+video {
+    width: 100%;
+    pointer-events: none;
+}
+{% if camera.user.vendor_profile.video_intro_font %}
+@font-face { font-family: 'VendorSpecified'; src: url('{{ camera.user.vendor_profile.video_intro_font.url }}'); }
+{% endif %}
 </style>
 {% endblock %}
 {% block content %}
+{% load app_filters %}
 <h1>{{ 'Live Recording'|etrans }}</h1>
 <legend>{% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %} {{ 'camera'|etrans }}</legend>
 <div id="container">
 {% if request.GET.with %}
 <div style="z-index: 1; position: absolute;">
 {% endif %}
-<p id="errormessage" class="hide" style="text-color: red;">{{ 'Please enable your camera in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="Reload page" class="btn btn-outline-primary">{{ 'Reload'|etrans }}</button></p>
+<p id="errormessage" class="hide" style="text-color: red;">{{ 'Please enable your camera in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="{{ 'Reload page'|etrans }}" class="btn btn-outline-primary">{{ 'Reload'|etrans }}</button></p>
 <div id="video-container">
-    <div style="text-align: center;" id="rec-status"></div>
-    <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen' }}"><i class="bi bi-arrows-fullscreen"></i></button>
-    <div id="mediaWrapper"></div>
-    {% if camera.broadcast %}
+<div id="mediaWrapper"></div>
+<div style="text-align: center;" id="rec-status"></div>
+<button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
+{% if camera.broadcast %}
     <div id="chat-overlay">
         <div id="chatbox">{% for message in camera.user.stream_messages|recent_stream_messages:1 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} (Streamer){% endif %}{% else %}Guest{% endif %}:</b> {{ message.message }}</div>{% endfor %}</div>
         <div class="input-group mb-3">
@@ -88,7 +87,7 @@ video {
             </div>
         </div>
     </div>
-    {% endif %}
+{% endif %}
 </div>
 {% if request.GET.with %}
 </div>
@@ -105,31 +104,28 @@ video {
 {% else %}
 <a class="btn btn-outline-secondary" href="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}{% if request.GET.with %}&with={{ request.GET.with }}{% endif %}&back=true">Back Facing Camera</a>
 {% endif %}
-{% if not request.GET.mirror %}
-<a class="btn btn-outline-primary" href="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}&mirror=t{% if request.GET.with %}&with={{ request.GET.with }}{% endif %}{% if request.GET.back %}&back=t{% endif %}">Mirror camera</a>
-{% else %}
-<a class="btn btn-outline-secondary" href="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}{% if request.GET.with %}&with={{ request.GET.with }}{% endif %}{% if request.GET.back %}&back=t{% endif %}">Disable mirroring (enabled)</a>
-{% endif %}
 <hr>
 <div class="display: inline-block;">
     <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam</button>
-    <button class="btn btn-outline-danger" id="startRecording" title="Record Resulting Stream">Record Stream</button>
+    <button class="btn btn-outline-info" id="startScreenShare" title="Start Screen Share">Start Screen Share</button>
+    <button class="btn btn-outline-primary" id="mergeStreams" title="Merge Streams">Merge Streams</button>
+    <button class="btn btn-outline-danger" id="startRecording" title="Record Resulting Stream">Record Resulting Stream</button>
     <button class="btn btn-outline-warning" id="stopRecording" title="Stop Recording">Stop Recording</button>
-    <button class="btn btn-outline-light" id="stopAllStreams" title="Stop All Streams"{% if not darkmode %} style="color: black !important;"{% endif %}>Stop Stream</button>
+    <button class="btn btn-outline-light" id="stopAllStreams" title="Stop All Streams"{% if not darkmode %} style="color: black !important;"{% endif %}>Stop All Streams</button>
 </div>
-{% endblocktrans %}
 <div style="display: flex; justify-content: space-around;">
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
 {% include 'live/go_remote.html' %}
 {% endif %}
 {% include 'live/mute_remote.html' %}
-<a href="{% url 'live:screencast' %}?camera={{ request.GET.camera }}" title="{{ 'Switch to screencasting mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video3"></i></a>
+<a href="{% url 'live:golivevideo' %}{% if request.GET.camera %}?camera={{ request.GET.camera }}{% endif %}" title="{{ 'Switch to video mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video"></i></a>
 <a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
 <button onclick="window.location.reload();" title="{{ 'Reload the page to stop the stream and create a new video'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-clockwise"></i></button>
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
 {% include 'live/recording_remote.html' %}
 {% endif %}
 </div>
+{% endblocktrans %}
 {% include 'live/camera_settings_frame.html' %}
 {% if nudity_censor %}
 <canvas id="cvcanvas" style="display: none;"></canvas>
@@ -165,7 +161,6 @@ function generateRandomString(length = 6) {
 }
 var CAMERA_ID = generateRandomString(8);
 const MINUTES_PER_LOGO = 5;
-var captureInterval;
 var liveButton = document.getElementById('golivebutton');
 var recordButton = document.getElementById('recordbutton');
 var muteButton = document.getElementById('mutebutton');
@@ -205,21 +200,13 @@ function openMediaSocket() {
         });
         mediaSocket.addEventListener("close", (event) => {
                 console.log('Socket closed.');
-                if(mediaSocketReconnectTimeout) clearTimeout(mediaSocketReconnectTimeout);
-                mediaSocketReconnectTimeout = setTimeout(function() {
-                        openMediaSocket();
-                }, {{ reload_time }});
-        });
-        mediaSocket.addEventListener("error", (event) => {
-                console.log('Socket error.');
-                if(mediaSocketReconnectTimeout) clearTimeout(mediaSocketReconnectTimeout);
                 mediaSocketReconnectTimeout = setTimeout(function() {
                         openMediaSocket();
                 }, {{ reload_time }});
         });
         mediaSocket.addEventListener("message", (event) => {
-                /*return;
-                if(unconfirmedFrames.includes(event.data)) {
+                return;
+                /*if(unconfirmedFrames.includes(event.data)) {
                         var index = unconfirmedFrames.indexOf(event.data);
                         console.log('Frame posted');
                         unconfirmedFrames.splice(index, 1);
@@ -227,7 +214,7 @@ function openMediaSocket() {
                         videoFrames[event.data] = null;
                 } else {
                         if(retryCount[event.data] < 5) {
-                                mediaSocket.send(videoFrames[event.data]);
+                                
                                 console.log('Sending capture again');
                         } else {
                                 console.log('Forfeiting capture');
@@ -242,6 +229,7 @@ function openMediaSocket() {
 }
 openMediaSocket();
 var form = document.getElementById('live-form');
+var video = document.getElementById('video-element');
 var data;
 var mediaChunks = [];
 {% if nudity_censor %}
@@ -277,6 +265,10 @@ function capture(){
         }
         {% endif %}
 }
+var captureInterval;
+function capture(){
+        mediaRecorder.stop();
+}
 const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
 let localCamStream,
   localScreenStream,
@@ -288,11 +280,14 @@ let localCamStream,
   audioDestination;
 let mediaWrapperDiv = document.getElementById("mediaWrapper");
 let startWebcamBtn = document.getElementById("startWebcam");
+let startScreenShareBtn = document.getElementById("startScreenShare");
+let mergeStreamsBtn = document.getElementById("mergeStreams");
 let startRecordingBtn = document.getElementById("startRecording");
 let stopRecordingBtn = document.getElementById("stopRecording");
 let stopAllStreamsBtn = document.getElementById("stopAllStreams");
 let canvasElement = document.createElement("canvas");
 let canvasCtx = canvasElement.getContext("2d");
+/* "video/webm; codecs=vp9", mimeType: 'video/' + {% autoescape off %}'{{ camera.mimetype }}'.split(',')[0].replace('"', ''){% endautoescape %},*/
 var mimeType = 'video/' + {% autoescape off %}'{{ camera.mimetype }}'.split(',')[0].replace('"', ''){% endautoescape %};
 
 let encoderOptions = {
@@ -320,33 +315,71 @@ const requestVideoFrame = function(callback) {
 const cancelVideoFrame = function(id) {
   clearTimeout(id);
 };
+
 async function startWebcamFn() {
   if(!localCamStream) {
-      CAMERA_ID = generateRandomString(8);
-      localCamStream = await navigator.mediaDevices.getUserMedia({
-        video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: {{ camera.width }} },  frameRate: { ideal: {{ fps }} } },
-        audio: {% if camera.microphone == 'communications' %}deviceId: { ideal: "communications" }{% elif camera.microphone == 'default' %}true{% elif camera.microphone == 'echo cancellation' %}{ echoCancellation: true, }{% endif %},
-      }).catch((error) => {
+    CAMERA_ID = generateRandomString(8);
+    localCamStream = await navigator.mediaDevices.getUserMedia({
+        video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: 320 },  frameRate: { ideal: 15 } },
+        audio: { deviceId: { ideal: "communications" } },
+    }).catch((error) => {
         console.log(error);
         $('#errormessage').removeClass('hide');
-      });
-      if (localCamStream && !document.getElementById("justWebcam")) {
+    });
+    if (localCamStream && !document.getElementById("justWebcam")) {
         cam = await attachToDOM("justWebcam", localCamStream);
-      }
-      setTimeout(mergeStreamsFn, 500);
+    }
   }
+}
+
+async function startScreenShareFn() {
+  if(!localScreenStream) {
+  localScreenStream = await navigator.mediaDevices.getDisplayMedia({
+    video: { width: {ideal: {{ camera.width }} },  frameRate: { ideal: {{ fps }} } },
+    audio: {echoCancellation: {% if camera.echo_cancellation %}true{% else %}false{% endif %},},
+  }).catch((error) => {
+    console.log(error);
+    $('#errormessage').removeClass('hide');
+  });
+  if (localScreenStream) {
+    screen = await attachToDOM("justScreenShare", localScreenStream);
+  }
+  }
+}
+
+async function stopAllStreamsFn() {
+  [
+    ...(localCamStream ? localCamStream.getTracks() : []),
+    ...(localScreenStream ? localScreenStream.getTracks() : []),
+    ...(localOverlayStream ? localOverlayStream.getTracks() : [])
+  ].map((track) => track.stop());
+  live = false;
+ if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
+      document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
+  } else {
+      document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
+  }
+  if(captureInterval) clearInterval(captureInterval);
+  localOverlayStream = null;
+  localCamStream = null;
+  localScreenStream = null;
+  audioTracks = [];
+  cancelVideoFrame(rafId);
+  mediaWrapperDiv.innerHTML = "";
+  document.getElementById("pipOverlayStream").style.border = "none";
 }
 const baseAlpha = {{ logo_alpha }};
 var logo = new Image();
 {% if camera.user.vendor_profile.logo %}logo.src = "{{ camera.user.vendor_profile.logo.url }}";{% endif %}
 async function makeComposite() {
-  if (cam) {
+  if (cam && screen) {
     canvasCtx.save();
     canvasCtx.globalAlpha = 1;
-    canvasElement.setAttribute("width", `${cam.videoWidth}px`);
-    canvasElement.setAttribute("height", `${cam.videoHeight}px`);
-    canvasCtx.clearRect(0, 0, cam.videoWidth, cam.videoHeight);
-    {% if request.GET.mirror and not request.GET.back %}   canvasCtx.scale(-1, 1);{% endif %}
+    canvasElement.setAttribute("width", `${screen.videoWidth}px`);
+    canvasElement.setAttribute("height", `${screen.videoHeight}px`);
+    canvasCtx.clearRect(0, 0, screen.videoWidth, screen.videoHeight);
+    canvasCtx.drawImage(screen, 0, 0, screen.videoWidth, screen.videoHeight);
+    const scaleConst = (screen.videoWidth/cam.videoWidth * 1.0);
     {% if nudity_censor %}
     if(censorVideo) {
         canvasCtx.filter = 'blur({{ nudity_censor_px }}px)';
@@ -354,58 +387,55 @@ async function makeComposite() {
     {% endif %}
     canvasCtx.drawImage(
       cam,
-      {% if request.GET.mirror and not request.GET.back %}-Math.floor(cam.videoWidth){% else %}0{% endif %},
-      0,
-      Math.floor(cam.videoWidth),
-      Math.floor(cam.videoHeight),
+      Math.floor(screen.videoWidth - (cam.videoWidth / 4 * scaleConst){% if request.GET.mirror and not request.GET.back %} - Math.floor(cam.videoWidth){% endif %}),
+      Math.floor(screen.videoHeight - (cam.videoHeight / 4 * scaleConst)),
+      Math.floor(cam.videoWidth / 4 * scaleConst),              
+      Math.floor(cam.videoHeight / 4 * scaleConst),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
     canvasCtx.filter = '';
-    {% if request.GET.mirror and not request.GET.back %}    canvasCtx.resetTransform();{% endif %}
     {% if camera.embed_logo and camera.user.vendor_profile.logo %}
     canvasCtx.globalAlpha = baseAlpha;
-    const logoSize = parseInt(cam.videoWidth / 13);
+    const logoSize = parseInt(screen.videoWidth / 13);
     canvasCtx.drawImage(
         logo,
         10,
-        cam.videoHeight - 10 - logoSize,
+        screen.videoHeight - 10 - logoSize,
         logoSize,
         logoSize
     );
     canvasCtx.globalAlpha = 1;
     {% if camera.user.vendor_profile.video_intro_text %}
-    const currentTime = new Date().getTime()/1000;
+    currentTime = new Date().getTime()/1000;
     if(currentTime - recordingStartTime < 1) {
         canvasCtx.globalAlpha = (currentTime - recordingStartTime) * baseAlpha;
-        canvasCtx.font = new String(parseInt(cam.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
+        canvasCtx.font = new String(parseInt(screen.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
-        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(cam.videoWidth/13) + 20, cam.videoHeight - logoSize/2.7);
+        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(screen.videoWidth/13) + 20, screen.videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime < 14) {
         canvasCtx.globalAlpha = baseAlpha;
-        canvasCtx.font = new String(parseInt(cam.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
+        canvasCtx.font = new String(parseInt(screen.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
-        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(cam.videoWidth/13) + 20, cam.videoHeight - logoSize/2.7);
+        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(screen.videoWidth/13) + 20, screen.videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime < 15) {
         canvasCtx.globalAlpha = (15 - (currentTime - recordingStartTime)) * baseAlpha;
-        canvasCtx.font = new String(parseInt(cam.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
+        canvasCtx.font = new String(parseInt(screen.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
-        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(cam.videoWidth/13) + 20, cam.videoHeight - logoSize/2.7);
+        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(screen.videoWidth/13) + 20, screen.videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime > {{ video_interval }}/1000 * 60 * MINUTES_PER_LOGO) {
         recordingStartTime = new Date().getTime()/1000;
     }
     {% endif %}
     {% endif %}
-    try {
-      let imageData = canvasCtx.getImageData(
-        0,
-        0,
-        cam.videoWidth,
-        cam.videoHeight
-      ); // this makes it work
-      canvasCtx.putImageData(imageData, 0, 0); // properly on safari/webkit browsers too
-    } catch {}
+    let imageData = canvasCtx.getImageData(
+      0,
+      0,
+      screen.videoWidth,
+      screen.videoHeight
+    ); // this makes it work
+    canvasCtx.putImageData(imageData, 0, 0); // properly on safari/webkit browsers too
     canvasCtx.restore();
     rafId = requestVideoFrame(makeComposite);
   }
@@ -418,6 +448,7 @@ async function mergeStreamsFn() {
   let fullVideoStream = canvasElement.captureStream();
   let existingAudioStreams = [
     ...(localCamStream ? localCamStream.getAudioTracks() : []),
+    ...(localScreenStream ? localScreenStream.getAudioTracks() : [])
   ];
   audioTracks.push(
     audioContext.createMediaStreamSource(
@@ -446,15 +477,12 @@ async function mergeStreamsFn() {
     overlay.volume = 0;
     cam.volume = 0;
     try {
+        screen.volume = 0;
         cam.style.display = "none";
         // localCamStream.getAudioTracks().map(track => { track.enabled = false });
+        screen.style.display = "none";
         // localScreenStream.getAudioTracks().map(track => { track.enabled = false });
     } catch {}
-    {% if nudity_censor %}
-    if(overlay) {
-        setTimeout(detectVideo, 3000);
-    }
-    {% endif %}
 {% if camera.broadcast %}
 var signalingSocket;
 var signalingSocketReconnectTimeout;
@@ -512,60 +540,23 @@ function handleViewer(id) {
 }
 var recordingStartTime;
 async function startRecordingFn() {
-  if(!localCamStream) {
-    await startWebcamFn();
-    await new Promise(r => setTimeout(r, 4000));
-  }
   if(!live) {
-      recordingStartTime = new Date().getTime()/1000;
-      live = true;
-      mediaRecorder.start();
-      console.log(mediaRecorder.state);
-      console.log("recorder started");
-      document.getElementById("pipOverlayStream").style.border = "4px solid red";
-      captureInterval = setInterval(capture, {{ video_interval }});
-      
+    if(!localCamStream) {
+      await startWebcamFn();
+      await new Promise(r => setTimeout(r, 4000));
+    }
+    recordingStartTime = new Date().getTime()/1000;
+    live = true;
+    mediaRecorder.start();
+    console.log(mediaRecorder.state);
+    console.log("recorder started");
+    document.getElementById("pipOverlayStream").style.border = "4px solid red";
+    captureInterval = setInterval(capture, {{ video_interval }});
   }
 }
-async function stopRecordingFn() {
-    if(live) {
-        live = false;
-        if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
-        } else {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
-        }
-        if(captureInterval) clearInterval(captureInterval);
-        document.getElementById("pipOverlayStream").style.border = "none";
-        mediaRecorder.stop();
-    }
-}
-
-async function stopAllStreamsFn() {
-  [
-    ...(localCamStream ? localCamStream.getTracks() : []),
-    ...(localOverlayStream ? localOverlayStream.getTracks() : [])
-  ].map((track) => track.stop());
-  live = false;
-  document.getElementById("rec-status").innerHTML = '';
-  if(captureInterval) clearInterval(captureInterval);
-  localOverlayStream = null;
-  localCamStream = null;
-  audioTracks = [];
-  cancelVideoFrame(rafId);
-  mediaWrapperDiv.innerHTML = "";
-  try {  document.getElementById("pipOverlayStream").style.border = "none"; }
-  catch { }
-}
-
-startRecordingBtn.addEventListener("click", startRecordingFn);
-stopRecordingBtn.addEventListener("click", stopRecordingFn);
-startWebcamBtn.addEventListener("click", startWebcamFn);
-stopAllStreamsBtn.addEventListener("click", stopAllStreamsFn);
-
 async function attachToDOM(id, stream) {
   let videoElem = document.createElement("video");
-{% if request.GET.mirror and not request.GET.back %}  if(id == 'justWebcam') { {% if request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }{% endif %}
+  if(id == 'justWebcam') { {% if request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }
   videoElem.id = id;
   videoElem.autoplay = true;
   videoElem.muted = true;
@@ -576,7 +567,6 @@ async function attachToDOM(id, stream) {
   mediaWrapperDiv.appendChild(videoElem);
   return videoElem;
 }
-
 function handleDataAvailable(event) {
   console.log("data-available");
   if (event.data.size > 0) {
@@ -585,7 +575,6 @@ function handleDataAvailable(event) {
     download();
   } else {}
 }
-var remoteSocketReconnectTimeout;
 var cameraon = false;
 function openRemoteSocket() {
         var remoteSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/remote/{{ camera.user.profile.name }}/{{ camera.name }}/');
@@ -594,15 +583,7 @@ function openRemoteSocket() {
         });
         remoteSocket.addEventListener("close", (event) => {
             console.log('Remote socket closed.');
-            if(remoteSocketReconnectTimeout) clearTimeout(remoteSocketReconnectTimeout);
-            remoteSocketReconnectTimeout = setTimeout(function() {
-                openRemoteSocket();
-            }, {{ reload_time }});
-        });
-        remoteSocket.addEventListener("error", (event) => {
-            console.log('Remote socket error.');
-            if(remoteSocketReconnectTimeout) clearTimeout(remoteSocketReconnectTimeout);
-            remoteSocketReconnectTimeout = setTimeout(function() {
+            setTimeout(function() {
                 openRemoteSocket();
             }, {{ reload_time }});
         });
@@ -610,7 +591,7 @@ function openRemoteSocket() {
             var instructions = event.data.split(',');
             if(instructions[0] == 'y' && !cameraon) {
                 cameraon = true;
-                setTimeout(startWebcamFn, 1000);
+                startWebcamFn();
                 liveButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
             } else if(instructions[0] == 'n' && cameraon) {
                 cameraon = false;
@@ -619,11 +600,11 @@ function openRemoteSocket() {
             }
             if(instructions[1] == 'y' && !recording) {
                 recording = true;
-                setTimeout(startRecordingFn, 4000);
+                setTimeout(startRecordingFn, 3000);
                 recordButton.innerHTML = '<i class="bi bi-toggle-on"></i>';
             } else if(instructions[1] == 'n' && recording) {
                 recording = false;
-                stopRecordingFn();                
+                stopRecordingFn();
                 recordButton.innerHTML = '<i class="bi bi-toggle-off"></i>';
             }
             if(instructions[2] == 'y' && !muted) {
@@ -636,18 +617,17 @@ function openRemoteSocket() {
         });
 }
 openRemoteSocket();
-
 function download() {
         if(live) { mediaRecorder.start(); }
         if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-fill"></i>';
+            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-file"></i>';
         } else {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle"></i>';
         }
         var file = new Blob(recordedChunks, {'type': 'video/' + '{% autoescape off %}{{ camera.mimetype }}{% endautoescape %}'.split(';')[0]});
-        recordedChunks = [];
+            recordedChunks = [];
         var formdata = new FormData(form);
-        var utc_timestamp = String(new Date().toISOString());
+                var utc_timestamp = String(new Date().toISOString());
         formdata.append('confirmation_id', String(Math.floor(Math.random() * 1000000000)));
         formdata.append('timestamp', utc_timestamp);
         formdata.append('viduid', CAMERA_ID);
@@ -659,106 +639,124 @@ function download() {
         zip.file('frame.' + '{{ camera.mimetype }}'.split(';')[0], new File([file], 'frame.' + '{{ camera.mimetype }}'.split(';')[0]));
         {% endautoescape %}
         zip.generateAsync({type:"blob"}).then(function (file) {
-        var zipfile = new File([file], 'frame.zip');
-        var reader = new FileReader();
+                var zipfile = new File([file], 'frame.zip');
+                var reader = new FileReader();
         reader.readAsDataURL(zipfile);
-        reader.onload = function () {
-            formdata.append("frame", reader.result);
+            reader.onload = function () {
+                formdata.append("frame", reader.result);
                 var data = new URLSearchParams(formdata).toString();
                 if(mediaSocket.readyState == WebSocket.OPEN) mediaSocket.send(data);
-            };
-            reader.onerror = function (error) {
-                    console.log('Error: ', error);
-            };
-        });
+                        };
+                        reader.onerror = function (error) {
+                                console.log('Error: ', error);
+                        };
+                });
         {% else %}
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-        formdata.append("frame", reader.result);
-        var data = new URLSearchParams(formdata).toString();
-            if(mediaSocket.readyState == WebSocket.OPEN) mediaSocket.send(data);
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                        formdata.append("frame", reader.result);
+            var data = new URLSearchParams(formdata).toString();
+                if(mediaSocket.readyState == WebSocket.OPEN) mediaSocket.send(data);
+                };
+                reader.onerror = function (error) {
+                        console.log('Error: ', error);
+                };
         {% endif %}
         {% else %}
-        {% if should_compress_live %}
-        var zip = new JSZip();
+            {% if should_compress_live %}
+            var zip = new JSZip();
         {% autoescape off %}
-        zip.file("frame." + '{{ camera.mimetype }}'.split(';')[0], new File([file], 'frame.' + '{{ camera.mimetype }}'.split(';')[0]));
+            zip.file("frame." + '{{ camera.mimetype }}'.split(';')[0], new File([file], 'frame.' + '{{ camera.mimetype }}'.split(';')[0]));
         {% endautoescape %}
-        zip.generateAsync({type:"blob"}).then(function (file) { // 1) generate the zip file
-            formdata.append('frame', new File([file], 'frame.zip'));
-            $.ajax({
-               url: window.location.href,
-               type: "POST",
-               data: formdata,
-               processData: false,
-               contentType: false,
-               timeout: {{ request_timeout }},
-               tryCount: 0,
-               retryLimit: 5,
-               error: (xhr, textStatus, errorThrown) => {
-                   this.tryCount++;
-                   if(this.tryCount >= this.retryLimit) return;
-                   $.ajax(this);
-               },
-               success: (data) => {
-/*                   $.ajax({
-                        url: '/live/confirm/' + id + '/',
-                        method: 'POST',
-                        success: function(data) {
-                            if(data != 'y') {
-                                    $.ajax(this);
-                            }
-                        },
-                    });*/
-                },
-            }).done(function(respond){
-                console.log(respond);
+            zip.generateAsync({type:"blob"}).then(function (file) { // 1) generate the zip file
+                formdata.append('frame', new File([file], 'frame.zip'));
+                $.ajax({
+                   url: window.location.href,
+                   type: "POST",
+                   data: formdata,
+                   processData: false,
+                   contentType: false,
+                   timeout: {{ request_timeout }},
+                   tryCount: 0,
+                   retryLimit: 5,
+                   error: (xhr, textStatus, errorThrown) => {
+                        this.tryCount++;
+                        if(this.tryCount >= this.retryLimit) return;
+                        $.ajax(this);
+                   },
+                   success: (data) => {
+                        $.ajax({
+                                url: '/live/confirm/' + id + '/',
+                                method: 'POST',
+                                success: function(data) {
+                                        if(data != 'y') {
+                                                $.ajax(this);
+                                        }
+                                },
+                        });
+                   },
+                }).done(function(respond){
+                        console.log(respond);
+                });
+            }, function (err) {
+                    console.log("Error zipping file");
             });
-        }, function (err) {
-            console.log("Error zipping file");
-        });
-        {% else %}
-        formdata.append('frame', new File([file], 'frame.webm'));
-        $.ajax({
-            url: window.location.href,
-            type: "POST",
-            data: formdata,
-            processData: false,
-            contentType: false,
-            timeout: {{ request_timeout }},
-            tryCount: 0,
-            retryLimit: 5,
-            error: (xhr, textStatus, errorThrown) => {
-                console.log('Error uploading');
-                this.tryCount++;
-                if(this.tryCount >= this.retryLimit) return;
-                $.ajax(this);
-            },
-            success: (data) => {
-/*                $.ajax({
-                   url: '/live/confirm/' + id + '/',
-                    method: 'POST',
-                    success: function(data) {
-                        if(data != 'y') {
-                            $.ajax(this);
-                        }
-                    },
-                });*/
-            },
-        }).done(function(respond){
-            console.log(respond);
-        });
-        {% endif %}
-    {% endif %}
+            {% else %}
+            formdata.append('frame', new File([file], 'frame.webm'));
+                $.ajax({
+                   url: window.location.href,
+                   type: "POST",
+                   data: formdata,
+                   processData: false,
+                   contentType: false,
+                   timeout: {{ request_timeout }},
+                   tryCount: 0,
+                   retryLimit: 5,
+                   error: (xhr, textStatus, errorThrown) => {
+                        console.log('Error uploading');
+                        this.tryCount++;
+                        if(this.tryCount >= this.retryLimit) return;
+                        $.ajax(this);
+                   },
+                   success: (data) => {
+                       $.ajax({
+                           url: '/live/confirm/' + id + '/',
+                                method: 'POST',
+                                success: function(data) {
+                                        if(data != 'y') {
+                                                $.ajax(this);
+                                        }
+                                },
+                        });
+                   },
+                }).done(function(respond){
+                        console.log(respond);
+                });
+            {% endif %}
+          {% endif %}
 }
+
+function stopRecordingFn() {
+  live = false;
+  if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
+    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
+  } else {
+    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
+  }
+  if(captureInterval) clearInterval(captureInterval);
+  document.getElementById("pipOverlayStream").style.border = "none";
+  mediaRecorder.stop();
+}
+startWebcamBtn.addEventListener("click", startWebcamFn);
+startScreenShareBtn.addEventListener("click", startScreenShareFn);
+mergeStreamsBtn.addEventListener("click", mergeStreamsFn);
+stopAllStreamsBtn.addEventListener("click", stopAllStreamsFn);
+startRecordingBtn.addEventListener("click", startRecordingFn);
+stopRecordingBtn.addEventListener("click", stopRecordingFn);
 {% include 'live/remote.js' %}
-const container = document.getElementById('video-container');
 var fullscreenButton = document.getElementById('fullscreenToggle');
+const container = document.getElementById('video-container');
 fullscreenButton.addEventListener('click', () => {
   if (!document.fullscreenElement) {
     fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
