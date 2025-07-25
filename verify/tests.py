@@ -14,7 +14,7 @@ def pediatric_identity_verified(user):
     from django.utils import timezone
     from django.conf import settings
     scan = IdentityDocument.objects.filter(user=user, verified=True, submitted__gte=timezone.now() - datetime.timedelta(hours=settings.SIG_VALID_HOURS)).order_by('-submitted').first()
-    if scan.birthday <= get_past_date(13):
+    if scan and scan.birthday <= get_past_date(13):
         return True
     return False
 
@@ -24,7 +24,7 @@ def youngadult_identity_verified(user):
     from django.utils import timezone
     from django.conf import settings
     scan = IdentityDocument.objects.filter(user=user, verified=True, submitted__gte=timezone.now() - datetime.timedelta(hours=settings.SIG_VALID_HOURS)).order_by('-submitted').first()
-    if scan.birthday <= get_past_date(16):
+    if scan and scan.birthday <= get_past_date(16):
         return True
     return False
 
@@ -34,7 +34,7 @@ def minor_identity_verified(user):
     from django.utils import timezone
     from django.conf import settings
     scan = IdentityDocument.objects.filter(user=user, verified=True, submitted__gte=timezone.now() - datetime.timedelta(hours=settings.SIG_VALID_HOURS)).order_by('-submitted').first()
-    if scan.birthday <= get_past_date(18):
+    if scan and scan.birthday <= get_past_date(18):
         return True
     return False
 
@@ -44,7 +44,7 @@ def adult_identity_verified(user):
     from django.utils import timezone
     from django.conf import settings
     scan = IdentityDocument.objects.filter(user=user, verified=True, submitted__gte=timezone.now() - datetime.timedelta(hours=settings.SIG_VALID_HOURS)).order_by('-submitted').first()
-    if scan.birthday <= get_past_date(21) or not scan.subjective:
+    if scan and scan.birthday <= get_past_date(21) or not scan.subjective:
         return True
     return False
 

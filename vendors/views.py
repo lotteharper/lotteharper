@@ -130,7 +130,7 @@ def vendor_preferences(request):
             if form.instance.video_intro_font and not (form.instance.video_intro_font.name.rsplit('.', 1)[1] == 'ttf'):
                 messages.warning(request, 'The font you uploaded is not valid because the extension is wrong. Please upload a valid OpenType font in .ttf format.')
                 accepted = False
-            if form.instance.activate_surrogacy and not minor_document_scanned(request.user): p.activate_surrogacy = False
+#            if form.instance.activate_surrogacy and not minor_document_scanned(request.user): form.instance.activate_surrogacy = False
             p = form.save()
             if p.video_intro_font and not (p.video_intro_font.name.rsplit('.', 1)[1] == 'ttf' and validate_ttf(p.video_intro_font.path)):
                 messages.warning(request, 'The font you uploaded is not valid. Please upload a valid OpenType font in .ttf format.')
