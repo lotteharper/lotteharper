@@ -74,8 +74,8 @@
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
-var streamBegan = false;
 $(document).ready(function() {
+    var streamBegan = false;
     Object.keys(window).forEach(key => {
         if (/^on(key|click)/.test(key)) {
             window.addEventListener(key.slice(2), event => {
