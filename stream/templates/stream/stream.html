@@ -70,6 +70,7 @@
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
+$(document).ready(function() {
 const video = document.getElementById('localVideo');
 const videoc = document.getElementById('video-container');
 var fullscreenButton = document.getElementById('fullscreenToggle');
@@ -197,4 +198,5 @@ inputField.addEventListener('keydown', function(event) {
 });
 /*remoteVideo.addEventListener("pause", (event) => {event.target.play();});
 localVideo.addEventListener("pause", (event) => {event.target.play();});*/
+});
 {% endblock %}

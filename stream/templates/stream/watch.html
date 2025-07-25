@@ -56,6 +56,7 @@
 {% load app_filters %}
 {% load feed_filters %}
     <h2>{{ vendor.profile.name }}{{ '\'s'|etrans }} {{ 'Broadcast'|etrans }}</h2>
+    <p id="hideafterbegin"><i>{{ 'Please click or tap the screen or use the keyboard to start the video.'|etrans }}</i></p>
     <div id="video-container">
     <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
         <video style="width: 100%;" id="remoteVideo" autoplay playsinline></video>
@@ -73,126 +74,142 @@
 {% endblock %}
 {% block javascript %}
 {% load app_filters %}
-const container = document.getElementById('video-container');
-const video = document.getElementById('remoteVideo');
-var fullscreenButton = document.getElementById('fullscreenToggle');
-fullscreenButton.addEventListener('click', () => {
-  if (!document.fullscreenElement) {
-    fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
-    // Enter fullscreen mode
-    if (container.requestFullscreen) {
-      container.requestFullscreen();
-    } else if (container.mozRequestFullScreen) { // Firefox
-      container.mozRequestFullScreen();
-    } else if (container.webkitRequestFullscreen) { // Chrome, Safari and Opera
-      container.webkitRequestFullscreen();
-    } else if (container.msRequestFullscreen) { // IE/Edge
-      container.msRequestFullscreen();
-    }
-  } else {
-    fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
-    // Exit fullscreen mode
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { // Firefox
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { // IE/Edge
-      document.msExitFullscreen();
-    }
-  }
-});
-var signalingSocket;
-var signalingSocketReconnectTimeout;
-function openSignalingSocket() {
-    signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ vendor.profile.name }}/");
-    signalingSocket.onerror = (event) => {
-        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
-        signalingSocketReconnectTimeout = setTimeout(function() {
-            openSignalingSocket();
-        }, {{ reload_time }});
-    };
-    signalingSocket.onclose = (event) => {
-        if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
-        signalingSocketReconnectTimeout = setTimeout(function() {
-            openSignalingSocket();
-        }, {{ reload_time }});
-    };
-    signalingSocket.onmessage = async (event) => {
-        let data = JSON.parse(event.data);
-        if (data.type === "offer") {
-            broadcasterId = data.from;
-            pc = new RTCPeerConnection(stunConfig);
-            pc.ontrack = e => {
-                document.getElementById("remoteVideo").srcObject = e.streams[0];
+var streamBegan = false;
+$(document).ready(function() {
+    Object.keys(window).forEach(key => {
+        if (/^on(key|click)/.test(key)) {
+            window.addEventListener(key.slice(2), event => {
+                if(!streamBegan) {
+                    streamBegan = true;
+                    $('#hideafterbegin').addClass('hide');
+                    beginStream();
+                }
+            });
+        }
+    });
+    function beginStream() {
+        const container = document.getElementById('video-container');
+        const video = document.getElementById('remoteVideo');
+        var fullscreenButton = document.getElementById('fullscreenToggle');
+        fullscreenButton.addEventListener('click', () => {
+          if (!document.fullscreenElement) {
+            fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+            // Enter fullscreen mode
+            if (container.requestFullscreen) {
+              container.requestFullscreen();
+            } else if (container.mozRequestFullScreen) { // Firefox
+              container.mozRequestFullScreen();
+            } else if (container.webkitRequestFullscreen) { // Chrome, Safari and Opera
+              container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) { // IE/Edge
+              container.msRequestFullscreen();
+            }
+          } else {
+            fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+            // Exit fullscreen mode
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { // Firefox
+              document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+              document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { // IE/Edge
+              document.msExitFullscreen();
+            }
+          }
+        });
+        var signalingSocket;
+        var signalingSocketReconnectTimeout;
+        function openSignalingSocket() {
+            signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ vendor.profile.name }}/");
+            signalingSocket.onerror = (event) => {
+                if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
+                signalingSocketReconnectTimeout = setTimeout(function() {
+                    openSignalingSocket();
+                }, {{ reload_time }});
             };
-            pc.onicecandidate = e => {
-                if (e.candidate) {
-                    signalingSocket.send(JSON.stringify({type:"candidate", candidate:e.candidate, to:broadcasterId}));
+            signalingSocket.onclose = (event) => {
+                if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
+                signalingSocketReconnectTimeout = setTimeout(function() {
+                    openSignalingSocket();
+                }, {{ reload_time }});
+            };
+            signalingSocket.onmessage = async (event) => {
+                let data = JSON.parse(event.data);
+                if (data.type === "offer") {
+                    broadcasterId = data.from;
+                    pc = new RTCPeerConnection(stunConfig);
+                    pc.ontrack = e => {
+                        document.getElementById("remoteVideo").srcObject = e.streams[0];
+                    };
+                    pc.onicecandidate = e => {
+                        if (e.candidate) {
+                            signalingSocket.send(JSON.stringify({type:"candidate", candidate:e.candidate, to:broadcasterId}));
+                        }
+                    };
+                    await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+                    let answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    signalingSocket.send(JSON.stringify({type:"answer", answer, to:broadcasterId}));
+                }
+                else if (data.type === "candidate") {
+                    if (pc) await pc.addIceCandidate(data.candidate);
+                }
+                else if (data.type === "broadcaster_online") {
+                    signalingSocket.close();
+                    openSignalingSocket();
                 }
             };
-            await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
-            let answer = await pc.createAnswer();
-            await pc.setLocalDescription(answer);
-            signalingSocket.send(JSON.stringify({type:"answer", answer, to:broadcasterId}));
         }
-        else if (data.type === "candidate") {
-            if (pc) await pc.addIceCandidate(data.candidate);
+        openSignalingSocket();
+        const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
+        let pc;
+        let broadcasterId = null;
+        function getRandomInt(min, max) {
+            min = Math.ceil(min); // Ensure min is an integer (rounds up)
+            max = Math.floor(max); // Ensure max is an integer (rounds down)
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
-        else if (data.type === "broadcaster_online") {
-            signalingSocket.close();
-            openSignalingSocket();
+        const guestID = new String(getRandomInt(0,99));
+        var chatSocket;
+        var chatSocketReconnectTimeout;
+        function openChatSocket() {
+            chatSocket = new WebSocket(
+                "wss://" + window.location.host + "/ws/chat/{{ vendor.profile.name }}/"
+            );
+            chatSocket.onerror = function() {
+                if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+                chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+            };
+            chatSocket.onclose = function() {
+                if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+                chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+            };
+            chatSocket.onmessage = function(event) {
+                let data = JSON.parse(event.data);
+                let chatbox = document.getElementById('chatbox');
+                chatbox.innerHTML += `<div><b>${data.username}:</b> ${data.message}</div>`;
+                chatbox.scrollBy(0, 1000);
+            };
         }
-    };
-}
-openSignalingSocket();
-const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
-let pc;
-let broadcasterId = null;
-function getRandomInt(min, max) {
-    min = Math.ceil(min); // Ensure min is an integer (rounds up)
-    max = Math.floor(max); // Ensure max is an integer (rounds down)
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-const guestID = new String(getRandomInt(0,99));
-var chatSocket;
-var chatSocketReconnectTimeout;
-function openChatSocket() {
-    chatSocket = new WebSocket(
-        "wss://" + window.location.host + "/ws/chat/{{ vendor.profile.name }}/"
-    );
-    chatSocket.onerror = function() {
-        if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
-        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
-    };
-    chatSocket.onclose = function() {
-        if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
-        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
-    };
-    chatSocket.onmessage = function(event) {
-        let data = JSON.parse(event.data);
+        openChatSocket();
+        function sendChat() {
+            let input = document.getElementById('chatinput');
+            chatSocket.send(JSON.stringify({
+                message: input.value,
+                username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
+            }));
+            input.value = "";
+        }
+        const inputField = document.getElementById('chatinput');
+        inputField.addEventListener('keydown', function(event) {     
+            if (event.keyCode === 13) { // 13 is the keyCode for the Enter key
+                event.preventDefault(); // Prevent default Enter key behavior
+                sendChat();
+            }
+        });
         let chatbox = document.getElementById('chatbox');
-        chatbox.innerHTML += `<div><b>${data.username}:</b> ${data.message}</div>`;
-        chatbox.scrollBy(0, 1000);
-    };
-}
-openChatSocket();
-function sendChat() {
-    let input = document.getElementById('chatinput');
-    chatSocket.send(JSON.stringify({
-        message: input.value,
-        username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
-    }));
-    input.value = "";
-}
-const inputField = document.getElementById('chatinput');
-inputField.addEventListener('keydown', function(event) {     
-    if (event.keyCode === 13) { // 13 is the keyCode for the Enter key
-        event.preventDefault(); // Prevent default Enter key behavior
-        sendChat();
+        chatbox.scrollBy(0, 9999999);
     }
 });
-let chatbox = document.getElementById('chatbox');
-chatbox.scrollBy(0, 9999999);
 {% endblock %}
