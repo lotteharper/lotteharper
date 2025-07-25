@@ -2,6 +2,12 @@ from django import template
 
 register = template.Library()
 
+@register.filter('recent_stream_messages')
+def recent_stream_messages(stream_messages, days):
+    import datetime
+    from django.utils import timezone
+    return stream_messages.filter(timestamp__gte=timezone.now() - datetime.timedelta(days=days)).order_by('timestamp') if stream_messages else ''
+
 @register.filter('unexpiredlogin')
 def unexpiredlogin(login):
     import datetime

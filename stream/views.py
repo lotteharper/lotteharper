@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 from verify.tests import pediatric_identity_verified
 from vendors.tests import is_vendor
+from django.views.decorators.cache import cache_page
 
 @login_required
 @user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
@@ -16,6 +17,7 @@ def stream(request):
     }
     return render(request, 'stream/stream.html', context)
 
+@cache_page(60*60)
 def watch(request, username):
     from django.http import Http404
     from django.contrib.auth.models import User

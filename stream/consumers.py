@@ -306,6 +306,14 @@ class StreamConsumer(AsyncWebsocketConsumer):
 #                await update_age(self, sender, message)
 #                await send_updates(self)
 
+@sync_to_async
+def create_stream_message(user_id, vendor_name, message):
+    from django.contrib.auth.models import User
+    user = User.objects.get(id=int(user_id)) if user_id else None
+    vendor = User.objects.get(profile__name=vendor_name) if vendor_name else None
+    from stream.models import ChatMessage
+    ChatMessage.objects.create(user=user, vendor=vendor, message=message)
+
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -326,9 +334,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': data['message'],
-                'username': data.get('username', 'Anonymous')
+                'username': data.get('username', 'Guest')
             }
         )
+        await create_stream_message(self.scope["user"].id if self.scope['user'] else None, self.room_name, data['message'])
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({

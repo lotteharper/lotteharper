@@ -211,6 +211,7 @@ sudo git config --global --add safe.directory $"/home/$U/$diropen"
 cd $"/home/$U/$diropen"
 echo "db.json.*" >> .gitignore
 echo "client_secret.json" >> .gitignore
+echo "client_secret_pub.json" >> .gitignore
 echo "client_secrets.json" >> .gitignore
 echo "client_secret*" >> .gitignore
 echo "mailbox/" >> .gitignore

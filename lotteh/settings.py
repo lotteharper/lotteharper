@@ -158,7 +158,7 @@ MIDDLEWARE = [
     'feed.middleware.CurrentUserMiddleware',
     'feed.middleware.CurrentRequestMiddleware',
     'feed.middleware.ExceptionVerboseMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+#    'allauth.account.middleware.AccountMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 #    '',
 ]

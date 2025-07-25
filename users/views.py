@@ -48,6 +48,15 @@ def google_auth(request):
     request.session['state'] = state
     return redirect(url)
 
+def google_pub_auth(request):
+    from django.shortcuts import redirect
+    from users.oauth import get_pub_auth_url
+    import uuid
+    url, state = get_pub_auth_url(request, request.user.email if request.user.is_authenticated else None)
+    print(state)
+    request.session['state'] = state
+    return redirect(url)
+
 #@login_required
 #@user_passes_test(is_superuser_or_vendor)
 
@@ -90,6 +99,47 @@ def google_auth_callback(request):
         return redirect(reverse('/'))
     from django.shortcuts import render
     return render(request, 'users/oauth.html', {'title': 'Google Auth'})
+
+@csrf_exempt
+def google_pub_auth_callback(request):
+    print(request.session.get('state'))
+    from users.oauth import parse_pub_callback_url
+    from security.middleware import get_qs
+    from django.shortcuts import redirect
+    from django.conf import settings
+    from django.urls import reverse
+    authorization_code = None
+    import json
+    url_working = settings.BASE_URL + request.get_full_path().replace(' ', '%20')
+    if request.method == 'POST':
+        email, token, refresh = parse_pub_callback_url(request, url_working)
+        print(email)
+        from django.contrib.auth.models import User
+        user = User.objects.filter(email=email).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
+        if not user:
+            from users.username_generator import generate_username as get_random_username
+            user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
+            profile = user.profile
+            profile.finished_signup = False
+            profile.save()
+            from django.contrib import messages
+            messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
+            from users.email import send_verification_email, sendwelcomeemail
+            send_verification_email(user)
+            send_registration_push(user)
+            sendwelcomeemail(user)
+#        user.profile.token = token
+#        user.profile.refresh_token = refresh
+#        user.profile.save()
+        if not request.user.is_authenticated:
+            from django.contrib.auth import login as auth_login
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        from django.contrib import messages
+        messages.success(request, 'Successfully linked Google account')
+        return redirect(reverse('/'))
+    from django.shortcuts import render
+    return render(request, 'users/oauth.html', {'title': 'Google Auth'})
+
 
 def resolve_multiple_accounts(request, user):
     from .models import AccountLink

@@ -42,6 +42,27 @@ def get_auth_url(request, email):
     flows[state] = flow
     return authorization_url, state
 
+def get_pub_auth_url(request, email):
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(str(os.path.join(settings.BASE_DIR, 'client_secret_pub.json')),
+    scopes=[
+        'https://www.googleapis.com/auth/userinfo.email',
+        'openid',
+    ])
+    flow.redirect_uri = settings.BASE_URL + reverse('users:google-auth-callback')
+    authorization_url, state = None, None
+    if email:
+        authorization_url, state = flow.authorization_url(
+            login_hint=email,
+#            redirect_uri='https://lotteh.com/accounts/auth/callback/',
+            prompt='consent')
+    else:
+        authorization_url, state = flow.authorization_url(
+#            redirect_uri='https://lotteh.com/accounts/auth/callback/',
+            prompt='consent')
+    global flows
+    flows[state] = flow
+    return authorization_url, state
+
 def get_user_info(credentials):
   """Send a request to the UserInfo API to retrieve the user's information.
 
@@ -87,5 +108,27 @@ def parse_callback_url(request, response):
     save_credentials(credentials, user_email)
     global creds
     creds[user_email] = credentials
+    return user_email, credentials.token, credentials.refresh_token
+
+def parse_pub_callback_url(request, response):
+#    print(str(request.body))
+    global flows
+#    flow = flows[request.GET.get('state')]
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(str(os.path.join(settings.BASE_DIR, 'client_secret_pub.json')),
+    scopes=[
+        'https://www.googleapis.com/auth/userinfo.email',
+        'openid',
+    ])
+    flow.redirect_uri = settings.BASE_URL + reverse('users:google-auth-callback')
+    from urllib.parse import unquote_plus
+    import json
+    flow.fetch_token(authorization_response=response) #json.dumps(request.GET.dict()))
+    credentials = flow.credentials
+    from recordings.youtube import save_credentials
+    user_email = get_user_info(credentials)['email']
+#    from recordings.youtube import save_credentials
+#    save_credentials(credentials, user_email)
+#    global creds
+#    creds[user_email] = credentials
     return user_email, credentials.token, credentials.refresh_token
 

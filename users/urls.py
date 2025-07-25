@@ -45,7 +45,9 @@ urlpatterns = [
     path('user/<int:pk>/delete/', UserDeleteView.as_view(template_name='blog/user_confirm_delete.html'), name='delete-user'),
     path('user/<int:pk>/active/', views.toggle_user_active, name='toggle-user-active'),
     path('user/<int:pk>/gift/', views.toggle_gift, name='toggle-gift'),
-    path('auth/google/', views.google_auth, name='youtube'),
+    path('auth/google/', views.google_pub_auth, name='google-auth'),
+    path('auth/google/callback/', views.google_pub_auth_callback, name='google-auth-callback'),
+    path('auth/youtube/', views.google_auth, name='youtube'),
     path('auth/callback/', views.google_auth_callback, name='oauth'),
     path('auth/imgur/', views.imgur_oauth, name='imgur'),
     path('auth/imgur/callback/', views.imgur_callback, name='imgur-callback')

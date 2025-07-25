@@ -21,6 +21,7 @@
   width: 300px;
   max-width: 90%;
   max-height: 60%;
+  min-height: 30%;
   background: rgba(0,0,0,0.5);
   color: #fff;
   border-radius: 10px;
@@ -57,7 +58,7 @@
   <div id="video-container">
       <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
       <video style="width: 100%;" id="localVideo" autoplay muted playsinline></video>
-      <div id="chatbox" style="overflow-y: scroll; height: 250px;"></div>
+      <div id="chatbox"></div>
       <div class="input-group mb-3">
         <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type a message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
         <div class="input-group-append">
