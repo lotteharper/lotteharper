@@ -96,6 +96,9 @@ def simple_middleware(get_response):
             if request.user.is_authenticated and not hasattr(request.user, 'security_profile'):
                 from security.models import SecurityProfile
                 SecurityProfile.objects.create(user=request.user)
+            if request.GET.get('cat', None) == 'true':
+                from django.contrib import messages
+                messages.success(request, 'Hey there. I noticed you have scanned a cat. She is chipped and wants to sell you this photo (and everything else she is sharing). xoxo <3')
         except:
             try:
                 Error.objects.create(user=request.user if request.user.is_authenticated else None, stack_trace=get_current_exception(), notes='Logged by users middleware.')
