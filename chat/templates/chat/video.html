@@ -28,6 +28,7 @@
         #video-container {
           width: 100%;
           min-width: 300px;
+          position: relative;
         }
         #videos {
           position: relative;
@@ -73,6 +74,12 @@
             z-index: 10000;
             overflow-y: scroll;
          }
+#fullscreenToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 900;
+}
       </style>
 {% endblock %}
 {% block content %}
@@ -90,6 +97,7 @@
     <button id="call-button" class="call-button">{{ 'Call someone'|etrans }}</button>
     <div>
         <div id="video-container" class="centered hide">
+          <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
           <div id="videos">
             <video id="local-video" autoplay="autoplay" muted></video>
             <video id="remote-video" autoplay="autoplay"></video>

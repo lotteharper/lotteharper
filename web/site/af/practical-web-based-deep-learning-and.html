@@ -1641,66 +1641,62 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # -o smtp_helo_timeout = 5 -o smtp_connect_timeout = 5
 # 
 # ======================================================================= ===================
-# Koppelvlakke na nie-postfix-sagteware. Ondersoek die handleiding
-# Bladsye van die nie-postfix-sagteware om uit te vind watter opsies hy wil hê.
-# 
-# Baie van die volgende dienste gebruik die postfix -pyp (8) aflewering
-# agent.  Raadpleeg die pyp (8) manbladsy vir inligting oor $ {ontvanger}
-# en ander opsies vir die koevert van boodskappe.
-# ======================================================================= ===================
-# 
-# MailDrop. Raadpleeg die Postfix MailDrop_Readme -lêer vir meer inligting.
-# Spesifiseer ook in main.cf: MailDrop_Destination_Recipient_limit = 1
-# 
-# 
-# ======================================================================= ===================
-# 
-# Onlangse Cyrus -weergawes kan die bestaande "LMTP" Master.cf -inskrywing gebruik.
-# 
-# Spesifiseer in cyrus.conf:
-# lmtp cmd = "lmtpd -a" luister = "localhost: lmtp" proto = tcp4
-# 
-# Spesifiseer in Main.cf een of meer van die volgende:
-# mailbox_transport = lmtp: inet: localhost
-# virtuele_transport = lmtp: inet: localhost
-# 
-# ======================================================================= ===================
-# 
-# Cyrus 2.1.5 (Amos Gouaux)
-# Spesifiseer ook in main.cf: cyrus_destination_recipient_limit = 1
-# 
-# Cyrus unix - n n - - pyp
-# vlae = drx gebruiker = cyrus argv =/cyrus/bin/aflewer -e -r $ {sender} -m $ {uitbreiding} $ {gebruiker}
-# 
-# ======================================================================= ===================
-# Ou voorbeeld van aflewering via Cyrus.
-# 
-# Old -Cyrus unix - n n - - pyp
-# vlae = r gebruiker = cyrus argv =/cyrus/bin/aflewer -e -m $ {uitbreiding} $ {gebruiker}
-# 
-# ======================================================================= ===================
-# 
-# Raadpleeg die postfix uucp_readme -lêer vir konfigurasiebesonderhede.
-# 
-# 
-# Ander eksterne afleweringsmetodes.
-# </code></pre>
-<p>En die Opendkim -konfigurasie. Opendkim identifiseer e -posbedieners met domeinksleutels om hulle veiliger te maak. Daarsonder is e -pos nie onderteken nie en kom dit miskien nie na 'n inkassie nie.</p>
-<pre class="language-bash"><code>nano config/etc_default_opendkim
-</code></pre>
-<p>Voeg hierdie lyne by:</p>
-<pre class="language-bash"><code># Opmerking: dit is 'n nalatenskapskonfigurasielêer. Dit word nie deur die Opendkim gebruik nie
-# SystemD -diens. Gebruik die ooreenstemmende konfigurasieparameters in
-# /etc/opendkim.conf in plaas daarvan.
-# 
-# Voorheen sou 'n mens die standaardinstellings hier wysig en dan uitvoer
-# /lib/opendkim/opendkim.service.
-# /etc/systemd/system/opendkim.service.d/override.conf en
-# /etc/tmpfiles.d/opendkim.conf. Alhoewel dit nog moontlik is, is dit nou
-# Aanbeveel om die instellings direk aan te pas in /etc/opendkim.conf.
-# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre><p></p><pre class="language-bash"><code>nano config/etc_default_opendkim
+</code></pre><p></p><pre class="language-bash"><code>
+
+
+
+
+
+
+
+
+
 # Daemon_opts = ""
-# Verander na/var/spoel/postfix/run/opendkim om 'n unix -sok met
+
 # Postfix in 'n chroot:
 # Rundir =/var/spoel/postfix/run/opendkim
 # 

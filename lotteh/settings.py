@@ -259,10 +259,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Cacheing
 CACHES = {
     "default": {
-#        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#        "LOCATION": "redis://localhost:6379",
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": str(os.path.join(BASE_DIR, 'cache/')),
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "dj_cache_table",  # Choose a unique table name
         "TIMEOUT": 300,
     }
 }

@@ -362,6 +362,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 open_channels = []
 
 class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
+    broadcast = None
     async def connect(self):
         # Get channel name from URL
         self.channel_name_param = self.scope['url_route']['kwargs']['channel_name']
@@ -372,7 +373,11 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
         username = await get_user_name(self.scope['user'].id)
         auth = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
         global open_channels
-        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param and username == self.channel_name_param and auth and not self.channel_name_param in open_channels
+        channel_open = self.channel_name_param not in open_channels
+        from urllib.parse import parse_qs
+        query_params = parse_qs(self.scope["query_string"].decode())
+        if 'broadcast' in query_params and query_params['broadcast']: self.broadcast = query_params['broadcast'][0]
+        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param and username == self.channel_name_param and auth and self.broadcast and channel_open
 
         # Add to group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)

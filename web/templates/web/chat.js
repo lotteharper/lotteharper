@@ -693,3 +693,32 @@ stillButton.addEventListener("click", function(){
 });
 remoteVideo.addEventListener("pause", (event) => {event.target.play();});
 localVideo.addEventListener("pause", (event) => {event.target.play();});
+const container = document.getElementById('video-container');
+var fullscreenButton = document.getElementById('fullscreenToggle');
+fullscreenButton.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+    // Enter fullscreen mode
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.mozRequestFullScreen) { // Firefox
+      container.mozRequestFullScreen();
+    } else if (container.webkitRequestFullscreen) { // Chrome, Safari and Opera
+      container.webkitRequestFullscreen();
+    } else if (container.msRequestFullscreen) { // IE/Edge
+      container.msRequestFullscreen();
+    }
+  } else {
+    fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+    // Exit fullscreen mode
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+      document.msExitFullscreen();
+    }
+  }
+});

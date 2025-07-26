@@ -1,2 +1,3 @@
-sudo rm /home/team/lotteh/cache/*
+#!/bin/bash
+/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py clear_cache
 htcacheclean -p /var/cache/apache2 -l 1024M

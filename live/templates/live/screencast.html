@@ -496,7 +496,7 @@ async function mergeStreamsFn() {
 var signalingSocket;
 var signalingSocketReconnectTimeout;
 function openSignalingSocket() {
-    signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ request.user.profile.name }}/");
+    signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ request.user.profile.name }}/?broadcast=true");
     signalingSocket.onerror = (event) => {
         if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
         signalingSocketReconnectTimeout = setTimeout(function() {

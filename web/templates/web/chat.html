@@ -91,6 +91,12 @@
         #remote-video {
           width: 100%;
         }
+#fullscreenToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
+}
       </style>
 {% endblock %}
 {% block content %}
@@ -109,6 +115,7 @@
          <button id="call-button" class="call-button">{{ 'Call someone'|etrans }}</button>
          <div>
             <div id="video-container" class="centered hide">
+               <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
                <div id="videos">
                   <video id="local-video" autoplay="autoplay" muted></video>
                   <video id="remote-video" autoplay="autoplay"></video>
