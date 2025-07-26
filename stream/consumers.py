@@ -326,9 +326,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
+        from urllib.parse import parse_qs
+        query_params = parse_qs(self.scope["query_string"].decode())
+        if 'lang' in query_params and query_params['lang']: self.lang = query_params['lang'][0]
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
-
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -347,8 +349,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await create_stream_message(self.scope["user"].id if self.scope['user'] else None, self.room_name, data['message'])
 
     async def chat_message(self, event):
+        from translate.translate import translate_html
         await self.send(text_data=json.dumps({
-            'message': event['message'],
+            'message': translate_html(None, event['message'], lang=self.lang),
             'username': event['username']
         }))
 

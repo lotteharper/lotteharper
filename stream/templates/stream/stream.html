@@ -164,7 +164,7 @@ var chatSocket;
 var chatSocketReconnectTimeout;
 function openChatSocket() {
     chatSocket = new WebSocket(
-        "wss://" + window.location.host + "/ws/chat/{{ request.user.profile.name }}/"
+        "wss://" + window.location.host + "/ws/chat/{{ request.user.profile.name }}/?lang={{ lang }}"
     );
     chatSocket.onerror = function() {
         if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);

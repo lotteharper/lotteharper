@@ -48,7 +48,7 @@
     position: absolute;
     top: 5px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
 }
 
 #fullscreenToggle {
@@ -82,7 +82,7 @@ video {
 <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
 {% if camera.broadcast %}
     <div id="chat-overlay">
-{% autoescape off %}        <div id="chatbox">{% for message in camera.user.stream_messages|recent_stream_messages:1 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} (Streamer){% endif %}{% else %}Guest{% endif %}:</b> {{ message.message }}</div>{% endfor %}</div>{% endautoescape %}
+{% autoescape off %}        <div id="chatbox">{% for message in camera.user.stream_messages|recent_stream_messages:1 %}<div><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} ({{ 'Streamer'|etrans }}){% endif %}{% else %}{{ 'Guest'|etrans }}{% endif %}:</b> {{ message.message|trans }}</div>{% endfor %}</div>{% endautoescape %}
         <div class="input-group mb-3">
             <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type your message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
             <div class="input-group-append">
@@ -788,7 +788,7 @@ var chatSocket;
 var chatSocketReconnectTimeout;
 function openChatSocket() {
     chatSocket = new WebSocket(
-        "wss://" + window.location.host + "/ws/chat/{{ request.user.profile.name }}/"
+        "wss://" + window.location.host + "/ws/chat/{{ request.user.profile.name }}/?lang={{ lang }}"
     );
     chatSocket.onerror = function() {
         if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
