@@ -92,7 +92,7 @@ def generate_site():
     }
     posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted').order_by('-pinned')
     context['posts'] = posts
-    for lang in langs if not disable_langs else []: # langs[langs.index('zu'):]
+    for lang in langs[langs.index('hy'):] if not disable_langs else []: # langs[langs.index('zu'):]
         images = ''
         init_images = ''
         count = 0
@@ -162,7 +162,7 @@ def generate_site():
         news = render_to_string('web/news.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
             file.write(news)
-            file.close()
+#            file.close()
         context['path'] = '/{}/{}'.format(lang, 'contact')
         context['title'] = translate(request, 'Contact', lang, 'en')
         context['description'] = 'Contact me | ' + settings.BASE_DESCRIPTION
