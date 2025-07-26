@@ -41,7 +41,7 @@ for recording in VideoRecording.objects.filter(processed=True, uploaded=False).o
                 recording,
                 recording.file.path,
                 profanity.censor(camera.title[:70]),
-                profanity.censor(camera.description) + '\n Transcript: ' + profanity.censor(recording.transcript[:4000]) +  ' - Recorded at ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y %H:%M:%S'),
+                profanity.censor(camera.description) + ('\nTranscript: ' if recording.transcript and len(recording.transcript) > 0 else '') + profanity.censor(recording.transcript[:4000]) +  '\nRecorded on ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y at %H:%M:%S'),
                 [profanity.censor(tag) for tag in camera.tags.split(',')],
                 category=camera.category,
                 privacy_status=camera.privacy_status if recording.public else 'private',

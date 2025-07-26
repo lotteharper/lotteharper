@@ -162,7 +162,7 @@ def generate_site():
         news = render_to_string('web/news.html', context)
         with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
             file.write(news)
-#            file.close()
+#        file.close()
         context['path'] = '/{}/{}'.format(lang, 'contact')
         context['title'] = translate(request, 'Contact', lang, 'en')
         context['description'] = 'Contact me | ' + settings.BASE_DESCRIPTION

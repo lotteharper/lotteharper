@@ -70,12 +70,13 @@
       <video style="width: 100%;" id="localVideo" autoplay muted playsinline></video>
 {% autoescape off %}      <div id="chatbox"></div>{% endautoescape %}
       <div class="input-group mb-3">
-        <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type a message here'|etrans }}" aria-label="{{ 'Message'|etrans }}">
+        <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type a message here'|etrans }}" aria-label="{{ 'Message'|etrans }}" style="max-width: 75%;">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendChat();">{{ 'Send'|etrans }}</button>
         </div>
       </div>
   </div>
+{% include 'language.html' %}
 {% include 'social.html' %}
 {% endblock %}
 {% block javascript %}

@@ -459,7 +459,7 @@ sudo swapon /swapfile
 echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
 sudo swapon --show
 # Open files fix
-echo "fs.file-max = 100000" | sudo tee -a /etc/sysctl.conf
+echo "fs.file-max = 100000000" | sudo tee -a /etc/sysctl.conf
 # Init caption engine
 echo "Initializing routine caption, mail, and site"
 /home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
