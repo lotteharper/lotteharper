@@ -331,6 +331,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if 'lang' in query_params and query_params['lang']: self.lang = query_params['lang'][0]
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
+
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -358,7 +359,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-channels = []
+open_channels = []
 
 class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -370,8 +371,8 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
         user = self.scope["user"]
         username = await get_user_name(self.scope['user'].id)
         auth = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
-        global channels
-        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param and username == self.channel_name_param and auth and not self.channel_name_param in channels
+        global open_channels
+        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param and username == self.channel_name_param and auth and not self.channel_name_param in open_channels
 
         # Add to group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -390,8 +391,7 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name, {"type": "broadcaster_online"}
             )
-        if self.is_broadcaster:
-            channels += [self.channel_name_param]
+            open_channels += [self.channel_name_param]
 
     async def disconnect(self, close_code):
 #        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -399,8 +399,8 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name, {"type": "broadcaster_offline"}
             )
-            global channels
-            channels.remove(self.channel_name_param)
+            global open_channels
+            open_channels.remove(self.channel_name_param)
 
     async def receive(self, text_data):
         data = json.loads(text_data)

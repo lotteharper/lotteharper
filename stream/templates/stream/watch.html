@@ -87,18 +87,6 @@
 var chatSocket;
 var chatSocketReconnectTimeout;
 $(document).ready(function() {
-    var streamBegan = false;
-    Object.keys(window).forEach(key => {
-        if (/^on(key|click)/.test(key)) {
-            window.addEventListener(key.slice(2), event => {
-                if(!streamBegan) {
-                    streamBegan = true;
-                    $('#hideafterbegin').addClass('hide');
-                    beginStream();
-                }
-            });
-        }
-    });
     function beginStream() {
         const container = document.getElementById('video-container');
         const video = document.getElementById('remoteVideo');
@@ -213,6 +201,18 @@ $(document).ready(function() {
         let chatbox = document.getElementById('chatbox');
         chatbox.scrollBy(0, 9999999);
     }
+    var streamBegan = false;
+    Object.keys(window).forEach(key => {
+        if (/^on(key|click)/.test(key)) {
+            window.addEventListener(key.slice(2), event => {
+                if(!streamBegan) {
+                    streamBegan = true;
+                    $('#hideafterbegin').addClass('hide');
+                    beginStream();
+                }
+            });
+        }
+    });
 });
 function sendChat() {
     let input = document.getElementById('chatinput');
