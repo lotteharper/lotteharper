@@ -18,6 +18,7 @@ from kick import consumers as kick_consumers
 from desktop import consumers as desktop_consumers
 from crypto import consumers as crypto_consumers
 from stream import consumers as stream_consumers
+from meetings import consumers as meeting_consumers
 from django.core.asgi import get_asgi_application
 from django.conf import settings
 
@@ -45,6 +46,7 @@ websocket_urlpatterns = [
     path('ws/desktop/', desktop_consumers.DesktopConsumer.as_asgi()),
     re_path(r'ws/signaling/(?P<channel_name>\w+)/$', stream_consumers.WebRTCSignalingConsumer.as_asgi()),
     re_path(r'ws/chat/(?P<room_name>\w+)/$', stream_consumers.ChatConsumer.as_asgi()),
+    path('ws/meeting/<uuid:meeting_id>/', meeting_consumers.MeetingConsumer.as_asgi()),
 #    path('ws/stream/', stream_consumers.StreamConsumer.as_asgi()),
     path('ws/crypto/miner/', crypto_consumers.MiningProxyConsumer.as_asgi()),
 ]

@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+    body { font-family: Arial, sans-serif; background: #181c22; color: #fff; margin: 0; }
+    #controls { padding: 10px; background: #23272f; }
+    #controls button { margin-right: 10px; }
+    #video-grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
+    video { width: 300px; height: 220px; background: #222; border-radius: 8px; }
+    .muted { border: 2px solid red; }
+    .hidden { opacity: 0.2; }
+
+    #chat-container { position: fixed; bottom: 0; right: 0; width: 320px; background: #222; border-radius: 8px 8px 0 0; }
+    #chat-messages { height: 200px; overflow-y: auto; padding: 10px; border-bottom: 1px solid #333; }
+    #chat-input-row { display: flex; }
+    #chat-input { flex: 1; padding: 8px; border: none; border-radius: 0 0 0 8px; }
+    #chat-send { padding: 8px 12px; border: none; border-radius: 0 0 8px 0; background: #39424e; color: #fff; }
+    #chat-send:hover { background: #5a6a85; }
+    .chat-msg { margin-bottom: 8px; }
+    .chat-user { font-weight: bold; color: #83aaff; }
+    .chat-self  { color: #b2ffb2; }
+    @media (max-width: 800px) {
+      #video-grid { flex-direction: column; align-items: center; }
+      video { width: 95vw; height: auto; }
+      #chat-container { width: 95vw; }
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+  <div id="controls" class="d-flex align-items-center gap-2">
+    <button id="muteBtn" class="btn btn-secondary btn-sm">Mute</button>
+    <button id="videoBtn" class="btn btn-secondary btn-sm">Hide Video</button>
+    <button id="screenshareBtn" class="btn btn-primary btn-sm">Share Screen</button>
+    <span id="meeting-id" class="ms-3 badge bg-info text-dark"></span>
+  </div>
+  <div id="video-outer-container">
+    <div id="video-grid-container">
+      <div id="video-grid"></div>
+    </div>
+    <div id="video-page-controls">
+      <button id="prevPageBtn" class="btn btn-dark btn-sm">&laquo;</button>
+      <span id="video-page-indicator">Page 1/1</span>
+      <button id="nextPageBtn" class="btn btn-dark btn-sm">&raquo;</button>
+    </div>
+  </div>
+  <div id="chat-container" class="shadow">
+    <div id="chat-messages"></div>
+    <div id="chat-input-row">
+      <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" class="form-control form-control-sm border-0">
+      <button id="chat-send" class="btn btn-primary btn-sm rounded-0">Send</button>
+    </div>
+  </div>
+{% endblock %}
+{% block javascript %}
+// ==========================
+// Dynamic Video Tiling, Paging, WebRTC, Chat
+// ==========================
+
+// --- Configuration (replace as needed) ---
+const meetingId = window.meetingId || (location.pathname.match(/\/meeting\/([a-zA-Z0-9\-]+)/)||[])[1] || "demo-meeting";
+const userId = window.userId || "user_" + Math.random().toString(36).substring(2, 10);
+
+// WebSocket connection
+const wsProtocol = location.protocol === "https:" ? "wss:" : "ws:";
+const ws = new WebSocket(`${wsProtocol}//${location.host}/ws/meeting/${meetingId}/`);
+
+// --- DOM Elements ---
+const videoGrid = document.getElementById('video-grid');
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+const videoPageIndicator = document.getElementById('video-page-indicator');
+const muteBtn = document.getElementById('muteBtn');
+const videoBtn = document.getElementById('videoBtn');
+const screenshareBtn = document.getElementById('screenshareBtn');
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+const meetingIdElem = document.getElementById('meeting-id');
+if (meetingIdElem) meetingIdElem.textContent = "Meeting ID: " + meetingId;
+
+// --- WebRTC Data ---
+let localStream = null;
+let peers = {};
+let audioEnabled = true;
+let videoEnabled = true;
+let screenSharing = false;
+let originalVideoTrack = null;
+
+// --- Video Paging/Tiling Data ---
+let allVideoStreams = []; // {id, stream, isLocal, videoElem}
+let videoPage = 0;
+let videosPerPage = 4; // Will be dynamically recalculated
+
+// --- 1. Get User Media and Join ---
+async function start() {
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    addVideoStream(localStream, userId, true);
+    ws.onopen = () => ws.send(JSON.stringify({ type: 'join', userId }));
+    ws.onmessage = handleWSMessage;
+  } catch (e) {
+    alert("Could not access camera/microphone.");
+    console.error(e);
+  }
+}
+start();
+
+// --- 2. WebSocket Signaling ---
+function handleWSMessage(event) {
+  const msg = JSON.parse(event.data);
+  if (msg.type === 'offer' && msg.from !== userId) handleOffer(msg);
+  if (msg.type === 'answer' && msg.from !== userId) peers[msg.from]?.setRemoteDescription(new RTCSessionDescription(msg.answer));
+  if (msg.type === 'ice-candidate' && msg.from !== userId) peers[msg.from]?.addIceCandidate(msg.candidate);
+  if (msg.type === 'join' && msg.userId !== userId) createPeerConnection(msg.userId, true);
+  if (msg.type === 'media-state') updateRemoteMediaState(msg.userId, msg.audioEnabled, msg.videoEnabled);
+  if (msg.type === 'screenshare-state') updateRemoteScreenshareState(msg.userId, msg.screensharing);
+  if (msg.type === 'chat') addChatMessage(msg.userId, msg.text, msg.userId === userId);
+  if (msg.type === 'leave') removeVideoStream(msg.userId);
+}
+
+function broadcast(type, data) {
+  ws.send(JSON.stringify({ type, userId, ...data }));
+}
+
+// --- 3. Peer Connection Setup ---
+function createPeerConnection(remoteUserId, isInitiator) {
+  if (peers[remoteUserId]) return peers[remoteUserId];
+  const pc = new RTCPeerConnection();
+  peers[remoteUserId] = pc;
+
+  // Add local tracks
+  localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+  pc.onicecandidate = e => {
+    if (e.candidate) ws.send(JSON.stringify({
+      type: 'ice-candidate',
+      candidate: e.candidate,
+      from: userId,
+      to: remoteUserId
+    }));
+  };
+
+  pc.ontrack = (e) => {
+    if (!allVideoStreams.find(v => v.id === remoteUserId)) {
+      addVideoStream(new MediaStream([e.track]), remoteUserId, false);
+    } else {
+      // Avoid duplicate tracks
+      const v = allVideoStreams.find(v => v.id === remoteUserId);
+      if (v && v.videoElem && !v.videoElem.srcObject.getTracks().some(t => t.id === e.track.id)) {
+        v.videoElem.srcObject.addTrack(e.track);
+      }
+    }
+  };
+
+  if (isInitiator) {
+    pc.createOffer().then(offer => {
+      pc.setLocalDescription(offer);
+      ws.send(JSON.stringify({ type: 'offer', offer, from: userId, to: remoteUserId }));
+    });
+  }
+
+  return pc;
+}
+
+async function handleOffer(msg) {
+  const pc = createPeerConnection(msg.from, false);
+  await pc.setRemoteDescription(new RTCSessionDescription(msg.offer));
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  ws.send(JSON.stringify({ type: 'answer', answer, from: userId, to: msg.from }));
+}
+
+// --- 4. Dynamic Video Tiling and Paging ---
+function updateVideosPerPage() {
+  const container = document.getElementById('video-grid-container');
+  if (!container) return;
+  const width = container.offsetWidth;
+  const height = container.offsetHeight;
+  let bestFit = 4;
+  let minSize = 140; // min px per video
+  for (let n = 1; n <= 16; n++) {
+    let cols = Math.ceil(Math.sqrt(n));
+    let rows = Math.ceil(n / cols);
+    let vw = (width - (cols - 1) * 12) / cols;
+    let vh = (height - (rows - 1) * 12) / rows;
+    let size = Math.min(vw, vh);
+    if (size < minSize) break;
+    bestFit = n;
+  }
+  videosPerPage = bestFit;
+}
+window.addEventListener('resize', () => {
+  updateVideosPerPage();
+  renderVideoGrid();
+});
+
+function renderVideoGrid() {
+  updateVideosPerPage();
+  while (videoGrid.firstChild) videoGrid.removeChild(videoGrid.firstChild);
+
+  const totalPages = Math.max(1, Math.ceil(allVideoStreams.length / videosPerPage));
+  if (videoPage >= totalPages) videoPage = totalPages - 1;
+  if (videoPage < 0) videoPage = 0;
+
+  const startIdx = videoPage * videosPerPage;
+  const endIdx = startIdx + videosPerPage;
+  const videosOnPage = allVideoStreams.slice(startIdx, endIdx);
+
+  let cols = Math.ceil(Math.sqrt(videosPerPage));
+  let rows = Math.ceil(videosPerPage / cols);
+  if (videosOnPage.length <= 2) { cols = videosOnPage.length; rows = 1; }
+  videoGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  videoGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+  videosOnPage.forEach(v => {
+    if (!v.videoElem) {
+      v.videoElem = document.createElement('video');
+      v.videoElem.autoplay = true;
+      v.videoElem.playsInline = true;
+      v.videoElem.srcObject = v.stream;
+      if (v.isLocal) v.videoElem.muted = true;
+      v.videoElem.id = `video-${v.id}`;
+    }
+    videoGrid.appendChild(v.videoElem);
+  });
+
+  videoPageIndicator.textContent = `Page ${videoPage + 1}/${totalPages}`;
+  prevPageBtn.disabled = videoPage === 0;
+  nextPageBtn.disabled = videoPage === totalPages - 1;
+}
+prevPageBtn.onclick = () => {
+  videoPage--;
+  renderVideoGrid();
+};
+nextPageBtn.onclick = () => {
+  videoPage++;
+  renderVideoGrid();
+};
+
+function addVideoStream(stream, id, isLocal) {
+  // Remove if exists
+  allVideoStreams = allVideoStreams.filter(v => v.id !== id);
+  allVideoStreams.push({ id, stream, isLocal, videoElem: null });
+  renderVideoGrid();
+}
+function removeVideoStream(id) {
+  allVideoStreams = allVideoStreams.filter(v => v.id !== id);
+  renderVideoGrid();
+}
+
+// --- 5. Media Controls: Mute/Unmute, Video Toggle ---
+muteBtn.onclick = () => {
+  audioEnabled = !audioEnabled;
+  if (localStream) localStream.getAudioTracks().forEach(t => t.enabled = audioEnabled);
+  muteBtn.textContent = audioEnabled ? 'Mute' : 'Unmute';
+  broadcast('media-state', { audioEnabled, videoEnabled });
+  updateRemoteMediaState(userId, audioEnabled, videoEnabled);
+};
+videoBtn.onclick = () => {
+  videoEnabled = !videoEnabled;
+  if (localStream) localStream.getVideoTracks().forEach(t => t.enabled = videoEnabled);
+  videoBtn.textContent = videoEnabled ? 'Hide Video' : 'Show Video';
+  broadcast('media-state', { audioEnabled, videoEnabled });
+  updateRemoteMediaState(userId, audioEnabled, videoEnabled);
+};
+
+// --- 6. Screensharing ---
+screenshareBtn.onclick = async () => {
+  if (!screenSharing) {
+    try {
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      const screenTrack = screenStream.getVideoTracks()[0];
+      originalVideoTrack = localStream.getVideoTracks()[0];
+
+      Object.values(peers).forEach(pc => {
+        const sender = pc.getSenders().find(s => s.track && s.track.kind === "video");
+        if (sender) sender.replaceTrack(screenTrack);
+      });
+
+      localStream.removeTrack(originalVideoTrack);
+      localStream.addTrack(screenTrack);
+      addVideoStream(localStream, userId, true);
+
+      screenSharing = true;
+      screenshareBtn.textContent = "Stop Sharing";
+      broadcast('screenshare-state', { screensharing: true });
+
+      screenTrack.onended = () => stopScreenshare();
+    } catch (e) {
+      alert("Screen sharing failed.");
+    }
+  } else {
+    stopScreenshare();
+  }
+};
+function stopScreenshare() {
+  if (!screenSharing) return;
+  if (!originalVideoTrack) return;
+  Object.values(peers).forEach(pc => {
+    const sender = pc.getSenders().find(s => s.track && s.track.kind === "video");
+    if (sender) sender.replaceTrack(originalVideoTrack);
+  });
+  localStream.getVideoTracks().forEach(t => localStream.removeTrack(t));
+  localStream.addTrack(originalVideoTrack);
+  addVideoStream(localStream, userId, true);
+
+  screenSharing = false;
+  screenshareBtn.textContent = "Share Screen";
+  broadcast('screenshare-state', { screensharing: false });
+  originalVideoTrack = null;
+}
+
+// --- 7. Update Video UI States ---
+function updateRemoteMediaState(id, audio, video) {
+  const v = allVideoStreams.find(v => v.id === id);
+  if (v && v.videoElem) {
+    v.videoElem.classList.toggle('muted', !audio);
+    v.videoElem.classList.toggle('hidden', !video);
+  }
+}
+function updateRemoteScreenshareState(id, screensharing) {
+  const v = allVideoStreams.find(v => v.id === id);
+  if (v && v.videoElem) {
+    v.videoElem.style.border = screensharing ? "3px solid #83aaff" : "";
+    v.videoElem.title = screensharing ? "Sharing screen" : "";
+  }
+}
+
+// --- 8. Chat ---
+chatSend.onclick = sendChat;
+chatInput.onkeydown = e => { if (e.key === "Enter") sendChat(); };
+function sendChat() {
+  const text = chatInput.value.trim();
+  if (text) {
+    broadcast('chat', { text });
+    addChatMessage(userId, text, true);
+    chatInput.value = "";
+  }
+}
+function addChatMessage(senderId, text, isSelf) {
+  const msgElem = document.createElement("div");
+  msgElem.className = "chat-msg";
+  msgElem.innerHTML = `<span class="chat-user${isSelf ? ' chat-self' : ''}">${isSelf ? "You" : senderId}:</span> ${escapeHtml(text)}`;
+  chatMessages.appendChild(msgElem);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[m]));
+}
+
+// --- 9. Cleanup on Leave (optional) ---
+window.onbeforeunload = () => {
+  ws.send(JSON.stringify({ type: 'leave', userId }));
+  ws.close();
+  Object.values(peers).forEach(pc => pc.close());
+};
+
+// --- 10. Init grid on load ---
+window.addEventListener('DOMContentLoaded', () => {
+  updateVideosPerPage();
+  renderVideoGrid();
+});
+{% endblock %}

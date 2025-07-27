@@ -322,7 +322,14 @@ def censor_profanity(text):
     from better_profanity import profanity
     return profanity.censor(text)
 
+@sync_to_async
+def translate_message(self, message):
+    from translate.translate import translate_html
+    return translate_html(None, message, target=self.lang)
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
+    lang = 'en'
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
@@ -350,9 +357,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await create_stream_message(self.scope["user"].id if self.scope['user'] else None, self.room_name, data['message'])
 
     async def chat_message(self, event):
-        from translate.translate import translate_html
+        mess = await translate_message(self, event['message'])
         await self.send(text_data=json.dumps({
-            'message': translate_html(None, event['message'], lang=self.lang),
+            'message': mess,
             'username': event['username']
         }))
 

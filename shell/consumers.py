@@ -44,20 +44,6 @@ def get_auth(user_id, session_key):
         if s.authorized: return True
     return False
 
-@sync_to_async
-def get_req(scope):
-    user = User.objects.get(id=scope['user'].id)
-    ip = scope['client'][0]
-    path = scope['path']
-#    print(ip)
-    s = Session.objects.create(user=user, ip_address=ip, path=path)
-    from django.utils import timezone
-    import datetime
-    sessions = Session.objects.filter(user=user, ip_address=ip, path=path, time__gte=timezone.now() - datetime.timedelta(seconds=4))
-    if sessions.count() > 1: return False
-    if sessions.count() < 1: return False
-    return True
-
 async def send(channel, output):
     await channel.send(text_data=output)
 

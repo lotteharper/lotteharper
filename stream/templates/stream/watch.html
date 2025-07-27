@@ -86,6 +86,12 @@
 {% load app_filters %}
 var chatSocket;
 var chatSocketReconnectTimeout;
+const guestID = new String(getRandomInt(0,99));
+function getRandomInt(min, max) {
+    min = Math.ceil(min); // Ensure min is an integer (rounds up)
+    max = Math.floor(max); // Ensure max is an integer (rounds down)
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 $(document).ready(function() {
     function beginStream() {
         const container = document.getElementById('video-container');
@@ -164,13 +170,6 @@ $(document).ready(function() {
         openSignalingSocket();
         const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
         let pc;
-        let broadcasterId = null;
-        function getRandomInt(min, max) {
-            min = Math.ceil(min); // Ensure min is an integer (rounds up)
-            max = Math.floor(max); // Ensure max is an integer (rounds down)
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        const guestID = new String(getRandomInt(0,99));
         function openChatSocket() {
             chatSocket = new WebSocket(
                 "wss://" + window.location.host + "/ws/chat/{{ vendor.profile.name }}/?lang={{ lang }}"
