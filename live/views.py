@@ -286,7 +286,7 @@ def mute(request):
             camera.muted = not camera.muted
             camera.updated = timezone.now()
             camera.save()
-    return HttpResponse('<i class="bi bi-mic-fill"></i>' if not camera.muted else '<i class="bi bi-mic-mute-fill"></i>')
+    return HttpResponse('<i class="bi bi-mic-fill"></i>' if camera.muted else '<i class="bi bi-mic-mute-fill"></i>')
 
 @csrf_exempt
 @login_required

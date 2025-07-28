@@ -1,5 +1,5 @@
-7
-12
+1
+00
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-07-22.git
@@ -13,8 +13,80 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 60dc8d19] backup
- 16 files changed, 3196 insertions(+), 4382 deletions(-)
+[main 51b6e0a6] backup
+ 101 files changed, 188 insertions(+), 278 deletions(-)
+ mode change 100755 => 100644 live/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/views.cpython-312.pyc
+ create mode 100644 media/audio/fingerprints/02d9db60-be35-43b2-a105-1606869943b7.npy
+ create mode 100644 media/audio/fingerprints/033f9ead-f30d-477e-9490-10381d9d0f41.npy
+ create mode 100644 media/audio/fingerprints/093cc205-d17f-4f61-b885-faf630e8cf94.npy
+ create mode 100644 media/audio/fingerprints/11746a93-9d2a-411c-afe5-6c44c918562e.npy
+ create mode 100644 media/audio/fingerprints/118b50fb-23bc-44e8-b146-63e4b656f293.npy
+ create mode 100644 media/audio/fingerprints/11e3ca59-b2b9-45c1-b3a9-3ce047f7947a.npy
+ create mode 100644 media/audio/fingerprints/1821bfe3-3313-4a2b-b781-dcef7742ef7e.npy
+ create mode 100644 media/audio/fingerprints/1822dbb5-d1fe-4fb8-9beb-00edaddb2807.npy
+ create mode 100644 media/audio/fingerprints/1d9f4e3b-c251-4a29-84e3-51e3c5748ee9.npy
+ create mode 100644 media/audio/fingerprints/22b65100-b84f-4c77-9049-418f33961895.npy
+ create mode 100644 media/audio/fingerprints/29cff07d-7a35-439b-a73b-a74d97d0e1ba.npy
+ create mode 100644 media/audio/fingerprints/2adf92ce-da7e-4946-a5ba-e59030a8f1f0.npy
+ create mode 100644 media/audio/fingerprints/2ba436d5-a99e-44da-b752-649b859d1a1b.npy
+ create mode 100644 media/audio/fingerprints/2cbeda6a-fb67-48e4-a397-7574aac2bba9.npy
+ create mode 100644 media/audio/fingerprints/2cdf085a-2e22-4f1a-b399-c7e212208101.npy
+ create mode 100644 media/audio/fingerprints/2da650c4-ee93-4d9d-b544-0f05883bca58.npy
+ create mode 100644 media/audio/fingerprints/35971558-dfe8-470f-85b7-b78b185b9dfc.npy
+ create mode 100644 media/audio/fingerprints/3c83a0e8-2011-4f74-82f1-6828dbb9a4ee.npy
+ create mode 100644 media/audio/fingerprints/41da7114-e6c5-450d-8f3c-e1e0a9124cda.npy
+ create mode 100644 media/audio/fingerprints/47222a59-62a7-49dd-a28b-a12554b4b7bd.npy
+ create mode 100644 media/audio/fingerprints/47a1d1c4-f8c4-4046-9cd0-e408842fce49.npy
+ create mode 100644 media/audio/fingerprints/48e4907c-c3a0-4e00-8434-0f25f8534151.npy
+ create mode 100644 media/audio/fingerprints/4ef4de3e-e270-494c-ad9b-f5454bc65d2d.npy
+ create mode 100644 media/audio/fingerprints/5aa28235-aea1-4a07-87f4-71cd59004605.npy
+ create mode 100644 media/audio/fingerprints/6369df4a-b5e0-4135-8faf-ce21877c3b36.npy
+ create mode 100644 media/audio/fingerprints/645ee578-4d05-4a90-92d9-0c7d5af0b231.npy
+ create mode 100644 media/audio/fingerprints/656aa47e-6070-4734-b99b-4b801c995803.npy
+ create mode 100644 media/audio/fingerprints/65ae6356-a93b-4d3d-a6c7-5365e3e00789.npy
+ create mode 100644 media/audio/fingerprints/725e799a-8d58-4ab4-b944-d0495ff85ae9.npy
+ create mode 100644 media/audio/fingerprints/72b4e9b3-0c26-4831-9c80-c182f6624a8c.npy
+ create mode 100644 media/audio/fingerprints/7a8147e9-a890-4d67-8898-e9b6641d2cf2.npy
+ create mode 100644 media/audio/fingerprints/7c07c30b-7efb-4a5b-9446-243a2ae77f7e.npy
+ create mode 100644 media/audio/fingerprints/7fadcb24-7456-4ec4-8d24-696bcb2bf2a6.npy
+ create mode 100644 media/audio/fingerprints/7fcf8ee6-4c98-4dc6-a366-747eae083aea.npy
+ create mode 100644 media/audio/fingerprints/8339b430-8dd9-4f0d-90a4-1939ea7db7a0.npy
+ create mode 100644 media/audio/fingerprints/85fff164-d740-4dee-9bda-0443ea98b753.npy
+ create mode 100644 media/audio/fingerprints/873e648c-813f-489d-9335-93cc00f157f5.npy
+ create mode 100644 media/audio/fingerprints/8997b908-cffe-4132-b74a-2fad4d0fefb9.npy
+ create mode 100644 media/audio/fingerprints/8c0028b5-591e-4a61-b07c-c635e148bbaa.npy
+ create mode 100644 media/audio/fingerprints/8eb66c52-b9f4-45ba-8acb-879d99235491.npy
+ create mode 100644 media/audio/fingerprints/9147c99e-056c-4c2f-85ea-9ca7c59c3cf4.npy
+ create mode 100644 media/audio/fingerprints/98bd8e61-5279-4db7-8649-1c30013e8210.npy
+ create mode 100644 media/audio/fingerprints/99f1527e-d2fb-4cae-af9c-85aef6a45355.npy
+ create mode 100644 media/audio/fingerprints/9f44d2d8-0abc-4065-8072-d767b810183c.npy
+ create mode 100644 media/audio/fingerprints/b19bf489-2f62-4235-a8a1-854070e2cd8f.npy
+ create mode 100644 media/audio/fingerprints/b25ead62-3ffc-4aca-93a0-e5726f1bc01f.npy
+ create mode 100644 media/audio/fingerprints/b359ec0e-fb14-4c90-9bc5-2658c9782845.npy
+ create mode 100644 media/audio/fingerprints/b552101b-34f5-44af-a903-3b31935481bd.npy
+ create mode 100644 media/audio/fingerprints/b58ae8b6-1111-48bd-8bad-e59ce7fb0c2b.npy
+ create mode 100644 media/audio/fingerprints/b62f304c-35e2-476e-85ec-5fee15e071a9.npy
+ create mode 100644 media/audio/fingerprints/be0030a8-a522-42ce-9f72-2b0ad18f928e.npy
+ create mode 100644 media/audio/fingerprints/be9efc33-a438-40a5-8bb6-41c90ad06206.npy
+ create mode 100644 media/audio/fingerprints/c0c2ce99-2d5e-4d7f-8be3-3c7c2881ad2c.npy
+ create mode 100644 media/audio/fingerprints/c3ce05ca-7fef-432b-abba-d971660d23ed.npy
+ create mode 100644 media/audio/fingerprints/c5e05d6c-52cb-41e3-bcd4-b1d43971c746.npy
+ create mode 100644 media/audio/fingerprints/cdd83d39-760b-4d68-8ab4-20f6ee3521bd.npy
+ create mode 100644 media/audio/fingerprints/ceaa41c7-2e79-42d0-8299-b80c88def448.npy
+ create mode 100644 media/audio/fingerprints/d11af953-9691-4856-b0fc-c15b2afe6eac.npy
+ create mode 100644 media/audio/fingerprints/d3cb9fa1-3bb5-4665-8e1a-1013283dd84d.npy
+ create mode 100644 media/audio/fingerprints/d633c58d-a8ee-4c98-be89-e08b09bd0ed4.npy
+ create mode 100644 media/audio/fingerprints/d7abe523-8065-4f6a-a5fd-fd2640a42eb5.npy
+ create mode 100644 media/audio/fingerprints/d844b09e-7db4-407d-a309-6e45de6a4955.npy
+ create mode 100644 media/audio/fingerprints/db2ad4cc-372b-4165-b385-e3d9b0cd0857.npy
+ create mode 100644 media/audio/fingerprints/dc784ecf-7e86-47fc-975f-806c62b78e84.npy
+ create mode 100644 media/audio/fingerprints/dce598df-be01-4efe-ae36-463a0fbec083.npy
+ create mode 100644 media/audio/fingerprints/e53da750-aa5f-46a8-9af6-95c03f723555.npy
+ create mode 100644 media/audio/fingerprints/e62b1f8d-ec6f-4d87-bdc9-f880eddf88d2.npy
+ create mode 100644 media/audio/fingerprints/f5bcd821-a804-4062-9c8d-8dde4950a36d.npy
+ create mode 100644 media/audio/fingerprints/f68a6e49-c9c9-4ecf-b867-daa4ebca8928.npy
+ create mode 100644 media/audio/fingerprints/f87f28af-cf96-4f7c-a95a-c25a16161028.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

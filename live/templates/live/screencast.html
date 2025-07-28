@@ -334,7 +334,7 @@ async function startWebcamFn() {
     CAMERA_ID = generateRandomString(8);
     localCamStream = await navigator.mediaDevices.getUserMedia({
         video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: 320 },  frameRate: { ideal: 15 } },
-        audio: { deviceId: { ideal: "communications" } },
+        audio: { {% if not camera.muted %}deviceId: { ideal: "communications" }{% else %}false{% endif %} },
     }).catch((error) => {
         console.log(error);
         $('#errormessage').removeClass('hide');
@@ -568,7 +568,6 @@ async function attachToDOM(id, stream) {
   if(id == 'justWebcam') { {% if request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }
   videoElem.id = id;
   videoElem.autoplay = true;
-  videoElem.muted = true;
   videoElem.volume = 0;
   videoElem.setAttribute("playsinline", true);
   videoElem.srcObject = new MediaStream(stream.getTracks());
@@ -618,10 +617,10 @@ function openRemoteSocket() {
             }
             if(instructions[2] == 'y' && !muted) {
                 muted = true;
-                muteButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+                muteButton.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
             } else if(instructions[2] == 'n' && muted) {
                 muted = false;
-                muteButton.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
+                muteButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
             }
         });
 }

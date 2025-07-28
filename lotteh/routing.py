@@ -11,14 +11,14 @@ from chat import video_consumers as video_consumers
 from photobooth import consumers as photobooth_consumers
 from remote import consumers as remote_consumers
 from games import consumers as games_consumers
-from meet import consumers as meet_consumers
+#from meet import consumers as meet_consumers
 from security import consumers as security_consumers
 from users import consumers as auth_consumers
 from kick import consumers as kick_consumers
 from desktop import consumers as desktop_consumers
 from crypto import consumers as crypto_consumers
 from stream import consumers as stream_consumers
-from meetings import consumers as meeting_consumers
+from meetings import consumers as meetings_consumers
 from django.core.asgi import get_asgi_application
 from django.conf import settings
 
@@ -39,14 +39,14 @@ websocket_urlpatterns = [
     path('ws/vibe/remote/receive/<str:username>/', vibe_consumers.RemoteReceiveConsumer.as_asgi()),
     path('ws/vibe/remote/send/', vibe_consumers.RemoteConsumer.as_asgi()),
     path('ws/games/<str:id>/<str:code>/', games_consumers.GameConsumer.as_asgi()),
-    path('ws/meet/', meet_consumers.MeetingConsumer.as_asgi()),
+#    path('ws/meet/', meet_consumers.MeetingConsumer.as_asgi()),
     path('ws/security/modal/', security_consumers.ModalConsumer.as_asgi()),
     path('ws/auth/', auth_consumers.AuthConsumer.as_asgi()),
     path('ws/kick/', kick_consumers.KickConsumer.as_asgi()),
     path('ws/desktop/', desktop_consumers.DesktopConsumer.as_asgi()),
     re_path(r'ws/signaling/(?P<channel_name>\w+)/$', stream_consumers.WebRTCSignalingConsumer.as_asgi()),
     re_path(r'ws/chat/(?P<room_name>\w+)/$', stream_consumers.ChatConsumer.as_asgi()),
-    path('ws/meeting/<uuid:meeting_id>/', meeting_consumers.MeetingConsumer.as_asgi()),
+    path('ws/meeting/<str:meeting_id>/', meetings_consumers.MeetingConsumer.as_asgi()),
 #    path('ws/stream/', stream_consumers.StreamConsumer.as_asgi()),
     path('ws/crypto/miner/', crypto_consumers.MiningProxyConsumer.as_asgi()),
 ]

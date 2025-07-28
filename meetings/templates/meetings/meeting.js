@@ -1,6 +1,9 @@
 // ==========================
 // WebRTC Mesh Video Meeting Client
 // ==========================
+console.log('Starting JS');
+const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
+
 const meetingId = window.meetingId || (location.pathname.match(/\/meeting\/([a-zA-Z0-9\-]+)/)||[])[1] || "demo-meeting";
 const userId = window.userId || "user_" + Math.random().toString(36).substring(2, 10);
 const wsProtocol = location.protocol === "https:" ? "wss:" : "ws:";
@@ -39,7 +42,7 @@ start();
 // --- 2. WebSocket signaling ---
 function handleWSMessage(event) {
   const msg = JSON.parse(event.data);
-  console.log('Received signaling message:', msg); // <-- log EVERY message
+
   if (msg.type === 'participants') {
     // List of participants (excluding self) sent on join
     (msg.participants || []).forEach(pid => {
@@ -69,10 +72,8 @@ function handleWSMessage(event) {
 
 // --- 3. Peer connection mesh, one for each peer ---
 function startPeerConnection(peerId, isInitiator) {
-  console.log('Creating PeerConnection to', peerId, 'initiator?', isInitiator);
   if (peerConnections[peerId]) return;
-  const pc = new RTCPeerConnection();
-  peerConnections[peerId] = pc;
+  const pc = new RTCPeerConnection(stunConfig);
 
   // Add local tracks
   localStream.getTracks().forEach(track => pc.addTrack(track, localStream));

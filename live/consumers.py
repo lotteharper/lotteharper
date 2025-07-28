@@ -40,7 +40,8 @@ def get_camera_data(camera_user, camera_name, index, request_user):
 @sync_to_async
 def get_camera_status(camera_user, camera_name):
     from live.models import VideoCamera
-    return '{},{},{}'.format('y' if VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first().live else 'n', 'y' if VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first().recording else 'n', 'y' if VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first().muted else 'n')
+    camera = VideoCamera.objects.filter(name=camera_name, user__profile__name=camera_user).first()
+    return '{},{},{}'.format('y' if camera.live else 'n', 'y' if camera.recording else 'n', 'y' if camera.muted else 'n')
 
 @sync_to_async
 def update_camera(user_id, camera_user, camera_name, camera_data, key=None):

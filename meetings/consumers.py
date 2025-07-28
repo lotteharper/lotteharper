@@ -6,7 +6,9 @@ ROOMS = {}
 class MeetingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.meeting_id = str(self.scope['url_route']['kwargs']['meeting_id'])
+        self.channel_name = 'webrtcmeet_{}'.format(self.meeting_id)
         self.user_id = None
+#        await self.channel_layer.group_add(self.meeting_id, self.channel_name)
         await self.accept()
 
     async def disconnect(self, _close_code):
