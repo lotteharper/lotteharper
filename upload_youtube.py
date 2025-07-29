@@ -22,35 +22,17 @@ for recording in VideoRecording.objects.filter(processed=True, uploaded=False).o
     thumbnail = None
     from live.duration import get_duration
     # camera.upload and
-    if recording.file and os.path.exists(recording.file.path) and get_duration(recording.file.path) > settings.LIVE_INTERVAL/1000 * 1.5:
+    from live.upload import upload_recording
+    recording = upload_recording(recording, camera)
+    recording.save()
+    if recording.uploaded:
         try:
-            if not (recording.file and os.path.exists(recording.file.path)):
-                print('Getting file from bucket for upload')
-                full_path = os.path.join(settings.BASE_DIR, 'media/', get_file_path(None, 'rec.mp4'))
-                with recording.file_processed.storage.open(str(recording.file_processed.name), mode='rb') as bucket_file:
-                    with open(full_path, "wb") as video_file:
-                        video_file.write(bucket_file.read())
-                    video_file.close()
-                bucket_file.close()
-                recording.file = full_path
-                recording.save()
-        except: print(traceback.format_exc())
-        try:
-            upload_youtube(
-                camera.user,
-                recording,
-                recording.file.path,
-                profanity.censor(camera.title[:70]),
-                profanity.censor(camera.description) + ('\nTranscript: ' if recording.transcript and len(recording.transcript) > 0 else '') + profanity.censor(recording.transcript[:4000]) +  '\nRecorded on ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y at %H:%M:%S'),
-                [profanity.censor(tag) for tag in camera.tags.split(',')],
-                category=camera.category,
-                privacy_status=camera.privacy_status if recording.public else 'private',
-                thumbnail=thumbnail,
-                age_restricted=not recording.public)
-            recording.uploaded = True
-        except:
-            recording.uploaded = False
-            print(traceback.format_exc())
-        recording.save()
-        count+=1
+            os.remove(recording.file.path)
+        except: pass
+        recording.file = None
+    recording.processed = True
+    recording.public = not recording.frames.filter(public=False).last()
+    recording.save()
+    for frame in recording.frames.all(): frame.delete_video()
+    count+=1
     if count >= to_upload: break

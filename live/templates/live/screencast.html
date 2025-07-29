@@ -56,6 +56,7 @@
 
 #rec-status {
     position: absolute;
+    z-index: 9999;
     top: 5px;
     left: 50%;
     transform: translate(-50%, 0%);
@@ -628,7 +629,7 @@ openRemoteSocket();
 function download() {
         if(live) { mediaRecorder.start(); }
         if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-file"></i>';
+            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-fill"></i>';
         } else {
             document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle"></i>';
         }
@@ -748,9 +749,9 @@ function download() {
 function stopRecordingFn() {
   live = false;
   if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
+    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-fill color-red"></i>';
   } else {
-    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
+    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle"></i>';
   }
   if(captureInterval) clearInterval(captureInterval);
   document.getElementById("pipOverlayStream").style.border = "none";

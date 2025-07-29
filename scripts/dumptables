@@ -29,7 +29,6 @@ source venv/bin/activate
 ./scripts/dumpapp auth
 ./scripts/dumpapp users.profile
 ./scripts/dumpapp sessions
-./scripts/dumpapp links
 ./scripts/dumpapp voice
 ./scripts/dumpapp tts
 ./scripts/dumpapp games
@@ -44,3 +43,5 @@ source venv/bin/activate
 ./scripts/dumpapp survey
 ./scripts/dumpapp webpush
 ./scripts/dumpapp translate
+./scripts/dumpapp links
+./scripts/dumpapp stream

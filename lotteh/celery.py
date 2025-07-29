@@ -21,6 +21,23 @@ try:
 except: pass
 
 @app.task
+def update_video_description(user_id, video_id, thumbnail_url, original_description, original_title, original_category_id):
+    import os, uuid
+    from django.contrib.auth.models import User
+    from django.conf import settings
+    user = User.objects.get(id=int(user_id))
+    op_path = os.path.join(settings.BASE_DIR, 'temp/', '{}.jpg'.format(str(uuid.uuid4())))
+    from live.upload import download_image_from_url
+    download_image_from_url(thumbnail_url, op_path)
+    from feed.caption import caption_image
+    thumbnail_caption = caption_image(str(op_path))
+#    print('Path exists for download? {}'.format(str(os.path.exists(op_path))))
+    print(thumbnail_caption)
+    os.remove(op_path)
+    from live.upload import update_description
+    update_description(user, video_id, thumbnail_caption + '\n' + original_description, original_title, original_category_id)
+
+@app.task
 def async_check_upload(post_id):
     from feed.models import Post
     from feed.upload import check_offsite
@@ -420,38 +437,9 @@ def process_recording(id, embed_logo):
 #            try:
 #                thumbnail = first_frame.still_bucket.url
 #            except: pass
-        from live.duration import get_duration
-        if camera.upload and get_duration(recording.file.path) > (7.5 if (settings.LIVE_INTERVAL/1000 * 1.5) <= 7.5 else (settings.LIVE_INTERVAL/1000 * 1.5)):
-            import traceback
-            import pytz
-            try:
-                from better_profanity import profanity
-                from recordings.youtube import upload_youtube
-                upload_youtube(
-                    camera.user,
-                    recording,
-                    recording.file.path,
-                    profanity.censor(camera.title[:70]),
-                    profanity.censor(camera.description) + ('\nTranscript: ' if recording.transcript and len(recording.transcript) > 0 else '') + profanity.censor(recording.transcript[:4000]) +  '\nRecorded on ' + recording.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%A %B %d, %Y at %H:%M:%S'),
-                    [profanity.censor(tag) for tag in camera.tags.split(',')],
-                    category=camera.category,
-                    privacy_status=camera.privacy_status if recording.public else 'private',
-                    thumbnail=thumbnail,
-                    age_restricted=not recording.public)
-                recording.uploaded = True
- #               import requests
- #               files = None
- #               with open(recording.file.path, 'rb') as file:
- #                   files = {'file': file}
- #                   payload = {'id_file': 'rec.mp4'}
- #                   resp = requests.post('https://lotteh.com/upload/?k={}'.format(settings.UPLOAD_KEY), files=files, data=payload)
- #                   print(resp)
- #                   print(resp.text)
- #                   print(resp.status_code)
- #                   recording.uploaded = True
-            except:
-                recording.uploaded = False
-                print(traceback.format_exc())
+        if camera.upload:
+            from live.upload import upload_recording
+            recording = upload_recording(recording, camera)
         if recording.uploaded:
             try:
                 os.remove(recording.file.path)
@@ -706,7 +694,6 @@ def routine_filter():
     if post:
         try:
             from feed.nude import is_nude_fast
-            from barcode.tests import document_scanned
             from feed.tests import minor_identity_verified
             if post.image and not os.path.exists(post.image.path) and post.image_bucket: post.download_photo()
             post = Post.objects.get(id=post.id)

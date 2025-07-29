@@ -69,9 +69,10 @@ def upload_youtube(user, recording, file_path, title, description, tags, categor
         "tags" : tags,
         "category" : category,
         "privacy" : privacy_status,
-        "thumbnail" : thumbnail,
         "kids" : False,
     }
+    if thumbnail: options["thumbnail"] = thumbnail
+
     if age_restricted: options["contentDetails"] = {"contentRating": {"ytRating": "ytAgeRestricted"}}
 
     import httplib2
@@ -161,11 +162,6 @@ def upload_youtube(user, recording, file_path, title, description, tags, categor
           description=options['description'],
           tags=options['tags'],
           categoryId=options['category'],
-          thumbnails=dict(
-            default=dict(
-              url=options['thumbnail']
-            ),
-          ) if options['thumbnail'] else None,
         ),
         status=dict(
           privacyStatus=options['privacy'],
@@ -191,7 +187,7 @@ def upload_youtube(user, recording, file_path, title, description, tags, categor
         media_body=MediaFileUpload(the_file, chunksize=-1, resumable=True)
       )
 
-      resumable_upload(insert_request)
+      return resumable_upload(insert_request)
 
     # This method implements an exponential backoff strategy to resume a
     # failed upload.
@@ -207,13 +203,15 @@ def upload_youtube(user, recording, file_path, title, description, tags, categor
               print('Successful upload.')
               print(response)
               id = response['id']
+              thumbnail_url = response['snippet']['thumbnails']['high']['url']
               print(id)
               recording.youtube_id = id
-              import time
-              time.sleep(5)
+              recording.thumbnail_url = thumbnail_url
+#              import time
+#              time.sleep(5)
               recording.youtube_embed = get_youtube_embed(id)
               recording.save()
-              pass
+              return id, recording
             else:
               exit("The upload failed with an unexpected response: %s" % response)
         except HttpError as e:
@@ -240,7 +238,7 @@ def upload_youtube(user, recording, file_path, title, description, tags, categor
 
     youtube = get_authenticated_service(user.email)
     try:
-      initialize_upload(youtube, options, file_path)
+      return initialize_upload(youtube, options, file_path)
     except HttpError as e:
       print(traceback.format_exc())
       print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
