@@ -24,15 +24,16 @@ for recording in VideoRecording.objects.filter(processed=True, uploaded=False).o
     # camera.upload and
     from live.upload import upload_recording
     recording = upload_recording(recording, camera)
-    recording.save()
-    if recording.uploaded:
-        try:
-            os.remove(recording.file.path)
-        except: pass
-        recording.file = None
-    recording.processed = True
-    recording.public = not recording.frames.filter(public=False).last()
-    recording.save()
-    for frame in recording.frames.all(): frame.delete_video()
+    if recording:
+        recording.save()
+        if recording.uploaded:
+            try:
+                os.remove(recording.file.path)
+            except: pass
+            recording.file = None
+        recording.processed = True
+        recording.public = not recording.frames.filter(public=False).last()
+        recording.save()
+        for frame in recording.frames.all(): frame.delete_video()
     count+=1
     if count >= to_upload: break
