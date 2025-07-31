@@ -213,7 +213,7 @@ DATABASES = {
         'POOL_OPTIONS': {
             'POOL_SIZE': 999999,
             'MAX_OVERFLOW': 999999999,
-            'RECYCLE': 60,
+            'RECYCLE': 0,
         },
 #        'DISABLE_SERVER_SIDE_CURSORS': True,
     },
