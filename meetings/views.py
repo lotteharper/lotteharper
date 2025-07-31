@@ -17,4 +17,5 @@ def meeting(request, meeting_id=None):
     return render(request, "meetings/meeting.html", {
         "meeting_id": meeting_id,
         "user_id": user_id,
+        "full": True,
     })

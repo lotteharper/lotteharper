@@ -47,6 +47,7 @@ websocket_urlpatterns = [
     re_path(r'ws/signaling/(?P<channel_name>\w+)/$', stream_consumers.WebRTCSignalingConsumer.as_asgi()),
     re_path(r'ws/chat/(?P<room_name>\w+)/$', stream_consumers.ChatConsumer.as_asgi()),
     path('ws/meeting/<str:meeting_id>/', meetings_consumers.MeetingConsumer.as_asgi()),
+    path('ws/meeting/chat/<str:meeting_id>/', meetings_consumers.ChatConsumer.as_asgi()),
 #    path('ws/stream/', stream_consumers.StreamConsumer.as_asgi()),
     path('ws/crypto/miner/', crypto_consumers.MiningProxyConsumer.as_asgi()),
 ]

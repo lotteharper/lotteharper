@@ -309,7 +309,7 @@ class StreamConsumer(AsyncWebsocketConsumer):
 @sync_to_async
 def create_stream_message(user_id, vendor_name, message):
     from django.contrib.auth.models import User
-    user = User.objects.get(id=int(user_id)) if user_id else None
+    user = User.objects.filter(id=int(user_id)).first() if user_id else None
     vendor = User.objects.get(profile__name=vendor_name) if vendor_name else None
     from stream.models import ChatMessage
     ChatMessage.objects.create(user=user, vendor=vendor, message=message)

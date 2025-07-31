@@ -1,5 +1,58 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
+
+@sync_to_async
+def censor_profanity(text):
+    from better_profanity import profanity
+    return profanity.censor(text)
+
+@sync_to_async
+def translate_message(self, message):
+    from translate.translate import translate_html
+    return translate_html(None, message, target=self.lang)
+
+@sync_to_async
+def create_stream_message(user_id, meeting_id, message):
+    from django.contrib.auth.models import User
+    user = User.objects.filter(id=int(user_id)).first() if user_id else None
+    from meetings.models import ChatMessage
+    ChatMessage.objects.create(user=user, meeting_id=meeting_id, message=message)
+
+class ChatConsumer(AsyncWebsocketConsumer):
+    lang = 'en'
+    async def connect(self):
+        self.meeting_id = self.scope['url_route']['kwargs']['meeting_id']
+        self.room_group_name = f'meeting_chat_{self.meeting_id}'
+        from urllib.parse import parse_qs
+        query_params = parse_qs(self.scope["query_string"].decode())
+        if 'lang' in query_params and query_params['lang']: self.lang = query_params['lang'][0]
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        from feed.templatetags.app_filters import embedlinks
+        data['message'] = await censor_profanity(embedlinks(data['message']))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': data['message'],
+                'username': data.get('username', 'Guest')
+            }
+        )
+        await create_stream_message(self.scope["user"].id if self.scope['user'] else None, self.meeting_id, data['message'])
+
+    async def chat_message(self, event):
+        mess = await translate_message(self, event['message'])
+        await self.send(text_data=json.dumps({
+            'message': mess,
+            'username': event['username']
+        }))
 
 class MeetingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -65,3 +118,4 @@ class MeetingConsumer(AsyncWebsocketConsumer):
             "from": event["from"],
             "data": event["data"]
         }))
+
