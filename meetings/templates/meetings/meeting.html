@@ -25,9 +25,9 @@
 {% block content %}
 {% load app_filters %}
     <div id="controls">
-        <button id="videoBtn">Toggle Video</button>
-        <button id="audioBtn">Toggle Mic</button>
-        <span>Meeting ID: {{ meeting_id }}</span>
+        <button id="videoBtn" class="btn btn-outline-secondary">{{ 'Toggle Video'|etrans }}</button>
+        <button id="audioBtn" class="btn btn-outline-secondary">{{ 'Toggle Mic'|etrans }}</button>
+        <span>{{ 'Meeting ID:'|etrans }} {{ meeting_id }}</span>
     </div>
     <div id="videos">
         <video id="localVideo" autoplay muted playsinline></video>
@@ -42,7 +42,7 @@ let localStream = null;
 let peers = {}; // peer_id -> RTCPeerConnection
 let streams = {}; // peer_id -> MediaStream
 
-const stunServers = [{urls: "stun:stun.l.google.com:19302"}]; // Pre-existing STUN
+const stunServers = [{urls: "stun:lotteh.com:3478"}]; // Pre-existing STUN
 
 async function getMedia() {
     return await navigator.mediaDevices.getUserMedia({video: true, audio: true});
