@@ -205,9 +205,10 @@ def deny_login(request, id):
             u.authorized = False
             u.save()
         from django.contrib.sessions.models import Session
-        sess = Session.objects.filter(session_key=login.session_key)
-        if s in sess: s.delete()
+        Session.objects.filter(session_key=login.session_key).delete()
+        response = HttpResponse('<i class="bi bi-door-open-fill"></i>' if login.bypass and login.expires >= timezone.now() else '<i class="bi bi-door-closed"></i>')
         login.delete()
+        return response
     return HttpResponse('<i class="bi bi-door-open-fill"></i>' if login.bypass and login.expires >= timezone.now() else '<i class="bi bi-door-closed"></i>')
 
 @login_required

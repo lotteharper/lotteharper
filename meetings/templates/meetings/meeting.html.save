@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+        body { margin: 0; background: #222; color: #fff; }
+        #videos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        video {
+            background: #000;
+            border-radius: 8px;
+            width: 320px;
+            height: 240px;
+            object-fit: cover;
+        }
+        #controls {
+            margin: 1em auto;
+            text-align: center;
+        }
+        button { margin: 0 5px; }
+</style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+    <div id="controls">
+        <button id="videoBtn">Toggle Video</button>
+        <button id="audioBtn">Toggle Mic</button>
+        <span>Meeting ID: {{ meeting_id }}</span>
+    </div>
+    <div id="videos">
+        <video id="localVideo" autoplay muted playsinline></video>
+    </div>
+{% endblock %}
+{% block javascript %}
+const meetingId = "{{ meeting_id }}";
+const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+const wsUrl = `${wsScheme}://${window.location.host}/ws/meeting/${meetingId}/`;
+
+let localStream = null;
+let peers = {}; // peer_id -> RTCPeerConnection
+let streams = {}; // peer_id -> MediaStream
+
+const stunServers = [{urls: "stun:stun.l.google.com:19302"}]; // Pre-existing STUN
+
+getMedia().then(async function(stream) {
+    localStream = stream;
+
+    const socket = new WebSocket(wsUrl);
+});
+
+async function getMedia() {
+    return await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+}
+
+function addVideo(peer_id, stream) {
+    if (document.getElementById("video_" + peer_id)) return;
+    const vid = document.createElement("video");
+    vid.id = "video_" + peer_id;
+    vid.autoplay = true; vid.playsInline = true;
+    vid.srcObject = stream;
+    document.getElementById("videos").appendChild(vid);
+}
+function removeVideo(peer_id) {
+    let vid = document.getElementById("video_" + peer_id);
+    if (vid) vid.remove();
+}
+
+function send(action, data={}, target=null) {
+    socket.send(JSON.stringify({ action, data, target }));
+}
+
+function createPeer(peer_id, initiator) {
+    let pc = new RTCPeerConnection({iceServers: stunServers});
+    localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+    pc.onicecandidate = (event) => {
+        if (event.candidate) send("signal", {type: "candidate", candidate: event.candidate}, peer_id);
+    };
+    pc.ontrack = (event) => {
+        if (!streams[peer_id]) {
+            streams[peer_id] = new MediaStream();
+            addVideo(peer_id, streams[peer_id]);
+        }
+        streams[peer_id].addTrack(event.track);
+    };
+    peers[peer_id] = pc;
+    return pc;
+}
+
+async function handleOffer(from, offer) {
+    let pc = createPeer(from, false);
+    await pc.setRemoteDescription(offer);
+    let answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    send("signal", {type: "answer", sdp: answer}, from);
+}
+
+async function handleAnswer(from, answer) {
+    let pc = peers[from];
+    if (pc) await pc.setRemoteDescription(answer);
+}
+
+async function handleCandidate(from, candidate) {
+    let pc = peers[from];
+    if (pc && candidate) await pc.addIceCandidate(candidate);
+}
+
+socket.onopen = async () => {
+    document.getElementById("localVideo").srcObject = localStream;
+};
+
+socket.onmessage = async (event) => {
+    const msg = JSON.parse(event.data);
+    if (msg.type === "peer-joined") {
+        if (msg.peer_id in peers) return;
+        // Initiate connection
+        let pc = createPeer(msg.peer_id, true);
+        let offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        send("signal", {type: "offer", sdp: offer}, msg.peer_id);
+    } else if (msg.type === "peer-left") {
+        if (msg.peer_id in peers) {
+            peers[msg.peer_id].close();
+            delete peers[msg.peer_id];
+        }
+        removeVideo(msg.peer_id);
+        delete streams[msg.peer_id];
+    } else if (msg.type === "signal") {
+        const from = msg.from;
+        const data = msg.data;
+        if (data.type === "offer") {
+            await handleOffer(from, data.sdp);
+        } else if (data.type === "answer") {
+            await handleAnswer(from, data.sdp);
+        } else if (data.type === "candidate") {
+            await handleCandidate(from, data.candidate);
+        }
+    }
+};
+
+// Controls
+let videoEnabled = true, audioEnabled = true;
+document.getElementById("videoBtn").onclick = () => {
+    videoEnabled = !videoEnabled;
+    localStream.getVideoTracks().forEach(track => track.enabled = videoEnabled);
+    document.getElementById("videoBtn").textContent = videoEnabled ? "Disable Video" : "Enable Video";
+};
+document.getElementById("audioBtn").onclick = () => {
+    audioEnabled = !audioEnabled;
+    localStream.getAudioTracks().forEach(track => track.enabled = audioEnabled);
+    document.getElementById("audioBtn").textContent = audioEnabled ? "Disable Mic" : "Enable Mic";
+};
+{% endblock %}
