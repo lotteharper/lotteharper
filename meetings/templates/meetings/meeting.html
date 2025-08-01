@@ -134,17 +134,19 @@ getMedia().then(async function(stream) {
             };
             $('#screenshareBtn').on('click', async function() {
                 if(!sharingScreen) {
+                    document.getElementById('screenshareBtn').innerHTML = 'End screenshare';
                     sharingScreen = true;
-                    const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
                     // Replace track in RTCPeerConnection
                     const sender = pc.getSenders().find(s => s.track.kind === 'video');
-                    sender.replaceTrack(screenStream.getVideoTracks()[0]);
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
                 } else {
+                    document.getElementById('screenshareBtn').innerHTML = 'Screenshare';
                     sharingScreen = false;
-                    const screenStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
+                    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
                     // Replace track in RTCPeerConnection
                     const sender = pc.getSenders().find(s => s.track.kind === 'video');
-                    sender.replaceTrack(screenStream.getVideoTracks()[0]);
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
                 }
             });
             peers[peer_id] = pc;
