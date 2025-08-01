@@ -2,6 +2,11 @@ from django import template
 
 register = template.Library()
 
+@register.filter('meeting_messages')
+def meeting_messages(meeting_id):
+    from meetings.models import ChatMessage
+    return ChatMessage.objects.filter(meeting_id=meeting_id).order_by('timestamp')
+
 @register.filter('recent_stream_messages')
 def recent_stream_messages(stream_messages, days=3):
     import datetime

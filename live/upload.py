@@ -46,7 +46,7 @@ def upload_recording(recording, camera):
                 privacy_status=camera.privacy_status if recording.public else 'private',
                 age_restricted=not recording.public)
             from lotteh.celery import update_video_description
-            update_video_description.apply_async(args=[camera.user.id, id, recording.thumbnail_url, description, title, camera.category], countdown=60*5)
+            update_video_description.apply_async(args=[camera.user.id, id, recording.thumbnail_url, description, title, camera.category], countdown=int(recording.frames.count() * settings.LIVE_INTERVAL/1000.0))
             recording.title = title
             recording.description = description
             recording.category = camera.category

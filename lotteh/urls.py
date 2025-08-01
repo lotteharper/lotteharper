@@ -72,6 +72,7 @@ urlpatterns = [
     path('games/', include(('games.urls'), namespace='games')),
     path('desktop/', include(('desktop.urls'), namespace='desktop')),
     path('meeting/', include(('meetings.urls'), namespace='meetings')),
+    path('events/', include(('events.urls'), namespace='events')),
     path('appeal/', kick_views.reasess_kick, name='appeal'),
     path('password-reset-confirm/<uidb64>/<token>/', user_views.password_reset, name='password_reset_confirm'),
 #         auth_views.PasswordResetConfirmView.as_view(

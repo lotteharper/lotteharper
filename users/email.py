@@ -38,7 +38,7 @@ def send_verification_email(user):
     send_html_email(user, mail_subject, html_message)
 
 
-def send_email(address, mail_subject, html_message):
+def send_email(address, mail_subject, html_message, attachments=None):
     to_email = address
     username = address
     if to_email == '':
@@ -47,6 +47,9 @@ def send_email(address, mail_subject, html_message):
     html_message = '<!DOCTYPE html><html><head><link rel="shortcut-icon" type="image/x-icon" href="{}/email/static/lotteh.png" /></head><body><div style="background-color: {}; padding: 5px; border-radius: 10px;"><img alt="Our company logo" src="{}{}" style="border-radius: 50%; width: 40px; height: 40px;"></img><div style="display: inline-block; padding: 10px; position: relative; top:-10px;"><h1>{}</h1></div></div><div style="background-color: {}; white-space: pre-wrap;">\n'.format(settings.BASE_URL, settings.HEADER_COLOR, settings.BASE_URL, settings.EMAIL_ICON_URL, settings.SITE_NAME, settings.BACKGROUND_COLOR) + html_message + '\n\n</div><div style="background-color: {}; padding: 10px; border-radius: 10px;"><p style="display: inline;">If you would like to stop receiving these emails, please <a href="{}" title="Unsubscribe from all {} emails">unsubscribe</a>.</p>  <b>Email: <a href="mailto:{}">{}</a> Phone: <a href="tel:{}">{}</a> - <a href="{}" title="Visit {}">{}</a></div></body></html>'.format(settings.FOOTER_COLOR, unsub_link, settings.SITE_NAME, settings.EMAIL_ADDRESS, settings.EMAIL_ADDRESS, settings.PHONE_NUMBER, phone_number_format(settings.PHONE_NUMBER), settings.BASE_URL, settings.SITE_NAME, settings.BASE_URL)
     msg = EmailMultiAlternatives(mail_subject, strip_tags(html_message), settings.DEFAULT_FROM_EMAIL, [to_email], headers={'List-Unsubscribe' : '<' + unsub_link + '>'},)
     msg.attach_alternative(html_message, "text/html")
+    if attachments:
+        for a in attachments:
+            msg.attach_file(a)
     try:
         msg.send(fail_silently=False)
     except:
@@ -66,7 +69,7 @@ def send_html_email(user, mail_subject, html_message, attachments=None):
     msg.attach_alternative(html_message, "text/html")
     if attachments:
         for a in attachments:
-            email.attach_file(a)
+            msg.attach_file(a)
     profile = user.profile
     try:
         msg.send(fail_silently=False)
@@ -78,7 +81,7 @@ def send_html_email(user, mail_subject, html_message, attachments=None):
         profile.email_valid=False
         profile.save()
 
-def send_html_email_backend(sender, to_email, mail_subject, html_message):
+def send_html_email_backend(sender, to_email, mail_subject, html_message, attachments=None):
     from django.core.mail.backends.smtp import EmailBackend
     backend = EmailBackend(host=settings.DOMAIN, port=settings.EMAIL_PORT, username=sender.profile.bash, password=sender.profile.email_password, use_tls=True)
     username = user.username
@@ -88,6 +91,9 @@ def send_html_email_backend(sender, to_email, mail_subject, html_message):
     html_message = '<!DOCTYPE html><html><head><link rel="shortcut-icon" type="image/x-icon" href="{}/email/static/lotteh.png" /></head><body><div style="background-color: {}; padding: 5px; border-radius: 10px;"><img alt="Our company logo" src="{}{}" style="border-radius: 50%; width: 40px; height: 40px;"></img><div style="display: inline-block; padding: 10px; position: relative; top:-10px;"><h1>{}</h1></div></div><div style="background-color: {}; white-space: pre-wrap;">\n'.format(settings.BASE_URL, settings.HEADER_COLOR, settings.BASE_URL, settings.EMAIL_ICON_URL, settings.SITE_NAME, settings.BACKGROUND_COLOR) + html_message + '\n\n</div><div style="background-color: {}; padding: 10px; border-radius: 10px;"><p style="display: inline;">If you would like to stop receiving these emails, please <a href="{}" title="Unsubscribe from all {} emails">unsubscribe</a>.</p>  <b>Email: <a href="mailto:{}">{}</a> Phone: <a href="tel:{}">{}</a> - <a href="{}" title="Visit {}">{}</a></div></body></html>'.format(settings.FOOTER_COLOR, unsub_link, settings.SITE_NAME, settings.EMAIL_ADDRESS, settings.EMAIL_ADDRESS, settings.PHONE_NUMBER, phone_number_format(settings.PHONE_NUMBER), settings.BASE_URL, settings.SITE_NAME, settings.BASE_URL)
     msg = EmailMultiAlternatives(mail_subject, strip_tags(html_message), '{} <{}@{}>'.format(sender.profile.name, sender.profile.bash, settings.MAIL_NAME), [to_email], connection=backend)
     msg.attach_alternative(html_message, "text/html")
+    if attachments:
+        for a in attachments:
+            msg.attach_file(a)
     profile = user.profile
     try:
         msg.send(fail_silently=False)

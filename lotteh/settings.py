@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'desktop',
     'links',
+    'events',
 #    '',
 ]
 
