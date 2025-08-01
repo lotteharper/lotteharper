@@ -13,7 +13,10 @@ def schedule_meeting(request):
     import datetime
     from events.models import Event
     from events.forms import EventForm
-    form = EventForm()
+    from django.utils import timezone
+    import pytz
+    from django.conf import settings
+    form = EventForm(initial={'event_start_date': timezone.now().astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%Y-%m-%d"), 'event_start_time': timezone.now().astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%H:%M:00"), 'event_end_date': (timezone.now().astimezone(pytz.timezone(settings.TIME_ZONE)) + datetime.timedelta(hours=1)).strftime("%Y-%m-%d"), 'event_end_time': (timezone.now().astimezone(pytz.timezone(settings.TIME_ZONE)) + datetime.timedelta(hours=1)).strftime("%H:%M:00")})
     if request.method == 'POST':
         form = EventForm(request.POST)
         from django.contrib import messages

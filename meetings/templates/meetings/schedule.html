@@ -6,6 +6,6 @@
 <form method="POST">
 {% csrf_token %}
 {{ form|crispy }}
-<button type="submit" class="btn btn-outline-info">{{ 'Post'|etrans }}</button>
+<button type="submit" class="btn btn-outline-info">{{ 'Send'|etrans }}</button>
 </form>
 {% endblock %}
