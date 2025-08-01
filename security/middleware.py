@@ -83,8 +83,8 @@ def security_middleware(get_response):
                 sd.async_delete()
                 sessions = SessionDedup.objects.filter(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip, path=request.path, querystring=qs, method=request.method, time__gte=timezone.now() - datetime.timedelta(seconds=2))
                 from django.http import HttpResponse
-                if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return HttpResponse(OVERCLICK_HTML_NOTE)
-                if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return HttpResponse(OVERCLICK_HTML_NOTE)
+                if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) #return HttpResponse(OVERCLICK_HTML_NOTE)
+                if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) # return HttpResponse(OVERCLICK_HTML_NOTE)
                 print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
             ip_obj = request.user.security_profile.ip_addresses.filter(ip_address=ip).first() if request.user.is_authenticated else UserIpAddress.objects.filter(ip_address=ip, user=None).first()
             if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
