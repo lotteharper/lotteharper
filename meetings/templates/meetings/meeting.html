@@ -104,7 +104,9 @@ getMedia().then(async function(stream) {
             vid.classList.add('video');
             vid.autoplay = true; vid.playsInline = true;
             vid.srcObject = stream;
-            initializeAudioContext(vid);
+            try {
+                initializeAudioContext(vid, stream);
+            } catch {}
             document.getElementById("videos").appendChild(vid);
             updateZoomMode(0);
         }
@@ -302,11 +304,10 @@ let audioContext;
 let updateInterval;
 let activeHighestVolumeVideo = null;
 
-function initializeAudioContext(video) {
+function initializeAudioContext(video, stream) {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
-
     const source = audioContext.createMediaElementSource(video);
     const analyser = audioContext.createAnalyser();
     analyser.minDecibels = -300;
