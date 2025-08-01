@@ -44,6 +44,7 @@ button { margin: 0 5px; }
     <div id="controls">
         <button id="videoBtn" class="btn btn-outline-secondary">{{ 'Toggle Video'|etrans }}</button>
         <button id="audioBtn" class="btn btn-outline-secondary">{{ 'Toggle Mic'|etrans }}</button>
+        <button id="screenshareBtn" class="btn btn-outline-secondary">{{ 'Screenshare'|etrans }}</button>
         <button onclick="updateZoomMode(-1);" class="btn btn-outline-info">{{ 'Less'|etrans }}</button>
         <button onclick="updateZoomMode(1);" class="btn btn-outline-info">{{ 'More'|etrans }}</button>
         <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('meeting-url');" title="{{ 'Invite another participant to this meeting by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button>
@@ -90,7 +91,7 @@ var socketReconnectTimeout;
 async function getMedia() {
     return await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 }
-
+var sharingScreen = false;
 getMedia().then(async function(stream) {
     localStream = stream;
     async function openMeetingSocket() {
@@ -129,7 +130,23 @@ getMedia().then(async function(stream) {
                 }
                 streams[peer_id].addTrack(event.track);
             };
+            $('#screenshareBtn').on('click', async function() {
+                if(!sharingScreen) {
+                    sharingScreen = true;
+                    const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(screenStream.getVideoTracks()[0]);
+                } else {
+                    sharingScreen = false;
+                    const screenStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(screenStream.getVideoTracks()[0]);
+                }
+            });
             peers[peer_id] = pc;
+
             return pc;
         }
 
