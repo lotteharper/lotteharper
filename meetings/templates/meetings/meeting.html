@@ -39,7 +39,7 @@ button { margin: 0 5px; }
 {% block content %}
 {% load app_filters %}
 <i id="meeting-url" class="hide">{{ base_url }}{% url 'meetings:meeting' meeting_id %}</i>
-    <div id="videos">
+    <div id="videos" class="videos">
     <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
     <div id="controls">
         <button id="videoBtn" class="btn btn-outline-secondary">{{ 'Toggle Video'|etrans }}</button>
@@ -103,6 +103,7 @@ getMedia().then(async function(stream) {
             vid.classList.add('video');
             vid.autoplay = true; vid.playsInline = true;
             vid.srcObject = stream;
+            initializeAudioContext(vid);
             document.getElementById("videos").appendChild(vid);
             updateZoomMode(0);
         }
@@ -274,5 +275,106 @@ fullscreenButton.addEventListener('click', () => {
       document.msExitFullscreen();
     }
   }
+});
+
+var videoElements = document.querySelectorAll("video");
+
+const videoVolumeData = new Map(); // Store audio data for each video
+
+let audioContext;
+let updateInterval;
+let activeHighestVolumeVideo = null;
+
+function initializeAudioContext(video) {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    const source = audioContext.createMediaElementSource(video);
+    const analyser = audioContext.createAnalyser();
+    analyser.minDecibels = -300;
+    analyser.maxDecibels = 900;
+    source.connect(analyser);
+
+    // Connect analyser to destination (speakers) only if not muted,
+    // otherwise, the analyser might not receive data
+    if (!video.muted) {
+        analyser.connect(audioContext.destination);
+    }
+
+    analyser.fftSize = 2048;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    videoVolumeData.set(video, {
+        analyser: analyser,
+        dataArray: dataArray,
+        volume: 0
+    });
+}
+
+function calculateVolume(analyser, dataArray) {
+    analyser.getByteTimeDomainData(dataArray);
+
+    let sumSquares = 0;
+    for (const amplitude of dataArray) {
+        const normalizedAmplitude = (amplitude - 128) / 128;
+        sumSquares += normalizedAmplitude * normalizedAmplitude;
+    }
+    const rms = Math.sqrt(sumSquares / dataArray.length);
+    return rms * 128; // Scale for sensitivity
+}
+
+function updateVolumes() {
+    let highestVolume = -1000;
+    let currentHighestVolumeVideo = null;
+
+    videoElements = document.querySelectorAll("video");
+
+    videoElements.forEach(video => {
+        if (video.paused || video.ended) {
+            // Skip if video is paused or ended
+            return;
+        }
+
+        if (!videoVolumeData.has(video)) {
+            initializeAudioContext(video);
+        }
+
+        const data = videoVolumeData.get(video);
+        const volume = calculateVolume(data.analyser, data.dataArray);
+        data.volume = volume;
+        if (volume > highestVolume) {
+            highestVolume = volume;
+            currentHighestVolumeVideo = video;
+        }
+    });
+    // Handle focusing the video with the highest volume
+    if (currentHighestVolumeVideo !== activeHighestVolumeVideo) {
+        if (activeHighestVolumeVideo) {
+            activeHighestVolumeVideo.closest(".videos").classList.remove("highest-volume");
+        }
+        if (currentHighestVolumeVideo) {
+            currentHighestVolumeVideo.closest(".videos").classList.add("highest-volume");
+            currentHighestVolumeVideo.focus(); // Focus the video element
+        }
+        activeHighestVolumeVideo = currentHighestVolumeVideo;
+    }
+    console.log(highestVolume);
+}
+if (!updateInterval) { // Start loop only once
+    updateInterval = setInterval(updateVolumes, 5000);
+}
+videoElements.forEach(video => {
+    video.addEventListener("play", () => {
+
+    });
+
+    video.addEventListener("pause", () => {
+        video.play();
+    });
+
+    video.addEventListener("ended", () => {
+        video.play();
+    });
 });
 {% endblock %}
