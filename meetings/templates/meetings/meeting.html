@@ -211,6 +211,7 @@ getMedia().then(async function(stream) {
                 }
                 removeVideo(msg.peer_id);
                 delete streams[msg.peer_id];
+                delete peerVolumes[msg.peer_id];
             } else if (msg.type === "signal") {
                 const from = msg.from;
                 const data = msg.data;
@@ -339,11 +340,13 @@ function createAudioStreamVolumeMeter(stream) {
 }
 
 function updateVolumes() {
+    var highestVolume = -1000;
     for(const video_id in peerVolumes) {
-        var highestVolume = -1000;
-        if(peerVolumes[video_id] > highestVolume) {
+        if(video_id && peerVolumes[video_id] > highestVolume) {
             highestVolume = peerVolumes[video_id];
-            document.getElementById("video_" + video_id).focus();
+            try {
+                document.getElementById("video_" + video_id).focus();
+            } catch { }
         }
     }
 }

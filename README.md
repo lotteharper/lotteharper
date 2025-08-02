@@ -50,9 +50,7 @@
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ![Stripe](https://img.shields.io/badge/Stripe-5469d4?style=for-the-badge&logo=stripe&logoColor=ffffff)
 ![Square Badge](https://img.shields.io/badge/Square-3E4348?logo=square&logoColor=fff&style=for-the-badge)
-![Dovecot Badge](https://img.shields.io/badge/Dovecot-54BCAB?logo=dovecot&logoColor=fff&style=for-the-badge)
 ![Google Badge](https://img.shields.io/badge/Google-4285F4?logo=google&logoColor=fff&style=for-the-badge)
-![Nike Badge](https://img.shields.io/badge/Nike-111?logo=nike&logoColor=fff&style=for-the-badge)
 ![Netflix Badge](https://img.shields.io/badge/Netflix-E50914?logo=netflix&logoColor=fff&style=for-the-badge)
 ![Ars Technica Badge](https://img.shields.io/badge/Ars%20Technica-FF4E00?logo=arstechnica&logoColor=fff&style=for-the-badge)
 ![Binance Badge](https://img.shields.io/badge/Binance-F0B90B?logo=binance&logoColor=fff&style=for-the-badge)
@@ -125,6 +123,7 @@
 ![Markdown Badge](https://img.shields.io/badge/Markdown-000?logo=markdown&logoColor=fff&style=for-the-badge)
 ![X Badge](https://img.shields.io/badge/X-000?logo=x&logoColor=fff&style=for-the-badge)
 ![YouTube Badge](https://img.shields.io/badge/YouTube-F00?logo=youtube&logoColor=fff&style=for-the-badge)
+![Nike Badge](https://img.shields.io/badge/Nike-111?logo=nike&logoColor=fff&style=for-the-badge)
 ](https://glamgirlx.com)
 
 ![NASA Badge](https://glamgirlx.com/media/static/NASA-small.png)
