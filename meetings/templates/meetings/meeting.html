@@ -91,7 +91,13 @@ var socketReconnectTimeout;
 async function getMedia() {
     return await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 }
+var peerVolumes = {};
 var sharingScreen = false;
+
+function send(action, data={}, target=null) {
+    socket.send(JSON.stringify({ action, data, target }));
+}
+
 getMedia().then(async function(stream) {
     localStream = stream;
     async function openMeetingSocket() {
@@ -113,10 +119,6 @@ getMedia().then(async function(stream) {
         function removeVideo(peer_id) {
             let vid = document.getElementById("video_" + peer_id);
             if (vid) vid.remove();
-        }
-
-        function send(action, data={}, target=null) {
-            socket.send(JSON.stringify({ action, data, target }));
         }
 
         function createPeer(peer_id, initiator) {
@@ -174,6 +176,13 @@ getMedia().then(async function(stream) {
 
         socket.onopen = async () => {
             document.getElementById("localVideo").srcObject = localStream;
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+              const volumeMeter = createAudioStreamVolumeMeter(stream);
+              setInterval(() => {
+                console.log('Mic volume:', volumeMeter.getCurrentVolume());
+                send("volume", {type: "volume", volume: volumeMeter.getCurrentVolume()}, null);
+              }, 500);
+            });
         };
 
         socket.onerror = function() {
@@ -212,9 +221,13 @@ getMedia().then(async function(stream) {
                 } else if (data.type === "candidate") {
                     await handleCandidate(from, data.candidate);
                 }
+            } else if (msg.type === "volume") {
+                const from = msg.peer_id;
+                peerVolumes[from] = msg.volume;
             }
         };
     }
+
     await openMeetingSocket();
     // Controls
     let videoEnabled = true, audioEnabled = true;
@@ -297,66 +310,42 @@ fullscreenButton.addEventListener('click', () => {
     }
   }
 });
-var videoElements;
 var updateInterval;
-var currentHighestVolumeVideo;
-var activeHighestVolumeVideo;
-function getAudioStreamVolume(stream) {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioContext.createMediaStreamSource(stream);
-    const analyser = audioContext.createAnalyser();
-    const gain = audioContext.createGain();
-    gain.gain.value = 60;
-    analyser.minDecibels = -300;
-    analyser.maxDecibels = 900;
-    analyser.fftSize = 256;
-    gain.connect(analyser);
-    source.connect(analyser);
+function createAudioStreamVolumeMeter(stream) {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioContext.createMediaStreamSource(stream);
+  const analyser = audioContext.createAnalyser();
+  analyser.fftSize = 256;
+  source.connect(analyser);
+  const dataArray = new Uint8Array(analyser.fftSize);
 
-    const dataArray = new Uint8Array(analyser.fftSize);
-
-  // This function will give the current volume level (average of samples)
+  // This method will give the current volume level (average of samples)
   function getCurrentVolume() {
     analyser.getByteTimeDomainData(dataArray);
-    // Normalize and average sample values (0-255)
     let sum = 0;
     for (let i = 0; i < dataArray.length; i++) {
-      const normalized = dataArray[i] / 128.0 - 1.0; // Range: -1.0 to 1.0
+      const normalized = dataArray[i] / 128 - 1.0; // Range: -1.0 to 1.0
       sum += normalized * normalized;
     }
     const rms = Math.sqrt(sum / dataArray.length); // Root mean square
     return rms; // 0 (silent) to ~1 (loud)
   }
 
-  return getCurrentVolume();
+  // Return both analyser (if needed for further processing) and the volume function
+  return {
+    analyser,
+    getCurrentVolume,
+  };
 }
 
 function updateVolumes() {
-    let highestVolume = -1000;
-    let currentHighestVolumeVideo = null;
-
-    videoElements = document.querySelectorAll("video");
-
-    videoElements.forEach(video => {
-        const volume = getAudioStreamVolume(video.srcObject);
-        console.log(volume);
-        if (volume > highestVolume) {
-            highestVolume = volume;
-            currentHighestVolumeVideo = video;
+    for(const video_id in peerVolumes) {
+        var highestVolume = -1000;
+        if(peerVolumes[video_id] > highestVolume) {
+            highestVolume = peerVolumes[video_id];
+            document.getElementById("video_" + video_id).focus();
         }
-    });
-    // Handle focusing the video with the highest volume
-    if (currentHighestVolumeVideo !== activeHighestVolumeVideo) {
-        if (activeHighestVolumeVideo) {
-            activeHighestVolumeVideo.closest(".videos").classList.remove("highest-volume");
-        }
-        if (currentHighestVolumeVideo) {
-            currentHighestVolumeVideo.closest(".videos").classList.add("highest-volume");
-            currentHighestVolumeVideo.focus(); // Focus the video element
-        }
-        activeHighestVolumeVideo = currentHighestVolumeVideo;
     }
-    console.log(highestVolume);
 }
 if (!updateInterval) { // Start loop only once
     updateInterval = setInterval(updateVolumes, 5000);

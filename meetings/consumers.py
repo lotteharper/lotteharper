@@ -1,4 +1,5 @@
 import json
+import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
@@ -54,7 +55,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': event['username']
         }))
 
+
 class MeetingConsumer(AsyncWebsocketConsumer):
+    audio_volume = -1000
+    connected = False
     async def connect(self):
         self.meeting_id = self.scope["url_route"]["kwargs"]["meeting_id"]
         self.room_group_name = f"meeting_{self.meeting_id}"
@@ -71,8 +75,10 @@ class MeetingConsumer(AsyncWebsocketConsumer):
                 "peer_id": self.user_id,
             }
         )
+        self.connected = True
 
     async def disconnect(self, close_code):
+        self.connected = False
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
         # Announce peer left
         await self.channel_layer.group_send(
@@ -96,6 +102,17 @@ class MeetingConsumer(AsyncWebsocketConsumer):
                 "from": self.user_id,
                 "data": payload
             })
+        if action == "volume":
+            self.audio_volume = payload['volume'] if 'volume' in payload else -1000
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "volume_event",
+                    "peer_id": self.user_id,
+                    "volume": self.audio_volume
+                }
+            )
+#            print(self.volume)
 
     async def peer_joined(self, event):
         # Notify all peers except the one who just joined
@@ -117,5 +134,13 @@ class MeetingConsumer(AsyncWebsocketConsumer):
             "type": "signal",
             "from": event["from"],
             "data": event["data"]
+        }))
+
+    async def volume_event(self, event):
+        # Notify peers
+        await self.send(text_data=json.dumps({
+            "type": "volume",
+            "peer_id": event["peer_id"],
+            "volume": event["volume"],
         }))
 
