@@ -149,7 +149,7 @@ I am a web developer focusing on Python and Linux full stack and IaaS (Internet 
 [![Django CI](https://github.com/daisycamber/lotteharper/actions/workflows/django.yml/badge.svg)](https://github.com/daisycamber/lotteharper/actions/workflows/django.yml)
 
 ## Automated, powerful computer vision and machine learning driven full stack software for professionals
-Lotte Harper is an autonymical app built by Charlotte Harper with powerful, automated, machine learning driven full stack and IaaS features built using Python, for expressive, social creators looking to build an online presence with modern software offering card and crypto payment processing with a number of processors, image, video, and audio upload and recording, ID scanning, enhanced biometric security features including facial recognition and biometric authentication as well as multi factor authentication and temporary one time codes, video chat (video meetings coming soon), games, voice donation, text to speech, transcription, image enhancement, programmable voice and SMS, a static frontend, marketing tools, remote control, recovery tools, full text search, an email server and integrated secure client, and a unix shell for authenticated administrators only. The software is also equipped with asynchronous tasks, a websocket server, stun server, and scheduled tasks. This is a full stack Python app with a purpose.
+Lotte Harper is an autonymical app built by Charlotte Harper with powerful, automated, machine learning driven full stack and IaaS features built using Python, for expressive, social creators looking to build an online presence with modern software offering card and crypto payment processing with a number of processors, image, video, and audio upload and recording, ID scanning, enhanced biometric security features including facial recognition and biometric authentication as well as multi factor authentication and temporary one time codes, video chat, video chat and video meetings, screen recordings, games, voice donation, text to speech, transcription, image enhancement, programmable voice and SMS, a static frontend, marketing tools, remote control, recovery tools, full text search, an email server and integrated secure client, and a unix shell for authenticated administrators only. The software is also equipped with asynchronous tasks, a websocket server, stun server, and scheduled tasks. This is a full stack Python app with a purpose.
 
 ## About
 This is a full stack web app focused on data visualization, machine learning, computer vision, facial recognition, biometrics, security, payment processing, marketing, ease of use, and more.
@@ -171,16 +171,16 @@ To deploy, scripts/init looks like this:
 # Use your SSH key
 SSH_KEY='<SSH key here>'
 # Use the git repo from the project
-GIT_REPO='https://github.com/daisycamber/lotteharper'
+GIT_REPO='https://github.com/lotteharper/lotteharper'
 # Add your project name and username here
 PROJECT_NAME="yourproject"
 USER_NAME="team"
 GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev`
 sudo apt-add-repository universe
 sudo apt install -y nano git expect
-wget https://daisycamber.github.io/unix-config/sshd_config
+wget https://lotteharper.github.io/unix-config/sshd_config
 sudo cp sshd_config /etc/ssh/sshd_config
-#wget https://daisycamber.github.io/unix-config/lockout
+#wget https://lotteharper.github.io/unix-config/lockout
 #sudo cp lockout /etc/lockout
 #sudo chmod a+x /etc/lockout
 #echo "sh /etc/lockout" | sudo tee -a /etc/profile

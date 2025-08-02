@@ -10,9 +10,9 @@ USER_NAME="team"
 GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev | cut -d. -f1`
 echo "\n" | sudo apt-add-repository universe
 echo "\n" | sudo apt install -y nano git expect
-wget https://daisycamber.github.io/unix-config/sshd_config
+wget https://lotteharper.github.io/unix-config/sshd_config
 echo "\n" | sudo cp sshd_config /etc/ssh/sshd_config
-#wget https://daisycamber.github.io/unix-config/lockout
+#wget https://lotteharper.github.io/unix-config/lockout
 #sudo cp lockout /etc/lockout
 #sudo chmod a+x /etc/lockout
 #echo "sh /etc/lockout" | sudo tee -a /etc/profile
