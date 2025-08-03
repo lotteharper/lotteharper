@@ -41,7 +41,7 @@ def adult_document_scanned(user):
     from django.utils import timezone
     from django.conf import settings
     scan = DocumentScan.objects.filter(user=user, verified=True, side=True, foreign=False, timestamp__gte=timezone.now() - datetime.timedelta(hours=settings.ID_VALID_HOURS)).order_by('-timestamp').first()
-    if scan and scan.birthday <= get_past_date(21) or not scan.subjective:
+    if scan and scan.birthday <= get_past_date(21) and scan.subjective:
         return True
     return False
 

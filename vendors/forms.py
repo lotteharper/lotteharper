@@ -122,8 +122,8 @@ class VendorProfileUpdateForm(forms.ModelForm):
         self.fields['litecoin_address'].label = translate(r, 'Litcoin (LTC) address', src='en')
         self.fields['usdtether_address'].label = translate(r, 'USDTether (USDT) address', src='en')
         self.fields['dogecoin_address'].label = translate(r, 'DogeCoin (DOGE) address', src='en')
-        from barcode.tests import minor_document_scanned
-        if not minor_document_scanned(user): self.fields.pop('activate_surrogacy')
+        from verify.tests import minor_identity_verified
+        if not minor_identity_verified(user): self.fields.pop('activate_surrogacy')
 
     class Meta:
         model = VendorProfile

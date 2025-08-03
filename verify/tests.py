@@ -44,7 +44,7 @@ def adult_identity_verified(user):
     from django.utils import timezone
     from django.conf import settings
     scan = IdentityDocument.objects.filter(user=user, verified=True, submitted__gte=timezone.now() - datetime.timedelta(hours=settings.SIG_VALID_HOURS)).order_by('-submitted').first()
-    if scan and scan.birthday <= get_past_date(21) or not scan.subjective:
+    if scan and scan.birthday <= get_past_date(21) and scan.subjective:
         return True
     return False
 

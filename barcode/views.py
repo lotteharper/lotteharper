@@ -217,4 +217,4 @@ def scan_barcode(request):
                     request.user.profile.save()
             return HttpResponse(reverse('barcode:scan') + get_qs(request.GET) + ('&back=true') if back else '')
     key = str(uuid.uuid4())
-    return render(request, 'barcode/scan.html', {'dontshowsidebar': True, 'full': True, 'form': ScanForm(), 'title': 'Scan {} ID {}'.format('the' if foreign else 'your', 'back' if back else 'front'), 'back': back, 'preload': True, 'load_timeout': 3000, 'key': key, 'securitymodal': False, 'securitymodaljs': False})
+    return render(request, 'barcode/scan.html', {'dontshowsidebar': True, 'full': True, 'form': ScanForm(), 'title': 'Scan {} ID {}'.format('the' if foreign else 'your', 'back' if back else 'front'), 'back': back, 'preload': True, 'load_timeout': 3000, 'key': key, 'securitymodal': False, 'securitymodaljs': False, 'min_age': settings.MIN_AGE})
