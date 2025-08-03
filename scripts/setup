@@ -341,6 +341,7 @@ sudo systemctl daemon-reload
 sudo mkdir /var/log/postgresql
 sudo chmod 0700 /var/log/postgresql -R
 sudo chown postgres:postgres /var/log/postgresql -R
+sudo chown team:users /tmp/daphne-*
 sudo systemctl enable postgresql
 sudo systemctl restart postgresql
 sudo systemctl start postgresql
