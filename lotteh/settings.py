@@ -216,7 +216,7 @@ DATABASES = {
             'MAX_OVERFLOW': 999999,
             'RECYCLE': 3600,
         },
-        'DISABLE_SERVER_SIDE_CURSORS': True,
+#        'DISABLE_SERVER_SIDE_CURSORS': True,
     },
 #    'lotteh2024': {
 #        'ENGINE': 'django.db.backends.postgresql',

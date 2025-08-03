@@ -85,6 +85,10 @@ def translate_html(request, html, target=None, src=None):
     count = 0
     if target == None and not request.GET.get('lang', None): target = request.LANGUAGE_CODE
     elif target == None and request.GET.get('lang', None): target = request.GET.get('lang', None)
+    from .models import CachedTranslation
+    trans = CachedTranslation.objects.filter(src_content=html, src=src, dest=target).order_by('timestamp').first()
+    if trans: return trans.dest_content
+    if target == src: return html
     def thread(target, src, to_trans, count, result):
         translated = translate(None, to_trans, target=target, src=src)
         result[count] = translated
@@ -132,8 +136,10 @@ def translate_html(request, html, target=None, src=None):
                 threads[thread_count] = threading.Thread(target=thread, args=(target, src, result_soup[thread_count], thread_count, result_arr))
                 threads[thread_count].start()
                 thread_count += 1
+            else: break
         for i in range(len(threads)):
             if threads[i]: threads[i].join()
+            else: break
     count = 0
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code'] and tag.string:
@@ -159,4 +165,9 @@ def translate_html(request, html, target=None, src=None):
         if 'alt' in tag.attrs:
             tag['alt'] = result_arr[count] if result_arr[count] else ''
             count+=1
-    return str(soup).replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    result =  str(soup).replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    if len(result) > 0:
+        try:
+            CachedTranslation.objects.get_or_create(src_content=html, dest_content=result, src=src, dest=target)
+        except: pass
+    return result
