@@ -49,7 +49,7 @@
 {% if request.GET.download %}
 <legend class="mb-2">{{ 'Scan the front and back of your ID'|trans }}</legend>
 {% else %}
-<legend class="mb-2">{% blocktrans %}Scan the {% if not back %}front{% else %}back{% endif %} of {% if request.GET.foreign %}the{% else %}your{% endif %} ID{% endblocktrans %}</legend>
+<legend class="mb-2">{% blocktrans en %}Scan the {% if not back %}front{% else %}back{% endif %} of {% if request.GET.foreign %}the{% else %}your{% endif %} ID{% endblocktrans %}</legend>
 <div style="display: flex; justify-content: space-around;">
 {% if request.GET.foreign and request.GET.back %}
 <a href="{{ request.path }}?foreign=true&{% for key,val in request.GET.items %}{% if not key == 'back' %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}" title="Scan the front of an ID" class="btn btn-sm btn-outline-primary">{{ 'Scan Front'|trans }}</a>
@@ -63,9 +63,9 @@
 {% endif %}
 </div>
 {% if not back %}
-<p>{% blocktrans %}Scan the front of {% if request.GET.foreign %}the{% else %}your{% endif %} ID, aligned with the frame.{% endblocktrans %}</p>
+<p>{% blocktrans en %}Scan the front of {% if request.GET.foreign %}the{% else %}your{% endif %} ID, aligned with the frame.{% endblocktrans %}</p>
 {% else %}
-<p>{% blocktrans %}Scan the back of {% if request.GET.foreign %}the{% else %}your{% endif %} ID, aligned with the frame.{% endblocktrans %}</p>
+<p>{% blocktrans en %}Scan the back of {% if request.GET.foreign %}the{% else %}your{% endif %} ID, aligned with the frame.{% endblocktrans %}</p>
 {% endif %}
 {% endif %}
 <form method="POST" enctype="multipart/form-data" id="face-login-form" style="position: absolute; display: none; visibility: hidden;" class="w-100 ml-0 mr-0">

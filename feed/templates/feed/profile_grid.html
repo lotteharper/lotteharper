@@ -37,7 +37,7 @@ b {
 {% include 'feed/_full_profile.html' %}
 {% elif not request.GET.grid %}
 <h1>Search</h1>
-<p>{{ 'Your search'|etrans }}, "{{ request.GET.q }}", {% blocktrans %}returned {{ count|nts }} results.{% endblocktrans %}</p>
+<p>{{ 'Your search'|etrans }}, "{{ request.GET.q }}", {% blocktrans en %}returned {{ count|nts }} results.{% endblocktrans %}</p>
 <a class="btn btn-sm btn-outline-info" href="{{ request.path }}?q={{ query }}" title="{{ 'Standard view'|etrans }}">{{ 'Standard'|etrans }}</a>
 {% include 'language.html' %}
 {% include 'search.html' %}

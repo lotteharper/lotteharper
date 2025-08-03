@@ -7,9 +7,7 @@
 {% load feed_filters %}
 <h1>{{ 'Subscribe to'|etrans }} {{ p_user.profile.name }}</h1>
 <img align="left" src="{{ p_user.profile.get_face_blur_url }}" style="width:33%; margin-right: 10px;" class="rounded" alt="{{ 'Subscribe to'|etrans }} {{ p_user.profile.name }}">
-{% blocktrans %}
 {% include 'payments/_subscription_perks.html' %}
-{% endblocktrans %}
 <p> - {{ p_user.profile.name }}</p>
 <hr style="color: red;">
 <div style="display: flex; justify-content: space-around;">

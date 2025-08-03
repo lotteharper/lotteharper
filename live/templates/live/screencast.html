@@ -112,7 +112,7 @@ video {
 {% if request.GET.with %}
 <iframe src="/live/{{ request.GET.with }}/?fullscreen=t&hidenavbar=t" width="100%" height="700px" id="live"></iframe>
 {% endif %}
-{% blocktrans %}
+{% blocktrans en %}
 {% if request.GET.back %}
 <a class="btn btn-outline-primary" href="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}{% if request.GET.with %}&with={{ request.GET.with }}{% endif %}">Front Facing Camera</a>
 {% else %}

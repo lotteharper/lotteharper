@@ -3,7 +3,7 @@
 {% load app_filters %}
 <h1>{{ 'TERMS AND CONDITIONS'|etrans }}</h1>
 <div style="white-space: pre-wrap;">
-{% blocktrans %}
+{% blocktrans en %}
 Last updated September 2, 2024
 
 TABLE OF CONTENTS
@@ -242,7 +242,7 @@ In order to resolve a complaint regarding the Site or to receive further informa
 {{ site_name }}
 ATTN: {{ agent_name }}
 {{ address }}
-Phone: {{ phone_number }} {% blocktrans %}(press option 6 for information, or use the menu to call me){% endblocktrans %}
+Phone: {{ phone_number }} {% blocktrans en %}(press option 6 for information, or use the menu to call me){% endblocktrans %}
 {{ email_address }}
 </div>
 {% endblock %}

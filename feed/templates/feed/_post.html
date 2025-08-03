@@ -7,7 +7,7 @@
       {% with post as content %}
         {% include 'clock.html' %}
       {% endwith %}
-      <small class="text-muted">{% blocktrans %}{{ post.date_posted|date:"F d, Y" }}{% endblocktrans %} {{ post.date_posted|time:"H:i" }}</small>
+      <small class="text-muted">{% blocktrans en %}{{ post.date_posted|date:"F d, Y" }}{% endblocktrans %} {{ post.date_posted|time:"H:i" }}</small>
       <small class="text-muted">#{{ post.id }} <i class="bi bi-translate"></i> {{ post.content|detectlanguage }}</small>
       <small>{% if post.pinned %}<i class="bi bi-pin-angle-fill"></i>{% else %}<i class="bi bi-pin-fill"></i>{% endif %}</small>
       {% if post.likes.count > 0 %}<small><i class="bi bi-heart-fill"></i> {{ post.likes.count|nts|etrans }}</small>{% endif %}

@@ -17,7 +17,7 @@
 <img class="rounded" style="float: left; width: 50%; max-width: 400px;" src="{% if request.user.is_authenticated %}{{ post.get_image_url }}{% else %}{{ post.get_face_blur_thumb_url }}{% endif %}" alt="{{ 'Conceive a child carried by'|etrans }} {{ vendor.profile.name }}"></img>
 </div>
 <div style="white-space: pre-wrap;">
-{% blocktrans %}
+{% blocktrans en %}
 {% autoescape off %}
 {{ agreement }}
 {% endautoescape %}

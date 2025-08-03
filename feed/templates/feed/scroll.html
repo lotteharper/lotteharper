@@ -110,7 +110,7 @@ var current_dot = 0;
 function moveDots(){
         var els = document.querySelectorAll('[id^="loading-posts"]');
         els.forEach(el => {
-                el.innerHTML = "{{ 'Loading more posts'|trans }}" + dots[current_dot];
+                el.innerHTML = "{{ 'Loading more posts'|etrans }}" + dots[current_dot];
         });
         current_dot++;
         if(current_dot > 3){
@@ -266,7 +266,7 @@ function likeForm() {
                 data: $(this).serialize(),
                 success: function(data) {},
                 error: function(xhr, response, error) {
-                    alert("{% blocktrans %}Please connect to the internet to interact with {{ the_site_name }}.{% endblocktrans %}");
+                    alert("{% blocktrans en %}Please connect to the internet to interact with {{ the_site_name }}.{% endblocktrans %}");
                 }
             });
         });
@@ -293,7 +293,7 @@ function publishForm() {
                     this.button.html(data);
                 },
                 error: function(xhr, response, error) {
-                    alert("{% blocktrans %}Please connect to the internet to interact.{% endblocktrans %}");
+                    alert("{% blocktrans en %}Please connect to the internet to interact.{% endblocktrans %}");
                 }
             });
         });

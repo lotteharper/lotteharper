@@ -14,7 +14,7 @@
 </form>
 {% if not request.GET.hidenavbar %}
 <hr style="color: blue;">
-{% blocktrans %}
+{% blocktrans en %}
 <p><i>Use the buttons below to record media to the site with your webcam.</i></p>
 <div style="display: flex; justify-content: space-around;">
 <a href="{% url 'live:golivevideo' %}?camera={{ form.instance.name }}" class="btn btn-outline-success">{{ 'Record webcam'|etrans }}</a>

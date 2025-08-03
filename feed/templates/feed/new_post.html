@@ -78,6 +78,10 @@
 <script src="/static/summernote/summernote.min.js"></script>
 {% endblock %}
 {% block javascripts %}
+{% if nudity_censor %}
+<script src="/static/js/tensorflow.min.js"></script>
+<script src="/static/js/nsfwjs.min.js"></script>
+{% endif %}
 {% if bs4 %}
 <script src="/static/summernote/summernote-bs4.min.js"></script>
 {% else %}
@@ -294,8 +298,35 @@ function getImgData() {
       fileReader.readAsDataURL(chooseFile.files[x]);
       fileReader.addEventListener("load", function(evt) {
         imgPreview.insertAdjacentHTML("beforeend", '<div class="img-container" style="display: inline; float: left; position: relative; left: 2%; margin-left: 1%; margin-right: 1%; margin-top: 2%; width: 31%;" id="image' + evt.target.index + '"><img width="100%" src="' + this.result + '"/><div class="img-clear" onclick="removeImage(\'image' + evt.target.index + '\');"><i class="bi bi-x-circle-fill" style="font-size: 35px"></i></div></div>');
+        detectImage("image" + evt.target.index);
       });
     }
   }
+}
+{% if nudity_censor %}
+const cvcanvas = document.getElementById('cvcanvas');
+const cvctx = cvcanvas.getContext('2d');
+var nsfwjsmodel;
+nsfwjs.load('/static/js/models/mobilenet_v2/').then(function(model) {
+    nsfwjsmodel = model;
+});
+{% endif %}
+function detectImage(image_id) {
+    {% if nudity_censor %}
+    var image = document.getElementById(image_id);
+    cvcanvas.width = Math.trunc(image.naturalWidth * {{ nudity_censor_scale }});
+    cvcanvas.height = Math.trunc(image.naturalHeight * {{ nudity_censor_scale }});
+    cvctx.clearRect(0, 0, cvcanvas.width, cvcanvas.height);
+    cvctx.drawImage(image, 0, 0, Math.trunc(image.naturalWidth * {{ nudity_censor_scale }}), Math.trunc(image.naturalHeight * {{ nudity_censor_scale }}));
+    nsfwjsmodel.classify(cvcanvas, 1).then(function (predictions) {
+        console.log(predictions[0]);
+        if(predictions[0].className == 'Porn' && predictions[0].probability > 0.95) {
+            console.log('Nude');
+            removeImage(image_id);
+        } else {
+            console.log('not nude');
+        }
+    });
+    {% endif %}
 }
 {% endblock %}

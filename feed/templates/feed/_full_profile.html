@@ -77,7 +77,7 @@
 <p style="text-align:center;"><img class="center rounded mx-auto" style="width: 70%; max-width: 700px;" src="{% if profile.user in request.user.profile.subscriptions.all %}{{ profile.get_image_url }}{% else %}{{ profile.get_face_blur_url }}{% endif %}"></p>
 <h1 style="text-align:center;">@{{ profile.name }}</h1>
 <legend style="text-align: center;"><a href="tel:{{ main_phone|phone_number }}" title="{{ 'Call my phone,'|etrans }} {{ main_phone|phone_number }}"><i class="bi bi-telephone-outbound-fill"></i> {{ main_phone|phone_number }}</a></legend>
-<legend>{% blocktrans %}My pronouns are {{ profile.user.vendor_profile.pronouns|pronouns }}{% endblocktrans %}</legend>
+<legend>{% blocktrans en %}My pronouns are {{ profile.user.vendor_profile.pronouns|pronouns }}{% endblocktrans %}</legend>
 {% with profile.user as theuser %}
 {% include 'signature.html' %}
 {% endwith %}

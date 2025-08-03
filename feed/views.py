@@ -796,6 +796,7 @@ def new_post(request):
     from .forms import PostForm, ScheduledPostForm
     from django.contrib.auth.models import User
     from django.http import HttpResponse
+    from verify.tests import minor_identity_verified
     arg = request.GET.get('text','')
     text = ''
     if not arg == '':
@@ -899,7 +900,7 @@ def new_post(request):
             form = PostForm(instance=unpublished_post) if not request.GET.get('schedule') else ScheduledPostForm(instance=unpublished_post)
     from django.shortcuts import render
     global use_bs4
-    return render(request, 'feed/new_post.html', {'title': 'New Post', 'form': form, 'full': True, 'upload_interval': settings.UPLOAD_INTERVAL, 'bs4': use_bs4, 'headjs': True})
+    return render(request, 'feed/new_post.html', {'title': 'New Post', 'form': form, 'full': True, 'upload_interval': settings.UPLOAD_INTERVAL, 'bs4': use_bs4, 'headjs': True, 'nudity_censor': not minor_identity_verified(request.user), 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX})
 
 from .forms import PostForm, ScheduledPostForm, UpdatePostForm
 from .models import Post
