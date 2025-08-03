@@ -177,20 +177,22 @@ def transbio(target):
     post = Profile.objects.get(id=int(target))
     return translate_html(get_current_request(), post.bio, get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang', None) else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else None, post.language_code if post.language_code else None)
 
+
 def do_blocktrans(parser, token):
     nodelist = parser.parse(('endblocktrans',))
     parser.delete_first_token()
-    return TransNode(nodelist)
+    return TransNode(nodelist, src=token.split_contents()[1] if len(token.split_contents()) > 1 else None)
 
 class TransNode(template.Node):
-    def __init__(self, nodelist):
+    def __init__(self, nodelist, src=None):
         self.nodelist = nodelist
+        self.src = src
 
     def render(self, context):
         output = self.nodelist.render(context)
         from translate.translate import translate_html
         from feed.middleware import get_current_request
-        return translate_html(get_current_request(), output)
+        return translate_html(get_current_request(), output, src=self.src if self.src else None)
 
 register.tag('blocktrans', do_blocktrans)
 
