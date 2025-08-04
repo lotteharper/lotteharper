@@ -125,44 +125,44 @@
         <div style="height: 10px;"></div>
         {% endif %}
         <main id="main-container" class="container-fluid{% if nopadding %} ml-0 mr-0 px-0 my-0 py-0{% endif %} clemn" style="width: {% if full or request.path|startswith:'/admin/' %}100{% else %}90{% endif %}%;">
-        {% if not request.path|startswith:'/admin/' %}
-        <div class="col-md-8 py-0 my-0 mx-auto align-self-center" id="django-messages-container">
-            {% autoescape off %}
-            {% if messages %}
-            {% for message in messages %}
-            	<div class="alert alert-{{ message.tags }}" style="text-color: black !important; color: black !important;">
-            	{{ message.message|etrans }}
-            	</div>
-            {% endfor %}
+            {% if not request.path|startswith:'/admin/' %}
+            <div class="col-md-8 py-0 my-0 mx-auto align-self-center" id="django-messages-container">
+                {% autoescape off %}
+                {% if messages %}
+                {% for message in messages %}
+                	<div class="alert alert-{{ message.tags }}" style="text-color: black !important; color: black !important;">
+                	{{ message.message|etrans }}
+                	</div>
+                {% endfor %}
+                {% endif %}
+                {% endautoescape %}
+            </div>
             {% endif %}
-            {% endautoescape %}
-        </div>
-        {% endif %}
-        {% include 'header.html' %}
-        <div id="main" class="py-0 my-0 {% if xsmall %}col-sm-3{% elif small %}col-sm-6{% elif medium %}col-md-6{% else %}w-100{% endif %} align-self-center mx-auto{% if nopadding %} px-0 ml-0 mr-0 my-0 py-0{% endif %}">
-        {% if request.path != '/accounts/profile/' %}
-        <div id="webpush-container" class="hide py-0 my-0">{% webpush_button %}</div>
-        {% endif %}
-        {% endlinebreakless %}
-        {% block content %}{% endblock %}
-        {% linebreakless %}
-        {% if splash %}
-        	{% include 'feed/modal.html' %}
-        {% endif %}
-        {% if not request.path == '/' %}
-        	{% include 'securitymodal.html' %}
-        {% endif %}
-        </div>
-        {% if not dontshowsidebar %}
-        	{% include 'sidebar.html' %}
-        {% endif %}
-        {% endlinebreakless %}
-        {% if not hidenavbar or showfooter %}
-        	{% include 'footer.html' %}
-        {% endif %}
-        {% linebreakless %}
-        <p style="color: red;" id="base-error-message" class="hide"></p>
-        <p style="color: orange;" id="javascript-console"></p>
+            {% include 'header.html' %}
+            <div id="main" class="py-0 my-0 {% if xsmall %}col-sm-3{% elif small %}col-sm-6{% elif medium %}col-md-6{% else %}w-100{% endif %} align-self-center mx-auto{% if nopadding %} px-0 ml-0 mr-0 my-0 py-0{% endif %}">
+                {% if request.path != '/accounts/profile/' %}
+                <div id="webpush-container" class="hide py-0 my-0">{% webpush_button %}</div>
+                {% endif %}
+                {% endlinebreakless %}
+                {% block content %}{% endblock %}
+                {% linebreakless %}
+                {% if splash %}
+                	{% include 'feed/modal.html' %}
+                {% endif %}
+                {% if not request.path == '/' %}
+                	{% include 'securitymodal.html' %}
+                {% endif %}
+            </div>
+            {% if not dontshowsidebar %}
+            	{% include 'sidebar.html' %}
+            {% endif %}
+            {% endlinebreakless %}
+            {% if not hidenavbar or showfooter %}
+            	{% include 'footer.html' %}
+            {% endif %}
+            {% linebreakless %}
+            <p style="color: red;" id="base-error-message" class="hide"></p>
+            <p style="color: orange;" id="javascript-console"></p>
         </main>
         <audio id="base-audio" hidden></audio>
         <div style="height: 40px;"></div>

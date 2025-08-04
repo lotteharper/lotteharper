@@ -98,6 +98,9 @@ function send(action, data={}, target=null) {
     socket.send(JSON.stringify({ action, data, target }));
 }
 
+var samples = 0;
+var totalVolume = 0;
+
 getMedia().then(async function(stream) {
     localStream = stream;
     async function openMeetingSocket() {
@@ -173,15 +176,21 @@ getMedia().then(async function(stream) {
             let pc = peers[from];
             if (pc && candidate) await pc.addIceCandidate(candidate);
         }
-
         socket.onopen = async () => {
             document.getElementById("localVideo").srcObject = localStream;
             navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
               const volumeMeter = createAudioStreamVolumeMeter(stream);
               setInterval(() => {
-                console.log('Mic volume:', volumeMeter.getCurrentVolume());
-                send("volume", {type: "volume", volume: audioEnabled ? volumeMeter.getCurrentVolume() : 0}, null);
-              }, 500);
+                const volume = audioEnabled ? volumeMeter.getCurrentVolume() : 0
+                totalVolume+=volume;
+                samples++;
+                if(samples > 20) {
+                    const averagedVolume = totalVolume / samples;
+                    samples = 0;
+                    totalVolume = 0;
+                    send("volume", {type: "volume", volume: averagedVolume}, null);
+                }
+              }, 50);
             });
         };
 
@@ -338,14 +347,13 @@ function createAudioStreamVolumeMeter(stream) {
     getCurrentVolume,
   };
 }
-
 function updateVolumes() {
     var highestVolume = -1000;
     for(const video_id in peerVolumes) {
         if(video_id && peerVolumes[video_id] > highestVolume) {
             highestVolume = peerVolumes[video_id];
             try {
-                document.getElementById("video_" + video_id).focus();
+                document.getElementById("video_" + video_id).scrollIntoView();
             } catch { }
         }
     }
