@@ -21,7 +21,7 @@ try:
 except: pass
 
 @app.task
-def update_video_description(user_id, video_id, thumbnail_url, original_description, original_title, original_category_id):
+def update_video_description(user_id, video_id, thumbnail_url, original_description, original_title, original_category_id, prompt):
     import os, uuid
     from django.contrib.auth.models import User
     from django.conf import settings
@@ -30,7 +30,7 @@ def update_video_description(user_id, video_id, thumbnail_url, original_descript
     from live.upload import download_image_from_url
     download_image_from_url(thumbnail_url, op_path)
     from feed.caption import caption_image
-    thumbnail_caption = caption_image(str(op_path))
+    thumbnail_caption = caption_image(str(op_path), prompt=prompt)
 #    print('Path exists for download? {}'.format(str(os.path.exists(op_path))))
     print(thumbnail_caption)
     os.remove(op_path)
@@ -237,9 +237,11 @@ def process_live(camera_id, frame_id):
             os.remove(frame.frame.path)
         except: pass
         frame.frame = path
-    if camera.speech_only:
+    transcript = ''
+    if camera.speech_only or camera.censor_audio:
         from live.speech_detection import detect_speech
-        frame.contains_speech = detect_speech(frame.frame.path, camera.vad_mode)
+        contains_speech, transcript = detect_speech(frame.frame.path, camera.vad_mode)
+        if camera.speech_only: frame.contains_speech = contains_speech
 #    camera.mime = frame.frame.name.split('.')[1]
 #    camera.save()
 #    try:
@@ -255,6 +257,15 @@ def process_live(camera_id, frame_id):
         os.remove(frame.frame.path)
         frame.frame = op_path
         frame.save()
+    if camera.censor_audio:
+        from better_profanity import profanity
+        if profanity.contains_profanity(transcript):
+            op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
+            from audio.censor import censor_video_audio
+            censor_video_audio(frame.frame.path, op_path)
+            os.remove(frame.frame.path)
+            frame.frame = op_path
+            frame.save()
     if not frame.safe and settings.NUDITY_FILTER: # or not is_safe_image(frame.still.path):
         frame.public = False
         frame.processed = True
@@ -438,6 +449,8 @@ def process_recording(id, embed_logo):
 #                thumbnail = first_frame.still_bucket.url
 #            except: pass
         if camera.upload:
+            recording.prompt = camera.prompt
+            recording.save()
             from live.upload import upload_recording
             recording = upload_recording(recording, camera)
         if recording.uploaded:

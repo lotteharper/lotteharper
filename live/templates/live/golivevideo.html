@@ -357,7 +357,6 @@ async function makeComposite() {
     canvasElement.setAttribute("width", `${cam.videoWidth}px`);
     canvasElement.setAttribute("height", `${cam.videoHeight}px`);
     canvasCtx.clearRect(0, 0, cam.videoWidth, cam.videoHeight);
-    {% if request.GET.mirror and not request.GET.back %}   canvasCtx.scale(-1, 1);{% endif %}
     {% if nudity_censor %}
     if(censorVideo) {
         canvasCtx.filter = 'blur({{ nudity_censor_px }}px)';
@@ -365,13 +364,12 @@ async function makeComposite() {
     {% endif %}
     canvasCtx.drawImage(
       cam,
-      {% if request.GET.mirror and not request.GET.back %}-Math.floor(cam.videoWidth){% else %}0{% endif %},
+      0,
       0,
       Math.floor(cam.videoWidth),
       Math.floor(cam.videoHeight),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
     canvasCtx.filter = '';
-    {% if request.GET.mirror and not request.GET.back %}    canvasCtx.resetTransform();{% endif %}
     {% if camera.embed_logo and camera.user.vendor_profile.logo %}
     canvasCtx.globalAlpha = baseAlpha;
     const logoSize = parseInt(cam.videoWidth / 13);
@@ -576,7 +574,7 @@ stopAllStreamsBtn.addEventListener("click", stopAllStreamsFn);
 
 async function attachToDOM(id, stream) {
   let videoElem = document.createElement("video");
-{% if request.GET.mirror and not request.GET.back %}  if(id == 'justWebcam') { {% if request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }{% endif %}
+{% if camera.mirror or request.GET.mirror and not request.GET.back %}  if(id == 'pipOverlayStream') { videoElem.style.transform = 'rotateY(180deg)'; }{% endif %}
   videoElem.id = id;
   videoElem.autoplay = true;
   videoElem.volume = 0;

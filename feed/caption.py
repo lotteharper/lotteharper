@@ -1,4 +1,4 @@
-def caption_image(image_path):
+def caption_image(image_path, prompt=None):
     from django.conf import settings
     from openai import OpenAI
 
@@ -21,7 +21,7 @@ def caption_image(image_path):
         input=[{
             "role": "user",
             "content": [
-                {"type": "input_text", "text": "what's in this image?"},
+                {"type": "input_text", "text": "what's in this image?" if not prompt else prompt},
                 {
                     "type": "input_image",
                     "file_id": file_id,

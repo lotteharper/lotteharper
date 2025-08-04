@@ -47,6 +47,7 @@ button { margin: 0 5px; }
         <button id="screenshareBtn" class="btn btn-outline-secondary">{{ 'Screenshare'|etrans }}</button>
         <button onclick="updateZoomMode(-1);" class="btn btn-outline-info">{{ 'Less'|etrans }}</button>
         <button onclick="updateZoomMode(1);" class="btn btn-outline-info">{{ 'More'|etrans }}</button>
+        <button id="autofocusBtn" class="btn btn-outline-secondary">{{ 'Toggle Autofocus'|etrans }}</button>
         <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('meeting-url');" title="{{ 'Invite another participant to this meeting by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button>
     </div>
         <video class="video" id="localVideo" autoplay muted playsinline></video>
@@ -100,6 +101,8 @@ function send(action, data={}, target=null) {
 
 var samples = 0;
 var totalVolume = 0;
+
+let videoEnabled = true, audioEnabled = true, autofocusEnabled = true;
 
 getMedia().then(async function(stream) {
     localStream = stream;
@@ -240,7 +243,6 @@ getMedia().then(async function(stream) {
 
     await openMeetingSocket();
     // Controls
-    let videoEnabled = true, audioEnabled = true;
     document.getElementById("videoBtn").onclick = () => {
         videoEnabled = !videoEnabled;
         localStream.getVideoTracks().forEach(track => track.enabled = videoEnabled);
@@ -250,6 +252,10 @@ getMedia().then(async function(stream) {
         audioEnabled = !audioEnabled;
         localStream.getAudioTracks().forEach(track => track.enabled = audioEnabled);
         document.getElementById("audioBtn").textContent = audioEnabled ? "{{ 'Disable Mic'|etrans }}" : "{{ 'Enable Mic'|etrans }}";
+    };
+    document.getElementById("autofocusBtn").onclick = () => {
+        autofocusEnabled = !autofocusEnabled;
+        document.getElementById("autofocusBtn").textContent = autofocusEnabled ? "{{ 'Disable Autofocus'|etrans }}" : "{{ 'Enable Autofocus'|etrans }}";
     };
     function openChatSocket() {
         chatSocket = new WebSocket(
@@ -348,13 +354,15 @@ function createAudioStreamVolumeMeter(stream) {
   };
 }
 function updateVolumes() {
-    var highestVolume = -1000;
-    for(const video_id in peerVolumes) {
-        if(video_id && peerVolumes[video_id] > highestVolume) {
-            highestVolume = peerVolumes[video_id];
-            try {
-                document.getElementById("video_" + video_id).scrollIntoView();
-            } catch { }
+    if(autofocusEnabled) {
+        var highestVolume = -1000;
+        for(const video_id in peerVolumes) {
+            if(video_id && peerVolumes[video_id] > highestVolume) {
+                highestVolume = peerVolumes[video_id];
+                try {
+                    document.getElementById("video_" + video_id).scrollIntoView();
+                } catch { }
+            }
         }
     }
 }

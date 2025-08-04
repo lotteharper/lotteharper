@@ -397,9 +397,9 @@ async function makeComposite() {
     {% endif %}
     canvasCtx.drawImage(
       cam,
-      Math.floor(screen.videoWidth - (cam.videoWidth / 4 * scaleConst){% if request.GET.mirror and not request.GET.back %} - Math.floor(cam.videoWidth){% endif %}),
+      Math.floor(screen.videoWidth - (cam.videoWidth / 4 * scaleConst)),
       Math.floor(screen.videoHeight - (cam.videoHeight / 4 * scaleConst)),
-      Math.floor(cam.videoWidth / 4 * scaleConst),              
+      Math.floor(cam.videoWidth / 4 * scaleConst),
       Math.floor(cam.videoHeight / 4 * scaleConst),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
     canvasCtx.filter = '';
@@ -566,7 +566,7 @@ async function startRecordingFn() {
 }
 async function attachToDOM(id, stream) {
   let videoElem = document.createElement("video");
-  if(id == 'justWebcam') { {% if request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }
+  if(id == 'pipOverlayStream') { {% if camera.mirror or request.GET.mirror and not request.GET.back %}videoElem.style.transform = 'rotateY(180deg)';{% endif %} }
   videoElem.id = id;
   videoElem.autoplay = true;
   videoElem.volume = 0;

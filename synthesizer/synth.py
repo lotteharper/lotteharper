@@ -207,14 +207,14 @@ def synthesize(filename, note, duration, type="sine", gain=-20, tune=440):
     # Create a mono synth
     synth = Voice(sampling_rate, gain=gain)
     frequency = 2**(keyboard.index(note)/12.0) * tune
-    if type="sawtooth":
+    if type=="sawtooth":
         ### Sawtooth generation ###
         sawtooth_table = generate_wavetable(wavetable_size, sawtooth_waveform)
         synth.oscillators[0] = WavetableOscillator(
             sawtooth_table, sampling_rate, LinearInterpolator())
         sawtooth_signal = synth.synthesize(frequency=frequency, duration_seconds=duration)
         output_wavs(sawtooth_signal, filename, sampling_rate, sawtooth_table)
-    elif type="multicycle":
+    elif type=="multicycle":
         ### Sine generation ###
         sine_table = generate_wavetable(wavetable_size, np.sin)
         ### Sawtooth generation ###
@@ -228,7 +228,7 @@ def synthesize(filename, note, duration, type="sine", gain=-20, tune=440):
         # Frequency is divided by 3 because we concatenated 3 tables
         multi_cycle = synth.synthesize(frequency=frequency / 3, duration_seconds=duration)
         output_wavs(multi_cycle, filename, sampling_rate, multi_cycle_table)
-    elif type="gaussian":
+    elif type=="gaussian":
         ### Gaussian mixture generation ###
         gaussians_table = generate_gaussians_table(wavetable_size)
         synth.oscillators[0] = WavetableOscillator(
@@ -240,7 +240,7 @@ def synthesize(filename, note, duration, type="sine", gain=-20, tune=440):
             sampling_rate,
             gaussians_table)
     type = "sine"
-    if type="sine":
+    if type=="sine":
         ### Sine generation ###
         sine_table = generate_wavetable(wavetable_size, np.sin)
         # Add an oscillator

@@ -3,7 +3,6 @@ from django.utils.crypto import get_random_string
 import sys
 import os
 import wave
-from .recognize import audio_to_text
 from django.conf import settings
 from pydub import AudioSegment
 import subprocess
@@ -40,15 +39,70 @@ def convert_video_to_audio_ffmpeg(video_file, output_ext="wav"):
 def convert_wav(audio_path):
     return convert_video_to_audio_ffmpeg(audio_path)
 
-def censor_audio(audio_path, output_name, format='wav'):
+def censor_audio(audio_path, output_path, format='wav'):
     from vosk import Model, KaldiRecognizer
-    r = get_current_request()
+    from better_profanity import profanity
+
     wave_path = convert_wav(audio_path)
     proc_file = AudioSegment.from_wav(wave_path)
     wf = wave.open(wave_path, "rb")
-    if wf.getnchannels() != 1 or wf.getsampwidth() != 2 or wf.getcomptype() != "NONE":
-        print('Not a wav')
-        return
+    sample_rate = wf.getframerate()
+    model = Model(lang="en-us")
+    rec = KaldiRecognizer(model, sample_rate)
+    results = []
+    frame_size = 1000  # frames per chunk
+    ms_per_frame = 1000.0 / sample_rate
+    time_ms = 0
+
+    while True:
+        data = wf.readframes(frame_size)
+        if len(data) == 0:
+            break
+        time_ms += frame_size * ms_per_frame
+        if rec.AcceptWaveform(data):
+            try:
+                text = json.loads(rec.Result())["partial"]
+            except:
+                text = ''
+            results.append((time_ms, text.strip()))
+        else:
+            try:
+                text = json.loads(rec.PartialResult())["partial"]
+            except:
+                text = ''
+            results.append((time_ms, text.strip()))
+
+    ltime = 0
+    combined_sounds = AudioSegment.empty()
+    beep = AudioSegment.from_wav(os.path.join(settings.BASE_DIR, 'media/sounds/', 'censor-beep.wav'))
+
+    for time_ms, word in results:
+        segment = proc_file[ltime:int(time_ms)]
+        if profanity.contains_profanity(word):
+            # Replace the segment with beep, matching the segment length
+            beep_segment = beep[:len(segment)] if len(beep) > len(segment) else beep + AudioSegment.silent(duration=len(segment)-len(beep))
+            combined_sounds += beep_segment
+        else:
+            combined_sounds += segment
+        ltime = int(time_ms)
+
+    # Add remaining audio if any
+    if ltime < len(proc_file):
+        combined_sounds += proc_file[ltime:]
+
+    combined_sounds.export(output_path, format=format)
+    return output_path
+
+def censor_audio_old(audio_path, output_path, format='wav'):
+    from vosk import Model, KaldiRecognizer
+    r = get_current_request()
+    wave_path = convert_wav(audio_path)
+    print('Wav exists? {}'.format(str(os.path.exists(wave_path))))
+    proc_file = AudioSegment.from_wav(wave_path)
+    wf = wave.open(wave_path, "rb")
+#    if wf.getnchannels() != 1 or wf.getsampwidth() != 2 or wf.getcomptype() != "NONE":
+#        print('Not a wav')
+#        return
     duration = wf.getnframes()/float(wf.getframerate())
     model = Model(lang="en-us")
     rec = KaldiRecognizer(model, wf.getframerate())
@@ -89,49 +143,45 @@ def censor_audio(audio_path, output_name, format='wav'):
     count = 0
     last_word = ''
     msg = 'Detected word(s) '
-    combined_sounds = AudioSegement.empty()
+    combined_sounds = AudioSegment.empty()
+    from better_profanity import profanity
+    beep = AudioSegment.from_wav(os.path.join(settings.BASE_DIR, 'media/sounds/', 'censor-beep.wav'))
     for time, word in results:
-        import profanity
         if count >= 0:
             msg = msg + word + ' at ' + str(time) + ', '
             try:
                 current_audio = proc_file[ltime:time]
-                if profanity.contains_profanity(word): # or profanity.contains_profanity(last_word):
-                    beep = os.path.join(settings.BASE_DIR, '/synthesizer/', 'beep-{}.wav'.format(time-ltime))
-                    if not os.path.exists(beep):
-                        from synthesizer.synth import synthesize
-                        synthesize('beep-{}.wav'.format(time-ltime), 'C6', time - ltime, type="sine", gain=-18, tune=440):
-                    current_audio = AudioSegment.from_wav(beep)
-                combined_sounds = combined_sounds + current_audio
+                if True or profanity.contains_profanity(word):
+                    beep_segment = beep[:len(current_audio)] if len(beep) > len(current_audio) else beep + AudioSegment.silent(duration=len(current_audio)-len(beep))
+                    combined_sounds += beep_segment
+                else:
+                    combined_sounds += current_audio
                 last_word = lword
             except:
                 print(traceback.format_exc())
         ltime = time
         lword = word
         count = count + 1
+    print(results)
     if len(results) == 0:
         combined_sounds = proc_file
-    ntime = int(librosa.get_duration(filename=wave_path) * 1000)
-    if len(results) > 0:
-        current_audio = proc_file[ltime: ntime]
-        if profanity.contains_profanity(word):
-            beep = os.path.join(settings.BASE_DIR, '/synthesizer/', 'beep-{}.wav'.format(time-ltime))
-            if not os.path.exists(beep):
-                from synthesizer.synth import synthesize
-                synthesize('beep-{}.wav'.format(time-ltime), 'C6', time - ltime, type="sine", gain=-18, tune=440):
-            current_audio = AudioSegment.from_wav(beep)
-        combined_sounds = combined_sounds + current_audio
-    combined_sounds.export(output_name + '.{}'.format(format), format=format)
-    return output_name + '.{}'.format(format)
+        return wave_path
+    if ltime < len(proc_file):
+        combined_sounds += proc_file[ltime:]
+    combined_sounds.export(output_path, format=format)
+    return output_path
 
 def censor_video_audio(video_path, out_path):
-    convert_video_to_audio_ffmpeg(video_path)
-    stripped_path = video_path.rsplit('/', 1)[1] + '.wav'
-    censor_path = video_path.rsplit('/', 1)[1] + '.censor'
-    censored_audio = censor_audio(stripped_path, censor_path)
+    import uuid
+    censor_path = os.path.join(settings.BASE_DIR, 'temp/{}-censor.wav'.format(uuid.uuid4()))
+    censored_path = censor_audio(video_path, censor_path)
+    res = os.path.exists(censored_path)
+    print(res)
+#    if not res: return
     from audio.addtovideo import replace_audio
-    replace_audio(video_path, censored_audio, out_path):
-
+    replace_audio(video_path, censored_path, out_path)
+#    os.remove(censored_audio)
+    return out_path
 
 def slice_audio_to_word(user, recording, word_name, last_word, next_word, path, start, end):
     random = get_random_string(length=8)

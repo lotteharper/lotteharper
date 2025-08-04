@@ -66,7 +66,7 @@ def detect_speech(audio_path, vad_mode):
         from audio.transcription import get_wav_transcript
         results = get_wav_transcript(output_wav)
     os.remove(output_wav)
-    return len(results) > 0
+    return len(results) > 0, results
 
 def detect_speech_old(input_mp4, vad_mode):
     PASSING_SCORE = 90
