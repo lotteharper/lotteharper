@@ -234,7 +234,7 @@ class VideoCamera(models.Model):
     mimetype = models.CharField(max_length=100, default='mp4; codecs="avc1.42E01E, mp4a.40.2"')
     microphone = models.CharField(max_length=30, default='default')
     title = models.CharField(max_length=200, default='{}'.format(settings.SITE_NAME))
-    description = models.CharField(max_length=2000, default="{} is live at {}".format(settings.SITE_NAME, settings.DOMAIN))
+    description = models.CharField(max_length=2000, default="{} is online and recording.\r\nWatch the livestream online at {}/stream/Daisy/\r\nMy name is Charlotte Harper, and I am a full stack Linux website and web app developer, actress, model, mother and cosmetics enthusiast living in Seattle, WA. \r\nVisit online at {} and {}\r\nChat with me at https://{}/chat\r\nContact me at https://{}/contact\r\nSee you there xoxo'".format(settings.SITE_NAME, settings.BASE_URL, settings.BASE_URL, settings.STATIC_DOMAIN, settings.STATIC_DOMAIN, settings.STATIC_DOMAIN))
     tags = models.CharField(max_length=500, default="passive income,technology,software,web development,web apps,programming,coding,casual gaming,online business,online shopping,stream,streaming,video chat,photography,machine learning,artificial intelligence,computer vision,cryptocurrency,payments,beauty,fashion,makeup,cosmetics,esthetics,esthetician,code,coding,coder,program,programming,meme,live,egirl,django,python,webapp,website,app,google,google pixel,webrtc,chat,payment processing,model,celebrity,engineer")
     privacy_status = models.CharField(max_length=30, default="public")
     video_length_minutes = models.FloatField(default=settings.LIVE_VIDEO_LENGTH_MINUTES)
