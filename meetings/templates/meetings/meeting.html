@@ -17,6 +17,9 @@ video {
     border-radius: 8px;
     object-fit: cover;
 }
+.speaker-video {
+    border: 4px solid gray;
+}
 #controls {
     position: absolute;
     bottom: 10px;
@@ -353,6 +356,7 @@ function createAudioStreamVolumeMeter(stream) {
     getCurrentVolume,
   };
 }
+var lastSpeakerVideo;
 function updateVolumes() {
     if(autofocusEnabled) {
         var highestVolume = -1000;
@@ -360,8 +364,14 @@ function updateVolumes() {
             if(video_id && peerVolumes[video_id] > highestVolume) {
                 highestVolume = peerVolumes[video_id];
                 try {
-                    document.getElementById("video_" + video_id).scrollIntoView();
-                } catch { }
+                    var speakerVideo = document.getElementById("video_" + video_id);
+                    if(speakerVideo != lastSpeakerVideo && lastSpeakerVideo && lastSpeakerVideo.classList.contains('speaker-video')) {
+                        lastSpeakerVideo.classList.remove('speaker-video');
+                    }
+                    speakerVideo.classList.add('speaker-video');
+                    speakerVideo.scrollIntoView();
+                    lastSpeakerVideo = speakerVideo;
+                } catch(e) { console.log(e); }
             }
         }
     }
