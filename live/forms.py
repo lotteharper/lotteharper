@@ -48,9 +48,9 @@ VAD_CHOICES = [
 
 ROTATION_CHOICES = [
     ['0','0° Horizontal'],
-    ['1','90° clockwise'],
-    ['2','180° (upside down)'],
-    ['3','90° counterclockwise (270°)'],
+    ['1','90° Clockwise'],
+    ['2','180° (Upside down)'],
+    ['3','90° Counterclockwise (270°)'],
 ]
 
 class NameCameraForm(forms.ModelForm):

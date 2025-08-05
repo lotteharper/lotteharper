@@ -44,7 +44,7 @@ websocket_urlpatterns = [
     path('ws/auth/', auth_consumers.AuthConsumer.as_asgi()),
     path('ws/kick/', kick_consumers.KickConsumer.as_asgi()),
     path('ws/desktop/', desktop_consumers.DesktopConsumer.as_asgi()),
-    re_path(r'ws/signaling/(?P<channel_name>\w+)/$', stream_consumers.WebRTCSignalingConsumer.as_asgi()),
+    re_path(r'ws/signaling/(?P<channel_name>\w+)/(?P<camera_name>\w+)/$', stream_consumers.WebRTCSignalingConsumer.as_asgi()),
     re_path(r'ws/chat/(?P<room_name>\w+)/$', stream_consumers.ChatConsumer.as_asgi()),
     path('ws/meeting/<str:meeting_id>/', meetings_consumers.MeetingConsumer.as_asgi()),
     path('ws/meeting/chat/<str:meeting_id>/', meetings_consumers.ChatConsumer.as_asgi()),

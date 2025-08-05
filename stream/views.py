@@ -33,6 +33,7 @@ def watch(request, username):
         'title': 'Watch stream',
         'description': 'Watch {}\'s stream on Lotte Harper. ' + settings.BASE_DESCRIPTION,
         'vendor': user,
+        'camera_name': settings.DEFAULT_CAMERA_NAME if not (request.GET.get('camera', None) and request.user.is_authenticated and request.user.profile.vendor and request.user == user) else request.GET.get('camera', None)
     }
     response = render(request, 'stream/watch.html', context)
     from django.views.decorators.cache import patch_cache_control

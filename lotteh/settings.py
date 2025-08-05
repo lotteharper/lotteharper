@@ -882,6 +882,8 @@ NUDITY_CENSOR_SCALE = 0.3
 # Bypass login is valid for X minutes
 LOGIN_BYPASS_VALID_MINUTES = 60 * 6
 
+DEFAULT_CAMERA_NAME = 'private'
+
 # Sentry
 import sentry_sdk
 sentry_sdk.init(

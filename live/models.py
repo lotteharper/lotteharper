@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from feed.storage import MediaStorage
 
-DEFAULT_CAMERA_NAME = 'private'
-
 def idle_recording(username):
     recordings = VideoRecording.objects.filter(user__username=username, interactive='idle')
     if recordings.count() == 0: return None
@@ -213,7 +211,7 @@ from django.conf import settings
 class VideoCamera(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='video_camera')
-    name = models.CharField(default=DEFAULT_CAMERA_NAME, null=True, blank=True, max_length=100)
+    name = models.CharField(default=settings.DEFAULT_CAMERA_NAME, null=True, blank=True, max_length=100)
     frame = models.FileField(upload_to=get_file_path, null=True, blank=True)
     frames = models.ManyToManyField(VideoFrame, blank=True, related_name='camera')
     still = models.ImageField(upload_to=get_file_path, null=True, blank=True)
@@ -331,7 +329,7 @@ class VideoRecording(models.Model):
     file_processed = models.FileField(upload_to=get_file_path, storage=MediaStorage(), null=True, blank=True)
     thumbnail_bucket = models.FileField(upload_to=get_still_path, storage=MediaStorage(), null=True, blank=True)
     uuid = models.CharField(max_length=100, default=uuid4)
-    camera = models.CharField(max_length=100, default=DEFAULT_CAMERA_NAME)
+    camera = models.CharField(max_length=100, default=settings.DEFAULT_CAMERA_NAME)
     camera_id = models.CharField(max_length=21, default='', null=True, blank=True)
     youtube_id = models.CharField(max_length=255, default='', null=True, blank=True)
     thumbnail_url = models.CharField(max_length=500, default='', null=True, blank=True)
