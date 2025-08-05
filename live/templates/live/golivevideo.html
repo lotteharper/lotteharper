@@ -134,6 +134,9 @@ video {
 {% include 'live/go_remote.html' %}
 {% endif %}
 <button id="audioBtn" title="{{ 'Mute or unmute the video'|etrans }}" class="btn btn-outline-dark pink-borders">{% if camera.muted %}<i class="bi bi-mic-mute-fill"></i>{% else %}<i class="bi bi-mic-fill"></i>{% endif %}</button>
+<button id="rotateLeftBtn" title="{{ 'Rotate the video left'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-counterclockwise"></i></button>
+<button id="rotateRightBtn" title="{{ 'Rotate the video right'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-clockwise"></i>
+</button>
 <a href="{% url 'live:screencast' %}?camera={{ request.GET.camera }}" title="{{ 'Switch to screencasting mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video3"></i></a>
 <a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
 <button onclick="window.location.reload();" title="{{ 'Reload the page to stop the stream and create a new video'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-clockwise"></i></button>
@@ -350,33 +353,51 @@ async function startWebcamFn() {
 const baseAlpha = {{ logo_alpha }};
 var logo = new Image();
 {% if camera.user.vendor_profile.logo %}logo.src = "{{ camera.user.vendor_profile.logo.url }}";{% endif %}
+var currentRotation = {% if camera.rotation %}{{ camera.rotation }}{% else %}0{% endif %};
+
 async function makeComposite() {
   if (cam) {
     canvasCtx.save();
     canvasCtx.globalAlpha = 1;
-    canvasElement.setAttribute("width", `${cam.videoWidth}px`);
-    canvasElement.setAttribute("height", `${cam.videoHeight}px`);
-    canvasCtx.clearRect(0, 0, cam.videoWidth, cam.videoHeight);
+    var videoWidth = cam.videoWidth;
+    var videoHeight = cam.videoHeight;
+    if(currentRotation % 2 == 0) {
+        canvasElement.setAttribute("width", `${cam.videoWidth}px`);
+        canvasElement.setAttribute("height", `${cam.videoHeight}px`);
+        canvasCtx.clearRect(0, 0, cam.videoWidth, cam.videoHeight);
+    } else {
+        videoHeight = cam.videoWidth;
+        videoWidth = cam.videoHeight;
+        canvasElement.setAttribute("width", `${cam.videoHeight}px`);
+        canvasElement.setAttribute("height", `${cam.videoWidth}px`);
+        canvasCtx.clearRect(0, 0, cam.videoHeight, cam.videoWidth);
+    }
     {% if nudity_censor %}
     if(censorVideo) {
         canvasCtx.filter = 'blur({{ nudity_censor_px }}px)';
     }
     {% endif %}
+    canvasCtx.translate(canvasElement.width / 2, canvasElement.height / 2);
+    const angleInRadians = currentRotation * 90 * (Math.PI / 180);
+    canvasCtx.rotate(angleInRadians);
     canvasCtx.drawImage(
       cam,
-      0,
-      0,
+      -Math.floor(cam.videoWidth)/2,
+      -Math.floor(cam.videoHeight)/2,
       Math.floor(cam.videoWidth),
       Math.floor(cam.videoHeight),
     ); // this is just a rough calculation to offset the webcam stream to bottom left
+    canvasCtx.save();
+    canvasCtx.restore();
+    canvasCtx.resetTransform();
     canvasCtx.filter = '';
     {% if camera.embed_logo and camera.user.vendor_profile.logo %}
     canvasCtx.globalAlpha = baseAlpha;
-    const logoSize = parseInt(cam.videoWidth / 13);
+    const logoSize = parseInt(videoWidth / 13);
     canvasCtx.drawImage(
         logo,
         10,
-        cam.videoHeight - 10 - logoSize,
+        videoHeight - 10 - logoSize,
         logoSize,
         logoSize
     );
@@ -385,21 +406,21 @@ async function makeComposite() {
     const currentTime = new Date().getTime()/1000;
     if(currentTime - recordingStartTime < 1) {
         canvasCtx.globalAlpha = (currentTime - recordingStartTime) * baseAlpha;
-        canvasCtx.font = new String(parseInt(cam.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
+        canvasCtx.font = new String(parseInt(videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
-        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(cam.videoWidth/13) + 20, cam.videoHeight - logoSize/2.7);
+        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(videoWidth/13) + 20, videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime < 14) {
         canvasCtx.globalAlpha = baseAlpha;
-        canvasCtx.font = new String(parseInt(cam.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
+        canvasCtx.font = new String(parseInt(videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
-        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(cam.videoWidth/13) + 20, cam.videoHeight - logoSize/2.7);
+        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(videoWidth/13) + 20, videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime < 15) {
         canvasCtx.globalAlpha = (15 - (currentTime - recordingStartTime)) * baseAlpha;
-        canvasCtx.font = new String(parseInt(cam.videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
+        canvasCtx.font = new String(parseInt(videoWidth/20)) + 'px {% if camera.user.vendor_profile.video_intro_font %}VendorSpecified{% else %}Arial{% endif %}';
         canvasCtx.fillStyle = "{{ camera.user.vendor_profile.video_intro_color }}";
-        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(cam.videoWidth/13) + 20, cam.videoHeight - logoSize/2.7);
+        canvasCtx.fillText("{{ camera.user.vendor_profile.video_intro_text }}", parseInt(videoWidth/13) + 20, videoHeight - logoSize/2.7);
         canvasCtx.globalAlpha = 1;
     } else if(currentTime - recordingStartTime > {{ video_interval }}/1000 * 60 * MINUTES_PER_LOGO) {
         recordingStartTime = new Date().getTime()/1000;
@@ -410,8 +431,8 @@ async function makeComposite() {
       let imageData = canvasCtx.getImageData(
         0,
         0,
-        cam.videoWidth,
-        cam.videoHeight
+        videoWidth,
+        videoHeight
       ); // this makes it work
       canvasCtx.putImageData(imageData, 0, 0); // properly on safari/webkit browsers too
     } catch {}
@@ -591,6 +612,12 @@ document.getElementById("audioBtn").onclick = () => {
     document.getElementById("audioBtn").innerHTML = audioEnabled ? '<i class="bi bi-mic-fill"></i>' : '<i class="bi bi-mic-mute-fill"></i>';
 };
 
+document.getElementById("rotateLeftBtn").onclick = () => {
+    currentRotation--;
+};
+document.getElementById("rotateRightBtn").onclick = () => {
+    currentRotation++;
+};
 function handleDataAvailable(event) {
   console.log("data-available");
   if (event.data.size > 0) {
