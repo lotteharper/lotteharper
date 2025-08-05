@@ -623,9 +623,11 @@ document.getElementById("audioBtn").onclick = () => {
 
 document.getElementById("rotateLeftBtn").onclick = () => {
     currentRotation--;
+    signalingSocket.send(JSON.stringify({type: 'rotate', data: currentRotation}));
 };
 document.getElementById("rotateRightBtn").onclick = () => {
     currentRotation++;
+    signalingSocket.send(JSON.stringify({type: 'rotate', data: currentRotation}));
 };
 function handleDataAvailable(event) {
   console.log("data-available");
