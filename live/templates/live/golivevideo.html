@@ -133,7 +133,7 @@ video {
 {% if request.user.profile.vendor and not request.GET.fullscreen %}
 {% include 'live/go_remote.html' %}
 {% endif %}
-{% include 'live/mute_remote.html' %}
+<button id="audioBtn" title="{{ 'Mute or unmute the video'|etrans }}" class="btn btn-outline-dark pink-borders">{% if camera.muted %}<i class="bi bi-mic-mute-fill"></i>{% else %}<i class="bi bi-mic-fill"></i>{% endif %}</button>
 <a href="{% url 'live:screencast' %}?camera={{ request.GET.camera }}" title="{{ 'Switch to screencasting mode'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-person-video3"></i></a>
 <a href="{% url 'live:name-camera' %}?camera={{ camera.name }}" title="{{ 'Return to camera settings and options'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-gear-fill"></i></a>
 <button onclick="window.location.reload();" title="{{ 'Reload the page to stop the stream and create a new video'|etrans }}" class="btn btn-outline-dark pink-borders"><i class="bi bi-arrow-clockwise"></i></button>
@@ -584,6 +584,12 @@ async function attachToDOM(id, stream) {
   mediaWrapperDiv.appendChild(videoElem);
   return videoElem;
 }
+var audioEnabled = {% if camera.muted %}true{% else %}false{% endif %};
+document.getElementById("audioBtn").onclick = () => {
+    audioEnabled = !audioEnabled;
+    localOverlayStream.getAudioTracks().forEach(track => track.enabled = audioEnabled);
+    document.getElementById("audioBtn").innerHTML = audioEnabled ? '<i class="bi bi-mic-fill"></i>' : '<i class="bi bi-mic-mute-fill"></i>';
+};
 
 function handleDataAvailable(event) {
   console.log("data-available");
