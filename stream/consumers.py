@@ -367,6 +367,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 open_channels = []
+channel_rotation = {}
 
 class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
     broadcast = None
@@ -399,6 +400,9 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
                     "viewer_channel": self.channel_name,
                 }
             )
+            global channel_rotation
+            rot = channel_rotation[self.room_group_name]
+            await self.send(text_data=json.dumps({"type": "rotation", "data": rot,}))
         elif self.is_broadcaster:
             await self.channel_layer.group_send(
                 self.room_group_name, {"type": "broadcaster_online"}
@@ -446,6 +450,16 @@ class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
                     "type": "broadcast_candidate",
                     "candidate": data["candidate"],
                     "from": self.channel_name,
+                }
+            )
+        elif data.get("type") == "rotation" and self.is_broadcaster:
+            global channel_rotation
+            channel_rotation[self.room_group_name] = data["data"]
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "rotation",
+                    "data": data["data"],
                 }
             )
 

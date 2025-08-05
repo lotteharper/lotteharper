@@ -46,6 +46,13 @@ VAD_CHOICES = [
     ['3', '3 - Most filtering, less non speech'],
 ]
 
+ROTATION_CHOICES = [
+    ['0','0° Horizontal'],
+    ['1','90° clockwise'],
+    ['2','180° (upside down)'],
+    ['3','90° counterclockwise (270°)'],
+]
+
 class NameCameraForm(forms.ModelForm):
     name = forms.CharField(required=True, min_length=1)
     mimetype = forms.CharField(widget=forms.Select(choices=MIME_CHOICES))
@@ -53,6 +60,7 @@ class NameCameraForm(forms.ModelForm):
     privacy_status = forms.CharField(widget=forms.Select(choices=PRIVACY_CHOICES))
     microphone = forms.CharField(widget=forms.Select(choices=MICROPHONE_CHOICES))
     category = forms.CharField(widget=forms.Select(choices=CATEGORY_CHOICES))
+    rotation = forms.CharField(widget=forms.Select(choices=ROTATION_CHOICES))
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 7}))
     tags = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
 #    vad_mode = forms.CharField(widget=forms.Select(choices=VAD_CHOICES))
@@ -97,6 +105,7 @@ class NameCameraForm(forms.ModelForm):
         self.fields['category'].label = translate(r, 'Video category', src='en')
         self.fields['description'].label = translate(r, 'Video description', src='en')
         self.fields['tags'].label = translate(r, 'Video tags', src='en')
+        self.fields['rotation'].label = translate(r, 'Default rotation', src='en')
         self.fields['video_length_minutes'].label = translate(r, 'Video length (in minutes)', src='en')
         self.fields['bucket'].label = translate(r, 'Upload the video to the media bucket?', src='en')
         self.fields['broadcast'].label = translate(r, 'Broadcast the video?', src='en')
@@ -135,7 +144,7 @@ class NameCameraForm(forms.ModelForm):
 
     class Meta:
         model = VideoCamera
-        fields = ('upload', 'broadcast', 'title', 'category', 'privacy_status', 'description', 'tags', 'prompt', 'video_length_minutes', 'name', 'mimetype', 'width', 'framerate', 'microphone', 'use_websocket', 'compress_video', 'censor_video', 'censor_audio', 'adjust_pitch', 'mirror', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
+        fields = ('upload', 'broadcast', 'title', 'category', 'privacy_status', 'description', 'tags', 'prompt', 'video_length_minutes', 'name', 'mimetype', 'rotation', 'width', 'framerate', 'microphone', 'use_websocket', 'compress_video', 'censor_video', 'censor_audio', 'adjust_pitch', 'mirror', 'bucket', 'animate_video', 'short_mode', 'speech_only', 'embed_logo', 'live', 'recording')
 
 # 'vad_mode',
 

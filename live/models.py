@@ -242,6 +242,7 @@ class VideoCamera(models.Model):
     speech_only = models.BooleanField(default=False)
     vad_mode = models.CharField(max_length=1, default='2')
     prompt = models.CharField(max_length=9001, default="what's in this image?", null=True, blank=True)
+    rotation = models.CharField(default='0', max_length=1)
     embed_logo = models.BooleanField(default=True)
     adjust_pitch = models.BooleanField(default=False)
     animate_video = models.BooleanField(default=False)

@@ -165,6 +165,9 @@ $(document).ready(function() {
                     signalingSocket.close();
                     openSignalingSocket();
                 }
+                else if (data.type === "rotation") {
+                    video.style.transform = 'rotate(' + (data.data*90)%360 + 'deg);';
+                }
             };
         }
         openSignalingSocket();
