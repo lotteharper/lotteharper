@@ -349,7 +349,7 @@ async function startWebcamFn() {
 async function startScreenShareFn() {
   if(!localScreenStream) {
   localScreenStream = await navigator.mediaDevices.getDisplayMedia({
-    video: { width: {ideal: {{ camera.width }} },  frameRate: { ideal: {{ fps }} } },
+    video: { width: { ideal: {{ camera.width|parsevideowidth }} }, height: { ideal: {{ camera.width|parsevideoheight }} }, frameRate: { ideal: {{ fps }} } },
     audio: {echoCancellation: {% if camera.echo_cancellation %}true{% else %}false{% endif %},},
   }).catch((error) => {
     console.log(error);

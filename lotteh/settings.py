@@ -118,10 +118,6 @@ INSTALLED_APPS = [
     'mail',
     'translate',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
     'games',
 #    'debug_toolbar',
     'webauth',
@@ -138,7 +134,6 @@ INSTALLED_APPS = [
 # Auth backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
 
@@ -160,7 +155,6 @@ MIDDLEWARE = [
     'feed.middleware.CurrentUserMiddleware',
     'feed.middleware.CurrentRequestMiddleware',
     'feed.middleware.ExceptionVerboseMiddleware',
-#    'allauth.account.middleware.AccountMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 #    '',
 ]

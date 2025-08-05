@@ -2,6 +2,15 @@ from django import template
 
 register = template.Library()
 
+@register.filter('parsevideowidth')
+def parsevideowidth(input):
+    return input.split('x')[0]
+
+@register.filter('parsevideoheight')
+def parsevideoheight(input):
+    return input.split('x')[1]
+
+
 @register.filter('meeting_messages')
 def meeting_messages(meeting_id):
     from meetings.models import ChatMessage

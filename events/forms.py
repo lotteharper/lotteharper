@@ -13,7 +13,7 @@ class EventForm(forms.ModelForm):
         from feed.middleware import get_current_request
         request = get_current_request()
         super(EventForm, self).__init__(*args, **kwargs)
-        self.fields['title'].label = translate(request, 'Event Title', src='en')
+        self.fields['title'].label = translate(request, 'Event title', src='en')
         self.fields['event_start_date'].label = translate(request, 'Start date', src='en')
         self.fields['event_start_time'].label = translate(request, 'Start time', src='en')
         self.fields['event_end_date'].label = translate(request, 'End date', src='en')

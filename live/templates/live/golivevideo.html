@@ -335,7 +335,7 @@ async function startWebcamFn() {
   if(!localCamStream) {
       CAMERA_ID = generateRandomString(8);
       localCamStream = await navigator.mediaDevices.getUserMedia({
-        video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: {{ camera.width }} },  frameRate: { ideal: {{ fps }} } },
+        video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: {{ camera.width|parsevideowidth }} }, height: { ideal: {{ camera.width|parsevideoheight }} },  frameRate: { ideal: {{ fps }} } },
         audio: {% if camera.muted %}false{% elif camera.microphone == 'communications' %}deviceId: { ideal: "communications" }{% elif camera.microphone == 'default' %}true{% elif camera.microphone == 'echo cancellation' %}{ echoCancellation: true, }{% endif %},
       }).catch((error) => {
         console.log(error);

@@ -92,8 +92,6 @@ urlpatterns = [
 #    path('', include('pwa_webpush.urls')),
     path('webpush/', include('webpush.urls')),
     path('summernote/', include('django_summernote.urls')),
-    path('accounts/', include('allauth.urls')),
-    path('accounts/', include('allauth.socialaccount.urls')),
 #    path("__debug__/", include("debug_toolbar.urls")),
     path("webauth/", include("webauth.urls")),
 ]
