@@ -244,11 +244,11 @@ def process_live(camera_id, frame_id):
         if camera.speech_only: frame.contains_speech = contains_speech
 #    camera.mime = frame.frame.name.split('.')[1]
 #    camera.save()
-#    try:
-#        frame.safe = not is_nude_fast(frame.still.path) if frame.still and os.path.exists(frame.still.path) else True
-#    except:
-#        import traceback
-#        print(traceback.format_exc())
+    try:
+        frame.safe = not is_nude_fast(frame.still.path) if frame.still and os.path.exists(frame.still.path) else True
+    except:
+        import traceback
+        print(traceback.format_exc())
 #        frame.safe = True
     if settings.NUDITY_CENSOR and not frame.safe:
         op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))

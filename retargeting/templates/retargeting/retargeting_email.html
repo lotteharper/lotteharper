@@ -4,9 +4,15 @@
 <p>Use this link to visit the site - <a href="{{ protocol }}://{{ domain }}">click here</a>.</p>
 <p>Alternatively, you can paste the following link in your browser's address bar:</p>
 <p>{{ protocol }}://{{ domain }}</p>
-<p>Thanks for being a part of something awesome. I look forward to seeing you online.</p>
+{% if videos %}
+<i>I also invite you to watch these and more new videos on my YouTube</i>
+{% for video in videos %}
+<p>{{ video.title }}</p>
+<a href="{{ video.get_youtube_url }}" title="Watch this video on YouTube"><img style="width: 60%; max-width: 300px;" src="{{ video.thumbnail_url }}"></a>
+{% endfor %}
+{% endif %}<p>Thanks for being a part of something awesome. I look forward to seeing you online.</p>
 <p>Seeing you there with love,</p>
-<p>Clementine</p>
+<p>{{ my_username }}</p>
 {% autoescape off %}
 <img style="width: 60%; max-width: 300px;" src="{{ photo }}" alt="A photo of me from {{ site_name }}"></img>
 {% endautoescape %}

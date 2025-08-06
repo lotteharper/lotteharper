@@ -350,6 +350,10 @@ class VideoRecording(models.Model):
     safe = models.BooleanField(default=False)
 
 
+    def get_youtube_url(self):
+        if self.youtube_id: return 'https://youtube.com/watch?v=' + self.youtube_id
+        return None
+
     def get_file_url(self):
         import os, shutil
         from security.secure import get_secure_live_path

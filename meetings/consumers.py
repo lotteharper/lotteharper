@@ -85,6 +85,7 @@ class MeetingConsumer(AsyncWebsocketConsumer):
         # Announce new peer
         self.username = await get_user_name(self.scope['user'].id)
         if not self.username:
+            import random
             self.username = "Guest {}".format(random.randrange(111,999))
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -135,7 +136,8 @@ class MeetingConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.send(target, {
                 "type": "signal.message",
                 "from": self.user_id,
-                "data": payload
+                "data": payload,
+                "username": self.username,
             })
         if action == "volume":
             self.audio_volume = payload['volume'] if 'volume' in payload else -1000
@@ -171,7 +173,7 @@ class MeetingConsumer(AsyncWebsocketConsumer):
             "type": "signal",
             "from": event["from"],
             "data": event["data"],
-            "username": self.username,
+            "username": event["username"],
         }))
 
     async def volume_event(self, event):

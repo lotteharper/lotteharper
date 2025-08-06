@@ -249,24 +249,6 @@ getMedia().then(async function(stream) {
             let vidcontainer = document.getElementById("videocontainer_" + peer_id);
             if (vidcontainer) vidcontainer.remove();
         }
-        $('#screenshareBtn').on('click', async function() {
-            if(!sharingScreen) {
-                document.getElementById('screenshareBtn').innerHTML = 'End screenshare';
-                sharingScreen = true;
-                localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
-                // Replace track in RTCPeerConnection
-                const sender = pc.getSenders().find(s => s.track.kind === 'video');
-                sender.replaceTrack(localStream.getVideoTracks()[0]);
-            } else {
-                document.getElementById('screenshareBtn').innerHTML = 'Screenshare';
-                sharingScreen = false;
-                localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
-                // Replace track in RTCPeerConnection
-                const sender = pc.getSenders().find(s => s.track.kind === 'video');
-                sender.replaceTrack(localStream.getVideoTracks()[0]);
-            }
-        });
-
         function createPeer(peer_id, initiator, peer_name) {
             let pc = new RTCPeerConnection({iceServers: stunServers});
             localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
@@ -281,6 +263,25 @@ getMedia().then(async function(stream) {
                 streams[peer_id].addTrack(event.track);
             };
             peers[peer_id] = pc;
+
+            $('#screenshareBtn').on('click', async function() {
+                if(!sharingScreen) {
+                    document.getElementById('screenshareBtn').innerHTML = 'End screenshare';
+                    sharingScreen = true;
+                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
+                } else {
+                    document.getElementById('screenshareBtn').innerHTML = 'Screenshare';
+                    sharingScreen = false;
+                    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
+                }
+            });
+
 
             return pc;
         }
