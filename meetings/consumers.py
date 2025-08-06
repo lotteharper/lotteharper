@@ -4,6 +4,23 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
 @sync_to_async
+def get_auth(user_id, session_key):
+    from security.models import UserSession
+    sess = UserSession.objects.filter(user__id=user_id, session_key=session_key).order_by('-timestamp')
+    for s in sess:
+        if s.authorized: return True
+    return False
+
+@sync_to_async
+def get_user_name(id):
+    from django.contrib.auth.models import User
+    try:
+        user = User.objects.get(id=int(id))
+    except: return False
+#    if not (user.profile.vendor or user.is_superuser): return False
+    return user.profile.name
+
+@sync_to_async
 def censor_profanity(text):
     from better_profanity import profanity
     return profanity.censor(text)
@@ -59,20 +76,38 @@ class ChatConsumer(AsyncWebsocketConsumer):
 class MeetingConsumer(AsyncWebsocketConsumer):
     audio_volume = -1000
     connected = False
+    username = 'Guest'
     async def connect(self):
         self.meeting_id = self.scope["url_route"]["kwargs"]["meeting_id"]
         self.room_group_name = f"meeting_{self.meeting_id}"
         self.user_id = self.channel_name  # Unique per connection
 
+        # Announce new peer
+        self.username = await get_user_name(self.scope['user'].id)
+        if not self.username:
+            self.username = "Guest {}".format(random.randrange(111,999))
+
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-        # Announce new peer
+#await self.channel_layer.group_send(
+#    self.room_group_name,
+#    {
+#        "type": "signal_message",
+#        "message": {
+#            "type": "peer-joined",
+#            "peer_id": peer_id,
+#            "username": self.scope["user"].username if self.scope["user"].is_authenticated else "Guest",
+#                "peer_name": self.name
+#        },
+#    }
+#)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 "type": "peer.joined",
                 "peer_id": self.user_id,
+                "peer_name": self.username,
             }
         )
         self.connected = True
@@ -116,10 +151,12 @@ class MeetingConsumer(AsyncWebsocketConsumer):
 
     async def peer_joined(self, event):
         # Notify all peers except the one who just joined
-        if event["peer_id"] != self.user_id:
+        if event["peer_id"] != self.user_id and 'peer_name' in event and event['peer_name']:
             await self.send(text_data=json.dumps({
                 "type": "peer-joined",
                 "peer_id": event["peer_id"],
+                "peer_name": event["peer_name"],
+    #event["peer_name"],
             }))
 
     async def peer_left(self, event):
@@ -133,7 +170,8 @@ class MeetingConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "type": "signal",
             "from": event["from"],
-            "data": event["data"]
+            "data": event["data"],
+            "username": self.username,
         }))
 
     async def volume_event(self, event):

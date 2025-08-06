@@ -32,5 +32,6 @@ def add_to_calendar(request, event_id):
     cal.add_component(ical_event)
 
     response = HttpResponse(cal.to_ical(), content_type='text/calendar')
-    response['Content-Disposition'] = f'attachment; filename="{event.title.replace(" ", "_")}.ics"'
+    import pytz
+    response['Content-Disposition'] = 'attachment; filename="{}_{}.ics"'.format(event.title.replace(' ', '_'), event.start_time.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%a_%m-%d-%Y_at_%H_%M_%S'))
     return response

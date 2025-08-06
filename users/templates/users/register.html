@@ -3,7 +3,6 @@
 {% include 'opc.html' %}
 {% load crispy_forms_tags %}
 {% load feed_filters %}
-{% load socialaccount %}
 	{% if available_accounts > 0 %}
         <form method="POST">
             {% csrf_token %}
