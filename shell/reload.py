@@ -11,10 +11,10 @@ def safe_reload():
 
 def reload_thread():
     sleep(3)
-    run_command('sudo systemctl start apache2')
+#    run_command('sudo systemctl start apache2')
     run_command('sudo systemctl start daphne')
-    run_command('sudo systemctl start celery')
-    run_command('sudo daphnereload')
+#    run_command('sudo systemctl start celery')
+    run_command('sudo daphnereload&')
 #    run_command('sudo systemctl reload apache2 && sudo systemctl restart apache2')
 #    run_command('sudo systemctl restart daphne')
 #    run_command('sudo systemctl restart celery')

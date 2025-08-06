@@ -193,6 +193,7 @@ def do_blocktrans(parser, token):
     return TransNode(nodelist, src=token.split_contents()[1] if len(token.split_contents()) > 1 else None)
 
 class TransNode(template.Node):
+    src = None
     def __init__(self, nodelist, src=None):
         self.nodelist = nodelist
         self.src = src

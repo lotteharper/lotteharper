@@ -1,5 +1,5 @@
-2
-12
+3
+00
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-07-22.git
@@ -13,702 +13,132 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 93a3b39a] backup
- 18 files changed, 410 insertions(+), 1103 deletions(-)
- create mode 100644 media/audio/fingerprints/ade0805c-16a7-4654-b16c-583a7612eb25.npy
+[main 5991dc8b] backup
+ 154 files changed, 789 insertions(+), 1391 deletions(-)
+ mode change 100755 => 100644 go/__pycache__/views.cpython-312.pyc
+ create mode 100644 go/templates/go/.go.html.swp
+ create mode 100644 media/audio/fingerprints/006c0039-1345-41a2-98b7-d400f77fb071.npy
+ create mode 100644 media/audio/fingerprints/01ce2115-94be-434b-aa53-c4eca4c20199.npy
+ create mode 100644 media/audio/fingerprints/01ef2d83-ea92-402b-a08a-2e3e9be23bb1.npy
+ create mode 100644 media/audio/fingerprints/03999e2e-6619-4cdb-a2de-74daf2d1a62f.npy
+ create mode 100644 media/audio/fingerprints/08bfaf6e-373d-4df4-b090-73266feee896.npy
+ create mode 100644 media/audio/fingerprints/0a5fc56b-dae0-4453-9f29-633d20c7beda.npy
+ create mode 100644 media/audio/fingerprints/0b9ea181-5003-4c88-b904-f67d5efd4eae.npy
+ create mode 100644 media/audio/fingerprints/0e2de111-0f53-40bc-9ced-c761e9c125e7.npy
+ create mode 100644 media/audio/fingerprints/112a6c56-1485-4670-8b23-df9aea366818.npy
+ create mode 100644 media/audio/fingerprints/113b9891-81cb-4fca-ab7b-744db33afe81.npy
+ create mode 100644 media/audio/fingerprints/14575d61-861b-4baa-b7b6-516331f127b4.npy
+ create mode 100644 media/audio/fingerprints/178838f8-fbd5-440c-b7d7-3a935be357a0.npy
+ create mode 100644 media/audio/fingerprints/1a5b8859-2389-4fc3-8798-58b3cf7b2d19.npy
+ create mode 100644 media/audio/fingerprints/1b19d01c-6fd3-4ef2-a23e-c64ea35adb5f.npy
+ create mode 100644 media/audio/fingerprints/1c8dca78-e4ab-4a7c-a585-7846398f49f9.npy
+ create mode 100644 media/audio/fingerprints/1ca9d570-c5d0-46af-99ef-9edbe979d372.npy
+ create mode 100644 media/audio/fingerprints/1d8bb4cd-e627-47a9-b26b-098f541f7aec.npy
+ create mode 100644 media/audio/fingerprints/231e57db-6b5a-42f5-9c12-9dfec56832ee.npy
+ create mode 100644 media/audio/fingerprints/238a8ce1-1296-49ef-8942-8e35dbd0478f.npy
+ create mode 100644 media/audio/fingerprints/254a7f14-bdaf-4c67-8faf-ca4429b76a55.npy
+ create mode 100644 media/audio/fingerprints/27f7290b-40bf-497c-8193-b8f4f3693a7b.npy
+ create mode 100644 media/audio/fingerprints/2c23bcb2-21ad-43c4-a9a3-2b5b458b7286.npy
+ create mode 100644 media/audio/fingerprints/2c5f6ef9-3e07-4deb-ac7f-6f1909b450eb.npy
+ create mode 100644 media/audio/fingerprints/2c9f5f18-58fa-47ac-b4ce-bbbfa2628fd0.npy
+ create mode 100644 media/audio/fingerprints/2f33afc5-1bdc-4c34-8e3f-ac688257d076.npy
+ create mode 100644 media/audio/fingerprints/2ffadd62-51ba-4f91-b048-5f292f726451.npy
+ create mode 100644 media/audio/fingerprints/33149b47-4463-477d-9544-6a60198ca89f.npy
+ create mode 100644 media/audio/fingerprints/35ad603e-ab1a-48e8-a3c6-42ee26337a7e.npy
+ create mode 100644 media/audio/fingerprints/35b1c595-9e57-4b32-a13b-14161144aaf2.npy
+ create mode 100644 media/audio/fingerprints/37235f48-92f0-404d-8771-c6d679d70446.npy
+ create mode 100644 media/audio/fingerprints/3981e824-c32b-4461-a322-1d528f2ae2f6.npy
+ create mode 100644 media/audio/fingerprints/3aa8c08b-e11f-4960-9ef9-a7e9c86a488c.npy
+ create mode 100644 media/audio/fingerprints/3b126428-a63d-4a38-a9a5-c99ccfadf6a8.npy
+ create mode 100644 media/audio/fingerprints/3cac8521-4eb0-4a86-9e02-f03330314474.npy
+ create mode 100644 media/audio/fingerprints/439e0161-1fe2-4ab3-aa13-0ccf11b5d0f6.npy
+ create mode 100644 media/audio/fingerprints/45617702-1802-4459-8941-7eef90c04bc6.npy
+ create mode 100644 media/audio/fingerprints/45db71d8-7ac0-46d0-8601-da25c08394ac.npy
+ create mode 100644 media/audio/fingerprints/46ca4851-9af1-4805-a39e-86a5b8da9060.npy
+ create mode 100644 media/audio/fingerprints/4bab6d26-da35-4f80-aeda-312ce9cddaaf.npy
+ create mode 100644 media/audio/fingerprints/4c92b552-625a-4464-af7e-b03c19319098.npy
+ create mode 100644 media/audio/fingerprints/4e06b1b6-5770-4992-ba0f-800f4f597f7b.npy
+ create mode 100644 media/audio/fingerprints/4f78005f-3e68-41e8-8273-24e36e89c3ee.npy
+ create mode 100644 media/audio/fingerprints/4f8c9f1d-7027-459b-b8ef-43ff84abb2e2.npy
+ create mode 100644 media/audio/fingerprints/4feb9ba7-7944-4855-b446-e9120bf9fd85.npy
+ create mode 100644 media/audio/fingerprints/51eec133-20f0-42cc-858a-754d5d9143a1.npy
+ create mode 100644 media/audio/fingerprints/526e26b5-c61c-4127-ab74-7f0c49bc1056.npy
+ create mode 100644 media/audio/fingerprints/52ff6ed7-a620-4d04-a371-db9228de40e8.npy
+ create mode 100644 media/audio/fingerprints/55022807-3084-48c2-996a-9b2aaa048f65.npy
+ create mode 100644 media/audio/fingerprints/551e6c7b-e558-4aa5-9882-f4d28a377c4f.npy
+ create mode 100644 media/audio/fingerprints/55207df3-0d6c-4790-9180-a4b254f01864.npy
+ create mode 100644 media/audio/fingerprints/5524d0e9-91a4-4456-803b-3633281b721d.npy
+ create mode 100644 media/audio/fingerprints/5709d651-f1dd-457d-a046-6549e12f8344.npy
+ create mode 100644 media/audio/fingerprints/575f763a-ebe1-4bcf-9d51-0ea6e9b8110f.npy
+ create mode 100644 media/audio/fingerprints/580a3852-5f9c-49e9-9750-6b6dff7a338b.npy
+ create mode 100644 media/audio/fingerprints/581b30de-76a0-4d47-bf29-622a1c94c4d6.npy
+ create mode 100644 media/audio/fingerprints/5942dae1-5d8c-432d-bd6a-33456adabb2b.npy
+ create mode 100644 media/audio/fingerprints/5a70c7b1-fa0b-4022-8038-c4a80e8892fc.npy
+ create mode 100644 media/audio/fingerprints/5a7ab34f-4a7f-4a2b-94bd-f38797994b1c.npy
+ create mode 100644 media/audio/fingerprints/5b37d296-d381-4464-ac6b-b1844a4f60bb.npy
+ create mode 100644 media/audio/fingerprints/5d64ad13-f772-42b9-b64e-01118f36e585.npy
+ create mode 100644 media/audio/fingerprints/602ff974-b5b2-4e11-9187-707af98df64e.npy
+ create mode 100644 media/audio/fingerprints/63ccd082-da81-42e7-9938-476f1875bd7e.npy
+ create mode 100644 media/audio/fingerprints/6702a606-b8a2-4473-847f-f3e9644e6f58.npy
+ create mode 100644 media/audio/fingerprints/67954fd8-d3bd-430e-9cd7-9d654feb2a97.npy
+ create mode 100644 media/audio/fingerprints/68ef36be-de47-4f36-a121-0f2bbac3e9af.npy
+ create mode 100644 media/audio/fingerprints/69a6849c-d51e-44b2-b257-69b4f105ecab.npy
+ create mode 100644 media/audio/fingerprints/6e481efa-c770-4899-b81e-83ee4cea0e92.npy
+ create mode 100644 media/audio/fingerprints/70d2ba5f-bde6-491f-8d97-2be5e4df592f.npy
+ create mode 100644 media/audio/fingerprints/7273313d-9f44-4880-8d3c-fed087aea239.npy
+ create mode 100644 media/audio/fingerprints/73068baf-b8b2-49be-9a63-90aee4000779.npy
+ create mode 100644 media/audio/fingerprints/734dbed7-138b-4c8c-9459-c6bbae3e7e51.npy
+ create mode 100644 media/audio/fingerprints/74601108-2fa4-4a55-a442-21f9c46d1d6d.npy
+ create mode 100644 media/audio/fingerprints/76fb359e-373e-478d-a9e2-2601137b7223.npy
+ create mode 100644 media/audio/fingerprints/7fa8f671-0219-417d-a2f8-bd15a63338d6.npy
+ create mode 100644 media/audio/fingerprints/82e90d0d-5976-4ae7-8031-002dd8397f35.npy
+ create mode 100644 media/audio/fingerprints/831fb4b9-ff2b-450e-8505-4638ddd9f5c3.npy
+ create mode 100644 media/audio/fingerprints/87aa1af5-72b8-4041-a111-7e3a95acd270.npy
+ create mode 100644 media/audio/fingerprints/87fff03d-5457-4da3-b5b1-ecc2de4e21e2.npy
+ create mode 100644 media/audio/fingerprints/887a55fd-81eb-466f-8d72-b9d1fc2ebaec.npy
+ create mode 100644 media/audio/fingerprints/8e47ca5a-a89d-471d-9df4-5373d40dcbf2.npy
+ create mode 100644 media/audio/fingerprints/8ec1b0f8-1270-45d3-85e2-8dbf6ab0c2d6.npy
+ create mode 100644 media/audio/fingerprints/90dbf712-71f8-49d8-84e3-bb1e26d7f4ab.npy
+ create mode 100644 media/audio/fingerprints/92de8ae4-2aae-4ce9-8d34-0b0ce0ad559a.npy
+ create mode 100644 media/audio/fingerprints/93b50ee2-1b62-4574-bc4e-b2b8fed8c191.npy
+ create mode 100644 media/audio/fingerprints/941dc0e7-590a-4d80-942b-2af46819d917.npy
+ create mode 100644 media/audio/fingerprints/9439e192-edcf-45fb-9e5a-7ade263a104c.npy
+ create mode 100644 media/audio/fingerprints/94f32ab6-65b9-47e6-aac9-6d3902a6f381.npy
+ create mode 100644 media/audio/fingerprints/955c82af-c933-4a9e-b52d-f2ebecb5b713.npy
+ create mode 100644 media/audio/fingerprints/96585037-88c9-4097-a7a8-9e0a3c42010a.npy
+ create mode 100644 media/audio/fingerprints/96c01923-edf1-444f-a804-15e6e02b5f7c.npy
+ create mode 100644 media/audio/fingerprints/9b6a0fa8-9c81-4e7c-b4d5-1ab05e845cee.npy
+ create mode 100644 media/audio/fingerprints/9c7d930c-463b-48dc-82b7-92e0ed194775.npy
+ create mode 100644 media/audio/fingerprints/a049bd1b-8bf7-4d45-ab95-4ad4ad060065.npy
+ create mode 100644 media/audio/fingerprints/a300b8a1-f6ab-4e9e-8ecb-c73dcd23de66.npy
+ create mode 100644 media/audio/fingerprints/a6489b62-ddf2-4b0d-a39c-aba9d9b90011.npy
+ create mode 100644 media/audio/fingerprints/aae7e290-b8ec-4f0c-bda0-1062536ce82d.npy
+ create mode 100644 media/audio/fingerprints/acaf0ed8-c195-4a63-924c-adb93054cffe.npy
+ create mode 100644 media/audio/fingerprints/aef33853-6497-4871-80f3-952067a15977.npy
+ create mode 100644 media/audio/fingerprints/b0167de8-b75d-40d8-83d5-341ab19d3b46.npy
+ create mode 100644 media/audio/fingerprints/b4319ecb-3d5a-4cd9-896f-19d0dff956a6.npy
+ create mode 100644 media/audio/fingerprints/b78ec3c2-64e9-49a7-b658-07be57e400fe.npy
+ create mode 100644 media/audio/fingerprints/b805e23a-8aaf-41ea-9ed3-2c5a8a44fadf.npy
+ create mode 100644 media/audio/fingerprints/baa3dc3a-db42-42e5-81ce-bb47921b466e.npy
+ create mode 100644 media/audio/fingerprints/c484be22-b121-43f6-91ff-f49115bafb37.npy
+ create mode 100644 media/audio/fingerprints/cf0f2bad-3030-418d-8f0e-8f05f5a5155f.npy
+ create mode 100644 media/audio/fingerprints/d24e1412-ff60-41c5-9b11-dd07e8f00946.npy
+ create mode 100644 media/audio/fingerprints/d3f830bd-492d-44b9-95fe-58dd136e5f4d.npy
+ create mode 100644 media/audio/fingerprints/e040f380-2567-412b-a701-8827997cfdce.npy
+ create mode 100644 media/audio/fingerprints/e06df5b9-bbd6-4aa7-a914-a04a12ad6a8b.npy
+ create mode 100644 media/audio/fingerprints/e285d799-fd12-4030-905a-1c0d8681c1ec.npy
+ create mode 100644 media/audio/fingerprints/eac924cc-55a3-4568-aaa8-f218c317987a.npy
+ create mode 100644 media/audio/fingerprints/eae86840-48b6-45cf-bae3-a28581a5f463.npy
+ create mode 100644 media/audio/fingerprints/eb0cd0dc-f71c-4eab-9454-fd7383031bbe.npy
+ create mode 100644 media/audio/fingerprints/ebc438d1-8d71-49f0-8afb-349b111d290e.npy
+ create mode 100644 media/audio/fingerprints/edcab9ef-dccf-403f-90b6-0062942241d2.npy
+ create mode 100644 media/audio/fingerprints/ef0b3b0a-7622-4bb8-ac71-6373e6582a68.npy
+ create mode 100644 media/audio/fingerprints/f504638f-ac42-4a21-be96-0d58c46b7608.npy
+ create mode 100644 media/audio/fingerprints/f79b39dd-9b0a-467b-bba5-f0f56466b7f4.npy
+ create mode 100644 media/audio/fingerprints/fc886e23-60d6-4d13-a772-cf0f8f5693df.npy
+ create mode 100644 media/audio/fingerprints/fede9b68-f5e7-4109-9359-75c57cebb002.npy
+ mode change 100755 => 100644 shell/__pycache__/reload.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-backup.log
-backup_date.txt
-backup_init_date.txt
-celerybeat-schedule
-email_list.txt
-requirements.txt
-__pycache__/
-app/
-app/__pycache__/
-app/migrations/
-app/migrations/__pycache__/
-app/templates/
-app/templates/app/
-audio/
-audio/__pycache__/
-audio/migrations/
-audio/migrations/__pycache__/
-audio/templates/
-audio/templates/audio/
-barcode/
-barcode/__pycache__/
-barcode/migrations/
-barcode/migrations/__pycache__/
-barcode/templates/
-barcode/templates/barcode/
-birthcontrol/
-birthcontrol/__pycache__/
-birthcontrol/migrations/
-birthcontrol/migrations/__pycache__/
-birthcontrol/templates/
-birthcontrol/templates/birthcontrol/
-cache/
-chat/
-chat/__pycache__/
-chat/migrations/
-chat/migrations/__pycache__/
-chat/templates/
-chat/templates/chat/
-config/
-config/Xwrapper.config
-config/apis-example.json
-config/apis.json
-config/ascripts
-config/banner
-config/config-example.json
-config/config.json
-config/crontab
-config/etc_default_celery
-config/etc_default_opendkim
-config/etc_dovecot_conf.d_10-auth.conf
-config/etc_dovecot_conf.d_10-mail.conf
-config/etc_dovecot_conf.d_10-master.conf
-config/etc_dovecot_dovecot.conf
-config/etc_dovecot_passwd
-config/etc_init.d_celery
-config/etc_init.d_celerybeat
-config/etc_opendkim.conf
-config/etc_pam.d_login
-config/etc_pam.d_sshd
-config/etc_postfix_main.cf
-config/etc_postfix_master.cf
-config/etc_systemd_system_celery.service
-config/etc_systemd_system_celerybeat.service
-config/etc_systemd_system_daphne.service
-config/etc_systemd_system_stun.service
-config/lotteh-le-ssl.conf
-config/postgresql.conf
-config/sudoers
-config/vd-model.py
-config/vd-requirements.txt
-contact/
-contact/__pycache__/
-contact/migrations/
-contact/migrations/__pycache__/
-contact/templates/
-contact/templates/contact/
-crypto/
-crypto/__pycache__/
-crypto/migrations/
-crypto/migrations/__pycache__/
-crypto/templates/
-crypto/templates/crypto/
-data/
-data/address.json.aa
-data/audio.json.aa
-data/auth.json.aa
-data/barcode.json.aa
-data/birthcontrol.json.aa
-data/chat.json.aa
-data/contact.json.aa
-data/crypto.json.aa
-data/feed.bid.json.aa
-data/feed.post.json.aa
-data/games.json.aa
-data/links.json.aa
-data/live.json.aa
-data/payments.json.aa
-data/security.biometric.json.aa
-data/security.credential.json.aa
-data/security.mrzscan.json.aa
-data/security.nfcscan.json.aa
-data/security.otptoken.json.aa
-data/security.pincode.json.aa
-data/security.securityprofile.json.aa
-data/security.session.json.aa
-data/security.session.json.ab
-data/security.session.json.ac
-data/security.session.json.ad
-data/security.useripaddress.json.aa
-data/security.userlogin.json.aa
-data/security.usersession.json.aa
-data/security.vivokeyscan.json.aa
-data/sessions.json.aa
-data/stream.json.aa
-data/survey.json.aa
-data/translate.json.aa
-data/translate.json.ab
-data/translate.json.ac
-data/translate.json.ad
-data/tts.json.aa
-data/users.profile.json.aa
-data/vendors.json.aa
-data/verify.json.aa
-data/voice.json.aa
-data/webauth.json.aa
-data/webpush.json.aa
-desktop/
-desktop/__pycache__/
-desktop/migrations/
-desktop/migrations/__pycache__/
-desktop/templates/
-desktop/templates/desktop/
-email/
-email/static/
-enhance/
-enhance/__pycache__/
-errors/
-errors/__pycache__/
-errors/templates/
-errors/templates/errors/
-events/
-events/__pycache__/
-events/migrations/
-events/migrations/__pycache__/
-experiments/
-experiments/pretrained_models/
-face/
-face/__pycache__/
-face/antispoofing/
-face/antispoofing/antispoofing_models/
-face/antispoofing/models/
-face/antispoofing/presentation_tools/
-face/migrations/
-face/migrations/__pycache__/
-face/templates/
-face/templates/face/
-feed/
-feed/__pycache__/
-feed/migrations/
-feed/migrations/__pycache__/
-feed/templates/
-feed/templates/feed/
-feed/templatetags/
-feed/templatetags/__pycache__/
-games/
-games/__pycache__/
-games/migrations/
-games/migrations/__pycache__/
-games/templates/
-games/templates/games/
-go/
-go/__pycache__/
-go/migrations/
-go/migrations/__pycache__/
-go/templates/
-go/templates/go/
-hot/
-hot/__pycache__/
-hot/migrations/
-hot/migrations/__pycache__/
-hot/templates/
-hot/templates/hot/
-hypnosis/
-hypnosis/__pycache__/
-hypnosis/migrations/
-hypnosis/migrations/__pycache__/
-hypnosis/templates/
-hypnosis/templates/hypnosis/
-info/
-info/__pycache__/
-info/migrations/
-info/migrations/__pycache__/
-interactive/
-interactive/__pycache__/
-interactive/migrations/
-interactive/migrations/__pycache__/
-interactive/templates/
-interactive/templates/interactive/
-keys/
-kick/
-kick/__pycache__/
-kick/migrations/
-kick/migrations/__pycache__/
-kick/templates/
-kick/templates/kick/
-landing/
-landing/__pycache__/
-landing/migrations/
-landing/migrations/__pycache__/
-landing/templates/
-landing/templates/landing/
-links/
-links/__pycache__/
-links/migrations/
-links/migrations/__pycache__/
-links/templates/
-links/templates/links/
-live/
-live/__pycache__/
-live/migrations/
-live/migrations/__pycache__/
-live/templates/
-live/templates/live/
-log/
-log/commands.log
-log/commands.log.1
-log/commands.log.2
-lotteh/
-lotteh/__pycache__/
-mail/
-mail/__pycache__/
-mail/inbox/
-mail/migrations/
-mail/migrations/__pycache__/
-mail/templates/
-mail/templates/mail/
-mailbox/
-mailbox/nobody
-mailbox/root
-mailbox/team
-management/
-management/commands/
-media/
-media/agreements/
-media/audio/
-media/audio/fingerprints/
-media/audio/fingerprints/ade0805c-16a7-4654-b16c-583a7612eb25.npy
-media/birthcontrol/
-media/books/
-media/chat/
-media/chat/sounds/
-media/events/
-media/font/
-media/games/
-media/games/cards/
-media/icons/
-media/logo/
-media/profiles/
-media/security/
-media/sounds/
-media/static/
-media/surrogacy/
-meet/
-meet/__pycache__/
-meet/migrations/
-meet/migrations/__pycache__/
-meet/templates/
-meet/templates/meet/
-meetings/
-meetings/__pycache__/
-meetings/migrations/
-meetings/migrations/__pycache__/
-meetings/templates/
-meetings/templates/meetings/
-melanin/
-melanin/__pycache__/
-melanin/migrations/
-melanin/migrations/__pycache__/
-melanin/templates/
-melanin/templates/melanin/
-misc/
-misc/__pycache__/
-misc/templates/
-misc/templates/misc/
-notes/
-notifications/
-notifications/__pycache__/
-notifications/migrations/
-notifications/migrations/__pycache__/
-notifications/templates/
-notifications/templates/notifications/
-payments/
-payments/__pycache__/
-payments/migrations/
-payments/migrations/__pycache__/
-payments/templates/
-payments/templates/payments/
-photobooth/
-photobooth/__pycache__/
-photobooth/migrations/
-photobooth/migrations/__pycache__/
-photobooth/templates/
-photobooth/templates/photobooth/
-pytorch-animeGAN/
-pytorch-animeGAN/example/
-pytorch-animeGAN/example/arcane/
-pytorch-animeGAN/example/face/
-pytorch-animeGAN/example/gif/
-pytorch-animeGAN/example/landscape/
-pytorch-animeGAN/example/more/
-pytorch-animeGAN/example/more/hayao_v2/
-pytorch-animeGAN/example/more/hayao_v2_retain/
-pytorch-animeGAN/example/result/
-pytorch-animeGAN/example/result/anime/
-pytorch-animeGAN/example/result/hayao/
-pytorch-animeGAN/example/result/hayao_v2/
-pytorch-animeGAN/example/result/hayao_v2_retain/
-pytorch-animeGAN/example/result/real/
-pytorch-animeGAN/models/
-pytorch-animeGAN/notebooks/
-pytorch-animeGAN/script/
-pytorch-animeGAN/script/train/
-pytorch-animeGAN/trainer/
-pytorch-animeGAN/utils/
-recordings/
-recordings/__pycache__/
-recordings/migrations/
-recordings/migrations/__pycache__/
-recordings/templates/
-recordings/templates/recordings/
-recovery/
-recovery/__pycache__/
-recovery/migrations/
-recovery/migrations/__pycache__/
-recovery/templates/
-recovery/templates/recovery/
-remote/
-remote/__pycache__/
-remote/migrations/
-remote/migrations/__pycache__/
-remote/templates/
-remote/templates/remote/
-retargeting/
-retargeting/__pycache__/
-retargeting/migrations/
-retargeting/migrations/__pycache__/
-retargeting/templates/
-retargeting/templates/retargeting/
-scripts/
-scripts/activate
-scripts/ascript
-scripts/ascripts
-scripts/asyncbackup
-scripts/backup
-scripts/catkeys
-scripts/check
-scripts/client.py
-scripts/cmds
-scripts/commitlog
-scripts/compinfo
-scripts/daphnereload
-scripts/dbinfo
-scripts/disgpu
-scripts/doreload
-scripts/enagpu
-scripts/finishsetup
-scripts/fixfile
-scripts/imagecounts
-scripts/init
-scripts/initialize
-scripts/inspecttask
-scripts/json.py
-scripts/jump
-scripts/lockout
-scripts/logs
-scripts/logssh
-scripts/mailtest
-scripts/makemigrate
-scripts/nude.py
-scripts/opendkimkey
-scripts/patchvenv
-scripts/psaux
-scripts/purgecache
-scripts/purgegit
-scripts/pushweb
-scripts/reinstallredis
-scripts/reload
-scripts/resetredis
-scripts/resetvenv
-scripts/rotatekeys
-scripts/safepoweroff
-scripts/safereboot
-scripts/setp
-scripts/setup
-scripts/setupisfinished
-scripts/startservices
-scripts/statuses
-scripts/stopservices
-scripts/updateupgrade
-scripts/watchcmd
-scripts/watchlogs
-secure/
-secure/static/
-secure/static/lips2.png/
-security/
-security/__pycache__/
-security/migrations/
-security/migrations/__pycache__/
-security/templates/
-security/templates/security/
-shell/
-shell/__pycache__/
-shell/migrations/
-shell/migrations/__pycache__/
-shell/templates/
-shell/templates/shell/
-shell/templatetags/
-shell/templatetags/__pycache__/
-sms/
-sms/__pycache__/
-sms/migrations/
-sms/migrations/__pycache__/
-stacktrace/
-stacktrace/__pycache__/
-stacktrace/migrations/
-stacktrace/migrations/__pycache__/
-static/
-static/address/
-static/address/js/
-static/admin/
-static/admin/css/
-static/admin/css/vendor/
-static/admin/css/vendor/select2/
-static/admin/fonts/
-static/admin/img/
-static/admin/img/gis/
-static/admin/js/
-static/admin/js/admin/
-static/admin/js/vendor/
-static/admin/js/vendor/jquery/
-static/admin/js/vendor/select2/
-static/admin/js/vendor/select2/i18n/
-static/admin/js/vendor/xregexp/
-static/audio/
-static/barcode/
-static/clock/
-static/crypto/
-static/crypto/lib/
-static/crypto/web/
-static/crypto/web/lib/
-static/css/
-static/debug_toolbar/
-static/debug_toolbar/css/
-static/debug_toolbar/js/
-static/face/
-static/fonts/
-static/fonts/bootstrap-icons-1.10.3/
-static/fonts/bootstrap-icons-1.10.3/fonts/
-static/fonts/bootstrap/
-static/fonts/fonts/
-static/fonts/misc/
-static/games/
-static/images/
-static/images/icons/
-static/js/
-static/js/models/
-static/js/models/inception_v3/
-static/js/models/mobilenet_v2/
-static/js/models/mobilenet_v2_mid/
-static/landing/
-static/live/
-static/maps/
-static/mfa/
-static/mfa/css/
-static/mfa/js/
-static/signature/
-static/summernote/
-static/summernote/font/
-static/summernote/lang/
-static/synthesizer/
-static/webpush/
-stream/
-stream/__pycache__/
-stream/migrations/
-stream/migrations/__pycache__/
-stream/templates/
-stream/templates/stream/
-stunserver/
-stunserver/client/
-stunserver/common/
-stunserver/networkutils/
-stunserver/resources/
-stunserver/server/
-stunserver/stuncore/
-stunserver/testcode/
-survey/
-survey/__pycache__/
-survey/migrations/
-survey/migrations/__pycache__/
-survey/templates/
-survey/templates/survey/
-synthesizer/
-synthesizer/__pycache__/
-synthesizer/migrations/
-synthesizer/migrations/__pycache__/
-synthesizer/templates/
-synthesizer/templates/synthesizer/
-temp/
-temp/489fc1e0-ad6e-4f2a-97c3-61c7b3258acc-censor.wav
-temp/data/
-temp/gfpgan/
-templates/
-templates/admin/
-templates/tags/
-templates/tags/__pycache__/
-templates/webauth/
-translate/
-translate/__pycache__/
-translate/migrations/
-translate/migrations/__pycache__/
-tts/
-tts/__pycache__/
-tts/migrations/
-tts/migrations/__pycache__/
-users/
-users/__pycache__/
-users/migrations/
-users/migrations/__pycache__/
-users/templates/
-users/templates/users/
-vendors/
-vendors/__pycache__/
-vendors/migrations/
-vendors/migrations/__pycache__/
-vendors/templates/
-vendors/templates/vendors/
-verify/
-verify/__pycache__/
-verify/migrations/
-verify/migrations/__pycache__/
-verify/templates/
-verify/templates/verify/
-vibe/
-vibe/__pycache__/
-vibe/migrations/
-vibe/migrations/__pycache__/
-vibe/templates/
-vibe/templates/vibe/
-violence-detection/
-violence-detection/data/
-violence-detection/results/
-vision/
-voice/
-voice/__pycache__/
-voice/migrations/
-voice/migrations/__pycache__/
-voice/templates/
-voice/templates/voice/
-web/
-web/__pycache__/
-web/migrations/
-web/migrations/__pycache__/
-web/site/
-web/site/af/
-web/site/am/
-web/site/ar/
-web/site/az/
-web/site/be/
-web/site/bg/
-web/site/bn/
-web/site/bs/
-web/site/ca/
-web/site/ceb/
-web/site/co/
-web/site/cs/
-web/site/cy/
-web/site/da/
-web/site/de/
-web/site/el/
-web/site/en/
-web/site/eo/
-web/site/es/
-web/site/et/
-web/site/eu/
-web/site/fa/
-web/site/fi/
-web/site/fr/
-web/site/fy/
-web/site/ga/
-web/site/gd/
-web/site/gl/
-web/site/gu/
-web/site/ha/
-web/site/haw/
-web/site/he/
-web/site/hi/
-web/site/hmn/
-web/site/hr/
-web/site/ht/
-web/site/hu/
-web/site/hy/
-web/site/id/
-web/site/ig/
-web/site/is/
-web/site/it/
-web/site/iw/
-web/site/ja/
-web/site/jw/
-web/site/ka/
-web/site/kk/
-web/site/km/
-web/site/kn/
-web/site/ko/
-web/site/ku/
-web/site/ky/
-web/site/la/
-web/site/lb/
-web/site/lo/
-web/site/lt/
-web/site/lv/
-web/site/media/
-web/site/media/icons/
-web/site/media/icons/icons/
-web/site/media/static/
-web/site/mg/
-web/site/mi/
-web/site/mk/
-web/site/ml/
-web/site/mn/
-web/site/mr/
-web/site/ms/
-web/site/mt/
-web/site/my/
-web/site/ne/
-web/site/nl/
-web/site/no/
-web/site/ny/
-web/site/or/
-web/site/pa/
-web/site/pl/
-web/site/ps/
-web/site/pt-br/
-web/site/pt/
-web/site/ro/
-web/site/ru/
-web/site/sd/
-web/site/si/
-web/site/sk/
-web/site/sl/
-web/site/sm/
-web/site/sn/
-web/site/so/
-web/site/sq/
-web/site/sr/
-web/site/st/
-web/site/static/
-web/site/static/fonts/
-web/site/static/fonts/bootstrap-icons-1.10.3/
-web/site/static/fonts/bootstrap-icons-1.10.3/fonts/
-web/site/static/fonts/bootstrap/
-web/site/static/games/
-web/site/static/js/
-web/site/su/
-web/site/sv/
-web/site/sw/
-web/site/ta/
-web/site/te/
-web/site/tg/
-web/site/th/
-web/site/tl/
-web/site/tr/
-web/site/ug/
-web/site/uk/
-web/site/ur/
-web/site/uz/
-web/site/vi/
-web/site/xh/
-web/site/yi/
-web/site/yo/
-web/site/zh-CN/
-web/site/zh-cn/
-web/site/zh-tw/
-web/site/zu/
-web/templates/
-web/templates/web/
-
-sent 869,342,711 bytes  received 239,856 bytes  193,240,570.44 bytes/sec
-total size is 4,431,317,564  speedup is 5.10
-Reinitialized existing Git repository in /home/team/lotteh-backup-open/.git/
-[main 31f170a0] open source
- 4 files changed, 400 insertions(+), 1087 deletions(-)
-branch 'main' set up to track 'originhub/main'.

@@ -178,7 +178,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 	<div style="max-height: 50vh; overflow: scroll;">
     <li><a class="dropdown-item" href="{% url 'feed:post-update' splash_id %}"> +- Edit Splash</a></li>
-    <li><a class="dropdown-item" href="{% url 'feed:post-update' smp_id %}"> +- Edit Status</a></li>
+{% if smp_id %}    <li><a class="dropdown-item" href="{% url 'feed:post-update' smp_id %}"> +- Edit Status</a></li>{% endif %}
 {% if ad_post %}      <li><a class="dropdown-item" href="{% url 'feed:post-update' ad_post %}"> +- Edit Ads</a></li>{% endif %}
 	</div>
   </ul>
