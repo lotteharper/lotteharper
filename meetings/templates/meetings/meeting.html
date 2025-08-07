@@ -488,24 +488,24 @@ function createAudioStreamVolumeMeter(stream) {
 }
 var lastSpeakerVideo;
 function updateVolumes() {
-    if(autofocusEnabled) {
-        var highestVolume = -1000;
-        for(const peer_id in peerVolumes) {
-            if(document.getElementById('muted-icon-' + peer_id)) document.getElementById('muted-icon-' + peer_id).style.display = peerVolumes[peer_id] <= 0 ? 'block' : 'none';
-            if(peer_id && peerVolumes[peer_id] > highestVolume) {
-                highestVolume = peerVolumes[peer_id];
-                try {
-                    var speakerVideo = document.getElementById("video_" + peer_id);
-                    if(speakerVideo != lastSpeakerVideo && lastSpeakerVideo && lastSpeakerVideo.classList.contains('speaker-video')) {
-                        lastSpeakerVideo.classList.remove('speaker-video');
-                    }
-                    speakerVideo.classList.add('speaker-video');
+    var highestVolume = -1000;
+    for(const peer_id in peerVolumes) {
+        if(document.getElementById('muted-icon-' + peer_id)) document.getElementById('muted-icon-' + peer_id).style.display = peerVolumes[peer_id] <= 0 ? 'block' : 'none';
+        if(peer_id && peerVolumes[peer_id] > highestVolume) {
+            highestVolume = peerVolumes[peer_id];
+            try {
+                var speakerVideo = document.getElementById("video_" + peer_id);
+                if(speakerVideo != lastSpeakerVideo && lastSpeakerVideo && lastSpeakerVideo.classList.contains('speaker-video')) {
+                    lastSpeakerVideo.classList.remove('speaker-video');
+                }
+                speakerVideo.classList.add('speaker-video');
+                if(autofocusEnabled) {
                     speakerVideo.scrollIntoView();
-                    lastSpeakerVideo = speakerVideo;
-                } catch(e) { console.log(e); }
-            }
-            updateVideoOffIcon(peer_id, isVideoShowing(document.getElementById('video_' + peer_id)));
+                }
+                lastSpeakerVideo = speakerVideo;
+            } catch(e) { console.log(e); }
         }
+        updateVideoOffIcon(peer_id, isVideoShowing(document.getElementById('video_' + peer_id)));
     }
 }
 if (!updateInterval) { // Start loop only once
