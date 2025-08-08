@@ -46,7 +46,7 @@ def recordings(request, username):
         recordings = recordings_annotated.filter(user__profile__name=username, processed=True, camera='private', safe=not minor_document_scanned(request.user), num_frames__gte=9).order_by('-last_frame')
     private_recordings = recordings_annotated.filter(user__profile__name=username, processed=True, recipient=request.user, safe=not document_scanned(request.user), num_frames__gte=9).exclude(youtube_embed='').order_by('-last_frame')
     recordings = list(chain(private_recordings, recordings))
-    p = Paginator(recordings, 10)
+    p = Paginator(recordings, 20)
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
         page = 1

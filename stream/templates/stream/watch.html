@@ -96,6 +96,7 @@ $(document).ready(function() {
     function beginStream() {
         const container = document.getElementById('video-container');
         const video = document.getElementById('remoteVideo');
+        video.addEventListener("pause", (event) => {event.target.play();});
         var fullscreenButton = document.getElementById('fullscreenToggle');
         fullscreenButton.addEventListener('click', () => {
           if (!document.fullscreenElement) {

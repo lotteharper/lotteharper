@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load crispy_forms_tags %}
-<legend>Send Email</legend>
-<p>Send an email to {% if request.GET.u %}{{ request.GET.u }}{% else %}all users{% endif %}. <a class="btn btn-outline-primary" title="See outgoing email" href="{% url 'retargeting:emails' %}">Outgoing</a></p>
+<legend>{{ 'Send Email'|etrans }}</legend>
+<p>{{ 'Send an email to'|etrans }} {% if request.GET.u %}{{ request.GET.u }}{% else %}{{ 'all users'|etrans }}{% endif %}. <a class="btn btn-outline-primary" title="See outgoing email" href="{% url 'retargeting:emails' %}">{{ 'Outgoing'|etrans }}</a></p>
 <div style="width: 100%; max-width: 100%;">
 <form method="POST" id="mail-form">
 {% csrf_token %}
 {% load feed_filters %}
 {{ form.media }}
 {{ form|crispy|safe }}
-<button id="mail-submit" type="submit" class="btn btn-outline-danger">Send</button>
+<button id="mail-submit" type="submit" class="btn btn-outline-danger">{{ 'Send'|etrans }}</button>
 </div>
 </form>
 {% endblock %}

@@ -4,8 +4,10 @@
 {% if videos %}
 <i>I want to share these new videos on YouTube with you.</i>
 {% for video in videos %}
-<p>{{ video.title }}</p>
-<a href="{{ video.get_youtube_url }}" title="Watch this video on YouTube"><img style="width: 60%; max-width: 300px;" src="{{ video.thumbnail_url }}"></a>
+<a href="{{ video.get_youtube_url }}" title="Watch this video on YouTube">
+<div>{{ video.title }}</div>
+<img style="width: 60%; max-width: 300px;" src="{{ video.thumbnail_url }}">
+</a>
 {% endfor %}
 {% endif %}
 <p>Use this link to visit the site - <a href="{{ protocol }}://{{ domain }}">click here</a>.</p>

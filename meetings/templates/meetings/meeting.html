@@ -237,6 +237,7 @@ getMedia().then(async function(stream) {
             vid.classList.add('video');
             vid.autoplay = true; vid.playsInline = true;
             vid.srcObject = stream;
+            vid.addEventListener("pause", async (event) => {await event.target.play();});
             try {
                 initializeAudioContext(vid, stream);
             } catch {}
