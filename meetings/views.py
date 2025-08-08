@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
 from feed.tests import pediatric_identity_verified
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache, cache_page
 
 #@cache_page(60*60*24)
 @login_required
@@ -50,6 +51,7 @@ def schedule_meeting(request):
             messages.warning(request, 'This event could not be saved with the following errors: {}'.format(str(form.errors)))
     return render(request, 'meetings/schedule.html', {'title': 'Schedule virtual meeting', 'form': form, 'small': True})
 
+@never_cache
 def meeting(request, meeting_id=None):
     """
     Render the meeting page with the specified meeting_id.
