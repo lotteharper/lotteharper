@@ -115,7 +115,7 @@ def feed_context(request):
         sunset = ip.sunset
         sunrise = ip.sunrise
         now = datetime.now(pytz.timezone(ip.timezone)) if ip.timezone else timezone.now()
-        if now < sunrise or now > sunset:
+        if (not request.GET.get('light', False)) and (now < sunrise or now > sunset or request.GET.get('dark', False)):
             context_data['darkmode'] = True
         context_data['current_time'] = str(now)
         context_data['current_time_text'] = current_time(now)

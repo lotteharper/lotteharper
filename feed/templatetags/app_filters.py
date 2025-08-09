@@ -531,6 +531,22 @@ def urlparams(page):
     query['page'] = str(page)
     return query.urlencode()
 
+@register.filter('urlparamedit')
+def urlparamedit(param):
+    from feed.middleware import get_current_request
+    split = param.split('=')
+    key = ''
+    value = ''
+    query = get_current_request().GET.copy()
+    if len(split) > 0:
+        key = split[0]
+        if len(split) > 1:
+            value = split[1]
+        else:
+            del query[key]
+    query[key] = str(value)
+    return '?' + query.urlencode() if len(query.urlencode()) > 0 else None
+
 def highlight_query(query, text):
     from misc.regex import SEARCH_REGEX, ESCAPED_QUERIES
     import re
@@ -709,13 +725,14 @@ def removehttps(value):
         value = value.replace(i, j)
     return value
 
+from urlextract import URLExtract
+extractor = URLExtract()
+
 @register.filter(name='embedlinks')
 def embedlinks(value):
     from django.conf import settings
     import requests
     if not value: return value
-    from urlextract import URLExtract
-    extractor = URLExtract()
     lang = ''
     try:
         lang = get_lang()

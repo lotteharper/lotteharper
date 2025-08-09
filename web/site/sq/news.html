@@ -1654,11 +1654,11 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # (po) (po) (jo) (kurrë) (100)
 # ===========================================================================
 # Smtp inet n - y - 1 pas ekranit
-
+# Smtpd Pass - - Y - - Smtpd
 # dnsblog unix - - y - 0 dnsblog
 # tlsproxy unix - - y - 0 tlsproxy
 # Zgjidhni një: Aktivizoni paraqitjen vetëm për klientët Loopback, ose për ndonjë klient.
-
+# 127.0.0.1: Submision inet n - y - - smtpd
 # -o syslog_name = postfix/dorëzimi
 # -o smtpd_tls_securance_level = encrypt
 # -o smtpd_sasl_auth_enable = po
@@ -1666,14 +1666,14 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # -o smtpd_reject_unlisted_recipient = nr
 # -O smtpd_client_restrictions = $ MUA_CLIENT_RESTRICTIONS
 # -O smtpd_helo_restrictions = $ MUA_HELO_RESTRICTIONS
-
-
+# -O smtpd_siender_restrictions = $ MUA_Sender_restrictions
+# -O smtpd_recipient_restrictions =
 # -o smtpd_relay_restrictions = leje_sasl_authenciatecated, refuzoj
-
+# -o milter_macro_daemon_name = me origjinë
 # Zgjidhni një: Aktivizoni SMTPS vetëm për klientët Loopback, ose për ndonjë klient.
 # 127.0.0.1:smtps inet n - y - - smtpd
-
-
+# smtps inet n - y - - smtpd
+# -o syslog_name = postfix/smtps
 # -o smtpd_tls_wrappermode = po
 # -o smtpd_sasl_auth_enable = po
 # -o smtpd_reject_unlisted_recipient = nr
@@ -1754,8 +1754,8 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # Uncomment për të specifikuar një fole alternative
 # Vini re se përcaktimi i kësaj do të tejkalojë çdo vlerë fole në opendkim.conf
 # Default:
-# Dëgjoni të gjitha ndërfaqet në portin 54321:
-# Fole = inet: 54321
+
+
 # Dëgjoni në Loopback në portin 12345:
 # Fole = inet: 12345@localhost
 # Dëgjoni në 192.0.2.1 në portin 12345:

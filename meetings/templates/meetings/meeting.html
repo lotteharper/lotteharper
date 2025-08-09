@@ -126,7 +126,9 @@ button { margin: 0 5px; }
 <div>
 <p><i>Additional settings</i></p>
 <div style="display: inline-block;">
-{% if request.GET.originalsound %}<a href="{{ request.path }}" class="btn btn-sm btn-outline-primary" title="Original sound for musicians">Original sound for musicians (on)</a>{% else %}<a href="{{ request.path }}?originalsound=true" class="btn btn-outline-primary" title="Original sound for musicians">Original sound for musicians (off)</a>{% endif %}
+{% if request.GET.originalsound %}<a href="{{ request.path }}{{ 'originalsound='|urlparamedit }}" class="btn btn-sm btn-outline-primary" title="Original sound for musicians">Original sound for musicians (on)</a>{% else %}<a href="{{ request.path }}{{ 'originalsound=true'|urlparamedit }}?originalsound=true" title="Original sound for musicians" class="btn btn-sm btn-outline-primary">Original sound for musicians (off)</a>{% endif %}
+{% if request.GET.light %}<a href="{{ request.path }}{{ 'light='|urlparamedit }}" class="btn btn-sm btn-outline-primary" title="Exit light mode">Exit light mode</a>{% else %}<a href="{{ request.path }}{{ 'light=true'|urlparamedit }}" title="Turn light mode on" class="btn btn-sm btn-outline-primary">Light mode</a>{% endif %}
+{% if request.GET.dark %}<a href="{{ request.path }}{{ 'dark='|urlparamedit }}" class="btn btn-sm btn-outline-primary" title="Lighten things up">Exit dark mode</a>{% else %}<a href="{{ request.path }}{{ 'dark=true'|urlparamedit }}" title="Enter dark mode" class="btn btn-sm btn-outline-primary">Dark mode</a>{% endif %}
 </div>
 </div>
 {% endblock %}

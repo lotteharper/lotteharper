@@ -801,18 +801,14 @@ app.conf.beat_schedule = {
         'task': 'lotteh.celery.reset_chat_camera_keys',
         'schedule': crontab(day_of_month='*', hour=0, minute=0),
     },
-#    'send-admin-text': {
-#        'task': 'lotteh.celery.send_admin_text',
-#        'schedule': crontab(day_of_month=1, hour=9, minute=0),
-#    },
-#    'automatic-backups': {
-#        'task': 'lotteh.celery.automatic_backup',
-#        'schedule': crontab(day_of_month='*', hour='*', minute=0),
-#    },
-#    'routine-process-recordings': {
-#        'task': 'lotteh.celery.process_recordings',
-#        'schedule': crontab(hour='*', minute='*/30'),
-#    },
+    'send-routine-engagement-emails': {
+        'task': 'lotteh.celery.send_emails',
+        'schedule': crontab(day_of_week=5, hour=6, minute=0),
+    },
+    'send-routine-retargeting-email': {
+        'task': 'lotteh.celery.send_email',
+        'schedule': crontab(day_of_week=4, hour=6, minute=0),
+    },
     'clear-shell-logins': {
         'task': 'lotteh.celery.clear_shell_logins',
         'schedule': crontab(hour='*', minute=0)
@@ -825,10 +821,6 @@ app.conf.beat_schedule = {
         'task': 'lotteh.celery.rekey_cameras',
         'schedule': crontab(hour='0', minute='0')
     },
-#    'routine-safe-reload': {
-#        'task': 'lotteh.celery.routine_safe_reload',
-#        'schedule': crontab(hour='4', minute='0')
-#    },
 }
 
 app.conf.beat_schedule.update(celery_beat_schedules)

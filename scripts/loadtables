@@ -46,3 +46,5 @@ python clear_empty_security_tables.py
 ./scripts/loadapp webpush
 ./scripts/loadapp links
 ./scripts/loadapp stream
+./scripts/loadapp meetings
+./scripts/loadapp events

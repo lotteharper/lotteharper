@@ -89,7 +89,7 @@ def recordings(request):
     return r
 
 @csrf_exempt
-@cache_page(60*60*24*30)
+#@cache_page(60*60*24*30)
 def recording(request, id):
     from django.utils import timezone
     from .models import AudioRecording

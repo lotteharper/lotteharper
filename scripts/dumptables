@@ -45,3 +45,5 @@ source venv/bin/activate
 ./scripts/dumpapp translate
 ./scripts/dumpapp links
 ./scripts/dumpapp stream
+./scripts/dumpapp meetings
+./scripts/dumpapp events

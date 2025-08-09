@@ -7,6 +7,8 @@
 <!--
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 -->
+<style>
+</style>
 {% endblock %}
 {% block content %}
 <h1>Audio Recording</h1>
@@ -64,14 +66,14 @@
 </div>
 </div>
 <div style="display: flex; justify-content: space-around;">
-<div><legend id="note-verbose" style="color: green; !important; text-color: green !important;">(Tap)</legend></div>
-<div><legend id="pitch-verbose" style="color: green; !important; text-color: green !important;"></legend></div>
+<div><legend id="note-verbose" style="color: green !important; text-color: green !important;">(Tap)</legend></div>
+<div><legend id="pitch-verbose" style="color: green !important; text-color: green !important;"></legend></div>
 </div>
 <hr>
 <div style="display: flex; justify-content: space-around;">
 <div><i>Target:</i></div>
-<div><legend id="target-note-verbose" style="color: green; !important; text-color: green !important;"></legend></div>
-<div><legend id="target-pitch-verbose" style="color: green; !important; text-color: green !imporant;"></legend></div>
+<div><legend id="target-note-verbose" style="color: green !important; text-color: green !important;"></legend></div>
+<div><legend id="target-pitch-verbose" style="color: green !important; text-color: green !imporant;"></legend></div>
 </div>
 {% endblock %}
 {% block javascript %}
@@ -371,15 +373,15 @@ function initialize() {
                         var thecolor;
                 		if(pitch >= targetPitch) {
                             thecolor = targetColor;//'rgb(0,255,0)';
-                			noteVerbose.style = 'color: green; !important';
-                			pitchVerbose.style = 'color: green; !important';
+                			noteVerbose.style = 'color: green !important';
+                			pitchVerbose.style = 'color: green !important';
                 		} else if(pitch > minimumPitch) {
                             thecolor = belowColor;//'rgb(255,0,0)';
-                            noteVerbose.style = 'color: red; !important';
+                            noteVerbose.style = 'color: red !important';
                 			{% if darkmode %}
-                			pitchVerbose.style = 'color: lightblue; !important';
+                			pitchVerbose.style = 'color: lightblue !important';
                 			{% else %}
-                			pitchVerbose.style = 'color: blue; !important';
+                			pitchVerbose.style = 'color: blue !important';
                 			{% endif %}
                 		}
                 		if(pitch > minimumPitch && pitch < maximumPitch) {

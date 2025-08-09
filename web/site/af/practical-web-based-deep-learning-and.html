@@ -1585,29 +1585,34 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # is /etc /e -posnaam.
 # myorigin = /etc /e -posnaam
 # bykomende .domein is die werk van die MUA.
-# Die volgende reël om 'n vertraagde pos 'waarskuwings te genereer
 
+# vertraging_warning_time = 4h
 # Kyk http://www.postfix.org/compatibility_readme.html - standaard tot 3.6 op
 # vars installasies.
-
+# TLS -parameters
 </code></pre>
-<p></p>
+<p>Volgende konfigurasie!</p>
 <pre class="language-bash"><code>nano config/etc_postfix_master.cf
-</code></pre><p>Voeg hierdie lyne by:</p>
-<pre class="language-bash"><code>
-# Postfix Master Process Configuration File.  Vir meer inligting oor die formaat
+</code></pre>
+<p></p><pre class="language-bash"><code># 
 
-# On-line: http://www.postfix.org/master.5.html).
-# 
-
-# 
+# van die lêer, sien die Master (5) Handleiding Bladsy (Opdrag: "Man 5 Master" of
 
 
-# (ja) (ja) (nee) (nooit) (100)
-# ======================================================================= ==========================
 
+
+
+
+
+
+# SMTP Inet N - Y - 1 Postcreen
 # SMTPD PASS - - Y - - SMTPD
 # dnsblog unix - - y - 0 dnsblog
+# TLPROXY UNIX - - Y - 0 TLPROXY
+
+
+
+# -o smtpd_tls_security_level = Encrypt
 
 
 
@@ -1633,42 +1638,37 @@ N/A<we'll add="" later="" this=""></we'll></p>
 
 
 
-
-
-
-# Qmgr unix n - n 300 1 oqmgr
-# -o smtp_helo_timeout = 5 -o smtp_connect_timeout = 5
 # 
 
 
-# Bladsye van die nie-postfix-sagteware om uit te vind watter opsies hy wil hê.
-# 
+
+
 # Baie van die volgende dienste gebruik die postfix -pyp (8) aflewering
-# agent.  Raadpleeg die pyp (8) manbladsy vir inligting oor $ {ontvanger}
+
+
+
+# 
+# MailDrop. Raadpleeg die Postfix MailDrop_Readme -lêer vir meer inligting.
+# Spesifiseer ook in main.cf: MailDrop_Destination_Recipient_limit = 1
+# 
 
 # ======================================================================= ===================
-
-
-
-
 # 
 
-# 
 
-# 
 # Spesifiseer in cyrus.conf:
 # lmtp cmd = "lmtpd -a" luister = "localhost: lmtp" proto = tcp4
 # 
 # Spesifiseer in Main.cf een of meer van die volgende:
 # mailbox_transport = lmtp: inet: localhost
 # virtuele_transport = lmtp: inet: localhost
-# 
+
 # ======================================================================= ===================
-# 
+
 # Cyrus 2.1.5 (Amos Gouaux)
 # Spesifiseer ook in main.cf: cyrus_destination_recipient_limit = 1
 # 
-
+# Cyrus unix - n n - - pyp
 # vlae = drx gebruiker = cyrus argv =/cyrus/bin/aflewer -e -r $ {sender} -m $ {uitbreiding} $ {gebruiker}
 # 
 # ======================================================================= ===================
@@ -1736,22 +1736,22 @@ N/A<we'll add="" later="" this=""></we'll></p>
   # service_count = 1
   # Aantal prosesse om altyd te wag vir meer verbindings.
   # proses_min_avail = 0
-
+  # As u Service_Count = 0 stel, moet u dit waarskynlik laat groei.
   # vsz_limit = $ default_vsz_limit
-
+    # poort = 110
     # poort = 995
-    # ssl = ja
+
     # poort = 587
   # Skep slegs 'n luisteraar as u die bogenoemde Unix -aansluiting nie kan gebruik nie
-
+  # inet_listener lmtp {
     # Vermy LMTP sigbaar vir die hele internet
     # adres =
-
+    # poort =
   # }
-
+  # Die meeste van die geheue gaan na mmap () lêers. Miskien moet u dit verhoog
   # Beperk as u groot posbusse het.
-
-
+  # vsz_limit = $ default_vsz_limit
+  # Maks. Aantal IMAP -prosesse (verbindings)
   # proses_limit = 1024
   # Maks. Aantal POP3 -prosesse (verbindings)
   # proses_limit = 1024
@@ -1764,7 +1764,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
   # 
   # Die standaard 0666 -modus stel iemand in staat om aan die sok te koppel, maar die
   # UserDB Soeke sal slegs slaag as die USERDB 'n "UID" -veld teruggee
-
+  # Pas die UID van die oproeperproses. Ook as die UID of GID van die beller ooreenstem met die
   # SOCKET se UID of GID Die opsoek slaag. Enigiets anders veroorsaak 'n mislukking.
   # 
   # Stel die modus op om die oproeper volle toestemmings te gee om alle gebruikers op te soek
@@ -1893,7 +1893,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # gekonfigureer soos getoon op die laaste reël hieronder.
 # Socket plaaslik: /run/opendkim/opendkim.sock
 # Socket Inet: 8891@localhost
-# SOCKET INET: 8891
+
 # Die gasheer waarvoor u moet onderteken eerder as om te verifieer, is 127.0.0.1. Sien die
 # Operasie -afdeling van Opendkim (8) vir meer inligting.
 # Internalhosts 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
