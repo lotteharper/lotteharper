@@ -46,6 +46,7 @@ def get_pub_auth_url(request, email):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(str(os.path.join(settings.BASE_DIR, 'client_secret_pub.json')),
     scopes=[
         'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
         'openid',
     ])
     flow.redirect_uri = settings.BASE_URL + reverse('users:google-auth-callback')
@@ -117,6 +118,7 @@ def parse_pub_callback_url(request, response):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(str(os.path.join(settings.BASE_DIR, 'client_secret_pub.json')),
     scopes=[
         'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
         'openid',
     ])
     flow.redirect_uri = settings.BASE_URL + reverse('users:google-auth-callback')
@@ -125,10 +127,13 @@ def parse_pub_callback_url(request, response):
     flow.fetch_token(authorization_response=response) #json.dumps(request.GET.dict()))
     credentials = flow.credentials
     from recordings.youtube import save_credentials
-    user_email = get_user_info(credentials)['email']
+    creds = get_user_info(credentials)
+    user_email = creds['email']
+    user_name = creds['name']
+    user_picture = creds['picture']
 #    from recordings.youtube import save_credentials
 #    save_credentials(credentials, user_email)
 #    global creds
 #    creds[user_email] = credentials
-    return user_email, credentials.token, credentials.refresh_token
+    return user_email, user_name, user_picture, credentials.token, credentials.refresh_token
 

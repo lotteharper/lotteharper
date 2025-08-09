@@ -29,7 +29,7 @@ def caption_image(image_path, prompt=None):
             ],
         }],
     )
-    return response.output_text
+    return str(response.output_text)
 
 def caption_image_url(image_url):
     from django.conf import settings
@@ -50,4 +50,4 @@ def caption_image_url(image_url):
             ],
         }],
     )
-    return response.output_text
+    return str(response.output_text)

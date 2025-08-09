@@ -1643,26 +1643,26 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # 
 # Shumë nga shërbimet e mëposhtme përdorin dorëzimin e tubit postfix (8)
 # agjent  Shikoni faqen e tubit (8) njeri për informacion në lidhje me $ {marrës}
-# dhe opsione të tjera të zarfit të mesazheve.
+
+
+
+
+
+
+
 # ========================================================================
 # 
-# Maildrop. Shikoni skedarin postfix maildrop_readme për detaje.
-# Specifikoni gjithashtu në Main.cf: maildrop_destination_recipient_limit = 1
+
 # 
+
+
 # 
-# ========================================================================
-# 
-# Versionet e fundit të Cyrus mund të përdorin hyrjen ekzistuese "LMTP" Master.CF.
-# 
-# Specifikoni në Cyrus.conf:
-# lmtp cmd = "lmtpd -a" dëgjo = "localhost: lmtp" proto = tcp4
-# 
-# Specifikoni në Main.cf një ose më shumë nga sa vijon:
+
 # mailbox_transport = lmtp: inet: localhost
-# virtual_transport = lmtp: inet: localhost
-# 
+
+
 # ========================================================================
-# 
+
 # Cyrus 2.1.5 (Amos Gouaux)
 # Specifikoni gjithashtu në main.cf: cyrus_destination_recipient_limit = 1
 # 

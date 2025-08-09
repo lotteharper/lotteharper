@@ -80,7 +80,11 @@ def google_auth_callback(request):
             from users.username_generator import generate_username as get_random_username
             user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
             profile = user.profile
-            profile.finished_signup = False
+            import random
+            profile.name = name.split(' ')[0] + ('' + (random.randrange(1111,9999) if User.objects.filter(profile__name=name).exclude(id=user.id).count() > 0))
+            profile.image_offsite = picture
+            profile.finished_signup = True
+            profile.email_verified = True
             profile.save()
             from django.contrib import messages
             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
@@ -112,15 +116,17 @@ def google_pub_auth_callback(request):
     import json
     url_working = settings.BASE_URL + request.get_full_path().replace(' ', '%20')
     if request.method == 'POST':
-        email, token, refresh = parse_pub_callback_url(request, url_working)
-        print(email)
+        email, name, picture, token, refresh = parse_pub_callback_url(request, url_working)
         from django.contrib.auth.models import User
         user = User.objects.filter(email=email).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
         if not user:
             from users.username_generator import generate_username as get_random_username
             user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
             profile = user.profile
-            profile.finished_signup = False
+            import random
+            profile.name = name.split(' ')[0] + ('' + (random.randrange(1111,9999) if User.objects.filter(profile__name=name).exclude(id=user.id).count() > 0))
+            profile.image_offsite = picture
+            profile.finished_signup = True
             profile.save()
             from django.contrib import messages
             messages.success(request, 'You are now subscribed, check your email for a confirmation. When you get the chance, fill out the form below to make an account.')
@@ -128,9 +134,6 @@ def google_pub_auth_callback(request):
             send_verification_email(user)
             send_registration_push(user)
             sendwelcomeemail(user)
-#        user.profile.token = token
-#        user.profile.refresh_token = refresh
-#        user.profile.save()
         if not request.user.is_authenticated:
             from django.contrib.auth import login as auth_login
             auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
