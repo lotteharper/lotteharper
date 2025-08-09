@@ -4,7 +4,8 @@ from langdetect import detect, detect_langs
 from googletrans import Translator
 from translate.languages import SELECTOR_LANGUAGES
 
-MAX_TRANS = 1000
+MAX_TRANS = 500
+translator = Translator()
 
 def translate(request, content, target=None, src=None):
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
@@ -56,7 +57,6 @@ def translate(request, content, target=None, src=None):
 #    print('Src lang code is ' + lang + ', target is ' + lang_code)
     for x in range(0, int(len(content)/MAX_TRANS) + 1):
         try:
-            translator = Translator()
             if len(content) < MAX_TRANS:
                 trans = translator.translate(content, src=lang, dest=lang_code)
                 text = text + str(trans.text)
@@ -70,6 +70,8 @@ def translate(request, content, target=None, src=None):
         except:
             print(traceback.format_exc())
             pass
+#    translator.client._channel.close()
+#    translator = None
     if len(text) > 0:
         try:
             CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation)

@@ -293,8 +293,8 @@ def grid_api(request, index):
             pins = Post.objects.filter(posted=True, author=profile.user, private=False, public=True, pinned=True, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
             rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []
             from barcode.tests import minor_document_scanned
-            if request.user.is_authenticated and minor_document_scanned(request.user):
-                ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
+            if minor_document_scanned(request.user):
+                ids = ids.union(Post.objects.filter(posted=True, author=profile.user, secure=True, private=True, public=False, pinned=False, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None).order_by('-date_posted') if request.user.is_authenticated else []).order_by('-date_posted')
             posts = unique(list(chain(pins, rec, ids)))
             post = posts[index%len(posts)]
             if not post.image and post.file: url = post.get_file_url()
@@ -317,8 +317,12 @@ def grid_api(request, index):
         elif not request.GET.get('q'):
             ids = Post.objects.filter(posted=True, author=profile.user, public=True, private=False, published=True, recipient=None, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
             pins = Post.objects.filter(posted=True, author=profile.user, public=True, private=False, pinned=True, published=True, recipient=None, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted')
-            priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted').values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
-            priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
+#.order_by('-date_posted')
+            priv = []
+            from barcode.tests import minor_document_scanned
+            if request.user.is_authenticated and minor_document_scanned(request.user):
+                priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None).values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
+                priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
             rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else []
             posts = unique(list(chain(pins, priv, rec, ids)))[:settings.FREE_POSTS]
             post = posts[index%len(posts)]
@@ -413,14 +417,18 @@ def profile_grid(request, username):
     else:
         ids = list(Post.objects.filter(posted=True, author=profile.user, public=True, private=False, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
         pins = list(Post.objects.filter(posted=True, author=profile.user, public=True, private=False, pinned=True, published=True, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted'))
-        priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted').values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
-        priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
+        from barcode.tests import minor_document_scanned
+        priv = []
+        if request.user.is_authenticated and minor_document_scanned(request.user):
+            priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted').values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
+            priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
         rec = list(Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=settings.DEFAULT_FEED).exclude(image=None, feed='blog').order_by('-date_posted') if request.user.is_authenticated else [])
         posts = unique(list(chain(pins, priv, rec, ids)))[:settings.FREE_POSTS]
     from lotteh.pricing import get_pricing_options
     choices = []
     for option in get_pricing_options(settings.PHOTO_CHOICES):
         choices = choices + [['${}'.format(sub_fee(option))]]
+    from feed.feeds import get_post_feeds
     resp = render(request, 'feed/profile_grid.html', {
         'title': '@' + profile.name + '\'s Grid',
         'count': len(posts),
@@ -428,7 +436,8 @@ def profile_grid(request, username):
         'following': following,
         'full': True,
         'hiderrm': True if request.GET.get('handtrack', False) else False,
-        'tip_options': choices
+        'tip_options': choices,
+        'feeds': get_post_feeds(),
     })
     if request.user.is_authenticated: patch_cache_control(resp, private=True)
     else: patch_cache_control(resp, public=True)
@@ -641,8 +650,11 @@ def profile(request, username):
     else:
         ids = Post.objects.filter(posted=True, author=profile.user, public=True, private=False, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
         pins = Post.objects.filter(posted=True, author=profile.user, private=False, pinned=True, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted')
-        priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted').values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
-        priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
+        from barcode.tests import minor_document_scanned
+        priv = []
+        if request.user.is_authenticated and minor_document_scanned(request.user):
+            priv_ids = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted').values_list('id', flat=True)[:settings.PAID_POSTS_SELECTION]
+            priv = Post.objects.filter(id__in=list(priv_ids)).order_by('?')[:settings.PAID_POSTS]
         rec = Post.objects.filter(posted=True, author=profile.user, private=False, public=False, pinned=False, recipient=request.user if request.user.is_authenticated else None, published=True, date_posted__lte=now, feed=blog_feed).order_by('-date_posted') if request.user.is_authenticated else []
         posts = unique(list(chain(pins, rec, priv, ids)))[:settings.FREE_POSTS]
     if not request.user.is_authenticated or not (profile.user in request.user.profile.subscriptions.all() or request.user == profile.user):
@@ -659,6 +671,7 @@ def profile(request, username):
     from barcode.tests import minor_document_scanned
     ds = False
     if request.user.is_authenticated and minor_document_scanned(request.user): ds = True
+    from feed.feeds import get_post_feeds
     resp = render(request, 'feed/profile.html' if pages else 'feed/scroll_page.html' if scroll_page else 'feed/scroll.html', {
         'title': '@' + profile.name + '\'s Profile',
         'posts': p.page(page),
@@ -675,6 +688,7 @@ def profile(request, username):
         'hidenavbar': True if scroll_page else False,
         'load_timeout': 0 if scroll_page else 0,
         'document_scanned': ds,
+        'feeds': get_post_feeds(),
     })
     if request.user.is_authenticated: patch_cache_control(resp, private=True)
     else: patch_cache_control(resp, public=True)

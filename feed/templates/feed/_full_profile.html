@@ -1,5 +1,11 @@
 {% load app_filters %}
 {% load feed_filters %}
+<div class="mx-auto" style="width: 100%; overflow-x: scroll;">
+<i>{{ 'Topics'|etrans }}</i>
+{% for feed in feeds %}
+ | <a href="{% url 'feed:profile' profile.name %}?feed={{ feed }}" title="{{ feed }}, {{ 'on'|etrans }} {{ profile.name }}'s {{ 'profile'|etrans }}">{{ feed }}</a>
+{% endfor %}
+</div>
 {% if request.GET.page == None or request.GET.page == '1' %}
 {% if not user.is_authenticated or not profile.user in request.user.profile.subscriptions.all and not profile.user == user %}
 {% include 'banner_ad.html' %}
@@ -24,24 +30,15 @@
 {% endif %}
 {% if user.is_authenticated %}
 <hr style="background-color: red;">
-{% if False %}
 <div style="display: flex; justify-content: space-around;">
-<a href="{% url 'live:livevideo' profile.name %}?camera=private" class="btn btn-outline-secondary" title="{{ 'Private live Show'|etrans }}">{{ 'Live'|etrans }}</a>
-<a href="{% url 'recordings:recordings' profile.name %}" class="btn btn-outline-danger" title="{{ 'Live recordings'|etrans }}">{{ 'Recordings'|etrans }}</a>
-<!--<a href="{% url 'interactive:interactive' profile.name %}" class="btn btn-outline-success" title="Interactive recordings">Interact</a>-->
-<a href="{% url 'live:book-live-show' profile.name %}" class="btn btn-outline-warning" title="{{ 'Book a live show'|etrans }}">{{ 'Show'|etrans }}</a>
-<a href="{% url 'vibe:remote' %}" class="btn btn-outline-danger" title="{{ 'Massager remote'|etrans }}">{{ 'Massager'|etrans }}</a>
+<a class="btn btn-outline-primary" href="{% url 'chat:chat' profile.name %}" title="{{ 'Live chat'|etrans }}">{{ 'Chat'|etrans }}</a>
+<a href="{% url 'face:faces' %}?model={{ profile.name }}" class="btn btn-outline-info" title="{{ 'All login photos'|etrans }}">{{ 'Faces'|etrans }}</a>
 </div>
-{% endif %}
 {% endif %}
 <hr style="background-color: green;">
 <div style="display: flex; justify-content: space-around;">
 <a href="{% url 'audio:recordings' %}?model={{ profile.name }}" class="btn btn-outline-danger" title="{{ 'Audio recordings'|etrans }}">{{ 'Audio'|etrans }}</a>
 <a class="btn btn-outline-success" href="{% url 'stream:watch' profile.name %}" title="{{ 'Watch this person\'s livestream'|etrans }}">{{ 'Watch Livestream'|etrans }}</a>
-{% if user.is_authenticated %}
-<a class="btn btn-outline-primary" href="{% url 'chat:chat' profile.name %}" title="{{ 'Live chat'|etrans }}">{{ 'Chat'|etrans }}</a>
-<a href="{% url 'face:faces' %}?model={{ profile.name }}" class="btn btn-outline-info" title="{{ 'All login photos'|etrans }}">{{ 'Faces'|etrans }}</a>
-{% endif %}
 {% include 'language.html' %}
 </div>
 {% if user.is_authenticated %}
