@@ -4,7 +4,7 @@ from langdetect import detect, detect_langs
 from googletrans import Translator
 from translate.languages import SELECTOR_LANGUAGES
 
-MAX_TRANS = 500
+MAX_TRANS = 200
 translator = Translator()
 
 def translate(request, content, target=None, src=None):

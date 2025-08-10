@@ -121,18 +121,39 @@ class NameCameraForm(forms.ModelForm):
             data = data[:max_length-3].rsplit(' ', 1)[0] + '...' # Truncate the text
         return data
 
-    def clean_tags(self):
-        data = self.cleaned_data['tags']
-        max_length = 500
-        if len(data) > max_length:
-            data = data[:max_length].rsplit(',', 1)[0]
-        return data
-
     def clean_name(self):
         data = self.cleaned_data['name']
         max_length = 100
         if len(data) > max_length:
             data = data[:max_length]
+        return data
+
+    def clean_tags(self):
+        data = self.cleaned_data['tags']
+#        data = data.replace(', ', ',').strip()
+#        data = data.replace(' ,', ',')
+        split = data.split(',')
+        ov_split = self.instance.tags_overflow.split(',')
+        tags = []
+        overflow_tags = []
+        max_length = 480
+        length = 0
+        for tag in split:
+            if not tag.strip() in tags:
+                if length + len(tag.strip()) < max_length:
+                    tags += [tag.strip()]
+                    length += len(tag.strip()) + 1
+                elif not tag.strip() in ov_split:
+                    overflow_tags += [tag.strip()]
+        data = ','.join(tags)
+#        if len(data) - data.count(',') > max_length:
+#            op_data = data[:max_length + data.count(',')]
+#        if data[max_length + data.count(','):]:
+#            self.instance.tags_overflow = 
+#data[max_length + data.count(','):]
+        if overflow_tags:
+            self.instance.tags_overflow += ',' + ','.join(overflow_tags)
+            self.instance.save()
         return data
 
     def clean_description(self):

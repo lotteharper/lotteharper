@@ -244,8 +244,9 @@ def process_live(camera_id, frame_id):
         if camera.speech_only: frame.contains_speech = contains_speech
 #    camera.mime = frame.frame.name.split('.')[1]
 #    camera.save()
+    from live.nude import is_nude_segment_fast
     try:
-        frame.safe = not is_nude_fast(frame.still.path) if frame.still and os.path.exists(frame.still.path) else True
+        frame.safe = not is_nude_segment_fast(frame.frame.path)
     except:
         import traceback
         print(traceback.format_exc())
@@ -257,15 +258,14 @@ def process_live(camera_id, frame_id):
         os.remove(frame.frame.path)
         frame.frame = op_path
         frame.save()
-    if camera.censor_audio:
-        from better_profanity import profanity
-        if profanity.contains_profanity(transcript):
-            op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
-            from audio.censor import censor_video_audio
-            censor_video_audio(frame.frame.path, op_path)
-            os.remove(frame.frame.path)
-            frame.frame = op_path
-            frame.save()
+    from better_profanity import profanity
+    if camera.censor_audio and profanity.contains_profanity(transcript):
+        op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
+        from audio.censor import censor_video_audio
+        censor_video_audio(frame.frame.path, op_path)
+        os.remove(frame.frame.path)
+        frame.frame = op_path
+        frame.save()
     if not frame.safe and settings.NUDITY_FILTER: # or not is_safe_image(frame.still.path):
         frame.public = False
         frame.processed = True

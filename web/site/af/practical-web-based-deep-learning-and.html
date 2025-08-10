@@ -1260,11 +1260,11 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 # Gssapistrictacceptorcheck ja
 # GSSAPIKEEXCHANGE NEE
 # Stel dit op 'Ja' om PAM -verifikasie, rekeningverwerking moontlik te maak,
-# en sessieverwerking. As dit geaktiveer is, sal PAM -verifikasie
+
 # toegelaat word deur die KBD -interaktiewea -verifiëring en
 # WagwoordAuthentication.  Afhangende van u PAM -konfigurasie,
 # PAM -verifikasie via kbdinteractiveauthentication kan omseil
-# die instelling van "Permitrootlogin sonder paswoord".
+
 # As u net wil hê dat die PAM -rekening en sessie -tjeks moet loop sonder
 # PAM -verifikasie, stel dit dan in staat, maar stel Passwordauthentication
 # en kbdinteractiveauthentication to 'No'.
@@ -1272,22 +1272,22 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 # AllowTCPForwarding Ja
 # Gatewayports no
 # X11displayOffset 10
-# X11uselocalhost ja
+
 # Permittty ja
 # Printlastlog ja
 # TCPKEEPALIVE JA
 # Permituseren omgewings nr
 # Kompressie vertraag
 # ClientaliveInterval 0
-# Clientalivecountmax 3
+
 # Gebruikns nee
 # Pidfile /run/sshd.pid
-# MaxStartups 10: 30: 100
+
 # Permittunnel nee
 # Chrootdirectory geen
 # Weergaweaddendum geen
 # Geen standaardbanierpad nie
-# Laat die kliënt toe om plaaslike omgewingveranderlikes te slaag
+
 # die standaard van geen substelsels te oorskry nie
 # Voorbeeld van die oorheersende instellings op 'n per-gebruiker basis
 # Pas gebruiker anoncvs
@@ -1299,7 +1299,7 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 <pre class="language-bash"><code>nano initialize
 </code></pre>
 <p>Voeg hierdie reëls by die lêer en vervang dit<key here="">Met u SSH -sleutel het u met CAT gevind. (.ssh/id_rsa.pub)</key></p>
-<pre class="language-bash"><code># !/bin/bash</code></pre>
+<pre class="language-bash"><code></code></pre>
 <p>Laat ons lyn vir lyn begin om u deur hierdie lêer te lei. Die eerste reël sê vir die samesteller dat dit 'n bash -skrif is. Dan installeer ons afhanklikhede, kopieer SSHD_CONFIG na die regte gids, begin SSH weer, genereer SSH -sleutels vir Root, voeg die gebruiker 'Team' by (u kan 'n naam kies wat u hiervoor wil gebruik, gebruik die adduser -opdrag met hul naam en gestremde wagwoord vir nou). Ons voeg ook span by die Sudo -groep, genereer hul SSH -sleutel, voeg ons sleutel by tot gemagtigde sleutels en hulle s'n, en druk hul sleutel. Hierdie nuwe gebruiker is hoe ons by die webwerf aanmeld.</p>
 <p>Gaan voort in 'n nuwe terminale en maak die bediener weer oop.</p>
 <pre class="language-bash"><code>ssh team@XX.XX.XX.XX
@@ -1585,146 +1585,141 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # is /etc /e -posnaam.
 # myorigin = /etc /e -posnaam
 # bykomende .domein is die werk van die MUA.
-
+# Die volgende reël om 'n vertraagde pos 'waarskuwings te genereer
 # vertraging_warning_time = 4h
 # Kyk http://www.postfix.org/compatibility_readme.html - standaard tot 3.6 op
 # vars installasies.
 # TLS -parameters
-</code></pre>
+# Milter konfigurasie</code></pre>
 <p>Volgende konfigurasie!</p>
 <pre class="language-bash"><code>nano config/etc_postfix_master.cf
 </code></pre>
-<p></p><pre class="language-bash"><code># 
-
+<p>Voeg hierdie lyne by:</p>
+<pre class="language-bash"><code># 
+# Postfix Master Process Configuration File.  Vir meer inligting oor die formaat
 # van die lêer, sien die Master (5) Handleiding Bladsy (Opdrag: "Man 5 Master" of
+# On-line: http://www.postfix.org/master.5.html).
+# 
+# Moenie vergeet om "Postfix Reload" uit te voer nadat u hierdie lêer geredigeer het nie.
+# 
+# ======================================================================= ==========================
+# Dienstipe Privaat Unpriv Chroot Wakeup MaxProc Command + Args
 
 
 
-
-
-
-
-
-# SMTP Inet N - Y - 1 Postcreen
 # SMTPD PASS - - Y - - SMTPD
 # dnsblog unix - - y - 0 dnsblog
-# TLPROXY UNIX - - Y - 0 TLPROXY
 
 
-
+# 127.0.0.1: Submission inet n - y - - smtpd
+# -o syslog_name = postfix/indiening
 # -o smtpd_tls_security_level = Encrypt
+# -o smtpd_sasl_auth_enable = ja
+# -o smtpd_tls_auth_only = ja
+# -o smtpd_reject_unlisted_recipient = nee
+# -o smtpd_client_restrictions = $ mua_client_restrictions
+# -o smtpd_helo_restrictions = $ MUA_HELO_RESTRICTS
 
+# -o SMTPD_RECIPIENT_RESTRICTS =
+# -o smtpd_relay_restrictions = permit_sasl_authenticated, verwerp
+# -o milter_macro_daemon_name = oorsprong
+# Kies een: Aktiveer SMTP's slegs vir Loopback -kliënte, of vir enige kliënt.
+# 127.0.0.1:smtps inet n - y - - smtpd
+# Smtps inet n - y - - smtpd
+# -o syslog_name = postfix/smtps
+# -o smtpd_tls_wrappermode = ja
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# -o smtpd_reject_unlisted_recipient = nee
+# -o smtpd_client_restrictions = $ mua_client_restrictions
+# -o smtpd_helo_restrictions = $ MUA_HELO_RESTRICTS
+# -o SMTPD_SENDER_RESTRICTS = $ MUA_SENDER_RESTRICTS
+# -o SMTPD_RECIPIENT_RESTRICTS =
+# -o smtpd_relay_restrictions = permit_sasl_authenticated, verwerp
+# -o milter_macro_daemon_name = oorsprong
+# 628 inet n - y - - qmqpd
+# Qmgr unix n - n 300 1 oqmgr
+# -o smtp_helo_timeout = 5 -o smtp_connect_timeout = 5
 # 
 
+# Koppelvlakke na nie-postfix-sagteware. Ondersoek die handleiding
 
 
 
-# Baie van die volgende dienste gebruik die postfix -pyp (8) aflewering
 
-
-
-# 
-# MailDrop. Raadpleeg die Postfix MailDrop_Readme -lêer vir meer inligting.
-# Spesifiseer ook in main.cf: MailDrop_Destination_Recipient_limit = 1
-# 
-
-# ======================================================================= ===================
-# 
-
-
-# Spesifiseer in cyrus.conf:
-# lmtp cmd = "lmtpd -a" luister = "localhost: lmtp" proto = tcp4
-# 
-# Spesifiseer in Main.cf een of meer van die volgende:
-# mailbox_transport = lmtp: inet: localhost
-# virtuele_transport = lmtp: inet: localhost
 
 # ======================================================================= ===================
 
-# Cyrus 2.1.5 (Amos Gouaux)
-# Spesifiseer ook in main.cf: cyrus_destination_recipient_limit = 1
-# 
-# Cyrus unix - n n - - pyp
-# vlae = drx gebruiker = cyrus argv =/cyrus/bin/aflewer -e -r $ {sender} -m $ {uitbreiding} $ {gebruiker}
-# 
-# ======================================================================= ===================
-# Ou voorbeeld van aflewering via Cyrus.
-# 
-# Old -Cyrus unix - n n - - pyp
-# vlae = r gebruiker = cyrus argv =/cyrus/bin/aflewer -e -m $ {uitbreiding} $ {gebruiker}
-# 
-# ======================================================================= ===================
-# 
-# Raadpleeg die postfix uucp_readme -lêer vir konfigurasiebesonderhede.
-# 
-# 
-# Ander eksterne afleweringsmetodes.
-# </code></pre>
-<p>En die Opendkim -konfigurasie. Opendkim identifiseer e -posbedieners met domeinksleutels om hulle veiliger te maak. Daarsonder is e -pos nie onderteken nie en kom dit miskien nie na 'n inkassie nie.</p>
-<pre class="language-bash"><code>nano config/etc_default_opendkim
-</code></pre>
-<p>Voeg hierdie lyne by:</p>
-<pre class="language-bash"><code># Opmerking: dit is 'n nalatenskapskonfigurasielêer. Dit word nie deur die Opendkim gebruik nie
-# SystemD -diens. Gebruik die ooreenstemmende konfigurasieparameters in
-# /etc/opendkim.conf in plaas daarvan.
-# 
-# Voorheen sou 'n mens die standaardinstellings hier wysig en dan uitvoer
-# /lib/opendkim/opendkim.service.
-# /etc/systemd/system/opendkim.service.d/override.conf en
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre><p></p><pre class="language-bash"><code>nano config/etc_default_opendkim
+</code></pre><p></p><pre class="language-bash"><code>
+
+
+
+
+
+
 # /etc/tmpfiles.d/opendkim.conf. Alhoewel dit nog moontlik is, is dit nou
-# Aanbeveel om die instellings direk aan te pas in /etc/opendkim.conf.
-# 
-# Daemon_opts = ""
-# Verander na/var/spoel/postfix/run/opendkim om 'n unix -sok met
-# Postfix in 'n chroot:
-# Rundir =/var/spoel/postfix/run/opendkim
-# 
-# Onkomment om 'n alternatiewe sok te spesifiseer
-# Let daarop dat die instelling daarvan enige sokwaarde in OpenDkim.conf sal ignoreer
-# verstek:
-# Luister op alle koppelvlakke op poort 54321:
+
+
+
+
+
+
+
+
+
+
+
 # Sok = inet: 54321
-# Luister op Loopback op poort 12345:
+
 # Sok = inet: 12345@localhost
-# Luister op 192.0.2.1 op poort 12345:
-# Sok = inet: 12345@192.0.2.1</code></pre>
-<pre class="language-bash"><code>nano config/etc_dovecot_conf.d_10-master.conf
-</code></pre>
-<p>Voeg hierdie lyne by:</p>
+
+</code></pre><pre class="language-bash"><code>nano config/etc_dovecot_conf.d_10-master.conf
+</code></pre><p>Voeg hierdie lyne by:</p>
 <pre class="language-bash"><code># DEFAULT_PROCESS_LIMIT = 100
 # Default_client_limit = 1000
-# Standaard VSZ (virtuele geheue -grootte) limiet vir diensprosesse. Dit is hoofsaaklik
+
 # bedoel om prosesse te vang en dood te maak wat die geheue lek voordat hulle eet
 # alles.
 # DEFAULT_VSZ_LIMIT = 256M
 # Aanmeldingsgebruikers word intern gebruik deur aanmeldprosesse. Dit is die mees onbetroubaarste
 # Gebruiker in Dovecot -stelsel. Dit moet glad nie toegang tot iets hê nie.
-# DEFAULTE_LOGIN_USER = DOEVOUDL
-# Interne gebruiker word deur onbevoorregte prosesse gebruik. Dit moet apart van
+
+
 # Aanmeldingsgebruiker, sodat aanmeldprosesse nie ander prosesse kan steur nie.
 # DEFAULT_INTERNAL_USER = DOVECOT
     # Poort = 143
@@ -1740,7 +1735,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
   # vsz_limit = $ default_vsz_limit
     # poort = 110
     # poort = 995
-
+    # ssl = ja
     # poort = 587
   # Skep slegs 'n luisteraar as u die bogenoemde Unix -aansluiting nie kan gebruik nie
   # inet_listener lmtp {
@@ -1771,8 +1766,8 @@ N/A<we'll add="" later="" this=""></we'll></p>
   # iets anders as 0666 en Dovecot laat die kern die
   # Toestemmings (bv. 0777 laat almal volle toestemmings toe).
   # Auth -werkersproses word standaard as wortel uitgevoer, sodat dit toegang kan kry
-  # /etc/skaduwee. As dit nie nodig is nie, moet die gebruiker verander word na
-  # $ default_internal_user.
+
+
   # Gebruiker = wortel
   # As DICT -instaanbediener gebruik word, moet e -posprosesse toegang tot die sok hê.
   # Byvoorbeeld: modus = 0660, groep = Vmail en Global Mail_access_Groups = Vmail
@@ -1784,7 +1779,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 </code></pre>
 <p>En voeg hierdie lyne by</p>
 <pre class="language-bash"><code>## Dovecot -konfigurasielêer
-# As u haastig is, sien http://wiki2.dovecot.org/quickconfiguration
+
 # "Doveconf -N" -opdrag gee 'n skoon uitset van die veranderde instellings. Gebruik dit
 # In plaas daarvan om lêers te kopieer en te plak wanneer u na die Dovecot -poslys gepos word.
 # '# 'Karakter en alles nadat dit as opmerkings behandel word. Ekstra ruimtes
@@ -1809,7 +1804,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # base_dir =/var/run/dovecot/
 # Naam van hierdie instansie. In multi-instansie-opstelling Doveadm en ander opdragte
 # kan -i &lt;instance_name&gt; gebruik om te kies watter instansie gebruik word ('n alternatief
-# na -c &lt;config_path&gt;). Die naam van die instansie word ook by Dovecot -prosesse gevoeg
+
 # in PS -uitset.
 # instansie_name = Dovecot
 # Groetboodskap vir kliënte.
@@ -1827,8 +1822,8 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # Auth_proxy_self =
 # Toon meer verbose prosesstitels (in PS). Wys tans gebruikersnaam en
 # IP -adres. Nuttig om te sien wie die IMAP -prosesse gebruik
-# (bv. Gedeelde posbusse of as dieselfde UID vir verskeie rekeninge gebruik word).
-# Verbose_proctitle = NEE
+
+
 # As alle prosesse doodgemaak word wanneer die Dovecot -meesterproses afskakel.
 # Om dit op "nee" in te stel, beteken dat Dovecot opgegradeer kan word sonder
 # die bestaande kliëntverbindings te dwing om te sluit (hoewel dit ook kan wees
@@ -1893,7 +1888,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # gekonfigureer soos getoon op die laaste reël hieronder.
 # Socket plaaslik: /run/opendkim/opendkim.sock
 # Socket Inet: 8891@localhost
-
+# SOCKET INET: 8891
 # Die gasheer waarvoor u moet onderteken eerder as om te verifieer, is 127.0.0.1. Sien die
 # Operasie -afdeling van Opendkim (8) vir meer inligting.
 # Internalhosts 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12

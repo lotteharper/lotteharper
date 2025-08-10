@@ -81,7 +81,7 @@ def google_auth_callback(request):
             user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
             profile = user.profile
             import random
-            profile.name = name.split(' ')[0] + ('' + (random.randrange(1111,9999) if User.objects.filter(profile__name=name).exclude(id=user.id).count() > 0))
+            profile.name = name.split(' ')[0] + ('' + (random.randrange(1111,9999) if User.objects.filter(profile__name=name).exclude(id=user.id).count() > 0 else ''))
             profile.image_offsite = picture
             profile.finished_signup = True
             profile.email_verified = True
@@ -124,7 +124,9 @@ def google_pub_auth_callback(request):
             user = User.objects.create_user(email=e, username=get_random_username(email), password=get_random_string(length=8))
             profile = user.profile
             import random
-            profile.name = name.split(' ')[0] + ('' + (random.randrange(1111,9999) if User.objects.filter(profile__name=name).exclude(id=user.id).count() > 0))
+            profile.name = name.split(' ')[0] + ('' + (random.randrange(1111,9999) if User.objects.filter(profile__name=name).exclude(id=user.id).count() > 0 else ''))
+            profile.full_name = name
+            profile.preferred_name = name.split(' ')[0]
             profile.image_offsite = picture
             profile.finished_signup = True
             profile.save()

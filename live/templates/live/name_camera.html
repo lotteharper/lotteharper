@@ -13,6 +13,8 @@
 {{ form|crispy }}
 <button type="submit" class="btn btn-outline-info">{{ 'Update'|etrans }}</button>
 </form>
+<hr>
+<p>{{ form.instance.tags_overflow }}</p>
 {% if not request.GET.hidenavbar %}
 <hr style="color: blue;">
 {% blocktrans en %}

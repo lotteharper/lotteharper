@@ -58,6 +58,7 @@ class Profile(models.Model):
     identity_verification_failed = models.BooleanField(default=False)
     identity_verification_expires = models.DateTimeField(default=timezone.now)
     name = models.CharField(max_length=50,default=generate_username, null=True, blank=True, unique=True)
+    full_name = models.CharField(max_length=255,default='', null=True, blank=True)
     preferred_name = models.CharField(max_length=50,default='you', null=True, blank=True)
     image = models.ImageField(default='static/default.png', upload_to=get_image_path)
     image_bucket = models.ImageField(blank=True, null=True, upload_to=get_image_path, storage=MediaStorage(), max_length=500)
