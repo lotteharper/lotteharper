@@ -516,8 +516,8 @@ class Post(models.Model):
             with open(os.path.join(settings.BASE_DIR, 'feed/common_words.txt'), 'r') as file:
                 lines = file.readlines()
                 for x in range(settings.POST_WORDS + words):
-                    ex = ex + ' {}'.format(random.choice(lines)[:-1])
-            name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 38) if content.rfind(' ', 20, 38) else 38].strip() if content else 'post')).lower()[:255])[:100]
+                    ex = ex + '-{}'.format(random.choice(lines)[:-1])
+            name = urllib.parse.quote_plus(((content[:content.rfind(' ', 20, 38) if content.rfind(' ', 20, 38) else 38].strip() if content else 'post')).lower()[:255])[:100] + ex
             name = name.replace('+', '-')
             name = re.sub(r"-+", '-', name)
             file.close()
