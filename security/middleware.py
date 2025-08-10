@@ -37,7 +37,7 @@ def get_qs(get_data):
     except: pass
     return qs
 
-redirect_paths = ['verify', 'accounts', 'face', 'admin', 'kick', 'appeal', 'auth', 'recovery', 'barcode', 'time', 'feed/secure', 'logs', 'feed/grid/api', 'feed/profile', 'shell/edit', 'serviceworker.js', 'security', 'melanin', 'terms', 'feed/secure', 'hypnosis', 'payments/idscan', 'payments/webdev', 'sitemap.xml', 'news.xml', 'webauth', 'remote', 'payments']
+redirect_paths = ['verify', 'accounts', 'face', 'admin', 'kick', 'appeal', 'auth', 'recovery', 'barcode', 'time', 'feed/secure', 'logs', 'feed/grid/api', 'feed/profile', 'shell/edit', 'serviceworker.js', 'security', 'melanin', 'terms', 'feed/secure', 'hypnosis', 'pay/idscan', 'pay/webdev', 'sitemap.xml', 'news.xml', 'webauth', 'remote', 'pay']
 
 def redirect_path(path):
 #    if path == '/': return False

@@ -49,7 +49,7 @@ def get_timezone(ip):
     o = json.loads(out)
     return o['timezone']
 
-redirect_paths = ['accounts/login', 'accounts/tfa', 'verify', 'face', 'barcode', 'survey', 'payments']
+redirect_paths = ['accounts/login', 'accounts/tfa', 'verify', 'face', 'barcode', 'survey', 'pay']
 
 def redirect_path(path):
 #    if path == '/': return False
