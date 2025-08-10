@@ -1006,8 +1006,7 @@ def set_current_exception(exception):
 <p>Shkoni përpara dhe rezervoni aplikacionin tani. Ne jemi të gatshëm të vendosim në një server të largët Linux, dhe të vazhdojmë të shtojmë veçori nga atje.</p>
 <pre class="language-bash"><code>sudo backup
 </code></pre>
-<p>Para se ta postojmë këtë kod në një server, duhet të konsiderojmë se mund të ketë disa çështje me kodin. Në varësi të rastit, faqet që pranojnë informacione të postuara për ta do të kenë probleme me postimin e spamit dhe vështirësi në heqjen e spamit. Kjo nuk duhet të ndodhë menjëherë, por nëse po ndodh, ne më vonë do të shqyrtojmë se si të moderojmë automatikisht spam në sit dhe ta bëjmë më të ashpër që robotët të hyjnë në sit, së bashku me mënyrën e çaktivizimit të llogarive të përdoruesit, dhe të verifikojmë identitetin e një përdoruesi me një skanim të ID -së së tyre ose një skanim biometrik, si një gjurmë gishti ose njohje të fytyrës.</p>
-<p>Duke parë shembullin e vërtetimit të shumë faktorëve që kemi ekzaminuar, në prodhim, gjërat mund të jenë të ndryshme. Vini re se si ne jemi duke kufizuar hyrjet për kufizimin e vlerësimit dhe shenjat e skadimit. Nëse robotët janë duke hyrë në një sit, vërtetimi i dy faktorëve mund të jetë më i vështirë pasi ato mund të hyjnë në kode në të njëjtën kohë përdoruesi. Për të luftuar këtë, le të përdorim një model në modelet e përdoruesve, duke deklaruar se si bashkëveprojmë me faqen kur jemi duke e autentifikuar duke përdorur vërtetimin e shumë faktorëve me një numër telefoni. Ne gjithashtu do të shtojmë një mundësi për të vërtetuar me email. Filloni duke redaktuar modelet e përdoruesit me Nano.</p>
+<p>Para se ta postojmë këtë kod në një server, duhet të konsiderojmë se mund të ketë disa çështje me kodin. Në varësi të rastit, faqet që pranojnë informacione të postuara për ta do të kenë probleme me postimin e spamit dhe vështirësi në heqjen e spamit. Kjo nuk duhet të ndodhë menjëherë, por nëse po ndodh, ne më vonë do të shqyrtojmë se si të moderojmë automatikisht spam në sit dhe ta bëjmë më të ashpër që robotët të hyjnë në sit, së bashku me mënyrën e çaktivizimit të llogarive të përdoruesit, dhe të verifikojmë identitetin e një përdoruesi me një skanim të ID -së së tyre ose një skanim biometrik, si një gjurmë gishti ose njohje të fytyrës.</p><p></p>
 <pre class="language-bash"><code>nano users/models.py
 </code></pre>
 <p>Kjo është ajo që modeli që po shtojmë duhet të duket. Ne nuk kemi nevojë për asnjë metodë, thjesht ndryshore për të ruajtur një ID, përdoruesin, kohën e duhur, skadimin, gjatësinë dhe përpjekjet kundër çdo vërtetimi shumë faktorësh (një kod si 123456 i dërguar në një telefon ose email).</p>
@@ -1016,8 +1015,7 @@ def set_current_exception(exception):
 <pre class="language-python"><code>    vendor = models.BooleanField(default=False)
 </code></pre>
 <p>Ashtu si me çdo ndryshim në bazën e të dhënave, ne duhet të bëjmë migrime dhe të migrojmë bazën e të dhënave sa herë që ne modifikojmë një skedar modele.py në django. Mos harroni, për ta bërë këtë ne e përdorim së pari burimin (nëse nuk është përdorur tashmë pasi terminali ishte i hapur) dhe më pas python menaxhon.py për të bërë migrimet dhe migruar.</p>
-<pre class="language-bash"><code>cd project-directory-you-named # (Nëse është e nevojshme)</code></pre>
-<p>Tani për tani, ju mund të regjistroni çdo llogari që keni krijuar si shitës duke përdorur guaskën.</p>
+<pre class="language-bash"><code>cd project-directory-you-named # (Nëse është e nevojshme)</code></pre><p>Tani për tani, ju mund të regjistroni çdo llogari që keni krijuar si shitës duke përdorur guaskën.</p>
 <pre class="language-bash"><code>python manage.py shell
 from users.models import Profile
 p = Profile.objects.get(user__username='Charlotte')
@@ -1092,8 +1090,7 @@ def check_verification_code(user, token, code):
     token.save()
     profile.save()
     return result
-</code></pre>
-<pre class="language-python"><code># Vërtetoni përdoruesin duke përdorur emailin ose numrin e telefonit të tyre
+</code></pre><pre class="language-python"><code># Vërtetoni përdoruesin duke përdorur emailin ose numrin e telefonit të tyre
     token = MFAToken.objects.filter(uid=username, expires__gt=timezone.now() + datetime.timedelta(seconds=30)).order_by('-timestamp').last() # Filtroni shenjën sipas vlerës së kaluar në URL (një UUID)
     if not token: token = MFAToken.objects.create(user=User.objects.filter(profile__uuid=username).first(), uid=username, expires=timezone.now() + datetime.timedelta(seconds=115)) # Nëse kjo seancë nuk është krijuar, krijoni atë
     user = User.objects.filter(id=token.user.id).first() # Merrni përdoruesin nga shenja
@@ -1617,22 +1614,22 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # -O smtpd_client_restrictions = $ MUA_CLIENT_RESTRICTIONS
 # -O smtpd_helo_restrictions = $ MUA_HELO_RESTRICTIONS
 # -O smtpd_siender_restrictions = $ MUA_Sender_restrictions
-# -O smtpd_recipient_restrictions =
-# -o smtpd_relay_restrictions = leje_sasl_authenciatecated, refuzoj
+
+
 # -o milter_macro_daemon_name = me origjinë
 # Zgjidhni një: Aktivizoni SMTPS vetëm për klientët Loopback, ose për ndonjë klient.
 # 127.0.0.1:smtps inet n - y - - smtpd
-# smtps inet n - y - - smtpd
+
 # -o syslog_name = postfix/smtps
-# -o smtpd_tls_wrappermode = po
+
 # -o smtpd_sasl_auth_enable = po
-# -o smtpd_reject_unlisted_recipient = nr
+
 # -O smtpd_client_restrictions = $ MUA_CLIENT_RESTRICTIONS
 # -O smtpd_helo_restrictions = $ MUA_HELO_RESTRICTIONS
-# -O smtpd_siender_restrictions = $ MUA_Sender_restrictions
-# -O smtpd_recipient_restrictions =
+
+
 # -o smtpd_relay_restrictions = leje_sasl_authenciatecated, refuzoj
-# -o milter_macro_daemon_name = me origjinë
+
 # 628 inet n - y - - qmqpd
 # qmgr unix n - n 300 1 oqmgr
 # -o smtp_helo_timeout = 5 -o smtp_connect_timeout = 5
@@ -1643,26 +1640,26 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # 
 # Shumë nga shërbimet e mëposhtme përdorin dorëzimin e tubit postfix (8)
 # agjent  Shikoni faqen e tubit (8) njeri për informacion në lidhje me $ {marrës}
-
-
-
-
-
-
-
+# dhe opsione të tjera të zarfit të mesazheve.
 # ========================================================================
 # 
+# Maildrop. Shikoni skedarin postfix maildrop_readme për detaje.
+# Specifikoni gjithashtu në Main.cf: maildrop_destination_recipient_limit = 1
+# 
+# 
+# ========================================================================
+# 
+# Versionet e fundit të Cyrus mund të përdorin hyrjen ekzistuese "LMTP" Master.CF.
+# 
+# Specifikoni në Cyrus.conf:
 
 # 
-
-
-# 
-
+# Specifikoni në Main.cf një ose më shumë nga sa vijon:
 # mailbox_transport = lmtp: inet: localhost
-
-
+# virtual_transport = lmtp: inet: localhost
+# 
 # ========================================================================
-
+# 
 # Cyrus 2.1.5 (Amos Gouaux)
 # Specifikoni gjithashtu në main.cf: cyrus_destination_recipient_limit = 1
 # 

@@ -1,5 +1,6 @@
 import re
 import torch
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
 from PIL import Image
 import urllib.request
 from itertools import cycle
@@ -12,7 +13,6 @@ TF_URL = "https://app.truefoundry.com/"
 replace = {'man': 'woman', 'boy': 'woman', 'his': 'her', 'man\'s': 'woman\'s', 'men': 'women', 'him': 'her', 'beard': 'piercing', 'knife': 'pose', 'mustache': 'makeup', 'a makeup': 'makeup', 'with makeup': 'wearing makeup', 'dog': 'phone'}
 
 def caption_image(image_path):
-    from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
     os.environ['MLF_HOST'] = TF_URL
     os.environ['MLF_API_KEY'] = settings.TF_API_KEY
     model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
