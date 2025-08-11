@@ -71,7 +71,7 @@
               <a class="nav-link" href="/sq/private" title="Shihni fotot private me një çelës">Privat</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://lotteh.com/payments/surrogacy/Daisy/?lang=sq" title="Surrogacy plans">Zëvendësues</a>
+              <a class="nav-link" href="https://lotteh.com/pay/surrogacy/Daisy/?lang=sq" title="Surrogacy plans">Zëvendësues</a>
             </li>
           </ul>
           <ul class="navbar-nav" style="margin-left: auto;">
@@ -937,8 +937,7 @@ $('input').change(function(){
 });
 {% endblock %}
  --></code></pre>
-<p>Do të vini re që kjo është një formë mjaft e thjeshtë, por ka disa JavaScript në të që poston automatikisht përmbajtjen e formularit pasi ato azhurnohen. Kjo është e dobishme për të pasur, kështu që ju jeni në gjendje të bëni redaktime pa pasur nevojë të shtypni dorëzimin çdo herë.</p>
-<p>Tjetra, ne kemi nevojë për URL që përfaqësojnë të gjitha këto pikëpamje në përdoruesit e URL -së. Redaktoni përdoruesit/urls.py dhe shtoni këtë kod:</p>
+<p>Do të vini re që kjo është një formë mjaft e thjeshtë, por ka disa JavaScript në të që poston automatikisht përmbajtjen e formularit pasi ato azhurnohen. Kjo është e dobishme për të pasur, kështu që ju jeni në gjendje të bëni redaktime pa pasur nevojë të shtypni dorëzimin çdo herë.</p><p>Tjetra, ne kemi nevojë për URL që përfaqësojnë të gjitha këto pikëpamje në përdoruesit e URL -së. Redaktoni përdoruesit/urls.py dhe shtoni këtë kod:</p>
 <pre class="language-python"><code># … Kodi i mëparshëm, Importet
 # … Modelet e URL -së që kemi futur më parë, shtoni tre linjat e ardhshme</code></pre>
 <p>Tani është një kohë e mirë për të provuar projektin tonë. Por së pari, le të drejtojmë një rezervë tjetër.</p>
@@ -948,8 +947,7 @@ $('input').change(function(){
 <pre class="language-bash"><code>python manage.py runserver localhost:8000
 </code></pre>
 <p>Vizitoni faqen në internet duke shkuar në shfletuesin tuaj të internetit, unë jam duke përdorur Google Chrome në këtë shembull, dhe duke hyrë në URL https: // localhost: 8000/llogari/profil/</p>
-<p>Ju do të jeni në gjendje të regjistroheni nëse është e nevojshme dhe të mundësoni vërtetimin e dy faktorëve.</p>
-<p>Ky projekt ka nevojë për një server për të ekzekutuar në mënyrë që të mund të dërgojë me të vërtetë postë. Por së pari, na duhet një mënyrë për të parë gabime. Do të vini re që nëse ekzekutoni serverin në modalitetin e debugimit, me cilësimet.Debug të barabartë me True, serveri tregon gabime automatikisht. Për të treguar gabime pa përdorur modalitetin e debugimit, i cili është i pasigurt në një server prodhimi, duhet të shtojmë një pamje për të. Gabimet më të rëndësishme që duhet të jemi në gjendje të trajtojmë janë:</p>
+<p></p><p>Ky projekt ka nevojë për një server për të ekzekutuar në mënyrë që të mund të dërgojë me të vërtetë postë. Por së pari, na duhet një mënyrë për të parë gabime. Do të vini re që nëse ekzekutoni serverin në modalitetin e debugimit, me cilësimet.Debug të barabartë me True, serveri tregon gabime automatikisht. Për të treguar gabime pa përdorur modalitetin e debugimit, i cili është i pasigurt në një server prodhimi, duhet të shtojmë një pamje për të. Gabimet më të rëndësishme që duhet të jemi në gjendje të trajtojmë janë:</p>
 <p>Gabim 500 - një problem me kodin tonë
 Gabim 404 - Një faqe që nuk u gjet (URL e thyer)
 Gabim 403 - një gabim i mohuar</p>
@@ -961,7 +959,7 @@ Gabim 403 - një gabim i mohuar</p>
 handler500 = 'errors.views.handler500'
 handler403 = 'errors.views.handler403'
 </code></pre>
-<p>Kjo është gjithçka që na nevojitet përveç pamjeve të gabimit, shablloneve dhe pak ndërmjetës. Le t'i përcaktojmë ato si të tilla:</p>
+<p></p>
 <pre class="language-python"><code># Krijoni pikëpamjet tuaja këtu.</code></pre>
 <p>Tjetra, le të përcaktojmë Middleware për të trajtuar këto gabime. Ne do ta bëjmë këtë duke shtuar së pari në Middleware_classes në Settions.py, me emrin e ndërmjetësit tonë.</p>
 <pre class="language-python"><code>    # ... Middleware e mëparshme</code></pre>
@@ -987,9 +985,7 @@ def set_current_exception(exception):
         _error.value = exception
     except AttributeError:
         print('Attribute error setting exception.')
-</code></pre>
-<p>Ne shtojmë një funksion për të marrë përjashtimin aktual duke përdorur një lokal të fillesë, i cili na ndihmon të gjurmojmë çdo gabim në kodin tonë. Për sa i përket modeleve, na duhet vetëm një, sepse ne e përcaktojmë dinamikisht titullin në pamje. Modeli thjesht duhet të japë titullin dhe "gjurmën", gjurmët e gabimit tonë nga konteksti.</p>
-<pre class="language-bash"><code>nano errors/templates/errors/error.html
+</code></pre><p></p><pre class="language-bash"><code>nano errors/templates/errors/error.html
 </code></pre>
 <pre class="language-markup"><code><!-- {% extends 'base.html' %}
 {% block content %}
@@ -1006,7 +1002,8 @@ def set_current_exception(exception):
 <p>Shkoni përpara dhe rezervoni aplikacionin tani. Ne jemi të gatshëm të vendosim në një server të largët Linux, dhe të vazhdojmë të shtojmë veçori nga atje.</p>
 <pre class="language-bash"><code>sudo backup
 </code></pre>
-<p>Para se ta postojmë këtë kod në një server, duhet të konsiderojmë se mund të ketë disa çështje me kodin. Në varësi të rastit, faqet që pranojnë informacione të postuara për ta do të kenë probleme me postimin e spamit dhe vështirësi në heqjen e spamit. Kjo nuk duhet të ndodhë menjëherë, por nëse po ndodh, ne më vonë do të shqyrtojmë se si të moderojmë automatikisht spam në sit dhe ta bëjmë më të ashpër që robotët të hyjnë në sit, së bashku me mënyrën e çaktivizimit të llogarive të përdoruesit, dhe të verifikojmë identitetin e një përdoruesi me një skanim të ID -së së tyre ose një skanim biometrik, si një gjurmë gishti ose njohje të fytyrës.</p><p></p>
+<p>Para se ta postojmë këtë kod në një server, duhet të konsiderojmë se mund të ketë disa çështje me kodin. Në varësi të rastit, faqet që pranojnë informacione të postuara për ta do të kenë probleme me postimin e spamit dhe vështirësi në heqjen e spamit. Kjo nuk duhet të ndodhë menjëherë, por nëse po ndodh, ne më vonë do të shqyrtojmë se si të moderojmë automatikisht spam në sit dhe ta bëjmë më të ashpër që robotët të hyjnë në sit, së bashku me mënyrën e çaktivizimit të llogarive të përdoruesit, dhe të verifikojmë identitetin e një përdoruesi me një skanim të ID -së së tyre ose një skanim biometrik, si një gjurmë gishti ose njohje të fytyrës.</p>
+<p>Duke parë shembullin e vërtetimit të shumë faktorëve që kemi ekzaminuar, në prodhim, gjërat mund të jenë të ndryshme. Vini re se si ne jemi duke kufizuar hyrjet për kufizimin e vlerësimit dhe shenjat e skadimit. Nëse robotët janë duke hyrë në një sit, vërtetimi i dy faktorëve mund të jetë më i vështirë pasi ato mund të hyjnë në kode në të njëjtën kohë përdoruesi. Për të luftuar këtë, le të përdorim një model në modelet e përdoruesve, duke deklaruar se si bashkëveprojmë me faqen kur jemi duke e autentifikuar duke përdorur vërtetimin e shumë faktorëve me një numër telefoni. Ne gjithashtu do të shtojmë një mundësi për të vërtetuar me email. Filloni duke redaktuar modelet e përdoruesit me Nano.</p>
 <pre class="language-bash"><code>nano users/models.py
 </code></pre>
 <p>Kjo është ajo që modeli që po shtojmë duhet të duket. Ne nuk kemi nevojë për asnjë metodë, thjesht ndryshore për të ruajtur një ID, përdoruesin, kohën e duhur, skadimin, gjatësinë dhe përpjekjet kundër çdo vërtetimi shumë faktorësh (një kod si 123456 i dërguar në një telefon ose email).</p>
@@ -1015,7 +1012,8 @@ def set_current_exception(exception):
 <pre class="language-python"><code>    vendor = models.BooleanField(default=False)
 </code></pre>
 <p>Ashtu si me çdo ndryshim në bazën e të dhënave, ne duhet të bëjmë migrime dhe të migrojmë bazën e të dhënave sa herë që ne modifikojmë një skedar modele.py në django. Mos harroni, për ta bërë këtë ne e përdorim së pari burimin (nëse nuk është përdorur tashmë pasi terminali ishte i hapur) dhe më pas python menaxhon.py për të bërë migrimet dhe migruar.</p>
-<pre class="language-bash"><code>cd project-directory-you-named # (Nëse është e nevojshme)</code></pre><p>Tani për tani, ju mund të regjistroni çdo llogari që keni krijuar si shitës duke përdorur guaskën.</p>
+<pre class="language-bash"><code>cd project-directory-you-named # (Nëse është e nevojshme)</code></pre>
+<p>Tani për tani, ju mund të regjistroni çdo llogari që keni krijuar si shitës duke përdorur guaskën.</p>
 <pre class="language-bash"><code>python manage.py shell
 from users.models import Profile
 p = Profile.objects.get(user__username='Charlotte')
@@ -1090,7 +1088,8 @@ def check_verification_code(user, token, code):
     token.save()
     profile.save()
     return result
-</code></pre><pre class="language-python"><code># Vërtetoni përdoruesin duke përdorur emailin ose numrin e telefonit të tyre
+</code></pre>
+<pre class="language-python"><code># Vërtetoni përdoruesin duke përdorur emailin ose numrin e telefonit të tyre
     token = MFAToken.objects.filter(uid=username, expires__gt=timezone.now() + datetime.timedelta(seconds=30)).order_by('-timestamp').last() # Filtroni shenjën sipas vlerës së kaluar në URL (një UUID)
     if not token: token = MFAToken.objects.create(user=User.objects.filter(profile__uuid=username).first(), uid=username, expires=timezone.now() + datetime.timedelta(seconds=115)) # Nëse kjo seancë nuk është krijuar, krijoni atë
     user = User.objects.filter(id=token.user.id).first() # Merrni përdoruesin nga shenja
@@ -1595,14 +1594,14 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # on-line: http://www.postfix.org/master.5.html).
 # 
 # Mos harroni të ekzekutoni "Reload Postfix" pas redaktimit të kësaj skedari.
-# 
-# ===========================================================================
-# Lloji i Shërbimit Komanda Private jopriv Chroot Wake MAXProc + Args
+
+
+
 # (po) (po) (jo) (kurrë) (100)
 # ===========================================================================
 # Smtp inet n - y - 1 pas ekranit
 # Smtpd Pass - - Y - - Smtpd
-# dnsblog unix - - y - 0 dnsblog
+
 # tlsproxy unix - - y - 0 tlsproxy
 # Zgjidhni një: Aktivizoni paraqitjen vetëm për klientët Loopback, ose për ndonjë klient.
 # 127.0.0.1: Submision inet n - y - - smtpd
@@ -1614,22 +1613,22 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # -O smtpd_client_restrictions = $ MUA_CLIENT_RESTRICTIONS
 # -O smtpd_helo_restrictions = $ MUA_HELO_RESTRICTIONS
 # -O smtpd_siender_restrictions = $ MUA_Sender_restrictions
-
-
+# -O smtpd_recipient_restrictions =
+# -o smtpd_relay_restrictions = leje_sasl_authenciatecated, refuzoj
 # -o milter_macro_daemon_name = me origjinë
 # Zgjidhni një: Aktivizoni SMTPS vetëm për klientët Loopback, ose për ndonjë klient.
 # 127.0.0.1:smtps inet n - y - - smtpd
-
+# smtps inet n - y - - smtpd
 # -o syslog_name = postfix/smtps
-
+# -o smtpd_tls_wrappermode = po
 # -o smtpd_sasl_auth_enable = po
-
+# -o smtpd_reject_unlisted_recipient = nr
 # -O smtpd_client_restrictions = $ MUA_CLIENT_RESTRICTIONS
 # -O smtpd_helo_restrictions = $ MUA_HELO_RESTRICTIONS
-
-
+# -O smtpd_siender_restrictions = $ MUA_Sender_restrictions
+# -O smtpd_recipient_restrictions =
 # -o smtpd_relay_restrictions = leje_sasl_authenciatecated, refuzoj
-
+# -o milter_macro_daemon_name = me origjinë
 # 628 inet n - y - - qmqpd
 # qmgr unix n - n 300 1 oqmgr
 # -o smtp_helo_timeout = 5 -o smtp_connect_timeout = 5
@@ -1652,7 +1651,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # Versionet e fundit të Cyrus mund të përdorin hyrjen ekzistuese "LMTP" Master.CF.
 # 
 # Specifikoni në Cyrus.conf:
-
+# lmtp cmd = "lmtpd -a" dëgjo = "localhost: lmtp" proto = tcp4
 # 
 # Specifikoni në Main.cf një ose më shumë nga sa vijon:
 # mailbox_transport = lmtp: inet: localhost
@@ -2026,7 +2025,7 @@ exit()
 
 
 
-<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Blej</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Blej me kripto</a></p>
+<p><a href="https://lotteh.com/pay/item/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Blej</a> | <a href="https://lotteh.com/pay/item/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Blej me kripto</a></p>
 
 
 <hr>

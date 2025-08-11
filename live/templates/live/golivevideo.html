@@ -610,6 +610,7 @@ async function attachToDOM(id, stream) {
   videoElem.volume = 0;
   videoElem.setAttribute("playsinline", true);
   videoElem.srcObject = new MediaStream(stream.getTracks());
+  videoElem.addEventListener("pause", (event) => {event.target.play();});
   videoElem.play();
   mediaWrapperDiv.appendChild(videoElem);
   return videoElem;

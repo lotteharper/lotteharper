@@ -372,7 +372,7 @@ class VideoRecording(models.Model):
     def __str__(self):
         import pytz
         from django.conf import settings
-        return 'Last frame at {}, Interactive "{}", public = {}'.format(self.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%m/%d/%Y, %H:%M:%S"), self.interactive, self.public)
+        return 'Last frame at {}, {} frames, ~{} length, Interactive "{}", public = {}, processing = {}, processed = {}, uploaded = {}'.format(self.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%m/%d/%Y, %H:%M:%S"), self.frames.count(), '{}:{}'.format(int((self.frames.count() * 5)/60), f"{(self.frames.count() * 5)%60:02d}"), self.interactive, self.public, self.processing, self.processed, self.uploaded)
 
 #
 

@@ -41,7 +41,6 @@ def convert_wav(audio_path):
 
 def censor_audio(audio_path, output_path, format='wav'):
     from vosk import Model, KaldiRecognizer
-    from better_profanity import profanity
 
     wave_path = convert_wav(audio_path)
     proc_file = AudioSegment.from_wav(wave_path)
@@ -73,11 +72,14 @@ def censor_audio(audio_path, output_path, format='wav'):
                 results.append((time_ms, text.strip()))
         except: pass
 
-    if not results: return False
+    if len(results.keys()) == 0:
+        os.remove(wave_path)
+        return False
     ltime = 0
     combined_sounds = AudioSegment.empty()
     beep = AudioSegment.from_wav(os.path.join(settings.BASE_DIR, 'media/sounds/', 'censor-beep.wav'))
 
+    from better_profanity import profanity
     for time_ms, word in results:
         segment = proc_file[ltime:int(time_ms)]
         if profanity.contains_profanity(word):
