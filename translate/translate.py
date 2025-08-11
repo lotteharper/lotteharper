@@ -5,7 +5,6 @@ from googletrans import Translator
 from translate.languages import SELECTOR_LANGUAGES
 
 MAX_TRANS = 200
-translator = Translator()
 
 def translate(request, content, target=None, src=None):
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
@@ -55,6 +54,7 @@ def translate(request, content, target=None, src=None):
     c = ''
     last = False
 #    print('Src lang code is ' + lang + ', target is ' + lang_code)
+    translator = Translator()
     for x in range(0, int(len(content)/MAX_TRANS) + 1):
         try:
             if len(content) < MAX_TRANS:
@@ -71,7 +71,7 @@ def translate(request, content, target=None, src=None):
             print(traceback.format_exc())
             pass
 #    translator.client._channel.close()
-#    translator = None
+    translator = None
     if len(text) > 0:
         try:
             CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation)

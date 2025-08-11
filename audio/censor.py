@@ -53,25 +53,27 @@ def censor_audio(audio_path, output_path, format='wav'):
     frame_size = 1000  # frames per chunk
     ms_per_frame = 1000.0 / sample_rate
     time_ms = 0
-
     while True:
         data = wf.readframes(frame_size)
         if len(data) == 0:
             break
         time_ms += frame_size * ms_per_frame
-        if rec.AcceptWaveform(data):
-            try:
-                text = json.loads(rec.Result())["partial"]
-            except:
-                text = ''
-            results.append((time_ms, text.strip()))
-        else:
-            try:
-                text = json.loads(rec.PartialResult())["partial"]
-            except:
-                text = ''
-            results.append((time_ms, text.strip()))
+        try:
+            if rec.AcceptWaveform(data):
+                try:
+                    text = json.loads(rec.Result())["partial"]
+                except:
+                    text = ''
+                results.append((time_ms, text.strip()))
+            else:
+                try:
+                    text = json.loads(rec.PartialResult())["partial"]
+                except:
+                    text = ''
+                results.append((time_ms, text.strip()))
+        except: pass
 
+    if not results: return False
     ltime = 0
     combined_sounds = AudioSegment.empty()
     beep = AudioSegment.from_wav(os.path.join(settings.BASE_DIR, 'media/sounds/', 'censor-beep.wav'))
@@ -175,13 +177,15 @@ def censor_video_audio(video_path, out_path):
     import uuid
     censor_path = os.path.join(settings.BASE_DIR, 'temp/{}-censor.wav'.format(uuid.uuid4()))
     censored_path = censor_audio(video_path, censor_path)
-    res = os.path.exists(censored_path)
-    print(res)
-#    if not res: return
-    from audio.addtovideo import replace_audio
-    replace_audio(video_path, censored_path, out_path)
-#    os.remove(censored_audio)
-    return out_path
+    if censored_path:
+        res = os.path.exists(censored_path)
+        print(res)
+    #    if not res: return
+        from audio.addtovideo import replace_audio
+        replace_audio(video_path, censored_path, out_path)
+    #    os.remove(censored_audio)
+        return out_path
+    return False
 
 def slice_audio_to_word(user, recording, word_name, last_word, next_word, path, start, end):
     random = get_random_string(length=8)

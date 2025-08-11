@@ -48,4 +48,6 @@ sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Gi
 sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
 # Create a superuser so you can authenticate with your app
 DIR_PATH="/home/$USER_NAME/$PROJECT_NAME/"
-${DIR_PATH}venv/bin/python ${DIR_PATH}create_superuser.py "YourUsername" "youremail@example.com" "yourpassword123"
+${DIR_PATH}venv/bin/python ${DIR_PATH}create_superuser.py "YourAdminUsername" "youremail@example.com" "yourpassword123"
+${DIR_PATH}venv/bin/python ${DIR_PATH}create_account.py "YourLoginUsername" "youremail@example.com" "yourpassword123" # Or login with Google
+# Be sure to set all settings for your project in project_name/settings.py and otherwise, edit /etc/config.json and /etc/apis.json according to the example

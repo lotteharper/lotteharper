@@ -262,10 +262,11 @@ def process_live(camera_id, frame_id):
     if camera.censor_audio and profanity.contains_profanity(transcript):
         op_path = os.path.join(settings.MEDIA_ROOT, get_file_path(frame, 'frame.mp4'))
         from audio.censor import censor_video_audio
-        censor_video_audio(frame.frame.path, op_path)
-        os.remove(frame.frame.path)
-        frame.frame = op_path
-        frame.save()
+        result = censor_video_audio(frame.frame.path, op_path)
+        if result:
+            os.remove(frame.frame.path)
+            frame.frame = op_path
+            frame.save()
     if not frame.safe and settings.NUDITY_FILTER: # or not is_safe_image(frame.still.path):
         frame.public = False
         frame.processed = True

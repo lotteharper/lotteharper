@@ -71,7 +71,7 @@
               <a class="nav-link" href="/af/private" title="Sien privaat foto&#x27;s met &#x27;n sleutel">Privaat</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://lotteh.com/payments/surrogacy/Daisy/?lang=af" title="Surrogacy plans">Surrogaatskap</a>
+              <a class="nav-link" href="https://lotteh.com/pay/surrogacy/Daisy/?lang=af" title="Surrogacy plans">Surrogaatskap</a>
             </li>
           </ul>
           <ul class="navbar-nav" style="margin-left: auto;">
@@ -1191,16 +1191,13 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 <p>Nou het ons 'n paar meer nuttige funksies. Maar wat van die groot prentjie hier? Hierdie kode is nog steeds nie van die internet af nie, ons het nog geen e -posbediener nie, en ons moet ons app uitbrei om 'n uitgebreide verifikasieproses sowel as gladde uitlegte in te sluit om ons te help om die webwerf te verken, saam met veilige protokolle vir die verifiëring van bevoorregte gebruikers.</p>
 <p>Ons sal dit alles regkry. Die belangrikste ding vir nou is net om hierdie kode aanlyn te kry, wat ons met net 'n paar reëls bash op 'n Ubuntu -bediener kan doen. U moet egter 'n bediener hiervoor huur, tensy u 'n bediener tuis het en 'n internet -intekening op die internet het waarmee u poorte kan oopmaak. Ek het persoonlik my webwerf bestuur op 'n HP Z440 wat in my woonstel geïnstalleer is, maar dit is gewoonlik baie goedkoper vir basiese behoeftes om 'n virtuele private bediener (VPS) te huur.</p>
 <p>Hou in gedagte dat die kode wat ons nou bestuur, relatief dun is, dit moet onderhou en verbeter word voordat ons gereed is om te gebruik wat ons moet bou. Maak seker dat u versigtig is wat u met die internet doen, maak seker dat u hierdie webwerf in die openbaar op die web op 'n Linux -bediener ontplooi, u 'n plan het om ongewenste interaksies met u webwerf te blokkeer. Dit sal waarskynlik aanvanklik nie 'n probleem wees nie, maar ons sal 'n verskeidenheid oplossings ondersoek om dit te bekamp, ​​insluitend masjienleer, kunsmatige intelligensie en rekenaarvisie. As dit 'n probleem word, kyk verder in hierdie teks vir 'n oplossing.</p>
-<p>Wat 'n VPS huur, is daar baie plekke waarheen u kan gaan. Google Cloud het VPS -bedieners, Ionos, Kamatera, Amazon AWS, en meer verskaffers bied wolkbedienersoplossings aan wat by ons behoeftes pas.</p>
-<p>U moet deur hul vorms klik en 'n plan kies om aan die gang te kom. U kan met 'n basiese plan saam met enige verskaffer gaan, maar maak seker dat die verskaffer u toelaat om Port Mail Server -poorte oop te maak om e -pos te stuur (dit moet poort 587 en poort 25 wees), sommige verskaffers blokkeer hierdie poorte. Tot dusver het ek die beste ervaring met Ionos en Kamatera gehad, albei sal my toelaat om onbeperkte e -pos te stuur en hul pryse is redelik goedkoop.</p>
-<p>U sal aan u nuwe bediener koppel oor 'n protokol genaamd SSH of Secure Shell, waarmee u op afstand koppelvlak met die bediener kan koppel presies soos u persoonlike rekenaar, vanaf u persoonlike rekenaar. As u die bediener opstel, sal die gasheerverskaffer u waarskynlik vra om 'n SSH -sleutel by te voeg, of hulle sal u 'n gebruikersnaam en wagwoord gee. Die SSH -sleutel is hoe u vanaf die opdragreël by die bediener sal aanmeld om die kode te wysig. Gebruik die onderstaande SSH-keygen-opsies om 'n SSH-sleutel te genereer.</p>
-<pre class="language-bash"><code>ssh-keygen
+<p>Wat 'n VPS huur, is daar baie plekke waarheen u kan gaan. Google Cloud het VPS -bedieners, Ionos, Kamatera, Amazon AWS, en meer verskaffers bied wolkbedienersoplossings aan wat by ons behoeftes pas.</p><p>U moet deur hul vorms klik en 'n plan kies om aan die gang te kom. U kan met 'n basiese plan saam met enige verskaffer gaan, maar maak seker dat die verskaffer u toelaat om Port Mail Server -poorte oop te maak om e -pos te stuur (dit moet poort 587 en poort 25 wees), sommige verskaffers blokkeer hierdie poorte. Tot dusver het ek die beste ervaring met Ionos en Kamatera gehad, albei sal my toelaat om onbeperkte e -pos te stuur en hul pryse is redelik goedkoop.</p>
+<p>U sal aan u nuwe bediener koppel oor 'n protokol genaamd SSH of Secure Shell, waarmee u op afstand koppelvlak met die bediener kan koppel presies soos u persoonlike rekenaar, vanaf u persoonlike rekenaar. As u die bediener opstel, sal die gasheerverskaffer u waarskynlik vra om 'n SSH -sleutel by te voeg, of hulle sal u 'n gebruikersnaam en wagwoord gee. Die SSH -sleutel is hoe u vanaf die opdragreël by die bediener sal aanmeld om die kode te wysig. Gebruik die onderstaande SSH-keygen-opsies om 'n SSH-sleutel te genereer.</p><pre class="language-bash"><code>ssh-keygen
 </code></pre>
 <p>Stoor die lêer en skryf dit oor as u dit nodig het, dit is goed om u SSH -sleutels te draai as u dit nog nie gedoen het nie. Nou kan u die volgende opdrag gebruik om u SSH -sleutel te sien. U wil dit na u afstandbediener kopieer, sodat u dit kan gebruik om te verifieer.</p>
 <pre class="language-bash"><code>cat ~/.ssh/id_rsa.pub
 </code></pre>
-<p>As u nie 'n SSH-sleutel kon sien wanneer u die opdrag tik nie ('n lang string syfers en letters wat begin met 'sSH-RSA AAA'), probeer om 'n RSA-sleutel te genereer (dit is veiliger, so ek raai u aan om dit te gebruik.) Die volgende kode sal 'n 4096 bit RSA SSH-sleutel genereer.</p>
-<pre class="language-bash"><code>ssh-keygen -t rsa -b 4096
+<p>As u nie 'n SSH-sleutel kon sien wanneer u die opdrag tik nie ('n lang string syfers en letters wat begin met 'sSH-RSA AAA'), probeer om 'n RSA-sleutel te genereer (dit is veiliger, so ek raai u aan om dit te gebruik.) Die volgende kode sal 'n 4096 bit RSA SSH-sleutel genereer.</p><pre class="language-bash"><code>ssh-keygen -t rsa -b 4096
 </code></pre>
 <p>Skep 'n VPS wat Ubuntu bestuur, maar u beplan om dit te doen. Nadat u 'n VPS geskep het deur deur die vorms op die verskafferswebwerf (Kamatera.com, Ionos.com of soortgelyk) te klik, wil u aanmeld. Om dit te doen, gebruik die SSH -opdrag met u IP -adres (die adres wat soos xx.xx.xx.xx lyk). U moet ook sensitief wees vir die standaard -gebruikersnaam op die bediener wat ons geskep het, byvoorbeeld Ubuntu.</p>
 <pre class="language-bash"><code>ssh ubuntu@XX.XX.XX.XX
@@ -1216,7 +1213,7 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 # OpenSSH is om opsies met hul standaardwaarde te spesifiseer waar
 # moontlik, maar laat hulle kommentaar lewer.  Ongeastemmenteerde opsies oorskry die
 # standaardwaarde.
-# Hawe 22
+
 # Adresfamilie enige
 # ListenAddress 0.0.0.0
 # ListenAddress ::
@@ -1260,11 +1257,11 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 # Gssapistrictacceptorcheck ja
 # GSSAPIKEEXCHANGE NEE
 # Stel dit op 'Ja' om PAM -verifikasie, rekeningverwerking moontlik te maak,
-
+# en sessieverwerking. As dit geaktiveer is, sal PAM -verifikasie
 # toegelaat word deur die KBD -interaktiewea -verifiëring en
 # WagwoordAuthentication.  Afhangende van u PAM -konfigurasie,
 # PAM -verifikasie via kbdinteractiveauthentication kan omseil
-
+# die instelling van "Permitrootlogin sonder paswoord".
 # As u net wil hê dat die PAM -rekening en sessie -tjeks moet loop sonder
 # PAM -verifikasie, stel dit dan in staat, maar stel Passwordauthentication
 # en kbdinteractiveauthentication to 'No'.
@@ -1272,22 +1269,22 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 # AllowTCPForwarding Ja
 # Gatewayports no
 # X11displayOffset 10
-
+# X11uselocalhost ja
 # Permittty ja
 # Printlastlog ja
 # TCPKEEPALIVE JA
 # Permituseren omgewings nr
 # Kompressie vertraag
 # ClientaliveInterval 0
-
+# Clientalivecountmax 3
 # Gebruikns nee
 # Pidfile /run/sshd.pid
-
+# MaxStartups 10: 30: 100
 # Permittunnel nee
 # Chrootdirectory geen
 # Weergaweaddendum geen
 # Geen standaardbanierpad nie
-
+# Laat die kliënt toe om plaaslike omgewingveranderlikes te slaag
 # die standaard van geen substelsels te oorskry nie
 # Voorbeeld van die oorheersende instellings op 'n per-gebruiker basis
 # Pas gebruiker anoncvs
@@ -1299,7 +1296,7 @@ from .tests import is_superuser_or_vendor # Ons sal hierdie toets moet opstel
 <pre class="language-bash"><code>nano initialize
 </code></pre>
 <p>Voeg hierdie reëls by die lêer en vervang dit<key here="">Met u SSH -sleutel het u met CAT gevind. (.ssh/id_rsa.pub)</key></p>
-<pre class="language-bash"><code></code></pre>
+<pre class="language-bash"><code># !/bin/bash</code></pre>
 <p>Laat ons lyn vir lyn begin om u deur hierdie lêer te lei. Die eerste reël sê vir die samesteller dat dit 'n bash -skrif is. Dan installeer ons afhanklikhede, kopieer SSHD_CONFIG na die regte gids, begin SSH weer, genereer SSH -sleutels vir Root, voeg die gebruiker 'Team' by (u kan 'n naam kies wat u hiervoor wil gebruik, gebruik die adduser -opdrag met hul naam en gestremde wagwoord vir nou). Ons voeg ook span by die Sudo -groep, genereer hul SSH -sleutel, voeg ons sleutel by tot gemagtigde sleutels en hulle s'n, en druk hul sleutel. Hierdie nuwe gebruiker is hoe ons by die webwerf aanmeld.</p>
 <p>Gaan voort in 'n nuwe terminale en maak die bediener weer oop.</p>
 <pre class="language-bash"><code>ssh team@XX.XX.XX.XX
@@ -1594,8 +1591,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 <p>Volgende konfigurasie!</p>
 <pre class="language-bash"><code>nano config/etc_postfix_master.cf
 </code></pre>
-<p>Voeg hierdie lyne by:</p>
-<pre class="language-bash"><code># 
+<p></p><pre class="language-bash"><code># 
 # Postfix Master Process Configuration File.  Vir meer inligting oor die formaat
 # van die lêer, sien die Master (5) Handleiding Bladsy (Opdrag: "Man 5 Master" of
 # On-line: http://www.postfix.org/master.5.html).
@@ -1604,123 +1600,129 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # 
 # ======================================================================= ==========================
 # Dienstipe Privaat Unpriv Chroot Wakeup MaxProc Command + Args
+# (ja) (ja) (nee) (nooit) (100)
+# ======================================================================= ==========================
+# SMTP Inet N - Y - 1 Postcreen
 
 
 
-# SMTPD PASS - - Y - - SMTPD
-# dnsblog unix - - y - 0 dnsblog
 
 
-# 127.0.0.1: Submission inet n - y - - smtpd
-# -o syslog_name = postfix/indiening
-# -o smtpd_tls_security_level = Encrypt
-# -o smtpd_sasl_auth_enable = ja
-# -o smtpd_tls_auth_only = ja
-# -o smtpd_reject_unlisted_recipient = nee
-# -o smtpd_client_restrictions = $ mua_client_restrictions
-# -o smtpd_helo_restrictions = $ MUA_HELO_RESTRICTS
 
-# -o SMTPD_RECIPIENT_RESTRICTS =
-# -o smtpd_relay_restrictions = permit_sasl_authenticated, verwerp
-# -o milter_macro_daemon_name = oorsprong
-# Kies een: Aktiveer SMTP's slegs vir Loopback -kliënte, of vir enige kliënt.
-# 127.0.0.1:smtps inet n - y - - smtpd
-# Smtps inet n - y - - smtpd
-# -o syslog_name = postfix/smtps
-# -o smtpd_tls_wrappermode = ja
 
-# -o smtpd_reject_unlisted_recipient = nee
-# -o smtpd_client_restrictions = $ mua_client_restrictions
-# -o smtpd_helo_restrictions = $ MUA_HELO_RESTRICTS
-# -o SMTPD_SENDER_RESTRICTS = $ MUA_SENDER_RESTRICTS
-# -o SMTPD_RECIPIENT_RESTRICTS =
-# -o smtpd_relay_restrictions = permit_sasl_authenticated, verwerp
-# -o milter_macro_daemon_name = oorsprong
-# 628 inet n - y - - qmqpd
-# Qmgr unix n - n 300 1 oqmgr
-# -o smtp_helo_timeout = 5 -o smtp_connect_timeout = 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Spesifiseer ook in main.cf: cyrus_destination_recipient_limit = 1
 # 
 
-# Koppelvlakke na nie-postfix-sagteware. Ondersoek die handleiding
-
-
-
-
-
+# vlae = drx gebruiker = cyrus argv =/cyrus/bin/aflewer -e -r $ {sender} -m $ {uitbreiding} $ {gebruiker}
+# 
 # ======================================================================= ===================
+# Ou voorbeeld van aflewering via Cyrus.
+
+# Old -Cyrus unix - n n - - pyp
+# vlae = r gebruiker = cyrus argv =/cyrus/bin/aflewer -e -m $ {uitbreiding} $ {gebruiker}
+# 
+# ======================================================================= ===================
+# 
+
+# 
+# 
+# Ander eksterne afleweringsmetodes.
+# </code></pre>
+<p>En die Opendkim -konfigurasie. Opendkim identifiseer e -posbedieners met domeinksleutels om hulle veiliger te maak. Daarsonder is e -pos nie onderteken nie en kom dit miskien nie na 'n inkassie nie.</p>
+<pre class="language-bash"><code>nano config/etc_default_opendkim
+</code></pre>
+<p>Voeg hierdie lyne by:</p>
+<pre class="language-bash"><code># Opmerking: dit is 'n nalatenskapskonfigurasielêer. Dit word nie deur die Opendkim gebruik nie
+# SystemD -diens. Gebruik die ooreenstemmende konfigurasieparameters in
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</code></pre><p></p><pre class="language-bash"><code>nano config/etc_default_opendkim
-</code></pre><p></p><pre class="language-bash"><code>
-
-
-
-
-
-
+# Voorheen sou 'n mens die standaardinstellings hier wysig en dan uitvoer
+# /lib/opendkim/opendkim.service.
+# /etc/systemd/system/opendkim.service.d/override.conf en
 # /etc/tmpfiles.d/opendkim.conf. Alhoewel dit nog moontlik is, is dit nou
-
-
-
-
-
-
-
-
-
-
-
+# Aanbeveel om die instellings direk aan te pas in /etc/opendkim.conf.
+# 
+# Daemon_opts = ""
+# Verander na/var/spoel/postfix/run/opendkim om 'n unix -sok met
+# Postfix in 'n chroot:
+# Rundir =/var/spoel/postfix/run/opendkim
+# 
+# Onkomment om 'n alternatiewe sok te spesifiseer
+# Let daarop dat die instelling daarvan enige sokwaarde in OpenDkim.conf sal ignoreer
+# verstek:
+# Luister op alle koppelvlakke op poort 54321:
 # Sok = inet: 54321
-
+# Luister op Loopback op poort 12345:
 # Sok = inet: 12345@localhost
-
-</code></pre><pre class="language-bash"><code>nano config/etc_dovecot_conf.d_10-master.conf
-</code></pre><p>Voeg hierdie lyne by:</p>
+# Luister op 192.0.2.1 op poort 12345:
+# Sok = inet: 12345@192.0.2.1</code></pre>
+<pre class="language-bash"><code>nano config/etc_dovecot_conf.d_10-master.conf
+</code></pre>
+<p>Voeg hierdie lyne by:</p>
 <pre class="language-bash"><code># DEFAULT_PROCESS_LIMIT = 100
 # Default_client_limit = 1000
-
+# Standaard VSZ (virtuele geheue -grootte) limiet vir diensprosesse. Dit is hoofsaaklik
 # bedoel om prosesse te vang en dood te maak wat die geheue lek voordat hulle eet
 # alles.
 # DEFAULT_VSZ_LIMIT = 256M
 # Aanmeldingsgebruikers word intern gebruik deur aanmeldprosesse. Dit is die mees onbetroubaarste
 # Gebruiker in Dovecot -stelsel. Dit moet glad nie toegang tot iets hê nie.
+# DEFAULTE_LOGIN_USER = DOEVOUDL
+# Interne gebruiker word deur onbevoorregte prosesse gebruik. Dit moet apart van
 
-
-# Aanmeldingsgebruiker, sodat aanmeldprosesse nie ander prosesse kan steur nie.
 # DEFAULT_INTERNAL_USER = DOVECOT
     # Poort = 143
     # poort = 993
@@ -1766,8 +1768,8 @@ N/A<we'll add="" later="" this=""></we'll></p>
   # iets anders as 0666 en Dovecot laat die kern die
   # Toestemmings (bv. 0777 laat almal volle toestemmings toe).
   # Auth -werkersproses word standaard as wortel uitgevoer, sodat dit toegang kan kry
-
-
+  # /etc/skaduwee. As dit nie nodig is nie, moet die gebruiker verander word na
+  # $ default_internal_user.
   # Gebruiker = wortel
   # As DICT -instaanbediener gebruik word, moet e -posprosesse toegang tot die sok hê.
   # Byvoorbeeld: modus = 0660, groep = Vmail en Global Mail_access_Groups = Vmail
@@ -1779,7 +1781,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 </code></pre>
 <p>En voeg hierdie lyne by</p>
 <pre class="language-bash"><code>## Dovecot -konfigurasielêer
-
+# As u haastig is, sien http://wiki2.dovecot.org/quickconfiguration
 # "Doveconf -N" -opdrag gee 'n skoon uitset van die veranderde instellings. Gebruik dit
 # In plaas daarvan om lêers te kopieer en te plak wanneer u na die Dovecot -poslys gepos word.
 # '# 'Karakter en alles nadat dit as opmerkings behandel word. Ekstra ruimtes
@@ -1804,7 +1806,7 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # base_dir =/var/run/dovecot/
 # Naam van hierdie instansie. In multi-instansie-opstelling Doveadm en ander opdragte
 # kan -i &lt;instance_name&gt; gebruik om te kies watter instansie gebruik word ('n alternatief
-
+# na -c &lt;config_path&gt;). Die naam van die instansie word ook by Dovecot -prosesse gevoeg
 # in PS -uitset.
 # instansie_name = Dovecot
 # Groetboodskap vir kliënte.
@@ -1822,8 +1824,8 @@ N/A<we'll add="" later="" this=""></we'll></p>
 # Auth_proxy_self =
 # Toon meer verbose prosesstitels (in PS). Wys tans gebruikersnaam en
 # IP -adres. Nuttig om te sien wie die IMAP -prosesse gebruik
-
-
+# (bv. Gedeelde posbusse of as dieselfde UID vir verskeie rekeninge gebruik word).
+# Verbose_proctitle = NEE
 # As alle prosesse doodgemaak word wanneer die Dovecot -meesterproses afskakel.
 # Om dit op "nee" in te stel, beteken dat Dovecot opgegradeer kan word sonder
 # die bestaande kliëntverbindings te dwing om te sluit (hoewel dit ook kan wees
@@ -2026,7 +2028,7 @@ exit()
 
 
 
-<p><a href="https://lotteh.com/payments/pay/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Koop</a> | <a href="https://lotteh.com/payments/pay/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Koop met crypto</a></p>
+<p><a href="https://lotteh.com/pay/item/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7" title="Buy on Lotte Harper">Koop</a> | <a href="https://lotteh.com/pay/item/crypto/Daisy/?id=cf8fc969-e02d-4952-a329-e60db51bc1a7&crypto=USDC" title="Buy with cryptocurrency on Lotte Harper">Koop met crypto</a></p>
 
 
 <hr>
