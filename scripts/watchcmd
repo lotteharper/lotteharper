@@ -1,0 +1,12 @@
+#!/bin/bash
+function pgrep_live {
+	pids=$(pgrep "$1");
+	[ "$pids" ] || return;
+	ps -o s= -o pid= $pids | sed -n 's/^[^ZT][[:space:]]\+//p';
+}
+procs=$(pgrep_live $1)
+echo $procs
+for word in $(echo $procs); do
+	ps -aux | grep $word
+done
+#watch sudo -u root $"ps -aux | grep $1 | grep -v '.*\<defunct\>\n'"

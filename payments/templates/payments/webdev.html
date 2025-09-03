@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+<script type="text/javascript" src="/static/qrcode.min.js"></script>
+{% if payment_processor == 'helcim' %}
+<script type="text/javascript" src="https://secure.helcim.app/helcim-pay/services/start.js"></script>
+{% elif payment_processor == 'stripe' %}
+<script src="https://js.stripe.com/v3/"></script>
+{% endif %}
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+{% include 'users/register_modal.html' %}
+<h1>{{ 'Buy a Custom Website'|etrans }}</h1>
+<p>{{ 'Get a custom website for your business or personal use.'|etrans }}</p>
+<legend>{{ 'Starting at'|etrans }} $100</legend>
+<p style="text-align: center;">
+<i class="bi bi-file-earmark" style="font-size: 120px;"></i>
+</p>
+<hr>
+<p>{{ 'For a monthly plan including ongoing development and support, please leave the box below checked before paying. You will be billed monthly for services (instead of a one time fee) and receive extended work on your website within reasonable accomodation.'|etrans }}</p>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+  <label class="form-check-label" for="flexCheckDefault">
+    {{ 'Monthly plan with ongoing development and support'|etrans }}
+  </label>
+</div>
+<div class="container">
+<div class="row" style="display: inline-block; text-align: center;">
+{% for plan in plans %}
+<div class="col-5 m-2 p-2 rounded" style="display: inline-block; background-color: #{% if darkmode %}555555{% else %}DDDDDD{% endif %};">
+<p>{{ 'Tier'|etrans }} {{ forloop.counter|nts|capitalize }}</p>
+<hr>
+<legend>{{ plan.description|etrans }}</legend>
+<button onclick="monthlyPlan({{plan.price}});" id="monthlyplan{{ plan.price }}" class="monthlyplan btn btn-lg btn-outline-success" title="{{ 'Subscribe to this plan'|etrans }}"><b>${{ plan.price|sub_fee }}</b></button>
+</div>
+{% endfor %}
+</div>
+</div>
+<hr>
+<b>{{ 'Items:'|etrans }}</b>
+<div class="hide" id="one-time">
+<ul>
+<li>{{ 'One time payment for web development services provided by'|etrans }} {{ the_site_name }}</li>
+<li>{{ 'Billed once only. Non refundable.'|etrans }}</ul>
+</ul>
+</div>
+<div id="monthly">
+<ul>
+<li>{{ 'Monthly fixed-fee payment for web development services provided by'|etrans }} {{ the_site_name }}</li>
+<li>{{ 'Billed monthly until cancellation through the website or by email, phone, or written request.'|etrans }}</ul>
+</ul>
+</div>
+<p>{{ 'Buy a custom website developed by'|etrans }} {{ the_site_name }}. {{ 'Consultation and custom design services included, customization services available on request. Website upgrades available. Guaranteed maintenance for at least five years included, additional maintenance available on request.'|etrans }}</p>
+<p>{{ 'By checking out, you agree to the'|etrans }} <a href="/terms/" title="{{ 'Read the terms of service and privacy policy'|etrans }}">{{ 'Terms of Service and Privacy Policy'|etrans }}</a>, {{ 'as well as agree to and and acknowledge the sale as outlined and selected.'|etrans }}</p>
+<p>{{ 'The transaction will display on your bank statement as'|etrans }} "{{ statement_descriptor }} WEBDEV".</p>
+<p>{{ 'You will be redirected to a checkout page to buy. Please enter your credit or debit card information, you will be billed immediatley and services will be provided within one week with communication over email and phone.'|etrans }}</p>
+<form id="pay-form" onsubmit="event.preventDefault(); payFee();">
+{{ form|crispy }}
+<button type="submit" class="btn btn-lg btn-outline-success" title="{{ 'Submit'|etrans }}">{{ 'Submit'|etrans }}</button>
+</form>
+<hr>
+{% include 'contact/form.html' %}
+<hr>
+{% include 'social.html' %}
+{% endblock %}
+{% block javascript %}
+var check = document.getElementById('flexCheckDefault');
+check.addEventListener("click", (e) => {
+	$('#one-time').toggleClass('hide');
+	$('#monthly').toggleClass('hide');
+});
+var price = 1000;
+function monthlyPlan(fee) {
+    price = fee;
+    var button = document.getElementById('monthlyplan' + new String(fee));
+    for(var el of document.getElementsByClassName('monthlyplan')) {
+        el.classList.remove('btn-success');
+        el.classList.add('btn-outline-success');
+    }
+    $(button).toggleClass('btn-success');
+}
+var product = 'webdev';
+var pid = {{ vendor.id }};
+var vendor = {{ vendor.id }};
+var payForm = document.getElementById('pay-form');
+{% if payment_processor == 'paypal' %}
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+    var url = '{{ base_url }}{% url 'payments:paypal-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid;
+	if(check.checked) url = url + "&sub=t";
+    $.ajax({
+        url: url,
+        method:'POST',
+        success: function(data) {
+            if(data.startsWith(window.location.protocol + '//')) {
+                window.location.href = data;
+            } else { console.log('Invalid response from server.'); }
+        },
+    });
+}
+{% elif payment_processor == 'square' %}
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+    var url = '{{ base_url }}{% url 'payments:square-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid;
+	if(check.checked) url = url + "&sub=t";
+    $.ajax({
+        url: url,
+        method:'POST',
+        success: function(data) {
+            if(data.startsWith(window.location.protocol + '//')) {
+                window.location.href = data;
+            } else { console.log('Invalid response from server.'); }
+        },
+    });
+}
+{% elif payment_processor == 'helcim' %}
+var checkoutToken;
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+    $.ajax({
+        url: '{{ base_url }}{% url 'payments:invoice' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
+        method:'POST',
+        success: function(data) {
+            var j = JSON.parse(data);
+            checkoutToken = j.checkoutToken;
+            $(document.getElementById("clemn-navbar")).autoHidingNavbar().hide();
+            appendHelcimPayIframe(j.checkoutToken);
+        },
+    });
+}
+window.addEventListener('message', (event) => {
+
+  const helcimPayJsIdentifierKey = 'helcim-pay-js-' + checkoutToken;
+
+  if(event.data.eventName === helcimPayJsIdentifierKey){
+
+    if(event.data.eventStatus === 'ABORTED'){
+      console.error('Transaction failed!', event.data.eventMessage);
+    }
+
+    if(event.data.eventStatus === 'SUCCESS'){
+      validateResponse(event.data.eventMessage)
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+    }
+  }
+});
+function validateResponse(eventMessage) {
+  const payload = {
+    'rawDataResponse': eventMessage.data,
+  };
+  return fetch('{{ base_url }}/payments/helcim/', {body: payload, method: "POST"});
+}
+{% elif payment_processor == 'stripe' %}
+var stripe = Stripe('{{ stripe_pubkey }}');
+function payFee(){
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+	var url = "/payments/webdev/checkout/?plan=" + price + "&email=" + email;
+	if(check.checked) url = url + "&monthly=t";
+        fetch(url)
+          .then((result) => {
+            return result.json();
+          })
+          .then((data) => {
+            return stripe.redirectToCheckout({ sessionId: data.sessionId });
+          });
+}
+{% endif %}
+{% include 'users/register_modal.js' %}
+{% endblock %}

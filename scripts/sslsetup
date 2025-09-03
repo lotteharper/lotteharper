@@ -1,0 +1,17 @@
+#!/bin/bash
+sudo a2dissite default-le-ssl
+sudo a2dissite 000-default-le-ssl
+sudo a2dissite lotteh-le-ssl
+sudo a2ensite 000-default
+sudo systemctl start apache2
+sudo systemctl reload apache2
+sudo certbot --apache --non-interactive --agree-tos --domains lotteh.com --email jasper.camber.holton@gmail.com
+cd /home/team/lotteh
+sudo cp -Lrv /etc/letsencrypt/live/lotteh.com/ keys
+sudo chown -R team:users keys
+sudo a2dissite 000-default
+sudo a2dissite default-le-ssl
+sudo a2dissite 000-default-le-ssl
+sudo a2ensite lotteh-le-ssl
+sudo systemctl restart apache2 daphne
+sudo systemctl reload apache2

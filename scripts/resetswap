@@ -1,0 +1,12 @@
+#!/bin/bash
+# Swap configuration
+echo "Allocating swap, this may take a while"
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo fallocate -l 16G /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1024 count=16777216
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
+sudo swapon --show

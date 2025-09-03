@@ -1,0 +1,21 @@
+{% load feed_filters %}
+{% if not user.is_authenticated %}
+<h1 style="text-align: center;">{{ 'Want to see more?'|etrans }}</h1>
+<p style="text-align: center;">
+<a class="btn btn-outline-secondary btn-lg lightblue" href="{% url 'users:register' %}" title="{{ 'Register'|etrans }}" style="color: black !important;">{{ 'Sign Up'|etrans }}</a>
+<a class="btn btn-outline-secondary btn-lg pink" href="{% url 'users:login' %}" title="{{ 'Log in'|etrans }}" style="color: black !important;">{{ 'Log in'|etrans }}</a>
+<a class="btn btn-primary btn-lg" href="{% url 'payments:subscribe-card' profile.name %}" title="{{ 'Follow this model'|etrans }}">{{ 'Follow'|etrans }}</a>
+{% if profile.shop_url %}<a class="btn btn-info btn-lg" target="_blank" href="{{ profile.shop_url }}" title="{{ 'Buy merch'|etrans }}">{{ 'Merch'|etrans }}</a>{% endif %}
+<!--{% if profile.user.vendor_profile.imgur_username %}<a class="btn btn-lg" target="_blank" href="https://imgur.com/user/{{ profile.user.vendor_profile.imgur_username }}/posts" title="{{ 'See my public profile on Imgur'|etrans }}">{{ 'My Imgur'|etrans }}</a>{% endif %}-->
+{% if adult_content %}
+{% if profile.user.vendor_profile.content_link %}<a class="btn btn-secondary btn-lg border border-dark" target="_blank" href="{% url 'verify:age' %}?next={% url 'vendors:content' profile.name %}" title="{{ 'Adult content (for adults 18+)'|etrans }}">{{ 'Adult Content'|etrans }}</a>{% endif %}
+{% if profile.user.vendor_profile.video_link %}<a class="btn btn-dark btn-lg border border-dark" target="_blank" href="{% url 'verify:age' %}?next={% url 'vendors:video' profile.name %}" title="{{ 'Adult Video (for adults 18+)'|etrans }}">{{ 'Adult Video'|etrans }}</a>{% endif %}
+{% else %}
+{% if profile.user.vendor_profile.content_link %}<a class="btn btn-secondary btn-lg border border-dark" target="_blank" href="{% url 'vendors:content' profile.name %}" title="{{ 'Blog content (for all ages)'|etrans }}">{{ 'Content'|etrans }}</a>{% endif %}
+{% if profile.user.vendor_profile.video_link %}<a class="btn btn-dark btn-lg border border-dark" target="_blank" href="{% url 'vendors:video' profile.name %}" title="{{ 'Video (for all ages)'|etrans }}">{{ 'Video'|etrans }}</a>{% endif %}
+{% endif %}
+<a class="btn btn-success btn-lg" href="{% url 'payments:tip-crypto-simple' profile.name %}" title="{{ 'Tip me with cryptocurrency'|etrans }}">{{ 'Tip'|etrans }}</a>
+{% if profile.user.vendor_profile.activate_surrogacy %}<a class="btn btn-light btn-lg border border-dark" href="{% url 'payments:surrogacy' profile.name %}" title="{{ 'Surrogacy plans'|etrans }}">{{ 'Surrogacy'|etrans }}</a>{% endif %}
+<a class="btn btn-danger btn-lg" href="{% url 'chat:video' %}" title="{{ 'Video chat'|etrans }}">{{ 'Video Chat'|etrans }}</a>
+</p>
+{% endif %}

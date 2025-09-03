@@ -1,0 +1,27 @@
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+<style>
+iframe { 
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+</style>
+{% endblock %}{% block content %}
+{% load feed_filters %}
+<div id="pg3">
+<legend>{{ 'Live Video'|etrans }} - <a href="{{ site_url }}/live/{{ model_name }}/?lang={{ lang }}" class="btn btn-outline-info btn-lg">{{ 'Visit Site'|etrans }}</a></legend>
+<i>{{ 'Watch my live video at the link above'|etrans }}</i>
+<img src="{{ model.profile.get_cover_image_url }}" width="100%" height="auto"></img>
+{% if model.vendor_profile.playlist_embed %}{% autoescape off %}
+{{ model.vendor_profile.playlist_embed }}
+{% endautoescape %}{% endif %}
+<iframe src="{{ site_url }}/about/?lang={{ lang }}" width="100%" height="700px" style="height: 700px !important;"></iframe>
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% endblock %}

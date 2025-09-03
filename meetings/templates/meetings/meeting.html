@@ -1,0 +1,543 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+body { margin: 0; background: #222; color: #fff; }
+#none {
+    display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    justify-content: center;
+    object-fit: cover;
+    object-fit: cover;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2%;
+}
+#videos {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    vertical-align: top;
+    vertical-align: left;
+}
+video {
+    border-radius: 6px;
+    vertical-align: top;
+    background: #000;
+}
+.video {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
+    vertical-align: top;
+    aspect-ratio: 16 / 9;
+}
+@media (max-width: 767px) {
+    /* CSS rules for mobile devices */
+    .video {
+        aspect-ratio: 4 / 3;
+    }
+}
+.video-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0.5% 0.25%;
+}
+@media (max-width: 767px) {
+    .video-container {
+        width: 98%;
+    }
+}
+@media (min-width: 767px) {
+    .video-container {
+        width: 49%;
+    }
+}
+.speaker-video {
+    border: 4px solid gray;
+}
+#controls {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 20;
+}
+button { margin: 0 5px; }
+#fullscreenToggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 25;
+}
+#chatbox {
+    overflow-y: auto;
+    max-height: 300px;
+}
+.muted-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 2em;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+}
+.videooff-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    color: #fff;
+    background: rgba(0,0,0,0.7);
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+}
+.video-name-overlay {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1em;
+    z-index: 3;
+    pointer-events: none;
+    max-width: 80%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+</style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+<i id="meeting-url" class="hide">{{ base_url }}{% url 'meetings:meeting' meeting_id %}</i>
+    <div id="videos" class="videos">
+    <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen" style="color: white !important;"></i></button>
+    <div id="controls">
+        <button id="videoBtn" class="btn btn-outline-secondary">{{ 'Toggle Video'|etrans }}</button>
+        <button id="audioBtn" class="btn btn-outline-secondary">{{ 'Toggle Mic'|etrans }}</button>
+        <button id="screenshareBtn" class="btn btn-outline-secondary">{{ 'Screenshare'|etrans }}</button>
+        <button onclick="updateZoomMode(-1);" class="btn btn-outline-info">{{ 'Less'|etrans }}</button>
+        <button onclick="updateZoomMode(1);" class="btn btn-outline-info">{{ 'More'|etrans }}</button>
+        <button id="autofocusBtn" class="btn btn-outline-secondary">{{ 'Toggle Autofocus'|etrans }}</button>
+        <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('meeting-url');" title="{{ 'Invite another participant to this meeting by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button>
+    </div>
+    <div class="video-container">
+        <i class="bi bi-mic-mute muted-icon" id="muted-icon-local" style="display:none; color: white !important;"></i>
+        <i class="bi bi-camera-video-off videooff-icon" id="videooff-icon-local" style="display:none; color: white !important;"></i>
+        <div class="video-name-overlay" id="video-name-local">{% if request.user.is_authenticated %}{{ request.user.profile.name }}{% else %}Guest{% endif %}</div>
+        <video class="video" id="localVideo" autoplay muted playsinline></video>
+    </div>
+    </div>
+<div id="fullscreenElement">
+</div>
+<div id="chat-overlay">
+    {% autoescape off %}<div id="chatbox">{% for message in meeting_id|meeting_messages|recent_stream_messages:3 %}<div class="bg-light text-dark"><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} ({{ 'Streamer'|etrans }}){% endif %}{% else %}{{ 'Guest'|etrans }}{% endif %}:</b> {{ message.message|trans }}</div>{% endfor %}</div>{% endautoescape %}
+    <div class="input-group mb-3">
+        <input id="chatinput" type="text" class="form-control" placeholder="{{ 'Type your message here'|etrans }}" aria-label="{{ 'Message'|etrans }}" style="max-width: 75%;">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendChat();">{{ 'Send'|etrans }}</button>
+        </div>
+    </div>
+</div>
+<div>
+<p><i>Additional settings</i></p>
+<div style="display: inline-block;">
+{% if request.GET.originalsound %}<a href="{{ request.path }}{{ 'originalsound='|urlparamedit }}" class="btn btn-sm btn-outline-primary" title="Original sound for musicians">Original sound for musicians (on)</a>{% else %}<a href="{{ request.path }}{{ 'originalsound=true'|urlparamedit }}?originalsound=true" title="Original sound for musicians" class="btn btn-sm btn-outline-primary">Original sound for musicians (off)</a>{% endif %}
+{% if request.GET.light %}<a href="{{ request.path }}{{ 'light='|urlparamedit }}" class="btn btn-sm btn-outline-primary" title="Exit light mode">Exit light mode</a>{% else %}<a href="{{ request.path }}{{ 'light=true'|urlparamedit }}" title="Turn light mode on" class="btn btn-sm btn-outline-primary">Light mode</a>{% endif %}
+{% if request.GET.dark %}<a href="{{ request.path }}{{ 'dark='|urlparamedit }}" class="btn btn-sm btn-outline-primary" title="Lighten things up">Exit dark mode</a>{% else %}<a href="{{ request.path }}{{ 'dark=true'|urlparamedit }}" title="Enter dark mode" class="btn btn-sm btn-outline-primary">Dark mode</a>{% endif %}
+</div>
+</div>
+{% endblock %}
+{% block javascript %}
+var zoomMode = 4;
+function updateZoomMode(zoomDiff) {
+    zoomMode += zoomDiff;
+    if(zoomMode < 3) zoomMode = 3;
+    if(zoomMode > 6) zoomMode = 6;
+    var videos = document.querySelectorAll('.video-container');
+    const newWidth = new String(Math.floor(((7 - (zoomMode <= 3 ? 1 : zoomMode))/6.0)*100)-1) + '%';
+    for(var x = 0; x < videos.length; x++) {
+        vid = videos[x];
+        vid.style.width = newWidth;
+    }
+/*    document.getElementById("videos").style.setProperty('--video-width', newWidth);*/
+}
+const meetingId = "{{ meeting_id }}";
+const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+const wsUrl = `${wsScheme}://${window.location.host}:443/ws/meeting/${meetingId}/`;
+var chatSocket;
+var chatSocketReconnectTimeout;
+
+let localStream = null;
+let peers = {}; // peer_id -> RTCPeerConnection
+let streams = {}; // peer_id -> MediaStream
+
+const stunServers = [{urls: "stun:lotteh.com:3478"}]; // Pre-existing STUN
+var socket;
+var socketReconnectTimeout;
+async function getMedia() {
+    return await navigator.mediaDevices.getUserMedia({video: true, audio: {% if request.GET.originalsound %}true{% else %}{ echoCancellation: true, }{% endif %}});
+}
+var peerVolumes = {};
+var sharingScreen = false;
+
+function send(action, data={}, target=null) {
+    socket.send(JSON.stringify({ action, data, target }));
+}
+
+var samples = 0;
+var totalVolume = 0;
+
+let videoEnabled = true, audioEnabled = true, autofocusEnabled = true;
+function isVideoShowing(videoElem) {
+    // Only check if video is playing and ready
+    if (
+        !videoElem
+        || videoElem.readyState < 2 // HAVE_CURRENT_DATA
+        || videoElem.paused
+        || videoElem.ended
+        || videoElem.videoWidth === 0
+    ) return false;
+
+    // Create a hidden canvas to draw the current frame
+    const canvas = document.createElement('canvas');
+    canvas.width = videoElem.videoWidth;
+    canvas.height = videoElem.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+
+    // Get pixel data
+    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = frame.data;
+
+    // Calculate average brightness
+    let total = 0;
+    for (let i = 0; i < data.length; i += 4) {
+        // RGB average (ignore alpha)
+        total += (data[i] + data[i+1] + data[i+2]) / 3;
+    }
+    const avg = total / (data.length / 4);
+
+    // If average brightness is above a threshold, it's not black
+    return avg > 10; // 10 is a reasonable threshold, tweak as needed
+}
+function updateVideoOffIcon(peer_id, enabled) {
+    const videoElem = document.getElementById(peer_id == 'local' ? 'localVideo' : "video_" + peer_id);
+    const iconElem = document.getElementById("videooff-icon-" + peer_id);
+    if (!videoElem || !iconElem) return;
+    if (!enabled) {
+        iconElem.style.visibility = "visible";
+        iconElem.style.display = "block";
+    } else {
+        iconElem.style.visibility = "hidden";
+        iconElem.style.display = "none";
+    }
+}
+
+
+getMedia().then(async function(stream) {
+    localStream = stream;
+    var peerUsernames = {};
+    async function openMeetingSocket() {
+        socket = new WebSocket(wsUrl);
+        function removeVideo(peer_id) {
+            /*let vid = document.getElementById("video_" + peer_id);
+            if (vid) vid.remove();*/
+            let vidcontainer = document.getElementById("videocontainer_" + peer_id);
+            if (vidcontainer) vidcontainer.remove();
+        }
+        function addVideo(peer_id, stream, peer_name) {
+            if (document.getElementById("video_" + peer_id)) return;
+            const vid = document.createElement("video");
+            const vidcontainer = document.createElement("div");
+            vidcontainer.id = "videocontainer_" + peer_id;
+            vidcontainer.classList.add('video-container');
+            vidcontainer.appendChild(vid);
+            vidcontainer.insertAdjacentHTML('beforeend', '<i class="bi bi-mic-mute muted-icon" id="muted-icon-' + peer_id + '" style="display:none; color: white !important;"></i>');
+            vidcontainer.insertAdjacentHTML('beforeend', '<i class="bi bi-camera-video-off videooff-icon" id="videooff-icon-' + peer_id + '" style="display:none; color: white !important;"></i>');
+            vidcontainer.insertAdjacentHTML('beforeend', '<div class="video-name-overlay" id="video-name-' + peer_id + '">' + peer_name || 'Guest' + '</div>');
+            vid.id = "video_" + peer_id;
+            vid.classList.add('video');
+            vid.autoplay = true; vid.playsInline = true;
+            vid.srcObject = stream;
+            vid.addEventListener("pause", async (event) => {await event.target.play();});
+            try {
+                initializeAudioContext(vid, stream);
+            } catch {}
+            document.getElementById("videos").appendChild(vidcontainer);
+        }
+        function createPeer(peer_id, initiator, peer_name) {
+            let pc = new RTCPeerConnection({iceServers: stunServers});
+            localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+            pc.onicecandidate = (event) => {
+                if (event.candidate) send("signal", {type: "candidate", candidate: event.candidate}, peer_id);
+            };
+            pc.ontrack = (event) => {
+                if (!streams[peer_id]) {
+                    streams[peer_id] = new MediaStream();
+                    addVideo(peer_id, streams[peer_id], peer_name);
+                }
+                streams[peer_id].addTrack(event.track);
+            };
+            peers[peer_id] = pc;
+
+            $('#screenshareBtn').on('click', async function() {
+                if(!sharingScreen) {
+                    document.getElementById('screenshareBtn').innerHTML = 'End screenshare';
+                    sharingScreen = true;
+                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
+                } else {
+                    document.getElementById('screenshareBtn').innerHTML = 'Screenshare';
+                    sharingScreen = false;
+                    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
+                }
+            });
+
+
+            return pc;
+        }
+
+        async function handleOffer(from, offer) {
+            let pc = createPeer(from, false);
+            await pc.setRemoteDescription(offer);
+            let answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            send("signal", {type: "answer", sdp: answer}, from);
+        }
+
+        async function handleAnswer(from, answer) {
+            let pc = peers[from];
+            if (pc) await pc.setRemoteDescription(answer);
+        }
+
+        async function handleCandidate(from, candidate) {
+            let pc = peers[from];
+            if (pc && candidate) await pc.addIceCandidate(candidate);
+        }
+        socket.onopen = async () => {
+            document.getElementById("localVideo").srcObject = localStream;
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+              const volumeMeter = createAudioStreamVolumeMeter(stream);
+              setInterval(() => {
+                const volume = audioEnabled ? volumeMeter.getCurrentVolume() : 0
+                totalVolume+=volume;
+                samples++;
+                if(samples > 20) {
+                    const averagedVolume = totalVolume / samples;
+                    samples = 0;
+                    totalVolume = 0;
+                    send("volume", {type: "volume", volume: averagedVolume}, null);
+                }
+              }, 50);
+            });
+        };
+
+        socket.onerror = function() {
+            if(socketReconnectTimeout) clearTimeout(socketReconnectTimeout);
+            meetingSocketReconnectTimeout = setTimeout(openMeetingSocket, {{ reload_time }});
+        };
+
+        socket.onclose = function() {
+            if(socketReconnectTimeout) clearTimeout(socketReconnectTimeout);
+            meetingSocketReconnectTimeout = setTimeout(openMeetingSocket, {{ reload_time }});
+        };
+        function updatePeerName(peer_id, username) {
+            peerUsernames[peer_id] = username;
+            const nameElem = document.getElementById("video-name-" + peer_id);
+            if (nameElem) nameElem.textContent = username || 'Guest';
+        }
+        socket.onmessage = async (event) => {
+            const msg = JSON.parse(event.data);
+            if (msg.type === "peer-joined") {
+                if (msg.peer_id in peers) return;
+                // Initiate connection
+                let pc = createPeer(msg.peer_id, true, msg.peer_name);
+                let offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+                send("signal", {type: "offer", sdp: offer}, msg.peer_id);
+            } else if (msg.type === "peer-left") {
+                if (msg.peer_id in peers) {
+                    peers[msg.peer_id].close();
+                    delete peers[msg.peer_id];
+                }
+                removeVideo(msg.peer_id);
+                delete streams[msg.peer_id];
+                delete peerVolumes[msg.peer_id];
+                delete peerUsernames[msg.peer_id];
+            } else if (msg.type === "signal") {
+                const from = msg.from;
+                const data = msg.data;
+                const username = msg.username;
+                updatePeerName(from, username);
+                if (data.type === "offer") {
+                    await handleOffer(from, data.sdp);
+                } else if (data.type === "answer") {
+                    await handleAnswer(from, data.sdp);
+                } else if (data.type === "candidate") {
+                    await handleCandidate(from, data.candidate);
+                }
+            } else if (msg.type === "volume") {
+                const from = msg.peer_id;
+                peerVolumes[from] = msg.volume;
+            }
+        };
+    }
+
+    await openMeetingSocket();
+    // Controls
+    document.getElementById("videoBtn").onclick = () => {
+        videoEnabled = !videoEnabled;
+        localStream.getVideoTracks().forEach(track => track.enabled = videoEnabled);
+        document.getElementById("videoBtn").textContent = videoEnabled ? "{{ 'Disable Video'|etrans }}" : "{{ 'Enable Video'|etrans }}";
+        updateVideoOffIcon('local', videoEnabled);
+    };
+    document.getElementById("audioBtn").onclick = () => {
+        audioEnabled = !audioEnabled;
+        localStream.getAudioTracks().forEach(track => track.enabled = audioEnabled);
+        document.getElementById("audioBtn").textContent = audioEnabled ? "{{ 'Disable Mic'|etrans }}" : "{{ 'Enable Mic'|etrans }}";
+        if(document.getElementById('muted-icon-local')) document.getElementById('muted-icon-local').style.display = !audioEnabled ? 'block' : 'none';
+    };
+    document.getElementById("autofocusBtn").onclick = () => {
+        autofocusEnabled = !autofocusEnabled;
+        document.getElementById("autofocusBtn").textContent = autofocusEnabled ? "{{ 'Disable Autofocus'|etrans }}" : "{{ 'Enable Autofocus'|etrans }}";
+    };
+    function openChatSocket() {
+        chatSocket = new WebSocket(
+            "wss://" + window.location.host + ":443/ws/meeting/chat/{{ meeting_id }}/?lang={{ lang }}"
+        );
+        chatSocket.onerror = function() {
+            if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+            chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+        };
+        chatSocket.onclose = function() {
+            if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
+            chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+        };
+        chatSocket.onmessage = function(event) {
+            let data = JSON.parse(event.data);
+            let chatbox = document.getElementById('chatbox');
+            chatbox.innerHTML += `<div class="bg-light text-dark"><b>${data.username}:</b> ${data.message}</div>`;
+            chatbox.scrollBy(0, 1000);
+        };
+    }
+    openChatSocket();
+    const inputField = document.getElementById('chatinput');
+    inputField.addEventListener('keydown', function(event) {
+        if (event.keyCode === 13) { // 13 is the keyCode for the Enter key
+            event.preventDefault(); // Prevent default Enter key behavior
+            sendChat();
+        }
+    });
+    let chatbox = document.getElementById('chatbox');
+    chatbox.scrollBy(0, 9999999);
+});
+function sendChat() {
+    let input = document.getElementById('chatinput');
+    if(input.value != "") {
+        chatSocket.send(JSON.stringify({
+            message: input.value,
+            username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
+        }));
+        input.value = "";
+    }
+}
+const container = document.getElementById('videos');
+var fullscreenButton = document.getElementById('fullscreenToggle');
+fullscreenButton.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit" style="color: white !important;"></i>';
+    // Enter fullscreen mode
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.mozRequestFullScreen) { // Firefox
+      container.mozRequestFullScreen();
+    } else if (container.webkitRequestFullscreen) { // Chrome, Safari and Opera
+      container.webkitRequestFullscreen();
+    } else if (container.msRequestFullscreen) { // IE/Edge
+      container.msRequestFullscreen();
+    }
+  } else {
+    fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen" style="color: white !important;"></i>';
+    // Exit fullscreen mode
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+      document.msExitFullscreen();
+    }
+  }
+});
+var updateInterval;
+function createAudioStreamVolumeMeter(stream) {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioContext.createMediaStreamSource(stream);
+  const analyser = audioContext.createAnalyser();
+  analyser.fftSize = 256;
+  source.connect(analyser);
+  const dataArray = new Uint8Array(analyser.fftSize);
+
+  // This method will give the current volume level (average of samples)
+  function getCurrentVolume() {
+    analyser.getByteTimeDomainData(dataArray);
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+      const normalized = dataArray[i] / 128 - 1.0; // Range: -1.0 to 1.0
+      sum += normalized * normalized;
+    }
+    const rms = Math.sqrt(sum / dataArray.length); // Root mean square
+    return rms; // 0 (silent) to ~1 (loud)
+  }
+
+  // Return both analyser (if needed for further processing) and the volume function
+  return {
+    analyser,
+    getCurrentVolume,
+  };
+}
+var lastSpeakerVideo;
+function updateVolumes() {
+    var highestVolume = -1000;
+    for(const peer_id in peerVolumes) {
+        if(document.getElementById('muted-icon-' + peer_id)) document.getElementById('muted-icon-' + peer_id).style.display = peerVolumes[peer_id] <= 0 ? 'block' : 'none';
+        if(peer_id && peerVolumes[peer_id] > highestVolume) {
+            highestVolume = peerVolumes[peer_id];
+            try {
+                var speakerVideo = document.getElementById("video_" + peer_id);
+                if(speakerVideo != lastSpeakerVideo && lastSpeakerVideo && lastSpeakerVideo.classList.contains('speaker-video')) {
+                    lastSpeakerVideo.classList.remove('speaker-video');
+                }
+                speakerVideo.classList.add('speaker-video');
+                if(autofocusEnabled) {
+                    speakerVideo.scrollIntoView({behavior: 'instant'});
+                }
+                lastSpeakerVideo = speakerVideo;
+            } catch(e) { console.log(e); }
+        }
+        updateVideoOffIcon(peer_id, isVideoShowing(document.getElementById('video_' + peer_id)));
+    }
+}
+if (!updateInterval) { // Start loop only once
+    updateInterval = setInterval(updateVolumes, 5000);
+}
+{% endblock %}

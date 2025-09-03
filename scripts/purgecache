@@ -1,0 +1,5 @@
+#!/bin/bash
+/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py clear_cache
+sudo rm -r cache
+htcacheclean -p /var/cache/apache2 -l 1024M
+#/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py createcachetable

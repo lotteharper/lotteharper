@@ -1,0 +1,227 @@
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+<script type="text/javascript" src="/static/crypto-js.min.js"></script>
+{% endblock %}{% block content %}
+{% load feed_filters %}
+{% load app_filters %}
+<div id="pg0">
+<div class="mx-auto" style="width: 100%; max-width: 800px;"><img src="{{ model.profile.get_cover_image }}" width="100%" class="rounded"></img></div>
+<h1>{{ 'My Private Photos'|etrans }}</h1>
+<legend>{{ model_name }}</legend>
+<p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
+{% include 'banner_ad.html' %}
+<p><i>{{ 'Leave me a tip in Bitcoin using this address:'|etrans }}</i> <b id="btc-wallet">{{ btc_wallet }}</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
+<p>{{ 'Or scan the code below:'|etrans }}</p>
+<div style="display: flex; justify-content: space-around;"><div id="tipqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<small>{{ 'Tips will always go towards supporting me and delivering more great software and content!'|etrans }}</small>
+<hr>
+<p>{{ 'These are encrypted private photos. You must be 18+ to access these photos. Please ask me for the secret key or ask me if you may scan my DESFire fob if you would like to see them.'|etrans }}</p>
+<p class="text-center" style="font-size: 40px" id="signal"><i class="bi bi-reception-1"></i></p>
+<p id="errors">{{ 'Tap the screen to enable NFC.'|etrans }}</p>
+<button onclick="decryptPrivateFeed();" class="btn btn-outline-danger btn-lg">{{ 'Click for access (18+ only, you must have a code)'|etrans }}</button>
+<i class="hide" id="decrypting-info">{{ 'Decrypting, please wait.'|etrans }}</i>
+<div id="photo-page">
+{% autoescape off %}
+{% endautoescape %}
+</div>
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% include 'crypto.js' %}
+{% autoescape off %}
+var info = document.getElementById('decrypting-info');
+function setGetParam(key,value) {
+  if (history.pushState) {
+    var params = new URLSearchParams(window.location.search);
+    params.set(key, value);
+    var newUrl = window.location.origin
+          + window.location.pathname
+          + '?' + params.toString();
+    window.history.pushState({path:newUrl},'',newUrl);
+  }
+}
+var params = new URLSearchParams(window.location.search);
+var images = `{{ images }}`;
+var nfc_images = `{{ nfc_images }}`;
+{% endautoescape %}
+var lcount = 1;
+var ncount = 1;
+var load_next = false;
+var load_last = false;
+var photoPage = document.getElementById('photo-page');
+var scroll_factor = 6;
+var disposal_limit = 40;
+function garbageDisposal(count) {
+    var d = document.getElementById('div' + new String(count - disposal_limit));
+    if(d) { d.remove();}
+    d = document.getElementById('div' + new String(count + disposal_limit));
+    if(d) { d.remove();}
+}
+const adsenseAd = `<iframe width="100%" src="/{{ lang }}/ad" height="700px">
+</iframe>
+<hr>`;
+var successfulWrite = false;
+var successfulRead = false;
+var signal = document.getElementById('signal');
+var redirecting = false;
+var decrypting = false;
+function readTag() {
+  if ("NDEFReader" in window) {
+    const ndef = new NDEFReader();
+    document.getElementById('errors').innerHtml = '{{ 'Initialized.'|etrans }}';
+    try {
+     ndef.scan().then(() => {
+      document.getElementById('errors').innerHTML = '{{ 'Scanning.'|etrans }}';
+      signal.innerHTML = '<i class="bi bi-reception-2"></i>';
+      ndef.onreading = (event) => {
+       try {
+        if(successfulWrite) { return; }
+        if(successfulRead) { return; }
+        document.getElementById('errors').innerHTML= '{{ 'Read tag.'|etrans }}';
+        signal.innerHTML = '<i class="bi bi-reception-3"></i>';
+        const decoder = new TextDecoder();
+        for (const record of event.message.records) {
+           if(decoder.decode(record.data) == '{{ base_url }}' || successfulRead) continue;
+           document.getElementById('errors').innerHTML= '{{ 'Record detected.'|etrans }}';
+           successfulRead = true;
+         }
+           var aes_key = new String(event.serialNumber).replaceAll(":", "").toUpperCase() + "FF";
+           signal.innerHTML = '<i class="bi bi-reception-4"></i>';
+           document.getElementById('errors').innerHTML= '{{ 'Read successful.'|etrans }}';
+		   decryptPrivateFeed(code=aes_key);
+        } catch(error) {
+           document.getElementById('errors').innerHTML = error.message;
+           decrypting = false;
+        }
+       };
+      });
+    } catch(error) {
+      document.getElementById('errors').innerHTML = error.message;
+      decrypting = false;
+    }
+  }
+}
+var reading = false;
+function initialize() {
+    if(!reading) {
+        reading = true;
+        readTag();
+        try {
+            window.navigator.vibrate({{ default_vibration }});
+        } catch {}
+    }
+}
+document.body.addEventListener('click', function(event) {
+    initialize();
+});
+document.body.addEventListener('touchmove', function(event) {
+    initialize();
+});
+function patchImage(img, code, alt) {
+    if(!$(img).hasClass('loaded')) {
+      fetch(img.src)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        console.log('alt is ' + new String(alt));
+        var de;
+        if(alt) {
+            de = decrypt_cbc(text.split(",")[1], code);
+        } else {
+            de = decrypt_cbc(text.split(",")[0], code);
+        }
+        if(de && !$(img).hasClass('loaded')) { 
+            img.src = "data:image/png;base64," + de;
+            $(img).addClass("loaded");
+        }
+      })
+      .catch(error => {
+      });
+    }
+}
+function patchEnc(code, alt) {
+    var els = document.getElementsByClassName("loadenc");
+    for(var y = 0; y < els.length; y++){
+        patchImage(els[y], code, alt);
+    }
+}
+var alternate_code = false;
+function decryptPrivateFeed(code=null) {
+    var res;
+    var dec;
+    info.innerHTML = '{{ 'Decrypting'|etrans }}...';
+    if(!code) {
+        res = prompt('{{ 'What is the secret passcode?'|etrans }}');
+        info.classList.remove('hide');
+        if(!res) {
+            info.innerHTML = '{{ 'No passcode supplied.'|etrans }}';
+            return;
+        }
+        dec = decrypt_cbc(images, res);
+        code = res;
+    } else {
+        dec = decrypt_cbc(nfc_images, code);
+        alternate_code = true;
+    }
+    if(dec) {
+       info.innerHTML = '{{ 'Successfully decrypted photos.'|etrans }}';
+        images = dec.split('\n');
+        setInterval(function() {
+            if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {
+              load_next = true;
+            } else {
+              load_next = false;
+            }
+            if($(window).scrollTop() + $(window).height() < $(document).height() - ($(document).height() - $(document).height()/scroll_factor)) {
+              load_last = true;
+            } else {
+              load_last = false;
+            }
+            if(ncount < images.length && load_next) {
+                for(var x = 0; x < 10; x++) {
+                   if(!document.getElementById('div' + new String(ncount)) && images[ncount]) {
+                       photoPage.insertAdjacentHTML("beforeend", images[ncount] + '<hr>');
+                       garbageDisposal(ncount);
+                        patchEnc(code, alternate_code);
+                       ncount = ncount + 1;
+                    } else {
+                        ncount = ncount + 1;
+                    }
+                }
+            	photoPage.insertAdjacentHTML("beforeend", adsenseAd);
+            }
+            if(lcount > 0 && load_last) {
+                for(var x = 0; x < 10; x++) {
+                   if(!document.getElementById('div' + new String(lcount)) && images[lcount]) {
+                       photoPage.insertAdjacentHTML("afterbegin", images[lcount] + '<hr>');
+                       garbageDisposal(lcount);
+                        patchEnc(code, alternate_code);
+                       lcount = lcount - 1;
+                    } else {
+                        lcount = lcount - 1;
+                    }
+                }
+            }
+        }, 3000);
+    } else {
+        info.innerHTML = 'Could not decrypt photos.';
+    }
+}
+var tqrdiv = document.getElementById("tipqrcode");
+if(tqrdiv) {
+    var tqr = new QRCode(tqrdiv, "{{ btc_wallet }}");
+    var timage = tqrdiv.querySelector('img');
+    timage.style.width = "100%";
+    timage.style.height = "100%";
+    timage.style.maxWidth = "200px";
+}
+{% endblock %}

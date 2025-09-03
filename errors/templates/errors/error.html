@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load app_filters %}
+<h1>{{ pagetitle }}</h1>
+<div style="white-space: pre-line;">{{ notes|etrans }}</div>
+<p><button class="btn btn-outline-info" href="{% url 'app:app' %}" title="{{ 'Return to the homepage'|etrans }}">{{ 'Return home'|etrans }}</button></p>
+<img class="mx-auto" style="width: 100%; max-width: 800px; height: auto" src="{{ model.profile.get_cover_image_url }}" alt="{{ 'My cover photo'|etrans }}">
+{% endblock %}

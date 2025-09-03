@@ -1,0 +1,9 @@
+#!/bin/bash
+cd /home/team/
+#git clone git@gitlab.com:charlotte-harper/lotteh2025-06-24.git
+#!/bin/bash
+echo $"data/$1.json"
+cat $2/data/$1.json.?? > $"$2/data/$1.json"
+source /home/team/lotteh/venv/bin/activate
+python manage.py loaddata $"$2/data/$1.json"
+rm $2/data/$1.json

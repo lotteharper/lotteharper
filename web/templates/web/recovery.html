@@ -1,0 +1,148 @@
+{% extends 'web/base.html' %}
+{% block head %}
+<script type="text/javascript" src="/static/crypto-js.min.js"></script>
+{% endblock %}
+{% block content %}
+<legend>NFC ID Recovery</legend>
+<p>Place the NFC device near the back of the phone. <a href="{{ request.path }}" about="_blank" title="New tab">Load in New Tab</a></p>
+<p class="text-center" style="font-size: 40px" id="signal"><i class="bi bi-reception-1"></i></p>
+<p id="errors">Tap the screen to enable NFC.</p>
+<div id="imcontainer" class="hide">
+<p>ID Front:</p>
+<img width="100%" height="auto" id="im1"></img>
+<p>ID Back:</p>
+<img width="100%" height="auto" id="im2"></img>
+<button class="btn btn-info btn-sm" title="Download these scans" onclick="downloadID();">Download</button>
+</div>
+{% endblock %}
+{% block javascript %}
+{% include 'crypto.js' %}
+var the_front = "{{ the_front }}";
+var the_back = "{{ the_back }}";
+var imageCont = document.getElementById("imcontainer");
+var image1 = document.getElementById("im1");
+var image2 = document.getElementById("im2");
+var successfulWrite = false;
+var successfulRead = false;
+var signal = document.getElementById('signal');
+var redirecting = false;
+const IMG_PREF = "data:image/png;base64,";
+var decrypting = false;
+function decryptData(aes_key) {
+    if(!decrypting) {
+        decrypting = true;    
+        var front = decrypt_cbc(the_front, aes_key);
+        var back = decrypt_cbc(the_back, aes_key);
+        if(front && back) {
+            image1.src = IMG_PREF + front;
+            image2.src = IMG_PREF + back;
+            imageCont.classList.remove('hide');
+            window.navigator.vibrate({{ default_vibration }});
+            document.getElementById('errors').innerHTML = 'Successfully decoded. Please see the data below.';
+        } else {
+            successfulRead = false;
+            successfulWrite = false;
+            decrypting = false;
+            document.getElementById('errors').innerHTML = 'Invalid tag or tag removed.';
+        }
+    }
+}
+function readTag() {
+  if ("NDEFReader" in window) {
+    const ndef = new NDEFReader();
+    document.getElementById('errors').innerHtml = 'Initialized.';
+    try {
+     ndef.scan().then(() => {
+      document.getElementById('errors').innerHTML = 'Scanning.';
+      signal.innerHTML = '<i class="bi bi-reception-2"></i>';
+      ndef.onreading = (event) => {
+       try {
+        if(successfulWrite) { return; }
+        if(successfulRead) { return; }
+        document.getElementById('errors').innerHTML= 'Read tag.';
+        signal.innerHTML = '<i class="bi bi-reception-3"></i>';
+        const decoder = new TextDecoder();
+        for (const record of event.message.records) {
+           if(decoder.decode(record.data) == '{{ base_url }}' || successfulRead) continue;
+           document.getElementById('errors').innerHTML= 'Record detected.';
+           successfulRead = true;
+         }
+           var aes_key = new String(event.serialNumber).replaceAll(":", "").toUpperCase() + "FF";
+           signal.innerHTML = '<i class="bi bi-reception-4"></i>';
+           document.getElementById('errors').innerHTML= event.serialNumber;
+		   decryptData(aes_key);
+        } catch(error) {
+           document.getElementById('errors').innerHTML= error.message;
+           decrypting = false;
+        }
+       };
+      });
+    } catch(error) {
+      document.getElementById('errors').innerHTML= error.message;
+      decrypting = false;
+    }
+  }
+}
+var reading = false;
+function initialize() {
+    if(!reading) {
+        reading = true;
+        readTag();
+        try {
+            window.navigator.vibrate({{ default_vibration }});
+        } catch {}
+    }
+}
+document.body.addEventListener('click', function(event) {
+    initialize();
+});
+document.body.addEventListener('touchmove', function(event) {
+    initialize();
+});
+if (!("NDEFReader" in window)) {
+	var readerPresent = false;
+    document.getElementById('errors').innerHTML = 'Insert the USB NFC reader.';
+	var nfcid = null;
+	var nfcdata = '';
+	function openSocket() {
+		let socket = new WebSocket("ws://localhost:13254");
+		socket.addEventListener("close", (event) => {
+			setTimeout(function() {
+				openSocket();
+			}, 10000);
+		});
+		socket.addEventListener("message", (event) => {
+			if(!readerPresent) {
+				signal.innerHTML = '<i class="bi bi-reception-2"></i>';
+			        document.getElementById('errors').innerHTML= 'Scan the tag.';
+			}
+			readerPresent = true;
+			var data = decrypt(event.data, "{{ rel_aes_key }}");
+			console.log("Message from server ", data);
+			if(data.includes("NFCID =")) {
+			        signal.innerHTML = '<i class="bi bi-reception-3"></i>';
+				    nfcid = data.split("= ")[1].slice(0, -2).replaceAll(" ", ":");
+			}
+			if(nfcid) {/* && nfcdata) {*/
+				signal.innerHTML = '<i class="bi bi-reception-4"></i>';
+                        	document.getElementById('errors').innerHTML= 'Data read, confirming.';
+               var aes_key = new String(nfcid).replaceAll(":", "").toUpperCase() + "FF";
+				decryptData(aes_key);
+			}
+		});
+	}
+	openSocket();
+}
+function downloadID() {
+    downloadImage(image1.src, 'recovered-id-front');
+    downloadImage(image2.src, 'recovered-id-back');
+}
+function downloadImage(url, name) {
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name + ".png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+{% endblock %}

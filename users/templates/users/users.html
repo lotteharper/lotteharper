@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load app_filters %}
+{% block content %}
+<h1>All Registered Visitors</h1>
+{% if request.GET.page == '1' or not request.GET.page %}
+<small>{{ verified_users|nts|capitalize }} ({{ verified_users }}) people active, {{ verified_user_count|nts }} ({{ verified_user_count }}) verified.</small>
+<p>{{ new_today|nts|capitalize }} new today, {{ new_this_month|nts }} new this month, {{ subscribers|nts }} subscribers, {{ all_users.count|nts }} total.</p>
+<small>{{ active_today|nonts|capitalize }} active today, {{ active_this_week|nonts }} this week, {{ active_this_month|nonts }} this month, {{ active_this_year|nonts }} this year.</small>
+{% endif %}
+<hr style="color: red;">
+{% for user in users %}
+{% include 'users/_user.html' %}
+{% include 'survey/_user.html' %}
+<hr style="color: blue;">
+{% endfor %}
+{% include 'pagelinks.html' %}
+{% endblock %}

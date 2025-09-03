@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load app_filters %}
+<legend>{{ 'Your recent videos'|etrans }}</legend>
+<p><i>{{ 'Recent uploaded videos'|etrans }}</i></p>
+{% for vid in uploaded_vids %}
+<div>#{{ forloop.counter }}: {{ vid }}{% if vid.youtube_id %} - <a class="btn btn-outline-primary" href="{{ vid.get_absolute_url }}" title="{{ 'See this recording'|etrans }}">{{ 'View'|etrans }}</a>{% endif %}</div>
+{% endfor %}
+<p><i>{{ 'Recent processing videos'|etrans }}</i></p>
+{% for vid in processing_vids %}
+<div>#{{ forloop.counter }}: {{ vid }}</div>
+{% endfor %}
+<p><i>{{ 'Not processing currently'|etrans }}</i></p>
+{% for vid in nonprocessing_vids %}
+<div>#{{ forloop.counter }}: {{ vid }}</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load feed_filters %}
+<legend>{{ 'Leaderboard'|etrans }}</legend>
+<hr>
+{% for game in games %}
+<p>*{{ game.post.id|shorttitle|trans }}* @{{ game.player1.profile.name }} ({{ game.player1_score }}) [{{ game.player1|scoretotals }}] vs. @{{ game.player2.profile.name }} ({{ game.player2_score }}) [{{ game.player2|scoretotals }}] - {% if game.player1_score|toint == game.player2_score|toint %}{{ 'This game was a tie.'|etrans }}{% elif game.player1_score|toint < game.player2_score|toint %}{{ game.player1.profile.name }} {{ 'won with a score of'|etrans }} {{ game.player1_score }}.{% else %}{{ game.player2.profile.name }} {{ 'won with a score of'|etrans }} {{ game.player2_score }}.{% endif %}</p>
+<hr>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{
+    "name": "{{ the_site_name }}",
+    "short_name": "{{ the_site_name }}",
+    "description": "{{ base_description }}",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "/media/static/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/media/static/android-chrome-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#c93443",
+    "background_color": "#b31717",
+    "display": "standalone"
+}

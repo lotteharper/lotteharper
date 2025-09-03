@@ -1,0 +1,21 @@
+Dear {{ vendor.profile.name }},
+
+This email is in regards to an invoice from {{ site_name }}.
+
+The total paid was ${{ invoice.price|sub_fee }}
+
+For the following items:
+
+{{ invoice.cart }}
+
+This invoice has been paid in full. Please arrange services accordingly for the client.
+
+The client's contact info is as follows:
+Name: {{ user.profile.name }}
+Phone number: {{ user.profile.phone_number }}
+Email: {{ user.email }}
+Username: {{ user.username }}
+
+Sincerely,
+
+{{ site_name }}

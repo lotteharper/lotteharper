@@ -1,0 +1,56 @@
+#!/bin/bash
+sudo systemctl stop apache2 daphne celery celerybeat
+cd ~
+cd lotteh
+sudo chown -R team:users ./
+sudo chmod -R 755 ./
+source venv/bin/activate
+echo "Postgres setup"
+sudo -u postgres psql -U postgres -c "ALTER SYSTEM SET max_connections TO '25000';"
+sudo -u postgres psql -U postgres -c "SELECT pg_reload_conf();"
+sudo systemctl restart postgresql
+sudo -u postgres psql -U postgres -c "DROP DATABASE lotteharper_db WITH (FORCE);"
+sudo -u postgres psql -U postgres -c "CREATE DATABASE lotteharper_db;"
+sudo -u postgres psql -U postgres -c "CREATE USER lotteharper_db_user WITH PASSWORD 'LotteHarperPrivateDBAuthorizedAccessOnly';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_db_user SET statement_timeout = '6000s';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_db_user SET client_encoding TO 'utf8';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_db_user SET default_transaction_isolation TO 'read committed';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_db_user SET timezone TO 'UTC';"
+sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lotteharper_db TO lotteharper_db_user;"
+sudo -u postgres psql -U postgres -c "GRANT ALL ON SCHEMA public TO lotteharper_db_user;"
+sudo -u postgres psql -U postgres -c "ALTER DATABASE database OWNER TO lotteharper_db_user;"
+python manage.py makemigrations
+python manage.py migrate --run-syncdb
+python manage.py makemigrations
+python manage.py migrate
+sudo -u postgres psql -U postgres -c "DROP DATABASE lotteharper_cache_db WITH (FORCE);"
+sudo -u postgres psql -U postgres -c "CREATE DATABASE lotteharper_cache_db;"
+sudo -u postgres psql -U postgres -c "CREATE USER lotteharper_cache_db_user WITH PASSWORD 'LotteHarperPrivateCacheDBAuthorizedAccessOnly';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_cache_db_user SET statement_timeout = '6000s';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_cache_db_user SET client_encoding TO 'utf8';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_cache_db_user SET default_transaction_isolation TO 'read committed';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_cache_db_user SET timezone TO 'UTC';"
+sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lotteharper_cache_db TO lotteharper_cache_db_user;"
+sudo -u postgres psql -U postgres -c "GRANT ALL ON SCHEMA public TO lotteharper_cache_db_user;"
+sudo -u postgres psql -U postgres -c "ALTER DATABASE lotteharper_cache_db OWNER TO lotteharper_cache_db_user;"
+sudo -u postgres psql -U postgres -c "DROP DATABASE lotteharper_translation_cache_db WITH (FORCE);"
+sudo -u postgres psql -U postgres -c "CREATE DATABASE lotteharper_translation_cache_db;"
+sudo -u postgres psql -U postgres -c "CREATE USER lotteharper_translation_cache_db_user WITH PASSWORD 'LotteHarperPrivateTranslationCacheDBAuthorizedAccessOnly';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_translation_cache_db_user SET statement_timeout = '6000s';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_translation_cache_db_user SET client_encoding TO 'utf8';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_translation_cache_db_user SET default_transaction_isolation TO 'read committed';"
+sudo -u postgres psql -U postgres -c "ALTER ROLE lotteharper_translation_cache_db_user SET timezone TO 'UTC';"
+sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lotteharper_translation_cache_db TO lotteharper_translation_cache_db_user;"
+sudo -u postgres psql -U postgres -c "GRANT ALL ON SCHEMA public TO lotteharper_translation_cache_db_user;"
+sudo -u postgres psql -U postgres -c "ALTER DATABASE lotteharper_translation_cache_db OWNER TO lotteharper_translation_cache_db_user;"
+python manage.py createcachetable
+python manage.py createcachetable lotteharper_private_translation_cache_table
+python manage.py createcachetable lotteharper_private_cache_table
+echo "Loading data, this may take a while"
+#python manage.py loaddata db.json
+cd ~
+cd lotteh
+./scripts/loadtables
+#python manage.py sqlflush feed.post
+#python manage.py loaddata data/feed-post.json
+sudo systemctl start apache2 daphne celery celerybeat

@@ -1,0 +1,515 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+<script type="text/javascript" src="/static/opencv.min.js"></script>
+{% if request.GET.back %}
+<script type="text/javascript" src="/static/zxing-browser.min.js"></script>
+{% else %}
+<script type="text/javascript" src="/static/tesseract.min.js"></script>
+{% endif %}
+<style>
+.spin-loader {
+  border: 18px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  animation: spin 4s linear infinite;
+  z-index: 99;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.container-video { position:relative; }
+.container-video video {
+    position:relative;
+
+    z-index:0;
+}
+.overlay-video {
+    max-width: 70%;
+    max-height: 70%;
+    position: absolute;
+    text-align: center;
+    top:-7%;
+    left:15%;
+    z-index:1;
+}
+.icon-rotate {
+    transform: rotate(-90deg);
+    left: 13%;
+    top: 15%;
+}
+</style>
+{% endblock %}
+{% block content %}
+{% load feed_filters %}
+<div class="container w-100">
+{% if request.GET.download %}
+<legend class="mb-2">{{ 'Scan the front and back of your ID'|trans }}</legend>
+{% else %}
+<legend class="mb-2">{% blocktrans %}Scan the {% if not back %}front{% else %}back{% endif %} of {% if request.GET.foreign %}the{% else %}your{% endif %} ID{% endblocktrans %}</legend>
+<div style="display: flex; justify-content: space-around;">
+{% if request.GET.foreign and request.GET.back %}
+<a href="{{ request.path }}?foreign=true&{% for key,val in request.GET.items %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endfor %}" title="Scan the front of an ID" class="btn btn-sm btn-outline-primary">{{ 'Scan Front'|trans }}</a>
+{% endif %}
+{% if not request.GET.noflash %}
+<a href="{{ request.path }}?noflash=t&{% for key,val in request.GET.items %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endfor %}" id="flash-switch" class="btn btn-sm btn-outline-primary"><i class="bi bi-toggle-on"></i> Flash on</a>
+{% else %}
+<a href="{{ request.path }}?{% for key,val in request.GET.items %}{% if not key == 'noflash' %}{{ key }}={{ val }}{% if forloop.counter != request.GET.keys|length %}&{% endif %}{% endif %}{% endfor %}" id="flash-switch" class="btn btn-sm btn-outline-primary"><i class="bi bi-toggle-off"></i> Flash off</a>
+{% endif %}
+</div>
+{% if not back %}
+<p>{% blocktrans %}Scan the front of {% if request.GET.foreign %}the{% else %}your{% endif %} ID, aligned with the frame.{% endblocktrans %}</p>
+{% else %}
+<p>{% blocktrans %}Scan the back of {% if request.GET.foreign %}the{% else %}your{% endif %} ID, aligned with the frame.{% endblocktrans %}</p>
+{% endif %}
+{% endif %}
+<form method="POST" enctype="multipart/form-data" id="face-login-form" style="position: absolute; display: none; visibility: hidden;" class="w-100 ml-0 mr-0">
+{% csrf_token %}
+{{ form|crispy }}
+</form>
+<div id="video-container" class="container-video">
+<video autoplay="true" muted="true" id="video" width="100%" class="ml-0 mr-0" style="position: relative; z-index: -1000;"></video>
+<img id="passkey" class="hide" width="100%"/>
+<div id="overlay" class="overlay-video" style="width: 100%;">
+<i class="bi {% if request.GET.back %}bi-card-heading{% else %}bi-person-vcard{% endif %} hide" id="icon" style="text-align: center; opacity: 0.5;"></i>
+</div>
+</div>
+<hr>
+<div>
+<div style="display: flex; justify-content: space-around;">
+<p style="display: inline-block;">{{ 'Align the document with the frame and tap the image.'|trans }}</p>
+</div>
+</div>
+<canvas id="canvas"></canvas>
+<canvas id="imgCanvas"></canvas>
+<div style="position: fixed; left: 0; top: 0; background-color: transparent; height: 0px; width: 100%; z-index: 99;" id="loader-container">
+<div id="spin-loader" style="position: relative; margin: auto; top: 50%; text-align: center;"></div>
+</div>
+<p id="data"></p>
+<p id="rect"></p>
+{% endblock %}
+{% block javascript %}
+var canvas = document.getElementById('canvas');
+var imgCanvas = document.getElementById('imgCanvas');
+var context = canvas.getContext('2d');
+var imgContext = imgCanvas.getContext('2d');
+var tryCount = 0;
+/*    document.getElementById('rect').innerHTML = 'Ready';*/
+const MIN_SCALE = 0.60;
+const MAX_SCALE = 0.95;
+var video = document.getElementById('video');
+var passkey = document.getElementById('passkey');
+var rect = document.getElementById('rect');
+var icon = document.getElementById('icon');
+var overlay = document.getElementById('overlay');
+function readyOverlay() {
+  	  var offsetWidth = video.getBoundingClientRect().width;
+  	  var offsetHeight = video.getBoundingClientRect().height;
+	  icon.style.fontSize = Math.floor(offsetHeight * 0.8) + "px";
+	  if(offsetHeight > offsetWidth) {
+	    if(!$(overlay).hasClass("icon-rotate")) {
+	    	$(overlay).toggleClass("icon-rotate");
+	    }
+	    icon.style.fontSize = Math.floor(offsetWidth * 0.7) + "px";
+	  }
+	  overlay.style.height = offsetHeight + "px";
+}
+window.addEventListener('resize', readyOverlay)
+let portrait = window.matchMedia("(orientation: portrait)");
+portrait.addEventListener("change", readyOverlay)
+var download_inc = 1;
+const download = function (canvas) {
+    const link = document.createElement('a');
+    link.download = '{{ the_site_name }} - ID Scan ' + download_inc + '.png';
+    download_inc++;
+    link.href = canvas.toDataURL()
+    link.click();
+}
+var scanInterval;
+var imageCapture;
+var form = document.getElementById('face-login-form');
+var mediaRecorder;
+var mediaChunks = [];
+var capt = false;
+var imageURL;
+document.getElementById("video-container").addEventListener("click", function(event) {
+	onTakePhotoButtonClick();
+});
+function onTakePhotoButtonClick() {
+    {% if request.GET.noflash == 't' %}
+    var imageCaptureConfig = {
+        focusMode: "continuous"
+    };
+   if(capt) {
+      imageCapture.takePhoto(imageCaptureConfig)
+      .then((blob) => function() {
+            imageURL = URL.createObjectURL(blob);
+            return createImageBitmap(blob);
+        })
+      .then((imageBitmap) => {
+    	image = imageBitmap;
+            uploadImage(image);
+      })
+      .catch((error) => uploadImage(video));
+   }
+    {% else %}
+    var imageCaptureConfig = {
+        fillLightMode: "torch", /* or "flash" */
+        focusMode: "continuous"
+    };
+   if(capt) {
+      imageCapture.takePhoto(imageCaptureConfig)
+      .then((blob) => function() {
+            imageURL = URL.createObjectURL(blob);
+            return createImageBitmap(blob);
+        })
+      .then((imageBitmap) => {
+    	image = imageBitmap;
+            uploadImage(image);
+      })
+      .catch((error) => uploadImage(video));
+   }
+    {% endif %}
+}
+var scale = 1;
+var degmod = 90;
+function drawRotatedConts(degrees, image, vid){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    if(vid) {
+        if(Math.floor(degrees/90) % 2 == 0) {
+            canvas.width = image.videoWidth * scale;
+            canvas.height = image.videoHeight * scale;
+        } else {
+            canvas.width = image.videoHeight * scale;
+            canvas.height = image.videoWidth * scale;
+        }
+    } else {
+        if(Math.floor(degrees/90) % 2 == 0) {
+            canvas.width = image.width * scale;
+            canvas.height = image.height * scale;
+        } else {
+            canvas.width = image.height * scale;
+            canvas.height = image.width * scale;
+        }
+    }
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.translate(canvas.width / 2, canvas.height / 2);   // to center
+    context.rotate(degrees * Math.PI / 180);                   // rotate
+    if(Math.floor(degrees/90) % 2 == 0) {
+        context.drawImage(image, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+    } else {
+        context.drawImage(image, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
+    }
+    context.translate(-canvas.width / 2, -canvas.height / 2); // and back
+    context.restore();
+    context.save();
+}
+function drawRotatedRes(degrees, image, vid){
+    document.getElementById('rect').innerHTML = 'Image drawn.';
+    imgContext.clearRect(0, 0, imgCanvas.width, imgCanvas.height);
+    if(vid) {
+        if(Math.floor(degrees/90) % 2 == 0) {
+            imgCanvas.width = image.videoWidth * scale;
+            imgCanvas.height = image.videoHeight * scale;
+        } else {
+            imgCanvas.width = image.videoHeight * scale;
+            imgCanvas.height = image.videoWidth * scale;
+        }
+    } else {
+        if(Math.floor(degrees/90) % 2 == 0) {
+            imgCanvas.width = image.width * scale;
+            imgCanvas.height = image.height * scale;
+        } else {
+            imgCanvas.width = image.height * scale;
+            imgCanvas.height = image.width * scale;
+        }
+    }
+    imgContext.clearRect(0, 0, imgCanvas.width, imgCanvas.height);
+    imgContext.translate(imgCanvas.width / 2, imgCanvas.height / 2);   // to center
+    imgContext.rotate(degrees * Math.PI / 180);                   // rotate
+    if(Math.floor(degrees/90) % 2 == 0) {
+        imgContext.drawImage(image, -imgCanvas.width / 2, -imgCanvas.height / 2, imgCanvas.width, imgCanvas.height);
+    } else {
+        imgContext.drawImage(image, -imgCanvas.height / 2, -imgCanvas.width / 2, imgCanvas.height, imgCanvas.width);
+    }
+    imgContext.translate(-imgCanvas.width / 2, -imgCanvas.height / 2); // and back
+    imgContext.restore();
+    imgContext.save();
+}
+function calculateAge(birthday) { // birthday is a date
+	var ageDifMs = Date.now() - birthday;
+	var ageDate = new Date(ageDifMs); // miliseconds from epoch
+	return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+var min_age = 21;
+function validateIdFront(text, image) {
+	var results = text.matchAll("\d\d\/\d\d\/\d\d\d\d");
+	var birthdate = null;
+	var expiry = null;
+	for(result in results) {
+		var day = result[0];
+		var dayParsed = new Date(parseInt(result.substring(6)), parseInt(result.substring(0,2)), parseInt(result.substring(3,5)));
+		if(calculateAge(dayParsed) >= min_age) {
+			birthdate = dayParsed;
+		}
+		if(dayParsed.getTime() > new Date().getTime()) {
+			expiry = dayParsed;
+		}
+	}
+	if(birthdate && (expiry || tryCount > 1)) {
+		showResult(true, image);
+		return;
+	}
+	showResult(false, image);
+}
+function validateIdBack(text, image) {
+	var results = text.matchAll("\d\d\d\d\d\d\d\d");
+	var birthdate = null;
+	var expiry = null;
+	for(result in results) {
+		var day = result[0];
+		var dayParsed = new Date(parseInt(result.substring(4)), parseInt(result.substring(0,2)), parseInt(result.substring(2,4)));
+		if(calculateAge(dayParsed) >= min_age) {
+			birthdate = dayParsed;
+		}
+		if(dayParsed.getTime() > new Date().getTime()) {
+			expiry = dayParsed;
+		}
+	}
+	if(birthdate && (expiry || tryCount > 1)) {
+		showResult(true, image);
+		return;
+	}
+	showResult(false, image);
+}
+function setGetParam(key,value) {
+  if (history.pushState) {
+    var params = new URLSearchParams(window.location.search);
+    params.set(key, value);
+    var newUrl = window.location.origin
+          + window.location.pathname
+          + '?' + params.toString();
+    window.history.pushState({path:newUrl},'',newUrl);
+  }
+}
+var params = new URLSearchParams(window.location.search);
+function recognizeText(image) {
+	Tesseract.recognize(
+	  image,
+	  'eng',
+	  { logger: m => console.log(m) }
+	).then(({ data: { text } }) => {
+		validateIdFront(text, image);
+	})
+}
+var src;
+var dst;
+var thresh;
+var contours;
+var hierarchy;
+var lastWidth;
+var largest;
+var target;
+var cnt;
+var rect;
+var cnts;
+var point1;
+var point2;
+var color = new cv.Scalar(250,250,250);
+const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
+function scheduleScan() {
+   clearInterval(scanInterval);
+      scanInterval = setInterval(function() {
+         try {
+            drawRotatedConts(0, video, true);
+            src = cv.imread('canvas');
+            dst = new cv.Mat();
+            cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+            thresh = new cv.Mat();
+            cv.threshold(dst, thresh, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+            contours = new cv.MatVector();
+            hierarchy = new cv.Mat();
+            cv.findContours(thresh, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+            lastWidth = 0;
+            largest = 0;
+            rectangles = [];
+            cnts = null;
+            for (let i = 0; i < contours.size(); ++i) {
+              cnt = contours.get(i);
+              rect = cv.boundingRect(cnt);
+              if(rect.width > lastWidth) {
+                  largest = i;
+                  cnts = cnt;
+                  lastWidth = rect.width;
+              }
+              rectangles.push(rect);
+            }
+            target = rectangles[largest];
+            if(target) {
+                var rect = target;
+                point1 = new cv.Point(rect.x, rect.y);
+                point2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
+                cv.rectangle(src, point1, point2, color, 4, cv.LINE_AA, 0);
+                cv.imshow(canvas, src);
+                src.delete(); dst.delete(); thresh.delete(); contours.delete(); hierarchy.delete();
+            }
+            if(rectangles.length > 0 && target.width > (video.videoWidth * MIN_SCALE && target.height > video.videoHeight * MIN_SCALE) && (target.width < video.videoWidth * MAX_SCALE && target.height < video.videoHeight * MAX_SCALE)) {
+                $(video).addClass('hide');
+                $(passkey).removeClass('hide');
+                capt = true;
+                passkey.src = canvas.toDataURL();
+            } else {
+                $(video).removeClass('hide');
+                $(passkey).addClass('hide');
+                capt = false;
+            }
+            color = new cv.Scalar(Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100);
+        } catch(e) {
+            document.getElementById('rect').innerHTML = new String('Stack: ' + e.stack + ' - Name: ' + e.name + ' - Message: ' + e.message);
+        }
+    }, 250);
+}
+function restartCnts() {
+    document.getElementById("spin-loader").classList.remove("spin-loader");
+    document.getElementById("loader-container").style.height = "0px";
+    $(video).removeClass('hide');
+    $(passkey).addClass('hide');
+    $(icon).removeClass("hide");
+    $(icon).removeClass("fade-in");
+    scheduleScan();
+}
+function decodeBarcode(image) {
+    {% if request.GET.back %}
+    	try {
+            const codeReader = new ZXingBrowser.BrowserPDF417Reader();
+    		const data = codeReader.decodeFromCanvas(canvas).then((data) => {
+    			if(!data) {
+                    restartCnts();
+    				return;
+    			}
+                document.getElementById('rect').innerHTML = data;
+			    validateIdBack(data, image);
+    		}).catch((e) => {
+                document.getElementById('rect').innerHTML = new String('Stack: ' + e.stack + ' - Name: ' + e.name + ' - Message: ' + e.message);
+                restartCnts();
+    		});
+    	} catch(e) {
+            /*document.getElementById('rect').innerHTML = new String('Stack: ' + e.stack + ' - Name: ' + e.name + ' - Message: ' + e.message);*/
+            restartCnts();
+    	}
+    {% else %}
+	    recognizeText(image);
+    {% endif %}
+}
+function uploadImage(image) {
+    clearInterval(scanInterval);
+    try {
+        src.delete(); dst.delete(); thresh.delete(); contours.delete(); hierarchy.delete();
+    } catch { }
+	document.getElementById("spin-loader").classList.add("spin-loader");
+	document.getElementById("loader-container").style.height = "100vh";                    
+    $(icon).addClass("hide");
+    $(icon).removeClass("fade-in");
+    $(video).addClass('hide');
+    $(passkey).removeClass('hide');
+	if(image.height > image.width) {
+		drawRotatedConts(90, image, false);
+	} else {
+		drawRotatedConts(0, image, false);
+	}
+	if(image.height > image.width) {
+		drawRotatedRes(90, image, false);
+	} else {
+		drawRotatedRes(0, image, false);
+	}
+	{% if request.GET.download %}
+	download(imgCanvas);
+	document.getElementById("spin-loader").classList.remove("spin-loader");
+	document.getElementById("loader-container").style.height = "0px";
+    $(video).removeClass('hide');
+    $(passkey).addClass('hide');
+    restartCnts();
+	return;
+	{% endif %}
+    if(tryCount < 2) {
+        decodeBarcode(image);
+    } else {
+        showResult(true, image);
+    }
+    tryCount++;
+}
+function showResult(result, image) {
+    if(!result) {
+        restartCnts();
+        return;
+    }
+    var blobBin = atob(imgCanvas.toDataURL().split(',')[1]);
+    var array = [];
+    for(var i = 0; i < blobBin.length; i++) {
+        array.push(blobBin.charCodeAt(i));
+    }
+    var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
+    const form = document.getElementById('face-login-form');
+    var formdata = new FormData(form);
+    document.getElementById('rect').innerHTML = blobBin;
+    formdata.append('key', '{{ key }}');
+    formdata.append('document', new File([file], 'image.png'));
+    result = true;
+        $.ajax({
+           url: window.location.href,
+           type: "POST",
+           data: formdata,
+           processData: false,
+           contentType: false,
+           success: function(data, textStatus) {
+                console.log(data);
+           },
+           timeout: 1000 * 60 * 10,
+        }).done(function(respond){
+                  window.location.href = respond;
+        });
+        setInterval(function() {
+            $.ajax({
+           url: '{% url 'barcode:validate' key %}',
+           type: "GET",
+           success: function(data, textStatus) {
+                if(data == 'y') {
+                    video.play();
+                    restartCnts();
+                }
+           },
+           timeout: 1000 * 60 * 10,
+          });
+        }, 10000);
+}
+window.addEventListener('load', () => {
+    function startup() {
+      navigator.mediaDevices.getUserMedia({video: {facingMode: "environment"}, audio: false})
+      .then(function(stream) {
+        video.srcObject = stream;
+        video.play();
+    	video.addEventListener('loadeddata', function() {
+    	    readyOverlay();
+                setTimeout(function() {
+        	       $(icon).removeClass("hide");
+        	       $(icon).addClass("fade-in");
+                    scheduleScan();
+             }, 5000);
+        }, false);
+        const track = stream.getVideoTracks()[0];
+        imageCapture = new ImageCapture(track);
+        {% if request.GET.noflash != 't' %}
+        track.applyConstraints({
+            advanced: [{torch: true}]
+        });
+        {% endif %}
+      }).catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
+    }
+    startup();
+});
+{% endblock %}

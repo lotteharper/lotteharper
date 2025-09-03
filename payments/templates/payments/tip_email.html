@@ -1,0 +1,77 @@
+<h1>{{ site_name }} - @{{ model.profile.name }} says: Thank you for your tip!</h1>
+<p>Dear {{ user.username }},</p>
+<p>I'm {{ model.profile.name }} from {{ site_name }}. I noticed you sent me a tip, and I wanted to thank you for your contribution! Everything helps, and especially crypto is helpful right now given the projected growth of the economy and stability of many available currencies, as well as easy access at global scale and secure anonymity through cryptography.</p>
+<p>Your tip of ${{ tip }} USD, paid in {{ crypto }} will help us maintain our services and continue to provide content, software and support for the app and hopefully eventually the app's dependency contributors as well.</p>
+{% load feed_filters %}
+{% if tip|casttofloat > 0 and tip|casttofloat < 0.05 %}
+<p>Your tip pays me little, but I have much in store, and everything matters. Your tip pays me like an ad view, 50-100 tips and a might be able to afford something useful. Thank you.</p>
+{% elif tip|casttofloat > 0.05 and tip|casttofloat < 0.10 %}
+<p>Your tip pays me like an ad click. If I get about 50 of these tips I might be able to afford a coffee or a can of soda. Thanks anyway!</p>
+{% elif tip|casttofloat > 0.10 and tip|casttofloat < 0.25 %}
+<p>You gave me a dime! Thank you, but it takes more than that to keep this site running.</p>
+{% elif tip|casttofloat > 0.25 and tip|casttofloat < 0.50 %}
+<p>You gave me enough to be able to afford a bowl of soup! Yum, I'm going to make some ramen. Thank you!</p>
+{% elif tip|casttofloat > 0.50 and tip|casttofloat < 0.75 %}
+<p>You gave me enough to send on some blockchains, but it's still not enough to afford an item at most stores. Thank you anyway.</p>
+{% elif tip|casttofloat > 0.75 and tip|casttofloat < 1%}
+<p>Your tip makes me about as much as a basic crypto miner might with energy bills these days. Thank you!</p>
+{% elif tip|casttofloat > 1 and tip|casttofloat < 1.50 %}
+<p>Your tip helps me be able to afford basic needs items, like small sets of things I need. Thank you so much.</p>
+{% elif tip|casttofloat > 1.50 and tip|casttofloat < 2.50 %}
+<p>You gave me enough to afford a candy bar. Yum! Thanks</p>
+{% elif tip|casttofloat > 2.50 and tip|casttofloat < 5 %}
+<p>You gave me enough to afford a snack. Thanks!</p>
+{% elif tip|casttofloat > 5.00 and tip|casttofloat < 10 %}
+<p>You gave me enough to afford a few API credits to run the server. Thanks!</p>
+{% elif tip|casttofloat > 10.00 and tip|casttofloat < 20 %}
+<p>You bought me a coffee and a donut, thank you!</p>
+{% elif tip|casttofloat > 20.00 and tip|casttofloat < 50 %}
+<p>You bought me a sandwich and a drink, thanks so much!</p>
+{% elif tip|casttofloat > 50.00 and tip|casttofloat < 100 %}
+<p>You bought me some groceries, thank you for your help!</p>
+{% elif tip|casttofloat > 100.00 and tip|casttofloat < 200 %}
+<p>You bought me a more expensive grocery purchase, thanks for your support, I'll spend this on things I need, or rent for the server. Thank you!</p>
+{% elif tip|casttofloat > 200.00 and tip|casttofloat < 500 %}
+<p>You gave me enough to branch out and try some new things, and to take care of myself. Thanks so much!</p>
+{% elif tip|casttofloat > 500.00 and tip|casttofloat < 1000 %}
+<p>You gave me enough to fund the server for a few months. Thanks so much!</p>
+{% elif tip|casttofloat > 1000.00 and tip|casttofloat < 2000 %}
+<p>You gave me enough to afford a nice laptop. Thanks for your contribution!</p>
+{% elif tip|casttofloat > 2000.00 and tip|casttofloat < 5000 %}
+<p>You gave me enough to afford a month or two of rent, or maybe a month somewhere a little bigger. Thank you!</p>
+{% elif tip|casttofloat > 5000.00 and tip|casttofloat < 10000 %}
+<p>You gave me enough to afford a few months of rent, in somewhere small. Cozy, Thank you!</p>
+{% elif tip|casttofloat > 10000.00 and tip|casttofloat < 15000 %}
+<p>You gave me enough to afford 6 months rent. Thank you so much!</p>
+{% elif tip|casttofloat > 15000.00 and tip|casttofloat < 20000 %}
+<p>You gave me enough to buy a decent car. Thanks for transporting me!</p>
+{% elif tip|casttofloat > 20000.00 and tip|casttofloat < 50000 %}
+<p>You gave me a years pay for a lot of people in America. That will go a long way. Thank you for your contribution.</p>
+{% elif tip|casttofloat > 50000.00 and tip|casttofloat < 75000 %}
+<p>You gave me enough to afford a few fun toys, like a new car or maybe some skydiving lessons. Thank you!</p>
+{% elif tip|casttofloat > 75000.00 and tip|casttofloat < 100000 %}
+<p>You gave me enough to afford a nice car, we should go somewhere fun! Thank you</p>
+{% elif tip|casttofloat > 100000.00 and tip|casttofloat < 500000 %}
+<p>You gave me enough to afford a decent apartment. Thank you for housing me!</p>
+{% elif tip|casttofloat > 500000.00 and tip|casttofloat < 1000000 %}
+<p>You gave me enough to buy a nice home and start a business. Thank you!</p>
+{% elif tip|casttofloat > 1000000.00 and tip|casttofloat < 10000000 %}
+<p>I'm a millionare overnight! You gave me enough to make a big difference in my life. Not enough for my whole life though. But I'll make it last! And get something I need.</p>
+{% elif tip|casttofloat > 10000000.00 and tip|casttofloat < 100000000 %}
+<p>You gave me enough to retire really nicely, and take care of my self in luxury style while making an impression with my influence. Thanks to you!</p>
+{% elif tip|casttofloat > 100000000.00 and tip|casttofloat < 1000000000 %}
+<p>You gave me enough money to afford a ticket to Mars and probably beyond. Going. Thank you!</p>
+{% elif tip|casttofloat > 1000000000.00 %}
+<p>You gave me enough money to charitably feed, house and treat every needy person. Probably. Or essentially. The world thanks you!</p>
+{% endif %}
+<img style="width: 30%; max-width: 300px; border-radius: 50%;" src="{{ model.profile.get_image_url }}" alt="A photo of me from {{ site_name }}"></img>
+<p>I want to make more content and features, and your contribution enables me to do so. You can also buy photos, hire me, subscribe to my blog, or an ID scanning plan, and visit my sites to support me, the link is below! Also, feel free to connect with me, I'd love to chat about your experience with my project. :)</p>
+<p>Use this link to visit the site - <a href="{{ protocol }}://{{ domain }}">click here</a>.</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ protocol }}://{{ domain }}</p>
+<p>Thanks for showing me some love.</p>
+<p>Seeing you there with love,</p>
+<p>{{ model.profile.name }}</p>
+{% autoescape off %}
+<img style="width: 60%; max-width: 300px;" src="{{ photo }}" alt="A photo of me from {{ site_name }}"></img>
+{% endautoescape %}
