@@ -1,5 +1,5 @@
-4
-12
+5
+00
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-09-01.git
@@ -13,10 +13,26 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main e8e443630] backup
- 10 files changed, 9 insertions(+), 8 deletions(-)
- create mode 100755 data/translate.json.ap
- mode change 100755 => 100644 retargeting/__pycache__/email.cpython-312.pyc
+[main 3293e48c9] backup
+ 32 files changed, 15 insertions(+), 15 deletions(-)
+ create mode 100644 media/audio/fingerprints/0d7b8dc1-a146-4519-a371-75c232166c0f.npy
+ create mode 100644 media/audio/fingerprints/1e83155a-c162-45eb-88a0-7b296b58c4b1.npy
+ create mode 100644 media/audio/fingerprints/2173ae16-430f-4667-bc14-599e77946818.npy
+ create mode 100644 media/audio/fingerprints/32bb63b7-5391-4854-9001-51aff8e15d07.npy
+ create mode 100644 media/audio/fingerprints/5e000261-f0e4-4156-a154-c5faa0ca8ddd.npy
+ create mode 100644 media/audio/fingerprints/69a4c839-30ff-434f-b463-934bd2d6a31d.npy
+ create mode 100644 media/audio/fingerprints/73eaaf11-23b9-49f5-809e-c28146d5ca2b.npy
+ create mode 100644 media/audio/fingerprints/774f39f1-cf6c-49fe-8607-366ae7fddff4.npy
+ create mode 100644 media/audio/fingerprints/949004a3-5dd1-4a68-bdad-9c603c6ddf4b.npy
+ create mode 100644 media/audio/fingerprints/9ddc3019-6bd3-4776-a482-dc33ffa52361.npy
+ create mode 100644 media/audio/fingerprints/a1bf2750-be84-4df3-a783-66359f7c825a.npy
+ create mode 100644 media/audio/fingerprints/aef1407d-5d6a-41cf-9fad-b85fe234b563.npy
+ create mode 100644 media/audio/fingerprints/c43d3570-88c8-4137-a69d-01e2a65c8ded.npy
+ create mode 100644 media/audio/fingerprints/c5ccd7bf-049e-48c9-9d4d-66602c133165.npy
+ create mode 100644 media/audio/fingerprints/e3e29e0f-7288-4de7-8713-94f0f0a1ba2c.npy
+ create mode 100644 media/audio/fingerprints/e60a0497-dd23-4b34-ad15-5edfcd415ca9.npy
+ create mode 100644 media/audio/fingerprints/f5a7cc4a-51d6-419d-97b7-fe12bfdb15d3.npy
+ create mode 100644 media/audio/fingerprints/fdf44b58-b3cf-4c64-a3ad-54c66561614d.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
