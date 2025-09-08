@@ -90,7 +90,7 @@ class IdentityDocument(models.Model):
     def save(self, *args, **kwargs):
         this = IdentityDocument.objects.filter(id=self.id).first()
         if this and this.verified:
-            return
+#            return
             if len(self.barcode_data) < len(this.barcode_data):
                 return
             if len(self.barcode_data_processed) < len(this.barcode_data_processed):

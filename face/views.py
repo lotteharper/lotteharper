@@ -11,6 +11,12 @@ def get_face_path(instance, filename):
     return os.path.join('face/', filename)
 
 @login_required
+@user_passes_test(is_superuser_or_vendor)
+def get_redirect(request):
+    from django.shortcuts import redirect
+    return redirect(request.user.profile.create_face_url())
+
+@login_required
 #@user_passes_test(is_superuser_or_vendor)
 def secure_photo(request, filename):
     from django.urls import reverse
@@ -137,14 +143,16 @@ def auth_url(request, username, token):
     if True: #request.method == 'POST':
         try:
             user = User.objects.filter(profile__uuid=username).order_by('-profile__last_seen').first()
-            face = Face.objects.get(token=token)
-#            print(face.authorized)
-            if not face.token == '' and not username == '' and not face.auth_url == '':
+            face = Face.objects.filter(token=token).first()
+#            print('Is auth? {}'.format(str(face.authorized)))
+            if face and (not face.token == '') and (not username == '') and (not face.auth_url == ''):
                 face.authorized = True
                 face.save()
                 return HttpResponse(face.auth_url)
             else: return HttpResponse('none')
         except:
+            import traceback
+            print(traceback.format_exc())
             return HttpResponse('failed')
     return HttpResponse('none')
 
@@ -185,7 +193,8 @@ def face_verify(request, username, token):
     from django.contrib.auth.models import User
     from django.utils.crypto import get_random_string
     flow = None
-    token = FaceToken.objects.filter(uid=username).order_by('-timestamp').last()
+    urltoken = token
+    token = FaceToken.objects.filter(uid=username, expires__gte=timezone.now()).order_by('-timestamp').last()
     if not token: token = FaceToken.objects.create(user=User.objects.filter(profile__uuid=username).first(), uid=username, expires=timezone.now() + datetime.timedelta(seconds=115))
     user = User.objects.filter(id=token.user.id).first()
     if request.GET.get('flow', False): flow = VeriFlow.objects.filter(uid=request.GET.get('flow', None), expires__gte=timezone.now()-datetime.timedelta(minutes=15))
@@ -193,51 +202,10 @@ def face_verify(request, username, token):
     if flow:
         user = None
     ip = get_client_ip(request)
-#    if not user:
-#        return redirect(reverse('users:login'))
-    if user and hasattr(user, 'security_profile'):
-        p = user.security_profile
-        if not ip in user.security_profile.ip_addresses.values_list('ip_address', flat=True):
-            ip_address = UserIpAddress()
-            ip_address.user = user
-            ip_address.ip_address = ip
-            ip_address.save()
-            ip_address.page_loads = 1
-            ip_address.risk_detected = check_ip_risk(ip_address)
-            ip_address.save()
-            p.ip_addresses.add(ip_address)
-            p.save()
-            if p.ip_addresses.count() % 10 == 0:
-                user.profile.identity_verified = False
-                user.profile.save()
-            if user.security_profile.ip_addresses.count() > 1:
-                messages.warning(request, 'You are using a new IP. Please verify your identity.')
-                user.profile.identity_confirmed = False
-                user.profile.save()
-        p = user.profile
-        ip_obj = user.security_profile.ip_addresses.filter(ip_address=ip).first()
-        risk_detected = ip_obj.risk_detected
-        if risk_detected or risk_detected == None:
-            p.identity_verified = False
-            p.identity_verification_failed = True
-            p.save()
-            messages.warning(request, 'You are using a suspicious IP. You have been logged out of the server.')
-            logout(request)
-            return HttpResponse(reverse('landing:landing'))
-        ip_obj.page_loads = ip_obj.page_loads + 1
-        if ip_obj.page_loads % FRAUD_MOD == 0:
-            ip_obj.risk_detected = check_ip_risk(ip_obj)
-        ip_obj.save()
-        risk_detected = ip_obj.risk_detected
-        if risk_detected or risk_detected == None:
-            p.identity_verified = False
-            p.identity_verification_failed = True
-            p.save()
-            messages.warning(request, 'You are using a suspicious IP. You have been logged out of the server.')
-            logout(request)
-            return HttpResponse(reverse('landing:landing'))
+    print('Got here')
     next = request.GET.get('next','')
-    if request.method == 'POST' and (user.profile.can_face_login < timezone.now() or not user) and not fraud_detect(request, True):
+    if request.method == 'POST' and not fraud_detect(request, True):
+        print('Got here to post')
         form = FaceForm(request.POST, request.FILES)
         if not form.is_valid():
             messages.warning(request, 'The form did not validate. Please try again.')
@@ -257,9 +225,11 @@ def face_verify(request, username, token):
         try:
             # prelim. result, token and timestamp
             result = True
-            if user: result = user.profile.check_face_token(token) and user.profile.can_face_login < timezone.now()
+            if user: result = user.profile.check_face_token(urltoken)
+            print('Success? {}'.format(result))
             from face.face import is_face_user
-            result = result and is_face_user(face.image.path, user)
+            if user: result = result and is_face_user(face.image.path, user)
+            print('Success? {}'.format(result))
         except:
             set_current_exception(traceback.format_exc())
             raise FaceLoginFailedException()
@@ -298,11 +268,10 @@ def face_verify(request, username, token):
             if not user.profile.check_face_token(token):
                 messages.warning(request, 'Your URL token for face login has expired. Please return to the login to create a new token.')
                 return HttpResponse(reverse('users:login'))
-            user.profile.can_face_login = timezone.now() + datetime.timedelta(seconds=5)
             user.profile.save()
             return HttpResponse(status=200)
     hide_logo = None
     if user.profile.hide_logo:
         hide_logo = True
-    token = get_random_string(length=64)
+    token = get_random_string(length=32)
     return render(request, 'face/face.html', {'dontshowsidebar': True, 'full': True, 'form': FaceForm(), 'title': 'Log in with your face', 'description': 'Log in to {} or create a new account with your face using a single tap.'.format(settings.SITE_NAME), 'hide_logo': hide_logo, 'profile': user.profile, 'accl_logout': user.profile.shake_to_logout, 'load_timeout': 3000, 'auth_token': token, 'user_uuid': user.profile.uuid})

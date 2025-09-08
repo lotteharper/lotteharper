@@ -9,6 +9,7 @@ python set_site.py
 ./scripts/loadapp address
 python clear_empty_profiles_table.py
 ./scripts/loadapp users.profile
+./scripts/loadapp users.emailaddress
 ./scripts/loadapp feed.post
 ./scripts/loadapp feed.bid
 ./scripts/loadapp chat
@@ -33,6 +34,7 @@ python clear_empty_security_tables.py
 ./scripts/loadapp webauth
 ./scripts/loadapp voice
 ./scripts/loadapp tts
+./scripts/loadapp face
 ./scripts/loadapp games
 ./scripts/loadapp audio
 ./scripts/loadapp live

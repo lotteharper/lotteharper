@@ -127,14 +127,14 @@ def is_face_user(image_path, user):
         if not user.profile.enable_facial_recognition and not user.profile.vendor and not user.is_superuser:
             print('Accepted face bypassing facial recognition')
             return True
-        if user.faces.count() > 0:
+        if user.faces.count() > 1:
             results = face_recognition.compare_faces(user_encodings, unknown_encoding)
-            if results[0]:
+            if results and results[0]:
                 if not verify_face(image_path, user_faces):
                     messages.warning(r, 'Your face doesn\'t match our {} records with DeepFace. Please try again.'.format(number_to_string(user.faces.count())))
                     return False
                 return True
-        elif user.faces.count() == 0:
+        elif user.faces.count() < 2:
             return True
         messages.warning(r, 'Your face doesn\'t match our {} records with dlib. Please try again.'.format(number_to_string(user.faces.count())))
         return False
