@@ -1,0 +1,2 @@
+#!/bin/bash
+watch sudo -u root "du -sh /home/team/lotteh/media/images/* | wc -l"

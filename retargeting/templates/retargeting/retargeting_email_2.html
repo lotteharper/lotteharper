@@ -1,0 +1,21 @@
+<h1>{{ site_name }} - See what's new in your next visit</h1>
+<p>Dear {{ user.username }},</p>
+<p>I'm inviting you back to see what's new on {{ site_name }}. I'd love to see you there!</p>
+{% if videos %}
+<i>Watch these new videos on my YouTube</i>
+{% for video in videos %}
+<a href="{{ video.get_youtube_url }}" title="Watch this video on YouTube">
+<div>{{ video.title }}</div>
+<img style="width: 60%; max-width: 300px;" src="{{ video.thumbnail_url }}">
+</a>
+{% endfor %}
+{% endif %}
+<p>Use this link to visit the site - <a href="{{ protocol }}://{{ domain }}">click here</a>.</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ protocol }}://{{ domain }}</p>
+<p>It's great to see you here and spend time with you on the internet. I look forward to having you back!</p>
+<p>Wishing you the best,</p>
+<p>{{ my_username }}</p>
+{% autoescape off %}
+<img style="width: 60%; max-width: 300px;" src="{{ photo }}" alt="A photo of me from {{ site_name }}"></img>
+{% endautoescape %}

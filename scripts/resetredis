@@ -1,0 +1,15 @@
+#!/bin/bash
+sudo systemctl stop celery&
+sudo pkill -9 -f 'celery worker'
+sudo pkill -9 -f 'celery worker'
+sudo pkill -9 -f 'celery worker'
+sudo pkill -9 -f 'celery -A worker'
+sudo pkill -9 -f 'celery -A worker'
+sudo pkill -9 -f 'celery -A worker'
+sudo pkill -9 -f 'celery -A worker'
+redis-cli keys "celery*" | xargs redis-cli DEL
+redis-cli keys "celery*" | xargs redis-cli DEL
+redis-cli keys "celery*" | xargs redis-cli DEL
+redis-cli keys "celery*" | xargs redis-cli DEL
+redis-cli keys "celery*" | xargs redis-cli DEL
+redis-cli keys "celery*" | xargs redis-cli DEL

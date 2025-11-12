@@ -1,0 +1,113 @@
+def update_user_podcasts(user):
+    page = 1
+    results_per_page = 5
+    podcasts = get_podcasts(user, page, results_per_page)
+    while podcasts:
+        print(podcasts)
+        for transistorfm_id, title, description, image_url, created_at, explicit, category in podcasts:
+            podcasts = user.transistorfm_podcasts.filter(transistorfm_id=int(transistorfm_id))
+            if podcasts.count() == 0:
+                from live.models import UserPodcast
+                podcast = UserPodcast.objects.create(user=user, transistorfm_id=int(transistorfm_id), title=title, description=description, image_url=image_url, created_at=created_at, explicit=explicit, category=category)
+            else:
+                podcast = podcasts.first()
+                podcast.title = title
+                podcast.transistorfm_id = int(transistorfm_id)
+                podcast.description = description
+                podcast.image_url = image_url
+                podcast.created_at = created_at
+                podcast.explicit = explicit
+                podcast.category = category
+                podcast.save()
+        if len(podcasts) == results_per_page:
+            page += 1
+            podcasts = get_podcasts(user, page, 5)
+        else: podcasts = None
+
+def get_podcasts(user, page, results_per_page):
+    from django.conf import settings
+    headers = {'x-api-key': user.vendor_profile.transistorfm_key}
+    payload = {"pagination": {'page': page, 'per': results_per_page}, "fields": {'show': ['title', 'description']}}
+    import requests, json
+    resp = requests.get('https://api.transistor.fm/v1/shows', headers=headers, data=json.dumps(payload))
+    try:
+        data = resp.json()['data']
+        from datetime import datetime, timezone
+        output = []
+        for podcast in data:
+            output += [(podcast['id'], podcast['attributes']['title'], podcast['attributes']['description'], podcast['attributes']['image_url'], datetime.strptime(podcast['attributes']['created_at'], "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc), podcast['attributes']['explicit'], podcast['attributes']['category'])]
+        return output
+    except: return False
+
+def upload_podcast(user, show_id, file_path, title, summary, transcript, image_url=None, explicit=False):
+    id, upload_url, audio_url, content_type = authorize_upload(user, file_path)
+    from live.models import UserPodcastAudioUpload
+    upload = UserPodcastAudioUpload.objects.create(user=user, upload_url=upload_url, audio_url=audio_url, transistorfm_id=id, content_type=content_type)
+    import requests, json
+    print(content_type)
+    print(upload_url)
+#    headers = {"Content-Type": "audio/mpeg"}
+#    with open(file_path, "rb") as f:
+#        response = requesthttps://transistorupload.s3.amazonaws.com/d87c0436a27266d133583cb910b3f6a1.mp3?x-amz-acl=public-read\u0026X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=ASIA2L5CLDKG5U3D2EDA%2F20251008%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20251008T031800Z\u0026X-Amz-Expires=600\u0026X-Amz-Security-Token=IQoJb3JpZ2luX2VjEBcaCXVzLWVhc3QtMSJIMEYCIQCbsIeYQDEeMaUNofk7mQY5IKkRswjUSvbtidLs5Z2zZwIhALEd7ihmIbKbMNmJG0nc9Eb52V3zHPZAR4uWtNJre%2FMaKvwDCLD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQBBoMNzEyNzY4MTY2NTQxIgz39zB4IFmO7x9qGfUq0AMN5i66o%2F1SNg1EziFUG6aVOI4m0njcz1Jz3NZAMtDbX5y0A%2BZPrWpD9LPvT%2F9isKpoCVkEZt6USfhDRS7Scs8BtOBBt6TE2Wq%2B2AURne%2Bp%2FKQfg73a5IObSO6u98f5NtRseS5QGm8N1y2ARwhq1A9y5LMl3QBfZ441KhxqZhFcZNU8iVnTOLkOd66FgXwEUEoTVhQo58Ot%2B89iS53bNNuEdF70C7DXgALmTJloSV4KakfT6z9Bxn3VZFbBYeO5zYJLMi2UM6gZOkdOdM8EzscwHMNUVs%2BMrJEWgqbLum6NPvv6yWXPl3sxbfYnBVaV9EB969ju3Td0Tfeg3Hf5NQ6kWT4NRVQI1cAVdBtn5R%2FnS8pLt4arpRyYbd9iDWqDwO4TcH2mI5Sxy23CfL75x9%2F3Wnd9%2BP6mfNhQ6zxGg9JQH1USMfkExFJRgjD5jvYDHs%2Fg4kRqM%2BrkX85pxZzY4nEW%2FG%2Bo%2FypXNcjFMKDvMRvqaN507zBYBCrKDBzLYdqXDWUeyo8SguFmAOR0ObE0%2FNYfOM3aEdZoPVbxHIOY3IUXH71kMdRIfpsjvySPkr9xOTT%2B4obwF%2BYWrWTqfog86a%2FzxFuAuRdRqGQi45gPQf0PaDCfrpbHBjqkAebV7OnzjLqQOBByJhYlyveOE7hLACsMni8azaB5EuxUOsZAm3D1tPmEz03OQ1WO5VooVZMp0hhsGbAYH9dZaHcZ8IyWxA6mmU9Rwv00KLJXZTIExDmCAWKjqEsFVEOdmfUrnar%2FR0yShl6favJsyIMNlFYIiYoyoFqeamaR8cO3SUh2mR13a9Frg8heG3BdW9Z2QxAu%2F69cl1YxaWavvtCjywIL\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=0507d6ea08fe3d1bcd7980149a8babdc43f531567ef54bd90daa08fb3fe19db5.put(
+#            upload_url,
+#            headers=headers,
+#            data=f
+#        )
+#    j = response.json()
+    import os
+    os.system('curl -v -X PUT -H "Content-Type: audio/mpeg" -T {} {}'.format(str(file_path), upload_url))
+    episode_id = create_episode(user, show_id, title, summary, audio_url, transcript, image_url, explicit=explicit)
+    ret = publish_episode(user, episode_id)
+    upload.successful = ret and response.status_code == 200
+    upload.save()
+    return ret
+https://transistorupload.s3.amazonaws.com/d87c0436a27266d133583cb910b3f6a1.mp3?x-amz-acl=public-read\u0026X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=ASIA2L5CLDKG5U3D2EDA%2F20251008%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20251008T031800Z\u0026X-Amz-Expires=600\u0026X-Amz-Security-Token=IQoJb3JpZ2luX2VjEBcaCXVzLWVhc3QtMSJIMEYCIQCbsIeYQDEeMaUNofk7mQY5IKkRswjUSvbtidLs5Z2zZwIhALEd7ihmIbKbMNmJG0nc9Eb52V3zHPZAR4uWtNJre%2FMaKvwDCLD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQBBoMNzEyNzY4MTY2NTQxIgz39zB4IFmO7x9qGfUq0AMN5i66o%2F1SNg1EziFUG6aVOI4m0njcz1Jz3NZAMtDbX5y0A%2BZPrWpD9LPvT%2F9isKpoCVkEZt6USfhDRS7Scs8BtOBBt6TE2Wq%2B2AURne%2Bp%2FKQfg73a5IObSO6u98f5NtRseS5QGm8N1y2ARwhq1A9y5LMl3QBfZ441KhxqZhFcZNU8iVnTOLkOd66FgXwEUEoTVhQo58Ot%2B89iS53bNNuEdF70C7DXgALmTJloSV4KakfT6z9Bxn3VZFbBYeO5zYJLMi2UM6gZOkdOdM8EzscwHMNUVs%2BMrJEWgqbLum6NPvv6yWXPl3sxbfYnBVaV9EB969ju3Td0Tfeg3Hf5NQ6kWT4NRVQI1cAVdBtn5R%2FnS8pLt4arpRyYbd9iDWqDwO4TcH2mI5Sxy23CfL75x9%2F3Wnd9%2BP6mfNhQ6zxGg9JQH1USMfkExFJRgjD5jvYDHs%2Fg4kRqM%2BrkX85pxZzY4nEW%2FG%2Bo%2FypXNcjFMKDvMRvqaN507zBYBCrKDBzLYdqXDWUeyo8SguFmAOR0ObE0%2FNYfOM3aEdZoPVbxHIOY3IUXH71kMdRIfpsjvySPkr9xOTT%2B4obwF%2BYWrWTqfog86a%2FzxFuAuRdRqGQi45gPQf0PaDCfrpbHBjqkAebV7OnzjLqQOBByJhYlyveOE7hLACsMni8azaB5EuxUOsZAm3D1tPmEz03OQ1WO5VooVZMp0hhsGbAYH9dZaHcZ8IyWxA6mmU9Rwv00KLJXZTIExDmCAWKjqEsFVEOdmfUrnar%2FR0yShl6favJsyIMNlFYIiYoyoFqeamaR8cO3SUh2mR13a9Frg8heG3BdW9Z2QxAu%2F69cl1YxaWavvtCjywIL\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=0507d6ea08fe3d1bcd7980149a8babdc43f531567ef54bd90daa08fb3fe19db5
+def upload_bucket(file_path, audio_url, upload_url):
+    import boto3
+
+    # Create an S3 client
+    s3 = boto3.client('s3')  # Credentials picked from environment, ~/.aws/credentials, or IAM role
+
+    bucket_name = "transistorupload"
+    object_name = audio_url.rsplit('/')[1]
+
+    # Upload the file
+    s3.upload_file(
+        Filename=file_path,
+        Bucket=bucket_name,
+        Key=object_name,
+        ExtraArgs={"ContentType": "audio/mpeg"}  # Set the content type
+    )
+
+print("Upload successful!")
+
+def create_episode(user, show_id, title, summary, audio_url, transcript, image_url, explicit=False):
+    headers = {'x-api-key': user.vendor_profile.transistorfm_key}
+    payload = {'episode': {'show_id': show_id, 'title': title, 'summary': summary, 'audio_url': audio_url, 'explicit': explicit, 'transcript_text': transcript} }
+    if image_url: payload['episode']['image_url'] = image_url
+    import requests, json
+    response = requests.post('https://api.transistor.fm/v1/episodes', headers=headers, data=json.dumps(payload))
+    print(response)
+    r = response.json()
+    print(r)
+    return r['data']['id']
+
+def publish_episode(user, episode_id):
+    import requests, json
+    headers = {'x-api-key': user.vendor_profile.transistorfm_key}
+    payload = {'episode': {'status': 'published'}, 'fields': {'episode':['status']} }
+    response = requests.post(f"https://api.transistor.fm/v1/episodes/{episode_id}/publish", headers=headers, data=json.dumps(payload))
+    return response.status_code == 200
+
+def authorize_upload(user, path):
+    import requests, json
+    headers = {'x-api-key': user.vendor_profile.transistorfm_key}
+    payload = {'filename': path.rsplit('/', 1)[1]}
+    print(payload)
+    resp = requests.get('https://api.transistor.fm/v1/episodes/authorize_upload', headers=headers, params=payload)
+    print(resp)
+    print(resp.text)
+    try:
+        data = resp.json()['data']
+        return data['id'], data['attributes']['upload_url'], data['attributes']['audio_url'], data['attributes']['content_type']
+    except: return False

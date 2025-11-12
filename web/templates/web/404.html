@@ -1,0 +1,23 @@
+{% extends 'web/base.html' %}
+{% load feed_filters %}
+{% block content %}
+<h1>{{ 'This page could not be found.'|etrans }}</h1>
+<p><i>{{ 'Consider going back to the'|etrans }} <a href="/" title="{{ 'Home page'|etrans }}">{{ 'home page'|etrans }}</a>.</i></p>
+<img class="mx-auto" style="width: 100%; max-width: 800px; height: auto" src="{{ model.profile.get_cover_image_url }}" alt="{{ 'My cover photo'|etrans }}">
+{% include 'banner_ad.html' %}
+{% endblock %}
+{% block javascript %}
+function getLang() {
+  if (navigator.languages !== undefined) 
+    return navigator.languages[0]; 
+  return navigator.language;
+}
+var allowedLangs = [{% for language in languages %}'{{ language }}',{% endfor %}];
+var theLang = getLang();
+if(theLang == 'en-US'){ theLang = 'en'; }
+if(allowedLangs.includes(theLang) && theLang != '{{ lang }}' && !window.location.pathname.startsWith('/' + thelang + '/')) {
+    setTimeout(function() {
+        window.location.href = 'https://' + window.location.hostname + '/' + theLang + '/404';
+    }, 2000);
+}
+{% endblock %}

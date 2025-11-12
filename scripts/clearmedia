@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /home/team/lotteh
+sudo rm -r media/secure/*
+sudo rm -r media/images/*
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py clear_cache
+sudo rm -r cache
+htcacheclean -p /var/cache/apache2 -l 1024M
+/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py createcachetable
+/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py createcachetable --database=cache_db
+/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py createcachetable lotteharper_private_translation_cache_table --database=lotteharper_translation_cache_db
+#/home/team/lotteh/venv/bin/python /home/team/lotteh/manage.py createcachetable lotteharper_private_cache_table --database=

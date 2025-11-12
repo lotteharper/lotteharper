@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo cat /etc/opendkim/keys/lotteh.com/sendonly.txt | tr -d '\n' | sed 's/\s//g' | awk -F'[)(]' '{print $2}' | sed '1s/"//g'
+# sed '0,/""/{s/""//}' |

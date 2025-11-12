@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+@font-face { font-family: 'EmojiFlag'; src: url('/static/fonts/NotoColorEmoji-flagsonly.ttf'); }
+</style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+<legend>{{ 'Review Login Sessions'|etrans }}</legend>
+{% if logins|length == 0 %}
+<p>{{ 'No pending logged in sessions to review.'|etrans }}</p>
+{% endif %}
+<ul>
+{% for login in logins %}
+<li id="{{ login.id }}">{{ 'Login at'|etrans }} {{ login.timestamp }} {{ 'and'|etrans }} {{ login.timestamp|time:"s u" }} {{ 'secs. from ip'|etrans }} {{ login.ip_address }} {{ 'from'|etrans }} {{ login.country|etrans }} ({{ login.country }}) <i style="font-family: 'EmojiFlag';">{{ login.country|getflag }}</i> {{ 'with agent'|etrans }} {{ login.user_agent }}. {{ 'Approve?'|etrans }} {% include 'security/approve.html' %} {{ 'OR Deauth?'|etrans }} {% include 'security/deauth.html' %} {{ 'OR Deny?'|etrans }} {% include 'security/deny.html' %}<hr></li>
+{% endfor %}
+</ul>
+{% endblock %}

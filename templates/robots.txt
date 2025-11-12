@@ -1,0 +1,5 @@
+Sitemap: https://{{ domain_name }}.com/sitemap.xml/
+User-agent: amazon-kendra-web-crawler-*
+Disallow: /
+User-agent: Amazonbot
+Disallow: /

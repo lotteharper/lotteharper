@@ -1,0 +1,38 @@
+#!/bin/bash
+# This script will build the project from source according to custom names and the public repository by default (it is the counterpart of a private script that simply builds my deployment of the app, you can make it do a similar thing by adding your fork of the repo in the GIT url)
+# Use your SSH key
+SSH_KEY='<SSH key here>'
+# Use the git repo from the project
+GIT_REPO="https://github.com/daisycamber/lotteharper.git"
+# Add your project name and username here
+PROJECT_NAME="yourproject"
+USER_NAME="team"
+GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev  | cut -d. -f1`
+sudo apt-add-repository universe
+sudo apt install -y nano git expect
+wget https://daisycamber.github.io/unix-config/sshd_config
+sudo cp sshd_config /etc/ssh/sshd_config
+sudo service ssh restart
+sudo service sshd restart
+echo "/root/.ssh/id_rsa" | sudo su root -c "ssh-keygen -t rsa -N ''"
+echo "root ssh key:"
+sudo su root -c "cat /root/.ssh/id_rsa.pub"
+sudo adduser --disabled-password --gecos "" $USER_NAME
+sudo passwd -d $USER_NAME
+sudo usermod -aG sudo $USER_NAME
+USER_RSA="/home/${USER_NAME}/.ssh/id_rsa"
+echo $USER_RSA | su team -c "ssh-keygen -t rsa -N ''"
+sudo cat /home/$USER_NAME/.ssh/id_rsa.pub | sudo tee -a /home/$USER_NAME/.ssh/authorized_keys
+ echo $SSH_KEY | sudo tee -a /home/$USER_NAME/.ssh/authorized_keys
+sudo su team
+cd /home/team
+git clone $GIT_REPO
+pwd
+ls
+# Convert the software to use the name Makeup Girl, domain mupgirl.com, mupgirl directory and settings (must be the same as above two lines), and the name Daisy with (for example) with your email and a good mail name for your project user (i'm using team, above)
+#mv /home/team/lotteharper /home/team/theproject
+#mv /home/team/theproject/lotteh /home/team/theproject/theproject
+#sudo chown -R team:users /home/team/theproject
+#sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/convert 'Makeup Girl' '<insert domain here, eg glamgirlx.com>' $PROJECT_NAME 'Daisy' your-letsencrypt-email@gmail.com" $USER_NAME
+#sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
+

@@ -1,0 +1,656 @@
+https://github.com/daisycamber/lotteharper.git
+6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/daisycamber\/lotteharper.git"/g
+https://gitlab.com/charlotte-harper/lotteh2025-01-07.git
+3s/GIT_REPO.*/GIT_REPO="https:\/\/gitlab.com\/charlotte-harper\/lotteh2025-01-07.git"/g
+setuptools==58.2.0
+twilio
+autocorrect
+paramiko
+ccxt
+numpy
+urllib3
+webauthn
+Reinitialized existing Git repository in /home/team/lotteh/.git/
+On branch main
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	..gitignore.swp
+	.github/
+	.gitignore
+	CODE_OF_CONDUCT.md
+	CONTRIBUTING.md
+	LICENSE.txt
+	README.md
+	SECURITY.md
+	__pycache__/
+	admin.py
+	app/
+	approve_login.py
+	audio/
+	auth_code.py
+	backup_date.txt
+	backup_init_date.txt
+	backuplogs
+	barcode/
+	binance.py
+	birthcontrol/
+	blacklist.txt
+	bucket_posts.py
+	bug_report.md
+	cache/
+	celery/
+	chat/
+	clear_empty_posts.py
+	clear_empty_profiles_table.py
+	clear_empty_security_tables.py
+	client_secret.json
+	conf.test
+	config/
+	constraints.txt
+	contact/
+	count.py
+	crypto/
+	crypto_trading.py
+	custom.md
+	data/
+	deny_login.py
+	deny_logins.py
+	desktop/
+	email/
+	email_list.txt
+	enhance/
+	errors/
+	face/
+	feature_request.md
+	feed/
+	fix_censor.py
+	fix_content.py
+	fix_paths.py
+	fixreq.sh
+	force_id_valid.py
+	force_publish.py
+	games/
+	generate_site.py
+	go/
+	highlight.py
+	hot/
+	hypnosis/
+	image_generator.py
+	index.html
+	index.html.1
+	info/
+	install.sh
+	install.yml
+	interactive/
+	keypress.py
+	kick/
+	landing/
+	last_logins.py
+	live/
+	log/
+	login.py
+	logout.py
+	logout.py.save
+	logout.sh
+	logout_everyone.py
+	logout_script.py
+	logout_script.sh
+	lotteh/
+	mail/
+	mailbox/
+	make_email_list.py
+	manage.py
+	media/
+	meet/
+	melanin/
+	misc/
+	notes/
+	notifications/
+	pam.py
+	pam.sh
+	patch_database.py
+	patch_posts.py
+	payments/
+	photobooth/
+	process_recordings.py
+	pull_request_template.md
+	questions.txt
+	recordings/
+	recover.py
+	recovery/
+	reload.py
+	remote/
+	reqfix.txt
+	reqs.txt
+	requirements.txt
+	restore_deleted_posts.py
+	retargeting/
+	revive.py
+	routine_caption.py
+	routine_caption_all.py
+	routine_enhance.py
+	routine_enhance_all.py
+	scripts/
+	secure/
+	security/
+	setup_mail.py
+	shell/
+	sms/
+	sources_backup
+	stacktrace/
+	static/
+	survey/
+	synthesizer/
+	templates/
+	templates_socialaccount_authentication_error.html
+	test.py
+	test.sh
+	test.txt
+	test_mail.py
+	translate/
+	tts/
+	unlock.py
+	upload_post.py
+	upload_posts.py
+	users/
+	vendors/
+	verify/
+	vibe/
+	views.py
+	vision/
+	voice/
+	web/
+	write_dovecot.py
+
+nothing added to commit but untracked files present (use "git add" to track)
+sending incremental file list
+./
+.gitignore
+backup_date.txt
+backup_init_date.txt
+backuplogs
+email_list.txt
+requirements.txt
+__pycache__/
+app/
+app/__pycache__/
+app/migrations/
+app/migrations/__pycache__/
+app/templates/
+app/templates/app/
+audio/
+audio/__pycache__/
+audio/migrations/
+audio/migrations/__pycache__/
+audio/templates/
+audio/templates/audio/
+barcode/
+barcode/__pycache__/
+barcode/migrations/
+barcode/migrations/__pycache__/
+barcode/templates/
+barcode/templates/barcode/
+birthcontrol/
+birthcontrol/__pycache__/
+birthcontrol/migrations/
+birthcontrol/migrations/__pycache__/
+birthcontrol/templates/
+birthcontrol/templates/birthcontrol/
+cache/
+chat/
+chat/__pycache__/
+chat/migrations/
+chat/migrations/__pycache__/
+chat/templates/
+chat/templates/chat/
+config/
+config/Xwrapper.config
+config/apis.json
+config/ascripts
+config/banner
+config/config.json
+config/crontab
+config/etc_default_celery
+config/etc_default_opendkim
+config/etc_dovecot_conf.d_10-auth.conf
+config/etc_dovecot_conf.d_10-master.conf
+config/etc_dovecot_dovecot.conf
+config/etc_dovecot_passwd
+config/etc_init.d_celery
+config/etc_init.d_celerybeat
+config/etc_opendkim.conf
+config/etc_pam.d_login
+config/etc_pam.d_sshd
+config/etc_postfix_main.cf
+config/etc_postfix_master.cf
+config/etc_systemd_system_celery.service
+config/etc_systemd_system_celerybeat.service
+config/etc_systemd_system_daphne.service
+config/etc_systemd_system_stun.service
+config/lotteh-le-ssl.conf
+config/postgresql.conf
+config/sudoers
+config/vd-model.py
+config/vd-requirements.txt
+contact/
+contact/__pycache__/
+contact/migrations/
+contact/migrations/__pycache__/
+contact/templates/
+contact/templates/contact/
+crypto/
+crypto/__pycache__/
+crypto/migrations/
+crypto/migrations/__pycache__/
+crypto/templates/
+crypto/templates/crypto/
+data/
+desktop/
+desktop/__pycache__/
+desktop/migrations/
+desktop/migrations/__pycache__/
+desktop/templates/
+desktop/templates/desktop/
+email/
+email/static/
+enhance/
+enhance/__pycache__/
+errors/
+errors/__pycache__/
+errors/templates/
+errors/templates/errors/
+experiments/
+experiments/pretrained_models/
+face/
+face/__pycache__/
+face/antispoofing/
+face/antispoofing/antispoofing_models/
+face/antispoofing/models/
+face/antispoofing/presentation_tools/
+face/migrations/
+face/migrations/__pycache__/
+face/templates/
+face/templates/face/
+feed/
+feed/__pycache__/
+feed/migrations/
+feed/migrations/__pycache__/
+feed/templates/
+feed/templates/feed/
+feed/templatetags/
+feed/templatetags/__pycache__/
+games/
+games/__pycache__/
+games/migrations/
+games/migrations/__pycache__/
+games/templates/
+games/templates/games/
+go/
+go/__pycache__/
+go/migrations/
+go/migrations/__pycache__/
+go/templates/
+go/templates/go/
+hot/
+hot/__pycache__/
+hot/migrations/
+hot/migrations/__pycache__/
+hot/templates/
+hot/templates/hot/
+hypnosis/
+hypnosis/__pycache__/
+hypnosis/migrations/
+hypnosis/migrations/__pycache__/
+hypnosis/templates/
+hypnosis/templates/hypnosis/
+info/
+info/__pycache__/
+info/migrations/
+info/migrations/__pycache__/
+interactive/
+interactive/__pycache__/
+interactive/migrations/
+interactive/migrations/__pycache__/
+interactive/templates/
+interactive/templates/interactive/
+keys/
+kick/
+kick/__pycache__/
+kick/migrations/
+kick/migrations/__pycache__/
+kick/templates/
+kick/templates/kick/
+landing/
+landing/__pycache__/
+landing/migrations/
+landing/migrations/__pycache__/
+landing/templates/
+landing/templates/landing/
+live/
+live/__pycache__/
+live/migrations/
+live/migrations/__pycache__/
+live/templates/
+live/templates/live/
+log/
+log/commands.log
+lotteh/
+lotteh/__pycache__/
+mail/
+mail/__pycache__/
+mail/inbox/
+mail/migrations/
+mail/migrations/__pycache__/
+mail/templates/
+mail/templates/mail/
+mailbox/
+mailbox/nobody
+mailbox/root
+mailbox/team
+media/
+media/agreements/
+media/audio/
+media/audio/fingerprints/
+media/birthcontrol/
+media/books/
+media/chat/
+media/chat/sounds/
+media/games/
+media/games/cards/
+media/icons/
+media/profiles/
+media/security/
+media/sounds/
+media/static/
+media/surrogacy/
+meet/
+meet/__pycache__/
+meet/migrations/
+meet/migrations/__pycache__/
+meet/templates/
+meet/templates/meet/
+melanin/
+melanin/__pycache__/
+melanin/migrations/
+melanin/migrations/__pycache__/
+melanin/templates/
+melanin/templates/melanin/
+misc/
+misc/__pycache__/
+misc/templates/
+misc/templates/misc/
+notes/
+notifications/
+notifications/__pycache__/
+notifications/migrations/
+notifications/migrations/__pycache__/
+notifications/templates/
+notifications/templates/notifications/
+payments/
+payments/__pycache__/
+payments/migrations/
+payments/migrations/__pycache__/
+payments/templates/
+payments/templates/payments/
+payments/templates/payments/payments/
+photobooth/
+photobooth/__pycache__/
+photobooth/migrations/
+photobooth/migrations/__pycache__/
+photobooth/templates/
+photobooth/templates/photobooth/
+recordings/
+recordings/__pycache__/
+recordings/migrations/
+recordings/migrations/__pycache__/
+recordings/templates/
+recordings/templates/recordings/
+recovery/
+recovery/__pycache__/
+recovery/migrations/
+recovery/migrations/__pycache__/
+recovery/templates/
+recovery/templates/recovery/
+remote/
+remote/__pycache__/
+remote/migrations/
+remote/migrations/__pycache__/
+remote/templates/
+remote/templates/remote/
+retargeting/
+retargeting/__pycache__/
+retargeting/migrations/
+retargeting/migrations/__pycache__/
+retargeting/templates/
+retargeting/templates/retargeting/
+scripts/
+scripts/activate
+scripts/ascript
+scripts/ascripts
+scripts/asyncbackup
+scripts/backup
+scripts/catkeys
+scripts/check
+scripts/client.py
+scripts/cmds
+scripts/commitlog
+scripts/compinfo
+scripts/daphnereload
+scripts/dbinfo
+scripts/disgpu
+scripts/doreload
+scripts/enagpu
+scripts/finishsetup
+scripts/fixfile
+scripts/googletrans_client.py
+scripts/imagecounts
+scripts/init
+scripts/initialize
+scripts/inspecttask
+scripts/json.py
+scripts/jump
+scripts/lockout
+scripts/logs
+scripts/logssh
+scripts/mailtest
+scripts/makemigrate
+scripts/nude.py
+scripts/opendkimkey
+scripts/patchvenv
+scripts/purgecache
+scripts/purgegit
+scripts/pushweb
+scripts/pwa_webpush_forms.py
+scripts/reinstallredis
+scripts/reload
+scripts/resetredis
+scripts/resetvenv
+scripts/rotatekeys
+scripts/safepoweroff
+scripts/safereboot
+scripts/setup
+scripts/setupisfinished
+scripts/startservices
+scripts/stopservices
+scripts/updateupgrade
+scripts/watchlogs
+scripts/webauth_views.py
+secure/
+secure/static/
+secure/static/lips2.png/
+security/
+security/__pycache__/
+security/migrations/
+security/migrations/__pycache__/
+security/templates/
+security/templates/security/
+shell/
+shell/__pycache__/
+shell/migrations/
+shell/migrations/__pycache__/
+shell/templates/
+shell/templates/shell/
+shell/templatetags/
+shell/templatetags/__pycache__/
+sms/
+sms/__pycache__/
+sms/migrations/
+sms/migrations/__pycache__/
+stacktrace/
+stacktrace/__pycache__/
+stacktrace/migrations/
+stacktrace/migrations/__pycache__/
+static/
+static/address/
+static/address/js/
+static/admin/
+static/admin/css/
+static/admin/css/vendor/
+static/admin/css/vendor/select2/
+static/admin/fonts/
+static/admin/img/
+static/admin/img/gis/
+static/admin/js/
+static/admin/js/admin/
+static/admin/js/vendor/
+static/admin/js/vendor/jquery/
+static/admin/js/vendor/select2/
+static/admin/js/vendor/select2/i18n/
+static/admin/js/vendor/xregexp/
+static/audio/
+static/barcode/
+static/clock/
+static/crypto/
+static/crypto/lib/
+static/crypto/web/
+static/crypto/web/lib/
+static/css/
+static/debug_toolbar/
+static/debug_toolbar/css/
+static/debug_toolbar/js/
+static/face/
+static/fonts/
+static/fonts/bootstrap-icons-1.10.3/
+static/fonts/bootstrap-icons-1.10.3/fonts/
+static/fonts/bootstrap/
+static/games/
+static/images/
+static/images/icons/
+static/js/
+static/landing/
+static/live/
+static/maps/
+static/mfa/
+static/mfa/css/
+static/mfa/js/
+static/signature/
+static/summernote/
+static/summernote/font/
+static/summernote/lang/
+static/synthesizer/
+static/webpush/
+stunserver/
+stunserver/client/
+stunserver/common/
+stunserver/networkutils/
+stunserver/resources/
+stunserver/server/
+stunserver/stuncore/
+stunserver/testcode/
+survey/
+survey/__pycache__/
+survey/migrations/
+survey/migrations/__pycache__/
+survey/templates/
+survey/templates/survey/
+synthesizer/
+synthesizer/__pycache__/
+synthesizer/migrations/
+synthesizer/migrations/__pycache__/
+synthesizer/templates/
+synthesizer/templates/synthesizer/
+ta-lib/
+ta-lib/autom4te.cache/
+ta-lib/include/
+ta-lib/src/
+ta-lib/src/.libs/
+ta-lib/src/ta_abstract/
+ta-lib/src/ta_abstract/.deps/
+ta-lib/src/ta_abstract/.libs/
+ta-lib/src/ta_abstract/frames/
+ta-lib/src/ta_abstract/tables/
+ta-lib/src/ta_abstract/templates/
+ta-lib/src/ta_common/
+ta-lib/src/ta_common/.deps/
+ta-lib/src/ta_common/.libs/
+ta-lib/src/ta_func/
+ta-lib/src/ta_func/.deps/
+ta-lib/src/ta_func/.libs/
+ta-lib/src/tools/
+ta-lib/src/tools/gen_code/
+ta-lib/src/tools/gen_code/.deps/
+ta-lib/src/tools/gen_code/.libs/
+ta-lib/src/tools/gen_code/java/
+ta-lib/src/tools/ta_regtest/
+ta-lib/src/tools/ta_regtest/.deps/
+ta-lib/src/tools/ta_regtest/.libs/
+ta-lib/src/tools/ta_regtest/ta_test_func/
+temp/
+temp/data/
+temp/gfpgan/
+templates/
+templates/admin/
+templates/tags/
+templates/tags/__pycache__/
+templates/webauth/
+translate/
+translate/__pycache__/
+translate/migrations/
+translate/migrations/__pycache__/
+tts/
+tts/__pycache__/
+tts/migrations/
+tts/migrations/__pycache__/
+users/
+users/__pycache__/
+users/migrations/
+users/migrations/__pycache__/
+users/templates/
+users/templates/users/
+vendors/
+vendors/__pycache__/
+vendors/migrations/
+vendors/migrations/__pycache__/
+vendors/templates/
+vendors/templates/vendors/
+verify/
+verify/__pycache__/
+verify/migrations/
+verify/migrations/__pycache__/
+verify/templates/
+verify/templates/verify/
+vibe/
+vibe/__pycache__/
+vibe/migrations/
+vibe/migrations/__pycache__/
+vibe/templates/
+vibe/templates/vibe/
+violence-detection/
+violence-detection/data/
+violence-detection/results/
+vision/
+voice/
+voice/__pycache__/
+voice/migrations/
+voice/migrations/__pycache__/
+voice/templates/
+voice/templates/voice/
+web/
+web/__pycache__/
+web/migrations/
+web/migrations/__pycache__/
+web/site/
+Reinitialized existing Git repository in /home/team/femmebabe-backup-open/.git/

@@ -1,0 +1,8 @@
+{% extends 'web/base.html' %}
+{% block content %}
+{% include 'banner_ad.html' %}
+{% load app_filters %}
+<p>{{ the_ad_text|etrans }}</p>
+<p><i>{{ the_site_name }}</i></p>
+<hr>
+{% endblock %}

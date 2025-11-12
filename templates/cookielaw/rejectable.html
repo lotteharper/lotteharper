@@ -1,0 +1,11 @@
+{% load app_filters %}
+<div id="CookielawBanner" style="{% if darkmode %}background-color: #222222 !important;{% else %}background-color: white !important;{% endif %} position: relative; z-index: 1100;">
+    <div class="container">
+        <h6 style="{% if darkmode %}color: white !important;{% else %}color: black !important;{% endif %}">{{ 'Cookies disclaimer'|etrans }}</h6>
+        <p>
+            <a class="btn btn-primary pull-right" href="javascript:Cookielaw.accept();">{{ 'I agree'|etrans }}</a>
+            <a class="btn btn-info pull-right reject" href="javascript:Cookielaw.reject();">{{ 'I disagree'|etrans }}</a>
+            <div style="{% if darkmode %}color: white !important;{% else %}color: black !important;{% endif %}">{% blocktrans en %}Our site saves small pieces of text information (cookies) on your device in order to deliver better content and for statistical purposes. You can disable the usage of cookies by changing the settings of your browser. By browsing our website without changing the browser settings you grant us permission to store that information on your device.{% endblocktrans %}</div>
+        </p>
+    </div>
+</div>

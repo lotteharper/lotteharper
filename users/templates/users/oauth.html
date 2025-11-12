@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load app_filters %}
+<h1>{{ 'Authenticating'|etrans }}...</h1>
+<p><i>Please wait, you will be redirected momentarily.</i></p>
+<form id="upload-form" class="hide">
+{% csrf_token %}
+</form>
+{% endblock %}
+{% block javascript %}
+var formElement = document.getElementById("upload-form");
+var form = document.getElementById("upload");
+var data = new FormData(formElement);
+data.append('auth', window.location.href);
+$.ajax({
+	url: window.location.href,
+	type: "POST",
+	data: data,
+	processData: false,
+	contentType: false,
+	timeout: 60000,
+}).done(function(respond) {
+	window.location.href = '/';
+});
+{% endblock %}

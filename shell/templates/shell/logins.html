@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+@font-face { font-family: 'EmojiFlag'; src: url('/static/fonts/NotoColorEmoji-flagsonly.ttf'); }
+</style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+{% blocktrans en %}
+<legend>Approve Shell Logins</legend>
+<p><i><b>Caution</b>: Only approve SSH logins from known IP addresses at known times. SSH access, while crucial, can corrupt the filesystem and database, and should be used carefully. All logins are deprecated after five minutes of no approval, or a dissaproval with the yellow button.</i></p>
+{% endblocktrans %}
+{% if logins|length == 0 %}
+<p>{{ 'No pending shell logins to display.'|etrans }}</p>
+{% else %}
+<p><small>{{ 'Please use the red buttons to approve SSH logins as needed.'|etrans }}</small></p>
+{% endif %}
+<ul>
+{% for login in logins %}
+<li id="{{ login.id }}" class="login">{{ 'Login at'|etrans }} {{ login.time }} {{ 'and'|etrans }} {{ login.time|time:"s u" }} secs. {{ 'with'|etrans }} ip {{ login.ip_address }} {{ 'from'|etrans }} {{ login.country|etrans }} ({{ login.country }}) <i style="font-family: 'EmojiFlag';">{{ login.country|getflag }}</i> {{ 'with code'|etrans }} <b>#{{ login.code }}</b>. {{ 'Approve?'|etrans }} {% include 'shell/approve.html' %} {% include 'shell/invalidate.html' %}<hr></li>
+{% endfor %}
+</ul>
+<hr>
+{% endblock %}
+{% block javascript %}
+var elements = document.querySelectorAll('.login');
+for(var x = 0; x < elements.length; x++) {
+	var element = elements[x];
+	$(element).on('click', function(event) {
+		$(event.target).toggleClass('fade-hidden-fast');
+		setTimeout(function() {
+			$(event.target).toggleClass('hide');
+		}, 1000);
+	});
+}
+/*var elements = document.querySelectorAll('.login-button');
+for(var x = 0; x < elements.length; x++) {
+	var element = document.getElementById(parseInt(elements[x].dataset.id));
+	$(elements[x]).on('click', function(event) {
+		setTimeout(function() {
+            if(event.target.parentElement) {
+    			$(event.target.parentElement).toggleClass('fade-hidden-fast');
+    			setTimeout(function() {
+    				$(event.target.parentElement).toggleClass('hide');
+    			}, 1000);
+                if(event.target.parentElement.parentElement) {
+        			$(event.target.parentElement.parentElement).toggleClass('fade-hidden-fast');
+        			setTimeout(function() {
+        				$(event.target.parentElement.parentElement).toggleClass('hide');
+        			}, 1000);
+                }
+            }
+		}, 5000);
+	});
+}*/
+{% endblock %}

@@ -1,0 +1,40 @@
+#!/bin/bash
+DOMAIN='lotteh.com'
+if [[ -z $SSH_ORIGINAL_COMMAND ]]; then
+# The format of log files is /var/log/jump/YYYY-MM-DD_HH-MM-SS_user
+LOG_FILE="`date --date="today" "+%Y-%m-%d_%H-%M-%S"`_`whoami`"
+LOG_DIR="/var/log/jump/"
+# Print a welcome message
+echo ""
+echo "Welcome to Lotte Harper! <3 <3 <3 xoxo"
+echo "⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "⬜⬜🟥⬜⬜⬜⬜⬜⬜⬜⬜🟥⬜⬜⬜🟥⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "⬜⬜🟧⬜⬜⬜⬜⬜🟧⬜⬜🟧⬜⬜⬜🟧⬜⬜⬜🟧🟧🟧⬜⬜"
+echo "⬜⬜🟨⬜⬜⬜⬜🟨⬜🟨⬜🟨🟨🟨⬜🟨🟨🟨⬜🟨⬜🟨⬜⬜"
+echo "⬜⬜🟩⬜⬜⬜⬜🟩⬜🟩⬜🟩⬜⬜⬜🟩⬜⬜⬜🟩🟩⬜⬜⬜"
+echo "⬜⬜🟦🟦🟦🟦⬜⬜🟦⬜⬜⬜🟦🟦⬜⬜🟦🟦⬜🟦🟦🟦⬜⬜"
+echo "⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "⬜🟥⬜⬜🟥⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "⬜🟧⬜⬜🟧⬜⬜🟧⬜⬜⬜🟧⬜🟧🟧⬜⬜🟧🟧🟧⬜⬜🟧⬜"
+echo "⬜🟨🟨🟨🟨⬜🟨⬜🟨⬜🟨⬜⬜🟨⬜🟨⬜🟨⬜🟨⬜🟨⬜⬜"
+echo "⬜🟩⬜⬜🟩⬜🟩⬜🟩⬜🟩⬜⬜🟩⬜🟩⬜🟩🟩⬜⬜🟩⬜⬜"
+echo "⬜🟦⬜⬜🟦⬜⬜🟦🟦⬜🟦⬜⬜🟦🟦⬜⬜🟦🟦🟦⬜🟦⬜⬜"
+echo "⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟪⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+echo "Now accessing Lotte Harper. This secure system is constantly being updated and monitored. If you make changes to this system without our permission, they will be routinely automatically purged. Cease and desist all unauthorized access if you are not accessing this site with permission from us. Copying or deploying keys, database, stealing passwords, NFC data, or otherwise maliciously installing any virus, malware, homemade software, research software other than under supervision of our organization, or any other software, including other websites, web apps, services, or any other activity constitutes unauthorized activity and will be reported and prosecuted by means of litigation in all applicable local and federal courts and under all applicable local and federal law. All activity on this system is monitored. This is a secure fintech app. Changing keys, code or configuration is strictly prohibited as this constitutes abuse and often fraud. You will be held liable for all of your access of this system, even if read only access exposes sensitive data."
+echo "Unauthorized access or use of this system is strictly prohibited under all penalties applicable to willful unauthorized access (UNAX) under 18 U.S.C. 1030."
+echo "This software is not intended for individuals under the age of 18 years, or the applicable age of consent for purposes of adult content and other applicable services in your jurisdiction. Do not use this website if you are under this age (18 in the United States of America). All applicable copyright laws apply to this software. Public record keeping laws also apply. Bypassing those tests using this shell is a violation of local and federal law. Use of this system, including recording, copying, spoofing, botting, and other malware or otherwise homemade software is strictly prohibited, once again, with all other prohibited access. If you are accessing this software without our permission, you clearly have violated our trust and potentially jeporadized your own account, along with the system, and will be litigated under all applicable laws in local and even federal court. Use of the webapp system, $DOMAIN, including disputes, are handled by arbitration. All unauthorized use of this computer system, the shell session behind it, and any remote control software, backdoor, or otherwise system used to control this device are strictly prohibited and are subject to criminal and civil prosecution in the court of law, local and federal, through litigation, whether as an individual or representative of another entity. If you have read all of this you should know by now you should not be accessing this software without permission, your final warning to cease and desist unauthorized access is given."
+echo "Your access is granted. Please use the shell session carefully. <3"
+echo "NOTE: This SSH session will be recorded and monitored."
+echo "AUDIT KEY: $LOG_FILE"
+echo ""
+# I suffix the log file name with a random string. I explain why
+# later on.
+SUFFIX=`mktemp -u _XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+# Wrap an interactive shell into "script" to record the SSH session
+script -qf --timing=$LOG_DIR$LOG_FILE$SUFFIX.time $LOG_DIR$LOG_FILE$SUFFIX.data --command="/bin/bash && source .profile"
+else
+echo "This jump supports interactive sessions only. Do not supply a command"
+exit 1
+fi

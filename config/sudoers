@@ -1,0 +1,94 @@
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+ALL ALL=NOPASSWD: /bin/backup
+ALL ALL=NOPASSWD: /bin/reload
+ALL ALL=NOPASSWD: /bin/systemctl reload apache2
+ALL ALL=NOPASSWD: /bin/systemctl status apache2
+ALL ALL=NOPASSWD: /bin/systemctl start apache2
+ALL ALL=NOPASSWD: /bin/systemctl stop daphne
+ALL ALL=NOPASSWD: /bin/systemctl start daphne
+ALL ALL=NOPASSWD: /bin/systemctl restart daphne
+ALL ALL=NOPASSWD: /bin/systemctl start celery
+ALL ALL=NOPASSWD: /bin/tail *
+ALL ALL=NOPASSWD: /bin/chmod -R a+rX /var/log/apache2/
+ALL ALL=NOPASSWD: /home/team/lotteh/venv/bin/python *
+ALL ALL=NOPASSWD: /bin/cp /home/team/lotteh/config/etc_dovecot_passwd /etc/dovecot/passwd
+ALL ALL=NOPASSWD: /bin/chown team\:users /home/team/lotteh/*
+ALL ALL=NOPASSWD: /bin/chown root\:root /etc/dovecot/passwd
+ALL ALL=NOPASSWD: /bin/cat *
+ALL ALL=NOPASSWD: /bin/chmod * *
+ALL ALL=NOPASSWD: /bin/chown * *
+ALL ALL=NOPASSWD: /bin/chmod
+ALL ALL=NOPASSWD: /bin/chown
+ALL ALL=NOPASSWD: /bin/tail -100 /var/log/auth.log
+ALL ALL=NOPASSWD: /bin/disgpu
+ALL ALL=NOPASSWD: /bin/enagpu
+ALL ALL=NOPASSWD: /home/team/femmebabe/venv/bin/python /home/team/femmebabe/setup_mail.py/home/team/femmebabe/venv/bin/python /home/team/femmebabe/setup_mail.py
+ALL ALL=NOPASSWD: /bin/Xvfb *
+ALL ALL=NOPASSWD: /bin/safereboot
+ALL ALL=NOPASSWD: /bin/daphnereload
+ALL ALL=NOPASSWD: /bin/systemctl start apache2
+ALL ALL=NOPASSWD: /bin/systemctl start daphne
+ALL ALL=NOPASSWD: /bin/systemctl start celery
+ALL ALL=NOPASSWD: /bin/safereboot
+ALL ALL=NOPASSWD: /bin/doveadm pw -s SHA512-CRYPT -p * -u *
+ALL ALL=NOPASSWD: /home/team/lotteh/set_code.sh *
+# See sudoers(5) for more information on "@include" directives:

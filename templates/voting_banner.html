@@ -1,0 +1,6 @@
+{% load app_filters %}
+{% load feed_filters %}
+<div id="vote-banner" class="hide mt-5 p-3 pt-4" style="height: 210px; width: 100%; background-color: lightblue;">
+<p><legend{% if darkmode %} style="text-color: black; !important; color: black !important;"{% endif %}><img class="mt-4 p-1" height="80px" width="auto" alt="{{ 'The American Flag - Vote for'|etrans }} Kamala Harris" src="/media/static/american-flag.png">{{ 'Remember to register to vote, and vote for'|etrans }} VP Kamala Harris - <a class="btn btn-primary" href="https://vote.gov" title="{{ 'Register to vote or update your registration'|etrans }}">{{ 'Vote'|etrans }}</a> - <button class="btn btn-sm btn-danger" title="{{ 'Hide this banner'|etrans }}" onclick="setCookie('hidevotebanner', 'yes', 14); document.getElementById('vote-banner').classList.add('fade-hidden');">{{ 'Hide'|trans }}</button></legend>
+</p>
+</div>

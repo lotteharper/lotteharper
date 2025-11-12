@@ -1,0 +1,3 @@
+#!/bin/bash
+/home/team/lotteh/venv/bin/python pip-audit
+/home/team/lotteh/venv/bin/python safety check

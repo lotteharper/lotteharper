@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load feed_filters %}
+<legend>{{ 'Generate a QR Code'|etrans }}</legend>
+<p>{{ 'Supply a link in the form below to generate.'|etrans }}</p>
+<input class="form-control mr-sm-2" type="text" placeholder="{{ base_url }}" aria-label="{{ base_url }}" id="text-input" autofocus>
+<button onclick="downloadQr();" class="btn btn-primary" title="Download code">{{ 'Download'|etrans }}</button>
+<hr>
+<div style="display: flex; justify-content: space-around;"><div id="qrcode" style="border: 15px solid white; border-radius: 5px;"></div></div>
+{% endblock %}
+{% block javascript %}
+var qrdiv = document.getElementById("qrcode");
+var qr = $('#qrcode').kjua({text: '{{ base_url }}', render: 'svg'});
+var image = qrdiv.querySelector('svg');
+image.style.width = "100%";
+image.style.maxWidth = "400px";
+const input = document.querySelector('#text-input');
+var textValue = "{{ base_url }}";
+var textUpdated = false;
+input.addEventListener('input', (event) => {
+        textValue = event.target.value;
+        textUpdated = true;
+});
+function updateQrCode(newText) {
+    var container = document.getElementById('qrcode');
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+    var newQrCodeElement = kjua({
+        text: newText,
+        render: 'svg'
+    });
+    container.appendChild(newQrCodeElement);
+}
+setInterval(function() {
+        if(textUpdated) {
+                updateQrCode(textValue);
+                textUpdated = false;
+        }
+}, 1000);
+function downloadSVG() {
+    const svg = document.getElementById('qrcode').querySelector('svg');
+
+    const serializer = new XMLSerializer();
+    let source = serializer.serializeToString(svg);
+
+    if (!source.match(/^<svg[^>]+xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    if (!source.match(/^<svg[^>]+\"http:\/\/www\.w3\.org\/1999\/xlink\"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
+    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+    const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = ('{{ the_site_name }} - QR Code').replaceAll(' ', '_');
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+function downloadQr(){
+    downloadSVG();
+}
+qrdiv.onclick = downloadQr;
+{% endblock %}

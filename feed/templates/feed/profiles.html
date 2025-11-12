@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+{% for profile in profiles %}
+{% if profile.user.vendor_profile.video_intro_font %}
+@font-face { font-family: 'Vendor Specified ({{ profile.name }})'; src: url('{{ profile.user.vendor_profile.video_intro_font.url }}'); }
+{% endif %}
+{% endfor %}
+</style>
+{% endblock %}
+{% block content %}
+{% load feed_filters %}
+<h1>{{ 'Active Models'|etrans }}</h1>
+{% include 'banner_ad.html' %}
+{% for profile in profiles %}
+{% include 'feed/_profile.html' %}
+{% endfor %}
+{% include 'pagelinks.html' %}
+{% endblock %}

@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link rel="stylesheet" href="/static/summernote/summernote.min.css">
+{% if bs4 %}
+<link rel="stylesheet" href="/static/summernote/summernote-bs4.min.css">
+{% else %}
+<link rel="stylesheet" href="/static/summernote/summernote-bs5.min.css">
+{% endif %}
+{% if nudity_censor %}
+<script src="/static/js/tensorflow.min.js"></script>
+<script src="/static/js/nsfwjs.min.js"></script>
+{% endif %}
+<style>
+{% if request.user.vendor_profile.video_intro_font %}
+@font-face { font-family: 'Vendor Specified ({{ request.user.profile.name }})'; src: url('{{ request.user.vendor_profile.video_intro_font.url }}'); }
+{% endif %}
+</style>
+{% if darkmode %}
+<style>
+/* Dark mode styles for Summernote */
+.note-editor {
+    background-color: #2c2c2c; /* Dark background for the entire editor */
+    border-color: #444;
+}
+
+.note-toolbar {
+    background-color: #333; /* Dark background for the toolbar */
+    border-color: #444;
+}
+
+.note-toolbar .btn {
+    color: #e0e0e0; /* Light text color for toolbar buttons */
+    background-color: #444;
+    border-color: #555;
+}
+
+.note-toolbar .btn:hover {
+    background-color: #555;
+    border-color: #666;
+}
+
+.note-editable {
+    background-color: #1e1e1e; /* Dark background for the editable area */
+    color: #f0f0f0; /* Light text color for the editable content */
+    border-color: #444;
+}
+
+.note-statusbar {
+    background-color: #333; /* Dark background for the status bar */
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+/* Specific styles for dropdowns and popovers */
+.dropdown-menu {
+    background-color: #333;
+    border-color: #555;
+}
+
+.dropdown-item {
+    color: #e0e0e0;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active {
+    background-color: #555;
+    color: #fff;
+}
+
+.note-popover .popover-content {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+.note-popover .arrow::after {
+    border-top-color: #333;
+}
+</style>
+{% endif %}
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+       <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">{{ 'Update Post'|etrans }}
+		{% if form.instance %}
+		<div style="text-align: right;">
+			<button type="submit" class="btn btn-outline-info">{{ 'Update'|etrans }}</button>
+			<a style="float: right;" href="{% url 'feed:post-delete' pk=form.instance.id %}" title="{{ 'Delete this post'|etrans }}"><button type="button" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i> {{ 'Delete'|etrans }}</button></a>
+		</div>
+		{% endif %}
+		</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <img id="image-to-upload"></img>
+            <hr>
+            <p id="contentLength"></p>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit" id="edit-form-submit">{{ 'Post'|etrans }}</button>
+            </div>
+        </form>
+        <hr>
+	{% if form.instance.image %}
+	<img id="image-to-upload" width="100%;" src="{{ form.instance.get_image_url }}"></img>
+	<div style="display: flex; justify-content: space-around;">
+	<form method="POST" action="{% url 'feed:rotate' pk=form.instance.id direction='left' %}">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-outline-secondary">{{ 'Rotate Left'|etrans }}</button>
+	</form>
+	<form method="POST" action="{% url 'feed:rotate' pk=form.instance.id direction='flip' %}">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-outline-secondary">{{ 'Flip 180°'|etrans }}</button>
+	</form>
+	<form method="POST" action="{% url 'feed:rotate' pk=form.instance.id direction='right' %}">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-outline-secondary">{{ 'Rotate Right'|etrans }}</button>
+	</form>
+	</div>
+	{% endif %}
+<script src="/static/summernote/summernote.min.js"></script>
+{% endblock %}
+{% block javascripts %}
+{% if bs4 %}
+<script src="/static/summernote/summernote-bs4.min.js"></script>
+{% else %}
+<script src="/static/summernote/summernote-bs5.min.js"></script>
+{% endif %}
+{{ form.media }}
+{% endblock %}
+{% block javascript %}
+{% if not request.GET.raw %}
+var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+    return new bootstrap.Dropdown(dropdownToggleEl)
+});
+{% endif %}
+var chooseFile = document.getElementById("id_image");
+var imgPreview = document.getElementById("image-to-upload");
+chooseFile.addEventListener("change", function () {
+    getImgData();
+});
+function getImgData() {
+    imgPreview.innerHTML = "";
+    chooseFileFiles = Array.from(chooseFile.files);
+    const files = chooseFile.files[0];
+    if (files) {
+    {% if nudity_censor %}    document.getElementById('edit-form-submit').disabled = true;{% endif %}
+        for(var x = 0; x < chooseFile.files.length; x++) {
+            var fileReader = new FileReader();
+            fileReader.index = x;
+            fileReader.readAsDataURL(chooseFile.files[x]);
+            fileReader.addEventListener("load", function(evt) {
+                imgPreview.src = this.result;
+            });
+        }
+    }
+}
+{% if nudity_censor %}
+const cvcanvas = document.getElementById('cvcanvas');
+const cvctx = cvcanvas.getContext('2d');
+var nsfwjsmodel;
+nsfwjs.load('/static/js/models/mobilenet_v2/').then(function(model) {
+    nsfwjsmodel = model;
+});
+function detectImage(image_id) {
+    var image = document.getElementById(image_id);
+    cvcanvas.width = Math.trunc(image.naturalWidth * {{ nudity_censor_scale }});
+    cvcanvas.height = Math.trunc(image.naturalHeight * {{ nudity_censor_scale }});
+    cvctx.clearRect(0, 0, cvcanvas.width, cvcanvas.height);
+    cvctx.drawImage(image, 0, 0, Math.trunc(image.naturalWidth * {{ nudity_censor_scale }}), Math.trunc(image.naturalHeight * {{ nudity_censor_scale }}));
+    nsfwjsmodel.classify(cvcanvas, 1).then(function (predictions) {
+        if(predictions[0].className == 'Porn' && predictions[0].probability > 0.95) {
+            chooseFile.value = '';
+            document.getElementById('image-to-upload').src = '';
+        } else {
+            document.getElementById('edit-form-submit').disabled = false;
+        }
+    });
+}
+{% endif %}
+$(document).ready(function() {
+    {% if not request.GET.raw %}
+    function onSummernoteInit() {
+        $('[data-toggle="dropdown"]').each(function(index, el) {
+            el.dataset.bsToggle = "dropdown";
+        });
+        {% if not darkmode %}
+        const summernoteElement = document.getElementById('id_content');
+        if (summernoteElement) {
+            function getAllTextNodes(element) {
+              const textNodes = [];
+
+              function traverse(node) {
+                // Check if the node is a text node
+                if (node.nodeType === Node.TEXT_NODE) {
+                  // Add the trimmed text content to the array
+                  const textContent = node.nodeValue.trim();
+                  if (textContent.length > 0) { // Only add non-empty text
+                    textNodes.push(node);
+                  }
+                } else {
+                  // Recursively traverse child nodes
+                  for (const childNode of node.childNodes) {
+                    traverse(childNode);
+                  }
+                }
+              }
+
+              traverse(element);
+              return textNodes;
+            }
+          const iElements = getAllTextNodes(summernoteElement);
+          for (let i = 0; i < iElements.length; i++) {
+            const currentIElement = iElements[i];
+            currentIElement.style = "color: black !important;";
+            console.log(currentIElement);
+          }
+        } else {
+          console.log("Element with ID 'summernote' not found.");
+        }
+        {% else %}
+        function getAllChildElements(parentElement) {
+          const children = [];
+          function traverse(node) {
+            for (let i = 0; i < node.children.length; i++) {
+              const childElement = node.children[i];
+              if(childElement.tagName != 'BUTTON' && childElement.tagName != 'OPTION' && childElement.tagName != 'DIV' && childElement.tagName != 'I' && childElement.tagName != 'INPUT' && childElement.tagName != 'TEXTAREA' && childElement.tagName != 'LABEL' && childElement.tagName != 'SPAN' && childElement.tagName != 'A' && !childElement.classList.contains('note-btn-group') && !childElement.classList.contains('form-group') && !childElement.classList.contains('form-check') && !childElement.classList.contains('select') && !childElement.classList.contains('form-check-label')) {
+                children.push(childElement);
+              } else if (((childElement.tagName == 'LABEL' && (childElement.classList.contains('note-form-label') || childElement.classList.contains('form-check-label'))) || (childElement.tagName == 'INPUT' && childElement.classList.contains('note-image-input'))) && !childElement.getAttribute('FOR').startsWith('id_')) {
+                children.push(childElement);
+              } else if(childElement.tagName != 'TEXTAREA' && childElement.tagName != 'INPUT') {
+                traverse(childElement);
+              }
+            }
+          }
+          traverse(parentElement); // Start the traversal from the initial parent
+          return children;
+        }
+        const bodyChildren = getAllChildElements(document.getElementById('id_content'));
+        for (let i = 0; i < bodyChildren.length; i++) {
+            const currentIElement = bodyChildren[i];
+            currentIElement.style = "color: black !important;";
+            console.log(currentIElement);
+        }
+        {% endif %}
+    }
+    $(document).on('summernote.init', '#id_content', onSummernoteInit);
+    $('#id_content').summernote({
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'{% if request.user.vendor_profile.video_intro_font %}, 'Vendor Specified ({{ request.user.profile.name }})'{% endif %}],
+        {% if request.user.vendor_profile.video_intro_font %}        fontNamesIgnoreCheck: ['Vendor Specified ({{ request.user.profile.name }})'],{% endif %}
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['fontname', 'fontsize', 'color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video', 'hr']],
+            ['view', ['fullscreen', 'codeview', 'help']],
+            ['misc', ['undo', 'redo']]
+        ],
+    });
+    {% endif %}
+});
+{% endblock %}

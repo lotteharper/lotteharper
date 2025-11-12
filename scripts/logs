@@ -1,0 +1,8 @@
+#/bin/bash
+if [ "$#" -eq 1 ]; then
+	sudo tail -$1 /var/log/apache2/error.log
+else
+	sudo tail -100 /var/log/apache2/error.log
+fi
+
+

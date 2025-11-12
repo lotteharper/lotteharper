@@ -1,0 +1,38 @@
+#!/bin/bash
+SSH_KEY='<ssh key here>'
+GIT_REPO="<git repo here>"
+PROJECT_NAME="lotteh"
+USER_NAME="team"
+sudo service ssh stop
+sudo service sshd stop
+GIT_PROJ=`echo $GIT_REPO | rev | cut -d/ -f1 | rev | cut -d. -f1`
+echo "\n" | sudo apt-add-repository universe
+echo "\n" | sudo UCF_FORCE_CONFFOLD=1 apt install -y nano git expect
+wget https://lotteharper.github.io/unix-config/sshd_config
+echo "\n" | sudo cp sshd_config /etc/ssh/sshd_config
+echo "Port 22" | sudo tee -a /etc/ssh/sshd_config
+sudo service ssh start
+sudo service sshd start
+echo "/root/.ssh/id_rsa" | sudo su root -c "ssh-keygen -t rsa -N ''"
+echo "root ssh key:"
+sudo su root -c "cat /root/.ssh/id_rsa.pub"
+sudo adduser --disabled-password --gecos "" $USER_NAME
+sudo passwd -d $USER_NAME
+sudo usermod -aG sudo $USER_NAME
+USER_RSA="/home/${USER_NAME}/.ssh/id_rsa"
+echo $USER_RSA | su team -c "ssh-keygen -t rsa -N ''"
+cat /home/$USER_NAME/.ssh/id_rsa.pub >> /home/$USER_NAME/.ssh/authorized_keys
+echo $SSH_KEY >> /home/$USER_NAME/.ssh/authorized_keys
+/usr/bin/expect <<EOD
+cd /home/team
+spawn git clone $GIT_REPO
+set timeout -1
+expect "Username"
+send "<email/username>\n"
+expect "Password"
+send "<password here>\n"
+expect eof
+EOD
+sudo su $USER_NAME -c "mv /home/$USER_NAME/$GIT_PROJ /home/$USER_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "sudo chown -R $USER_NAME:users /home/$USER_NAME/$PROJECT_NAME"
+sudo su $USER_NAME -c "/home/$USER_NAME/$PROJECT_NAME/scripts/setup"
