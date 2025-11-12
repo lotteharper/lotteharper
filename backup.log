@@ -1,9 +1,9 @@
 3
-00
+12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
-https://gitlab.com/charlotte-harper/lotteh2025-11-08.git
-3s/GIT_REPO.*/GIT_REPO="https:\/\/gitlab.com\/charlotte-harper\/lotteh2025-11-08.git"/g
+https://gitlab.com/charlotte-harper/lotteh2025-11-15.git
+3s/GIT_REPO.*/GIT_REPO="https:\/\/gitlab.com\/charlotte-harper\/lotteh2025-11-15.git"/g
 setuptools==58.2.0
 twilio
 autocorrect
@@ -13,257 +13,16 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main adfc355] open source
- 54 files changed, 38 insertions(+), 24 deletions(-)
- mode change 100755 => 100644 barcode/__pycache__/barcode.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/blur_detection.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/forms.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/idscan.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/idscantext.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/scan.cpython-312.pyc
- mode change 100755 => 100644 face/__pycache__/deep.cpython-312.pyc
- mode change 100755 => 100644 feed/__pycache__/align.cpython-312.pyc
- mode change 100755 => 100644 feed/__pycache__/apis.cpython-312.pyc
- mode change 100755 => 100644 feed/__pycache__/blur.cpython-312.pyc
- create mode 100644 media/audio/fingerprints/06cf3ee4-4ff4-4658-9f30-f75a7a56a377.npy
- create mode 100644 media/audio/fingerprints/18e62bd9-abd3-4fb9-a3f0-747e02fb44f1.npy
- create mode 100644 media/audio/fingerprints/1de57af9-c013-4968-92a6-53a9283ca562.npy
- create mode 100644 media/audio/fingerprints/32f9bb28-603b-4fa5-b8c3-1586454e3ef0.npy
- create mode 100644 media/audio/fingerprints/6b430829-9208-4615-88d9-7660f163cd52.npy
- create mode 100644 media/audio/fingerprints/6de77a79-6082-4a88-9650-28f8f18fbf0e.npy
- create mode 100644 media/audio/fingerprints/6f067eef-e87c-4b5a-96ab-29d0e9362cd3.npy
- create mode 100644 media/audio/fingerprints/77b4253d-1da3-4d44-bc8e-c8d8a6928f9b.npy
- create mode 100644 media/audio/fingerprints/87bb1980-374b-4268-8284-63d61447162a.npy
- create mode 100644 media/audio/fingerprints/a2faf8e3-611e-4ec3-b4ac-67029822c2a4.npy
- create mode 100644 media/audio/fingerprints/bd437eb2-2f9a-44c5-9d60-7b966d56b2d0.npy
- create mode 100644 media/audio/fingerprints/cebfd82d-5f8c-4981-a8bb-7552459e9dc1.npy
- create mode 100644 media/audio/fingerprints/de889d5f-ad33-4b40-ac84-3ac9c6d0c5df.npy
- mode change 100755 => 100644 retargeting/__pycache__/forms.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/barcode.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/forensics.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/idscan.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/ocr.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/process_barcode.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/validation.cpython-312.pyc
+[main 4b246ab] open source
+ 28 files changed, 559 insertions(+), 715 deletions(-)
+ mode change 100755 => 100644 audio/__pycache__/forms.cpython-312.pyc
+ create mode 100644 media/audio/fingerprints/34d3f393-1783-4569-818b-ce1ba03ddfe8.npy
+ create mode 100644 media/audio/fingerprints/62bca191-cd72-4207-a26b-05a66effe9f2.npy
+ create mode 100644 media/audio/fingerprints/8abbc695-dad8-425e-bb65-8ffd19187fe7.npy
+ create mode 100644 media/audio/fingerprints/a64c8d31-9e35-49e6-95ce-478235db9095.npy
+ create mode 100644 media/audio/fingerprints/c4378b6f-9b46-42b1-808e-c38721e9f6e3.npy
+ create mode 100644 media/audio/fingerprints/e4743355-18bd-4ab6-a279-0ad82ab09927.npy
+branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-backup.log
-backup_date.txt
-backup_init_date.txt
-celerybeat-schedule
-email_list.txt
-requirements.txt
-barcode/__pycache__/
-barcode/__pycache__/barcode.cpython-312.pyc
-barcode/__pycache__/blur_detection.cpython-312.pyc
-barcode/__pycache__/forms.cpython-312.pyc
-barcode/__pycache__/idscan.cpython-312.pyc
-barcode/__pycache__/idscantext.cpython-312.pyc
-barcode/__pycache__/scan.cpython-312.pyc
-cache/
-config/
-config/Xwrapper.config
-config/apis-example.json
-config/apis.json
-config/ascripts
-config/banner
-config/config-example.json
-config/config.json
-config/crontab
-config/etc_default_celery
-config/etc_default_opendkim
-config/etc_dovecot_conf.d_10-auth.conf
-config/etc_dovecot_conf.d_10-mail.conf
-config/etc_dovecot_conf.d_10-master.conf
-config/etc_dovecot_dovecot.conf
-config/etc_dovecot_passwd
-config/etc_init.d_celery
-config/etc_init.d_celerybeat
-config/etc_opendkim.conf
-config/etc_pam.d_login
-config/etc_pam.d_sshd
-config/etc_postfix_main.cf
-config/etc_postfix_master.cf
-config/etc_systemd_system_celery.service
-config/etc_systemd_system_celerybeat.service
-config/etc_systemd_system_daphne.service
-config/etc_systemd_system_stun.service
-config/lotteh-le-ssl.conf
-config/postgresql.conf
-config/sudoers
-data/
-data/address.json.aa
-data/audio.json.aa
-data/auth.json.aa
-data/barcode.json.aa
-data/birthcontrol.json.aa
-data/chat.json.aa
-data/contact.json.aa
-data/cookielaw.json.aa
-data/crypto.json.aa
-data/events.json.aa
-data/face.json.aa
-data/feed.bid.json.aa
-data/feed.post.json.aa
-data/games.json.aa
-data/links.json.aa
-data/live.json.aa
-data/live.userplaylist.json.aa
-data/live.videocamera.json.aa
-data/live.videorecording.json.aa
-data/meetings.json.aa
-data/payments.json.aa
-data/security.biometric.json.aa
-data/security.credential.json.aa
-data/security.mrzscan.json.aa
-data/security.nfcscan.json.aa
-data/security.otptoken.json.aa
-data/security.pincode.json.aa
-data/security.securityprofile.json.aa
-data/security.session.json.aa
-data/security.useripaddress.json.aa
-data/security.userlogin.json.aa
-data/security.usersession.json.aa
-data/security.vivokeyscan.json.aa
-data/sessions.json.aa
-data/stream.json.aa
-data/survey.json.aa
-data/translate.json.aa
-data/translate.json.ab
-data/translate.json.ac
-data/translate.json.ad
-data/translate.json.ae
-data/translate.json.af
-data/translate.json.ag
-data/translate.json.ah
-data/translate.json.ai
-data/translate.json.aj
-data/translate.json.ak
-data/translate.json.al
-data/translate.json.am
-data/translate.json.an
-data/translate.json.ao
-data/translate.json.ap
-data/translate.json.aq
-data/translate.json.ar
-data/translate.json.as
-data/translate.json.at
-data/translate.json.au
-data/translate.json.av
-data/translate.json.aw
-data/translate.json.ax
-data/translate.json.ay
-data/translate.json.az
-data/translate.json.ba
-data/translate.json.bb
-data/tts.json.aa
-data/users.emailaddress.json.aa
-data/users.profile.json.aa
-data/vendors.json.aa
-data/verify.json.aa
-data/voice.json.aa
-data/webauth.json.aa
-data/webpush.json.aa
-face/__pycache__/
-face/__pycache__/deep.cpython-312.pyc
-feed/__pycache__/
-feed/__pycache__/align.cpython-312.pyc
-feed/__pycache__/apis.cpython-312.pyc
-feed/__pycache__/blur.cpython-312.pyc
-keys/
-log/commands.log
-mailbox/nobody
-mailbox/root
-mailbox/team
-media/audio/fingerprints/
-media/audio/fingerprints/06cf3ee4-4ff4-4658-9f30-f75a7a56a377.npy
-media/audio/fingerprints/18e62bd9-abd3-4fb9-a3f0-747e02fb44f1.npy
-media/audio/fingerprints/1de57af9-c013-4968-92a6-53a9283ca562.npy
-media/audio/fingerprints/32f9bb28-603b-4fa5-b8c3-1586454e3ef0.npy
-media/audio/fingerprints/6b430829-9208-4615-88d9-7660f163cd52.npy
-media/audio/fingerprints/6de77a79-6082-4a88-9650-28f8f18fbf0e.npy
-media/audio/fingerprints/6f067eef-e87c-4b5a-96ab-29d0e9362cd3.npy
-media/audio/fingerprints/77b4253d-1da3-4d44-bc8e-c8d8a6928f9b.npy
-media/audio/fingerprints/85be43fd-7234-424e-a7af-d39d037f2a1d.npy
-media/audio/fingerprints/87bb1980-374b-4268-8284-63d61447162a.npy
-media/audio/fingerprints/a2faf8e3-611e-4ec3-b4ac-67029822c2a4.npy
-media/audio/fingerprints/bd437eb2-2f9a-44c5-9d60-7b966d56b2d0.npy
-media/audio/fingerprints/cebfd82d-5f8c-4981-a8bb-7552459e9dc1.npy
-media/audio/fingerprints/de889d5f-ad33-4b40-ac84-3ac9c6d0c5df.npy
-media/profiles/1808b3c3-b8a1-4ca6-8d5b-a799edf0aad8-2.jpg
-retargeting/__pycache__/
-retargeting/__pycache__/forms.cpython-312.pyc
-scripts/
-scripts/activate
-scripts/ascript
-scripts/ascripts
-scripts/asyncbackup
-scripts/auditproject
-scripts/backup
-scripts/catkeys
-scripts/check
-scripts/client.py
-scripts/cmds
-scripts/commitlog
-scripts/compinfo
-scripts/daphnereload
-scripts/dbinfo
-scripts/disgpu
-scripts/doreload
-scripts/enagpu
-scripts/finishsetup
-scripts/fixfile
-scripts/imagecounts
-scripts/init
-scripts/initialize
-scripts/initialize_site
-scripts/inspecttask
-scripts/json.py
-scripts/jump
-scripts/lockout
-scripts/logs
-scripts/logssh
-scripts/mailtest
-scripts/makemigrate
-scripts/nude.py
-scripts/opendkimkey
-scripts/patchvenv
-scripts/psaux
-scripts/purgecache
-scripts/purgegit
-scripts/pushweb
-scripts/reinstallredis
-scripts/reload
-scripts/resetredis
-scripts/resetvenv
-scripts/rotatekeys
-scripts/safepoweroff
-scripts/safereboot
-scripts/setup
-scripts/setupisfinished
-scripts/startservices
-scripts/statuses
-scripts/stopservices
-scripts/updateupgrade
-scripts/watchcmd
-scripts/watchlogs
-temp/
-temp/cf2aac03-b944-4e6a-9e67-f14888ef7218.jpg
-temp/data/
-verify/__pycache__/
-verify/__pycache__/barcode.cpython-312.pyc
-verify/__pycache__/forensics.cpython-312.pyc
-verify/__pycache__/idscan.cpython-312.pyc
-verify/__pycache__/ocr.cpython-312.pyc
-verify/__pycache__/process_barcode.cpython-312.pyc
-verify/__pycache__/validation.cpython-312.pyc
-
-sent 2,870,707,435 bytes  received 7,343 bytes  212,645,539.11 bytes/sec
-total size is 6,930,335,930  speedup is 2.41
-Reinitialized existing Git repository in /home/team/lotteh-backup-open/.git/
-[main fd5aae2] open source
- 20 files changed, 36 insertions(+), 9 deletions(-)
-Backup to Write-Once-Read-Many Mirror
-Downloading zip as none was found...
-Finished backup to S3
