@@ -1,5 +1,5 @@
-4
-12
+5
+00
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-11-15.git
@@ -13,9 +13,20 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 7d5f0e4] open source
- 18 files changed, 16 insertions(+), 16 deletions(-)
- mode change 100755 => 100644 retargeting/__pycache__/email.cpython-312.pyc
+[main 866b4ee] open source
+ 31 files changed, 21 insertions(+), 20 deletions(-)
+ create mode 100755 data/translate.json.bc
+ create mode 100644 media/audio/fingerprints/1b52856f-e814-44a3-a808-5beb85ff19d5.npy
+ create mode 100644 media/audio/fingerprints/3eaf3812-457c-4898-8ba7-d0df142512da.npy
+ create mode 100644 media/audio/fingerprints/53ff5fe3-8562-45a8-8f3b-d53b36101781.npy
+ create mode 100644 media/audio/fingerprints/6c8fd46c-f658-4fc5-9faf-d1f7fddb0948.npy
+ create mode 100644 media/audio/fingerprints/70cef4b6-749f-4a8f-9197-21b589ef6248.npy
+ create mode 100644 media/audio/fingerprints/8cf013a5-32f7-497b-8ceb-76f90e8647d2.npy
+ create mode 100644 media/audio/fingerprints/a0b4f10c-7452-4901-bcf5-e2e2c448e528.npy
+ create mode 100644 media/audio/fingerprints/d3602b8c-0695-4328-9aab-b4318cca0fdd.npy
+ create mode 100644 media/audio/fingerprints/de46fd86-6411-44ab-a948-768b070686b4.npy
+ create mode 100644 media/audio/fingerprints/e012a813-c88d-476a-befc-706d20b36aa5.npy
+ mode change 100755 => 100644 voice/__pycache__/forms.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
