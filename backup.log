@@ -1,5 +1,5 @@
 6
-00
+12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-11-15.git
@@ -13,194 +13,86 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main a608fa1] open source
- 26 files changed, 25 insertions(+), 25 deletions(-)
- create mode 100644 media/audio/fingerprints/1fa78e89-25d3-42b1-91ff-c2de9a8ace37.npy
+[main 5dabb50] open source
+ 100 files changed, 465 insertions(+), 652 deletions(-)
+ create mode 100644 media/audio/fingerprints/04b47c35-6a83-4c8f-bfc3-0e9d64881a81.npy
+ create mode 100644 media/audio/fingerprints/06654d76-520a-40b5-b76e-b8e5bc02f777.npy
+ create mode 100644 media/audio/fingerprints/0849559b-ace1-456f-b6fb-733355d491d4.npy
+ create mode 100644 media/audio/fingerprints/0a3447f1-5095-440e-90bc-0208f8342b57.npy
+ create mode 100644 media/audio/fingerprints/0aecdad5-db0b-4ca8-bcc1-569907b5e4ca.npy
+ create mode 100644 media/audio/fingerprints/0c80d82a-3769-4975-864a-2e074bedae80.npy
+ create mode 100644 media/audio/fingerprints/0f25a3d6-73e5-43cf-8713-a1ef4da2abb5.npy
+ create mode 100644 media/audio/fingerprints/16c38c30-4fba-45a2-a92b-3136133c56c9.npy
+ create mode 100644 media/audio/fingerprints/18d650f4-8a2c-4fb5-9b38-b620919d8f5f.npy
+ create mode 100644 media/audio/fingerprints/20544ea7-0058-41e3-b766-0edf3a7c4ae4.npy
+ create mode 100644 media/audio/fingerprints/29167c34-0ecc-4ed5-9ffc-17dedc2b2499.npy
+ create mode 100644 media/audio/fingerprints/299bf7f2-73ac-452c-950f-f02c78e631fd.npy
+ create mode 100644 media/audio/fingerprints/2d478b13-ffbe-4d58-a539-8f4d98a7e571.npy
+ create mode 100644 media/audio/fingerprints/2f4ae79e-e61a-42d3-ad87-9b78056261b6.npy
+ create mode 100644 media/audio/fingerprints/31e1eb15-b2d4-4205-968a-9cb4b06b6042.npy
+ create mode 100644 media/audio/fingerprints/3260af93-a402-4dfb-b014-12f549da7024.npy
+ create mode 100644 media/audio/fingerprints/329073b5-0fea-41a1-aae2-dd4492ca19b6.npy
+ create mode 100644 media/audio/fingerprints/32e0dfae-15b0-459a-9704-4123991560b0.npy
+ create mode 100644 media/audio/fingerprints/36963c31-5aaf-4a0c-b346-35153f4afea6.npy
+ create mode 100644 media/audio/fingerprints/3a114a27-ceae-4cc6-8987-930b654be6c3.npy
+ create mode 100644 media/audio/fingerprints/3ae96426-905a-48ff-8f25-78d46aa9678f.npy
+ create mode 100644 media/audio/fingerprints/3b84d9d8-387f-4211-8259-f7e43733d11d.npy
+ create mode 100644 media/audio/fingerprints/3e2e4cd6-b34d-4a72-ab29-a2a66a6b7032.npy
+ create mode 100644 media/audio/fingerprints/3ed9f76e-5503-4a71-8bb1-7fdffd56e714.npy
+ create mode 100644 media/audio/fingerprints/41351389-f5b6-4c2e-bb4d-ffe71ac69e0b.npy
+ create mode 100644 media/audio/fingerprints/42e13d47-0321-4dcc-9b53-40b9ece7d761.npy
+ create mode 100644 media/audio/fingerprints/4eb7b240-274e-43bb-b2e5-76e93c47887e.npy
+ create mode 100644 media/audio/fingerprints/59420639-2ac3-425b-879b-a203e694d409.npy
+ create mode 100644 media/audio/fingerprints/5b9e11ae-a306-4d11-a6d2-0fe947cf7be9.npy
+ create mode 100644 media/audio/fingerprints/5e36d6d4-5bbe-4c2f-8140-7014ab550a49.npy
+ create mode 100644 media/audio/fingerprints/6651ba1f-f7e7-42c8-9993-a7510e33bf9d.npy
+ create mode 100644 media/audio/fingerprints/683617aa-a4c0-4c2f-ac51-72fabd7addcf.npy
+ create mode 100644 media/audio/fingerprints/6a886945-28bd-4a7c-8adb-5005aed1d8d7.npy
+ create mode 100644 media/audio/fingerprints/6cd3deee-d87e-49cd-89e3-7036c1b91484.npy
+ create mode 100644 media/audio/fingerprints/728bd931-8547-464a-916f-20efd97adb05.npy
+ create mode 100644 media/audio/fingerprints/7337b58c-1b08-46b1-b920-4aa95a3410a9.npy
+ create mode 100644 media/audio/fingerprints/76380e7a-c8f1-4e2e-a16d-b4acf0a0c17e.npy
+ create mode 100644 media/audio/fingerprints/7738aa52-24fd-4bde-a7c9-55b5c6e14809.npy
+ create mode 100644 media/audio/fingerprints/7814dc2c-6dff-4523-9b87-ab7c0fd1f624.npy
+ create mode 100644 media/audio/fingerprints/7918514b-5802-4465-8a98-b6feafdb5426.npy
+ create mode 100644 media/audio/fingerprints/7b184338-f32d-40e1-864e-45ebe2e361a3.npy
+ create mode 100644 media/audio/fingerprints/7ead9e4c-5858-47cc-847c-9d28da8051f2.npy
+ create mode 100644 media/audio/fingerprints/7f7a66d3-b6cc-42e8-b6a8-0494f0af17cc.npy
+ create mode 100644 media/audio/fingerprints/82d6995e-e4d1-4cd1-9e1e-edd9cc12bd76.npy
+ create mode 100644 media/audio/fingerprints/84539087-6613-4ac9-9952-83a2f7d77b31.npy
+ create mode 100644 media/audio/fingerprints/88e16915-0ce0-44d9-9520-529e7f07c550.npy
+ create mode 100644 media/audio/fingerprints/8a7bb688-3754-4e8a-b1e4-d84a7f4b6b6a.npy
+ create mode 100644 media/audio/fingerprints/8db523e5-3a9f-406f-b9a7-cabff0c3d4b7.npy
+ create mode 100644 media/audio/fingerprints/8febb4fa-7c1a-4c79-9611-cb53963b193a.npy
+ create mode 100644 media/audio/fingerprints/91f036a7-ea83-4bfe-9d10-948b15cfee88.npy
+ create mode 100644 media/audio/fingerprints/95531e98-dc89-41a5-9368-4a7fef391fbc.npy
+ create mode 100644 media/audio/fingerprints/9817d431-024b-478e-ae24-ee512f6697df.npy
+ create mode 100644 media/audio/fingerprints/9868d3a4-4213-4900-85ee-f9250e2d7d8a.npy
+ create mode 100644 media/audio/fingerprints/989526f7-aa07-4dff-8349-fad00eb3a817.npy
+ create mode 100644 media/audio/fingerprints/9b48c05a-3219-4fd7-a8aa-1fe8a53920c3.npy
+ create mode 100644 media/audio/fingerprints/9b807409-285b-4e02-ad11-82e69650bc20.npy
+ create mode 100644 media/audio/fingerprints/9c573747-c0cf-4ad0-867c-aeccb991af18.npy
+ create mode 100644 media/audio/fingerprints/9dad23de-050e-4ded-87f5-f5ca4967a7fc.npy
+ create mode 100644 media/audio/fingerprints/ab6c4c4c-c038-479a-bfdd-e135bef4a72c.npy
+ create mode 100644 media/audio/fingerprints/ac5b7a93-a891-45a8-b5e8-18216b2e4f15.npy
+ create mode 100644 media/audio/fingerprints/ad2f43a7-6e0c-4698-953c-b5ce39b77a5d.npy
+ create mode 100644 media/audio/fingerprints/b42af2b6-d612-445e-9e4c-2c20e4106a73.npy
+ create mode 100644 media/audio/fingerprints/c3f5bd9a-677f-47aa-913a-2ab7556a9629.npy
+ create mode 100644 media/audio/fingerprints/c49a8f84-58ef-42ca-8804-46894981f6b2.npy
+ create mode 100644 media/audio/fingerprints/cc00702d-ed8f-4587-adf5-0ae3e8e51e3e.npy
+ create mode 100644 media/audio/fingerprints/d63c3945-25d7-44bb-828b-c3473ddba282.npy
+ create mode 100644 media/audio/fingerprints/e1cf8ecb-c941-49f7-a849-266e33b6ac6d.npy
+ create mode 100644 media/audio/fingerprints/e29804f2-c746-4c55-bffc-8bd6807a1513.npy
+ create mode 100644 media/audio/fingerprints/e4ec1c2e-3766-4d95-a679-1c5b1a10d668.npy
+ create mode 100644 media/audio/fingerprints/e9c2eab3-ba18-4ebb-9e9d-a7c72529204d.npy
+ create mode 100644 media/audio/fingerprints/f773eb60-af85-4229-9e8e-65a84baf6fb3.npy
+ create mode 100644 media/audio/fingerprints/f96eb682-016c-4d46-8bf0-4a97d23c03b9.npy
+ create mode 100644 media/audio/fingerprints/f96f670b-059f-47e0-8acb-16b6d85df258.npy
+ create mode 100644 media/audio/fingerprints/fa0968fd-2b29-4c59-a127-e01d839e9127.npy
+ create mode 100644 media/audio/fingerprints/fb13bf51-6fa9-4671-834f-99b9c24a49a8.npy
+ create mode 100644 media/audio/fingerprints/fb182d07-7920-495c-a7ea-583249839343.npy
+ create mode 100644 media/audio/fingerprints/fdf04f50-ab60-4385-b2ae-bcd4dfa0eba5.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-backup.log
-backup_date.txt
-backup_init_date.txt
-celerybeat-schedule
-email_list.txt
-requirements.txt
-cache/
-config/
-config/Xwrapper.config
-config/apis-example.json
-config/apis.json
-config/ascripts
-config/banner
-config/config-example.json
-config/config.json
-config/crontab
-config/etc_default_celery
-config/etc_default_opendkim
-config/etc_dovecot_conf.d_10-auth.conf
-config/etc_dovecot_conf.d_10-mail.conf
-config/etc_dovecot_conf.d_10-master.conf
-config/etc_dovecot_dovecot.conf
-config/etc_dovecot_passwd
-config/etc_init.d_celery
-config/etc_init.d_celerybeat
-config/etc_opendkim.conf
-config/etc_pam.d_login
-config/etc_pam.d_sshd
-config/etc_postfix_main.cf
-config/etc_postfix_master.cf
-config/etc_systemd_system_celery.service
-config/etc_systemd_system_celerybeat.service
-config/etc_systemd_system_daphne.service
-config/etc_systemd_system_stun.service
-config/lotteh-le-ssl.conf
-config/postgresql.conf
-config/sudoers
-data/
-data/address.json.aa
-data/audio.json.aa
-data/auth.json.aa
-data/barcode.json.aa
-data/birthcontrol.json.aa
-data/chat.json.aa
-data/contact.json.aa
-data/cookielaw.json.aa
-data/crypto.json.aa
-data/events.json.aa
-data/face.json.aa
-data/feed.bid.json.aa
-data/feed.post.json.aa
-data/games.json.aa
-data/links.json.aa
-data/live.json.aa
-data/live.userplaylist.json.aa
-data/live.videocamera.json.aa
-data/live.videorecording.json.aa
-data/meetings.json.aa
-data/payments.json.aa
-data/security.biometric.json.aa
-data/security.credential.json.aa
-data/security.mrzscan.json.aa
-data/security.nfcscan.json.aa
-data/security.otptoken.json.aa
-data/security.pincode.json.aa
-data/security.securityprofile.json.aa
-data/security.session.json.aa
-data/security.useripaddress.json.aa
-data/security.userlogin.json.aa
-data/security.usersession.json.aa
-data/security.vivokeyscan.json.aa
-data/sessions.json.aa
-data/stream.json.aa
-data/survey.json.aa
-data/translate.json.aa
-data/translate.json.ab
-data/translate.json.ac
-data/translate.json.ad
-data/translate.json.ae
-data/translate.json.af
-data/translate.json.ag
-data/translate.json.ah
-data/translate.json.ai
-data/translate.json.aj
-data/translate.json.ak
-data/translate.json.al
-data/translate.json.am
-data/translate.json.an
-data/translate.json.ao
-data/translate.json.ap
-data/translate.json.aq
-data/translate.json.ar
-data/translate.json.as
-data/translate.json.at
-data/translate.json.au
-data/translate.json.av
-data/translate.json.aw
-data/translate.json.ax
-data/translate.json.ay
-data/translate.json.az
-data/translate.json.ba
-data/translate.json.bb
-data/translate.json.bc
-data/tts.json.aa
-data/users.emailaddress.json.aa
-data/users.profile.json.aa
-data/vendors.json.aa
-data/verify.json.aa
-data/voice.json.aa
-data/webauth.json.aa
-data/webpush.json.aa
-keys/
-log/commands.log
-mailbox/nobody
-mailbox/root
-mailbox/team
-media/audio/fingerprints/
-media/audio/fingerprints/1fa78e89-25d3-42b1-91ff-c2de9a8ace37.npy
-media/profiles/1808b3c3-b8a1-4ca6-8d5b-a799edf0aad8-2.jpg
-scripts/
-scripts/activate
-scripts/ascript
-scripts/ascripts
-scripts/asyncbackup
-scripts/auditproject
-scripts/backup
-scripts/catkeys
-scripts/check
-scripts/client.py
-scripts/cmds
-scripts/commitlog
-scripts/compinfo
-scripts/daphnereload
-scripts/dbinfo
-scripts/disgpu
-scripts/doreload
-scripts/enagpu
-scripts/finishsetup
-scripts/fixfile
-scripts/imagecounts
-scripts/init
-scripts/initialize
-scripts/initialize_site
-scripts/inspecttask
-scripts/json.py
-scripts/jump
-scripts/lockout
-scripts/logs
-scripts/logssh
-scripts/mailtest
-scripts/makemigrate
-scripts/nude.py
-scripts/opendkimkey
-scripts/patchvenv
-scripts/psaux
-scripts/purgecache
-scripts/purgegit
-scripts/pushweb
-scripts/reinstallredis
-scripts/reload
-scripts/resetredis
-scripts/resetvenv
-scripts/rotatekeys
-scripts/safepoweroff
-scripts/safereboot
-scripts/setup
-scripts/setupisfinished
-scripts/startservices
-scripts/statuses
-scripts/stopservices
-scripts/updateupgrade
-scripts/watchcmd
-scripts/watchlogs
-temp/
-
-sent 3,003,967,515 bytes  received 6,967 bytes  139,719,743.35 bytes/sec
-total size is 7,063,825,913  speedup is 2.35
-Reinitialized existing Git repository in /home/team/lotteh-backup-open/.git/
-[main 5bb3791] open source
- 4 files changed, 7 insertions(+), 6 deletions(-)
-branch 'main' set up to track 'originhub/main'.
-Backup to Write-Once-Read-Many Mirror
-Downloading zip as none was found...
-Finished backup to S3
