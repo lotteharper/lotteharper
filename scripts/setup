@@ -487,5 +487,6 @@ echo "Thank you for using the lotteh installer. Have a great day!"
 echo "Goodbye."
 # Reboot safely
 sudo systemctl stop apache2 daphne celery celerybeat stun
+/home/team/lotteh/venv/bin/python /home/team/lotteh/admission_coral.py
 sudo rm /etc/nologin
 sudo reboot
