@@ -20,12 +20,42 @@ try:
     me = User.objects.get(id=settings.MY_ID) if User.objects.count() > 1 else None
 except: pass
 
-@app.task
-def reply_message_async(phone, message):
+import asyncio
+from celery import shared_task
+
+@shared_task
+def do_async_stuff():
+    loop = asyncio.new_event_loop()
+    result = loop.run_until_complete(async_func())
+    loop.close()
+    return result
+
+#def do_async_stuff():
+
+from asgiref.sync import sync_to_async
+
+@sync_to_async
+def reply_message(phone, message, user_id):
+    from django.contrib.auth.models import User
+    user = User.objects.get(id=int(user_id))
+    preferred_language = user.profile.preferred_language
+    lang = preferred_language
     from voice.ai import get_ai_response
-    response = get_ai_response(message)
+    response = get_ai_response(message, lang)
     from users.tfa import send_text
-    send_text(phone, response)
+    loop = asyncio.new_event_loop()
+    result = loop.run_until_complete(send_text(phone, response))
+    loop.close()
+
+@shared_task
+def reply_message_async(phone, message, user_id):
+    loop = asyncio.new_event_loop()
+    result = loop.run_until_complete(reply_message(phone, message, user_id))
+    loop.close()
+    return result
+
+#@app.task
+#def reply_message_async(phone, message, user_id):
 
 @app.task
 def update_video_description(user_id, recording_id, video_id, thumbnail_url, original_description, original_title, original_category_id, prompt):

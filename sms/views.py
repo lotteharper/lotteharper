@@ -100,5 +100,6 @@ def sms(request):
     else:
         resp.message('I\'m thinking about that. Give me a few seconds...')
         from lotteh.celery import reply_message_async
-        reply_message_async.delay(phone, message)
+        user_id = user.id
+        reply_message_async.delay(phone, message, user_id)
     return HttpResponse(str(resp), content_type='text/xml')

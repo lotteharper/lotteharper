@@ -363,8 +363,8 @@ def tfa(request, username, usertoken):
             user.profile.tfa_attempts = 0
             user.profile.can_send_tfa = timezone.now() + datetime.timedelta(minutes=2)
             user.profile.save()
-            from .tfa import send_verification_text, check_verification_code, send_user_text, send_text
-            from .tfa import send_verification_email as send_tfa_verification_email
+            from .mfa import send_verification_text, check_verification_code, send_user_text, send_text
+            from .mfa import send_verification_email as send_tfa_verification_email
             if form.data.get('send_email', False):
                 send_tfa_verification_email(user, token)
             else:
