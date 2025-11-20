@@ -1,23 +1,15 @@
 from django.utils import timezone
-from django.contrib.auth.models import User
-from .models import SessionDedup
 from django.utils.deprecation import MiddlewareMixin
-import traceback
-import uuid, re
-import datetime
-from feed.middleware import set_current_exception
-from django.contrib.sessions.models import Session as SecureSession
+import re, datetime
 from security.apis import get_client_ip, check_ip_risk
-from stacktrace.models import Error
-from uuid import UUID
 from django.conf import settings
-from django.shortcuts import redirect
 from django.contrib import messages
 
 RISK_LEVEL = 1
 FRAUD_MOD = settings.PAGE_LOADS_PER_API_CALL
 
 def get_uuid():
+    import uuid
     filename = "%s" % (uuid.uuid4())
     return filename
 
@@ -77,19 +69,22 @@ def security_middleware(get_response):
     def middleware(request):
         response = None
         try:
-            if request.get_full_path().startswith('/feed/profile/Daisy/?feed=privatelang') or request.get_full_path().startswith('/feed/grid/Daisy/?handtrack=tlang') or request.get_full_path().startswith('/feed/profile/Daisy/?feed=privateembed=tlang') or request.get_full_path().startswith('/collections/shop-accessories/products/cotton-tote-bag/'): return redirect(settings.REDIRECT_URL)
+            if request.get_full_path().startswith('/feed/profile/Daisy/?feed=privatelang') or request.get_full_path().startswith('/feed/grid/Daisy/?handtrack=tlang') or request.get_full_path().startswith('/feed/profile/Daisy/?feed=privateembed=tlang') or request.get_full_path().startswith('/collections/shop-accessories/products/cotton-tote-bag/'):
+                from django.shortcuts import redirect
+                return redirect(settings.REDIRECT_URL)
             print(request.get_full_path())
             ip = get_client_ip(request)
             qs = get_qs(request.GET)
             sessions = None
             if request.method == 'POST':
+                from .models import SessionDedup
                 sd = SessionDedup.objects.create(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method)
                 sd.async_delete()
                 sessions = SessionDedup.objects.filter(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method, time__gte=timezone.now() - datetime.timedelta(seconds=2))
-                from django.http import HttpResponse
+                from django.shortcuts import redirect
                 if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) #return HttpResponse(OVERCLICK_HTML_NOTE)
                 if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) # return HttpResponse(OVERCLICK_HTML_NOTE)
-                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
+#                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
             ip_obj = UserIpAddress.objects.filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).first()
             if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
                 from django.http import HttpResponseRedirect
@@ -116,9 +111,12 @@ def security_middleware(get_response):
                     if red: return red
             async_process_user_request.delay(ip, request.user.id if hasattr(request, 'user') and request.user.is_authenticated else None, True if hasattr(request, 'user') and request.user.is_authenticated else False, request.path, request.META.get('CONTENT_LENGTH'), request.META.get('HTTP_REFERER'), qs, request.method, sessions.count() if sessions else -1)
         except:
+            import traceback
+            from stacktrace.models import Error
             try:
                 Error.objects.create(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, stack_trace=traceback.format_exc(), notes='Logged by security middleware.')
             except: pass
+            from feed.middleware import set_current_exception
             set_current_exception(traceback.format_exc())
             print(traceback.format_exc())
         response = get_response(request)

@@ -1,25 +1,7 @@
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from django.contrib import messages
-from users.models import Profile
-from security.models import SecurityProfile
-from django.shortcuts import redirect
-from django.urls import reverse
-import traceback
-from django.utils.deprecation import MiddlewareMixin
-from django.http import HttpResponse, HttpResponseRedirect
-import uuid
-from threading import local
-from django.contrib.auth import logout
-from feed.middleware import set_current_exception, get_current_exception
-from django.contrib.sessions.models import Session as SecureSession
-from stacktrace.models import Error
-from security.apis import get_client_ip
-from security.middleware import get_qs
 from django.conf import settings
-from security.models import UserIpAddress
-from django.contrib.auth.models import User
-import datetime
+from django.utils.deprecation import MiddlewareMixin
+from security.apis import get_client_ip
+from threading import local
 
 _user = local()
 
@@ -65,7 +47,9 @@ def simple_middleware(get_response):
     def middleware(request):
         response = None
         try:
-            if request.user.is_authenticated and not request.user.is_active: logout(request)
+            if request.user.is_authenticated and not request.user.is_active:
+                from django.contrib.auth import logout
+                logout(request)
             if not request.session.session_key:
                 request.session.save()
             next = request.GET.get('next', False)
@@ -75,11 +59,14 @@ def simple_middleware(get_response):
                 qs = ''
                 for key, value in request.GET.items():
                     qs = qs + '{}={}&'.format(key, value)
+                from django.http import HttpResponseRedirect
                 return HttpResponseRedirect(request.path + '?' + qs)
             ip = get_client_ip(request)
             async_user_tasks.delay(request.user.is_authenticated, request.user.id if request.user.is_authenticated else None, ip, request.LANGUAGE_CODE)
             if request.user.is_authenticated and (request.user.profile.enable_two_factor_authentication or request.user.profile.vendor) and not request.path.startswith('/accounts/tfa/') and not request.path.startswith('/accounts/logout/') and not request.path.startswith("/face/") and not request.path.startswith("/verify/"):
                 if not request.user.profile.phone_number or len(request.user.profile.phone_number) < 11:
+                    from django.http import HttpResponseRedirect
+                    from django.urls import reverse
                     return HttpResponseRedirect(reverse('users:tfa_onboarding'))
             response = get_response(request)
             if request.COOKIES.get('user_signup', False):
@@ -87,22 +74,20 @@ def simple_middleware(get_response):
             if request.path != '/verify/age/' and request.COOKIES.get('push_cookie'):
                 request.has_push_cookie = True
             if request.path != '/verify/age/' and not request.COOKIES.get('push_cookie'):
+                import datetime
                 max_age = settings.PUSH_COOKIE_EXPIRATION_HOURS * 60 * 60
                 expires = datetime.datetime.strftime(
                     datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age),
                     "%a, %d-%b-%Y %H:%M:%S GMT",
                 )
                 response.set_cookie('push_cookie', True, max_age=max_age, expires=expires)
-            if request.user.is_authenticated and not hasattr(request.user, 'security_profile'):
-                from security.models import SecurityProfile
-                SecurityProfile.objects.create(user=request.user)
-            if request.GET.get('cat', None) == 'true':
-                from django.contrib import messages
-                messages.success(request, 'Hey there. I noticed you have scanned a cat. She is chipped and wants to sell you this photo (and everything else she is sharing). xoxo <3')
         except:
+            from stacktrace.models import Error
             try:
                 Error.objects.create(user=request.user if request.user.is_authenticated else None, stack_trace=get_current_exception(), notes='Logged by users middleware.')
             except: pass
+            import traceback
+            from feed.middleware import set_current_exception, get_current_exception
             set_current_exception(traceback.format_exc())
             print(traceback.format_exc())
         response = get_response(request)

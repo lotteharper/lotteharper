@@ -386,17 +386,10 @@ class VideoRecording(models.Model):
     def __str__(self):
         import pytz
         from django.conf import settings
-        return '#{} Last frame at {}, {} frames, ~{} length, public = {}, processing = {}, processed = {}, uploaded = {}, upload email = {}'.format(self.id, self.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%m/%d/%Y, %H:%M:%S"), self.frames.count(), '{}:{}'.format(int((self.frames.count() * 5)/60), f"{(self.frames.count() * 5)%60:02d}"), self.public, self.processing, self.processed, self.uploaded, self.upload_email)
-
-#
+        return '#{} Last frame at {}, {} frames, {} seconds duration, public = {}, processing = {}, processed = {}, uploaded = {}, upload email = {}'.format(self.id, self.last_frame.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%m/%d/%Y, %H:%M:%S"), self.frames.count(), int(self.duration), self.public, self.processing, self.processed, self.uploaded, self.upload_email)
 
     def save(self, *args, **kwargs):
         from .concat import concat
-#        old = VideoRecording.objects.filter(id=self.id).first()
-#        if old and old.frames != self.frames and old.processed and self.file == old.file:
-#            path = os.path.join(settings.BASE_DIR, 'media', get_file_path(recording, 'file.webm'))
-#            os.remove(self.file.path)
-#            self.file = concat(self, path)
         super(VideoRecording, self).save(*args, **kwargs)
 
     def delete(self):

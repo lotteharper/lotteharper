@@ -125,6 +125,7 @@ class VivoKeyScan(models.Model):
 
 class UserIpAddress(models.Model):
     id = models.AutoField(primary_key=True)
+    created_at = models.DateTimeField(default=timezone.now)
     timestamp = models.DateTimeField(default=timezone.now)
     last_updated_sun = models.DateTimeField(default=timezone.now)
     sunrise = models.DateTimeField(default=timezone.now)

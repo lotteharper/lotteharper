@@ -270,19 +270,21 @@ def stretrans(content):
     from feed.middleware import get_current_request
     from django.conf import settings
     from threading import Thread
+    if content[0] == '"': content = content[1:]
+    if content[len(content)-1] == '"': content = content[:-1]
     split = content.split('", "')
     result = [None] * len(split)
     threads = [None] * len(split)
     target = get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG
     def transthread(split, index, result, target):
-        result[index] = translate(get_current_request(), split[index], target=target, src='en')
+        result[index] = translate(get_current_request(), split[index], target=target, src='en').replace('"', '').replace("'", '').strip()
     for x in range(len(split)):
         threads[x] = Thread(target=transthread, args=(split, x, result, target))
         threads[x].start()
     for i in range(len(threads)):
         if threads[i]: threads[i].join()
         else: break
-    return '", "'.join(result)
+    return '"' + '", "'.join(result) + '"'
 
 @register.filter('stripsender')
 def stripsender(sender):

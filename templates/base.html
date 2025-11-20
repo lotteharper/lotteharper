@@ -195,8 +195,6 @@
         {% block javascripts %}{% endblock %}
         <script>
         {% linebreakless %}
-/*        	document.getElementById('base-error-message').innerHTML = error.stack;
-        	$("#base-error-message").removeClass("hide");*/
         {% include 'security/session_injection.js' %}
         $(document).ready(function() {
         	{% if not hidenavbar %}

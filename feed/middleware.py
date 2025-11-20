@@ -1,5 +1,4 @@
 from threading import local
-import traceback
 from django.utils.deprecation import MiddlewareMixin
 
 _request = local()
@@ -25,6 +24,7 @@ def set_current_request(value):
 
 class ExceptionVerboseMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
+        import traceback
         _error.value = traceback.format_exc()
 
 def get_current_exception():
