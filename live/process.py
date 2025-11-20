@@ -99,6 +99,7 @@ def process_live(camera_id, frame_id):
 def process_recording(id):
     embed_logo = False
     from live.concat import concat
+    from live.duration import get_duration
     from audio.transcription import get_transcript
     from audio.fingerprinting import save_fingerprint, is_in_database
     from live.models import VideoRecording, VideoFrame, get_file_path, VideoCamera
@@ -132,6 +133,7 @@ def process_recording(id):
             recording.processed = True
             recording.save()
             return
+        recording.duration = get_duration(recording.file.path)
         recording.transcript, recording.fingerprint = get_transcript(recording.file.path)
         recording.save()
         if not camera.bucket:
