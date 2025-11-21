@@ -215,7 +215,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
         'POOL_OPTIONS': {
-            'POOL_SIZE': 200,
+            'POOL_SIZE': 400,
             'MAX_OVERFLOW': 1000,
             'RECYCLE': -1,
         },
@@ -228,7 +228,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
         'POOL_OPTIONS': {
-            'POOL_SIZE': 200,
+            'POOL_SIZE': 400,
             'MAX_OVERFLOW': 1000,
             'RECYCLE': -1,
         },
@@ -241,7 +241,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
         'POOL_OPTIONS': {
-            'POOL_SIZE': 200,
+            'POOL_SIZE': 400,
             'MAX_OVERFLOW': 1000,
             'RECYCLE': -1,
         },
