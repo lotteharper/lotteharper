@@ -9,9 +9,10 @@ TRANSLATION_CACHE_TIMEOUT = 60*60*24*30*12
 SIMULTANEOUS_THREADS = 10
 
 def translate(request, content, target=None, src=None):
-    from django.core.cache import caches
+    from django.core.cache import cache
+#    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
-    cache = caches['translation_cache']
+#    cache = caches['translation_cache']
     cache_key = f"translation:{src}:{target}:{hash(content)}"
     db_key = f"{src}:{target}:{hash(content)}"
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
@@ -95,9 +96,10 @@ def translate(request, content, target=None, src=None):
 def translate_html(request, html, target=None, src=None):
     from django.utils.html import strip_tags
     if strip_tags(html) == html: return translate(request, html, target=target, src=src)
-    from django.core.cache import caches
+    from django.core.cache import cache
+#    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
-    cache = caches['translation_cache']
+#    cache = caches['translation_cache']
     cache_key = f"translation:{src}:{target}:{hash(html)}"
     db_key = f"{src}:{target}:{hash(html)}"
     """Translates HTML content to the target language."""
@@ -208,9 +210,10 @@ def translate_html(request, html, target=None, src=None):
     return result
 
 def translate_multiple(request, split, target=None, src=None):
-    from django.core.cache import caches
+    from django.core.cache import cache
+#    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
-    cache = caches['translation_cache']
+#    cache = caches['translation_cache']
     cache_key = f"translation:{src}:{target}:{hash(split)}"
     db_key = f"{src}:{target}:{hash(split)}"
     if target == src:

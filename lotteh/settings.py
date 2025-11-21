@@ -220,6 +220,9 @@ DATABASES = {
             'RECYCLE': -1,
         },
     },
+}
+
+OLD_DATABASES = {
     'cache_db': {
         'ENGINE': 'dj_db_conn_pool.backends.postgresql',
         'NAME': 'lotteharper_cache_db',
@@ -275,6 +278,9 @@ CACHES = {
         "DATABASE": "cache_db",  # Name of the alternate database
         "TIMEOUT": 60 * 60 * 24 * 3, # 1 week expiry
     },
+}
+
+OLD_CACHES = {
     "translation_cache": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "lotteharper_private_translation_cache_table",  # Name of your cache table
