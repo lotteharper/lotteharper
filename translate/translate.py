@@ -6,7 +6,7 @@ from translate.languages import SELECTOR_LANGUAGES
 
 MAX_TRANS = 5000
 TRANSLATION_CACHE_TIMEOUT = 60*60*24*30*12
-SIMULTANEOUS_THREADS = 32
+SIMULTANEOUS_THREADS = 10
 
 def translate(request, content, target=None, src=None):
     from django.core.cache import caches

@@ -10,5 +10,5 @@
 51 */12 * * * sudo daphnereload
 0 */12 * * * sh -c "sudo backup > /home/team/lotteh/backup.log" team
 #*/10 * * * * sudo systemctl start apache2
-*/15 * * * * sudo systemctl start celery
+#0 0 * * * sudo systemctl start celery
 0 * * * * sudo systemctl start clamav-daemon

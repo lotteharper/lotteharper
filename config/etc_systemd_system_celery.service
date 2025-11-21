@@ -7,6 +7,7 @@ Type=forking
 User=team
 Group=users
 TimeoutStartSec=180
+Restart=on-failure
 EnvironmentFile=/etc/default/celery
 WorkingDirectory=/home/team/lotteh
 ExecStart=/bin/sh -c '${CELERY_BIN} multi start ${CELERYD_NODES} \
