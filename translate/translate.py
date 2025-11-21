@@ -208,6 +208,20 @@ def translate_html(request, html, target=None, src=None):
     return result
 
 def translate_multiple(request, split, target=None, src=None):
+    from django.core.cache import caches
+    global TRANSLATION_CACHE_TIMEOUT
+    cache = caches['translation_cache']
+    cache_key = f"translation:{src}:{target}:{hash(split)}"
+    db_key = f"{src}:{target}:{hash(split)}"
+    if target == src:
+        return split
+    translation = cache.get(cache_key)
+    if translation is not None:
+        return translation
+    from .models import CachedTranslation
+    trans = CachedTranslation.objects.filter(src_hash=db_key).order_by('timestamp').first()
+    if trans:
+        return trans.dest_content
     from translate.translate import translate
     from feed.middleware import get_current_request
     from django.conf import settings
@@ -226,4 +240,9 @@ def translate_multiple(request, split, target=None, src=None):
     for i in range(len(threads)):
         if threads[i]: threads[i].join()
         else: break
+    if len(result) > 0:
+        try:
+            CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=result, src=src, dest=target)
+        except: pass
+    cache.set(cache_key, result, timeout=TRANSLATION_CACHE_TIMEOUT)
     return result

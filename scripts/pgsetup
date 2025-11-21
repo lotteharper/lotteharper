@@ -43,8 +43,8 @@ sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lotteharp
 sudo -u postgres psql -U postgres -c "GRANT ALL ON SCHEMA public TO lotteharper_translation_cache_db_user;"
 sudo -u postgres psql -U postgres -c "ALTER DATABASE lotteharper_translation_cache_db OWNER TO lotteharper_translation_cache_db_user;"
 python manage.py createcachetable
-python manage.py createcachetable lotteharper_private_translation_cache_table
-python manage.py createcachetable lotteharper_private_cache_table
+python manage.py createcachetable lotteharper_private_translation_cache_table --database=translation_cache_db
+python manage.py createcachetable lotteharper_private_cache_table --database=cache_db
 #echo "Loading data, this may take a while"
 #python manage.py loaddata db.json
 #cd ~

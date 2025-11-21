@@ -23,6 +23,7 @@ def webmanifest(request):
     from django.shortcuts import render
     return render(request, 'misc/site.webmanifest', {})
 
+@cache_page(60*60*24*28)
 def map(request):
     from django.shortcuts import render
     from security.models import UserIpAddress, Session
@@ -299,6 +300,7 @@ def robotstxt(request):
 
 @csrf_exempt
 def upload_video_api(request):
+    return False
     from django.http import HttpResponse
     from .forms import UploadForm
     from django.conf import settings
