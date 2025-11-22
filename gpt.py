@@ -6,6 +6,6 @@ from django.conf import settings
 from voice.ai import get_ai_response
 arguments_string = ' '.join(sys.argv[1:])
 if len(arguments_string) > 0:
-    print(get_ai_response(arguments_string))
+    print(get_ai_response(arguments_string, 'en'))
 else:
     print('No input supplied.')

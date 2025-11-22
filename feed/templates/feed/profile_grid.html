@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block head %}
-<script type="text/javascript" src="/static/qrcode.min.js"></script>
 {% if request.GET.handtrack %}
 <script src="/static/handtrack.min.js"></script>
 {% endif %}
@@ -82,7 +81,7 @@ b {
 <p>{{ profile.id|transbio|addhttpstodomains|embedlinks|tagusers }}</p>
 {% endautoescape %}
 <p style="text-align:center;"><small class="text-muted">{{ 'Last Seen'|etrans }}: {{ profile.last_seen|date:"F d, Y" }} {{ profile.last_seen|time:"H:i" }}</small> - <small class="text-muted"> {{ 'Joined'|etrans }}: {{ profile.date_joined|date:"F d, Y" }} {{ profile.date_joined|time:"H:i" }}</small></p>
-<i>(Expand)</i>
+<i>({{ 'Expand'|etrans }})</i>
 </div>
 <hr style="background-color: red;" class="mb-5">
 <div class="display: inline-block;" id="feed-grid">
