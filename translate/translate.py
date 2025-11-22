@@ -236,7 +236,7 @@ def translate_multiple(request, split, target=None, src=None):
         target = request.user.profile.preferred_language if hasattr(request, 'user') and hasattr(request.user, 'profile') and not request.GET.get('lang', False) else request.LANGUAGE_CODE if request and not request.GET.get('lang') else request.GET.get('lang') if request and request.GET.get('lang', None) else settings.DEFAULT_LANG
     if not src: src = settings.DEFAULT_LANG
     def transthread(split, index, result, src, target):
-        result[index] = translate_html(request, split[index], target=target, src=src)
+        result[index] = translate(None, split[index], target=target, src=src)
     for x in range(len(split)):
         threads[x] = Thread(target=transthread, args=(split, x, result, src, target))
         threads[x].start()

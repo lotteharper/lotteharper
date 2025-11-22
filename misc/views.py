@@ -82,7 +82,8 @@ def sitemap(request):
     from django.utils import timezone
     surrogate_urls = ['/surrogacy/', '/surrogacy/checkout/']
     from translate.languages import SELECTOR_LANGUAGES
-    return render(request, 'misc/sitemap.xml', {'posts': Post.objects.filter(public=True, private=False, published=True).exclude(content=''), 'vendors': User.objects.filter(profile__vendor=True, is_active=True), 'surrogates': User.objects.filter(profile__vendor=True, is_active=True, vendor_profile__activate_surrogacy=True), 'vendor_urls': vendor_urls, 'urls': urls, 'surrogate_urls': surrogate_urls, 'vendor_feeds': vendor_feeds, 'languages': SELECTOR_LANGUAGES.keys(), 'base_url': settings.BASE_URL, 'date': timezone.now().strftime('%Y-%m-%d')}, content_type='application/xml')
+    author = User.objects.get(id=settings.MY_ID)
+    return render(request, 'misc/sitemap.xml', {'posts': Post.objects.filter(public=True, private=False, published=True).exclude(content=''), 'vendors': User.objects.filter(profile__vendor=True, is_active=True), 'surrogates': User.objects.filter(profile__vendor=True, is_active=True, vendor_profile__activate_surrogacy=True), 'vendor_urls': vendor_urls, 'urls': urls, 'surrogate_urls': surrogate_urls, 'vendor_feeds': vendor_feeds, 'languages': SELECTOR_LANGUAGES.keys(), 'base_url': settings.BASE_URL, 'date': author.profile.date_joined}, content_type='application/xml')
 
 @cache_page(60*60*24)
 def news(request):

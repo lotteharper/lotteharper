@@ -110,8 +110,23 @@ def process_recording(id):
     from live.still import get_still
     from shell.execute import run_command
     import datetime as dt
+    mul_seconds = 8 # 4 (the number is the gap, a larger number adds more length to the recording with a longer gap
     recording = VideoRecording.objects.get(id=id)
-    if (recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * 12)) and (not (recording.processing or recording.processed)): # 4 (the number is the gap, a larger number adds more length to the recording with a longer gap
+    first_frame = recording.last_frame
+    should_process = recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * mul_seconds)
+    if recording.processing or recording.processed:
+        return
+    if should_process:
+        import time
+        time.sleep(int(settings.LIVE_INTERVAL/1000)*2) # Potentially multiply by three instead of two, to extend processing buffer retention in low data/poor cell signal conditions
+    else: return
+    recording = VideoRecording.objects.get(id=id)
+    second_frame = recording.last_frame
+    should_process = recording.last_frame < timezone.now() - dt.timedelta(seconds=(settings.LIVE_INTERVAL/1000) * mul_seconds)
+    if recording.processing or recording.processed:
+        return
+    stable_frames = first_frame == second_frame
+    if should_process and stable_frames:
         recording.processing = True
         recording.save()
         camera = VideoCamera.objects.filter(user=recording.user, name=recording.camera).order_by('-last_frame').first()

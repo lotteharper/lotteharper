@@ -216,6 +216,7 @@ class TransNode(template.Node):
         output = self.nodelist.render(context)
         from translate.translate import translate_html
         from feed.middleware import get_current_request
+        from django.conf import settings
         return translate_html(get_current_request(), output, target=get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG, src=self.src if self.src else None)
 
 register.tag('blocktrans', do_blocktrans)
