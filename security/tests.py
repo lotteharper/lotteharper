@@ -150,3 +150,12 @@ def face_mrz_or_nfc_verified_session_key(user, session_key):
 #    print(recent_face_match_skey(user, session_key))
 #    print(mrz_or_nfc_verified_skey(user, session_key))
     return user and ((pin_verified_skey(user, session_key) and (recent_face_match_skey(user, session_key) or mrz_or_nfc_verified_skey(user, session_key))) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
+
+def is_deauth_skey(user, session_key):
+    from django.utils import timezone
+    import datetime
+    from django.conf import settings
+    return user.user_sessions.filter(session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=True).count() > 0
+
+def is_deauth(request):
+    return is_deauth_skey(request.user, request.session.session_key)

@@ -62,10 +62,15 @@ def get_next_redirect(request):
         from django.http import HttpResponseRedirect
         from django.urls import reverse
         from django.shortcuts import redirect
-        from security.tests import face_mrz_or_nfc_verified, pin_verified, biometric_verified, otp_verified, vivokey_verified
+        from security.tests import face_mrz_or_nfc_verified, pin_verified, biometric_verified, otp_verified, vivokey_verified, is_deauth
         red = False
         request.GET._mutable = True
         if request.user.is_authenticated and request.user.profile.vendor and (not request.path.startswith('/security/')) and (not request.method == 'POST') and (not vivokey_verified(request)) and redirect_path(request.path):
+            red = True
+            request.GET._mutable = True
+            request.GET['next'] = request.path + get_qs(request.GET)
+            return redirect(reverse('security:vivokey') + get_qs(request.GET))
+        if request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor) and is_deauth(request) and redirect_path(request.path):
             red = True
             request.GET._mutable = True
             request.GET['next'] = request.path + get_qs(request.GET)
@@ -103,6 +108,9 @@ def update_session(user_id, skey):
         if (user.is_superuser or user.profile.vendor) and (not vivokey_verified_skey(user, skey)):
             red = True
 #            print('vivokey not verified')
+            return False
+        if (user.is_superuser or user.profile.vendor) and is_deauth_skey(user, skey):
+            request.GET._mutable = True
             return False
         if user.profile.vendor and (not face_mrz_or_nfc_verified_session_key(user, skey)):
             red = True
