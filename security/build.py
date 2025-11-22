@@ -95,7 +95,7 @@ def update_session(user_id, skey):
     from django.contrib.auth.models import User
     user = User.objects.get(id=int(user_id))
     if user:
-        from users.middleware import get_qs, redirect_path
+        from security.middleware import get_qs, redirect_path
         from django.http import HttpResponseRedirect
         from django.urls import reverse
         from security.tests import face_mrz_or_nfc_verified_session_key, pin_verified_skey, biometric_verified_skey, otp_verified_skey, vivokey_verified_skey

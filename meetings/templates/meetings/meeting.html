@@ -133,7 +133,7 @@ button { margin: 0 5px; }
         <button id="autofocusBtn" class="btn btn-outline-secondary">{{ 'Toggle Autofocus'|etrans }}</button>
         <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('meeting-url');" title="{{ 'Invite another participant to this meeting by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button>
     </div>
-    <div class="video-container">
+    <div class="video-container" id="localVideoContainer">
         <i class="bi bi-mic-mute muted-icon" id="muted-icon-local" style="display:none; color: white !important;"></i>
         <i class="bi bi-camera-video-off videooff-icon" id="videooff-icon-local" style="display:none; color: white !important;"></i>
         <div class="video-name-overlay" id="video-name-local">{% if request.user.is_authenticated %}{{ request.user.profile.name }}{% else %}Guest{% endif %}</div>
@@ -194,7 +194,9 @@ var peerVolumes = {};
 var sharingScreen = false;
 
 function send(action, data={}, target=null) {
-    socket.send(JSON.stringify({ action, data, target }));
+    if(socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ action, data, target }));
+    }
 }
 
 var samples = 0;
@@ -251,13 +253,42 @@ getMedia().then(async function(stream) {
     localStream = stream;
     var peerUsernames = {};
     async function openMeetingSocket() {
-        socket = new WebSocket(wsUrl);
         function removeVideo(peer_id) {
-            /*let vid = document.getElementById("video_" + peer_id);
-            if (vid) vid.remove();*/
+            let vid = document.getElementById("video_" + peer_id);
+            if (vid) vid.remove();
             let vidcontainer = document.getElementById("videocontainer_" + peer_id);
             if (vidcontainer) vidcontainer.remove();
         }
+        function clearStreams() {
+            // Remove all remote peers' video containers, clear state objects
+            Object.keys(peers).forEach(peer_id => {
+                if (peer_id !== 'local') {
+                    removeVideo(peer_id);
+                }
+                try { peers[peer_id].close(); } catch {}
+                delete peers[peer_id];
+            });
+            Object.keys(streams).forEach(peer_id => {
+                if (peer_id !== 'local') delete streams[peer_id];
+            });
+            Object.keys(peerVolumes).forEach(peer_id => {
+                if (peer_id !== 'local') delete peerVolumes[peer_id];
+            });
+            Object.keys(peerUsernames).forEach(peer_id => {
+                if (peer_id !== 'local') delete peerUsernames[peer_id];
+            });
+
+            // REMOVE any accidental duplicate local video containers (defensive)
+            document.querySelectorAll('.video-container').forEach(vc => {
+                if (!vc.id || (
+                    vc.id !== 'localVideoContainer' && vc.querySelector('#localVideo') === null
+                )) {
+                    vc.remove();
+                }
+            });
+        }
+        clearStreams();
+        socket = new WebSocket(wsUrl);
         function addVideo(peer_id, stream, peer_name) {
             if (document.getElementById("video_" + peer_id)) return;
             const vid = document.createElement("video");
@@ -317,15 +348,26 @@ getMedia().then(async function(stream) {
 
         async function handleOffer(from, offer) {
             let pc = createPeer(from, false);
+            if (pc.signalingState === "stable" && offer.type === "offer") {
+                await pc.setRemoteDescription(offer);
+                let answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                send("signal", {type: "answer", sdp: answer}, from);
+            } else {
+                console.warn(`Unexpected state for offer: ${pc.signalingState}`);
+            }
+        }
+/*        async function handleOffer(from, offer) {
+            let pc = createPeer(from, false);
             await pc.setRemoteDescription(offer);
             let answer = await pc.createAnswer();
             await pc.setLocalDescription(answer);
             send("signal", {type: "answer", sdp: answer}, from);
-        }
+        }*/
 
         async function handleAnswer(from, answer) {
             let pc = peers[from];
-            if (pc) await pc.setRemoteDescription(answer);
+            await pc.setRemoteDescription(answer);
         }
 
         async function handleCandidate(from, candidate) {
@@ -349,7 +391,6 @@ getMedia().then(async function(stream) {
               }, 50);
             });
         };
-
         socket.onerror = function() {
             if(socketReconnectTimeout) clearTimeout(socketReconnectTimeout);
             meetingSocketReconnectTimeout = setTimeout(openMeetingSocket, {{ reload_time }});
@@ -367,8 +408,9 @@ getMedia().then(async function(stream) {
         socket.onmessage = async (event) => {
             const msg = JSON.parse(event.data);
             if (msg.type === "peer-joined") {
+                // Don't create a peer or video for yourself!
+                if (msg.peer_id === 'local' || msg.peer_id === '{{ request.user.pk }}') return;
                 if (msg.peer_id in peers) return;
-                // Initiate connection
                 let pc = createPeer(msg.peer_id, true, msg.peer_name);
                 let offer = await pc.createOffer();
                 await pc.setLocalDescription(offer);
@@ -386,17 +428,25 @@ getMedia().then(async function(stream) {
                 const from = msg.from;
                 const data = msg.data;
                 const username = msg.username;
-                updatePeerName(from, username);
+                peerUsernames[from] = username;
                 if (data.type === "offer") {
-                    await handleOffer(from, data.sdp);
+                    let pc = createPeer(from, false, username);
+                    if (pc.signalingState === "stable" && data.sdp.type === "offer") {
+                        await pc.setRemoteDescription(data.sdp);
+                        let answer = await pc.createAnswer();
+                        await pc.setLocalDescription(answer);
+                        send("signal", {type: "answer", sdp: answer}, from);
+                    }
                 } else if (data.type === "answer") {
-                    await handleAnswer(from, data.sdp);
+                    let pc = peers[from];
+                    // Defensive: Only apply answer if in the right state
+                    if (pc && pc.signalingState === "have-local-offer" && data.sdp.type === "answer") {
+                        await pc.setRemoteDescription(data.sdp);
+                    }
                 } else if (data.type === "candidate") {
-                    await handleCandidate(from, data.candidate);
+                    let pc = peers[from];
+                    if (pc && data.candidate) await pc.addIceCandidate(data.candidate);
                 }
-            } else if (msg.type === "volume") {
-                const from = msg.peer_id;
-                peerVolumes[from] = msg.volume;
             }
         };
     }
@@ -451,7 +501,7 @@ getMedia().then(async function(stream) {
 });
 function sendChat() {
     let input = document.getElementById('chatinput');
-    if(input.value != "") {
+    if(input.value != "" && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
         chatSocket.send(JSON.stringify({
             message: input.value,
             username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
