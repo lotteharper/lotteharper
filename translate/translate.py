@@ -8,8 +8,26 @@ MAX_TRANS = 5000
 TRANSLATION_CACHE_TIMEOUT = 60*60*24*30*12
 SIMULTANEOUS_THREADS = 10
 
+def split_text_by_length(text, max_len=MAX_TRANS):
+    words = text.split()
+    parts = []
+    curr_part = []
+    for word in words:
+        tentative = ' '.join(curr_part + [word]) if curr_part else word
+        if len(tentative) > max_len:
+            # Finish current part and start a new one with current word
+            if curr_part:
+                parts.append(' '.join(curr_part))
+            curr_part = [word]
+        else:
+            curr_part.append(word)
+    if curr_part:
+        parts.append(' '.join(curr_part))
+    return parts
+
 def translate(request, content, target=None, src=None):
     from django.core.cache import cache
+    global MAX_TRANS
 #    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
 #    cache = caches['translation_cache']
@@ -45,15 +63,11 @@ def translate(request, content, target=None, src=None):
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
     if (not content) or content == '' or content == None or (lang != None and lang_code != None and lang_code == lang): return content
     if not lang_code: return content
-    if not src: src = settings.DEFAULT_LANG #return content
-#    print(content)
-#    print(src)
-#    print(lang_code)
+    if not src: src = settings.DEFAULT_LANG
     if not lang_code in SELECTOR_LANGUAGES.keys():
         from django.contrib import messages
         if request and 'lang' in list(request.GET.keys()): messages.warning(request, 'You have selected a language not yet available for translation. Please change the "lang=" parameter in the URL to a valid two character language code for Google Translate API such as "en", "es" or "de", or <a href="/" title="Return home and clear the lang parameter for now">click here to return home</a>.')
         return content
-    # Try to get the translation from cache
     translation = cache.get(cache_key)
     if translation is not None:
         return translation
@@ -62,28 +76,48 @@ def translate(request, content, target=None, src=None):
     if trans: return trans.dest_content
     text = ''
     pronunciation = ''
-    c = ''
-    last = False
-#    print('Src lang code is ' + lang + ', target is ' + lang_code)
     translator = Translator()
-    for x in range(0, int(len(content)/MAX_TRANS) + 1):
+    content_fragments = split_text_by_length(content, max_len=MAX_TRANS)
+    def thread(target, src, to_trans, count, result, result_pronun):
         try:
-            if len(content) < MAX_TRANS:
-                trans = translator.translate(content, src=lang, dest=lang_code)
-                text = text + str(trans.text)
-                pronunciation = pronunciation + str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
-                break
-            if (x+1) * MAX_TRANS > len(content): last = True
-            c = content[x * MAX_TRANS - (0 if not c else MAX_TRANS-len(c)):(x+1)*MAX_TRANS - (0 if not c else MAX_TRANS-len(c) if not last else -1 * MAX_TRANS)].rsplit(' ', 1)[0]
-            trans = translator.translate(c, src=lang, dest=lang_code)
-            text = text + str(trans.text)
-            pronunciation = pronunciation + str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
+            trans = translator.translate(to_trans, src=lang, dest=lang_code)
+            result[count] = str(trans.text)
+            result_pronun[count] = str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
         except:
             print(traceback.format_exc())
             pass
+        return
+    import threading
+    thread_count = 0
+    threads = [None] * len(content_fragments)
+    result = [None] * len(content_fragments)
+    result_arr = [None] * len(content_fragments)
+    result_arr_pronun = [None] * len(content_fragments)
+    while thread_count < len(content_fragments):
+        for i in range(SIMULTANEOUS_THREADS):
+            if thread_count < len(content_fragments):
+                threads[thread_count] = threading.Thread(target=thread, args=(target, src, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun))
+                threads[thread_count].start()
+                thread_count += 1
+            else: break
+        for i in range(len(threads)):
+            if threads[i]: threads[i].join()
+            else: break
     try: translator.client.close()
     except: pass
     translator = None
+    result_text = ''
+    pronunciation_text = ''
+    for x in range(len(result_arr)):
+        text = result_arr[x]
+        if text:
+            pronun = result_arr_pronun[x]
+            if len(result_text) > 0 and result_text[-1:] != ' ': result_text = result_text + ' '
+            if len(pronunciation_text) > 0 and pronunciation_text[-1:] != ' ': pronunciation_text = pronunciation_text + ' '
+            result_text = result_text + text
+            pronunciation_text = pronunciation_text + pronun
+    text = result_text
+    pronunciation = pronunciation_text
     if len(text) > 0:
         try:
             CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation, src_hash=hash(content))

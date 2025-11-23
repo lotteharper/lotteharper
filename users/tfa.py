@@ -15,39 +15,69 @@ source_phone = settings.PHONE_NUMBER
 async def send_rust_text(target_phone, text):
     value = await send_text(target_phone, text)
 
+def split_text_parts(text, max_len=310, last_max_len=293):
+    words = text.split()
+    parts = []
+    curr_part = []
+
+    for word in words:
+        # If adding the word exceeds limit for all except last
+        tentative = ' '.join(curr_part + [word])
+        # For all but last, use max_len; for last use last_max_len
+        curr_max = last_max_len if len(parts) and len(' '.join(parts + [tentative])) <= last_max_len else max_len
+
+        if len(tentative) > curr_max:
+            # Finish current part and start a new one
+            if curr_part:
+                parts.append(' '.join(curr_part))
+            curr_part = [word]
+        else:
+            curr_part.append(word)
+
+    # Append any remaining words
+    if curr_part:
+        parts.append(' '.join(curr_part))
+
+    # Now, if last part is too long, move words to previous
+    while len(parts) > 1 and len(parts[-1]) >= last_max_len:
+        # Move last word from penultimate to last
+        last_words = parts[-1].split()
+        prev_words = parts[-2].split()
+        moved_word = prev_words.pop()
+        parts[-2] = ' '.join(prev_words)
+        parts[-1] = moved_word + ' ' + ' '.join(last_words)
+
+    # Clean up any blanks
+    parts = [part for part in parts if part.strip()]
+    # Final check
+    assert all(len(part) < max_len for part in parts[:-1]), "A non-last part exceeds 310 chars"
+    assert len(parts[-1]) < last_max_len, "Last part exceeds 293 chars"
+
+    return parts
+
 async def send_text(target_phone, text):
     import asyncio, math
     from twilio.rest import Client
     try:
         client = Client(account_sid, auth_token)
         if len(target_phone) >= 11:
-            response = text
-            count = None
-            count = 0
-            total_length = str(math.ceil(len(response)/310)) if math.ceil(len(response)/310) > 1 else '1'
-            while response[:293]:
+            split_text = split_text_parts(text)
+            total_length = str(len(split_text))
+            for x in range(len(split_text)):
+                count = str(x+1)
+                response_fragment = split_text[x]
                 if len(response) < 294:
-                    msg = ' ({})'.format(str(count+1) + '/' + total_length)
+                    msg = ' ({})'.format(count + '/' + total_length)
                     message = client.messages.create(
                         to=target_phone,
                         from_=source_phone,
-                        body=response[:293] + msg + ('...' if len(response) > 293 else '') + ' Text STOP to cancel.')
-                    count += 1
-                    break
+                        body=response_fragment + msg + ('...' if len(response) > 293 else '') + ' Text STOP to cancel.')
                 else:
-                    msg = ' ({})'.format(str(count+1) + '/' + total_length)
+                    msg = ' ({})'.format(count + '/' + total_length)
                     message = client.messages.create(
                         to=target_phone,
                         from_=source_phone,
-                        body=response[:310] + msg + ('...' if len(response) > 310 else ''))
-                    count += 1
-                    response = response[310:]
-                    if not response:
-                        message = client.messages.create(
-                            to=target_phone,
-                            from_=source_phone,
-                            body='Text STOP to cancel.')
-                        count += 1
+                        body=response_fragment + msg + ('...' if len(response) > 310 else ''))
                 await asyncio.sleep(10)
     except:
         import traceback
