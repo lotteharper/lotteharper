@@ -76,11 +76,11 @@ def translate(request, content, target=None, src=None):
     if trans: return trans.dest_content
     text = ''
     pronunciation = ''
-    translator = Translator()
     content_fragments = split_text_by_length(content, max_len=MAX_TRANS)
     def thread(target, src, to_trans, count, result, result_pronun):
+        translator = Translator()
         try:
-            trans = translator.translate(to_trans, src=lang, dest=lang_code)
+            trans = translator.translate(to_trans, src=src, dest=target)
             result[count] = str(trans.text)
             result_pronun[count] = str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
         except:
@@ -96,7 +96,7 @@ def translate(request, content, target=None, src=None):
     while thread_count < len(content_fragments):
         for i in range(SIMULTANEOUS_THREADS):
             if thread_count < len(content_fragments):
-                threads[thread_count] = threading.Thread(target=thread, args=(target, src, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun))
+                threads[thread_count] = threading.Thread(target=thread, args=(lang_code, lang, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun))
                 threads[thread_count].start()
                 thread_count += 1
             else: break
