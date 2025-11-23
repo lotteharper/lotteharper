@@ -76,6 +76,7 @@ def translate(request, content, target=None, src=None):
     if trans: return trans.dest_content
     text = ''
     pronunciation = ''
+    content = content.replace('\n', '<br/>')
     content_fragments = split_text_by_length(content, max_len=MAX_TRANS)
     def thread(target, src, to_trans, count, result, result_pronun):
         translator = Translator()
@@ -116,7 +117,7 @@ def translate(request, content, target=None, src=None):
             if len(pronunciation_text) > 0 and pronunciation_text[-1:] != ' ': pronunciation_text = pronunciation_text + ' '
             result_text = result_text + text
             pronunciation_text = pronunciation_text + pronun
-    text = result_text
+    text = result_text.replace('<br/>', '\n')
     pronunciation = pronunciation_text
     if len(text) > 0:
         try:
@@ -125,7 +126,6 @@ def translate(request, content, target=None, src=None):
     else: return content
     cache.set(cache_key, text, timeout=TRANSLATION_CACHE_TIMEOUT)
     return text
-
 
 def translate_html(request, html, target=None, src=None):
     from django.utils.html import strip_tags
