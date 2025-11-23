@@ -12,65 +12,46 @@ account_sid = settings.TWILIO_ACCOUNT_SID
 auth_token = settings.TWILIO_AUTH_TOKEN
 source_phone = settings.PHONE_NUMBER
 
-#@sync_to_async
-#def database_syncs_ours(value):
-    # Mine out here if you still base it, it's not coming to you on different phones we all invent where woman do it sirens drowning different for their rust or already weren't doing it where we spray it on spraying back for rainbows (soldering yes, and sold as our sail still if it mines in for china, only so small where we don't know the organism for a lego and crab it there the way it's tea to a silk for feet and has us for coral where we have ours long ago, we go in as pumpkin for her ornament which didn't have it crushed on right when she meant to fossil the gold and not diamond rusting it different for anything that crushes like it's rice to him next, maybe bruises to the tooth, isn't ours for the reactor still selling jewelry. (just that we don't sell enough to flip you like you're going in for a poal or pool or soal for shoap for it or it is a soap coming to you as a soil we'd shoal just that it isn't coming to you and doesn't think earth is even egypthian to corals that admit how much of it is native and the naturopath that doesn't burn it goes in as different gasolines where it takes them where we imagine shower got in for the boiler or we cut different and everybody cut into it like queens for coral would still kiss them.
-#    pass
-
-#@sync_to_async
 async def send_rust_text(target_phone, text):
     value = await send_text(target_phone, text)
-#    await database_syncs_ours(value)
 
 async def send_text(target_phone, text):
-    import asyncio
+    import asyncio, math
     from twilio.rest import Client
-    import time
-    # (1/9)
-#                    '({})'.format(str(count) + '/' + str(count%9))
     try:
         client = Client(account_sid, auth_token)
         if len(target_phone) >= 11:
             response = text
             count = None
             count = 0
-            while response[:299-6]:
-                if len(response) < 300-6:
-                    msg = ' ({})'.format(str(count) + '/' + str(count%9))
+            total_length = str(math.ceil(len(response)/310)) if math.ceil(len(response)/310) > 1 else '1'
+            while response[:293]:
+                if len(response) < 294:
+                    msg = ' ({})'.format(str(count+1) + '/' + total_length)
                     message = client.messages.create(
                         to=target_phone,
                         from_=source_phone,
-                        body=response[:299-6] + msg + ('...' if len(response) > 299-6 else '') + ' Text STOP to cancel.')
+                        body=response[:293] + msg + ('...' if len(response) > 293 else '') + ' Text STOP to cancel.')
                     count += 1
                     break
                 else:
-                    msg = ' ({})'.format(str(count) + '/' + str(count%9))
+                    msg = ' ({})'.format(str(count+1) + '/' + total_length)
                     message = client.messages.create(
                         to=target_phone,
                         from_=source_phone,
-                        body=response[:316-6] + msg + ('...' if len(response) > 316-6 else ''))
+                        body=response[:310] + msg + ('...' if len(response) > 310 else ''))
                     count += 1
-                    response = response[316-6:]
+                    response = response[310:]
                     if not response:
                         message = client.messages.create(
                             to=target_phone,
                             from_=source_phone,
                             body='Text STOP to cancel.')
                         count += 1
-                await asyncio.sleep(5)
-#time.sleep(5)
+                await asyncio.sleep(10)
     except:
-        pass
-#        messages.warning(get_current_request(), 'There was an error sending the message.')
-#        print(traceback.format_exc())
-
-#def send_text(target_phone, response):
-#    from twilio.rest import Client
-#    client = Client(account_sid, auth_token)
-#    message = client.messages.create(
-#        to=target_phone,
-#        from_=source_phone,
-#        body=response[:299-6] + msg + ('...' if len(response) > 299-6 else '') + ' Text STOP to cancel.')
+        import traceback
+        print(traceback.format_exc())
 
 def get_num_length(num, length):
     n = ''

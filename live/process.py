@@ -57,7 +57,7 @@ def process_live(camera_id, frame_id):
         from audio.transcription import get_transcript
         transcript, fingerprint = get_transcript(frame.frame.path, save_fingerprint=False)
         if transcript and camera.speech_only: frame.contains_speech = True
-    if camera.server_moderation or (frame.recording.first().frames.count() % settings.VIDEO_SEGMENTS_PER_MODERATION) == 0:
+    if camera.server_moderation or ((frame.recording.first() and (frame.recording.first().frames.count() % settings.VIDEO_SEGMENTS_PER_MODERATION)) == 0):
         from live.nude import is_nude_segment_fast
         try:
             frame.safe = not is_nude_segment_fast(frame.frame.path)
