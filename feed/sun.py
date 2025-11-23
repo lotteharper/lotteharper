@@ -17,7 +17,8 @@ def utc_to_local(utc_dt, local_tz):
 
 def get_sun(user_id, user_is_authenticated, ip):
     user = User.objects.filter(id=user_id).first()
-    ip = UserIpAddress.objects.filter(user=None if not user_is_authenticated else user, ip_address=ip).first()
+    ips = UserIpAddress.objects.filter(user=None if not user_is_authenticated else user, ip_address=ip)
+    ip = ips.first()
     if ip != None and ip.latitude != None and ip.longitude != None:
         from astral.sun import sun
         from astral import LocationInfo
@@ -30,15 +31,17 @@ def get_sun(user_id, user_is_authenticated, ip):
             import timezonefinder
             tf = timezonefinder.TimezoneFinder()
             timezone_str = tf.certain_timezone_at(lat=ip.latitude, lng=ip.longitude)
-            ip.timezone = timezone_str
-            ip.save()
+            for ip in ips:
+                ip.timezone = timezone_str
+                ip.save()
         else: timezone_str = ip.timezone
         tz = pytz.timezone(timezone_str)
         now = datetime.now(tz)
         s = sun(location.observer, date=now.date(), tzinfo=timezone_str)
         sunrise = parse(f'{s["sunrise"]}').astimezone(tz)
         sunset = parse(f'{s["sunset"]}').astimezone(tz)
-        ip.sunset = sunset
-        ip.sunrise = sunrise
-        ip.last_updated_sun = timezone.now()
-        ip.save()
+        for ip in ips:
+            ip.sunset = sunset
+            ip.sunrise = sunrise
+            ip.last_updated_sun = timezone.now()
+            ip.save()

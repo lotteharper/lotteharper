@@ -623,3 +623,21 @@ function totalCart() {
     }
 }
 totalCart();
+// Function to show the loading bar
+function showLoadingBar() {
+  document.getElementById('loading-bar').style.display = 'flex';
+}
+
+// Function to hide the loading bar
+function hideLoadingBar() {
+  document.getElementById('loading-bar').style.display = 'none';
+}
+// Add the event listener to show the bar before page unload
+window.addEventListener('beforeunload', () => {
+  showLoadingBar();
+});
+
+// Add the event listener to hide the bar when the new page is ready
+document.addEventListener('DOMContentLoaded', () => {
+  hideLoadingBar();
+});
