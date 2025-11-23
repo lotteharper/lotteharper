@@ -622,6 +622,7 @@ ID_VERIFICATION_EXPIRES_DAYS = 30 * 3
 PAGE_LOADS_PER_API_CALL = 20
 CONTENT_RISK_ASSESS_TIMEOUT = 60 * 5
 REDIRECT_URL = 'https://glamgirlx.com/'
+ALT_REDIRECT_URL = 'https://www.youtube.com/watch?v=SRfwnvXRsRk&t=18s'
 
 # SMS settings
 PHONE_NUMBER = '+12063394443' #'+19705857901'

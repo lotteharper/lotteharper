@@ -88,6 +88,8 @@ def security_middleware(get_response):
             ip_obj = UserIpAddress.objects.filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).first()
             if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
                 from django.http import HttpResponseRedirect
+                if ip_obj.page_loads > 12:
+                    return HttpResponseRedirect(settings.ALT_REDIRECT_URL)
                 return HttpResponseRedirect(settings.REDIRECT_URL)
 #            request.GET._mutable = True
             if request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor):

@@ -1,5 +1,5 @@
 7
-00
+12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-11-15.git
@@ -13,217 +13,18 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main add0c35] open source
- 30 files changed, 484 insertions(+), 553 deletions(-)
- create mode 100644 celery/pid/worker1.pid
- create mode 100644 celery/pid/worker2.pid
- create mode 100644 media/audio/fingerprints/21eff340-2160-4e02-b4ab-deb23d030685.npy
- create mode 100644 media/audio/fingerprints/273cb7c6-5466-4b09-a17a-8efc2f2028a9.npy
- create mode 100644 media/audio/fingerprints/27fee7e0-b4ae-4866-967b-b442bc69f810.npy
- create mode 100644 media/audio/fingerprints/34eab614-07e0-4ef1-a2f6-6bb262732705.npy
- create mode 100644 media/audio/fingerprints/44d6e689-a8bf-4069-a053-92de55f1d00e.npy
- create mode 100644 media/audio/fingerprints/4d97bbe1-04cd-48b3-a56c-eb1f6378bb87.npy
- create mode 100644 media/audio/fingerprints/54d6c70f-6ab9-4305-b8cd-b935366064e5.npy
- create mode 100644 media/audio/fingerprints/740f8482-8e93-47c4-ad62-eb41dce0af39.npy
- create mode 100644 media/audio/fingerprints/fffac7a3-a01a-4207-bf1e-42ea00254642.npy
+[main 7d02d57] open source
+ 32 files changed, 508 insertions(+), 672 deletions(-)
+ create mode 100644 media/audio/fingerprints/30cae687-3052-4f5c-be03-e201247ba184.npy
+ create mode 100644 media/audio/fingerprints/3f75438b-ad6e-4bbc-bf4d-1e1439f87f2e.npy
+ create mode 100644 media/audio/fingerprints/460ead81-e298-44fe-add5-9605498c91dc.npy
+ create mode 100644 media/audio/fingerprints/589d8851-520b-45e5-bfb8-9dbff2d4370e.npy
+ create mode 100644 media/audio/fingerprints/87d8152b-4e2b-4d7f-bdae-1b109fd6e4cf.npy
+ create mode 100644 media/audio/fingerprints/91790196-b8a8-4c6e-8219-fe225edca9ac.npy
+ create mode 100644 media/audio/fingerprints/9520edfd-ba41-4a08-a69d-54fc73992fdc.npy
+ create mode 100644 media/audio/fingerprints/a4709356-24a3-4551-9d3c-56236cdc5281.npy
+ create mode 100644 media/audio/fingerprints/b89e2960-464c-4b18-a638-63bd5c549c0f.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-backup.log
-backup_date.txt
-backup_init_date.txt
-celerybeat-schedule
-email_list.txt
-requirements.txt
-config/
-config/Xwrapper.config
-config/apis-example.json
-config/apis.json
-config/ascripts
-config/banner
-config/config-example.json
-config/config.json
-config/crontab
-config/etc_default_celery
-config/etc_default_opendkim
-config/etc_dovecot_conf.d_10-auth.conf
-config/etc_dovecot_conf.d_10-mail.conf
-config/etc_dovecot_conf.d_10-master.conf
-config/etc_dovecot_dovecot.conf
-config/etc_dovecot_passwd
-config/etc_init.d_celery
-config/etc_init.d_celerybeat
-config/etc_opendkim.conf
-config/etc_pam.d_login
-config/etc_pam.d_sshd
-config/etc_postfix_main.cf
-config/etc_postfix_master.cf
-config/etc_systemd_system_celery.service
-config/etc_systemd_system_celerybeat.service
-config/etc_systemd_system_daphne.service
-config/etc_systemd_system_stun.service
-config/lotteh-le-ssl.conf
-config/postgresql.conf
-config/sudoers
-data/
-data/address.json.aa
-data/audio.json.aa
-data/auth.json.aa
-data/barcode.json.aa
-data/birthcontrol.json.aa
-data/chat.json.aa
-data/contact.json.aa
-data/cookielaw.json.aa
-data/crypto.json.aa
-data/events.json.aa
-data/face.json.aa
-data/feed.bid.json.aa
-data/feed.post.json.aa
-data/games.json.aa
-data/links.json.aa
-data/live.json.aa
-data/live.userplaylist.json.aa
-data/live.videocamera.json.aa
-data/live.videorecording.json.aa
-data/meetings.json.aa
-data/payments.json.aa
-data/security.biometric.json.aa
-data/security.credential.json.aa
-data/security.mrzscan.json.aa
-data/security.nfcscan.json.aa
-data/security.otptoken.json.aa
-data/security.pincode.json.aa
-data/security.securityprofile.json.aa
-data/security.session.json.aa
-data/security.useripaddress.json.aa
-data/security.userlogin.json.aa
-data/security.usersession.json.aa
-data/security.vivokeyscan.json.aa
-data/sessions.json.aa
-data/stream.json.aa
-data/survey.json.aa
-data/translate.json.aa
-data/translate.json.ab
-data/translate.json.ac
-data/translate.json.ad
-data/translate.json.ae
-data/translate.json.af
-data/translate.json.ag
-data/translate.json.ah
-data/translate.json.ai
-data/translate.json.aj
-data/translate.json.ak
-data/translate.json.al
-data/translate.json.am
-data/translate.json.an
-data/translate.json.ao
-data/translate.json.ap
-data/translate.json.aq
-data/translate.json.ar
-data/translate.json.as
-data/translate.json.at
-data/translate.json.au
-data/translate.json.av
-data/translate.json.aw
-data/translate.json.ax
-data/translate.json.ay
-data/translate.json.az
-data/translate.json.ba
-data/translate.json.bb
-data/translate.json.bc
-data/translate.json.bd
-data/translate.json.be
-data/translate.json.bf
-data/translate.json.bg
-data/tts.json.aa
-data/users.emailaddress.json.aa
-data/users.profile.json.aa
-data/vendors.json.aa
-data/verify.json.aa
-data/voice.json.aa
-data/webauth.json.aa
-data/webpush.json.aa
-keys/
-log/commands.log
-log/commands.log.1
-mailbox/nobody
-mailbox/root
-mailbox/team
-media/audio/fingerprints/
-media/audio/fingerprints/21eff340-2160-4e02-b4ab-deb23d030685.npy
-media/audio/fingerprints/273cb7c6-5466-4b09-a17a-8efc2f2028a9.npy
-media/audio/fingerprints/27fee7e0-b4ae-4866-967b-b442bc69f810.npy
-media/audio/fingerprints/34eab614-07e0-4ef1-a2f6-6bb262732705.npy
-media/audio/fingerprints/44d6e689-a8bf-4069-a053-92de55f1d00e.npy
-media/audio/fingerprints/4d97bbe1-04cd-48b3-a56c-eb1f6378bb87.npy
-media/audio/fingerprints/54d6c70f-6ab9-4305-b8cd-b935366064e5.npy
-media/audio/fingerprints/740f8482-8e93-47c4-ad62-eb41dce0af39.npy
-media/audio/fingerprints/fffac7a3-a01a-4207-bf1e-42ea00254642.npy
-media/profiles/1808b3c3-b8a1-4ca6-8d5b-a799edf0aad8-2.jpg
-scripts/
-scripts/activate
-scripts/ascript
-scripts/ascripts
-scripts/asyncbackup
-scripts/auditproject
-scripts/backup
-scripts/catkeys
-scripts/check
-scripts/client.py
-scripts/cmds
-scripts/commitlog
-scripts/compinfo
-scripts/daphnereload
-scripts/dbinfo
-scripts/disgpu
-scripts/doreload
-scripts/enagpu
-scripts/finishsetup
-scripts/fixfile
-scripts/imagecounts
-scripts/init
-scripts/initialize
-scripts/initialize_site
-scripts/inspecttask
-scripts/json.py
-scripts/jump
-scripts/lockout
-scripts/logs
-scripts/logssh
-scripts/mailtest
-scripts/makemigrate
-scripts/nude.py
-scripts/opendkimkey
-scripts/patchvenv
-scripts/psaux
-scripts/purgecache
-scripts/purgegit
-scripts/pushweb
-scripts/reinstallredis
-scripts/reload
-scripts/resetredis
-scripts/resetvenv
-scripts/rotatekeys
-scripts/safepoweroff
-scripts/safereboot
-scripts/setup
-scripts/setupisfinished
-scripts/startservices
-scripts/statuses
-scripts/stopservices
-scripts/updateupgrade
-scripts/watchcmd
-scripts/watchlogs
-temp/
-temp/data/
-
-sent 3,466,892,252 bytes  received 8,947 bytes  106,673,883.05 bytes/sec
-total size is 7,528,910,059  speedup is 2.17
-Reinitialized existing Git repository in /home/team/lotteh-backup-open/.git/
-[main ff4a930] open source
- 4 files changed, 459 insertions(+), 644 deletions(-)
-branch 'main' set up to track 'originhub/main'.
-Backup to Write-Once-Read-Many Mirror
-Downloading zip as none was found...
-Finished backup to S3
