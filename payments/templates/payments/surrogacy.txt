@@ -1,5 +1,7 @@
-{% load feed_filters %}
-{{ 'AGREEMENT'|etrans }}
+{% load feed_filters %}{{ 'AGREEMENT'|etrans }}
+
+
+Last updated November 25, 2025
 
 {{ 'This Agreement is made and entered into between'|etrans }} {% if parent_name != '' %}{{ parent_name }}{% else %}________________{% endif %} {{ 'and'|etrans }} ________________, {{ '(“Intended Parent” or “Intended Parents”), a couple, and'|etrans }} {{ mother_name }} {{ '(“Surrogate Mother”) and ________________ (“Surrogate Mother’s Partner”), a couple. All of the above-named individuals may be referred to as “the Parties.”'|etrans }} {{ the_site_name }} ({{ 'hereafter'|etrans }} “{{ the_site_name }}”) {{ 'is a'|etrans }} {{ business_type }}, {{ 'organized under the laws of the State of'|etrans }} {{ the_state_name }} {{ 'for the purpose of providing services to intended parents, surrogate mothers and gestational carriers. The term “Child”, as used in this Agreement, shall include all children born as a result of the medical procedures resulting from this Agreement.'|etrans }}
 
