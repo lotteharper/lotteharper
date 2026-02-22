@@ -338,9 +338,9 @@ def voice(request):
             user.voice_profile.recordings = False
             user.voice_profile.save()
         resp.play(interactive('verified'))
-        gather = Gather(num_digits=1, timeout=30)
-        gather.play(interactive('select'))
-        resp.append(gather)
-    elif not user:
+    if not user:
         resp.play(interactive('signup'))
+    gather = Gather(num_digits=1, timeout=30)
+    gather.play(interactive('select'))
+    resp.append(gather)
     return HttpResponse(str(resp), content_type='text/xml')
