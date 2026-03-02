@@ -1,5 +1,5 @@
 1
-00
+12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
 https://gitlab.com/charlotte-harper/lotteh2025-11-15.git
@@ -12,13 +12,3 @@ ccxt
 numpy
 urllib3
 webauthn
-Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 99546d6] open source
- 34 files changed, 473 insertions(+), 815 deletions(-)
- delete mode 100644 data/stream.json
- create mode 100644 media/audio/fingerprints/a5aea6e5-9371-4f24-a069-a28a1e9cc3eb.npy
- create mode 100644 media/audio/fingerprints/d5d64c4e-696a-4186-ac6c-432ea7bdaccb.npy
- create mode 100644 media/audio/fingerprints/e4ba52c4-7a44-4596-b840-3730acd7ff11.npy
-sending incremental file list
-./
-.gitignore
