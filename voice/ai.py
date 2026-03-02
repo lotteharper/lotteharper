@@ -6,7 +6,8 @@ def post_ai_response(user, text):
 
 def get_ai_response(text, lang):
     from translate.translate import translate_html
-    lego = translate_html(None, text, src=lang)
+    from django.conf import settings
+    lego = translate_html(None, text, src=lang, target=settings.DEFAULT_LANG)
     from openai import OpenAI
     from django.conf import settings
     client = OpenAI(api_key=settings.OPENAI_KEY)

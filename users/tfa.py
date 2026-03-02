@@ -66,18 +66,18 @@ async def send_text(target_phone, text):
             for x in range(len(split_text)):
                 count = str(x+1)
                 response_fragment = split_text[x]
-                if len(response) < 294:
+                if len(response_fragment) < 294:
                     msg = ' ({})'.format(count + '/' + total_length)
                     message = client.messages.create(
                         to=target_phone,
                         from_=source_phone,
-                        body=response_fragment + msg + ('...' if len(response) > 293 else '') + ' Text STOP to cancel.')
+                        body=response_fragment + msg + ('...' if len(response_fragment) > 293 else '') + ' Text STOP to cancel.')
                 else:
                     msg = ' ({})'.format(count + '/' + total_length)
                     message = client.messages.create(
                         to=target_phone,
                         from_=source_phone,
-                        body=response_fragment + msg + ('...' if len(response) > 310 else ''))
+                        body=response_fragment + msg + ('...' if len(response_fragment) > 310 else ''))
                 await asyncio.sleep(10)
     except:
         import traceback
