@@ -1,3 +1,5 @@
+
+
 def delete_old_sessions(minutes=20160, user=None, session_key=None):
     from .models import UserSession
     from datetime import timedelta
@@ -103,7 +105,7 @@ def update_session(user_id, skey):
         from security.middleware import get_qs, redirect_path
         from django.http import HttpResponseRedirect
         from django.urls import reverse
-        from security.tests import face_mrz_or_nfc_verified_session_key, pin_verified_skey, biometric_verified_skey, otp_verified_skey, vivokey_verified_skey
+        from security.tests import face_mrz_or_nfc_verified_session_key, pin_verified_skey, biometric_verified_skey, otp_verified_skey, vivokey_verified_skey, is_deauth_skey
         red = False
         if (user.is_superuser or user.profile.vendor) and (not vivokey_verified_skey(user, skey)):
             red = True
