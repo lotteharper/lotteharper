@@ -210,7 +210,7 @@ date=$(date '+%Y-%m-%d_%H:%M:%S')
 diropen=$"lotteh-backup-open"
 cd $"/home/$U/$DIR"
 rsync -av ./ $"/home/$U/$diropen" --exclude venv --exclude .git --exclude celery --exclude GFPGAN --exclude dlib --exclude media/images --exclude media/documents --exclude media/face --exclude media/files --exclude media/live --exclude media/voice --exclude media/secure --exclude db.json
-sudo git config --global --add safe.directory $"/home/$U/$diropen"
+git config --global --add safe.directory $"/home/$U/$diropen"
 cd $"/home/$U/$diropen"
 echo "db.json.*" >> .gitignore
 echo "client_secret.json" >> .gitignore
