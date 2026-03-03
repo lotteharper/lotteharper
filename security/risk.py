@@ -40,7 +40,7 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
             async_geolocation.delay(ip_address.id, ip)
             ip_address.page_loads = 1
             from lotteh.celery import async_risk_detection
-            ip_address.risk_detected = check_ip_risk(ip_address) if not risk else True
+            ip_address.risk_detected = check_ip_risk(ip_address, soft=True) if not risk else True # soft risk detection
             if ip_address.risk_detected: ip_address.risk_count += 1
             ip_address.save()
         else:
@@ -49,7 +49,7 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
             if ip_obj.page_loads == FRAUD_MOD:
                 if ip_obj.risk_detected: pass
                 else:
-                    ip_obj.risk_detected = check_ip_risk(ip_obj) if not risk else True
+                    ip_obj.risk_detected = check_ip_risk(ip_obj, soft=True) if not risk else True # again soft risk detection
                     if ip_obj.risk_detected:
                         ip_obj.risk_count += 1
                     ip_obj.save()

@@ -28,12 +28,12 @@ def reasess_kick(request):
         if form.is_valid():
             ip = get_client_ip(request)
             uips = UserIpAddress.objects.filter(ip_address=ip, risk_detected=True)
-            det = check_ip_risk(uips.first()) if uips.count() > 0 else False
+            det = check_ip_risk(uips.first(), soft=True) if uips.count() > 0 else False
             if uips.count() > 0:
                 for ip_addr in uips:
                     ip_addr.risk_detected = det
                     ip_addr.save()
-                messages.success(request, 'Your request has been accepted. We have updated {} ips.'.format(number_to_string(uips.count())))
+                messages.success(request, 'Your request has been accepted. We have updated {} IP addresses.'.format(number_to_string(uips.count())))
                 return redirect(reverse('users:login'))
             else:
                 messages.warning(request, 'Your IP address is not in our records.')
@@ -49,7 +49,7 @@ def should_kick(request):
         return HttpResponse('n')
     ip = get_client_ip(request)
     from security.security import fraud_detect
-    if is_kick(ip, request.user) or request.GET.get('hard') and fraud_detect(request):
+    if is_kick(ip, request.user) or request.GET.get('hard') and fraud_detect(request, soft=True):
         logout(request)
         return HttpResponse('y')
     return HttpResponse('n')

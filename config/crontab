@@ -8,7 +8,7 @@
 #*/30 * * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/process_recordings.py
 #0 */12 * * * /home/team/lotteh/venv/bin/python /home/team/lotteh/routine_safe_reload.py
 51 */12 * * * sudo daphnereload
-0 */12 * * * sh -c "sudo backup > /home/team/lotteh/backup.log" team
+0 12 * * * sh -c "sudo backup > /home/team/lotteh/backup.log" team
 #*/10 * * * * sudo systemctl start apache2
 #0 0 * * * sudo systemctl start celery
 0 * * * * sudo systemctl start clamav-daemon

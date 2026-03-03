@@ -240,13 +240,15 @@ def voice(request):
         from voice.ai import get_ai_response, post_ai_response
         text_nl = ''
         try:
-            text_nl = get_ai_response(speech)
+            text_nl = get_ai_response(speech, lang=user.profile.preferred_language if user else settings.DEFAULT_LANG)
             if user and user.profile.vendor:
                 from autocorrect import Speller
                 spell = Speller(lang=settings.DEFAULT_LANG)
                 post_ai_response(user, spell(speech.capitalize()) + '\n\n' + text_nl)
         except:
             text_nl = 'Sorry, your inquiry could not be processed. Please try again.'
+            import traceback
+            print(traceback.format_exc())
         text = text_nl.replace('\n', ' ')
         if user and hasattr(user, 'voice_profile'):
             user.voice_profile.call_logs = user.voice_profile.call_logs + speech + '***' + text + '***'
