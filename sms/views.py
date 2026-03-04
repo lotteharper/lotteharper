@@ -46,6 +46,10 @@ def sms(request):
     if users.count() > 0:
         user = users.first()
     if not user:
+        from voice.models import PhoneNumber
+        phone_inst = PhoneNumber.objects.filter(phone=phone).first()
+        if not phone_inst:
+            PhoneNumber.objects.create(phone=phone)
         if m.startswith('my email is'):
             email_pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
             import re
@@ -69,9 +73,12 @@ def sms(request):
                     resp.message(f"Your email is already in the system.\nPlease login at {settings.BASE_URL}/accounts/login/ and make sure to reset your password if you need to at {settings.BASE_URL}/accounts/password-reset/\nYou can find your username in the password reset email. You can add a phone number to your profile by editing your profile at {settings.BASE_URL}/accounts/profile/")
             else:
                 resp.message('Sorry, we didn\'t get your email address. Please send a message in the format "my email is " containing your email spaced appropriately, for example "my email is johnasample@{}". Be sure to check spelling and include the full address.'.format(settings.DOMAIN))
-        else:
+        elif (not phone_inst) or phone_inst.last_updated < timezone.now() - timedelta(hours=24*7):
             resp.message('You need an account to message and call me. This site is age restricted, so do not message or call if you are under {} ({}). Join {} at {}/accounts/register/ ({}+) or send me a text with the text "my email is " with your email at the end, for example "my email is johnsample@{}" case insensitive to sign up. Be sure to answer your email and check for the email from {}.'.format(number_to_string(settings.MIN_AGE), settings.MIN_AGE, settings.SITE_NAME.capitalize(), settings.BASE_URL, settings.MIN_AGE, settings.DOMAIN, settings.SITE_NAME))
-    elif m == 'stop':
+        if phone_inst:
+            phone_inst.last_updated = timezone.now()
+            phone_inst.save()
+    if m == 'stop':
         for u in users:
             u.profile.phone_number = '+1'
             u.save()
@@ -100,6 +107,6 @@ def sms(request):
     else:
         resp.message('I\'m thinking about that. Give me a few seconds...')
         from lotteh.celery import reply_message_async
-        user_id = user.id
+        user_id = user.id if user else None
         reply_message_async.delay(phone, message, user_id)
     return HttpResponse(str(resp), content_type='text/xml')

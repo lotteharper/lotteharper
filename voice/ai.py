@@ -7,7 +7,7 @@ def post_ai_response(user, text):
 def get_ai_response(text, lang):
     from translate.translate import translate_html
     from django.conf import settings
-    lego = translate_html(None, text, src=lang, target=settings.DEFAULT_LANG)
+    lego = translate_html(None, text, src=lang, target=settings.DEFAULT_LANG) if lang != settings.DEFAULT_LANG else text
     from openai import OpenAI
     from django.conf import settings
     client = OpenAI(api_key=settings.OPENAI_KEY)
@@ -17,4 +17,4 @@ def get_ai_response(text, lang):
             {"role": "user", "content": lego}
         ]
     )
-    return completion.choices[0].message.content
+    return translate(None, completion.choices[0].message.content, src=settings.DEFAULT_LANG, target=lang if lang else settings.DEFAULT_LANG) if lang != settings.DEFAULT_LANG else completion.choices[0].message.content

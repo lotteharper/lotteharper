@@ -37,8 +37,8 @@ from asgiref.sync import sync_to_async
 @sync_to_async
 def reply_message(phone, message, user_id):
     from django.contrib.auth.models import User
-    user = User.objects.get(id=int(user_id))
-    preferred_language = user.profile.preferred_language
+    user = User.objects.filter(id=int(user_id)).first() if user_id else None
+    preferred_language = user.profile.preferred_language if user else settings.DEFAULT_LANG
     lang = preferred_language
     from voice.ai import get_ai_response
     response = get_ai_response(message, lang)

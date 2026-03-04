@@ -9,6 +9,11 @@ def get_file_path(instance, filename):
     filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join('voice/', filename)
 
+class PhoneNumber(models.Model):
+    id = models.AutoField(primary_key=True)
+    phone = models.CharField(default='', null=True, blank=True, max_length=30)
+    last_updated = models.DateTimeField(default=timezone.now)
+
 class Call(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='calls')
     sid = models.TextField(default='', null=True, blank=True)
