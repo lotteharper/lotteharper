@@ -61,7 +61,6 @@ def option_add(request):
     from django.utils import timezone
     from django.contrib.auth.decorators import user_passes_test
     from vendors.tests import is_vendor
-    from feed.tests import identity_verified
     from django.contrib.sessions.models import Session
     from live.models import VideoRecording
     from django.core.paginator import Paginator
@@ -99,8 +98,6 @@ def recordings(request):
     from django.urls import reverse
     from django.utils import timezone
     from django.contrib.auth.decorators import user_passes_test
-    from vendors.tests import is_vendor
-    from feed.tests import identity_verified
     from vendors.tests import is_vendor
     from django.contrib.sessions.models import Session
     from live.models import VideoRecording
