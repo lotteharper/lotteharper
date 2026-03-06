@@ -231,8 +231,8 @@ OLD_DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
         'POOL_OPTIONS': {
-            'POOL_SIZE': 400,
-            'MAX_OVERFLOW': 1000,
+            'POOL_SIZE': 2000,
+            'MAX_OVERFLOW': 5000,
             'RECYCLE': -1,
         },
     },
@@ -244,8 +244,8 @@ OLD_DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
         'POOL_OPTIONS': {
-            'POOL_SIZE': 400,
-            'MAX_OVERFLOW': 1000,
+            'POOL_SIZE': 2000,
+            'MAX_OVERFLOW': 5000,
             'RECYCLE': -1,
         },
     },
@@ -287,12 +287,12 @@ OLD_CACHES = {
         "DATABASE": "translation_cache_db",  # Name of the alternate database
         "TIMEOUT": 60 * 60 * 24 * 7 * 4 * 12, # 1 week expiry
     },
-    "old": {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache/'),
+#    "old": {
+#        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#        'LOCATION': os.path.join(BASE_DIR, 'cache/'),
 #        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
 #        "LOCATION": "dj_cache_table",  # Choose a unique table name
-    },
+#    },
 }
 
 CORS_ALLOW_ALL_ORIGINS = False

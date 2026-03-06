@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-<p>{{ notes }}</p>
+<p><a class="btn btn-outline-success" onclick="window.location.reload();"></a><i class="bi bi-arrow-repeat"></i>{{ notes }}</p>
 {% if trace %}
 <p style="white-space: pre-wrap;">{{ trace }}</p>
 {% endif %}

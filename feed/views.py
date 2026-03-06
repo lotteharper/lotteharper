@@ -987,7 +987,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         from security.security import fraud_detect
-        if identity_verified(self.request.user) and is_vendor(self.request.user) and self.request.user == post.author or (self.request.user.is_superuser and not post.author.is_superuser) and not fraud_detect(request, True):
+        if minor_identity_verified(self.request.user) and is_vendor(self.request.user) and self.request.user == post.author or (self.request.user.is_superuser and not post.author.is_superuser) and not fraud_detect(request, True):
             return True
         return False
 

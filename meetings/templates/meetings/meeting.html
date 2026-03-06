@@ -233,7 +233,7 @@ function isVideoShowing(videoElem) {
     const avg = total / (data.length / 4);
 
     // If average brightness is above a threshold, it's not black
-    return avg > 10; // 10 is a reasonable threshold, tweak as needed
+    return avg > 40; // 10 is a reasonable threshold, tweak as needed
 }
 function updateVideoOffIcon(peer_id, enabled) {
     const videoElem = document.getElementById(peer_id == 'local' ? 'localVideo' : "video_" + peer_id);
@@ -569,7 +569,7 @@ var lastSpeakerVideo;
 function updateVolumes() {
     var highestVolume = -1000;
     for(const peer_id in peerVolumes) {
-        if(document.getElementById('muted-icon-' + peer_id)) document.getElementById('muted-icon-' + peer_id).style.display = peerVolumes[peer_id] <= 0 ? 'block' : 'none';
+        if(document.getElementById('muted-icon-' + peer_id)) document.getElementById('muted-icon-' + peer_id).style.display = peerVolumes[peer_id] <= 10 ? 'block' : 'none';
         if(peer_id && peerVolumes[peer_id] > highestVolume) {
             highestVolume = peerVolumes[peer_id];
             try {
