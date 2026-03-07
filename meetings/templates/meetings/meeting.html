@@ -399,13 +399,10 @@ getMedia().then(async function(stream) {
 
              } else if(msg.type === "audio") {
                 const from = msg.from;
-                console.log(msg.from);
                 const data = msg.data;
-                let pc = peers[from];
                 if (msg.from) updateAudioOffIcon(msg.from, data.on);
              } else if(msg.type == "video") {
                 const from = msg.from;
-                console.log(msg.from);
                 const data = msg.data;
                 if (msg.from) updateVideoOffIcon(msg.from, data.on);
              } else if (msg.type === "signal") {
@@ -444,7 +441,6 @@ getMedia().then(async function(stream) {
         document.getElementById("videoBtn").textContent = videoEnabled ? "{{ 'Disable Video'|etrans }}" : "{{ 'Enable Video'|etrans }}";
         updateVideoOffIcon('local', videoEnabled);
         for (const [peer_id, rtc] of Object.entries(peers)) {
-            console.log(peer_id);
             send("video", {type: "video", on: videoEnabled}, null);
         }
     };
@@ -454,7 +450,6 @@ getMedia().then(async function(stream) {
         document.getElementById("audioBtn").textContent = audioEnabled ? "{{ 'Disable Mic'|etrans }}" : "{{ 'Enable Mic'|etrans }}";
         if(document.getElementById('muted-icon-local')) document.getElementById('muted-icon-local').style.display = !audioEnabled ? 'block' : 'none';
         for (const [peer_id, rtc] of Object.entries(peers)) {
-            console.log(peer_id);
             send("audio", {type: "audio", on: audioEnabled}, null);
         }
     };
