@@ -237,7 +237,7 @@ def voice(request):
         from voice.ai import get_ai_response, post_ai_response
         text_nl = ''
         try:
-            text_nl = get_ai_response(speech, lang=user.profile.preferred_language if user else settings.DEFAULT_LANG)
+            text_nl = get_ai_response(speech, user.profile.preferred_language if user else settings.DEFAULT_LANG)
             if user and user.profile.vendor:
                 from autocorrect import Speller
                 spell = Speller(lang=settings.DEFAULT_LANG)
@@ -317,7 +317,8 @@ def voice(request):
             gather = Gather(input='speech', timeout=15, action=reverse('voice:voice'))
             gather.say('What else do you need? Talk to me, or ask me a question.', voice='alice')
             resp.append(gather)
-            resp.redirect(reverse('voice:voice'))
+#            resp.redirect(reverse('voice:voice'))
+            return HttpResponse(str(resp), content_type='text/xml')
         else:
             resp.play(interactive('sorry'))
             resp.redirect(reverse('voice:voice'))

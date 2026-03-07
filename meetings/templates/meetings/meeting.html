@@ -203,41 +203,21 @@ var samples = 0;
 var totalVolume = 0;
 
 let videoEnabled = true, audioEnabled = true, autofocusEnabled = true;
-function isVideoShowing(videoElem) {
-    // Only check if video is playing and ready
-    if (
-        !videoElem
-        || videoElem.readyState < 2 // HAVE_CURRENT_DATA
-        || videoElem.paused
-        || videoElem.ended
-        || videoElem.videoWidth === 0
-    ) return false;
-
-    // Create a hidden canvas to draw the current frame
-    const canvas = document.createElement('canvas');
-    canvas.width = videoElem.videoWidth;
-    canvas.height = videoElem.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
-
-    // Get pixel data
-    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = frame.data;
-
-    // Calculate average brightness
-    let total = 0;
-    for (let i = 0; i < data.length; i += 4) {
-        // RGB average (ignore alpha)
-        total += (data[i] + data[i+1] + data[i+2]) / 3;
-    }
-    const avg = total / (data.length / 4);
-
-    // If average brightness is above a threshold, it's not black
-    return avg > 40; // 10 is a reasonable threshold, tweak as needed
-}
 function updateVideoOffIcon(peer_id, enabled) {
     const videoElem = document.getElementById(peer_id == 'local' ? 'localVideo' : "video_" + peer_id);
     const iconElem = document.getElementById("videooff-icon-" + peer_id);
+    if (!videoElem || !iconElem) return;
+    if (!enabled) {
+        iconElem.style.visibility = "visible";
+        iconElem.style.display = "block";
+    } else {
+        iconElem.style.visibility = "hidden";
+        iconElem.style.display = "none";
+    }
+}
+function updateAudioOffIcon(peer_id, enabled) {
+    const videoElem = document.getElementById(peer_id == 'local' ? 'localVideo' : "video_" + peer_id);
+    const iconElem = document.getElementById("muted-icon-" + peer_id);
     if (!videoElem || !iconElem) return;
     if (!enabled) {
         iconElem.style.visibility = "visible";
@@ -342,7 +322,6 @@ getMedia().then(async function(stream) {
                 }
             });
 
-
             return pc;
         }
 
@@ -357,13 +336,6 @@ getMedia().then(async function(stream) {
                 console.warn(`Unexpected state for offer: ${pc.signalingState}`);
             }
         }
-/*        async function handleOffer(from, offer) {
-            let pc = createPeer(from, false);
-            await pc.setRemoteDescription(offer);
-            let answer = await pc.createAnswer();
-            await pc.setLocalDescription(answer);
-            send("signal", {type: "answer", sdp: answer}, from);
-        }*/
 
         async function handleAnswer(from, answer) {
             let pc = peers[from];
@@ -424,7 +396,19 @@ getMedia().then(async function(stream) {
                 delete streams[msg.peer_id];
                 delete peerVolumes[msg.peer_id];
                 delete peerUsernames[msg.peer_id];
-            } else if (msg.type === "signal") {
+
+             } else if(msg.type === "audio") {
+                const from = msg.from;
+                console.log(msg.from);
+                const data = msg.data;
+                let pc = peers[from];
+                if (msg.from) updateAudioOffIcon(msg.from, data.on);
+             } else if(msg.type == "video") {
+                const from = msg.from;
+                console.log(msg.from);
+                const data = msg.data;
+                if (msg.from) updateVideoOffIcon(msg.from, data.on);
+             } else if (msg.type === "signal") {
                 const from = msg.from;
                 const data = msg.data;
                 const username = msg.username;
@@ -447,6 +431,7 @@ getMedia().then(async function(stream) {
                     let pc = peers[from];
                     if (pc && data.candidate) await pc.addIceCandidate(data.candidate);
                 }
+
             }
         };
     }
@@ -458,12 +443,20 @@ getMedia().then(async function(stream) {
         localStream.getVideoTracks().forEach(track => track.enabled = videoEnabled);
         document.getElementById("videoBtn").textContent = videoEnabled ? "{{ 'Disable Video'|etrans }}" : "{{ 'Enable Video'|etrans }}";
         updateVideoOffIcon('local', videoEnabled);
+        for (const [peer_id, rtc] of Object.entries(peers)) {
+            console.log(peer_id);
+            send("video", {type: "video", on: videoEnabled}, null);
+        }
     };
     document.getElementById("audioBtn").onclick = () => {
         audioEnabled = !audioEnabled;
         localStream.getAudioTracks().forEach(track => track.enabled = audioEnabled);
         document.getElementById("audioBtn").textContent = audioEnabled ? "{{ 'Disable Mic'|etrans }}" : "{{ 'Enable Mic'|etrans }}";
         if(document.getElementById('muted-icon-local')) document.getElementById('muted-icon-local').style.display = !audioEnabled ? 'block' : 'none';
+        for (const [peer_id, rtc] of Object.entries(peers)) {
+            console.log(peer_id);
+            send("audio", {type: "audio", on: audioEnabled}, null);
+        }
     };
     document.getElementById("autofocusBtn").onclick = () => {
         autofocusEnabled = !autofocusEnabled;
@@ -569,7 +562,6 @@ var lastSpeakerVideo;
 function updateVolumes() {
     var highestVolume = -1000;
     for(const peer_id in peerVolumes) {
-        if(document.getElementById('muted-icon-' + peer_id)) document.getElementById('muted-icon-' + peer_id).style.display = peerVolumes[peer_id] <= 10 ? 'block' : 'none';
         if(peer_id && peerVolumes[peer_id] > highestVolume) {
             highestVolume = peerVolumes[peer_id];
             try {
@@ -584,7 +576,6 @@ function updateVolumes() {
                 lastSpeakerVideo = speakerVideo;
             } catch(e) { console.log(e); }
         }
-        updateVideoOffIcon(peer_id, isVideoShowing(document.getElementById('video_' + peer_id)));
     }
 }
 if (!updateInterval) { // Start loop only once

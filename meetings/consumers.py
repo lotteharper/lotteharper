@@ -140,6 +140,7 @@ class MeetingConsumer(AsyncWebsocketConsumer):
 
         # Signal relay: send signal to a specific peer
         if action == "signal":
+            print("Signal + " + str(payload))
             await self.channel_layer.send(target, {
                 "type": "signal.message",
                 "from": self.user_id,
@@ -156,7 +157,26 @@ class MeetingConsumer(AsyncWebsocketConsumer):
                     "volume": self.audio_volume
                 }
             )
-#            print(self.volume)
+        if action == "audio":
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "audio",
+                    "from": self.user_id,
+                    "data": payload,
+                    "username": self.username,
+                }
+            )
+        if action == "video":
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "video",
+                    "from": self.user_id,
+                    "data": payload,
+                    "username": self.username,
+                }
+            )
 
     async def peer_joined(self, event):
         # Notify all peers except the one who just joined
@@ -191,5 +211,21 @@ class MeetingConsumer(AsyncWebsocketConsumer):
             "type": "volume",
             "peer_id": event["peer_id"],
             "volume": event["volume"],
+        }))
+
+    async def video(self, event):
+        await self.send(text_data=json.dumps({
+            "type": "video",
+            "from": event["from"],
+            "data": event["data"],
+            "username": event["username"],
+        }))
+
+    async def audio(self, event):
+        await self.send(text_data=json.dumps({
+            "type": "audio",
+            "from": event["from"],
+            "data": event["data"],
+            "username": event["username"],
         }))
 
