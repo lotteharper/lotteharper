@@ -3,7 +3,6 @@ import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
-
 @sync_to_async
 def get_auth(user_id, session_key):
     from django.contrib.auth.models import User
@@ -77,11 +76,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': event['username']
         }))
 
-
 class MeetingConsumer(AsyncWebsocketConsumer):
     audio_volume = -1000
     connected = False
     username = 'Guest'
+    audios = {}
+    videos = {}
     async def connect(self):
         self.meeting_id = self.scope["url_route"]["kwargs"]["meeting_id"]
         self.room_group_name = f"meeting_{self.meeting_id}"
@@ -96,18 +96,6 @@ class MeetingConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-#await self.channel_layer.group_send(
-#    self.room_group_name,
-#    {
-#        "type": "signal_message",
-#        "message": {
-#            "type": "peer-joined",
-#            "peer_id": peer_id,
-#            "username": self.scope["user"].username if self.scope["user"].is_authenticated else "Guest",
-#                "peer_name": self.name
-#        },
-#    }
-#)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -116,6 +104,21 @@ class MeetingConsumer(AsyncWebsocketConsumer):
                 "peer_name": self.username,
             }
         )
+
+        await asyncio.sleep(5)
+
+        for a in self.audios.values():
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                a
+            )
+
+        for v in self.videos.values():
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                v
+            )
+
         self.connected = True
 
     async def disconnect(self, close_code):
@@ -140,7 +143,7 @@ class MeetingConsumer(AsyncWebsocketConsumer):
 
         # Signal relay: send signal to a specific peer
         if action == "signal":
-            print("Signal + " + str(payload))
+#            print("Signal + " + str(payload))
             await self.channel_layer.send(target, {
                 "type": "signal.message",
                 "from": self.user_id,
@@ -158,6 +161,12 @@ class MeetingConsumer(AsyncWebsocketConsumer):
                 }
             )
         if action == "audio":
+            self.audios[self.user_id] = {
+                "type": "audio",
+                "from": self.user_id,
+                "data": payload,
+                "username": self.username,
+            }
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -168,6 +177,12 @@ class MeetingConsumer(AsyncWebsocketConsumer):
                 }
             )
         if action == "video":
+            self.videos[self.user_id] = {
+                "type": "video",
+                "from": self.user_id,
+                "data": payload,
+                "username": self.username,
+            }
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {

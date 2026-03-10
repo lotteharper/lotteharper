@@ -878,8 +878,8 @@ def idscan(request):
     else: patch_cache_control(r, public=True)
     return r
 
-@cache_page(60*60*24*365)
-@vary_on_cookie
+#@vary_on_cookie
+#@cache_page(60*60*24*365)
 def surrogacy(request, username):
     from django.conf import settings
     from django.shortcuts import render
@@ -900,12 +900,13 @@ def surrogacy(request, username):
     if vendor.verifications.filter(verified=True).last(): signature = render_to_string('raw_signature.html', {'theuser': vendor})
     if request.user.is_authenticated and request.user.verifications.last(): parent_signature = render_to_string('raw_signature.html', {'theuser': request.user})
     from translate.translate import translate
-    inp_t = translate(request, 'Intended Parent', src='en')
-    sgm_t = translate(request, 'Surrogate Mother', src='en')
+    inp_t = '' #translate(request, 'Intended Parent', src='en')
+    sgm_t = '' #translate(request, 'Surrogate Mother', src='en')
     agreement = render_agreement(request, vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user if request.user.is_authenticated else None, vendor).replace('__________________________________, Surrogate Mother', '{}, {}'.format(signature if signature else '__________________________________', sgm_t), 1).replace('__________________________________, Intended Parent', '{}, {}'.format(parent_signature if parent_signature else '__________________________________', inp_t), 1)
     post_ids = Post.objects.filter(public=True, private=False, published=True, feed='private').exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
     post = Post.objects.filter(id__in=post_ids).order_by('?').first()
     r = render(request, 'payments/surrogacy.html', {'title': 'Surrogacy Plans', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'post': post, 'vendor': vendor, 'agreement': agreement, 'surrogacy_fee': settings.SURROGACY_FEE, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'preload': False, 'down_payment': settings.SURROGACY_DOWN_PAYMENT, 'weekly_payment': (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36})
+    return r
     if request.user.is_authenticated: patch_cache_control(r, private=True)
     else: patch_cache_control(r, public=True)
     return r

@@ -230,32 +230,38 @@ def voice(request):
     resp = VoiceResponse()
     client = Client(account_sid, auth_token)
     if request.POST.get('SpeechResult') or request.POST.get('UnstableSpeechResult'):
-        speech = request.POST.get('SpeechResult', '') if request.POST.get('SpeechResult', False) else request.POST.get('UnstableSpeechResult', '')
-        from contact.models import Contact
-        Contact.objects.create(phone=phone, message=speech, user=user)
-        l = speech.lower()
-        from voice.ai import get_ai_response, post_ai_response
-        text_nl = ''
         try:
+            speech = request.POST.get('SpeechResult', '') if request.POST.get('SpeechResult', False) else request.POST.get('UnstableSpeechResult', '')
+            from contact.models import Contact
+            Contact.objects.create(phone=phone, message=speech, user=user)
+            l = speech.lower()
+            from voice.ai import get_ai_response, post_ai_response
+            text_nl = ''
             text_nl = get_ai_response(speech, user.profile.preferred_language if user else settings.DEFAULT_LANG)
             if user and user.profile.vendor:
                 from autocorrect import Speller
                 spell = Speller(lang=settings.DEFAULT_LANG)
                 post_ai_response(user, spell(speech.capitalize()) + '\n\n' + text_nl)
+            print(text_nl)
+            text = text_nl.replace('\n', ' ')
+            if user and hasattr(user, 'voice_profile'):
+                user.voice_profile.call_logs = user.voice_profile.call_logs + speech + '***' + text + '***'
+                user.voice_profile.save()
+            resp.say(text, voice='alice')
+            gather = Gather(input='speech', timeout=15, action=reverse('voice:voice'))
+            gather.say('what else can I help you with?', voice='alice')
+            resp.append(gather)
+            resp.redirect(reverse('voice:voice'))
+            return HttpResponse(str(resp), content_type='text/xml')
         except:
-            text_nl = 'Sorry, your inquiry could not be processed. Please try again.'
             import traceback
             print(traceback.format_exc())
-        text = text_nl.replace('\n', ' ')
-        if user and hasattr(user, 'voice_profile'):
-            user.voice_profile.call_logs = user.voice_profile.call_logs + speech + '***' + text + '***'
-            user.voice_profile.save()
-        resp.say(text, voice='alice')
-        gather = Gather(input='speech', timeout=15, action=reverse('voice:voice'))
-        gather.say('what else can I help you with?', voice='alice')
-        resp.append(gather)
-        resp.redirect(reverse('voice:voice'))
-        return HttpResponse(str(resp), content_type='text/xml')
+            text_nl = 'Sorry, your inquiry could not be processed. Please try again.'
+            gather = Gather(input='speech', timeout=15, action=reverse('voice:voice'))
+            gather.say('what else can I help you with?', voice='alice')
+            resp.append(gather)
+            resp.redirect(reverse('voice:voice'))
+            return HttpResponse(str(resp), content_type='text/xml')
     if request.POST.get('Digits'):
         choice = request.POST.get('Digits')
         if user and hasattr(user, 'voice_profile'):

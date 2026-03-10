@@ -43,7 +43,7 @@ def logout_user(user_id, session_key):
 async def security_event(self):
     session_auth = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
     message = 'y' if session_auth else 'n'
-    print(message)
+#    print(message)
     return message
 #    await self.send(text_data=message)
 
@@ -52,10 +52,10 @@ async def security_thread(self):
         try:
             message = await security_event(self)
             await self.send(text_data=message)
-            await asyncio.sleep(15)
+            await asyncio.sleep(30)
         except:
             import traceback
-            print(traceback.format_exc())
+#            print(traceback.format_exc())
 
 @sync_to_async
 def patch_session(user_id, skey):
