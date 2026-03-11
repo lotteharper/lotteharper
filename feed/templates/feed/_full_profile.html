@@ -46,7 +46,6 @@
 <a class="btn btn-outline-info" href="{% url 'recordings:recordings' profile.name %}" title="{{ 'See recordings recorded by' }} @{{ profile.name }}">{{ 'Watch Videos' }}</a>
 <a class="btn btn-outline-success" href="{% url 'stream:watch' profile.name %}" title="{{ 'Watch the livestream recorded by' }} @{{ profile.name }}">{{ 'Watch Livestream' }}</a>
 {% endblocktrans %}
-{% include 'language.html' %}
 </div>
 {% blocktrans en %}
 {% if user.is_authenticated %}

@@ -160,9 +160,9 @@ def translang(content, target):
 
 @register.filter('etranslang')
 def etranslang(content, target):
-    from translate.translate import translate_html
+    from translate.translate import translate, translate_html
     from feed.middleware import get_current_request
-    return translate_html(get_current_request(), content, target=target, src='en')
+    return translate(get_current_request(), content, target=target, src='en')
 
 @register.filter('transpost')
 def transpost(target):

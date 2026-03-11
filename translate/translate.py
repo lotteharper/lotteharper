@@ -34,6 +34,9 @@ def translate(request, content, target=None, src=None):
     cache_key = f"translation:{src}:{target}:{hash(content)}"
     db_key = f"{src}:{target}:{hash(content)}"
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
+    translation = cache.get(cache_key)
+    if translation is not None:
+        return translation
     lang = src
     if not src:
         lang = settings.DEFAULT_LANG
@@ -136,6 +139,9 @@ def translate_html(request, html, target=None, src=None):
 #    cache = caches['translation_cache']
     cache_key = f"translation:{src}:{target}:{hash(html)}"
     db_key = f"{src}:{target}:{hash(html)}"
+    translation = cache.get(cache_key)
+    if translation is not None:
+        return translation
     """Translates HTML content to the target language."""
     count = 0
     if target == None and request and not (request.GET.get('lang', None) or (hasattr(request, 'user') and hasattr(request.user, 'profile') and request.user.is_authenticated and request.user.profile.preferred_language)): target = request.LANGUAGE_CODE

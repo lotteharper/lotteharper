@@ -216,7 +216,7 @@ DATABASES = {
         'PORT': '',
         'POOL_OPTIONS': {
             'POOL_SIZE': 500,
-            'MAX_OVERFLOW': 5000,
+            'MAX_OVERFLOW': 3000,
             'RECYCLE': -1,
         },
     },
@@ -787,8 +787,8 @@ USE_ALLAUTH = True
 UBI = '604-691-289'
 COMPANY_NAME = 'Charlotte Grace Harper'
 AUTHOR_NAME = 'Charlotte Grace Harper'
-CITY_STATE = 'Seattle, Washington'
-ADDRESS = '1438 NW 60th St Apt 102, Seattle, WA 98107-2997, USA'
+CITY_STATE = 'Burien, Washington'
+ADDRESS = '15035 8th Avenue South Apt 100, Burien, WA 98148-1112, USA'
 AGENT_NAME = 'Dr. Charlotte Harper, PhD'
 AGENT_PHONE = '+1 (425) 535-8727'
 BUSINESS_TYPE = 'sole proprietorship'

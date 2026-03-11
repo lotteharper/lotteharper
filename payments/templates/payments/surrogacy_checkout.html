@@ -12,7 +12,6 @@
 {% load feed_filters %}
 <h1>{{ 'Buy a Surrogacy Plan'|etrans }}</h1>
 <p>{{ 'Conceive a child carried by'|etrans }} {{ vendor.profile.name }}, {{ 'according to the agreement below.'|etrans }}</p>
-{% include 'language.html' %}
 <div style="display: flex; justify-content: space-around;">
 <img class="rounded" style="float: left; width: 50%; max-width: 400px;" src="{% if request.user.is_authenticated %}{{ post.get_image_url }}{% else %}{{ post.get_face_blur_thumb_url }}{% endif %}" alt="{{ 'Conceive a child carried by'|etrans }} {{ vendor.profile.name }}"></img>
 </div>
