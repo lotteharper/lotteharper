@@ -528,6 +528,8 @@ async function mergeStreamsFn() {
         setTimeout(detectVideo, 500);
     }
     {% endif %}
+  }
+}
 {% if camera.broadcast_youtube %}
 const liveMediaRecorder = new MediaRecorder(fullOverlayStream, { mimeType: 'video/webm; codecs=vp8,opus' });
 let liveMediaChunks = [];
@@ -627,8 +629,6 @@ function handleViewer(id) {
     });
 }
 {% endif %}
-  }
-}
 var recordingStartTime;
 async function startRecordingFn() {
   if(!live) {
@@ -644,6 +644,7 @@ async function startRecordingFn() {
     document.getElementById("pipOverlayStream").style.border = "4px solid red";
     captureInterval = setInterval(capture, {{ video_interval }});
     CAMERA_ID = generateRandomString(8);
+    if(signalingSocket.readyState != WebSocket.OPEN) { openSignalingSocket(); }
   }
 }
 async function attachToDOM(id, stream) {

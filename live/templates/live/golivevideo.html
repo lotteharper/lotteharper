@@ -341,22 +341,6 @@ const requestVideoFrame = function(callback) {
 const cancelVideoFrame = function(id) {
   clearTimeout(id);
 };
-async function startWebcamFn() {
-  if(!localCamStream) {
-      CAMERA_ID = generateRandomString(8);
-      localCamStream = await navigator.mediaDevices.getUserMedia({
-        video: { {% if request.GET.back %}facingMode: "environment", {% endif %} height: { ideal: {{ camera.width|parsevideoheight }} }, width: { ideal: {{ camera.width|parsevideowidth }} },  frameRate: { ideal: {{ fps }} } },
-        audio: {% if camera.muted %}false{% elif camera.microphone == 'communications' %}deviceId: { ideal: "communications" }{% elif camera.microphone == 'default' %}true{% elif camera.microphone == 'echo cancellation' %}{ echoCancellation: true, }{% endif %},
-      }).catch((error) => {
-        console.log(error);
-        $('#errormessage').removeClass('hide');
-      });
-      if (localCamStream && !document.getElementById("justWebcam")) {
-        cam = await attachToDOM("justWebcam", localCamStream);
-      }
-      setTimeout(mergeStreamsFn, 500);
-  }
-}
 const baseAlpha = {{ logo_alpha }};
 var logo = new Image();
 {% if camera.user.vendor_profile.logo %}logo.src = "{{ camera.user.vendor_profile.logo.url }}";{% endif %}
@@ -498,27 +482,31 @@ async function mergeStreamsFn() {
         setTimeout(detectVideo, 500);
     }
     {% endif %}
-{% if camera.broadcast_youtube %}
-const liveMediaRecorder = new MediaRecorder(fullOverlayStream, { mimeType: 'video/webm; codecs=vp8,opus' });
-let liveMediaChunks = [];
-var liveSignalingSocket;
-var liveSignalingSocketReconnectTimeout;
-var liveCaptureInterval;
-function liveCapture() {
-    if(liveMediaRecorder.state == 'recording') liveMediaRecorder.stop();
-    liveMediaRecorder.start();
+    {% if camera.broadcast_youtube %}
+    const liveMediaRecorder = new MediaRecorder(fullOverlayStream, { mimeType: 'video/webm; codecs=vp8,opus' });
+    let liveMediaChunks = [];
+    var liveSignalingSocket;
+    var liveSignalingSocketReconnectTimeout;
+    var liveCaptureInterval;
+    function liveCapture() {
+        if(liveMediaRecorder.state == 'recording') liveMediaRecorder.stop();
+        liveMediaRecorder.start();
+    }
+    liveMediaRecorder.ondataavailable = async (event) => liveMediaChunks.push(event.data);
+    liveMediaRecorder.onstop = async (event) => {
+        const blob = new Blob(liveMediaChunks, { type: 'video/webm' });
+        const reader = new FileReader();
+        reader.onload = function() {
+            liveSignalingSocket.send(reader.result);
+        };
+        reader.readAsArrayBuffer(blob);
+        liveMediaChunks = [];
+        console.log('Sending data to live');
+    };
+    {% endif %}
+  }
 }
-liveMediaRecorder.ondataavailable = async (event) => liveMediaChunks.push(event.data);
-liveMediaRecorder.onstop = async (event) => {
-  const blob = new Blob(liveMediaChunks, { type: 'video/webm' });
-  const reader = new FileReader();
-  reader.onload = function() {
-    liveSignalingSocket.send(reader.result);
-  };
-  reader.readAsArrayBuffer(blob);
-  liveMediaChunks = [];
-  console.log('Sending data to live');
-};
+{% if camera.broadcast %}
 function openLiveSignalingSocket() {
     liveSignalingSocket = new WebSocket("wss://" + window.location.host + "/ws/live/signaling/{{ request.user.profile.name }}/{{ camera.name }}/");
     liveSignalingSocket.binaryType = "arraybuffer";
@@ -544,8 +532,6 @@ function openLiveSignalingSocket() {
     };
 }
 openLiveSignalingSocket();
-{% endif %}
-{% if camera.broadcast %}
 var signalingSocketReconnectTimeout;
 function openSignalingSocket() {
     signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ request.user.profile.name }}/{{ camera.name }}/?broadcast=true");
@@ -599,9 +585,24 @@ function handleViewer(id) {
     });
 }
 {% endif %}
+var recordingStartTime;
+async function startWebcamFn() {
+  if(!localCamStream) {
+      CAMERA_ID = generateRandomString(8);
+      localCamStream = await navigator.mediaDevices.getUserMedia({
+        video: { {% if request.GET.back %}facingMode: "environment", {% endif %} height: { ideal: {{ camera.width|parsevideoheight }} }, width: { ideal: {{ camera.width|parsevideowidth }} },  frameRate: { ideal: {{ fps }} } },
+        audio: {% if camera.muted %}false{% elif camera.microphone == 'communications' %}deviceId: { ideal: "communications" }{% elif camera.microphone == 'default' %}true{% elif camera.microphone == 'echo cancellation' %}{ echoCancellation: true, }{% endif %},
+      }).catch((error) => {
+        console.log(error);
+        $('#errormessage').removeClass('hide');
+      });
+      if (localCamStream && !document.getElementById("justWebcam")) {
+        cam = await attachToDOM("justWebcam", localCamStream);
+      }
+      setTimeout(mergeStreamsFn, 500);
+      if(signalingSocket.readyState != WebSocket.OPEN) { openSignalingSocket(); }
   }
 }
-var recordingStartTime;
 async function startRecordingFn() {
   if(!localCamStream) {
     await startWebcamFn();
