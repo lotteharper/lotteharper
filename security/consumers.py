@@ -48,14 +48,27 @@ async def security_event(self):
 #    await self.send(text_data=message)
 
 async def security_thread(self):
-    while self.connected:
-        try:
-            message = await security_event(self)
-            await self.send(text_data=message)
-            await asyncio.sleep(30)
-        except:
-            import traceback
+#    while self.connected:
+    try:
+        message = await security_event(self)
+        await self.send(text_data=message)
+        await asyncio.sleep(30)
+    except:
+        import traceback
 #            print(traceback.format_exc())
+
+def async_security_thread(self):
+#    import nest_asyncio
+#    nest_asyncio.apply()
+#    loop = asyncio.new_event_loop()
+#    result = loop.run_until_complete(security_thread(self))
+#    loop.close()
+#    return result
+    while self.connected:
+        asyncio.create_task(security_thread(self))
+
+async def delay_async_security_thread(self):
+    await sync_to_async(async_security_thread(self))
 
 @sync_to_async
 def patch_session(user_id, skey):
@@ -79,10 +92,17 @@ class ModalConsumer(AsyncWebsocketConsumer):
         await patch_session(self.scope['user'].id, self.session_key)
         await self.accept()
         self.connected = True
-        await security_thread(self)
+        self.loop_task = asyncio.create_task(self.periodically_send_data())
+#        await sync_to_async(async_security_thread)
+#        await delay_async_security_thread(self)
+
+    async def periodically_send_data(self):
+        while self.connected:
+            await security_thread(self)
 
     async def disconnect(self, close_code):
         self.connected = False
+        self.loop_task.cancel()
         pass
 
     # This function receive messages from WebSocket.

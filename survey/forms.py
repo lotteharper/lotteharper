@@ -28,6 +28,7 @@ class SurveyForm(forms.ModelForm):
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'survey-large-text'}),
     )
+    other = forms.CharField(widget=models.Text
     def __init__(self, *args, **kwargs):
         surv = kwargs.pop('surv', None)
         super(SurveyForm, self).__init__(*args, *kwargs)
@@ -48,4 +49,4 @@ class SurveyForm(forms.ModelForm):
 
     class Meta:
         model = Answer
-        fields = ('answer',)
+        fields = ('answer','other',)
