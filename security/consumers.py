@@ -6,6 +6,8 @@ from asgiref.sync import sync_to_async
 import asyncio
 from .tests import face_mrz_or_nfc_verified
 
+remote_sessions = {}
+
 @sync_to_async
 def get_user(id):
     try:
@@ -24,91 +26,85 @@ def get_auth(user_id, session_key):
             return True
     return False
 
-@sync_to_async
-def reset_session(user_id):
-    user = User.objects.get(id=int(user_id))
-    if user:
-        for scan in user.mrz_scans.filter(valid=True, timestamp__gte=timezone.now()-datetime.timedelta(minutes=settings.MRZ_SCAN_REQUIRED_MINUTES)):
-            scan.valid = False
-            scan.save()
-        for scan in user.nfc_scans.filter(valid=True, timestamp__gte=timezone.now()-datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)):
-            scan.valid = False
-            scan.save()
+import re, uuid
+import os
+import sys
+import select
+from live.models import VideoCamera
+import datetime
+from security.models import Session
+from asgiref.sync import sync_to_async
+from django.utils import timezone
+
+sessions = {}
+last_update = None
 
 @sync_to_async
-def logout_user(user_id, session_key):
-    user = User.objects.get(id=int(user_id))
-    [s.delete() for s in Session.objects.all() if s.get_decoded().get('_auth_user_id') == user.id and s.session_key == session_key]
+def update_sessions():
+    global remote_sessions
+    global sessions
+    global remote
+    global last_update
+    if not last_update or last_update < timezone.now() - datetime.timedelta(seconds=settings.SESSION_UPDATE_SECONDS):
+        for key, sess in remote_sessions.items():
+            session_auth = get_auth(sess.scope['user'].id, sess.scope['session'].session_key)
+            message = 'y' if session_auth else 'n'
+            sessions[sess.skey] = message
+        last_update = timezone.now()
 
-async def security_event(self):
-    session_auth = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
+@sync_to_async
+def get_session(skey):
+    global remote_sessions
+    bself = remote_sessions[skey]
+    session_auth = get_auth(bself.scope['user'].id, bself.scope['session'].session_key)
     message = 'y' if session_auth else 'n'
-#    print(message)
     return message
-#    await self.send(text_data=message)
+#    session = Session.objects.filter(injection_key=session_id, time__gte=timezone.now() - datetime.timedelta(minutes=60*24*7), index=settings.SESSION_INDEX).last()
+#    return session
 
-async def security_thread(self):
-#    while self.connected:
-    try:
-        message = await security_event(self)
-        await self.send(text_data=message)
-        await asyncio.sleep(30)
-    except:
-        import traceback
-#            print(traceback.format_exc())
+@sync_to_async
+def clear_session(session_id):
+    global sessions
+    del sessions[session_id]
 
-def async_security_thread(self):
-#    import nest_asyncio
-#    nest_asyncio.apply()
-#    loop = asyncio.new_event_loop()
-#    result = loop.run_until_complete(security_thread(self))
-#    loop.close()
-#    return result
+async def remote_thread(self):
     while self.connected:
-        asyncio.create_task(security_thread(self))
+        await update_sessions()
+        global remote_sessions
+        global sessions
+        if self.skey in sessions and sessions[self.skey] != self.last_session:
+            await self.send(text_data=sessions[self.skey])
+            self.last_session = sessions[self.skey]
+        await asyncio.sleep(10)
 
-async def delay_async_security_thread(self):
-    await sync_to_async(async_security_thread(self))
-
-@sync_to_async
-def patch_session(user_id, skey):
-    from security.build import update_session
-    update_session(user_id, skey)
-
-@sync_to_async
-def build_session(user_id, skey):
-    from security.build import async_build_session
-    update_session(user_id, skey)
 
 class ModalConsumer(AsyncWebsocketConsumer):
-    user_id = None
-    session_key = None
+    session_id = None
     connected = False
+    user_id = None
+    path = None
+    ip = None
+    skey = None
+    last_session = None
+    session_key = None
     async def connect(self):
         self.user_id = self.scope['user'].id
         self.session_key = self.scope['session'].session_key
-        auth = await get_user(self.scope['user'].id)
-        if not (auth): return
-        await patch_session(self.scope['user'].id, self.session_key)
+        self.ip = self.scope["client"][0]
+        from urllib.parse import parse_qs
+        query_params = parse_qs(self.scope["query_string"].decode())
+#        self.path = query_params['path'][0]
         await self.accept()
+        self.skey = str(uuid.uuid4())
         self.connected = True
-        self.loop_task = asyncio.create_task(self.periodically_send_data())
-#        await sync_to_async(async_security_thread)
-#        await delay_async_security_thread(self)
+        global remote_sessions
+        remote_sessions[self.skey] = self
+        await remote_thread(self)
 
-    async def periodically_send_data(self):
-        while self.connected:
-            await security_thread(self)
+    async def receive(self, text_data):
+        self.ip = text_data
+#        await set_ip(self)
 
     async def disconnect(self, close_code):
         self.connected = False
-        self.loop_task.cancel()
         pass
-
-    # This function receive messages from WebSocket.
-    async def receive(self, text_data):
-        if text_data == 'logout': await logout_user(self.user_id, self.session_key)
-        else: await reset_session(self.user_id)
-        pass
-
-    pass

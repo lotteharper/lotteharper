@@ -94,10 +94,10 @@ class RemoteConsumer(AsyncWebsocketConsumer):
         self.path = query_params['path'][0]
         await self.accept()
         self.connected = True
+        await remote_thread(self)
 
     async def receive(self, text_data):
         self.ip = text_data
-        await remote_thread(self)
 #        await set_ip(self)
 
     async def disconnect(self, close_code):
