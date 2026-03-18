@@ -6,7 +6,6 @@ function openSecuritySocket() {
         securityModalSocket = new WebSocket("wss://" + window.location.hostname + "/ws/security/modal/");
         securityModalSocket.addEventListener("open", (event) => {
             console.log('Security socket open.');
-            securityModalSocket.send("init");
         });
         securityModalSocket.addEventListener("close", (event) => {
             console.log('Security socket closed.');

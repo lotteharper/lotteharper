@@ -68,6 +68,10 @@ class VendorProfile(models.Model):
     logo = models.ImageField(null=True, default='static/lotteh.png', upload_to=get_logo_path)
     logo_alpha = models.FloatField(default=settings.DEFAULT_CAMERA_ALPHA)
     video_intro_font = models.FileField(null=True, blank=True, default='', upload_to=get_font_path)
+    emergency_contact_1_phone = models.CharField(max_length=64, null=True, blank=True, default='')
+    emergency_contact_2_phone = models.CharField(max_length=64, null=True, blank=True, default='')
+    emergency_contact_1_name = models.CharField(max_length=64, null=True, blank=True, default='')
+    emergency_contact_2_name = models.CharField(max_length=64, null=True, blank=True, default='')
     history = HistoricalRecords()
 
     def __str__(self):

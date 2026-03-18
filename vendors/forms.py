@@ -125,12 +125,17 @@ class VendorProfileUpdateForm(forms.ModelForm):
         self.fields['usdtether_address'].label = translate(r, 'USDTether (USDT) address', src='en')
         self.fields['dogecoin_address'].label = translate(r, 'DogeCoin (DOGE) address', src='en')
         self.fields['transistorfm_key'].label = translate(r, 'Transistor.fm API Key (for podcast upload)', src='en')
+        self.fields['emergency_contact_1_name'].label = translate(r, 'Emergency contact 1 name', src='en')
+        self.fields['emergency_contact_1_phone'].label = translate(r, 'Emergency contact 1 phone number including +1', src='en')
+        self.fields['emergency_contact_2_name'].label = translate(r, 'Emergency contact 2 name', src='en')
+        self.fields['emergency_contact_2_phone'].label = translate(r, 'Emergency contact 2 phone number including +1', src='en')
+
         from verify.tests import minor_identity_verified
         if not minor_identity_verified(user): self.fields.pop('activate_surrogacy')
 
     class Meta:
         model = VendorProfile
-        fields = ['logo', 'video_intro_font', 'video_intro_text', 'video_intro_color', 'logo_alpha', 'hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'video_embed', 'playlist_embed', 'transistorfm_key', 'sync_podcasts', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address', 'usdcoin_address', 'solana_address', 'trump_address', 'polygon_address', 'avalanche_address', 'bitcoin_cash_address', 'litecoin_address', 'usdtether_address', 'dogecoin_address']
+        fields = ['logo', 'video_intro_font', 'video_intro_text', 'video_intro_color', 'logo_alpha', 'hide_profile', 'activate_surrogacy', 'pronouns', 'address', 'insurance_provider', 'video_link', 'content_link', 'video_embed', 'playlist_embed', 'transistorfm_key', 'sync_podcasts', 'pitch_adjust', 'subscription_fee', 'free_trial', 'photo_tip', 'payout_currency', 'payout_address', 'bitcoin_address', 'ethereum_address', 'usdcoin_address', 'solana_address', 'trump_address', 'polygon_address', 'avalanche_address', 'bitcoin_cash_address', 'litecoin_address', 'usdtether_address', 'dogecoin_address', 'emergency_contact_1_name', 'emergency_contact_1_phone', 'emergency_contact_2_name', 'emergency_contact_2_phone']
         labels = {
             'usdcoin_address': 'USDCoin address',
             'usdtether_address': 'USD Tether address',

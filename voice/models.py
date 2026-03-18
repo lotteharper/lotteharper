@@ -15,8 +15,10 @@ class PhoneNumber(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
 
 class Call(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='calls')
     sid = models.TextField(default='', null=True, blank=True)
+    phone_number = models.CharField(max_length=32, null=True, blank=True, default='')
     call_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
 
 class VoiceProfile(models.Model):
@@ -25,6 +27,7 @@ class VoiceProfile(models.Model):
     recordings = models.BooleanField(default=False)
     interactive = models.TextField(default='', null=True, blank=True)
     call_logs = models.TextField(default='', null=True, blank=True)
+    pinkey_entered = models.DateTimeField(default=timezone.now)
 
 class Choice(models.Model):
     option = models.TextField(default='', null=True, blank=True)

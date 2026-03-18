@@ -2,6 +2,35 @@ from django import template
 
 register = template.Library()
 
+@register.filter('character_phone_number')
+def character_phone_number(phone):
+    characters = [
+        '',
+        '',
+        'ABC',
+        'DEF',
+        'GHI',
+        'JKL',
+        'MNO',
+        'PQRS',
+        'TUV',
+        'WXYZ',
+    ]
+    number_chars = ' ({}) '.format(phone[2:5])
+    count = 0
+    for num in phone[5:8]:
+        number_chars = number_chars + characters[int(num)][count]
+        count += 1
+        if count == 2: count = 3
+    number_chars = number_chars + '-'
+    count = 1
+    for place, num in enumerate(phone[8:12]):
+        if place == 3: count = 2
+        number_chars = number_chars + characters[int(num)][count]
+        count += 1
+        if count == 3: count = 0
+    return phone[:2] + number_chars
+
 @register.filter('getflag')
 def getflag(country):
     try:

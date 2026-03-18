@@ -1,4 +1,4 @@
-2
+3
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,14 +13,22 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 3818319] open source
- 39 files changed, 74 insertions(+), 46 deletions(-)
- create mode 100644 media/audio/fingerprints/1a5197c9-8b20-427c-aff6-ccab79f9a827.npy
- create mode 100644 media/audio/fingerprints/5399066b-bbf9-4469-ba9a-e5ad574c3849.npy
- create mode 100644 media/audio/fingerprints/8a36c74d-ce71-4a2d-8dd9-0b5be2cf4160.npy
- create mode 100644 media/audio/fingerprints/b6a2e43c-a64e-4479-9393-2c6d6e733fe0.npy
- create mode 100644 media/audio/fingerprints/c4ba3945-776f-4f82-a07e-81cee334c0d9.npy
- create mode 100644 media/audio/fingerprints/d4caaf28-84cc-4c73-ae43-ac6875f4e59d.npy
+[main c500e8f] open source
+ 59 files changed, 517 insertions(+), 104 deletions(-)
+ create mode 100755 data/translate.json.cm
+ create mode 100644 media/audio/fingerprints/176c0c20-734c-4302-be43-33c3301366f4.npy
+ create mode 100644 media/audio/fingerprints/7c56242d-0913-48b4-88db-83586a624102.npy
+ create mode 100644 media/audio/fingerprints/f21d54ed-6152-4299-8558-115cca68dc50.npy
+ create mode 100644 vendors/migrations/0026_historicalvendorprofile_emergency_contact_1_name_and_more.py
+ create mode 100644 vendors/migrations/__pycache__/0026_historicalvendorprofile_emergency_contact_1_name_and_more.cpython-312.pyc
+ create mode 100644 voice/migrations/0004_call_phone.py
+ create mode 100644 voice/migrations/0005_alter_call_id.py
+ create mode 100644 voice/migrations/0006_rename_phone_call_phone_number.py
+ create mode 100644 voice/migrations/0007_voiceprofile_pinkey_entered.py
+ create mode 100644 voice/migrations/__pycache__/0004_call_phone.cpython-312.pyc
+ create mode 100644 voice/migrations/__pycache__/0005_alter_call_id.cpython-312.pyc
+ create mode 100644 voice/migrations/__pycache__/0006_rename_phone_call_phone_number.cpython-312.pyc
+ create mode 100644 voice/migrations/__pycache__/0007_voiceprofile_pinkey_entered.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

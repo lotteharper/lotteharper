@@ -47,7 +47,7 @@ def call_recordings(request):
             call = Call.objects.get(sid=recording.sid)
         except:
             call = None
-        urls.append((call.user.profile.phone_number if call else 'unknown', call.call_time.astimezone(pytz.timezone(settings.TIME_ZONE)) if call else 'unknown', recording.media_url))
+        urls.append((call.phone_number if call else 'unknown number', recording.media_url, recording.date_created, recording.duration, '@{}'.format(call.user.username) if hasattr(call, 'user') and call.user else 'not a user'))
     return render(request, 'voice/calls.html', {'title': 'Phone Calls', 'urls': urls})
 
 @login_required
@@ -129,6 +129,7 @@ def recordings(request):
         'recordings': p.page(page),
         'count': p.count,
         'page_obj': p.get_page(page),
+        'current_page': page,
     })
 
 @login_required
@@ -229,6 +230,9 @@ def voice(request):
     if phone == '+1': user = None
     resp = VoiceResponse()
     client = Client(account_sid, auth_token)
+    if request.POST.get('RecordingSid'):
+        print('GOT recording SID ' + request.POST.get('RecordingSid'))
+        Call.objects.create(user=user, sid=request.POST.get('RecordingSid'), phone_number=phone)
     if request.POST.get('SpeechResult') or request.POST.get('UnstableSpeechResult'):
         try:
             speech = request.POST.get('SpeechResult', '') if request.POST.get('SpeechResult', False) else request.POST.get('UnstableSpeechResult', '')
@@ -264,80 +268,113 @@ def voice(request):
             return HttpResponse(str(resp), content_type='text/xml')
     if request.POST.get('Digits'):
         choice = request.POST.get('Digits')
-        if user and hasattr(user, 'voice_profile'):
-            Call.objects.create(user=user, sid=session_id)
-            if user.voice_profile.last_call and user.voice_profile.recordings:
-                if timezone.now() - datetime.timedelta(minutes=1) < user.voice_profile.last_call:
-                    interactives = AudioInteractive.objects.filter(label=user.voice_profile.interactive)
-                    interact = None
-                    if interactives.count() > 0:
-                        interact = interactives.first()
-                    else:
-                        interact = AudioInteractive.objects.get(label='init')
-                    for option in interact.choices.all():
-                        if choice == str(option.number):
-                            interactives = AudioInteractive.objects.filter(label=option.option)
-                            interact = None
-                            if interactives.count() > 0:
-                                interact = interactives.first()
-                            else:
-                                interact = AudioInteractive.objects.get(label='init')
-                            gather = Gather(num_digits=1, timeout=30)
-                            gather.play(interactive(interact.label))
-                            user.voice_profile.interactive = interact.label
-                            user.voice_profile.save()
-                            if interact.label == 'call':
-                                resp.dial(from_phone)
-                            else:
-                                resp.append(gather)
-                            return HttpResponse(str(resp), content_type='text/xml')
-            user.voice_profile.last_call = timezone.now()
-            user.voice_profile.save()
-        if choice == '1':
-            resp.play(interactive('call'))
-            resp.dial(from_phone)
+        no_user = False if not user else True
+        def_user = User.objects.get(id=settings.MY_ID)
+        if not user or user.id != def_user.id:
+            no_user = True
+        if no_user:
+            user = def_user
+        if len(choice) == 1 and user and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=2):
+            if choice == '7':
+                resp.dial(user.profile.phone_number)
+            if choice == '8':
+                resp.dial(user.vendor_profile.emergency_contact_1_phone)
+            if choice == '9':
+                resp.dial(user.vendor_profile.emergency_contact_2_phone)
             return HttpResponse(str(resp), content_type='text/xml')
-        elif choice == '2':
-            gather = Gather(input='speech', timeout=30, action=reverse('voice:voice'))
-            gather.play(interactive('callback'))
+        if len(choice) == 6 and user and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=1):
+            gather = Gather(num_digits=1, timeout=30, action=reverse('voice:voice'))
+            gather.say('Please select an emergency contact from the following list:', voice='alice')
+            gather.say(user.profile.name + ' : Number seven', voice='alice')
+            gather.say(user.vendor_profile.emergency_contact_1_name + ' : Number eight', voice='alice')
+            gather.say(user.vendor_profile.emergency_contact_2_name + ' : Number nine', voice='alice')
             resp.append(gather)
-            resp.redirect(reverse('voice:voice'))
             return HttpResponse(str(resp), content_type='text/xml')
-        elif choice == '3':
-            resp.play(interactive('recording'))
-            return HttpResponse(str(resp), content_type='text/xml')
-        elif choice == '4':
-            resp.play(interactive('recordings'))
-            gather = Gather(num_digits=1, timeout=30)
-            gather.play(interactive('init'))
-            resp.append(gather)
-            user.voice_profile.recordings = True
-            user.voice_profile.interactive = 'init'
-            user.voice_profile.last_call = timezone.now()
-            user.voice_profile.save()
-            return HttpResponse(str(resp), content_type='text/xml')
-        elif choice == '5':
-            resp.play(interactive('record'))
-            resp.record()
-        elif choice == '6':
-            gather = Gather(input='speech', timeout=15, action=reverse('voice:voice'))
-            gather.say('What else do you need? Talk to me, or ask me a question.', voice='alice')
-            resp.append(gather)
-#            resp.redirect(reverse('voice:voice'))
-            return HttpResponse(str(resp), content_type='text/xml')
-        else:
-            resp.play(interactive('sorry'))
-            resp.redirect(reverse('voice:voice'))
-            return HttpResponse(str(resp), content_type='text/xml')
+        if no_user: user = None
+        if len(choice) < 2:
+            if user and hasattr(user, 'voice_profile'):
+                Call.objects.create(user=user, sid=session_id)
+                if user.voice_profile.last_call and user.voice_profile.recordings:
+                    if timezone.now() - datetime.timedelta(minutes=1) < user.voice_profile.last_call:
+                        interactives = AudioInteractive.objects.filter(label=user.voice_profile.interactive)
+                        interact = None
+                        if interactives.count() > 0:
+                            interact = interactives.first()
+                        else:
+                            interact = AudioInteractive.objects.get(label='init')
+                        for option in interact.choices.all():
+                            if choice == str(option.number):
+                                interactives = AudioInteractive.objects.filter(label=option.option)
+                                interact = None
+                                if interactives.count() > 0:
+                                    interact = interactives.first()
+                                else:
+                                    interact = AudioInteractive.objects.get(label='init')
+                                gather = Gather(num_digits=1, timeout=30)
+                                gather.play(interactive(interact.label))
+                                user.voice_profile.interactive = interact.label
+                                user.voice_profile.save()
+                                if interact.label == 'call':
+                                    resp.dial(from_phone)
+                                else:
+                                    resp.append(gather)
+                                return HttpResponse(str(resp), content_type='text/xml')
+                user.voice_profile.last_call = timezone.now()
+                user.voice_profile.save()
+            if choice == '1':
+                resp.play(interactive('call'))
+                resp.dial(from_phone)
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '2':
+                gather = Gather(input='speech', timeout=30, action=reverse('voice:voice'))
+                gather.play(interactive('callback'))
+                resp.append(gather)
+                resp.redirect(reverse('voice:voice'))
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '3':
+                resp.play(interactive('recording'))
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '4':
+                resp.play(interactive('recordings'))
+                gather = Gather(num_digits=1, timeout=30, action=reverse('voice:voice'))
+                gather.play(interactive('init'))
+                resp.append(gather)
+                user.voice_profile.recordings = True
+                user.voice_profile.interactive = 'init'
+                user.voice_profile.last_call = timezone.now()
+                user.voice_profile.save()
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '5':
+                resp.play(interactive('record'))
+                resp.record()
+            elif choice == '6':
+                gather = Gather(input='speech', timeout=15, action=reverse('voice:voice'))
+                gather.say('What else do you need? Talk to me, or ask me a question.', voice='alice')
+                resp.append(gather)
+    #            resp.redirect(reverse('voice:voice'))
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '7':
+                gather = Gather(num_digits=6, timeout=30, action=reverse('voice:voice'))
+                gather.say('Please enter your pincode to continue')
+                resp.append(gather)
+                vp = user.voice_profile if user else def_user.voice_profile if def_user else None
+                if vp:
+                    vp.pinkey_entered = timezone.now()
+                    vp.save()
+                return HttpResponse(str(resp), content_type='text/xml')
+            else:
+                resp.play(interactive('sorry'))
+                resp.redirect(reverse('voice:voice'))
+                return HttpResponse(str(resp), content_type='text/xml')
     called = False
     if user:
         if hasattr(user, 'voice_profile'):
             resp.play(interactive('hello'))
             resp.say(user.profile.name if user else 'guest', voice='alice')
-            if user.voice_profile.last_call:
-                if timezone.now() - datetime.timedelta(minutes=1) < user.voice_profile.last_call:
-                    resp.play(interactive('recent call'))
-                    called = True
+#            if user.voice_profile.last_call:
+#                if timezone.now() - datetime.timedelta(minutes=1) < user.voice_profile.last_call:
+#                    resp.play(interactive('recent call'))
+#                    called = True
             resp.play(interactive('thanks'))
         if hasattr(user, 'voice_profile'):
             user.voice_profile.last_call = timezone.now()

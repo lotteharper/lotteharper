@@ -98,7 +98,6 @@ class RemoteConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         self.ip = text_data
-#        await set_ip(self)
 
     async def disconnect(self, close_code):
         self.connected = False

@@ -90,8 +90,12 @@ class ModalConsumer(AsyncWebsocketConsumer):
         await remote_thread(self)
 
     async def receive(self, text_data):
-        self.ip = text_data
+        pass
 
     async def disconnect(self, close_code):
         self.connected = False
+        global sessions
+        global remote_sessions
+        del sessions[self.skey]
+        del remote_sessions[self.skey]
         pass
