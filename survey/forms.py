@@ -28,7 +28,7 @@ class SurveyForm(forms.ModelForm):
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'survey-large-text'}),
     )
-    other = forms.CharField(widget=models.Text
+    other = forms.CharField(widget=forms.Textarea(attrs={'rows':3}))
     def __init__(self, *args, **kwargs):
         surv = kwargs.pop('surv', None)
         super(SurveyForm, self).__init__(*args, *kwargs)
@@ -37,6 +37,7 @@ class SurveyForm(forms.ModelForm):
         from translate.translate import translate
         from django.conf import settings
         self.fields['answer'].label = translate(r, surv.question, src=settings.DEFAULT_LANG)
+        self.fields['other'].label = translate(r, "Other input", src=settings.DEFAULT_LANG)
         choices = ()
         self.instance.user = r.user
         self.instance.survey = surv

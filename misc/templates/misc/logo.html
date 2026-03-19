@@ -1,0 +1,57 @@
+<!doctype HTML>
+<html>
+        <head>
+                <script type="text/javascript" src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+                <script
+                  src="https://code.jquery.com/jquery-4.0.0.min.js"
+                  integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
+                  crossorigin="anonymous"></script>
+                <style>
+                        @font-face { font-family: 'VendorSpecified'; src: url('/media/font/d8c91b9c-aa45-46d0-affc-2ebef6501287.ttf'); }
+                </style>
+        </head>
+        <body>
+                <canvas id="canvas" height="1500" width="1500"></canvas>
+                <script>
+                    const myFont = new FontFace('VendorSpecified', 'url(/media/font/d8c91b9c-aa45-46d0-affc-2ebef6501287.ttf)');
+                    myFont.load().then(function(loaded_face) {
+                        document.fonts.add(loaded_face);
+                        console.log('Font loaded and ready for use in CreateJS');
+                        $(document).ready(function() {
+                                var stage = new createjs.Stage("canvas");
+                                var colors = ['red','green','blue','yellow','purple','orange','brown','black'];
+                                var median = 740;
+                                var rectangle = new createjs.Shape();
+                                rectangle.graphics.beginFill('#FFFFFF').drawRect(0,0,1500,1500);
+                                rectangle.x = 0; // + Math.sin(ste>
+                                rectangle.y = 0;
+                                stage.addChild(rectangle);
+                                function drawRectangles(step) {
+                                        var rectangle = new createjs.Shape();
+                                        rectangle.graphics.beginFill(colors[step]).drawRect(0, 0, 500, 500);
+                                        rectangle.x = median; // + Math.sin(step*5)*200;
+                                        rectangle.y = median; // + Math.sin(step*5)*200;
+                                        rectangle.rotation = 45 * step;
+                                        rectangle.alpha = 0.7;
+                                        stage.addChild(rectangle);
+                                        stage.update();
+                                        step -= 1;
+                                        if(step >= 0) drawRectangles(step);
+                                }
+                                drawRectangles(7);
+                                var title = new createjs.Text("Lotte", "360px VendorSpecified", "#000000");
+                                title.x = median-280;
+                                title.y = median-330;
+                                stage.addChild(title);
+                                var title2 = new createjs.Text("Harper", "360px VendorSpecified", "#000000");
+                                title2.x = median-400;
+                                title2.y = median+50;
+                                stage.addChild(title2);
+                                stage.update();
+                        });
+                    }).catch(function(error) {
+                        console.error('Font failed to load:', error);
+                    });
+                </script>
+        </body>
+</html>

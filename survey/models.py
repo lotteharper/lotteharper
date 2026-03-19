@@ -20,4 +20,5 @@ class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='surveys', null=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='answers', null=True)
     answer = models.TextField(default='', null=True, blank=True)
+    other = models.TextField(default='', null=True, blank=True)
     completed = models.BooleanField(default=False)

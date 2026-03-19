@@ -1,6 +1,10 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 import asyncio
+import uuid
+global sessions
+global remote_sessions
+import datetime
 
 @sync_to_async
 def get_user(id):
@@ -11,28 +15,44 @@ def get_user(id):
     except: return False
     return True
 
-async def user_event(self):
-    await asyncio.sleep(15)
-    auth = await get_user(self.scope['user'].id)
-    if auth: await self.send(text_data='y')
+last_updated = None
+
+async def update_event(self):
+    global sessions
+    global remote_sessions
+    global last_updated
+    if (not last_updated) or last_updated < timezone.now() - datetime.timedelta(seconds=15):
+        for sess in sessions:
+            auth = await get_user(sess.scope['user'].id)
+            remote_sessions[sess.pkey] = auth
+        last_updated = timezone.now()
 
 async def user_thread(self):
     while self.connected:
-        await user_event(self)
+        await update_event(self)
+        global remote_sessions
+        if remote_sessions[self.pkey]: await self.send(text_data='y')
         await asyncio.sleep(20)
+
 
 class AuthConsumer(AsyncWebsocketConsumer):
     connected = False
+    pkey = None
     async def connect(self):
         await self.accept()
         self.connected = True
         await user_thread(self)
-#        t = threading.Thread(target=user_thread, args=(self,))
-#        t.start()
+        self.pkey = str(uuid.uuid4())
+        global sessions
+        sessions[self.pkey] = self
         pass
 
     async def disconnect(self, close_code):
         self.connected = False
+        global sessions
+        del sessions[self.pkey]
+        global remote_sessions
+        del remote_sessions[self.pkey]
         pass
 
     # This function receive messages from WebSocket.

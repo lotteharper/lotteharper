@@ -4,6 +4,7 @@
 {% for survey in user.id|get_answered_surveys %}
 Q: {{ survey.survey.question|trans }}
 A: {% autoescape off %}{{ survey.answer|showanswers|trans }}
+{{ survey.other }}
 {% endautoescape %}
 {% endfor %}
 </small>
