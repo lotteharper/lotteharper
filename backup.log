@@ -1,4 +1,4 @@
-4
+5
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,26 +13,20 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 69e33e5] open source
- 59 files changed, 261 insertions(+), 36 deletions(-)
- create mode 100644 media/audio/fingerprints/21409a4a-1b97-425d-a9f3-8f639fdfae43.npy
- create mode 100644 media/audio/fingerprints/51a8b1c7-f3a7-4f6e-832a-8dffe1d9b6e8.npy
- create mode 100644 media/audio/fingerprints/950a2914-623f-4ce6-8c60-2b014da7d301.npy
- create mode 100644 media/audio/fingerprints/95275837-8ef3-4dba-9402-bdc59a08cac6.npy
- create mode 100644 media/audio/fingerprints/9ea41db3-e335-4ca0-82a5-7bec3d498d7e.npy
- create mode 100644 media/audio/fingerprints/a1a718f3-36d8-4a57-8093-748e89729609.npy
- create mode 100644 media/audio/fingerprints/a6bd8f1b-fa3d-4765-9afb-60bbca823d5e.npy
- mode change 100755 => 100644 media/static/android-chrome-192x192.png
- delete mode 100755 media/static/android-chrome-384x384.png
- mode change 100755 => 100644 media/static/android-chrome-512x512.png
- mode change 100755 => 100644 media/static/favicon-16x16.png
- mode change 100755 => 100644 media/static/favicon-32x32.png
- mode change 100755 => 100644 media/static/favicon.ico
- delete mode 100755 media/static/favicon_io (3).zip
- delete mode 100755 media/static/favicon_io (4).zip
- create mode 100644 misc/templates/misc/logo.html
- mode change 100755 => 100644 survey/__pycache__/forms.cpython-312.pyc
+[main 7f72986] open source
+ 45 files changed, 181 insertions(+), 41 deletions(-)
+ create mode 100644 Restart=on-failure
+ create mode 100644 "[Service]\nRestart=on-failure\nRestartSec=5s"
+ create mode 100755 logo.png
+ create mode 100644 media/audio/fingerprints/0e3a8afb-4f74-41bf-9f4f-8474c8350b25.npy
+ create mode 100644 media/audio/fingerprints/1a4f0100-e845-4adc-ac5e-f0b5c9ca3219.npy
+ create mode 100644 media/audio/fingerprints/58aa0f61-9c02-4320-8e26-063876f61b2f.npy
+ create mode 100644 media/audio/fingerprints/85dce309-1969-481e-acaa-a851230ec8c7.npy
+ create mode 100644 media/audio/fingerprints/c9a5265c-0a89-4aaa-b685-abb09861cc88.npy
+ create mode 100644 media/audio/fingerprints/d9c588eb-0127-437d-ab8c-d4c1d612cad3.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
+Restart=on-failure
+[Service]\#012Restart=on-failure\#012RestartSec=5s

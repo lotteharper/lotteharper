@@ -64,11 +64,11 @@ function openAuthSocket() {
         authSocket.addEventListener("message", (event) => {
                 let message = event.data;
                 console.log("Auto login? " + message)
-        	   if(message.startsWith("y")) {
-			window.location.href = '{% if request.GET.next %}{{ request.GET.next }}{% else %}/{% endif %}';
-        	   }
+         	    if(message.startsWith("y")) {
+    			 window.location.href = '{% if request.GET.next %}{{ request.GET.next }}{% else %}/{% endif %}';
+        	    }
         });
 }
-openAuthSocket();
+if window.location.pathname.startsWith("/admin/login/")) { openAuthSocket(); }
 {% include 'users/register_modal.js' %}
 {% endblock %}

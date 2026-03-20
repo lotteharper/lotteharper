@@ -308,6 +308,9 @@ sudo cp config/etc_systemd_system_daphne.service /etc/systemd/system/daphne.serv
 sudo cp config/etc_systemd_system_celery.service /etc/systemd/system/celery.service
 sudo cp config/etc_systemd_system_stun.service /etc/systemd/system/stun.service
 sudo cp config/etc_systemd_system_celerybeat.service /etc/systemd/system/celerybeat.service
+echo "[Service]" | sudo tee -a /etc/systemd/system/apache2.service
+echo "Restart=on-failure" | sudo tee -a /etc/systemd/system/apache2.service
+echo "RestartSec=5s" | sudo tee -a /etc/systemd/system/apache2.service
 # Fix celery perms
 sudo chmod a+x /etc/init.d/celery
 sudo chmod a+x /etc/init.d/celerybeat

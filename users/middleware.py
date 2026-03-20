@@ -2,7 +2,8 @@ from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from security.apis import get_client_ip
 from threading import local
-
+from django.shortcuts import redirect
+from django.urls import reverse
 _user = local()
 
 class CurrentUserMiddleware(MiddlewareMixin):
@@ -41,6 +42,8 @@ def redirect_path(path):
     return True
 
 from lotteh.celery import async_user_tasks
+
+translation_servers = {}
 
 def simple_middleware(get_response):
     # One-time configuration and initialization.
@@ -81,6 +84,8 @@ def simple_middleware(get_response):
                     "%a, %d-%b-%Y %H:%M:%S GMT",
                 )
                 response.set_cookie('push_cookie', True, max_age=max_age, expires=expires)
+#            if request.GET.get('lang') or request.LANGUAGE_CODE:
+#                response = redirect(reverse('translate:translating') + '?page=' + request.get_full_url())
         except:
             from stacktrace.models import Error
             try:
