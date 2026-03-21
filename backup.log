@@ -1,4 +1,4 @@
-5
+6
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,20 +13,27 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 7f72986] open source
- 45 files changed, 181 insertions(+), 41 deletions(-)
- create mode 100644 Restart=on-failure
- create mode 100644 "[Service]\nRestart=on-failure\nRestartSec=5s"
- create mode 100755 logo.png
- create mode 100644 media/audio/fingerprints/0e3a8afb-4f74-41bf-9f4f-8474c8350b25.npy
- create mode 100644 media/audio/fingerprints/1a4f0100-e845-4adc-ac5e-f0b5c9ca3219.npy
- create mode 100644 media/audio/fingerprints/58aa0f61-9c02-4320-8e26-063876f61b2f.npy
- create mode 100644 media/audio/fingerprints/85dce309-1969-481e-acaa-a851230ec8c7.npy
- create mode 100644 media/audio/fingerprints/c9a5265c-0a89-4aaa-b685-abb09861cc88.npy
- create mode 100644 media/audio/fingerprints/d9c588eb-0127-437d-ab8c-d4c1d612cad3.npy
+[main 5e50abd] open source
+ 57 files changed, 559 insertions(+), 479 deletions(-)
+ mode change 100755 => 100644 crypto/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 events/__pycache__/forms.cpython-312.pyc
+ create mode 100644 live/.models.py.swp
+ create mode 100644 media/audio/fingerprints/07cab4a8-7720-4213-8f54-d9e2b48f877d.npy
+ create mode 100644 media/audio/fingerprints/0b9eb7bc-96a8-4961-84da-dd8db0ac8c1c.npy
+ create mode 100644 media/audio/fingerprints/407ed7ac-f798-4264-9c9a-25cb47b99bc8.npy
+ create mode 100644 media/audio/fingerprints/48899432-91cb-42b4-a602-b31bb97b161c.npy
+ create mode 100644 media/audio/fingerprints/4c39e9e7-6a41-48da-ab86-36102f264653.npy
+ create mode 100644 media/audio/fingerprints/509375e4-e316-4994-ab5a-14b7ea11935a.npy
+ create mode 100644 media/audio/fingerprints/528af551-56c4-42ec-bc32-12ce2ee9beea.npy
+ create mode 100644 media/audio/fingerprints/5b4392e1-298e-405d-ba4b-846879a08aea.npy
+ create mode 100644 media/audio/fingerprints/5eef94de-a09b-49ba-9fd1-d3386e0c2cf1.npy
+ create mode 100644 media/audio/fingerprints/b1ece5ee-780c-4259-8294-42a75ad963de.npy
+ create mode 100644 media/audio/fingerprints/bcc11c36-c565-4d90-8bbb-5ddce326d77a.npy
+ create mode 100644 media/audio/fingerprints/c3f576e6-d011-472a-9653-7073a6680820.npy
+ create mode 100644 media/audio/fingerprints/c68921a5-a1ac-4f5e-8845-7e1f0d17ece8.npy
+ create mode 100644 media/audio/fingerprints/f1d6db17-907a-4234-990c-adb70c7678cf.npy
+ create mode 100644 media/audio/fingerprints/f9c515b4-6ebf-4016-881b-b759f2418340.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-Restart=on-failure
-[Service]\#012Restart=on-failure\#012RestartSec=5s

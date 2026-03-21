@@ -392,6 +392,21 @@ class VideoRecording(models.Model):
         from .concat import concat
         super(VideoRecording, self).save(*args, **kwargs)
 
+    def delete_video(self):
+        import os
+        for frame in self.frames.all():
+            if frame.frame:
+                try:
+                    os.remove(frame.frame.path)
+                except: pass
+                try:
+                    os.remove(frame.still.path)
+                except: pass
+        if self.file:
+            try:
+                os.remove(self.file.path)
+            except: pass
+
     def delete(self):
         import os
         for frame in self.frames.all():

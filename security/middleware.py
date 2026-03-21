@@ -107,7 +107,7 @@ def security_middleware(get_response):
                     sess.expiry_warning = True
                     sess.save()
                 request.security_modal = redirect_path(request.path)
-                if not sess.authorized and request.security_modal:
+                if request.security_modal or (not sess.authorized) or (not sess.bypass): # and request.security_modal:
                     from security.build import get_next_redirect
                     red = get_next_redirect(request)
                     if red: return red

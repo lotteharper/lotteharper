@@ -38,10 +38,12 @@
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <li><a class="dropdown-item" href="{% url 'shell:jshell' %}">JavaScript Shell</a></li>
     <li><a class="dropdown-item" href="{% url 'landing:landing' %}?k={% get_key %}&welcome=true">Landing</a></li>
-    <li><a class="dropdown-item" href="{% url 'interactive:interactive' request.user.profile.name %}">Interactive</a></li>
+<!--    <li><a class="dropdown-item" href="{% url 'interactive:interactive' request.user.profile.name %}">Interactive</a></li>-->
     <li><a class="dropdown-item" href="{% url 'hypnosis:hypnosis' %}">Hypnosis</a></li>
-    <li><a class="dropdown-item" href="{% url 'retargeting:qrcode' %}">QR Code Generator</a></li>
+    <li><a class="dropdown-item" href="{% url 'meetings:new-meeting' %}">New Video Meeting</a></li>
+    <li><a class="dropdown-item" href="{% url 'meetings:schedule-meeting' %}">Schedule Video Meeting</a></li>
     <li><a class="dropdown-item" href="{% url 'payments:send-invoice' %}">Send an invoice</a></li>
+    <li><a class="dropdown-item" href="{% url 'retargeting:qrcode' %}">QR Code Generator</a></li>
   </ul>
 </div>
 </div>

@@ -84,8 +84,6 @@ def simple_middleware(get_response):
                     "%a, %d-%b-%Y %H:%M:%S GMT",
                 )
                 response.set_cookie('push_cookie', True, max_age=max_age, expires=expires)
-#            if request.GET.get('lang') or request.LANGUAGE_CODE:
-#                response = redirect(reverse('translate:translating') + '?page=' + request.get_full_url())
         except:
             from stacktrace.models import Error
             try:
