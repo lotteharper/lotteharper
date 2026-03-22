@@ -90,7 +90,6 @@ def translate(request, content, target=None, src=None):
         except:
             print(traceback.format_exc())
             pass
-        return
     import threading
     thread_count = 0
     threads = [None] * len(content_fragments)
