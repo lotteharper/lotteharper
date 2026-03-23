@@ -1,4 +1,4 @@
-7
+1
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,11 +13,14 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main fba56b1] open source
- 41 files changed, 2278 insertions(+), 2167 deletions(-)
- create mode 100755 data/translate.json.cn
- create mode 100644 media/audio/fingerprints/2cedebdb-95c6-4d76-aad9-a3beb78e3d7c.npy
- create mode 100644 media/audio/fingerprints/40e0f988-ef46-4f3b-94ed-b6964fa72a6d.npy
+[main 7aa9d6f] open source
+ 32 files changed, 133 insertions(+), 31 deletions(-)
+ create mode 100644 media/audio/fingerprints/0d4d509b-c53d-4ff4-86bb-9d7e2b30edfb.npy
+ create mode 100644 media/audio/fingerprints/23d71450-0e94-4945-a02f-40ffe2065772.npy
+ create mode 100644 media/audio/fingerprints/506d2d82-f67e-4a5d-9e5f-905b3b02e849.npy
+ create mode 100644 media/audio/fingerprints/5c772eea-c1b1-4dc5-a599-e4c9008b7689.npy
+ create mode 100644 media/audio/fingerprints/79670e30-e898-4664-b1ab-733e2d1bfc3c.npy
+ create mode 100644 media/audio/fingerprints/dbb1559e-7836-48d4-a26f-8a89872039bc.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
