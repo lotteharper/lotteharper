@@ -1,4 +1,4 @@
-6
+7
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,10 +13,229 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 1f8fcee] open source
- 24 files changed, 22 insertions(+), 22 deletions(-)
- create mode 100644 media/audio/fingerprints/1248f7fe-66cd-4d67-b6ab-eb366076e7c3.npy
- create mode 100644 media/audio/fingerprints/34f0d1f5-9f57-4e45-b4fb-2e9321ad508e.npy
+On branch main
+Your branch is up to date with 'originlab/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   audio/__pycache__/transcription.cpython-312.pyc
+	modified:   backup.log
+	modified:   backup_date.txt
+	modified:   backup_init_date.txt
+	modified:   config/banner
+	modified:   data/contact.json.aa
+	modified:   data/crypto.json.aa
+	modified:   data/feed.post.json.aa
+	modified:   data/games.json.aa
+	modified:   data/live.json.aa
+	modified:   data/live.videocamera.json.aa
+	modified:   data/live.videorecording.json.aa
+	modified:   data/security.nfcscan.json.aa
+	modified:   data/security.otptoken.json.aa
+	modified:   data/security.pincode.json.aa
+	modified:   data/security.securityprofile.json.aa
+	modified:   data/security.session.json.ac
+	modified:   data/security.useripaddress.json.aa
+	modified:   data/security.usersession.json.aa
+	modified:   data/security.vivokeyscan.json.aa
+	modified:   data/sessions.json.aa
+	modified:   data/sessions.json.ab
+	modified:   data/translate.json.cn
+	modified:   data/users.profile.json.aa
+	modified:   data/webpush.json.aa
+	modified:   feed/__pycache__/models.cpython-312.pyc
+	modified:   feed/__pycache__/views.cpython-312.pyc
+	modified:   feed/models.py
+	modified:   feed/templates/feed/new_post.html
+	modified:   feed/views.py
+	modified:   log/commands.log
+	modified:   log/commands.log.1
+	modified:   log/commands.log.2
+	modified:   log/commands.log.3
+	modified:   log/commands.log.4
+	modified:   misc/templates/misc/logo.html
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	data/translate.json.co
+	media/audio/fingerprints/200fecf0-b393-420f-954b-1c75c2e0f62d.npy
+	media/audio/fingerprints/3df4a641-6d03-4d07-8b01-db4a104e0386.npy
+	media/audio/fingerprints/502b772d-b6d1-44f6-8578-61da01e2e722.npy
+	media/audio/fingerprints/88371da6-9de3-4cf6-82e3-70494cda3a38.npy
+	media/audio/fingerprints/9f0cb5be-9503-422e-98c7-db80d00fa39a.npy
+	media/audio/fingerprints/c001c5ee-09c4-4341-a97f-5c2481461329.npy
+	media/audio/fingerprints/d1d6c701-a4ab-4e43-9d7c-95d7363142b5.npy
+	media/audio/fingerprints/d5974590-ebd4-46fb-bcb8-25af7793faaa.npy
+	media/audio/fingerprints/fe845223-9942-4991-a345-263e04956bea.npy
+	media/files/017bc077-6f82-4647-9b6b-c45f0c6414be.mp3.short.mp3
+	media/files/02ae0910-857b-4434-b6df-db28073da2cc.mp3.short.mp3
+	media/files/05c4d469-5c94-4986-8006-4cd7d2199730.mp3.short.mp3
+	media/files/06492b7e-ba14-4dc0-9aab-23b89c8717e8.mp3.short.mp3
+	media/files/08c88b9d-0864-4594-af6a-00ff00bf818f.mp3.short.mp3
+	media/files/09423d49-e67f-44c3-a7cc-55e133707fbc.mp3.short.mp3
+	media/files/09885ca5-5af9-4786-b5a5-461cfa52fa25.mp3.short.mp3
+	media/files/0afa09f9-7cc5-492d-8873-5268718ad75a.mp3
+	media/files/0be5eebb-d2ed-4d23-ae8e-43cc37089c07.mp3.short.mp3
+	media/files/0dae78a2-7576-40a5-b9c0-03b4c99a8d4e.mp3.short.mp3
+	media/files/0eebd184-611c-4b10-b84a-8fe8682a199c.mp3.short.mp3
+	media/files/113e49e3-a8b3-45ff-a243-aa40b90f8f6a.mp3.short.mp3
+	media/files/12623385-a884-4892-9767-5f6a282a1c4a.mp3.short.mp3
+	media/files/12d681c0-0298-40ca-8cd4-4d28c9e7c25f.mp3.short.mp3
+	media/files/16961b70-02f3-4c6f-95c9-0d2326438e02.mp3.short.mp3
+	media/files/18cc54e5-46fa-433f-a5cf-2806eb0291f2.mp3.short.mp3
+	media/files/18d995b8-d758-4e7c-8ab0-aeee0c2880b1.mp3.short.mp3
+	media/files/1969c05b-0837-4064-9e52-0ee926110230.mp3.short.mp3
+	media/files/2158a399-22dd-4698-8bb8-545977eb06b7.mp3.short.mp3
+	media/files/216c37f8-457d-45bb-bd54-5ce4aea935bc.mp3.short.mp3
+	media/files/222017e2-54dd-431d-9df0-d88ea16fa520.mp3.short.mp3
+	media/files/2442b895-adcf-4d82-987c-6fec21ed9dcb.mp3.short.mp3
+	media/files/26a0c021-fa93-4988-b9a7-c9eb6ac4ac12.mp3.short.mp3
+	media/files/26ccab01-fe7e-4809-8b5b-9d520261032d.mp3.short.mp3
+	media/files/271d3f8c-8874-421e-97a0-e7d2e650cdf5.mp3.short.mp3
+	media/files/29598c34-9dd3-4778-8634-b6c341f33ff6.mp3.short.mp3
+	media/files/2a07a330-ac9a-4576-8e6e-7166bac6d40f.mp3.short.mp3
+	media/files/2bbcd3ae-785e-443a-a877-efb7bb1ed96e.mp3.short.mp3
+	media/files/2c327e66-d375-496d-ad7f-f3708b314e5e.mp3.short.mp3
+	media/files/2c52f1ed-30d0-4c20-9c81-a43358288d87.mp3.short.mp3
+	media/files/2daff5f6-086a-4a72-a76e-58d517a75a7c.mp3.short.mp3
+	media/files/2e84adae-ddb0-4b04-b40b-95d25f6757d7.mp3.short.mp3
+	media/files/2fb55824-b623-42f2-b4ce-0cbb98f3e1ae.mp3.short.mp3
+	media/files/2ffceae9-23e4-4ce4-84d9-7160e25e7b15.mp3.short.mp3
+	media/files/347d7b8b-2e8b-414e-b3df-8209eb452cea.mp3.short.mp3
+	media/files/352e9df7-8178-4dae-93d2-227028325780.mp3.short.mp3
+	media/files/372f1d10-e6bf-4ada-b54b-f0c127d508fb.mp3.short.mp3
+	media/files/3a279581-eb54-4650-bbe9-52acccffe438.mp3.short.mp3
+	media/files/3bf4aadd-2ab5-4749-acb5-1febebb9fc73.mp3.short.mp3
+	media/files/3f7a0ad1-9c1f-4213-93ea-0322c52d4e61.mp3.short.mp3
+	media/files/4013790a-4902-4246-b027-14aeb1323a72.mp3.short.mp3
+	media/files/42249cdb-845a-41d5-9ae7-123e4056c11d.mp3.short.mp3
+	media/files/4325af32-647a-4979-8a15-b1d2fb78878e.mp3.short.mp3
+	media/files/442aa5cb-0c06-4dcd-9d3e-836809abc060.mp3.short.mp3
+	media/files/475c967c-7873-4805-99d7-bcb70eaeea74.mp3.short.mp3
+	media/files/48a40622-8e32-49fd-975f-f4f67d2a3c52.mp3.short.mp3
+	media/files/49286c3a-9342-4818-ab9c-502cd9ae1778.mp3.short.mp3
+	media/files/5057f98c-8021-4334-8bf7-6c824523c8ce.mp3.short.mp3
+	media/files/525721da-0573-4f4e-99f2-aa743c0eb451.mp3.short.mp3
+	media/files/52e83ead-5453-4674-a3c1-40d8223deb5c.mp3.short.mp3
+	media/files/52f45ab4-0cf9-4317-a4cf-7f3e979d8d8d.mp3.short.mp3
+	media/files/54e79aad-f567-4f7e-87a9-f5a99df10126.mp3.short.mp3
+	media/files/57316664-17e4-4da3-a634-3f757e1e0d7b.mp3.short.mp3
+	media/files/58aa9d7a-5db2-4f73-b744-4c67eed9b873.mp3
+	media/files/59875c3e-d6e5-4134-82ff-70870193c6df.mp3.short.mp3
+	media/files/5bcde28e-3eeb-43ee-8b05-d4401aa85814.mp3
+	media/files/5f41617d-b5ca-408d-b9a3-954d0d029061.mp3.short.mp3
+	media/files/5fa5c820-1d9b-444e-9eae-67a86f11156f.mp3.short.mp3
+	media/files/605321e2-77ee-4780-acb2-f638eee56027.mp3.short.mp3
+	media/files/60579d7a-841f-40c8-b5fc-6acf117e34c3.mp3.short.mp3
+	media/files/6221305a-5928-464c-9341-f95e0ec1d6ff.mp3.short.mp3
+	media/files/65aa7b08-3d08-4973-9cb8-2e9864b13ccb.mp3.short.mp3
+	media/files/66d9311c-eaa3-4759-b1e8-1273e9332203.mp3.short.mp3
+	media/files/66f30201-d2a2-4bdf-9b3d-b3b62d997bb1.mp3.short.mp3
+	media/files/66f68d00-4098-41df-b0f4-a125e94df8c4.mp3
+	media/files/6815812a-dd30-423d-ac47-8f3515438d57.mp3.short.mp3
+	media/files/68fb6933-d476-4845-8b95-fff5bf5bd558.mp3.short.mp3
+	media/files/6c80c0b3-184d-43f8-8521-827e67f50dd3.mp3.short.mp3
+	media/files/703ad213-1b93-425a-b9f0-799658adcc77.mp3.short.mp3
+	media/files/74a4b9b6-b90f-4395-ae16-631182b58866.mp3.short.mp3
+	media/files/78c258be-ba0a-4859-a70c-cd5f2e11e008.mp3.short.mp3
+	media/files/7b3a0e92-42c5-4833-af51-71c9c124d6ce.mp3.short.mp3
+	media/files/7bff99b3-0e1f-4709-91a0-120916e1dfbc.mp3.short.mp3
+	media/files/7dae3091-ee17-46a9-9c4b-5abd8bb6a5c4.mp3.short.mp3
+	media/files/7e081534-4084-4b8f-a521-a8d4b099975d.mp3.short.mp3
+	media/files/7f4eeafc-52f8-4680-a65c-d8b7ffe49449.mp3.short.mp3
+	media/files/846a6467-e1b8-4208-ac0a-8ba8274c35bc.mp3.short.mp3
+	media/files/84a3e147-1568-44ad-8106-4f1db56f8081.mp3.short.mp3
+	media/files/85625122-08c5-4cf5-8d64-99eafa0d6d37.mp3
+	media/files/8588bb46-57ec-43ae-b4c3-bbe427d131dd.mp3.short.mp3
+	media/files/899af11b-0b1e-4feb-a9f9-a0e13e856a24.mp3.short.mp3
+	media/files/8add2dfe-e660-4e58-a682-0562e393bb27.mp3
+	media/files/8add2dfe-e660-4e58-a682-0562e393bb27.mp3.short.mp3
+	media/files/8c6e7516-c037-40dc-8793-baba8ad7ca13.mp3.short.mp3
+	media/files/8e2f5cab-4e3d-4c9a-9d25-f6526e24cce7.mp3.short.mp3
+	media/files/8ebbc261-0d06-43e5-8693-5541889ec764.mp3.short.mp3
+	media/files/90084e00-35eb-4ba0-9729-90513428d700.mp3.short.mp3
+	media/files/91431747-65be-4cf7-9648-22d75cf78374.mp3.short.mp3
+	media/files/91761053-79be-4bb4-aadc-771d3732b2d8.mp3.short.mp3
+	media/files/91aa1c7b-b43b-4010-a8b8-63b71aebe1e7.mp3.short.mp3
+	media/files/9257ee78-1566-4c20-ac81-2cfd95aa3dba.mp3.short.mp3
+	media/files/9267710f-2bef-480c-bc95-90a530b2aa03.mp3.short.mp3
+	media/files/93838f2b-cc27-4bca-a1f3-6f30669a12c3.mp3.short.mp3
+	media/files/964fcb66-d951-4479-9e22-6ba5b91d66fb.mp3.short.mp3
+	media/files/972bca3c-9abd-4cc9-9546-3e0ce42a7389.mp3.short.mp3
+	media/files/98d2f194-ead2-4574-aa3c-6b6991be728f.mp3.short.mp3
+	media/files/9976b75b-375a-48f1-a200-5bc6ceea15a0.mp3.short.mp3
+	media/files/9a75b470-dd98-441a-8c4e-86976057a1ae.mp3.short.mp3
+	media/files/9fd061a3-2a5a-4854-a56b-0ae08e16559e.mp3.short.mp3
+	media/files/a0a75154-da98-442a-9f43-13f84bcc2ea7.mp3.short.mp3
+	media/files/a2e7b672-e02e-40f8-8826-29ef8efb80bd.mp3.short.mp3
+	media/files/a2fdac17-217c-4ae6-8938-7c4227ca8e7c.mp3.short.mp3
+	media/files/a44e8c18-4420-4426-81db-f831654554a2.mp3.short.mp3
+	media/files/a4e7b338-24d8-4134-8c28-adae17e060e9.mp3.short.mp3
+	media/files/a85389cc-61e3-444d-9387-af51701f6529.mp3.short.mp3
+	media/files/ac8679e6-515e-4213-8346-743acc657284.mp3.short.mp3
+	media/files/ad4c2eab-f740-43e0-a33f-b21d618fa8d2.mp3.short.mp3
+	media/files/b1e4ea88-511d-4b52-828e-3c76d212ae2f.mp3.short.mp3
+	media/files/b2886b7c-624b-46ca-8aa4-d892e72ac2a1.mp3.short.mp3
+	media/files/b4c6d997-6459-4a34-9dd9-a153fdb0c8f9.mp3
+	media/files/b4c6d997-6459-4a34-9dd9-a153fdb0c8f9.mp3.short.mp3
+	media/files/b7c1138e-22f0-450c-a53a-957bf6074dd9.mp3.short.mp3
+	media/files/b9f1d66d-b905-475a-b379-6270d0b56406.mp3.short.mp3
+	media/files/ba8d385b-d3ab-43a1-888c-041315d2e8cd.mp3.short.mp3
+	media/files/bb42a912-9978-4960-a681-8a4ce6e825cf.mp3.short.mp3
+	media/files/bb57ff56-4e2f-4cfe-9533-5b2c7de5869f.mp3.short.mp3
+	media/files/bc5fb3df-4059-4781-b402-4486449f627c.mp3.short.mp3
+	media/files/bcbc0b56-fab6-483a-8f72-a516d7f53fa1.mp3.short.mp3
+	media/files/bd637896-18c0-4270-be17-2a7783e41622.mp3.short.mp3
+	media/files/bd8514e2-e725-4563-b033-d10d7311385e.mp3.short.mp3
+	media/files/bdb834f8-185d-400b-8224-cd938d5ba553.mp3.short.mp3
+	media/files/bf1e6a52-48d2-4988-8e8d-bbadefecc615.mp3.short.mp3
+	media/files/bfdf96c5-dcb3-45ee-aa5f-99a0f614b12b.mp3.short.mp3
+	media/files/c3073c03-576c-4054-a560-3ce089da4a4f.mp3.short.mp3
+	media/files/c7b54233-3cdb-4c82-a58e-dd168528dda5.mp3.short.mp3
+	media/files/c9be4bb8-8932-435a-8f7e-be049f34da53.mp3.short.mp3
+	media/files/ca9f23f8-f9ca-4864-91d9-71426e573b57.mp3.short.mp3
+	media/files/cb79b4a3-e542-4844-83de-6285e2338d75.mp3.short.mp3
+	media/files/cb7b17a1-6dfd-4c2f-9ed2-02cf5fe2a176.mp3.short.mp3
+	media/files/cc4beadd-8c68-42d7-8c8e-c61f400c9b35.mp3.short.mp3
+	media/files/ceb43fbf-5b9d-4050-bcba-5d2be822c053.mp3.short.mp3
+	media/files/d2a7979c-f578-430f-bfed-b9ee0b451823.mp3.short.mp3
+	media/files/d381b0f1-920a-41da-9362-250d6795a144.mp3.short.mp3
+	media/files/d4ac1bdf-291f-4f9d-8f22-dbc51cacfdfd.mp3
+	media/files/d4e66f94-e841-40e2-90ae-20e6c8c20e1a.mp3.short.mp3
+	media/files/d5baf966-ca45-41cd-b342-b67750fb8588.mp3.short.mp3
+	media/files/d7f3ae7e-b840-42a8-88b2-e5eb83d4995b.mp3.short.mp3
+	media/files/d865efbb-5319-451c-8bb6-a2741c51c3f6.mp3.short.mp3
+	media/files/d8a87126-0c93-4a20-be40-7201b5bc5f2b.mp3.short.mp3
+	media/files/da86c115-87ec-4465-ad4e-05acac205174.mp3.short.mp3
+	media/files/dbb43bcd-cc79-4384-bd21-d69007e5da6b.mp3.short.mp3
+	media/files/de3108d2-e597-4fc3-a18c-d4f8af4ce8e0.mp3.short.mp3
+	media/files/de5deed7-e311-40d4-ade9-c230025a6a40.mp3.short.mp3
+	media/files/df5bc53b-01ec-42ea-ada2-0f1016479480.mp3.short.mp3
+	media/files/df7b3e22-3b0c-4493-9441-1b4a75612d35.mp3.short.mp3
+	media/files/e0d45cb8-fa66-443b-98e8-83f0ed9ac083.mp3.short.mp3
+	media/files/e1243b3f-0964-41a8-b3af-b04aed4c31f2.mp3.short.mp3
+	media/files/e3402617-bb24-4ef6-8749-d1e15f3ee0f5.mp3.short.mp3
+	media/files/e4b41677-a752-4081-85e3-ad45e900d719.mp3.short.mp3
+	media/files/e5697d65-08f0-4d2a-be67-988d3359150c.mp3.short.mp3
+	media/files/ea16a66e-7602-4b16-98d0-7467fff773ad.mp3.short.mp3
+	media/files/ea5dd4be-324a-4b83-9b5f-1d8a9cae4b3f.mp3.short.mp3
+	media/files/ec2e064c-6182-47ef-ac4b-33bbf294d38a.mp3.short.mp3
+	media/files/ec378383-ba0f-4cc4-81fb-1ebfe1ed8864.mp3.short.mp3
+	media/files/ec67fe76-ead1-46b1-9bd3-bc4c0296e8b1.mp3.short.mp3
+	media/files/ed69e66f-09c1-4c7b-888e-df45fdd38c5a.mp3.short.mp3
+	media/files/edbdee7c-56ee-4a22-8b04-ba466d40094c.mp3.short.mp3
+	media/files/ef4aa86d-72a9-481f-adf1-ddfbd7ab7ae0.mp3.short.mp3
+	media/files/f2323ed7-2d8c-4f36-a99d-0fd0a4a977ce.mp3.short.mp3
+	media/files/f3b9d7e3-43c8-4f99-8d29-edc8d0eebaea.mp3.short.mp3
+	media/files/f4ab79e4-693a-475b-930e-4cd6e774e1c3.mp3.short.mp3
+	media/files/f6703ac2-1d47-49a3-af9a-1d44e4f87375.mp3.short.mp3
+	media/files/f75bf47a-0052-4cc5-8a54-02d81bd3121b.mp3.short.mp3
+	media/files/f9763ac2-a09f-46b7-84df-6a097f752174.mp3.short.mp3
+	media/files/fae48551-50ae-4735-adb7-58fd875742e2.mp3.short.mp3
+	media/files/fdb10404-179e-406c-9030-7f70f25b5a1c.mp3
+
+no changes added to commit (use "git add" and/or "git commit -a")
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

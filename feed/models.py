@@ -755,20 +755,7 @@ class Post(models.Model):
                     img.thumbnail(output_size)
                     img = Image.open(self.image.path)
                     img.save(self.image.path)
-        if self.file and (self.file and ((not self.file_bucket) or this and self.file.path != this.file.path)):
-            towrite = self.file_bucket.storage.open(self.file.path, mode='wb')
-            with self.file.open('rb') as file:
-                towrite.write(file.read())
-            towrite.close()
-            self.file_bucket = self.file.path
-            self.file_sample_bucket = None
-            self = self.make_file_sample()
-            self.file_sample = self.file.path
-            towrite = self.file_sample_bucket.storage.open(self.file_sample.path, mode='wb')
-            with self.file.open('rb') as file:
-                towrite.write(file.read())
-            towrite.close()
-            self.file_sample_bucket = self.file_sample.path
+
         if settings.REMOVE_DUPLICATES and self and self.image_original and ((this and self.image_original != this.image_original and self.image_original) or (not self.image_hash and self.image_original and os.path.exists(self.image_original.path))) and self.image_original.name != 'static/default.png':
             import hashlib
             with open(self.image_original.path, 'rb') as f:
@@ -790,6 +777,25 @@ class Post(models.Model):
             self.friendly_name = self.get_friendly_name()
 #        if (this and ((this.content != self.content) or (not this))) and self.posted:
 #            self.compile_content()
+#        try:
+#            super(Post, self).save(*args, **kwargs)
+#        except:
+#            import traceback
+#            print(traceback.format_exc())
+        if self.file != None and self.file and os.path.exists(self.file.path) and (self.file and ((not self.file_bucket) or this and self.file and self.file.path != this.file.path)):
+            towrite = self.file_bucket.storage.open(self.file.path, mode='wb')
+            with self.file.open('rb') as file:
+                towrite.write(file.read())
+            towrite.close()
+            self.file_bucket = self.file.path
+            self.file_sample_bucket = None
+            self = self.make_file_sample()
+            self.file_sample = self.file.path
+            towrite = self.file_sample_bucket.storage.open(self.file_sample.path, mode='wb')
+            with self.file.open('rb') as file:
+                towrite.write(file.read())
+            towrite.close()
+            self.file_sample_bucket = self.file_sample.path
         try:
             super(Post, self).save(*args, **kwargs)
         except:

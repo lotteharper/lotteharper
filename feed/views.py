@@ -961,6 +961,10 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         from django.contrib import messages
         self.object = self.get_object()
         form.instance.author = self.request.user
+        import datetime
+        import pytz
+        from django.conf import settings
+        form.instance.date_posted = datetime.datetime.combine(form.cleaned_data['date'], form.cleaned_data['time']).astimezone(pytz.timezone(settings.TIME_ZONE))
         messages.success(self.request, f'Your post has been updated.')
         return super().form_valid(form)
 
