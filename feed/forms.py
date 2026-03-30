@@ -175,6 +175,19 @@ class ScheduledPostForm(forms.ModelForm):
             data = data[:max_length]
         return data
 
+    def clean_date_auction(self):
+        data = self.cleaned_data['date_auction']
+        from django.conf import settings
+        from django.utils import timezone
+        import datetime
+        import pytz
+        auction_dt = timezone.make_aware(datetime.datetime.combine(self.cleaned_data['date_auction'], datetime.time(hour=12, minute=0, second=0)), pytz.timezone(settings.TIME_ZONE))
+        return auction_dt
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        return date
+
     class Meta:
         model = Post
         fields = ('feed', 'content', 'image', 'file', 'price', 'private', 'public', 'pinned', 'confirmation_id', 'paid_file', 'date_auction')

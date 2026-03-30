@@ -2,6 +2,11 @@ from django import template
 
 register = template.Library()
 
+@register.filter('secondstominutes')
+def secondstominutes(input):
+    import math
+    return f"{math.floor(input/60)}:{str(math.floor(input%60)).zfill(2)}"
+
 @register.filter('character_phone_number')
 def character_phone_number(phone):
     characters = [

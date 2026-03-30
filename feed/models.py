@@ -443,7 +443,7 @@ class Post(models.Model):
         if not self.friendly_name:
             self.friendly_name = self.get_friendly_name()
             self.save()
-        return reverse('feed:post-detail', kwargs={'uuid': self.friendly_name})
+        return reverse('feed:post-detail', kwargs={'name': self.friendly_name})
 
     def get_friendly_name(self):
         from django.urls import reverse
@@ -782,7 +782,8 @@ class Post(models.Model):
 #        except:
 #            import traceback
 #            print(traceback.format_exc())
-        if self.file != None and self.file and os.path.exists(self.file.path) and (self.file and ((not self.file_bucket) or this and self.file and self.file.path != this.file.path)):
+        if self.file != None and self.file and os.path.exists(self.file.path) and (self.file and ((not self.file_bucket) or (this and self.file and self.file.path != this.file.path))):
+            print('Writing file to bucket storage.')
             towrite = self.file_bucket.storage.open(self.file.path, mode='wb')
             with self.file.open('rb') as file:
                 towrite.write(file.read())

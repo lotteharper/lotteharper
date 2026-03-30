@@ -730,19 +730,20 @@ def all(request):
 #@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
 @vary_on_cookie
 @cache_page(60*60*24*7)
-def post_detail(request, uuid):
+#@never_cache
+def post_detail(request, name):
     from django.core.paginator import Paginator
     from django.contrib import messages
     from feed.models import Post
     from django.shortcuts import render, get_object_or_404
     from django.core.exceptions import PermissionDenied
-    post = Post.objects.filter(friendly_name=uuid).order_by('-date_posted').first()
+    post = Post.objects.filter(friendly_name=name).order_by('-date_posted').first()
     if not post:
-        post = Post.objects.filter(friendly_name__icontains=uuid[:32]).order_by('-date_posted').first()
+        post = Post.objects.filter(friendly_name__icontains=name[:32]).order_by('-date_posted').first()
     if not post:
-        post = Post.objects.filter(friendly_name__icontains=uuid[:24]).order_by('-date_posted').first()
+        post = Post.objects.filter(friendly_name__icontains=name[:24]).order_by('-date_posted').first()
     if not post:
-        post = Post.objects.filter(friendly_name__icontains=uuid[:15]).order_by('-date_posted').first()
+        post = Post.objects.filter(friendly_name__icontains=name[:15]).order_by('-date_posted').first()
     from barcode.tests import minor_document_scanned
     if (((not request.user.is_authenticated or not hasattr(request.user, 'profile') or not post.author in request.user.profile.subscriptions.all()) and post.private) and post.author != request.user and not post.recipient == request.user) or (post.secure or (post.private)) and not (request.user.is_authenticated and minor_document_scanned(request.user)):
         from django.urls import reverse
@@ -766,7 +767,7 @@ def post_detail(request, uuid):
             title = post.content.splitlines()[0][0:38].rsplit(' ', 1)[0] + '...'
         from translate.translate import translate
         from django.conf import settings
-        title = '\"' + translate(None, title, src=None, target=settings.DEFAULT_LANG) + '\" - View Post'
+        title = '\"' + translate(request, title, src=None, target=settings.DEFAULT_LANG) + '\" - View Post'
     if len(post.content.splitlines()) > 1:
         description = post.content.splitlines()[1][0:155]
         if len(description) == 0 and len(post.content.splitlines()) > 2:
@@ -925,54 +926,65 @@ def new_post(request):
 from .forms import PostForm, ScheduledPostForm, UpdatePostForm
 from .models import Post
 
-@method_decorator(never_cache, name='dispatch')
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Post
-    form_class = UpdatePostForm
-    object = None
-
-    def get(self, request, pk):
-        from django.shortcuts import render
-        from django.http import HttpResponseRedirect
-        self.object = self.get_object()
-        if ('***' in self.get_object().content or '```' in self.get_object().content) and not request.GET.get('raw', None): return HttpResponseRedirect(request.path + '?raw=t')
-        return render(request, self.template_name, self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        censor = not minor_identity_verified(self.request.user)
-        context['nudity_censor'] = censor
-        if censor:
-            from django.conf import settings
-            context['nudity_censor_scale'] = settings.NUDITY_CENSOR_FRONTEND_SCALE
-        context['headjs'] = True
-        return context
-
-    def get_initial(self):
-        import pytz
-        from django.conf import settings
-        from security.crypto import decrypt_cbc
-        try:
-            return {'time': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date, 'auction_message': decrypt_cbc(self.get_object().auction_message, settings.AES_KEY)} #.strftime('%m-%d-%Y')
-        except:
-            return {'time': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': self.get_object().date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date} #.strftime('%m-%d-%Y')
-
-    def form_valid(self, form):
-        from django.contrib import messages
-        self.object = self.get_object()
-        form.instance.author = self.request.user
-        import datetime
-        import pytz
-        from django.conf import settings
-        form.instance.date_posted = datetime.datetime.combine(form.cleaned_data['date'], form.cleaned_data['time']).astimezone(pytz.timezone(settings.TIME_ZONE))
-        messages.success(self.request, f'Your post has been updated.')
-        return super().form_valid(form)
-
-    def test_func(self):
-        post = self.get_object()
-        if minor_identity_verified(self.request.user) and is_vendor(self.request.user) and self.request.user == post.author:
-            return True
-        return False
+@login_required
+def update_post(request, pk):
+    post = Post.objects.get(id=pk)
+    from .forms import ScheduledPostForm
+    from django.contrib import messages
+    from django.shortcuts import render, redirect
+    from django.utils import timezone
+    from django.conf import settings
+    import datetime, pytz, os
+    from .models import get_file_path, get_image_path
+    if minor_identity_verified(request.user) and is_vendor(request.user) and request.user == post.author:
+        if request.method == 'POST':
+            form = ScheduledPostForm(request.POST, request.FILES, instance=post)
+            if form.is_valid():
+                files = request.FILES.getlist('image')
+                if len(files) > 0:
+                    f = files[0]
+                    path = os.path.join(settings.MEDIA_ROOT, get_image_path(form.instance, f.name))
+                    with open(path, 'wb+') as file:
+                        for chunk in f.chunks():
+                            file.write(chunk)
+                        file.close()
+                    form.instance.image = path
+                files = request.FILES.getlist('file')
+                if len(files) > 0:
+                    f = files[0]
+                    path = os.path.join(settings.MEDIA_ROOT, get_file_path(form.instance, f.name))
+                    with open(path, 'wb+') as file:
+                        for chunk in f.chunks():
+                            file.write(chunk)
+                        file.close()
+                    form.instance.file = path
+                posted_dt = timezone.make_aware(datetime.datetime.combine(form.cleaned_data['date'], form.cleaned_data['time']), pytz.timezone(settings.TIME_ZONE))
+                form.instance.date_posted = posted_dt
+                post = form.save()
+                post.upload()
+                messages.success(request, 'Your post has been updated.')
+                return redirect(post.get_absolute_url())
+        else:
+            def get_init(post):
+                import pytz
+                from django.conf import settings
+                from security.crypto import decrypt_cbc
+                try:
+                    return {'time': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date, 'auction_message': decrypt_cbc(post.auction_message, settings.AES_KEY)} #.strftime('%m-%d-%Y')
+                except:
+                    return {'time': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date} #.strftime('%m-%d-%Y')
+            if ('***' in post.content or '```' in post.content) and not request.GET.get('raw', None): return HttpResponseRedirect(request.path + '?raw=t')
+            context = {'title': 'Edit post', 'form': ScheduledPostForm(initial=get_init(post), instance=post)}
+            censor = not minor_identity_verified(request.user)
+            context['nudity_censor'] = censor
+            if censor:
+                from django.conf import settings
+                context['nudity_censor_scale'] = settings.NUDITY_CENSOR_FRONTEND_SCALE
+            context['headjs'] = True
+            return render(request, 'feed/post_edit_form.html', context)
+    else:
+        from django.urls import reverse
+        return redirect(reverse('go:go'))
 
 from django.urls import reverse_lazy
 

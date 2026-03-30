@@ -945,14 +945,14 @@ DEFAULT_CAMERA_NAME = 'private'
 LOGIN_EXPIRY_WARNING_MINUTES = 30
 
 # Sentry
-import sentry_sdk
-sentry_sdk.init(
-    dsn="https://c321f4368422e514f39fcb2b07ba8ffc@o4506803873447936.ingest.sentry.io/4506803875282944",
+#import sentry_sdk
+#sentry_sdk.init(
+#    dsn="https://c321f4368422e514f39fcb2b07ba8ffc@o4506803873447936.ingest.sentry.io/4506803875282944",
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
-    traces_sample_rate=1.0,
+#    traces_sample_rate=1.0,
     # Set profiles_sample_rate to 1.0 to profile 100%
     # of sampled transactions.
     # We recommend adjusting this value in production.
-    profiles_sample_rate=0.5,
-)
+#    profiles_sample_rate=0.5,
+#)

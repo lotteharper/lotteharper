@@ -18,8 +18,8 @@ def remove_post_duplicates():
             else:
                 duplicates.append(post.id)
     for d in duplicates:
-        if not (d.file or d.file_bucket):
-            post = Post.objects.get(id=d)
+        post = Post.objects.get(id=d)
+        if not (post.file or post.file_bucket):
             post.private = True
             post.published = False
             post.save()

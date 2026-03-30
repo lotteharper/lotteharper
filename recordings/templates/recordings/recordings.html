@@ -22,7 +22,7 @@
 <div style="position: relative; right: 5px;" class="mr-3">
 {% with recording as content %}{% include 'clock.html' %}{% endwith %}
 </div>
-<p>Recording of {{ recording.frames.count }} frames on {{ recording.last_frame }} from camera "{{ recording.camera }}" - <a href="{% url 'recordings:recording' recording.uuid %}" title="Recordings">Watch</a></p>
+<p>Recording of duration {{ recording.duration|secondstominutes }} on {{ recording.last_frame }} from camera "{{ recording.camera }}" - <a href="{% url 'recordings:recording' recording.uuid %}" title="Recordings">Watch</a></p>
 </div>
 <div style="display: inline-block;">
 {% for frame in recording.frames.all|slice:"24" %}
