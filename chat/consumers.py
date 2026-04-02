@@ -11,7 +11,9 @@ from users.models import Profile
 import datetime
 from django.core.paginator import Paginator
 
-@sync_to_async
+chats = {}
+remote_chats = {}
+
 def get_chat(user_id, recipient_id, lang='en'):
     user = User.objects.get(id=int(user_id))
     recipient = User.objects.get(id=int(recipient_id))
@@ -54,10 +56,21 @@ def get_chat_user(name):
 def get_user(user_id):
     return User.objects.get(id=user_id)
 
-async def chat_event(self):
-    chat = await get_chat(self.scope['user'].id, self.chat_user.id)
-    if chat:
-        await self.send(text_data=chat)
+from django.utils import timezone
+
+last_update = None
+
+import datetime
+
+@sync_to_async
+def chat_event(self):
+    global last_update
+    global chats
+    if not last_update or last_update < timezone.now() - datetime.timedelta(seconds=15):
+        for uid, chat in chats.items():
+            c = get_chat(chat.scope['user'].id, chat.chat_user.id)
+            chat.send(text_data=c)
+        last_update = timezone.now()
 
 async def chat_thread(self):
     import asyncio
@@ -67,16 +80,22 @@ async def chat_thread(self):
         except: pass
         await asyncio.sleep(15)
 
+import uuid
+
 # Send the setting to the server from foreign user
 class ChatConsumer(AsyncWebsocketConsumer):
     chat_user = None
     connected = False
+    uid = None
     async def connect(self):
         self.chat_user = await get_chat_user(self.scope['url_route']['kwargs']['username'])
         await self.accept()
         self.connected = True
         user = await get_user(self.scope['user'].id)
         await chat_thread(self)
+        self.uid = str(uuid.uuid4())
+        global chats
+        chats[self.uid] = self
 
     async def disconnect(self, close_code):
         self.connected = False

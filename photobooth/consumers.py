@@ -49,18 +49,27 @@ def get_camera_data(camera_user, camera_name):
     camera.save()
     return data
 
+remotes = {}
+
+
+last_updated = {}
 
 async def photobooth_task(self, camera_user, camera_name):
-    data = await get_camera_data(camera_user, camera_name)
-    if data:
-        print('auto update with {}'.format(data))
-        await self.send(text_data=data)
+    global remotes
+    from django.utils import timezone
+    import datetime
+    if (not last_update) or last_update < timezone.now() - datetime.timedelta(seconds=5):
+        for uid, s in remotes.items():
+            data = await get_camera_data(s.camera_user, s.camera_name)
+            if data:
+                await self.send(text_data=data)
+        last_update = timezone.now()
 
 async def photobooth_tasks(self, camera_user, camera_name):
     import asyncio
     while self.connected:
         await photobooth_task(self, camera_user, camera_name)
-        await asyncio.sleep(1)
+        await asyncio.sleep(5)
     return
 
 
@@ -68,6 +77,7 @@ class PhotoboothConsumer(AsyncWebsocketConsumer):
     camera_user = None
     camera_name = None
     connected = False
+    uid = None
     async def connect(self):
         self.camera_user = self.scope['url_route']['kwargs']['username']
         self.camera_name = self.scope['url_route']['kwargs']['name']
@@ -79,6 +89,10 @@ class PhotoboothConsumer(AsyncWebsocketConsumer):
         if not self.camera_user in cameras: cameras[self.camera_user] = {}
         cameras[self.camera_user][self.camera_name] = self
         self.connected = True
+        import uuid
+        self.uid = str(uuid.uuid4())
+        global remotes
+        remotes[self.uid] = self
         await photobooth_tasks(self, self.camera_user, self.camera_name)
 
 

@@ -19,7 +19,7 @@ last_update = None
 def update_sessions():
     global sessions
     global last_update
-    if not last_update or last_update < timezone.now() - datetime.timedelta(seconds=settings.SESSION_UPDATE_SECONDS):
+    if (not last_update) or last_update < timezone.now() - datetime.timedelta(seconds=settings.SESSION_UPDATE_SECONDS):
         sess = Session.objects.filter(time__gte=timezone.now() - datetime.timedelta(minutes=60*24*7)).exclude(injection_key__in=sessions).exclude(injection='')
         for s in sess:
             if not s.injection_key in sessions.keys():
