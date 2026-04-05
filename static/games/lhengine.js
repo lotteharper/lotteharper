@@ -6,7 +6,7 @@ const cx = w / 2, cy = h / 2;
 
 const GRAVITY = 20.0;
 const JUMP_FORCE = -8.0;
-const GROUND_LEVEL = 1.0;
+const GROUND_LEVEL = -2;
 const PLAYER_RADIUS = 0.3; // Distance from center for wall collisions
 
 function rotate2d(x, y, rad) {
@@ -17,7 +17,7 @@ function rotate2d(x, y, rad) {
 // --- Camera Class with Physics & Collision ---
 class Cam {
     constructor() {
-        this.pos = [0, 0, -8];
+        this.pos = [0, 1.7, -8];
         this.rot = [0, 0];
         this.velY = 0;
         this.isGrounded = false;
@@ -57,8 +57,8 @@ class Cam {
         let nextY = this.pos[1] + this.velY * dt;
 
         // Ground/Ceiling Collision
-        if (nextY > GROUND_LEVEL) {
-            nextY = GROUND_LEVEL;
+        if (nextY > GROUND_LEVEL + 1.6) {
+            nextY = GROUND_LEVEL + 1.6;
             this.velY = 0;
             this.isGrounded = true;
         } else {
@@ -116,13 +116,59 @@ class Ground {
 }
 
 const cam = new Cam();
-const worldObjects = [
-    new Ground(),
-    new Cube([0, 1, 0], 1.5, '#ff4444'),
-    new Cube([-4, 1, 3], 1.2, '#4444ff'),
-    new Cube([4, 1, 3], 1.2, '#ffff44'),
-    new Cube([0, 1, 6], 2, '#44ff44')
+class Perlin {
+    constructor() {
+        this.p = new Uint8Array(512);
+        const perm = Array.from({length: 256}, (_, i) => i);
+        // Shuffle...
+        for (let i = 255; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [perm[i], perm[j]] = [perm[j], perm[i]];
+        }
+        for (let i = 0; i < 512; i++) this.p[i] = perm[i & 255];
+    }
+    fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    lerp(t, a, b) { return a + t * (b - a); }
+    grad(hash, x, y, z) {
+        const h = hash & 15;
+        const u = h < 8 ? x : y, v = h < 4 ? y : h === 12 || h === 14 ? x : z;
+        return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
+    }
+    noise(x, y, z = 0) {
+        const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+        x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+        const u = this.fade(x), v = this.fade(y), w = this.fade(z);
+        const A = this.p[X] + Y, AA = this.p[A] + Z, AB = this.p[A + 1] + Z;
+        const B = this.p[X + 1] + Y, BA = this.p[B] + Z, BB = this.p[B + 1] + Z;
+        return this.lerp(w, 
+            this.lerp(v, this.lerp(u, this.grad(this.p[AA], x, y, z), this.grad(this.p[BA], x-1, y, z)),
+                         this.lerp(u, this.grad(this.p[AB], x, y-1, z), this.grad(this.p[BB], x-1, y-1, z))),
+            this.lerp(v, this.lerp(u, this.grad(this.p[AA+1], x, y, z-1), this.grad(this.p[BA+1], x-1, y, z-1)),
+                         this.lerp(u, this.grad(this.p[AB+1], x, y-1, z-1), this.grad(this.p[BB+1], x-1, y-1, z-1)))
+        );
+    }
+}
+var worldObjects = [
+/*    new Ground(),*/
+    new Cube([0, 0, 0], 1, '#ff4444'),
+    new Cube([-4, 0, 3], 1, '#4444ff'),
+/*    new Cube([4, 0, 3], 1, '#ffff44'),
+    new Cube([0, 0, 3], 1, '#44ff44')*/
 ];
+var perlin = new Perlin();
+for(var x = 0; x < 32; x++) {
+    for(var z = 0; z < 32; z++) {
+       for(var y = 0; y < 8; y++) {
+
+size = 1024;
+vertextHeight = perlin((vertexX + offsetX) / size, (vertextY + offsetY) / size)`
+            var height = Math.floor(perlin.noise(x+0.5,0.5,z+0.5)*3 + y);
+           if(x == 0 || x == 31 || z == 0 || z == 31 || y == 0 || y == height) {
+               worldObjects.push(new Cube([x,height,z], 1, '#ff4444'));
+           }
+       }
+    }
+}
 const keys = {};
 let lastTime = 0;
 

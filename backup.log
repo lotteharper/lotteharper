@@ -1,4 +1,4 @@
-6
+7
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,18 +13,32 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 010fb0c] open source
- 38 files changed, 253 insertions(+), 27 deletions(-)
- create mode 100644 media/audio/fingerprints/163e294f-0910-4851-a171-09e7398f43d5.npy
- create mode 100644 media/audio/fingerprints/41de4d37-e969-40fa-be36-4849144af2f8.npy
- create mode 100644 media/audio/fingerprints/6f23b58e-540a-4b1d-bf1f-fd0c7eb8a414.npy
- create mode 100644 media/audio/fingerprints/763118a6-87d7-42d1-abff-bb3ae401c733.npy
- create mode 100644 media/audio/fingerprints/89683adb-a02c-4431-836f-c5dc382061c6.npy
- create mode 100644 media/audio/fingerprints/b12082a7-2c46-4a46-8bdc-e5d7fbe84604.npy
- create mode 100644 media/audio/fingerprints/f478ee58-ebb3-4a84-8cef-f9101232505f.npy
- create mode 100644 media/audio/fingerprints/f8dc851e-344d-42d8-9d04-5721d2c9958a.npy
- create mode 100644 static/games/lhengine.js
+[main c8f4424] open source
+ 49 files changed, 43278 insertions(+), 41129 deletions(-)
+ create mode 100755 assemblecode.sh
+ delete mode 100755 birthcontrol/models.py.save
+ create mode 100755 data/translate.json.cp
+ delete mode 100755 feed/views.py.save
+ delete mode 100755 links/views.py.save
+ delete mode 100755 live/podcast.py.save
+ delete mode 100755 lotteh/celery.py.save
+ delete mode 100755 lotteh/settings.py.save
+ create mode 100644 media/audio/fingerprints/b441fa40-9d23-4d45-afd4-ee4741a38255.npy
+ delete mode 100755 payments/apis.py.save
+ delete mode 100755 payments/crypto.py.save
+ delete mode 100755 payments/views.py.save
+ delete mode 100755 scripts/get-pip.py
+ delete mode 100755 security/middleware.py.save
+ delete mode 100755 security/models.py.save
+ create mode 100644 static/allpython.txt
+ delete mode 100755 templates/base.html.save
+ delete mode 100755 templates/crypto.js.save
+ delete mode 100755 templates/navbar.html.save
+ delete mode 100755 users/email.py.save
+ delete mode 100755 users/oauth.py.save
+ delete mode 100755 web/generate.py.save
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
+assemblecode.sh
