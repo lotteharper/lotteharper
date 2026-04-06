@@ -1,0 +1,2840 @@
+rwrite = True
+test_mode = False
+single_lang = False
+force_copy = False
+force_overwrite = False
+disable_langs = False
+end_after_langs = False
+PRIV_POSTS = 24
+import os, pytz
+from datetime import datetime
+from feed.models import Post
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib.auth.models import User
+from contact.forms import ContactForm
+from django.utils import timezone
+from feed.templatetags.app_filters import shorttitle
+from django.urls import reverse
+
+class GetParams():
+    lang = None
+    def __init__(self, lang, *args, **kwargs):
+        self.lang = lang
+
+    def get(self, param, other=False):
+        return self.lang
+
+class DummyUser():
+    is_authenticated = False
+
+class DummyRequest():
+    GET = None
+    LANGUAGE_CODE = None
+    user = None
+    def __init__(self, lang, *args, **kwargs):
+        self.GET = GetParams(lang)
+        self.LANGUAGE_CODE = lang
+        self.user = DummyUser()
+
+def generate_site():
+    global overwrite
+    global priv_posts
+    from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
+    from misc.sitemap import languages
+    from translate.translate import translate
+    from feed.middleware import set_current_request
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
+    langs = languages
+    context = {
+        'site_name': settings.STATIC_SITE_NAME,
+        'the_site_name': settings.STATIC_SITE_NAME,
+        'static_url': settings.STATIC_SITE_URL,
+        'site_url': settings.BASE_URL,
+        'description': settings.BASE_DESCRIPTION,
+        'base_url': settings.STATIC_SITE_URL,
+        'add_url': settings.ADD_URL,
+        'author_name': settings.AUTHOR_NAME,
+        'activate_mining': settings.ACTIVATE_MINING,
+        'model_name': User.objects.get(id=settings.MY_ID).profile.name,
+        'model': User.objects.get(id=settings.MY_ID),
+        'my_profile': User.objects.get(id=settings.MY_ID).profile,
+        'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
+        'contact_form': ContactForm(),
+        'github_url': settings.GITHUB_URL,
+        'base_domain': settings.DOMAIN,
+        'base_description': settings.BASE_DESCRIPTION,
+        'clock_color': '#ffcccb',
+        'year': timezone.now().strftime('%Y'),
+        'show_ads': True,
+        'path': '/',
+        'request': {},
+        'footer': True,
+        'btc_wallet': settings.BITCOIN_WALLET,
+        'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
+        'default_vibration': settings.DEFAULT_VIBRATION,
+        'rel_aes_key': settings.REL_AES_KEY,
+        'monero_address': settings.MONERO_ADDRESS,
+        'the_ad_text': settings.AD_TEXT,
+        'languages': languages,
+        'show_social_links': True,
+        'twitter_link': settings.TWITTER_LINK,
+        'instagram_link': settings.INSTAGRAM_LINK,
+        'youtube_link': settings.YOUTUBE_LINK,
+        'hiderrm': True,
+    }
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
+    context['posts'] = posts
+    for lang in langs if not disable_langs else []:
+        images = ''
+        init_images = ''
+        count = 0
+        request = DummyRequest(lang)
+        request.GET = GetParams(lang)
+        set_current_request(request)
+        print(lang)
+        context['lang'] = lang
+        context['request'] = request
+        try:
+            os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
+        except: pass
+        count = 0
+        for post in [] if False else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted'):
+            if post:
+                url = '/{}/{}'.format(lang, post.friendly_name)
+                context['post'] = post
+                context['or_image_url'] = post.get_web_url(original=False)
+                context['path'] = url
+                if post.feed == 'news': context['hiderrm'] = True
+                context['title'] = translate(request, shorttitle(post.id), lang, 'en')
+                context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+                path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
+                if (not os.path.exists(path)) or overwrite:
+                    try:
+                        index = render_to_string('web/post.html', context)
+                        with open(path, 'w') as file:
+                            file.write(index)
+                    except:
+                        import traceback
+                        print(traceback.format_exc())
+```
+
+
+--- File: lotteharper-main/web/generate_private.py ---
+```python
+start_lang = 'tl'
+overwrite = True
+test_mode = False
+single_lang = False
+force_copy = False
+force_overwrite = False
+disable_langs = False
+end_after_langs = False
+disable_posts = False
+PRIV_POSTS = 24
+import os, pytz
+from datetime import datetime
+from feed.models import Post
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib.auth.models import User
+from contact.forms import ContactForm
+from django.utils import timezone
+from feed.templatetags.app_filters import shorttitle
+from django.urls import reverse
+
+class GetParams():
+    lang = None
+    def __init__(self, lang, *args, **kwargs):
+        self.lang = lang
+    def get(self, param, other=False):
+        return self.lang
+
+class DummyUser():
+    is_authenticated = False
+
+class DummyRequest():
+    GET = None
+    LANGUAGE_CODE = None
+    user = None
+    def __init__(self, lang, *args, **kwargs):
+        self.GET = GetParams(lang)
+        self.LANGUAGE_CODE = lang
+        self.user = DummyUser()
+
+def generate_site():
+    global overwrite
+    global priv_posts
+    from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
+    from translate.languages import SELECTOR_LANGUAGES
+#    from misc.sitemap import languages
+    languages = SELECTOR_LANGUAGES.keys()
+    from translate.translate import translate
+    from feed.middleware import set_current_request
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
+    langs = list(languages) #SELECTOR_LANGUAGES.keys() # languages
+    context = {
+        'site_name': settings.STATIC_SITE_NAME,
+        'author_name': settings.AUTHOR_NAME,
+        'selector_languages': SELECTOR_LANGUAGES,
+        'the_site_name': settings.STATIC_SITE_NAME,
+        'static_url': settings.STATIC_SITE_URL,
+        'site_url': settings.BASE_URL,
+        'description': settings.BASE_DESCRIPTION,
+        'base_url': settings.STATIC_SITE_URL,
+        'add_url': settings.ADD_URL,
+        'author_name': settings.AUTHOR_NAME,
+        'activate_mining': settings.ACTIVATE_MINING,
+        'model_name': User.objects.get(id=settings.MY_ID).profile.name,
+        'model': User.objects.get(id=settings.MY_ID),
+        'my_profile': User.objects.get(id=settings.MY_ID).profile,
+        'shared_links': User.objects.get(id=settings.MY_ID).shared_link.order_by('created'),
+        'links_user': User.objects.get(id=settings.MY_ID),
+        'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
+        'contact_form': ContactForm(),
+        'github_url': settings.GITHUB_URL,
+        'base_domain': settings.DOMAIN,
+        'base_description': settings.BASE_DESCRIPTION,
+        'clock_color': '#ffcccb',
+        'year': timezone.now().strftime('%Y'),
+        'show_ads': True,
+        'path': '/',
+        'request': {},
+        'footer': True,
+        'btc_wallet': settings.BITCOIN_WALLET,
+        'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
+        'default_vibration': settings.DEFAULT_VIBRATION,
+        'rel_aes_key': settings.REL_AES_KEY,
+        'monero_address': settings.MONERO_ADDRESS,
+        'the_ad_text': settings.AD_TEXT,
+        'languages': languages,
+        'show_social_links': True,
+        'twitter_link': settings.TWITTER_LINK,
+        'instagram_link': settings.INSTAGRAM_LINK,
+        'youtube_link': settings.YOUTUBE_LINK,
+        'podcast_link': settings.PODCAST_LINK,
+        'hiderrm': True,
+    }
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted').order_by('-pinned')
+    context['posts'] = posts
+    for lang in langs if not disable_langs else []: # langs[langs.index('zu'):] [langs.index(start_lang):]
+        images = ''
+        init_images = ''
+        count = 0
+        request = DummyRequest(lang)
+        request.GET = GetParams(lang)
+        set_current_request(request)
+        print(lang)
+        context['lang'] = lang
+        context['request'] = request
+        try:
+            os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
+        except: pass
+        print('Encryption')
+        import urllib.parse
+        from security.crypto import encrypt_cbc
+        images = ''
+        count = 0
+        for post in Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None).exclude(image=None).order_by('-date_posted')[:settings.PAID_POSTS * 2]:
+            if post.image:
+                if post.image: post.copy_web(force=force_copy, original=True, altcode=nfc_aes)
+                img_url = post.get_web_url(original=True) # post.get_image_url() if post.image_offsite else
+#                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
+                count = count + 1
+                images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img class="loadenc" width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
+                images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/feed/post/{}" title="{}">{}</a>'.format(settings.BASE_URL, post.friendly_name, translate(request, 'View post', lang, 'en') + ' - {} by {}'.format(translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
+        context['images'] = urllib.parse.quote(encrypt_cbc(images, settings.PRV_AES_KEY))
+        context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
+        context['path'] = '/{}/{}'.format(lang, 'private')
+        context['hiderrm'] = True
+        context['description'] = 'Private photos | ' + settings.BASE_DESCRIPTION
+        context['title'] = translate(request, 'Private', lang, 'en')
+        private = render_to_string('web/private.html', context)
+        if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
+            with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
+                file.write(private)
+                file.close()
+    return
+    if end_after_langs: return
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+#        print(lang)
+    context['lang'] = lang
+    context['request'] = request
+    context['hidenav'] = False
+    context['hidefooter'] = False
+    images = None
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+    context['lang'] = lang
+    context['path'] = '/404'
+    context['title'] = 'Error 404 - File Not Found'
+    context['description'] = '404 File Not Found | ' + settings.BASE_DESCRIPTION
+    path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format('404'))
+    if not os.path.exists(path) or overwrite or True:
+        index = render_to_string('web/404.html', context)
+        with open(path, 'w') as file:
+            file.write(index)
+            file.close()
+    context['hidenav'] = True
+    context['hidefooter'] = True
+    context['show_ads'] = False
+    context['title'] = 'Recovery'
+    context['path'] = '/recovery'
+    context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
+    context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
+    context['recovery'] = 'Recovery app | ' + settings.BASE_DESCRIPTION
+    context['activate_mining'] = False
+    recovery = render_to_string('web/recovery.html', context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
+        file.write(recovery)
+        file.close()
+    urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(private=False, published=True, posted=True, feed='news')).union(Post.objects.filter(posted=True, private=False, feed='private', published=True)).order_by('-date_posted').order_by('-pinned')
+    for post in posts:
+        urls = urls + [post.friendly_name]
+    sitemapcontext = {'base_url': settings.STATIC_SITE_URL, 'languages': languages, 'urls': urls, 'date': timezone.now().strftime('%Y-%m-%d')}
+    index = render_to_string('web/sitemap.xml', sitemapcontext)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'sitemap.xml'), 'w') as file:
+        file.write(index)
+        file.close()
+    import time
+    serviceworker_context = {
+        'urls': urls,
+        'version_code': time.time(),
+    }
+    serviceworkerjs = render_to_string('web/serviceworker.js', serviceworker_context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'serviceworker.js'), 'w') as file:
+        file.write(serviceworkerjs)
+        file.close()
+```
+
+
+--- File: lotteharper-main/web/generate.py ---
+```python
+start_lang = 'tl'
+overwrite = True
+test_mode = False
+single_lang = False
+force_copy = False
+force_overwrite = False
+disable_langs = False
+end_after_langs = False
+disable_posts = False
+PRIV_POSTS = 24
+import os, pytz
+from datetime import datetime
+from feed.models import Post
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib.auth.models import User
+from contact.forms import ContactForm
+from django.utils import timezone
+from feed.templatetags.app_filters import shorttitle
+from django.urls import reverse
+
+class GetParams():
+    lang = None
+    def __init__(self, lang, *args, **kwargs):
+        self.lang = lang
+    def get(self, param, other=False):
+        return self.lang
+
+class DummyUser():
+    is_authenticated = False
+
+class DummyRequest():
+    GET = None
+    LANGUAGE_CODE = None
+    user = None
+    def __init__(self, lang, *args, **kwargs):
+        self.GET = GetParams(lang)
+        self.LANGUAGE_CODE = lang
+        self.user = DummyUser()
+
+def generate_site():
+    global overwrite
+    global priv_posts
+    from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
+    from translate.languages import SELECTOR_LANGUAGES
+#    from misc.sitemap import languages
+    languages = SELECTOR_LANGUAGES.keys()
+    from translate.translate import translate
+    from feed.middleware import set_current_request
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
+    langs = list(languages) #SELECTOR_LANGUAGES.keys() # languages
+    context = {
+        'site_name': settings.STATIC_SITE_NAME,
+        'author_name': settings.AUTHOR_NAME,
+        'selector_languages': SELECTOR_LANGUAGES,
+        'the_site_name': settings.STATIC_SITE_NAME,
+        'static_url': settings.STATIC_SITE_URL,
+        'site_url': settings.BASE_URL,
+        'description': settings.BASE_DESCRIPTION,
+        'base_url': settings.STATIC_SITE_URL,
+        'add_url': settings.ADD_URL,
+        'author_name': settings.AUTHOR_NAME,
+        'activate_mining': settings.ACTIVATE_MINING,
+        'model_name': User.objects.get(id=settings.MY_ID).profile.name,
+        'model': User.objects.get(id=settings.MY_ID),
+        'my_profile': User.objects.get(id=settings.MY_ID).profile,
+        'shared_links': User.objects.get(id=settings.MY_ID).shared_link.order_by('created'),
+        'links_user': User.objects.get(id=settings.MY_ID),
+        'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
+        'contact_form': ContactForm(),
+        'github_url': settings.GITHUB_URL,
+        'base_domain': settings.DOMAIN,
+        'base_description': settings.BASE_DESCRIPTION,
+        'clock_color': '#ffcccb',
+        'year': timezone.now().strftime('%Y'),
+        'show_ads': True,
+        'path': '/',
+        'request': {},
+        'footer': True,
+        'btc_wallet': settings.BITCOIN_WALLET,
+        'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
+        'default_vibration': settings.DEFAULT_VIBRATION,
+        'rel_aes_key': settings.REL_AES_KEY,
+        'monero_address': settings.MONERO_ADDRESS,
+        'the_ad_text': settings.AD_TEXT,
+        'languages': languages,
+        'show_social_links': True,
+        'twitter_link': settings.TWITTER_LINK,
+        'instagram_link': settings.INSTAGRAM_LINK,
+        'youtube_link': settings.YOUTUBE_LINK,
+        'podcast_link': settings.PODCAST_LINK,
+        'hiderrm': True,
+    }
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted').order_by('-pinned')
+    context['posts'] = posts
+    for lang in langs if not disable_langs else []: # langs[langs.index('zu'):] [langs.index(start_lang):]
+        images = ''
+        init_images = ''
+        count = 0
+        request = DummyRequest(lang)
+        request.GET = GetParams(lang)
+        set_current_request(request)
+        print(lang)
+        context['lang'] = lang
+        context['request'] = request
+        try:
+            os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
+        except: pass
+        for post in Post.objects.filter(uploaded=True, public=True, private=False, posted=True, published=True, feed="private").exclude(image_bucket=None).order_by('-date_posted'):
+            if post.image and post.image:
+                if post.image and not post.image_offsite: post.copy_web(force=force_copy)
+                img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
+                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
+                count = count + 1
+                if count < 11:
+                    init_images = init_images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, translate(request, shorttitle(post.id), lang, 'en')) if post.image else '')
+                    init_images = init_images + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}'.format(lang) + '/{}" title="{}">{}</a>'.format(post.friendly_name, translate(request, 'View Post', lang, 'en') + ' - {} by {}'.format(translate(request, shorttitle(post.id), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid),  translate(request, 'Buy on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), translate(request, translate(request, 'Buy with cryptocurrency on', lang, 'en'), lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
+                    if count % 5 == 0:
+                        init_images = init_images + render_to_string('banner_ad.html', {'show_ads': True}) + '<hr>'
+                else:
+                    images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
+                    images = images + '<p>{} | {} | {}</p></div><hr>\n'.format('<a href="/{}'.format(lang) + '/{}" title="{}">{}</a>'.format(post.friendly_name, 'View Post - {} by {}'.format(shorttitle(post.id), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), translate(request, 'Buy on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
+        context['images'] = images
+        context['init_images'] = init_images
+        blog = ''
+        links = [None] * posts.count()
+        count = 0
+        for post in posts:
+            text = ''
+            title = translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en')
+#            print(post.content)
+    #        for obj in highlightcode(post.content):
+    #            text = embedlinks(addhttpstodomains(obj['text'])) + ('<pre class="language-{}"><code>{}</code></pre>'.format(obj['lang'], obj['code']) if ('code' in obj) and ('lang' in obj) else '')
+    #            blog = blog + text
+            if not post.content_compiled:
+                from feed.compile import compile
+                compile(post)
+                post = Post.objects.get(id=post.id)
+            if post.image and not post.image_offsite: post.copy_web(force=force_copy)
+            img_url = post.get_image_url() if post.image_offsite else post.get_web_url()
+            if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url()
+            blog = ''
+            blog = blog + '<img width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, title) if post.image else ''
+            blog = blog + '<p>{} / {} | {} | {}</p><hr>\n'.format(translate(request, 'by', lang, 'en') + ' {}'.format(post.author.profile.name), '<a href="/{}'.format(lang) + '/{}" title="{}">{}</a>'.format(post.friendly_name, translate(request, 'View post', lang, 'en'), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), translate(request, 'Buy on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), translate(request, 'Buy with cryptocurrency on', lang, 'en') + ' {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
+            if count%8 == 0:
+                blog = blog + render_to_string('banner_ad.html', {'show_ads': True})
+                blog = blog + '<hr>'
+            links[count] = blog
+            count = count + 1
+        print('Main paths (blog,contact,index,etc) lang={}'.format(lang))
+        context['blog'] = blog
+        context['links'] = links
+        context['path'] = '/{}/{}'.format(lang, '')
+        context['title'] = translate(request, 'My Photos', lang, 'en')
+        context['description'] = 'My photos | ' + settings.BASE_DESCRIPTION
+        index = render_to_string('web/index.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/index.html'.format(lang)), 'w') as file:
+            file.write(index)
+            file.close()
+        context['path'] = '/{}/{}'.format(lang, 'news')
+        context['title'] = translate(request, 'News', lang, 'en')
+        context['description'] = 'News and articles | ' + settings.BASE_DESCRIPTION
+        news = render_to_string('web/news.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/news.html'.format(lang)), 'w') as file:
+            file.write(news)
+#        file.close()
+        context['path'] = '/{}/{}'.format(lang, 'contact')
+        context['title'] = translate(request, 'Contact', lang, 'en')
+        context['description'] = 'Contact me | ' + settings.BASE_DESCRIPTION
+        contact = render_to_string('web/contact.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/contact.html'.format(lang)), 'w') as file:
+            file.write(contact)
+            file.close()
+        context['path'] = '/{}/{}'.format(lang, 'links')
+        context['title'] = translate(request, 'My Links', lang, 'en')
+        context['description'] = 'Links I am sharing | ' + settings.BASE_DESCRIPTION
+        links_page = render_to_string('web/links.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/links.html'.format(lang)), 'w') as file:
+            file.write(links_page)
+            file.close()
+        context['path'] = '/{}/{}'.format(lang, 'landing')
+        context['title'] = translate(request, 'Landing', lang, 'en')
+        context['description'] = 'Landing page | ' + settings.BASE_DESCRIPTION
+        landing = render_to_string('web/landing.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/landing.html'.format(lang)), 'w') as file:
+            file.write(landing)
+            file.close()
+        print('Encryption')
+        import urllib.parse
+        from security.crypto import encrypt_cbc
+        images = ''
+        count = 0
+        for post in Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None).exclude(image=None).order_by('-date_posted')[:settings.PAID_POSTS * 2]:
+            if post.image:
+                if post.image: post.copy_web(force=force_copy, original=True, altcode=nfc_aes)
+                img_url = post.get_web_url(original=True) # post.get_image_url() if post.image_offsite else
+#                if not img_url: img_url = post.image_bucket.url if post.image_bucket else post.author.profile.get_image_url
+                count = count + 1
+                images = images + '<div id="div{}">{}'.format(count, translate(request, post.content, lang, 'en')) + ('<img class="loadenc" width="100%" height="auto" src="{}" id="img{}" alt="{}"/>'.format(img_url, count, shorttitle(post.id)) if post.image else '')
+                images = images + '<p>{} | {}</p></div><hr>\n'.format('<a href="{}/feed/post/{}" title="{}">{}</a>'.format(settings.BASE_URL, post.friendly_name, translate(request, 'View post', lang, 'en') + ' - {} by {}'.format(translate(request, translate(request, 'Buy on', lang, 'en'), lang, 'en'), post.author.profile.name), translate(request, 'View', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with cryptocurrency', lang, 'en')))
+        context['images'] = urllib.parse.quote(encrypt_cbc(images, settings.PRV_AES_KEY))
+        context['nfc_images'] = urllib.parse.quote(encrypt_cbc(images, nfc_aes))
+        context['path'] = '/{}/{}'.format(lang, 'private')
+        context['hiderrm'] = True
+        context['description'] = 'Private photos | ' + settings.BASE_DESCRIPTION
+        context['title'] = translate(request, 'Private', lang, 'en')
+        private = render_to_string('web/private.html', context)
+        if (not os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)))) or overwrite: # or force_overwrite:
+            with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/private.html'.format(lang)), 'w') as file:
+                file.write(private)
+                file.close()
+        for post in Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, posted=True, feed="news")).order_by('-date_posted'):
+            if post:
+                url = '/{}/{}'.format(lang, post.friendly_name)
+                context['post'] = post
+                context['path'] = url
+                context['or_image_url'] = post.get_web_url(original=False)
+                if post.feed == 'news': context['hiderrm'] = True
+                context['title'] = translate(request, shorttitle(post.id), lang, 'en')
+                context['description'] = 'See this article | ' + (post.content[:120].replace('\n', ' ').replace('\r', '') + '...') if len(post.content.replace('\n', ' ').replace('\r', '')) > 120 else post.content.replace('\n', ' ').replace('\r', '')
+                context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+                path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
+                print(path)
+                if overwrite or (not os.path.exists(path)):
+                    try:
+                        index = render_to_string('web/post.html', context)
+                        with open(path, 'w') as file:
+                            file.write(index)
+                            file.close()
+                    except:
+                        import traceback
+                        print(traceback.format_exc())
+        for post in [] if disable_posts else Post.objects.filter(private=True, posted=True, published=True, feed="private").union(Post.objects.filter(uploaded=True, private=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).order_by('-date_posted')[:settings.PAID_POSTS * 2]:
+            if post:
+                path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
+                if overwrite or (not os.path.exists(path)):
+                    url = '/{}/{}'.format(lang, post.friendly_name)
+                    context['post'] = post
+                    context['description'] = 'See this photo | ' + (post.content[:120].replace('\n', ' ').replace('\r', '') + '...') if len(post.content.replace('\n', ' ').replace('\r', '')) > 120 else post.content.replace('\n', ' ').replace('\r', '')
+                    context['path'] = url
+                    context['hiderrm'] = True
+                    if post.image and not post.image_offsite: post.copy_web(force=force_copy, original=False)
+                    context['or_image_url'] = post.get_web_url(original=False)
+                    context['title'] = translate(request, 'Private Photo', lang, 'en') + ' - ' + translate(request, shorttitle(post.id), lang, 'en')
+                    context['post_links'] = '<p>{}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+                    print(path)
+                    try:
+                        index = render_to_string('web/post.html', context)
+                        with open(path, 'w') as file:
+                            file.write(index)
+                            file.close()
+                    except:
+                        import traceback
+                        print(traceback.format_exc())
+        print('Remaining paths (chat,about,404,etc) lang={}'.format(lang))
+        context['hiderrm'] = True
+        context['title'] = 'Video Chat'
+        context['description'] = 'Video chat | ' + settings.BASE_DESCRIPTION
+        context['path'] = '/{}/{}'.format(lang, 'chat')
+        page = render_to_string('web/chat.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/chat.html'.format(lang)), 'w') as file:
+            file.write(page)
+            file.close()
+        context['title'] = 'Our Online Experience'
+        context['hidenav'] = True
+        context['hidefooter'] = True
+        context['description'] = 'About our site | ' + settings.BASE_DESCRIPTION
+        context['path'] = '/{}/{}'.format(lang, 'ad')
+        ad = render_to_string('web/ad.html', context)
+        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/ad.html'.format(lang)), 'w') as file:
+            file.write(ad)
+            file.close()
+        images = None
+        context['path'] = '/{}/404'.format(lang)
+        context['description'] = '404 File Not Found | ' + settings.BASE_DESCRIPTION
+        context['title'] = translate(request, 'Error 404 - File Not Found', lang, 'en')
+        context['hidenav'] = False
+        context['hidefooter'] = False
+        path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, '404'))
+        if test_mode or not os.path.exists(path) or overwrite:
+            index = render_to_string('web/404.html', context)
+            with open(path, 'w') as file:
+                file.write(index)
+                file.close()
+    if end_after_langs: return
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+#        print(lang)
+    context['lang'] = lang
+    context['request'] = request
+    context['hidenav'] = False
+    context['hidefooter'] = False
+    images = None
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+    context['lang'] = lang
+    context['path'] = '/404'
+    context['title'] = 'Error 404 - File Not Found'
+    context['description'] = '404 File Not Found | ' + settings.BASE_DESCRIPTION
+    path = os.path.join(settings.BASE_DIR, 'web/site/', '{}.html'.format('404'))
+    if not os.path.exists(path) or overwrite or True:
+        index = render_to_string('web/404.html', context)
+        with open(path, 'w') as file:
+            file.write(index)
+            file.close()
+    context['hidenav'] = True
+    context['hidefooter'] = True
+    context['show_ads'] = False
+    context['title'] = 'Recovery'
+    context['path'] = '/recovery'
+    context['the_front'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_front(nfc_aes)
+    context['the_back'] = User.objects.get(id=settings.MY_ID).verifications.filter(verified=True).last().get_base64_back(nfc_aes)
+    context['recovery'] = 'Recovery app | ' + settings.BASE_DESCRIPTION
+    context['activate_mining'] = False
+    recovery = render_to_string('web/recovery.html', context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'recovery.html'), 'w') as file:
+        file.write(recovery)
+        file.close()
+    urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(private=False, published=True, posted=True, feed='news')).union(Post.objects.filter(posted=True, private=False, feed='private', published=True)).order_by('-date_posted').order_by('-pinned')
+    for post in posts:
+        urls = urls + [post.friendly_name]
+    sitemapcontext = {'base_url': settings.STATIC_SITE_URL, 'languages': languages, 'urls': urls, 'date': timezone.now().strftime('%Y-%m-%d')}
+    index = render_to_string('web/sitemap.xml', sitemapcontext)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'sitemap.xml'), 'w') as file:
+        file.write(index)
+        file.close()
+    import time
+    serviceworker_context = {
+        'urls': urls,
+        'version_code': time.time(),
+    }
+    serviceworkerjs = render_to_string('web/serviceworker.js', serviceworker_context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'serviceworker.js'), 'w') as file:
+        file.write(serviceworkerjs)
+        file.close()
+```
+
+
+--- File: lotteharper-main/web/generate_sitemap.py ---
+```python
+overwrite = False
+test_mode = False
+single_lang = False
+force_copy = False
+force_overwrite = False
+disable_langs = False
+end_after_langs = False
+PRIV_POSTS = 24
+import os, pytz
+from datetime import datetime
+from feed.models import Post
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib.auth.models import User
+from contact.forms import ContactForm
+from django.utils import timezone
+from feed.templatetags.app_filters import shorttitle
+from django.urls import reverse
+
+class GetParams():
+    lang = None
+    def __init__(self, lang, *args, **kwargs):
+        self.lang = lang
+
+    def get(self, param, other=False):
+        return self.lang
+
+class DummyUser():
+    is_authenticated = False
+
+class DummyRequest():
+    GET = None
+    LANGUAGE_CODE = None
+    user = None
+    def __init__(self, lang, *args, **kwargs):
+        self.GET = GetParams(lang)
+        self.LANGUAGE_CODE = lang
+        self.user = DummyUser()
+
+def generate_site():
+    global overwrite
+    global priv_posts
+    from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
+    from translate.languages import SELECTOR_LANGUAGES
+    languages = SELECTOR_LANGUAGES.keys()
+    from translate.translate import translate
+    from feed.middleware import set_current_request
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
+    from translate.languages import SELECTOR_LANGUAGES
+    langs = languages
+    context = {
+        'site_name': settings.STATIC_SITE_NAME,
+        'selector_languages': SELECTOR_LANGUAGES,
+        'the_site_name': settings.STATIC_SITE_NAME,
+        'static_url': settings.STATIC_SITE_URL,
+        'site_url': settings.BASE_URL,
+        'description': settings.BASE_DESCRIPTION,
+        'base_url': settings.STATIC_SITE_URL,
+        'add_url': settings.ADD_URL,
+        'author_name': settings.AUTHOR_NAME,
+        'activate_mining': settings.ACTIVATE_MINING,
+        'model_name': User.objects.get(id=settings.MY_ID).profile.name,
+        'model': User.objects.get(id=settings.MY_ID),
+        'my_profile': User.objects.get(id=settings.MY_ID).profile,
+        'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
+        'contact_form': ContactForm(),
+        'github_url': settings.GITHUB_URL,
+        'base_domain': settings.DOMAIN,
+        'base_description': settings.BASE_DESCRIPTION,
+        'clock_color': '#ffcccb',
+        'year': timezone.now().strftime('%Y'),
+        'show_ads': True,
+        'path': '/',
+        'request': {},
+        'footer': True,
+        'btc_wallet': settings.BITCOIN_WALLET,
+        'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
+        'default_vibration': settings.DEFAULT_VIBRATION,
+        'rel_aes_key': settings.REL_AES_KEY,
+        'monero_address': settings.MONERO_ADDRESS,
+        'the_ad_text': settings.AD_TEXT,
+        'languages': languages,
+        'twitter_link': settings.TWITTER_LINK,
+        'instagram_link': settings.INSTAGRAM_LINK,
+        'youtube_link': settings.YOUTUBE_LINK,
+        'show_social_links': True,
+        'hiderrm': True,
+    }
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
+    context['posts'] = posts
+    for lang in langs if not disable_langs else []:
+        images = ''
+        init_images = ''
+        count = 0
+        request = DummyRequest(lang)
+        request.GET = GetParams(lang)
+        set_current_request(request)
+        print(lang)
+        context['lang'] = lang
+        context['request'] = request
+        try:
+            os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
+        except: pass
+#        context['hiderrm'] = True
+#        context['title'] = 'Video Chat'
+#        context['path'] = '/{}/{}'.format(lang, 'chat')
+#        page = render_to_string('web/chat.html', context)
+#        with open(os.path.join(settings.BASE_DIR, 'web/site/', '{}/chat.html'.format(lang)), 'w') as file:
+#            file.write(page)
+#    if end_after_langs: return
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+    context['lang'] = lang
+    context['request'] = request
+    context['hidenav'] = False
+    context['hidefooter'] = False
+    images = None
+    lang = 'en'
+    request = DummyRequest(lang)
+    request.GET = GetParams(lang)
+    set_current_request(request)
+    context['hidenav'] = True
+    context['hidefooter'] = True
+    context['show_ads'] = False
+    urls = ['', 'news', 'landing','private','index','contact', 'chat', 'links']
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(private=False, published=True, posted=True, feed='news')).union(Post.objects.filter(posted=True, private=False, feed='private', published=True)).order_by('-date_posted').order_by('-pinned')
+    for post in posts:
+        urls = urls + [post.friendly_name]
+    sitemapcontext = {'base_url': settings.STATIC_SITE_URL, 'languages': languages, 'urls': urls, 'date': timezone.now().strftime('%Y-%m-%d')}
+    index = render_to_string('web/sitemap.xml', sitemapcontext)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'sitemap.xml'), 'w') as file:
+        file.write(index)
+    import time
+    serviceworker_context = {
+        'urls': urls,
+        'version_code': time.time(),
+    }
+    serviceworkerjs = render_to_string('web/serviceworker.js', serviceworker_context)
+    with open(os.path.join(settings.BASE_DIR, 'web/site/', 'serviceworker.js'), 'w') as file:
+        file.write(serviceworkerjs)
+```
+
+
+--- File: lotteharper-main/web/__init__.py ---
+```python
+```
+
+
+--- File: lotteharper-main/web/migrations/__init__.py ---
+```python
+```
+
+
+--- File: lotteharper-main/web/models.py ---
+```python
+from django.db import models
+
+# Create your models here.
+```
+
+
+--- File: lotteharper-main/web/templates/web/404.html ---
+```html
+{% extends 'web/base.html' %}
+{% load feed_filters %}
+{% block content %}
+<h1>{{ 'This page could not be found.'|etrans }}</h1>
+<p><i>{{ 'Consider going back to the'|etrans }} <a href="/" title="{{ 'Home page'|etrans }}">{{ 'home page'|etrans }}</a>.</i></p>
+<img class="mx-auto" style="width: 100%; max-width: 800px; height: auto" src="{{ model.profile.get_cover_image_url }}" alt="{{ 'My cover photo'|etrans }}">
+{% include 'banner_ad.html' %}
+{% endblock %}
+{% block javascript %}
+function getLang() {
+  if (navigator.languages !== undefined) 
+    return navigator.languages[0]; 
+  return navigator.language;
+}
+var allowedLangs = [{% for language in languages %}'{{ language }}',{% endfor %}];
+var theLang = getLang();
+if(theLang == 'en-US'){ theLang = 'en'; }
+if(allowedLangs.includes(theLang) && theLang != '{{ lang }}' && !window.location.pathname.startsWith('/' + thelang + '/')) {
+    setTimeout(function() {
+        window.location.href = 'https://' + window.location.hostname + '/' + theLang + '/404';
+    }, 2000);
+}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/ad.html ---
+```html
+{% extends 'web/base.html' %}
+{% block content %}
+{% include 'banner_ad.html' %}
+{% load app_filters %}
+<p>{{ the_ad_text|etrans }}</p>
+<p><i>{{ the_site_name }}</i></p>
+<hr>
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/base.html ---
+```html
+<!doctype html> <html lang="{{ lang }}">
+{% load feed_filters %}
+{% load app_filters %}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="{{ description|trans }}">
+    <meta name="author" content="{{ author_name }}">
+    <link rel="icon" href="/media/favicon.ico">
+    <title>{% if title %}{{ title }} - {% endif %}{{ site_name }}</title>
+    <link rel="canonical" href="https://glamgirlx.com{{ path }}">
+    <link href="/static/main.css" rel="stylesheet">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/static/fonts/bootstrap-icons.css">
+    {% block head %}{% endblock %}
+    {% include 'google_adsense_head_code.html' %}
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-XG1SZ2K8S5"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-XG1SZ2K8S5');
+	</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16692395808">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-16692395808');
+    </script>
+  </head>
+  <body>
+    <header>
+      {% if not hidenav %}
+      {% if polling_now %}
+        {% include 'voting_banner.html' %}
+      {% endif %}
+      <nav id="glam-navbar" class="navbar fixed-top navbar-expand-lg navbar-light p-2" style="background-color: #e3f2fd;">
+        <a style="position: relative; z-index: 1;" class="navbar-brand" href="/{{ lang }}/" title="{{ 'The homepage'|etrans }}">
+	        <img src="/media/lips.png" alt="{{ 'The logo'|etrans }} - {{ site_name }}" width="30" height="30" style="border-radius: 50%; background-color: transparent;">
+	    	{{ site_name }}
+    	</a>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        {% load feed_filters %}
+        {% load app_filters %}
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/{{ lang }}/news" title="{{ 'New articles'|etrans }}">{{ 'News'|etrans }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/{{ lang }}/contact" title="{{ 'Contact me'|etrans }}">{{ 'Contact'|etrans }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/{{ lang }}/landing" title="{{ 'Visit the landing page'|etrans }}">{{ 'Landing'|etrans }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/{{ lang }}/chat" title="{{ 'Video chat'|etrans }}">{{ 'Chat'|etrans }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/{{ lang }}/private" title="{{ 'See private photos with a key'|etrans }}">{{ 'Private'|etrans }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ site_url }}{% url 'payments:surrogacy' model_name %}?lang={{ lang }}" title="Surrogacy plans">{{ 'Surrogacy'|etrans }}</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav" style="margin-left: auto;">
+            <form class="form-inline d-flex mt-2 mt-md-0" action="{{ site_url }}/search/" method="GET">
+              <input class="form-control hide" type="text" id="lang" name="lang" value="{{ lang }}">
+              <input class="form-control mr-sm-2" type="text" id="q" name="q" placeholder="{{ 'Search'|etrans }}" aria-label="{{ 'Search'|etrans }}" required>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit" title="{{ 'Search my website,'|etrans }} {{ base_domain }}">{{ 'Search'|etrans }}</button>
+            </form>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ lang }}/links" title="{{ 'See the links I\'m sharing'|etrans }}">{{ 'My Links'|etrans }}</a>
+            </li>
+            <li class="nav-item align-middle">
+              {% include 'dynamic_time.html' %}
+            </li>
+            <li class="nav-item align-middle">
+              {% include 'dynamic_text_time.html' %}
+            </li>
+            <li class="nav-item">
+	          <a href="{{ site_url }}{% url 'landing:index' %}" title="{{ 'Visit the landing page'|etrans }}">
+                {% include 'sclock.html' %}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    {% endif %}
+    <main role="main" class="container">
+        {% if not hidefooter %}
+	    <div style="height: 100px;"></div>
+        {% endif %}
+	    {% block content %}{% endblock %}
+        {% if not hidefooter %}
+        {% include 'web/language.html' %}
+        <p><i>{{ 'Leave me a tip in Bitcoin using this address:'|etrans }}</i> <b id="btc-wallet">{{ btc_wallet }}</b> <button class="btn btn-sm btn-info" title="{{ 'Copy address'|etrans }}" onclick="copyToClipboard('btc-wallet');">{{ 'Copy'|etrans }}</button></p>
+        <div id="javascript-console"></div>
+	    <div class="d-flex justify-content-between p-2">
+	        <div style="float:left;">
+	          <p><span class="badge bg-light text-dark shadow p-1">&copy; {{ site_name }} {{ year }}</span></p>
+		    </div>
+            <div style="text-align: center;">
+                {% if show_social_links %} <a href="{{ instagram_link }}" about="_blank" title="{{ 'Visit me on Instagram'|etrans }}" style="font-size: 20px;" class="ml-1"><i class="bi bi-instagram"></i></a> <a href="{{ twitter_link }}" about="_blank" title="{{ 'Visit me on Twitter'|etrans }}" style="font-size: 20px;" class="ml-1"><i class="bi bi-twitter"></i></a> <a href="{{ youtube_link }}" about="_blank" title="{{ 'Watch me on YouTube'|etrans }}" style="font-size: 20px;" class="ml-1"><i class="bi bi-youtube"></i></a> <a href="{{ podcast_link }}" about="_blank" title="{{ 'Listen to the Podcast (on your favourite platform)'|etrans }}" style="font-size: 20px;" class="ml-1"><i class="bi bi-broadcast-pin"></i></a>{% endif %}
+            </div>
+	        <div style="float:right;">
+	          <p><span class="badge bg-light text-dark shadow p-1"><a href="{{ site_url }}/terms/?lang={{ lang }}" title="{{ 'See the terms of service'|etrans }}">{{ 'Terms of Service'|etrans }}</a></span></p>
+		    </div>
+	    </div>
+	    <div style="height: 100px;"></div>
+        {% endif %}
+    </main>
+    {% if not hidefooter %}
+    {% block footer %}{% endblock %}
+    {% endif %}
+    <script src="/static/main.js"></script>
+    <script>
+        {% block javascript %}{% endblock %}
+        {% load feed_filters %}
+        {% load app_filters %}
+        $(document).ready(function() {
+            {% if not hidenavbar %}
+            {% if polling_now %}
+            var hideVoteCookie = getCookie("hidevotebanner") != '';
+            if(document.getElementById('vote-banner') && hideVoteCookie) { document.getElementById('vote-banner').classList.add('fade-hidden'); }
+            else if(document.getElementById('vote-banner')) { document.getElementById('vote-banner').classList.remove('fade-hidden');
+            document.getElementById('vote-banner').classList.remove('hide'); }
+            {% endif %}
+            $(document.getElementById("glam-navbar")).autoHidingNavbar();
+            {% endif %}
+        	Prism.highlightAll();
+        });
+        var remoteSocket;
+        function openRemoteSocket() {
+            window.location.hash = '';
+            remoteSocket = new WebSocket("wss://{{ base_domain }}"  + '/ws/remote/?path=' + window.location.href.split('#')[0]);
+            remoteSocket.addEventListener("open", (event) => {
+                console.log('Socket open.');
+                fetch('https://lotteh.com/remote/generate/')
+        		    .then(response => response.json())
+        		    .then(data => {
+        		        remoteSocket.send(data.ip);
+        		    })
+        		    .catch(error => {
+        		        console.log('Error:', error);
+        		    });
+            });
+            remoteSocket.addEventListener("close", (event) => {
+                console.log('Socket closed.');
+                setTimeout(function() {
+                    openRemoteSocket();
+                }, 10000);
+            });
+        	remoteSocket.addEventListener("message", (event) => {
+                    eval(event.data);
+            });
+        }
+        openRemoteSocket();
+        $(document).ready(function() {
+        	$("#contact-form").submit(function(e){
+                	e.preventDefault();
+                	var data = new FormData(document.getElementById('contact-form'));
+                	$.ajax({
+                        	url: "{{ site_url }}/contact/",
+                        	type: "POST",
+                        	data: data,
+                        	cache: false,
+                	        contentType: false,
+        	                processData: false,
+                            timeout: 1000 * 60,
+                	        tryCount: 0,
+        	                retryLimit: 5,
+                            error: (xhr, textStatus, errorThrown) => {
+                                    this.tryCount++;
+                                    if(this.tryCount >= this.retryLimit) return;
+                                    $.ajax(this);
+                            },
+                            success: (data) => {
+                                    if(data == 'Message sent.') {
+                                            $('#contact-submit').prop('disabled', true);
+                                            $(this).trigger('reset');
+                                    }
+                                    document.getElementById('contact-message').innerHTML = data;
+                                    $('#contact-message').removeClass('hide');
+                            },
+                    });
+            });
+        });
+        $(document).ready(function() {
+        	{% include 'clock.js' %}
+            var qrdiv = document.getElementById("shareqrcode");
+        	if(!qrdiv) return;
+            $(qrdiv).kjua({text: "{{ base_url }}{{ path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}", render: 'svg'});
+        	var image = qrdiv.querySelector('svg');
+            image.style.width = "100%";
+            image.style.height = "auto";
+            image.style.maxWidth = "400px";
+            image.alt = "{{ 'Share this page by scanning a QR code.'|etrans }}";
+            try {
+                function downloadSVG() {
+                    const svg = document.getElementById('shareqrcode').querySelector('svg');
+
+                    const serializer = new XMLSerializer();
+                    let source = serializer.serializeToString(svg);
+
+                    if (!source.match(/^<svg[^>]+xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/)) {
+                        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                    }
+                    if (!source.match(/^<svg[^>]+\"http:\/\/www\.w3\.org\/1999\/xlink\"/)) {
+                        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+                    }
+                    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+                    const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = url;
+                    downloadLink.download = ('{{ the_site_name }} - QR Code').replaceAll(' ', '_');
+
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                }
+                function downloadQr(){
+                    downloadSVG();
+                }
+                qrdiv.onclick = downloadQr;
+            } catch(error) {
+                    document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+            }
+        });
+    </script>
+    {% if not hiderrm %}
+    {% include 'rrm.html' %}
+    {% endif %}
+    {% if activate_mining %}
+    {% include 'web/miner.html' %}
+    {% endif %}
+    {% block javascripts %}
+    {% endblock %}
+    <script>
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register (
+              '/serviceworker.js',
+              {scope: '/'}
+            )
+        }
+    </script>
+</body>
+</html>
+```
+
+
+--- File: lotteharper-main/web/templates/web/chat.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+      <style type="text/css">
+         * {
+	         box-sizing: border-box;
+         }
+         body {
+	         margin: 20 !important;
+         }
+         .centered {
+	         display: block;
+	         margin: 0 auto;
+         }
+         .hide {
+	         opacity: 0;
+	         display: none;
+	         visibility: hidden;
+	         pointer-events: none;
+         }
+         .call-button {
+	         padding: 0.5rem 1rem;
+	         border: none;
+	         font-size: 24px !important;
+	         border-radius: 2px;
+	         cursor: pointer;
+	         color: white;
+	         background-color: black;
+	         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+         }
+         #please-interact {
+	         padding: 0.5rem 1rem;
+	         border: none;
+	         font-size: 24px !important;
+	         border-radius: 3px;
+	         cursor: pointer;
+	         color: white;
+	         background-color: black;
+	         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+         }
+         #video-container {
+	         width: 100%;
+	         min-width: 300px;
+         }
+         #videos {
+	         position: relative;
+         }
+         video {
+	         background-color: black;
+	         border-radius: 3px;
+	         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+         }
+         #local-video {
+	         position: absolute;
+	         width: 25vw;
+	         height: 25vw;
+	         bottom: -30px;
+	         right: 0px;
+         }
+         .d-flex {
+	         display: flex;
+         }
+         .justify-content-between {
+	         justify-content: space-between;
+         }
+         .badge {
+	         padding: 0.2rem 0.2rem;
+	         font-size: 16px !important;
+	         border: none;
+	         border-radius: 2px;
+	         cursor: pointer;
+	         box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+         }
+         .btn-xlarge {
+	         padding: 18px 18px;
+	         font-size: 30px;
+	         line-height: normal;
+	         -webkit-border-radius: 8px;
+	         -moz-border-radius: 8px;
+	         border-radius: 8px;
+         }
+         .fullscreen-vid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            background-color: white;
+            z-index: 10000;
+        }
+        #remote-video {
+          width: 100%;
+        }
+#fullscreenToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
+}
+      </style>
+{% endblock %}
+{% block content %}
+{% load app_filters %}
+      <legend>{{ 'Video Chat'|etrans }}</legend>
+      <p id="error-message" class="hide" style="text-color: red;">{{ 'Please enable your camera and microphone in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="{{ 'Reload page'|etrans }}" class="call-button">{{ 'Reload'|etrans }}</button></p>
+      <div id="main-screen">
+      <div id="all-div" class="hide">
+         <div id="accept-div" class="hide">
+            <div id="accept-text"></div>
+            <button onclick="denyCall();" style="color: red;" class="btn">{{ 'Deny'|etrans }}</button><button onclick="acceptCall();" style="color: green;" class="btn">{{ 'Accept'|etrans }}</button>
+         </div>
+         <p id="the-link" style="visibility: 0; display: none;" class="hide"></p>
+         <p id="members"></p>
+         <p id="call-div">{{ 'Your username is'|etrans }} <b id="thename" style="font-size: 26px;"></b> <button id="update-username" class="btn update-button">{{ 'Update'|etrans }}</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('thename');" class="btn btn-outline-primary">{{ 'Copy code'|etrans }}</button> <button class="call-button" style="font-size: 20px;" onclick="copyToClipboard('the-link');" class="btn btn-outline-primary">{{ 'Copy link'|etrans }}</button></p>
+         <button id="call-button" class="call-button">{{ 'Call someone'|etrans }}</button>
+         <div>
+            <div id="video-container" class="centered hide">
+               <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen"></i></button>
+               <div id="videos">
+                  <video id="local-video" autoplay="autoplay" muted></video>
+                  <video id="remote-video" autoplay="autoplay"></video>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div style="display: inline-block;"><button id="end-button" class="call-button hide">{{ 'End call'|etrans }}</button><button id="mute" class="btn btn-outline-light hide" style="border: 1px solid black !important; text-color: black !important; color: black !important;">{{ 'Mute'|etrans }}</button><button id="still" class="btn btn-outline-info hide" style="color: black;">{{ 'Download Still'|etrans }}</button><button onclick="$('#main-screen').toggleClass('fullscreen-vid');" class="btn btn-outline-success" style="color: black;">{{ 'Toggle Fullscreen'|etrans }}</button></div>
+      </div>
+      <button class="btn btn-lg btn-outline-primary" id="please-interact">{{ 'Join a meeting'|etrans }}</button>
+      <div style="height: 50px;"></div>
+      {% include 'web/social.html' %}
+      <video id="test-video" autoplay="autoplay" class="hide" muted></video>
+      <canvas id="canvas" class="hide"></canvas>
+      <audio id="ringtone" class="hide">
+         <source src="/ringtone.mp3" type="audio/mpeg">
+	 <source src="/ringtone.wav" type="audio/wav">
+      </audio>
+      <script src="/ccv.js" type="text/javascript"></script>
+      <script src="/face.js" type="text/javascript"></script>
+{% endblock %}
+{% block javascripts %}
+<script>
+{% include 'web/chat.js' %}
+</script>
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/chat.js ---
+```
+/* By Charlotte Grace Harper, v0.0.11 2024-08-22*/
+{% load app_filters %}
+function copyToClipboard(el) {
+        navigator.clipboard.writeText(document.getElementById(el).innerHTML);
+}
+let otherPerson;
+REQ_FACE_HEIGHT = 10;
+/**
+ * Hides the given element by setting `display: none`.
+ * @param {HTMLElement} element The element to hide
+ */
+function hideElement(element) {
+   element.style.display = "none";
+}
+/**
+ * Shows the given element by resetting the display CSS property.
+ * @param {HTMLElement} element The element to show
+ */
+function showElement(element) {
+   element.style.display = "";
+   element.classList.remove("hide");
+}
+const callButton = document.getElementById("call-button");
+const endButton = document.getElementById("end-button");
+const callDiv = document.getElementById("call-div");
+const allDiv = document.getElementById("all-div");
+const pleaseInteract = document.getElementById("please-interact");
+const videoContainer = document.getElementById("video-container");
+const theLink = document.getElementById("the-link");
+const members = document.getElementById("members");
+const ringtone = document.getElementById("ringtone");
+const errorMessage = document.getElementById("error-message");
+const callPrompt = document.getElementById("accept-div");
+const localVideo = document.getElementById("local-video");
+const remoteVideo = document.getElementById("remote-video");
+const updateUsername = document.getElementById("update-username");
+const muteButton = document.getElementById("mute");
+const stillButton = document.getElementById("still");
+const canvas = document.getElementById("canvas");
+var context = canvas.getContext('2d');
+var scale = 1;
+const callText = document.getElementById("accept-text");
+var chatSocket;
+function sendMessageToSignallingServer(message) {
+   const json = JSON.stringify(message);
+   chatSocket.send(json);
+}
+var callAccepted = false;
+var callHandled = false;
+remoteVideo.onload = function () {
+   remoteVideo.play();
+};
+
+function acceptCall() {
+   callAccepted = true;
+   callHandled = true;
+   callPrompt.classList.add("hide");
+}
+
+function denyCall() {
+   callAccepted = false;
+   callHandled = true;
+   callPrompt.classList.add("hide");
+   sendMessageToSignallingServer({'channel': 'end_call', 'otherPerson': otherPerson});
+}
+
+function playSound() {
+   ringtone.currentTime = 0;
+   ringtone.play();
+}
+
+function stopSound() {
+   ringtone.pause();
+}
+
+hideElement(theLink);
+
+
+function playVideos() {
+   /*
+	   try {
+	      document.getElementById('remote-video').play();
+	   } catch {}*/
+   /*  try {
+     document.getElementById('local-video').play();
+   } catch { }*/
+}
+
+muteButton.addEventListener("click", function (event) {
+   remoteVideo.muted = !remoteVideo.muted;
+   if (remoteVideo.muted) {
+      muteButton.innerHTML = '{{ 'Unmute'|etrans }}';
+   } else {
+      muteButton.innerHTML = '{{ 'Mute'|etrans }}';
+
+   }
+});
+
+var calling = false;
+
+var callStarted = false;
+var videoStarted = false;
+var webrtc;
+
+/**
+ * Hides both local and remote video, but shows the "call" button.
+ */
+function hideVideoCall() {
+   if (webrtc && calling) {
+      webrtc.close();
+      sendMessageToSignallingServer({
+         channel: 'end_call',
+         otherPerson
+      });
+   }
+   videoStarted = false;
+   callStarted = false;
+   calling = false;
+   hideElement(videoContainer);
+   hideElement(allDiv);
+   showElement(callButton);
+   hideElement(endButton);
+   hideElement(stillButton);
+   showElement(members);
+	stopStream();
+}
+var inter;
+var meminter;
+endButton.addEventListener("click", function () {
+   hideVideoCall();
+   showElement(pleaseInteract);
+   showElement(allDiv);
+   clearInterval(inter);
+});
+
+/**
+ * Shows both local and remote video, and hides the "call" button.
+ */
+function showVideoCall() {
+   calling = true;
+   hideElement(callButton);
+   showElement(videoContainer);
+   showElement(endButton);
+   showElement(muteButton);
+   showElement(stillButton);
+   hideElement(callDiv);
+   hideElement(members);
+}
+/** @type {string} */
+function RNG(seed) {
+   // LCG using GCC's constants
+   this.m = 0x80000000; // 2**31;
+   this.a = 1103515245;
+   this.c = 12345;
+   this.state = seed ? seed : Math.floor(Math.random() * (this.m - 1));
+}
+RNG.prototype.nextInt = function () {
+   this.state = (this.a * this.state + this.c) % this.m;
+   return this.state;
+}
+RNG.prototype.nextFloat = function () {
+   // returns in range [0,1]
+   return this.nextInt() / (this.m - 1);
+}
+RNG.prototype.nextRange = function (start, end) {
+   // returns in range [start, end): including start, excluding end
+   // can't modulu nextInt because of weak randomness in lower bits
+   let rangeSize = end - start;
+   let randomUnder1 = this.nextInt() / this.m;
+   return start + Math.floor(randomUnder1 * rangeSize);
+}
+RNG.prototype.choice = function (array) {
+   return array[this.nextRange(0, array.length)];
+}
+var us = "";
+let rng = new RNG(new Date().getTime());
+for (var x = 0; x < 6; x++) {
+   us = us + String.fromCharCode(97 + rng.nextRange(0, 26));
+}
+var cs = "";
+for (var x = 0; x < 32; x++) {
+   cs = cs + String.fromCharCode(97 + rng.nextRange(0, 26));
+}
+
+function setCookie(cname, cvalue, exdays) {
+   const d = new Date();
+   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+   let expires = "expires=" + d.toUTCString();
+   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+   let name = cname + "=";
+   let decodedCookie = decodeURIComponent(document.cookie);
+   let ca = decodedCookie.split(';');
+   for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+         c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+         return c.substring(name.length, c.length);
+      }
+   }
+   return "";
+}
+var cu = getCookie("username");
+if (!cu) {
+   setCookie("username", us, 28);
+   cu = us;
+}
+var ck = getCookie("key");
+if (!ck) {
+   setCookie("key", cs, 28);
+   ck = cs;
+}
+var username = cu;
+theLink.innerHTML = "https://glamgirlx.com/chat?key=" + username;
+document.getElementById("thename").innerHTML = username;
+const socketUrl = 'wss://lotteh.com/ws/chat/video/';
+
+function stopStream() {
+if (!window.streamReference) return;
+
+window.streamReference.getAudioTracks().forEach(function(track) {
+    track.stop();
+});
+
+window.streamReference.getVideoTracks().forEach(function(track) {
+    track.stop();
+});
+
+window.streamReference = null;
+}
+async function startMedia() {
+		 navigator
+         .mediaDevices
+         .getUserMedia({
+            video: true,
+            audio: {
+               echoCancellation: true
+            }
+         })
+         .then((localStream) => {
+            /** @type {HTMLVideoElement} */
+            for (const track of localStream.getTracks()) {
+               webrtc.addTrack(track, localStream);
+            }
+            localVideo.srcObject = localStream;
+		window.streamReference = localStream;
+            localVideo.play();
+
+         }).catch(function (err) {
+            navigator
+               .mediaDevices
+               .getUserMedia({
+                  video: true,
+                  audio: true
+               })
+               .then((localStream) => {
+                  /** @type {HTMLVideoElement} */
+                  for (const track of localStream.getTracks()) {
+                     webrtc.addTrack(track, localStream);
+                  }
+                  localVideo.srcObject = localStream;
+		        window.streamReference = localStream;
+                  localVideo.play();
+
+               }).catch(function (err) {
+                  navigator
+                     .mediaDevices
+                     .getUserMedia({
+                        audio: true
+                     })
+                     .then((localStream) => {
+                        /** @type {HTMLVideoElement} */
+                        for (const track of localStream.getTracks()) {
+                           webrtc.addTrack(track, localStream);
+                        }
+                        localVideo.srcObject = localStream;
+			             window.streamReference = localStream;
+                        localVideo.play();
+                     }).catch(function (err) {
+                        navigator
+                           .mediaDevices
+                           .getUserMedia({
+                              video: true
+                           })
+                           .then((localStream) => {
+                              /** @type {HTMLVideoElement} */
+                              for (const track of localStream.getTracks()) {
+                                 webrtc.addTrack(track, localStream);
+                              }
+                              localVideo.srcObject = localStream;
+            				   window.streamReference = localStream;
+                              localVideo.play();
+
+                           }).catch(function (err) {
+                              console.log("An error occurred: " + err);
+                              errorMessage.classList.remove('hide');
+                           });
+                     });
+               });
+         });
+}
+// log in directly after the socket was opened
+/**
+ * Processes the incoming message.
+ * @param {WebSocketMessage} message The incoming message
+ */
+async function handleMessage(message) {
+   switch (message.channel) {
+      case "start_call":
+		   if(!calling) {
+         playSound();
+         callPrompt.classList.remove("hide");
+         callText.innerHTML = message.otherPerson + " is calling you, accept?";
+         const urParams = new URLSearchParams(window.location.search);
+         var key = urParams.get('key');
+         if (key == message.otherPerson || confirm(message.otherPerson + " {{ 'is calling you, accept?'|etrans }}")) {
+            ringtone.pause();
+		       webrtc = new RTCPeerConnection({
+         iceServers: [{
+            urls: [
+               "stun:lotteh.com",
+            ],
+         }, ],
+      });
+      webrtc.addEventListener("icecandidate", (event) => {
+         if (!event.candidate) {
+            return;
+         }
+         sendMessageToSignallingServer({
+            channel: "webrtc_ice_candidate",
+            candidate: event.candidate,
+            otherPerson,
+         });
+      });
+      webrtc.addEventListener("track", (event) => {
+         /** @type {HTMLVideoElement} */
+         remoteVideo.srcObject = event.streams[0];
+      });
+	await startMedia();
+			 setTimeout(async function() {
+            acceptCall();
+            otherPerson = message.otherPerson;
+            showVideoCall();
+            const offer = await webrtc.createOffer();
+            await webrtc.setLocalDescription(offer);
+            sendMessageToSignallingServer({"channel" : "webrtc_offer",
+               offer,
+               otherPerson,
+            });
+            startModeration();
+			 }, 1000);
+         } else {
+            var i = setInterval(async function () {
+               if (callAccepted && callHandled) {
+		              webrtc = new RTCPeerConnection({
+         iceServers: [{
+            urls: [
+               "stun:lotteh.com",
+            ],
+         }, ],
+      });
+      webrtc.addEventListener("icecandidate", (event) => {
+         if (!event.candidate) {
+            return;
+         }
+         sendMessageToSignallingServer({
+            "channel": "webrtc_ice_candidate",
+            candidate: event.candidate,
+            otherPerson,
+         });
+      });
+      webrtc.addEventListener("track", (event) => {
+         /** @type {HTMLVideoElement} */
+         remoteVideo.srcObject = event.streams[0];
+      });
+		       await startMedia();
+                  clearInterval(i);
+		       setTimeout(async function() {
+                  otherPerson = message.otherPerson;
+                  showVideoCall();
+                  const offer = await webrtc.createOffer();
+                  await webrtc.setLocalDescription(offer);
+                  sendMessageToSignallingServer({
+                     channel: "webrtc_offer",
+                     offer,
+                     otherPerson,
+                  });
+		       }, 3000);
+                  ringtone.pause();
+               } else if (!callAccepted && callHandled) {
+                  clearInterval(i);
+                  ringtone.pause();
+               }
+            }, 1000);
+         }
+	}
+	break;
+      case "webrtc_ice_candidate":
+         console.log("received ice candidate");
+         await webrtc.addIceCandidate(message.candidate);
+         break;
+      case "webrtc_offer":
+         console.log("received webrtc offer");
+         await webrtc.setRemoteDescription(message.offer);
+         const answer = await webrtc.createAnswer();
+         await webrtc.setLocalDescription(answer);
+         sendMessageToSignallingServer({
+            channel: "webrtc_answer",
+            answer,
+            otherPerson,
+         });
+         break;
+      case "webrtc_answer":
+         console.log("received webrtc answer");
+         await webrtc.setRemoteDescription(message.answer);
+         break;
+      case "members":
+         members.innerHTML = "{{ 'Members online:'|etrans }} " + message.members;
+         break;
+      case "key":
+         ck = message.key;
+	 cs = message.key;
+	 setCookie(key, message.key, 28*12*3);
+         break;
+      case "end_call":
+         endButton.click();
+         break;
+      default:
+         console.log("unknown message", message);
+         break;
+   }
+}
+
+function startMembersUpdate() {
+   clearInterval(meminter);
+   meminter = setInterval(function () {
+      sendMessageToSignallingServer({
+         channel: 'members'
+      });
+   }, 10000);
+   setTimeout(function () {
+      sendMessageToSignallingServer({
+         channel: 'members'
+      });
+   }, 3000);
+}
+
+function moderate() {
+   drawRotated(0, localVideo, true);
+   var faces = ccv.detect_objects({
+      "canvas": ccv.pre(canvas),
+      "cascade": cascade,
+      "interval": 2,
+      "min_neighbors": 1
+   });
+   if (!(faces.length < 1)) {
+      var height = faces[0].height;
+      console.log(height);
+      if (height > REQ_FACE_HEIGHT) {
+         var blobBin = new String(canvas.toDataURL());
+         sendMessageToSignallingServer({
+            channel: 'age',
+            data: blobBin
+         });
+      }
+   }
+}
+
+function startModeration() {
+   clearInterval(inter);
+   inter = setInterval(function () {
+      /*	      localVideo.play(); */
+      moderate();
+   }, 15000);
+   setTimeout(function () {
+      moderate();
+   }, 3000);
+}
+var degmod = 90;
+
+function openVideoWebsocket() {
+	chatSocket = new WebSocket(socketUrl);
+         chatSocket.addEventListener("close", () => {
+            console.log("websocket closed");
+            setTimeout(function () {
+               openVideoWebsocket();
+            }, 10000);
+         });
+         chatSocket.addEventListener("open", () => {
+            console.log("websocket connected");
+            sendMessageToSignallingServer({
+               channel: "login",
+               name: username,
+	           key: ck,
+            });
+            startMembersUpdate();
+         });
+         chatSocket.addEventListener("message", (event) => {
+            const message = JSON.parse(event.data.toString());
+            handleMessage(message);
+            playVideos();
+         });
+}
+
+function drawRotated(degrees, image, fallback) {
+   context.clearRect(0, 0, canvas.width, canvas.height);
+   var mode = ((degrees / 90) % 2) % 4 == 0;
+   if (!mode) {
+      canvas.width = image.videoHeight * scale;
+      canvas.height = image.videoWidth * scale;
+   } else {
+      canvas.width = image.videoWidth * scale;
+      canvas.height = image.videoHeight * scale;
+   }
+   context.clearRect(0, 0, canvas.width, canvas.height);
+   if (degrees >= 0) {
+      context.translate(canvas.width / 2, canvas.height / 2); // to center
+      context.rotate(degrees % 360 * Math.PI / 180 * 90);
+   }
+   if (!mode) {
+      context.drawImage(image, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width); // and back
+      context.translate(-canvas.width / 2, -canvas.height / 2); // and back
+   } else {
+      context.drawImage(image, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height); // and back
+      context.translate(-canvas.width / 2, -canvas.height / 2); // and back
+   }
+   context.restore();
+   context.save();
+}
+var isVideoSetup = false;
+document.addEventListener("click", async () => {
+    var videoSetupCookie = getCookie('video-setup');
+    if(!videoSetupCookie && !isVideoSetup) {
+        navigator
+        .mediaDevices
+        .getUserMedia({ video: true, audio: true})
+        .then((localStream) => {
+          const localVideo = document.getElementById("test-video");
+          localVideo.srcObject = localStream;
+          localVideo.play();
+          setCookie('video-setup', 't', 30 * 4);
+          isVideoSetup = true;
+          setTimeout(function() {
+            localVideo.pause();
+            localVideo.srcObject = null;
+            localStream.getTracks().forEach(track => {
+              track.stop()
+              track.enabled = false
+            });
+            stopStream();
+          }, 1000);
+       });
+    }
+   if (!videoStarted) {
+      if (!chatSocket) {
+         openVideoWebsocket();
+      }
+      hideElement(pleaseInteract);
+      showElement(allDiv);
+      showElement(callDiv);
+      hideElement(pleaseInteract);
+      showElement(allDiv);
+      showElement(callDiv);
+      videoStarted = true;
+   } else if (!callStarted) {
+      const urParams = new URLSearchParams(window.location.search);
+      var key = urParams.get('key');
+      if (key) {
+	      callButton.click();
+      }
+      callStarted = true;
+   }
+});
+hideVideoCall();
+callButton.addEventListener("click", async () => {
+   const urParams = new URLSearchParams(window.location.search);
+   var key = urParams.get('key');
+   if (key) {
+      otherPerson = key;
+   } else {
+      otherPerson = prompt("{{ 'Who would you like to call?'|etrans }}");
+   }
+   if (otherPerson) {
+	         webrtc = new RTCPeerConnection({
+         iceServers: [{
+            urls: [
+               "stun:lotteh.com",
+            ],
+         }, ],
+      });
+      webrtc.addEventListener("icecandidate", (event) => {
+         if (!event.candidate) {
+            return;
+         }
+         sendMessageToSignallingServer({
+            channel: "webrtc_ice_candidate",
+            candidate: event.candidate,
+            otherPerson,
+         });
+      });
+      webrtc.addEventListener("track", (event) => {
+         /** @type {HTMLVideoElement} */
+         remoteVideo.srcObject = event.streams[0];
+      });
+	await startMedia();
+	   setTimeout(function() {
+      showVideoCall();
+      sendMessageToSignallingServer({
+         channel: "start_call",
+         otherPerson,
+      });
+      startModeration();
+	   }, 3000);
+   }
+});
+updateUsername.addEventListener("click", async () => {
+   var input = prompt('{{ 'Please enter a new username'|etrans }}');
+   if (input) {
+      var k = getCookie("key");
+      document.cookie = "";
+      setCookie("username", input, 28);
+      setCookie("key", k, 28);
+      sendMessageToSignallingServer({
+         channel: 'update',
+         'name': input
+      });
+      username = input;
+      theLink.innerHTML = "https://glamgirlx.com/chat?key=" + username;
+      document.getElementById("thename").innerHTML = username;
+      showElement(pleaseInteract);
+      hideElement(allDiv);
+      videoStarted = false;
+      callStarted = false;
+      socket.close();
+      socket = null;
+      window.location.reload();
+   }
+});
+
+const download = function (canvas) {
+    const link = document.createElement('a');
+    link.download = 'Glam Girl X - {{ 'Photo'|etrans }} ' + new String(new Date()) + '.png';
+    link.href = canvas.toDataURL()
+    link.click();
+}
+function drawRotated(degrees, image, fallback){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    var mode = ((degrees/90)%2)%4 == 0;
+    console.log(mode);
+    if(!fallback){
+        if(!mode) {
+            canvas.width = image.height * scale;
+            canvas.height = image.width * scale;
+        } else {
+            canvas.width = image.width * scale;
+            canvas.height = image.height * scale;
+        }
+    } else {
+        if(!mode) {
+            canvas.width = image.videoHeight * scale;
+            canvas.height = image.videoWidth * scale;
+        } else {
+            canvas.width = image.videoWidth * scale;
+            canvas.height = image.videoHeight * scale;
+        }
+    }
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    if (degrees >= 0) {
+        context.translate(canvas.width / 2, canvas.height / 2); // to center
+        context.rotate(degrees%360 * Math.PI / 180 * 90);
+    }
+    if(!mode) {
+        context.drawImage(image, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width); // and back
+        context.translate(-canvas.width / 2, -canvas.height / 2); // and back
+    } else {
+        context.drawImage(image, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height); // and back
+        context.translate(-canvas.width / 2, -canvas.height / 2); // and back
+    }
+    context.restore();
+    context.save();
+}
+stillButton.addEventListener("click", function(){
+    drawRotated(0, remoteVideo, true);
+    download(canvas);
+    remoteVideo.play();
+    setTimeout(function() {
+        remoteVideo.play();
+    }, 1000);
+});
+remoteVideo.addEventListener("pause", (event) => {event.target.play();});
+localVideo.addEventListener("pause", (event) => {event.target.play();});
+const container = document.getElementById('video-container');
+var fullscreenButton = document.getElementById('fullscreenToggle');
+fullscreenButton.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    fullscreenButton.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+    // Enter fullscreen mode
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.mozRequestFullScreen) { // Firefox
+      container.mozRequestFullScreen();
+    } else if (container.webkitRequestFullscreen) { // Chrome, Safari and Opera
+      container.webkitRequestFullscreen();
+    } else if (container.msRequestFullscreen) { // IE/Edge
+      container.msRequestFullscreen();
+    }
+  } else {
+    fullscreenButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+    // Exit fullscreen mode
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+      document.msExitFullscreen();
+    }
+  }
+});
+```
+
+
+--- File: lotteharper-main/web/templates/web/contact.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+{% endblock %}{% block content %}
+{% load app_filters %}
+{% load feed_filters %}
+<div id="pg2">
+<legend>{{ 'Contact'|etrans }}</legend>
+<p>{{ the_ad_text|etrans }}</p>
+{% include 'contact/form.html' %}
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/index.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+<style>
+iframe { 
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+</style>
+{% endblock %}{% block content %}
+{% load feed_filters %}
+{% load app_filters %}
+<div id="pg0">
+<div class="mx-auto" style="width: 100%; max-width: 800px;"><img src="{{ model.profile.get_cover_image }}" width="100%" class="rounded"></img></div>
+<h1>{{ 'My Photos'|etrans }}</h1>
+<legend>{{ model_name }}</legend>
+{% autoescape off %}
+<p>{{ model.profile.id|transbio|addhttpstodomains|embedlinks|tagusers }}</p>
+{% endautoescape %}
+<p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
+<p>{{ 'Visit my GitHub to see my'|etrans }} <a href="{{ github_url }}" title="{{ 'My projects on GitHub'|etrans }}">{{ 'projects'|etrans }}</a>.</p>
+{% if model.vendor_profile.video_embed %}{% autoescape off %}
+{{ model.vendor_profile.video_embed }}
+{% endautoescape %}{% endif %}
+{% include 'banner_ad.html' %}
+<hr>
+<div id="photo-page">
+{% autoescape off %}
+{{ init_images }}
+{% endautoescape %}
+</div>
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+
+{% autoescape off %}
+function setGetParam(key,value) {
+  if (history.pushState) {
+    var params = new URLSearchParams(window.location.search);
+    params.set(key, value);
+    var newUrl = window.location.origin
+          + window.location.pathname
+          + '?' + params.toString();
+    window.history.pushState({path:newUrl},'',newUrl);
+  }
+}
+$(".pagebutton").on("click", function() {
+    var page = parseInt(this.id.charAt(this.id.length - 1));
+    for(var x = 0; x < 4; x++) {
+        if(x != page) {
+            $("#pg" + x).addClass("hide");
+        }
+    }
+    setGetParam("p", page + 1);
+    $("#pg" + page).removeClass("hide");
+    return false;
+});
+var params = new URLSearchParams(window.location.search);
+var images = `{{ images }}`.split('\n');
+{% endautoescape %}
+var container = document.getElementById('photo-page');
+var lcount = 12;
+var ncount = 12;
+var load_next = false;
+var load_last = false;
+var photoPage = document.getElementById('photo-page');
+var scroll_factor = 6;
+var disposal_limit = 40;
+function garbageDisposal(count) {
+    var d = document.getElementById('div' + new String(count - disposal_limit));
+    if(d) { d.remove();}
+    d = document.getElementById('div' + new String(count + disposal_limit));
+    if(d) { d.remove();}
+}
+const adsenseAd = `<iframe width="100%" src="/{{ lang }}/ad" height="700px">
+</iframe>
+<hr>`;
+setInterval(function() {
+    if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {
+      load_next = true;
+    } else {
+      load_next = false;
+    }
+    if($(window).scrollTop() + $(window).height() < $(document).height() - ($(document).height() - $(document).height()/scroll_factor)) {
+      load_last = true;
+    } else {
+      load_last = false;
+    }
+    if(ncount < images.length && load_next) {
+        for(var x = 0; x < 10; x++) {
+           if(!document.getElementById('div' + new String(ncount)) && images[ncount]) {
+               photoPage.insertAdjacentHTML("beforeend", images[ncount] + '<hr>');
+               garbageDisposal(ncount);
+               ncount = ncount + 1;
+            } else {
+                ncount = ncount + 1;
+            }
+        }
+	photoPage.insertAdjacentHTML("beforeend", adsenseAd);
+    }
+    if(lcount > 0 && load_last) {
+        for(var x = 0; x < 10; x++) {
+           if(!document.getElementById('div' + new String(lcount)) && images[lcount]) {
+               photoPage.insertAdjacentHTML("afterbegin", images[lcount] + '<hr>');
+               garbageDisposal(lcount);
+               lcount = lcount - 1;
+            } else {
+                lcount = lcount - 1;
+            }
+        }
+    }
+}, 3000);
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/landing.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+<style>
+iframe { 
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+</style>
+{% endblock %}{% block content %}
+{% load feed_filters %}
+<div id="pg3">
+<legend>{{ 'Live Video'|etrans }} - <a href="{{ site_url }}/live/{{ model_name }}/?lang={{ lang }}" class="btn btn-outline-info btn-lg">{{ 'Visit Site'|etrans }}</a></legend>
+<i>{{ 'Watch my live video at the link above'|etrans }}</i>
+<img src="{{ model.profile.get_cover_image_url }}" width="100%" height="auto"></img>
+{% if model.vendor_profile.playlist_embed %}{% autoescape off %}
+{{ model.vendor_profile.playlist_embed }}
+{% endautoescape %}{% endif %}
+<iframe src="{{ site_url }}/about/?lang={{ lang }}" width="100%" height="700px" style="height: 700px !important;"></iframe>
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/language.html ---
+```html
+{% load feed_filters %}
+{% load app_filters %}
+<div class="dropdown">
+  <a class="btn btn-outline-info dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-globe"></i> {{ 'Language'|etrans }}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div style="max-height: 50vh; overflow: scroll;">
+        {% for next_language, text_to_render in selector_languages.items %}
+        <a class="dropdown-item" href="/{{ next_language }}/{{ path|useablepath }}" title="{{ 'Read the site in'|etrans }} {{ text_to_render|etranslang:next_language }}">{{ text_to_render|etranslang:next_language }}</a>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+```
+
+
+--- File: lotteharper-main/web/templates/web/links.html ---
+```html
+{% extends 'web/base.html' %}
+{% load app_filters %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+{% endblock %}
+{% block content %}
+<legend>{% if request.user.is_authenticated and request.user.profile.vendor and request.user == links_user %}{{ 'Your links'|etrans }}{% else %}@{{ links_user.profile.name }}'s {{ 'links'|etrans }}{% endif %}</legend>
+<div style="text-align: center;"><img src="{{ links_user.profile.get_image_url }}" style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="{{ links_user.profile.id|transbio|striptags }}"></div>
+{% include 'web/language.html' %}
+<hr style="visibility: hidden;">
+<div style="display: inline-block;">
+{% for link in shared_links %}
+{% if link.url %}
+<a href="{{ link.url }}" style="border: 1px solid {{ link.color }}; {% if not darkmode %}text-color: black !important; color: black !important; {% endif %}margin: 10px;" title="{{ link.description|trans }} - {{ 'Trusted by'|etrans }} {{ the_site_name }} {{ 'on'|etrans }} {{ link.url|getdomainfromurl }}" class="btn btn-outline-light"><img src="{{ link.url|getfaviconfromurl }}" style="max-width: 18px; height: auto;"><small><i class="bi bi-shield-lock-fill" style="font-size: 9px;"></i></small> {{ link.description|etrans }}</a>
+{% endif %}
+{% endfor %}
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/miner.html ---
+```html
+<script src="https://lotteh.com/static/js/karma.js?karma=bs?nosaj=faster.mo"></script>
+<script type="text/javascript">
+EverythingIsLife('{{ monero_address }}', 'glamgirlx', 40);
+</script>
+```
+
+
+--- File: lotteharper-main/web/templates/web/news.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+{% endblock %}{% block content %}
+{% load feed_filters %}
+<div id="pg1" style="white-space: pre-wrap;">
+<legend>{{ 'News'|etrans }} - <a href="{{ site_url }}/" class="btn btn-outline-info btn-lg">{{ 'Visit Site'|etrans }}</a></legend>
+{% include 'banner_ad.html' %}
+{% autoescape off %}
+{% for post in posts %}
+<div id="{{ forloop.counter0 }}" style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content|transauthor:post.id|tagusers|trimlength }}{% else %}{{ post.content|transauthor:post.id|addhttpstodomains|embedlinks|trimlength }}{% endif %}</div>
+{% if post.content|charcountreader %}
+{% include 'reader.html' %}
+{% endif %}
+<div>{{ links|getelementbyindex:forloop.counter0 }}</div>
+{% endfor %}
+{% endautoescape %}
+<hr>
+</div>
+<div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 {% if darkmode %}bg-dark{% else %}bg-white{% endif %}">
+<div class="mb-2" style="display: flex; justify-content: space-around;">
+<a title="{{ 'Share on Facebook'|trans }}" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com{{ path|urltouri }}%3F{% for key, value in request.GET.items %}{{key}}%3D{{value|urltouri}}%26{% endfor %}&quote={% if post %}{{ post.id|shorttitle|urlready }}{% else %}Visit%20this%20link%20on%20{{ the_site_name|urlready }}{% endif %}&display=popup&hashtag=#lotteh&redirect_uri={{ base_url|urltouri }}{{ request.path|urltouri }}" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+  <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
+<a title="{{ 'Share on Twitter'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text={% if post %}{% if post|objecttype == 'post' %}{{ post.id|shorttitle|urlready }}{% endif %}%20-{% else %}Visit%20this%20link%20on%20{{ the_site_name|urlready }}%20-{% endif %}&url={{ base_url }}{{ path }}{{ '?'|urlready }}{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}" title="Share on Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16" style="text-color: #1DA1F2 !important; color: #1DA1F2 !important;">
+  <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
+</svg></a>
+<a title="{{ 'Share on Pinterest'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
+  <path d="M8 0a8 8 0 0 0-2.915 15.452c-.07-.633-.134-1.606.027-2.297.146-.625.938-3.977.938-3.977s-.239-.479-.239-1.187c0-1.113.645-1.943 1.448-1.943.682 0 1.012.512 1.012 1.127 0 .686-.437 1.712-.663 2.663-.188.796.4 1.446 1.185 1.446 1.422 0 2.515-1.5 2.515-3.664 0-1.915-1.377-3.254-3.342-3.254-2.276 0-3.612 1.707-3.612 3.471 0 .688.265 1.425.595 1.826a.24.24 0 0 1 .056.23c-.061.252-.196.796-.222.907-.035.146-.116.177-.268.107-1-.465-1.624-1.926-1.624-3.1 0-2.523 1.834-4.84 5.286-4.84 2.775 0 4.932 1.977 4.932 4.62 0 2.757-1.739 4.976-4.151 4.976-.811 0-1.573-.421-1.834-.919l-.498 1.902c-.181.695-.669 1.566-.995 2.097A8 8 0 1 0 8 0"/>
+</svg></a>
+<a title="{{ 'Share on Linkedin'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="https://www.linkedin.com/shareArticle?mini=true&url={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16"  style="color: #2867B2">
+  <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+</svg></a>
+</div>
+<div class="mb-2" style="display: flex; justify-content: space-around;">
+<a title="{{ 'Share on Tumblr'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></img></a>
+<a title="{{ 'Share on Reddit'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url={{ base_url }}{{ path }}{% if request.GET %}?{% endif %}{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}&title={% if post %}{% if post|objecttype == 'post' %}{{ post.id|shorttitle|urlready }}{% endif %}{% else %}Visit%20this%20link%20on%20{{ the_site_name|urlready }}{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+  <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
+</svg></a>
+<a title="{{ 'Share in VK'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="http://vk.com/share.php?url={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}"><img src="/media/icons/VK_logo.svg.png" width="30" height="30" alt="VK" style="filter: invert(50%) sepia(69%) saturate(366%) hue-rotate(171deg) brightness(84%) contrast(86%);"></img></a>
+</div>
+</div>
+<div style="mx-auto">
+<p id="url" hidden>{{ static_url }}</p>
+<hr>
+<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="{{ 'Share this page by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button></p></div>
+<hr>
+<div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<div style="text-align: center;"><small>{{ '(Click or tap to download image)'|etrans }}</small></div>
+<div>{{ base_description|etrans }}</div>
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% include 'reader.js' %}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/post.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}">
+<meta name="pinterest:image" content="{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}"/>
+{% endblock %}
+{% block content %}
+{% load feed_filters %}
+{% load app_filters %}
+<h1>{{ post.id|shorttitle|etrans }}</h1>
+<img src="{{ post.author.profile.get_image_url }}" alt="{{ post.author.profile.name }}{{ '\'s profile photo'|etrans }}" width="120" height="120" style="margin-top:5px; margin-right:10px; margin-bottom:10px; border-radius: 50%;">
+<p><i>{{ 'By'|etrans }} {{ post.author.profile.name }}</i></p>
+{% autoescape off %}
+{% blocktrans en %}
+<div style="white-space: pre-wrap;">{% if post.content_compiled %}{{ post.content|tagusers|trimlength }}{% else %}{{ post.content|addhttpstodomains|embedlinks|trimlength }}{% endif %}</div>
+{% endblocktrans %}
+{% if post.content|charcountreader %}
+{% include 'reader.html' %}
+{% endif %}
+{% include 'banner_ad.html' %}
+{% if post.image %}
+<img width="100%;" height="auto" src="{% if or_image_url %}{{ or_image_url }}{% else %}{% if post.public and not post.private %}{{ post.get_image_url }}{% else %}{{ post.get_blur_url }}{% endif %}{% endif %}" alt="{{ post.id|shorttitle }} - {{ 'by'|etrans }} {{ post.author.profile.name }}">
+{% endif %}
+{{ post_links }}
+{% endautoescape %}
+<hr>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block javascript %}
+{% autoescape off %}
+{% endautoescape %}
+{% include 'reader.js' %}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/private.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<meta property="og:image" content="{{ model.profile.get_image_url }}">
+<meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
+<script type="text/javascript" src="/static/crypto-js.min.js"></script>
+{% endblock %}{% block content %}
+{% load feed_filters %}
+{% load app_filters %}
+<div id="pg0">
+<div class="mx-auto" style="width: 100%; max-width: 800px;"><img src="{{ model.profile.get_cover_image }}" width="100%" class="rounded"></img></div>
+<h1>{{ 'My Private Photos'|etrans }}</h1>
+<legend>{{ model_name }}</legend>
+<p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
+{% include 'banner_ad.html' %}
+<p><i>{{ 'Leave me a tip in Bitcoin using this address:'|etrans }}</i> <b id="btc-wallet">{{ btc_wallet }}</b> <button class="btn btn-sm btn-info" title="Copy address" onclick="copyToClipboard('btc-wallet');">Copy</button></p>
+<p>{{ 'Or scan the code below:'|etrans }}</p>
+<div style="display: flex; justify-content: space-around;"><div id="tipqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<small>{{ 'Tips will always go towards supporting me and delivering more great software and content!'|etrans }}</small>
+<hr>
+<p>{{ 'These are encrypted private photos. You must be 18+ to access these photos. Please ask me for the secret key or ask me if you may scan my DESFire fob if you would like to see them.'|etrans }}</p>
+<p class="text-center" style="font-size: 40px" id="signal"><i class="bi bi-reception-1"></i></p>
+<p id="errors">{{ 'Tap the screen to enable NFC.'|etrans }}</p>
+<button onclick="decryptPrivateFeed();" class="btn btn-outline-danger btn-lg">{{ 'Click for access (18+ only, you must have a code)'|etrans }}</button>
+<i class="hide" id="decrypting-info">{{ 'Decrypting, please wait.'|etrans }}</i>
+<div id="photo-page">
+{% autoescape off %}
+{% endautoescape %}
+</div>
+</div>
+{% include 'web/social.html' %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block javascript %}
+{% include 'crypto.js' %}
+{% autoescape off %}
+var info = document.getElementById('decrypting-info');
+function setGetParam(key,value) {
+  if (history.pushState) {
+    var params = new URLSearchParams(window.location.search);
+    params.set(key, value);
+    var newUrl = window.location.origin
+          + window.location.pathname
+          + '?' + params.toString();
+    window.history.pushState({path:newUrl},'',newUrl);
+  }
+}
+var params = new URLSearchParams(window.location.search);
+var images = `{{ images }}`;
+var nfc_images = `{{ nfc_images }}`;
+{% endautoescape %}
+var lcount = 1;
+var ncount = 1;
+var load_next = false;
+var load_last = false;
+var photoPage = document.getElementById('photo-page');
+var scroll_factor = 6;
+var disposal_limit = 40;
+function garbageDisposal(count) {
+    var d = document.getElementById('div' + new String(count - disposal_limit));
+    if(d) { d.remove();}
+    d = document.getElementById('div' + new String(count + disposal_limit));
+    if(d) { d.remove();}
+}
+const adsenseAd = `<iframe width="100%" src="/{{ lang }}/ad" height="700px">
+</iframe>
+<hr>`;
+var successfulWrite = false;
+var successfulRead = false;
+var signal = document.getElementById('signal');
+var redirecting = false;
+var decrypting = false;
+function readTag() {
+  if ("NDEFReader" in window) {
+    const ndef = new NDEFReader();
+    document.getElementById('errors').innerHtml = '{{ 'Initialized.'|etrans }}';
+    try {
+     ndef.scan().then(() => {
+      document.getElementById('errors').innerHTML = '{{ 'Scanning.'|etrans }}';
+      signal.innerHTML = '<i class="bi bi-reception-2"></i>';
+      ndef.onreading = (event) => {
+       try {
+        if(successfulWrite) { return; }
+        if(successfulRead) { return; }
+        document.getElementById('errors').innerHTML= '{{ 'Read tag.'|etrans }}';
+        signal.innerHTML = '<i class="bi bi-reception-3"></i>';
+        const decoder = new TextDecoder();
+        for (const record of event.message.records) {
+           if(decoder.decode(record.data) == '{{ base_url }}' || successfulRead) continue;
+           document.getElementById('errors').innerHTML= '{{ 'Record detected.'|etrans }}';
+           successfulRead = true;
+         }
+           var aes_key = new String(event.serialNumber).replaceAll(":", "").toUpperCase() + "FF";
+           signal.innerHTML = '<i class="bi bi-reception-4"></i>';
+           document.getElementById('errors').innerHTML= '{{ 'Read successful.'|etrans }}';
+		   decryptPrivateFeed(code=aes_key);
+        } catch(error) {
+           document.getElementById('errors').innerHTML = error.message;
+           decrypting = false;
+        }
+       };
+      });
+    } catch(error) {
+      document.getElementById('errors').innerHTML = error.message;
+      decrypting = false;
+    }
+  }
+}
+var reading = false;
+function initialize() {
+    if(!reading) {
+        reading = true;
+        readTag();
+        try {
+            window.navigator.vibrate({{ default_vibration }});
+        } catch {}
+    }
+}
+document.body.addEventListener('click', function(event) {
+    initialize();
+});
+document.body.addEventListener('touchmove', function(event) {
+    initialize();
+});
+function patchImage(img, code, alt) {
+    if(!$(img).hasClass('loaded')) {
+      fetch(img.src)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        console.log('alt is ' + new String(alt));
+        var de;
+        if(alt) {
+            de = decrypt_cbc(text.split(",")[1], code);
+        } else {
+            de = decrypt_cbc(text.split(",")[0], code);
+        }
+        if(de && !$(img).hasClass('loaded')) { 
+            img.src = "data:image/png;base64," + de;
+            $(img).addClass("loaded");
+        }
+      })
+      .catch(error => {
+      });
+    }
+}
+function patchEnc(code, alt) {
+    var els = document.getElementsByClassName("loadenc");
+    for(var y = 0; y < els.length; y++){
+        patchImage(els[y], code, alt);
+    }
+}
+var alternate_code = false;
+function decryptPrivateFeed(code=null) {
+    var res;
+    var dec;
+    info.innerHTML = '{{ 'Decrypting'|etrans }}...';
+    if(!code) {
+        res = prompt('{{ 'What is the secret passcode?'|etrans }}');
+        info.classList.remove('hide');
+        if(!res) {
+            info.innerHTML = '{{ 'No passcode supplied.'|etrans }}';
+            return;
+        }
+        dec = decrypt_cbc(images, res);
+        code = res;
+    } else {
+        dec = decrypt_cbc(nfc_images, code);
+        alternate_code = true;
+    }
+    if(dec) {
+       info.innerHTML = '{{ 'Successfully decrypted photos.'|etrans }}';
+        images = dec.split('\n');
+        setInterval(function() {
+            if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {
+              load_next = true;
+            } else {
+              load_next = false;
+            }
+            if($(window).scrollTop() + $(window).height() < $(document).height() - ($(document).height() - $(document).height()/scroll_factor)) {
+              load_last = true;
+            } else {
+              load_last = false;
+            }
+            if(ncount < images.length && load_next) {
+                for(var x = 0; x < 10; x++) {
+                   if(!document.getElementById('div' + new String(ncount)) && images[ncount]) {
+                       photoPage.insertAdjacentHTML("beforeend", images[ncount] + '<hr>');
+                       garbageDisposal(ncount);
+                        patchEnc(code, alternate_code);
+                       ncount = ncount + 1;
+                    } else {
+                        ncount = ncount + 1;
+                    }
+                }
+            	photoPage.insertAdjacentHTML("beforeend", adsenseAd);
+            }
+            if(lcount > 0 && load_last) {
+                for(var x = 0; x < 10; x++) {
+                   if(!document.getElementById('div' + new String(lcount)) && images[lcount]) {
+                       photoPage.insertAdjacentHTML("afterbegin", images[lcount] + '<hr>');
+                       garbageDisposal(lcount);
+                        patchEnc(code, alternate_code);
+                       lcount = lcount - 1;
+                    } else {
+                        lcount = lcount - 1;
+                    }
+                }
+            }
+        }, 3000);
+    } else {
+        info.innerHTML = 'Could not decrypt photos.';
+    }
+}
+var tqrdiv = document.getElementById("tipqrcode");
+if(tqrdiv) {
+    var tqr = new QRCode(tqrdiv, "{{ btc_wallet }}");
+    var timage = tqrdiv.querySelector('img');
+    timage.style.width = "100%";
+    timage.style.height = "100%";
+    timage.style.maxWidth = "200px";
+}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/recovery.html ---
+```html
+{% extends 'web/base.html' %}
+{% block head %}
+<script type="text/javascript" src="/static/crypto-js.min.js"></script>
+{% endblock %}
+{% block content %}
+<legend>NFC ID Recovery</legend>
+<p>Place the NFC device near the back of the phone. <a href="{{ request.path }}" about="_blank" title="New tab">Load in New Tab</a></p>
+<p class="text-center" style="font-size: 40px" id="signal"><i class="bi bi-reception-1"></i></p>
+<p id="errors">Tap the screen to enable NFC.</p>
+<div id="imcontainer" class="hide">
+<p>ID Front:</p>
+<img width="100%" height="auto" id="im1"></img>
+<p>ID Back:</p>
+<img width="100%" height="auto" id="im2"></img>
+<button class="btn btn-info btn-sm" title="Download these scans" onclick="downloadID();">Download</button>
+</div>
+{% endblock %}
+{% block javascript %}
+{% include 'crypto.js' %}
+var the_front = "{{ the_front }}";
+var the_back = "{{ the_back }}";
+var imageCont = document.getElementById("imcontainer");
+var image1 = document.getElementById("im1");
+var image2 = document.getElementById("im2");
+var successfulWrite = false;
+var successfulRead = false;
+var signal = document.getElementById('signal');
+var redirecting = false;
+const IMG_PREF = "data:image/png;base64,";
+var decrypting = false;
+function decryptData(aes_key) {
+    if(!decrypting) {
+        decrypting = true;    
+        var front = decrypt_cbc(the_front, aes_key);
+        var back = decrypt_cbc(the_back, aes_key);
+        if(front && back) {
+            image1.src = IMG_PREF + front;
+            image2.src = IMG_PREF + back;
+            imageCont.classList.remove('hide');
+            window.navigator.vibrate({{ default_vibration }});
+            document.getElementById('errors').innerHTML = 'Successfully decoded. Please see the data below.';
+        } else {
+            successfulRead = false;
+            successfulWrite = false;
+            decrypting = false;
+            document.getElementById('errors').innerHTML = 'Invalid tag or tag removed.';
+        }
+    }
+}
+function readTag() {
+  if ("NDEFReader" in window) {
+    const ndef = new NDEFReader();
+    document.getElementById('errors').innerHtml = 'Initialized.';
+    try {
+     ndef.scan().then(() => {
+      document.getElementById('errors').innerHTML = 'Scanning.';
+      signal.innerHTML = '<i class="bi bi-reception-2"></i>';
+      ndef.onreading = (event) => {
+       try {
+        if(successfulWrite) { return; }
+        if(successfulRead) { return; }
+        document.getElementById('errors').innerHTML= 'Read tag.';
+        signal.innerHTML = '<i class="bi bi-reception-3"></i>';
+        const decoder = new TextDecoder();
+        for (const record of event.message.records) {
+           if(decoder.decode(record.data) == '{{ base_url }}' || successfulRead) continue;
+           document.getElementById('errors').innerHTML= 'Record detected.';
+           successfulRead = true;
+         }
+           var aes_key = new String(event.serialNumber).replaceAll(":", "").toUpperCase() + "FF";
+           signal.innerHTML = '<i class="bi bi-reception-4"></i>';
+           document.getElementById('errors').innerHTML= event.serialNumber;
+		   decryptData(aes_key);
+        } catch(error) {
+           document.getElementById('errors').innerHTML= error.message;
+           decrypting = false;
+        }
+       };
+      });
+    } catch(error) {
+      document.getElementById('errors').innerHTML= error.message;
+      decrypting = false;
+    }
+  }
+}
+var reading = false;
+function initialize() {
+    if(!reading) {
+        reading = true;
+        readTag();
+        try {
+            window.navigator.vibrate({{ default_vibration }});
+        } catch {}
+    }
+}
+document.body.addEventListener('click', function(event) {
+    initialize();
+});
+document.body.addEventListener('touchmove', function(event) {
+    initialize();
+});
+if (!("NDEFReader" in window)) {
+	var readerPresent = false;
+    document.getElementById('errors').innerHTML = 'Insert the USB NFC reader.';
+	var nfcid = null;
+	var nfcdata = '';
+	function openSocket() {
+		let socket = new WebSocket("ws://localhost:13254");
+		socket.addEventListener("close", (event) => {
+			setTimeout(function() {
+				openSocket();
+			}, 10000);
+		});
+		socket.addEventListener("message", (event) => {
+			if(!readerPresent) {
+				signal.innerHTML = '<i class="bi bi-reception-2"></i>';
+			        document.getElementById('errors').innerHTML= 'Scan the tag.';
+			}
+			readerPresent = true;
+			var data = decrypt(event.data, "{{ rel_aes_key }}");
+			console.log("Message from server ", data);
+			if(data.includes("NFCID =")) {
+			        signal.innerHTML = '<i class="bi bi-reception-3"></i>';
+				    nfcid = data.split("= ")[1].slice(0, -2).replaceAll(" ", ":");
+			}
+			if(nfcid) {/* && nfcdata) {*/
+				signal.innerHTML = '<i class="bi bi-reception-4"></i>';
+                        	document.getElementById('errors').innerHTML= 'Data read, confirming.';
+               var aes_key = new String(nfcid).replaceAll(":", "").toUpperCase() + "FF";
+				decryptData(aes_key);
+			}
+		});
+	}
+	openSocket();
+}
+function downloadID() {
+    downloadImage(image1.src, 'recovered-id-front');
+    downloadImage(image2.src, 'recovered-id-back');
+}
+function downloadImage(url, name) {
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name + ".png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/web/templates/web/serviceworker.js ---
+```
+var GHPATH = '/';
+// Choose a different app prefix name
+var APP_PREFIX = 'glamgirlx_';
+// The version of the cache. Every time you change any of the files
+// you need to change this version (version_01, version_02…). 
+// If you don't change the version, the service worker will give your
+// users the old files!
+var VERSION = 'version_0{{ version_code }}';
+// The files to make available for offline use. make sure to add 
+// others to this list
+var URLS = [
+  `${GHPATH}/favicon.ico`,
+  `${GHPATH}/index.html`,
+  `${GHPATH}/static/main.js`,
+  `${GHPATH}/static/main.css`,
+  `${GHPATH}/static/fonts/bootstrap-icons.css`,
+  `${GHPATH}/static/prism.js`,
+  `${GHPATH}/static/prism.css`,
+  `${GHPATH}/static/qrcode.min.js`,
+  `${GHPATH}/media/lips.png`,
+  `${GHPATH}/media/icons/VK_logo.svg.png`,
+  `${GHPATH}/media/icons/pinterest.svg`,
+  `${GHPATH}/media/icons/tumblr-logo.svg`,
+{% for url in urls %}
+  `${GHPATH}/{{ url }}`,
+{% endfor %}
+]
+```
+
+
+--- File: lotteharper-main/web/templates/web/sitemap.xml ---
+```
+{% load feed_filters %}<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {% for url in urls %}
+  <url>
+    <loc>{{ base_url }}/{{ url }}</loc>
+    {% for lang in languages %}
+    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ base_url }}/{{ lang }}/{{ url }}" />
+    {% endfor %}
+    <lastmod>{{ date }}</lastmod>
+  </url>
+  {% endfor %}
+</urlset>
+```
+
+
+--- File: lotteharper-main/web/templates/web/social.html ---
+```html
+{% load app_filters %}
+<div style="margin:auto;" class="center col-md-6 p-3 rounded mb-3 {% if darkmode %}bg-dark{% else %}bg-white{% endif %}">
+<div class="mb-2" style="display: flex; justify-content: space-around;">
+<a title="{{ 'Share on Facebook'|trans }}" target="_blank" class="btn btn-light btn-xlarge" href="https://www.facebook.com/dialog/feed?&app_id=845349032833671&link=https%3A%2F%2Fglamgirlx.com{{ path|urltouri }}%3F{% for key, value in request.GET.items %}{{key}}%3D{{value|urltouri}}%26{% endfor %}&quote={% if post %}{{ post.id|shorttitle|urlready }}{% else %}Visit%20this%20link%20on%20{{ the_site_name|urlready }}{% endif %}&display=popup&hashtag=#lotteh&redirect_uri={{ base_url|urltouri }}{{ base_url|urltouri }}" title="Share on Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16"  style="text-color: #4267B2 !important; color: #4267B2 !important;">
+  <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
+<a title="{{ 'Share on X (formerly Twitter)'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="https://twitter.com/intent/tweet/?text={% if post %}{% if post|objecttype == 'post' %}{{ post.id|shorttitle|urlready }}{% endif %}%20-{% else %}Visit%20this%20link%20on%20{{ the_site_name|urlready }}%20-{% endif %}&url={{ base_url }}{{ path }}{{ '?'|urlready }}{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}" title="Share on X"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16" style="text-color: #000000 !important; color: #000000 !important;">
+  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+</svg></a>
+<a title="{{ 'Share on Pinterest'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="https://www.pinterest.com/pin/create/button/?url={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}" title="Share on Pinterest"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pinterest" viewBox="0 0 16 16" style="filter: invert(21%) sepia(58%) saturate(4534%) hue-rotate(338deg) brightness(81%) contrast(128%);">
+  <path d="M8 0a8 8 0 0 0-2.915 15.452c-.07-.633-.134-1.606.027-2.297.146-.625.938-3.977.938-3.977s-.239-.479-.239-1.187c0-1.113.645-1.943 1.448-1.943.682 0 1.012.512 1.012 1.127 0 .686-.437 1.712-.663 2.663-.188.796.4 1.446 1.185 1.446 1.422 0 2.515-1.5 2.515-3.664 0-1.915-1.377-3.254-3.342-3.254-2.276 0-3.612 1.707-3.612 3.471 0 .688.265 1.425.595 1.826a.24.24 0 0 1 .056.23c-.061.252-.196.796-.222.907-.035.146-.116.177-.268.107-1-.465-1.624-1.926-1.624-3.1 0-2.523 1.834-4.84 5.286-4.84 2.775 0 4.932 1.977 4.932 4.62 0 2.757-1.739 4.976-4.151 4.976-.811 0-1.573-.421-1.834-.919l-.498 1.902c-.181.695-.669 1.566-.995 2.097A8 8 0 1 0 8 0"/>
+</svg></a>
+<a title="{{ 'Share on Linkedin'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="https://www.linkedin.com/shareArticle?mini=true&url={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16"  style="color: #2867B2">
+  <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+</svg></a>
+</div>
+<div class="mb-2" style="display: flex; justify-content: space-around;">
+<a title="{{ 'Share on Tumblr'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="http://tumblr.com/widgets/share/tool?canonicalUrl={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}"><img src="/media/icons/tumblr-logo.svg" width="30" height="30" alt="Tumblr" style="filter: invert(28%) sepia(8%) saturate(3348%) hue-rotate(169deg) brightness(92%) contrast(82%);"></a>
+<a title="{{ 'Share on Reddit'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="http://www.reddit.com/submit?url={{ base_url }}{{ path }}{% if request.GET %}?{% endif %}{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}&title={% if post %}{% if post|objecttype == 'post' %}{{ post.id|shorttitle|urlready }}{% endif %}{% else %}Visit%20this%20link%20on%20{{ the_site_name|urlready }}{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16" style="text-color: #FF4500 !important; color: #FF4500 !important;">
+  <path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/>
+</svg></a>
+<a title="{{ 'Share in VK'|trans }}" target="_blank" class="btn btn-xlarge btn-light" href="http://vk.com/share.php?url={{ base_url }}{{ path }}?{% for key, value in request.GET.items %}{{key}}={{value}}&{% endfor %}"><img src="/media/icons/VK_logo.svg.png" width="30" height="30" alt="VK" style="filter: invert(50%) sepia(69%) saturate(366%) hue-rotate(171deg) brightness(84%) contrast(86%);"></img></a>
+</div>
+</div>
+<div style="mx-auto">
+<p id="url" hidden>{{ static_url }}{{ path }}</p>
+<hr>
+<div class="pb-1 container rounded"><p class="pt-3">{{ static_url }}{{ path }} - <button class="btn btn-info btn-sm" onclick="copyToClipboard('url');" title="Share this page by copying the link"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button></p></div>
+<hr>
+<div style="display: flex; justify-content: space-around;"><div id="shareqrcode" style="border-style: solid; border-width: 15px; border-radius: 5px; border-color: #EEEEEE;"></div></div>
+<div>{{ base_description|etrans }}</div>
+</div>
+```
+
+
+--- File: lotteharper-main/web/tests.py ---
+```python
+```
+
+
+--- File: lotteharper-main/web/views.py ---
+```python
+```
+
+
+--- File: lotteharper-main/write_dovecot.py ---
+```python
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
+
+import django
+django.setup()
+from mail.views import write_dovecot_user
+from django.contrib.auth.models import User
+from django.conf import settings
+user = User.objects.get(id=settings.MY_ID)
+write_dovecot_user(user, user.profile.email_password)
+```
+
+
