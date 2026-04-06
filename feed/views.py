@@ -932,6 +932,7 @@ def update_post(request, pk):
     from .forms import ScheduledPostForm
     from django.contrib import messages
     from django.shortcuts import render, redirect
+    from django.http import HttpResponseRedirect
     from django.utils import timezone
     from django.conf import settings
     import datetime, pytz, os
