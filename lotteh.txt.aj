@@ -1,123 +1,4 @@
-
-    resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
-  else:
-    # When it is not obtained by video stream, the entire file is returned by generator to save memory
-    from wsgiref.util import FileWrapper
-    resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
-    resp['Content-Length'] = str(size)
-  resp['Accept-Ranges'] = 'bytes'
-  return resp
-
-#@login_required
-#@user_passes_test(identity_verified, login_url='/verify/', redirect_field_name='next')
-@csrf_exempt
-def video_frame(request, username):
-  from users.models import Profile
-  from .models import VideoCamera
-  from django.contrib.auth.models import User
-  profile = get_object_or_404(Profile, name=username, identity_verified=True, vendor=True)
-  cameras = VideoCamera.objects.filter(user=profile.user, name=request.GET.get('camera'))
-  model = User.objects.get(profile__name=username)
-#  if request.user != model and (not is_live_show(request, model) or (not model in request.user.profile.subscriptions.all())):
-#    messages.warning(request, 'You need to follow {} before you can see their interactive feed.'.format(username))
-#    return redirect(reverse('feed:follow', kwargs={'username': username}))
-  c = cameras.first()
-  init = int(request.GET.get('index')) - (camera.frames.count() - camera.frame_count)
-  frame = c.frames.filter(processed=True, public=True if profile.user != request.user else None).order_by('time_captured')[int(request.GET.get('index')) if not camera.default else -1]
-  filename = frame.name.split('/')[-1]
-  from django.http import HttpResponse
-  return HttpResponse(reverse('live:stream-video', kwargs={'filename': filename}))
-
-@login_required
-@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
-@csrf_exempt
-def stream_video(request, filename):
-  import os, re
-  from django.http import StreamingHttpResponse
-  from django.conf import settings
-  path = os.path.join(settings.BASE_DIR,'media/live/files/', filename)
-  """Responding to the video file by streaming media"""
-  range_header = request.META.get('HTTP_RANGE', '').strip()
-  range_re = re.compile(r'bytes\s*=\s*(\d+)\s*-\s*(\d*)', re.I)
-  range_match = range_re.match(range_header)
-  size = os.path.getsize(path)
-  content_type, encoding = mimetypes.guess_type(path)
-  content_type = content_type or 'application/octet-stream'
-  if range_match:
-    first_byte, last_byte = range_match.groups()
-    first_byte = int(first_byte) if first_byte else 0
-    last_byte = first_byte + 1024 * 1024 * 8    # 8M Each piece, the maximum volume of the response body
-    if last_byte >= size:
-      last_byte = size - 1
-    length = last_byte - first_byte + 1
-    resp = StreamingHttpResponse(file_iterator(path, offset=first_byte, length=length), status=206, content_type=content_type)
-    resp['Content-Length'] = str(length)
-    resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
-  else:
-    from wsgiref.util import FileWrapper
-    # When it is not obtained by video stream, the entire file is returned by generator to save memory
-    resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
-    resp['Content-Length'] = str(size)
-  resp['Accept-Ranges'] = 'bytes'
-  return resp
-
-def remote_api(request):
-    from .models import VideoCamera
-    from django.utils import timezone
-    from django.http import HttpResponse
-    from django.core.exceptions import PermissionDenied
-    camera = None
-    if request.user.is_authenticated:
-        camera, created = VideoCamera.objects.get_or_create(user=request.user, name=request.GET.get('camera'))
-    else:
-        camera = VideoCamera.objects.get(key=request.GET.get('key', None))
-        camera.updated = timezone.now()
-        camera.save()
-    if not identity_verified(camera.user): raise PermissionDenied()
-    return HttpResponse('r' if camera.live else 'x')
-
-LIVE_UPDATE_SECONDS = 1
-
-@csrf_exempt
-@login_required
-@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
-@user_passes_test(is_vendor)
-def remote(request):
-    from .models import VideoCamera
-    import datetime
-    from django.utils import timezone
-    from django.http import HttpResponse
-    cameras = VideoCamera.objects.filter(user=request.user, name=request.GET.get('camera'))
-    if cameras.count() < 1 and request.user.is_authenticated and request.user.profile.vendor:
-        cameras = VideoCamera.objects.filter(user=request.user, name=request.GET.get('camera'))
-    camera = cameras.first()
-    if request.method == 'POST':
-        if not camera.updated > timezone.now() - datetime.timedelta(seconds=LIVE_UPDATE_SECONDS):
-            camera.live = not camera.live
-            camera.updated = timezone.now()
-            camera.save()
-    return HttpResponse('<i class="bi bi-toggle-on"></i>' if camera.live else '<i class="bi bi-toggle-off"></i>')
-
-@csrf_exempt
-def mute(request):
-    from .models import VideoCamera
-    from django.http import HttpResponse
-    from django.utils import timezone
-    import datetime
-    cameras = VideoCamera.objects.filter(user__profile__name=request.GET.get('user', None), name=request.GET.get('camera'), key=request.GET.get('key', ''))
-    if cameras.count() < 1 and request.user.is_authenticated and request.user.profile.vendor:
-        cameras = VideoCamera.objects.filter(user=request.user, name=request.GET.get('camera'))
-    camera = cameras.first()
-    if request.method == 'POST':
-        if not camera.updated > timezone.now() - datetime.timedelta(seconds=LIVE_UPDATE_SECONDS):
-            camera.muted = not camera.muted
-            camera.updated = timezone.now()
-            camera.save()
-    return HttpResponse('<i class="bi bi-mic-fill"></i>' if camera.muted else '<i class="bi bi-mic-mute-fill"></i>')
-
-@csrf_exempt
-@login_required
-@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
+gin_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def record_remote(request):
     from .models import VideoCamera
@@ -5085,4 +4966,129 @@ function updateAudioOffIcon(peer_id, enabled) {
     if (!videoElem || !iconElem) return;
     if (!enabled) {
         iconElem.style.visibility = "visible";
-        ico
+        iconElem.style.display = "block";
+    } else {
+        iconElem.style.visibility = "hidden";
+        iconElem.style.display = "none";
+    }
+}
+
+
+getMedia().then(async function(stream) {
+    localStream = stream;
+    var peerUsernames = {};
+    async function openMeetingSocket() {
+        function removeVideo(peer_id) {
+            let vid = document.getElementById("video_" + peer_id);
+            if (vid) vid.remove();
+            let vidcontainer = document.getElementById("videocontainer_" + peer_id);
+            if (vidcontainer) vidcontainer.remove();
+        }
+        function clearStreams() {
+            // Remove all remote peers' video containers, clear state objects
+            Object.keys(peers).forEach(peer_id => {
+                if (peer_id !== 'local') {
+                    removeVideo(peer_id);
+                }
+                try { peers[peer_id].close(); } catch {}
+                delete peers[peer_id];
+            });
+            Object.keys(streams).forEach(peer_id => {
+                if (peer_id !== 'local') delete streams[peer_id];
+            });
+            Object.keys(peerVolumes).forEach(peer_id => {
+                if (peer_id !== 'local') delete peerVolumes[peer_id];
+            });
+            Object.keys(peerUsernames).forEach(peer_id => {
+                if (peer_id !== 'local') delete peerUsernames[peer_id];
+            });
+
+            // REMOVE any accidental duplicate local video containers (defensive)
+            document.querySelectorAll('.video-container').forEach(vc => {
+                if (!vc.id || (
+                    vc.id !== 'localVideoContainer' && vc.querySelector('#localVideo') === null
+                )) {
+                    vc.remove();
+                }
+            });
+        }
+        clearStreams();
+        socket = new WebSocket(wsUrl);
+        function addVideo(peer_id, stream, peer_name) {
+            if (document.getElementById("video_" + peer_id)) return;
+            const vid = document.createElement("video");
+            const vidcontainer = document.createElement("div");
+            vidcontainer.id = "videocontainer_" + peer_id;
+            vidcontainer.classList.add('video-container');
+            vidcontainer.appendChild(vid);
+            vidcontainer.insertAdjacentHTML('beforeend', '<i class="bi bi-mic-mute muted-icon" id="muted-icon-' + peer_id + '" style="display:none; color: white !important;"></i>');
+            vidcontainer.insertAdjacentHTML('beforeend', '<i class="bi bi-camera-video-off videooff-icon" id="videooff-icon-' + peer_id + '" style="display:none; color: white !important;"></i>');
+            vidcontainer.insertAdjacentHTML('beforeend', '<div class="video-name-overlay" id="video-name-' + peer_id + '">' + peer_name || 'Guest' + '</div>');
+            vid.id = "video_" + peer_id;
+            vid.classList.add('video');
+            vid.autoplay = true; vid.playsInline = true;
+            vid.srcObject = stream;
+            vid.addEventListener("pause", async (event) => {await event.target.play();});
+            try {
+                initializeAudioContext(vid, stream);
+            } catch {}
+            document.getElementById("videos").appendChild(vidcontainer);
+        }
+        function createPeer(peer_id, initiator, peer_name) {
+            let pc = new RTCPeerConnection({iceServers: stunServers});
+            localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+            pc.onicecandidate = (event) => {
+                if (event.candidate) send("signal", {type: "candidate", candidate: event.candidate}, peer_id);
+            };
+            pc.ontrack = (event) => {
+                if (!streams[peer_id]) {
+                    streams[peer_id] = new MediaStream();
+                    addVideo(peer_id, streams[peer_id], peer_name);
+                }
+                streams[peer_id].addTrack(event.track);
+            };
+            peers[peer_id] = pc;
+
+            $('#screenshareBtn').on('click', async function() {
+                if(!sharingScreen) {
+                    document.getElementById('screenshareBtn').innerHTML = 'End screenshare';
+                    sharingScreen = true;
+                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
+                } else {
+                    document.getElementById('screenshareBtn').innerHTML = 'Screenshare';
+                    sharingScreen = false;
+                    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
+                    // Replace track in RTCPeerConnection
+                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
+                    sender.replaceTrack(localStream.getVideoTracks()[0]);
+                }
+            });
+
+            return pc;
+        }
+
+        async function handleOffer(from, offer) {
+            let pc = createPeer(from, false);
+            if (pc.signalingState === "stable" && offer.type === "offer") {
+                await pc.setRemoteDescription(offer);
+                let answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                send("signal", {type: "answer", sdp: answer}, from);
+            } else {
+                console.warn(`Unexpected state for offer: ${pc.signalingState}`);
+            }
+        }
+
+        async function handleAnswer(from, answer) {
+            let pc = peers[from];
+            await pc.setRemoteDescription(answer);
+        }
+
+        async function handleCandidate(from, candidate) {
+            let pc = peers[from];
+            if (pc && candidate) await pc.addIceCandidate(candidate);
+        }
+        so

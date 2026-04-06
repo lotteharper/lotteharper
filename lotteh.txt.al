@@ -1,139 +1,4 @@
-nforce any right or provision of these Terms of Use shall not operate as a waiver of such right or provision. These Terms of Use operate to the fullest extent permissible by law. We may assign any or all of our rights and obligations to others at any time. We shall not be responsible or liable for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If any provision or part of a provision of these Terms of Use is determined to be unlawful, void, or unenforceable, that provision or part of the provision is deemed severable from these Terms of Use and does not affect the validity and enforceability of any remaining provisions. There is no joint venture, partnership, employment or agency relationship created between you and us as a result of these Terms of Use or use of the Site. You agree that these Terms of Use will not be construed against us by virtue of having drafted them. You hereby waive any and all defenses you may have based on the electronic form of these Terms of Use and the lack of signing by the parties hereto to execute these Terms of Use.
-
-25. RETURN AND REFUND POLICY
-
-Products, services, goods, and other purchases made on this site may not be returned. No refunds may be issued for subscriptions or purchases with us on {{ the_site_name }}. {{ the_site_name }} reserves the right to refuse any refund of payment made with us on this website or otherwise.
-
-26. CONTACT US
-
-In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at:
-</div>
-{% endblocktrans %}
-
-<div style="white-space: pre-wrap;">
-{{ site_name }}
-ATTN: {{ agent_name }}
-{{ address }}
-Phone: {{ phone_number }} {% blocktrans en %}(press option 6 for information, or use the menu to call me){% endblocktrans %}
-{{ email_address }}
-</div>
-{% endblock %}
-```
-
-
---- File: lotteharper-main/misc/tests.py ---
-```python
-```
-
-
---- File: lotteharper-main/misc/urls.py ---
-```python
-from django.urls import path
-
-from . import views
-
-app_name='misc'
-
-urlpatterns = [
-    path('search/', views.search, name='search'),
-    path('terms/', views.terms, name='terms'),
-    path('auth/', views.authenticated, name='auth'),
-    path('logo/', views.logo, name='logo'),
-    path('time/', views.time, name='time'),
-    path('ad/', views.ad, name='ad'),
-    path('ads.txt', views.adstxt, name='adstxt'),
-    path('robots.txt', views.robotstxt, name='robotstxt'),
-    path('idscan/', views.idscan, name='idscan'),
-    path('sitemap.xml', views.sitemap, name='sitemap'),
-    path('news.xml', views.news, name='news'),
-    path('map/', views.map, name='map'),
-    path('opendkimkey/', views.opendkimkey, name='opendkimkey'),
-    path('publickeys/', views.publickeys, name='publickeys'),
-    path('upload/', views.upload_video_api, name='upload'),
-    path('site.webmanifest', views.webmanifest, name='webmanifest'),
-    path('serviceworker.js', views.service_worker, name='serviceworker'),
-]
-```
-
-
---- File: lotteharper-main/misc/views.py ---
-```python
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
-from vendors.tests import is_vendor
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import never_cache, cache_page
-from users.tests import is_superuser_or_vendor
-
-@never_cache
-def logo(request):
-    from django.shortcuts import render
-    return render(request, 'misc/logo.html')
-
-@login_required
-@user_passes_test(is_superuser_or_vendor)
-def publickeys(request):
-    from django.http import HttpResponse
-    import subprocess
-    return HttpResponse(subprocess.check_output("catkeys", shell=True))
-
-@cache_page(60*60*24*28)
-def opendkimkey(request):
-    from django.http import HttpResponse
-    import subprocess
-    return HttpResponse(subprocess.check_output("opendkimkey", shell=True))
-
-@cache_page(60*60*24*30)
-def webmanifest(request):
-    from django.shortcuts import render
-    return render(request, 'misc/site.webmanifest', {})
-
-@cache_page(60*60*24*28)
-def map(request):
-    from django.shortcuts import render
-    from security.models import UserIpAddress, Session
-    latlngs = []
-    from django.conf import settings
-    for ip in UserIpAddress.objects.all():
-        if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude)]
-    import numpy as np
-    from sklearn.cluster import DBSCAN
-    coords = np.array(latlngs)
-    # Haversine metric requires radians:
-    kms_per_radian = 6371.0088
-    epsilon = 50 / kms_per_radian # 50km radius
-    db = DBSCAN(eps=epsilon, min_samples=2, algorithm='ball_tree', metric='haversine').fit(np.radians(coords))
-    labels = db.labels_
-    groups = {}
-    for label, point in zip(labels, latlngs):
-        groups.setdefault(label, []).append(point)
-    pts = []
-    for x in range(len(groups)-1):
-        pts = pts + [groups[x][0]]
-#    print(pts)
-    return render(request, 'misc/map.html', {'title': 'Visitor Map', 'latlngs': pts, 'maps_api_key': settings.GOOGLE_API_KEY})
-
-@cache_page(60*60*24*30)
-def adstxt(request):
-    from django.shortcuts import render
-    return render(request, 'ads.txt')
-
-@cache_page(60*60*24*30)
-def service_worker(request):
-    from django.http import HttpResponse
-    from django.conf import settings
-    import os
-    sw_path = os.path.join(settings.BASE_DIR, 'templates', 'serviceworker.js')
-    try:
-        from django.template.loader import render_to_string
-        from datetime import datetime
-        context = {'timestamp': str(datetime.now().timestamp()).split('.')[0]}
-        sw_js = render_to_string('serviceworker.js', context)
-        return HttpResponse(sw_js, content_type='application/javascript')
-    except FileNotFoundError:
-        return HttpResponse("Service worker not found", status=404)
-
-@cache_page(60*60*24*30)
+che_page(60*60*24*30)
 def sitemap(request):
     from .sitemap import languages
     from .sitemap import urls
@@ -4624,4 +4489,112 @@ function payFee() {
     var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
     $.ajax({
         url: '{{ base_url }}{% url 'payments:square-checkout' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid + '&sub=t',
-        
+        method:'POST',
+        success: function(data) {
+            if(data.startsWith(window.location.protocol + '//')) {
+                window.location.href = data;
+            } else { console.log('Invalid response from server.'); }
+        },
+    });
+}
+{% elif payment_processor == 'helcim' %}
+var checkoutToken;
+function payFee() {
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+    $.ajax({
+        url: '{{ base_url }}{% url 'payments:invoice' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
+        method:'POST',
+        success: function(data) {
+            var j = JSON.parse(data);
+            checkoutToken = j.checkoutToken;
+            $(document.getElementById("clemn-navbar")).autoHidingNavbar().hide();
+            appendHelcimPayIframe(j.checkoutToken);
+        },
+    });
+}
+window.addEventListener('message', (event) => {
+
+  const helcimPayJsIdentifierKey = 'helcim-pay-js-' + checkoutToken;
+
+  if(event.data.eventName === helcimPayJsIdentifierKey){
+
+    if(event.data.eventStatus === 'ABORTED'){
+      console.error('Transaction failed!', event.data.eventMessage);
+    }
+
+    if(event.data.eventStatus === 'SUCCESS'){
+      validateResponse(event.data.eventMessage)
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+    }
+  }
+});
+
+function validateResponse(eventMessage) {
+  const payload = {
+    'rawDataResponse': eventMessage.data,
+  };
+  return fetch('{{ base_url }}/payments/helcim/', {body: payload, method: "POST"});
+}
+{% elif payment_processor == 'stripe' %}
+var stripe = Stripe('{{ stripe_pubkey }}');
+function payFee(){
+    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
+      fetch("/payments/checkout/monthly/?plan={{ fee }}&vendor={{ profile.stripe_id }}&email=" + email)
+          .then((result) => {
+            return result.json();
+          })
+          .then((data) => {
+            return stripe.redirectToCheckout({ sessionId: data.sessionId });
+          });
+}
+{% endif %}
+{% endblock %}
+
+```
+
+
+--- File: lotteharper-main/payments/templates/payments/subscribe_crypto.html ---
+```html
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load app_filters %}
+{% block head %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://crypto-js.stripe.com/crypto-onramp-outer.js"></script>
+{% endblock %}
+{% block content %}
+<div class="container rounded shadow col-md-6 mx-auto">
+<h1><i class="bi bi-currency-bitcoin"></i> {{ 'Subscribe to'|etrans }} @{{ username }} {{ 'with'|etrans }} {{ request.GET.crypto }}</h1>
+<div style="display: inline-block;">
+<img align="left" src="{{ model.get_face_blur_url }}" style="width:33%; margin-right: 10px;" class="rounded"></img>
+<img class="mr-2 img-fluid rounded" src="{{ post.get_blur_thumb_url }}" style="float: left; width: 40%; max-width: 400px;" alt="{{ 'See photos like these'|etrans }}"></img>
+</div>
+<p>{{ 'This purchase is subject to'|etrans }} <a href="{% url 'misc:terms' %}" title="{{ 'View the terms and coniditons'|etrans }}">{{ 'the terms and conditions and privacy policy'|etrans }}</a> {{ 'of'|etrans }} {{ the_site_name }}.</p>
+<div style="display: flex; justify-content: space-around;">
+<div class="dropdown" style="display: inline-block;">
+  <a class="btn btn-outline-dark pink-borders dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-currency-bitcoin"></i> {{ 'Change Currency'|etrans }}
+  </a>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+	<div style="max-height: 50vh; overflow: scroll;">
+        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC">BTC (Lightning Network)</a></li>
+    {% for currency in currencies %}
+        <li><a class="dropdown-item" href="{{ request.path }}?crypto={{ currency }}">{{ currency }}{% if forloop.counter < 6 %} - {{ 'Fiat options'|etrans }}{% endif %}</a></li>
+    {% endfor %}
+	</div>
+  </ul>
+</div>
+</div>
+<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
+<div id="onramp-element" style="max-width: 500px" class="mx-auto">
+<!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->
+<form id="payment-form" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<legend class="border-bottom mb-4">{{ 'Step 1: Send'|etrans }} {{ request.GET.crypto }}</legend>
+<fieldset class="form-group">
+<p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" type="button" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
+<b><i style="overflow-wrap: break-word;">{{ crypto_address }}</i></b>
+<button class="btn btn-sm btn-info" type="button" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button>
+<hr style="background-color: green;">
+<p>{% if not request.user.is_authenticated %}{{ 'Enter your email and press'|etrans }}{% else %}{{ 'Press'|etrans }}{% endif %} {{ 'the "Send" button to confirm your payment once 

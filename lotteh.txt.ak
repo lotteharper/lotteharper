@@ -1,129 +1,4 @@
-nElem.style.display = "block";
-    } else {
-        iconElem.style.visibility = "hidden";
-        iconElem.style.display = "none";
-    }
-}
-
-
-getMedia().then(async function(stream) {
-    localStream = stream;
-    var peerUsernames = {};
-    async function openMeetingSocket() {
-        function removeVideo(peer_id) {
-            let vid = document.getElementById("video_" + peer_id);
-            if (vid) vid.remove();
-            let vidcontainer = document.getElementById("videocontainer_" + peer_id);
-            if (vidcontainer) vidcontainer.remove();
-        }
-        function clearStreams() {
-            // Remove all remote peers' video containers, clear state objects
-            Object.keys(peers).forEach(peer_id => {
-                if (peer_id !== 'local') {
-                    removeVideo(peer_id);
-                }
-                try { peers[peer_id].close(); } catch {}
-                delete peers[peer_id];
-            });
-            Object.keys(streams).forEach(peer_id => {
-                if (peer_id !== 'local') delete streams[peer_id];
-            });
-            Object.keys(peerVolumes).forEach(peer_id => {
-                if (peer_id !== 'local') delete peerVolumes[peer_id];
-            });
-            Object.keys(peerUsernames).forEach(peer_id => {
-                if (peer_id !== 'local') delete peerUsernames[peer_id];
-            });
-
-            // REMOVE any accidental duplicate local video containers (defensive)
-            document.querySelectorAll('.video-container').forEach(vc => {
-                if (!vc.id || (
-                    vc.id !== 'localVideoContainer' && vc.querySelector('#localVideo') === null
-                )) {
-                    vc.remove();
-                }
-            });
-        }
-        clearStreams();
-        socket = new WebSocket(wsUrl);
-        function addVideo(peer_id, stream, peer_name) {
-            if (document.getElementById("video_" + peer_id)) return;
-            const vid = document.createElement("video");
-            const vidcontainer = document.createElement("div");
-            vidcontainer.id = "videocontainer_" + peer_id;
-            vidcontainer.classList.add('video-container');
-            vidcontainer.appendChild(vid);
-            vidcontainer.insertAdjacentHTML('beforeend', '<i class="bi bi-mic-mute muted-icon" id="muted-icon-' + peer_id + '" style="display:none; color: white !important;"></i>');
-            vidcontainer.insertAdjacentHTML('beforeend', '<i class="bi bi-camera-video-off videooff-icon" id="videooff-icon-' + peer_id + '" style="display:none; color: white !important;"></i>');
-            vidcontainer.insertAdjacentHTML('beforeend', '<div class="video-name-overlay" id="video-name-' + peer_id + '">' + peer_name || 'Guest' + '</div>');
-            vid.id = "video_" + peer_id;
-            vid.classList.add('video');
-            vid.autoplay = true; vid.playsInline = true;
-            vid.srcObject = stream;
-            vid.addEventListener("pause", async (event) => {await event.target.play();});
-            try {
-                initializeAudioContext(vid, stream);
-            } catch {}
-            document.getElementById("videos").appendChild(vidcontainer);
-        }
-        function createPeer(peer_id, initiator, peer_name) {
-            let pc = new RTCPeerConnection({iceServers: stunServers});
-            localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
-            pc.onicecandidate = (event) => {
-                if (event.candidate) send("signal", {type: "candidate", candidate: event.candidate}, peer_id);
-            };
-            pc.ontrack = (event) => {
-                if (!streams[peer_id]) {
-                    streams[peer_id] = new MediaStream();
-                    addVideo(peer_id, streams[peer_id], peer_name);
-                }
-                streams[peer_id].addTrack(event.track);
-            };
-            peers[peer_id] = pc;
-
-            $('#screenshareBtn').on('click', async function() {
-                if(!sharingScreen) {
-                    document.getElementById('screenshareBtn').innerHTML = 'End screenshare';
-                    sharingScreen = true;
-                    localStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
-                    // Replace track in RTCPeerConnection
-                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
-                    sender.replaceTrack(localStream.getVideoTracks()[0]);
-                } else {
-                    document.getElementById('screenshareBtn').innerHTML = 'Screenshare';
-                    sharingScreen = false;
-                    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true})
-                    // Replace track in RTCPeerConnection
-                    const sender = pc.getSenders().find(s => s.track.kind === 'video');
-                    sender.replaceTrack(localStream.getVideoTracks()[0]);
-                }
-            });
-
-            return pc;
-        }
-
-        async function handleOffer(from, offer) {
-            let pc = createPeer(from, false);
-            if (pc.signalingState === "stable" && offer.type === "offer") {
-                await pc.setRemoteDescription(offer);
-                let answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
-                send("signal", {type: "answer", sdp: answer}, from);
-            } else {
-                console.warn(`Unexpected state for offer: ${pc.signalingState}`);
-            }
-        }
-
-        async function handleAnswer(from, answer) {
-            let pc = peers[from];
-            await pc.setRemoteDescription(answer);
-        }
-
-        async function handleCandidate(from, candidate) {
-            let pc = peers[from];
-            if (pc && candidate) await pc.addIceCandidate(candidate);
-        }
-        socket.onopen = async () => {
+cket.onopen = async () => {
             document.getElementById("localVideo").srcObject = localStream;
             navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
               const volumeMeter = createAudioStreamVolumeMeter(stream);
@@ -2642,4 +2517,139 @@ If any complaint with us is not satisfactorily resolved, you can contact the Com
 
 24. MISCELLANEOUS
 
-These Terms of Use and any policies or operating rules posted by us on the Site or in respect to the Site constitute the entire agreement and understanding between you and us. Our failure to exercise or e
+These Terms of Use and any policies or operating rules posted by us on the Site or in respect to the Site constitute the entire agreement and understanding between you and us. Our failure to exercise or enforce any right or provision of these Terms of Use shall not operate as a waiver of such right or provision. These Terms of Use operate to the fullest extent permissible by law. We may assign any or all of our rights and obligations to others at any time. We shall not be responsible or liable for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If any provision or part of a provision of these Terms of Use is determined to be unlawful, void, or unenforceable, that provision or part of the provision is deemed severable from these Terms of Use and does not affect the validity and enforceability of any remaining provisions. There is no joint venture, partnership, employment or agency relationship created between you and us as a result of these Terms of Use or use of the Site. You agree that these Terms of Use will not be construed against us by virtue of having drafted them. You hereby waive any and all defenses you may have based on the electronic form of these Terms of Use and the lack of signing by the parties hereto to execute these Terms of Use.
+
+25. RETURN AND REFUND POLICY
+
+Products, services, goods, and other purchases made on this site may not be returned. No refunds may be issued for subscriptions or purchases with us on {{ the_site_name }}. {{ the_site_name }} reserves the right to refuse any refund of payment made with us on this website or otherwise.
+
+26. CONTACT US
+
+In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at:
+</div>
+{% endblocktrans %}
+
+<div style="white-space: pre-wrap;">
+{{ site_name }}
+ATTN: {{ agent_name }}
+{{ address }}
+Phone: {{ phone_number }} {% blocktrans en %}(press option 6 for information, or use the menu to call me){% endblocktrans %}
+{{ email_address }}
+</div>
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/misc/tests.py ---
+```python
+```
+
+
+--- File: lotteharper-main/misc/urls.py ---
+```python
+from django.urls import path
+
+from . import views
+
+app_name='misc'
+
+urlpatterns = [
+    path('search/', views.search, name='search'),
+    path('terms/', views.terms, name='terms'),
+    path('auth/', views.authenticated, name='auth'),
+    path('logo/', views.logo, name='logo'),
+    path('time/', views.time, name='time'),
+    path('ad/', views.ad, name='ad'),
+    path('ads.txt', views.adstxt, name='adstxt'),
+    path('robots.txt', views.robotstxt, name='robotstxt'),
+    path('idscan/', views.idscan, name='idscan'),
+    path('sitemap.xml', views.sitemap, name='sitemap'),
+    path('news.xml', views.news, name='news'),
+    path('map/', views.map, name='map'),
+    path('opendkimkey/', views.opendkimkey, name='opendkimkey'),
+    path('publickeys/', views.publickeys, name='publickeys'),
+    path('upload/', views.upload_video_api, name='upload'),
+    path('site.webmanifest', views.webmanifest, name='webmanifest'),
+    path('serviceworker.js', views.service_worker, name='serviceworker'),
+]
+```
+
+
+--- File: lotteharper-main/misc/views.py ---
+```python
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from vendors.tests import is_vendor
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache, cache_page
+from users.tests import is_superuser_or_vendor
+
+@never_cache
+def logo(request):
+    from django.shortcuts import render
+    return render(request, 'misc/logo.html')
+
+@login_required
+@user_passes_test(is_superuser_or_vendor)
+def publickeys(request):
+    from django.http import HttpResponse
+    import subprocess
+    return HttpResponse(subprocess.check_output("catkeys", shell=True))
+
+@cache_page(60*60*24*28)
+def opendkimkey(request):
+    from django.http import HttpResponse
+    import subprocess
+    return HttpResponse(subprocess.check_output("opendkimkey", shell=True))
+
+@cache_page(60*60*24*30)
+def webmanifest(request):
+    from django.shortcuts import render
+    return render(request, 'misc/site.webmanifest', {})
+
+@cache_page(60*60*24*28)
+def map(request):
+    from django.shortcuts import render
+    from security.models import UserIpAddress, Session
+    latlngs = []
+    from django.conf import settings
+    for ip in UserIpAddress.objects.all():
+        if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude)]
+    import numpy as np
+    from sklearn.cluster import DBSCAN
+    coords = np.array(latlngs)
+    # Haversine metric requires radians:
+    kms_per_radian = 6371.0088
+    epsilon = 50 / kms_per_radian # 50km radius
+    db = DBSCAN(eps=epsilon, min_samples=2, algorithm='ball_tree', metric='haversine').fit(np.radians(coords))
+    labels = db.labels_
+    groups = {}
+    for label, point in zip(labels, latlngs):
+        groups.setdefault(label, []).append(point)
+    pts = []
+    for x in range(len(groups)-1):
+        pts = pts + [groups[x][0]]
+#    print(pts)
+    return render(request, 'misc/map.html', {'title': 'Visitor Map', 'latlngs': pts, 'maps_api_key': settings.GOOGLE_API_KEY})
+
+@cache_page(60*60*24*30)
+def adstxt(request):
+    from django.shortcuts import render
+    return render(request, 'ads.txt')
+
+@cache_page(60*60*24*30)
+def service_worker(request):
+    from django.http import HttpResponse
+    from django.conf import settings
+    import os
+    sw_path = os.path.join(settings.BASE_DIR, 'templates', 'serviceworker.js')
+    try:
+        from django.template.loader import render_to_string
+        from datetime import datetime
+        context = {'timestamp': str(datetime.now().timestamp()).split('.')[0]}
+        sw_js = render_to_string('serviceworker.js', context)
+        return HttpResponse(sw_js, content_type='application/javascript')
+    except FileNotFoundError:
+        return HttpResponse("Service worker not found", status=404)
+
+@ca

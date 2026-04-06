@@ -1,180 +1,4 @@
- }
-    } else {
-        if(Math.floor(degrees/90) % 2 == 0) {
-            canvas.width = image.width * scale;
-            canvas.height = image.height * scale;
-        } else {
-            canvas.width = image.height * scale;
-            canvas.height = image.width * scale;
-        }
-    }
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.translate(canvas.width / 2, canvas.height / 2);   // to center
-    context.rotate(degrees * Math.PI / 180);                   // rotate
-    if(Math.floor(degrees/90) % 2 == 0) {
-        context.drawImage(image, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
-    } else {
-        context.drawImage(image, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
-    }
-    context.translate(-canvas.width / 2, -canvas.height / 2); // and back
-    context.restore();
-    context.save();
-}
-function calculateAge(birthday) { // birthday is a date
-	var ageDifMs = Date.now() - birthday;
-	var ageDate = new Date(ageDifMs); // miliseconds from epoch
-	return Math.abs(ageDate.getUTCFullYear() - 1970);
-}
-var min_age = {{ min_age }};
-function validateIdFront(text) {
-	var results = text.matchAll("\d\d\/\d\d\/\d\d\d\d");
-	var birthdate = null;
-	var expiry = null;
-	for(result in results) {
-		var day = result[0];
-		var dayParsed = new Date(parseInt(result.substring(6)), parseInt(result.substring(0,2)), parseInt(result.substring(3,5)));
-		if(calculateAge(dayParsed) >= min_age) {
-			birthdate = dayParsed;
-		}
-		if(dayParsed.getTime() > new Date().getTime()) {
-			expiry = dayParsed;
-		}
-	}
-	if(birthdate && (expiry || tryCountFront > 1)) {
-		showResult(true, false);
-		return;
-	}
-    tryCountFront++;
-	showResult(false, false);
-}
-function validateIdBack(text) {
-	var results = text.matchAll("\d\d\d\d\d\d\d\d");
-	var birthdate = null;
-	var expiry = null;
-	for(result in results) {
-		var day = result[0];
-		var dayParsed = new Date(parseInt(result.substring(4)), parseInt(result.substring(0,2)), parseInt(result.substring(2,4)));
-		if(calculateAge(dayParsed) >= min_age) {
-			birthdate = dayParsed;
-		}
-		if(dayParsed.getTime() > new Date().getTime()) {
-			expiry = dayParsed;
-		}
-	}
-	if(birthdate && (expiry || tryCountBack > 1)) {
-		showResult(true, true);
-		return;
-	}
-    tryCountBack++;
-	showResult(false, true);
-}
-function setGetParam(key,value) {
-  if (history.pushState) {
-    var params = new URLSearchParams(window.location.search);
-    params.set(key, value);
-    var newUrl = window.location.origin
-          + window.location.pathname
-          + '?' + params.toString();
-    window.history.pushState({path:newUrl},'',newUrl);
-  }
-}
-var params = new URLSearchParams(window.location.search);
-function showResult(result, back) {
-    if(!result) {
-        if(back) {
-            document.getElementById("id_document_back").value = null;
-        } else {
-            document.getElementById("id_document").value = null;
-        }
-        return;
-    }
-    if(back) {
-        d2 = true;   
-    } else {
-        d1 = true;
-    }
-    finishPhotoCheck();
-}
-function recognizeText(image) {
-	Tesseract.recognize(
-	  image,
-	  'eng',
-	  { logger: m => console.log(m) }
-	).then(({ data: { text } }) => {
-        console.log(text);
-		validateIdFront(text);
-	})
-}
-var src;
-var dst;
-var thresh;
-var contours;
-var hierarchy;
-var lastWidth;
-var largest;
-var target;
-var cnt;
-var rect;
-var cnts;
-var point1;
-var point2;
-var color = new cv.Scalar(250,250,250);
-const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
-function scheduleScan(back) {
-    try {
-        drawRotated(0, image, false);
-        src = cv.imread('canvas');
-        dst = new cv.Mat();
-        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-        thresh = new cv.Mat();
-        cv.threshold(dst, thresh, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
-        contours = new cv.MatVector();
-        hierarchy = new cv.Mat();
-        cv.findContours(thresh, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-        lastWidth = 0;
-        largest = 0;
-        rectangles = [];
-        cnts = null;
-        for (let i = 0; i < contours.size(); ++i) {
-          cnt = contours.get(i);
-          rect = cv.boundingRect(cnt);
-          if(rect.width > lastWidth) {
-              largest = i;
-              cnts = cnt;
-              lastWidth = rect.width;
-          }
-          rectangles.push(rect);
-        }
-        target = rectangles[largest];
-        if(target) {
-            var rect = target;
-            point1 = new cv.Point(rect.x, rect.y);
-            point2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
-            /*cv.rectangle(src, point1, point2, color, 4, cv.LINE_AA, 0);*/
-            cv.imshow(canvas, src);
-            src.delete(); dst.delete(); thresh.delete(); contours.delete(); hierarchy.delete();
-        }
-        if(rectangles.length > 0 && target.width > (canvas.width * MIN_SCALE && target.height > canvas.height * MIN_SCALE) && (target.width < canvas.width * MAX_SCALE && target.height < canvas.height * MAX_SCALE)) {
-            decodeBarcode(canvas, back);
-            console.log('Decoding barcode');
-        } else {
-            showResult(false, back);
-        }
-        color = new cv.Scalar(Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100);
-    } catch(e) {
-        console.log('Error ' + new String(e));
-    }
-}
-function decodeBarcode(canvas, back) {
-    if(back) {
-    	try {
-            const codeReader = new ZXingBrowser.BrowserPDF417Reader();
-    		const data = codeReader.decodeFromCanvas(canvas).then((data) => {
-    			if(!data) {
-                    showResult(false, true);
-    			}
-                console.log(data);
-			    validateIdBack(data);
+;
     		}).catch((e) => {
     		});
     	} catch(e) {
@@ -4807,4 +4631,132 @@ def generate_site():
 
 --- File: lotteharper-main/web/generate_posts.py ---
 ```python
-ove
+overwrite = True
+test_mode = False
+single_lang = False
+force_copy = False
+force_overwrite = False
+disable_langs = False
+end_after_langs = False
+PRIV_POSTS = 24
+import os, pytz
+from datetime import datetime
+from feed.models import Post
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib.auth.models import User
+from contact.forms import ContactForm
+from django.utils import timezone
+from feed.templatetags.app_filters import shorttitle
+from django.urls import reverse
+
+class GetParams():
+    lang = None
+    def __init__(self, lang, *args, **kwargs):
+        self.lang = lang
+
+    def get(self, param, other=False):
+        return self.lang
+
+class DummyUser():
+    is_authenticated = False
+
+class DummyRequest():
+    GET = None
+    LANGUAGE_CODE = None
+    user = None
+    def __init__(self, lang, *args, **kwargs):
+        self.GET = GetParams(lang)
+        self.LANGUAGE_CODE = lang
+        self.user = DummyUser()
+
+def generate_site():
+    global overwrite
+    global priv_posts
+    from feed.templatetags.app_filters import embedlinks, addhttpstodomains, highlightcode
+    from misc.sitemap import languages
+    from translate.translate import translate
+    from feed.middleware import set_current_request
+    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
+    langs = languages
+    context = {
+        'site_name': settings.STATIC_SITE_NAME,
+        'the_site_name': settings.STATIC_SITE_NAME,
+        'static_url': settings.STATIC_SITE_URL,
+        'site_url': settings.BASE_URL,
+        'description': settings.BASE_DESCRIPTION,
+        'base_url': settings.STATIC_SITE_URL,
+        'add_url': settings.ADD_URL,
+        'author_name': settings.AUTHOR_NAME,
+        'activate_mining': settings.ACTIVATE_MINING,
+        'model_name': User.objects.get(id=settings.MY_ID).profile.name,
+        'model': User.objects.get(id=settings.MY_ID),
+        'my_profile': User.objects.get(id=settings.MY_ID).profile,
+        'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
+        'contact_form': ContactForm(),
+        'github_url': settings.GITHUB_URL,
+        'base_domain': settings.DOMAIN,
+        'base_description': settings.BASE_DESCRIPTION,
+        'clock_color': '#ffcccb',
+        'year': timezone.now().strftime('%Y'),
+        'show_ads': True,
+        'path': '/',
+        'request': {},
+        'footer': True,
+        'btc_wallet': settings.BITCOIN_WALLET,
+        'polling_now': timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
+        'default_vibration': settings.DEFAULT_VIBRATION,
+        'rel_aes_key': settings.REL_AES_KEY,
+        'monero_address': settings.MONERO_ADDRESS,
+        'the_ad_text': settings.AD_TEXT,
+        'languages': languages,
+        'show_social_links': True,
+        'twitter_link': settings.TWITTER_LINK,
+        'instagram_link': settings.INSTAGRAM_LINK,
+        'youtube_link': settings.YOUTUBE_LINK,
+        'hiderrm': True,
+    }
+    posts = Post.objects.filter(public=True, posted=True, private=False, published=True, feed="blog").union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted').order_by('-pinned')
+    context['posts'] = posts
+    for lang in langs if not disable_langs else []:
+        images = ''
+        init_images = ''
+        count = 0
+        request = DummyRequest(lang)
+        request.GET = GetParams(lang)
+        set_current_request(request)
+        print(lang)
+        context['lang'] = lang
+        context['request'] = request
+        try:
+            os.mkdir(os.path.join(settings.BASE_DIR, 'web/site/{}'.format(lang)))
+        except: pass
+        count = 0
+        for post in [] if False else Post.objects.filter(public=True, posted=True, published=True, feed="blog").union(Post.objects.filter(uploaded=True, public=True, posted=True, published=True, feed="private").exclude(image_bucket=None)).union(Post.objects.filter(public=True, private=False, published=True, pinned=True, posted=True, feed='news')).order_by('-date_posted'):
+            if post:
+                url = '/{}/{}'.format(lang, post.friendly_name)
+                context['post'] = post
+                context['or_image_url'] = post.get_web_url(original=False)
+                context['path'] = url
+                if post.feed == 'news': context['hiderrm'] = True
+                context['title'] = translate(request, shorttitle(post.id), lang, 'en')
+                context['post_links'] = '<p>{} | {}</p>\n'.format('<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-card', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid), 'Buy on {}'.format(settings.SITE_NAME), translate(request, 'Buy', lang, 'en')), '<a href="{}" title="{}">{}</a>'.format(settings.BASE_URL + reverse('payments:buy-photo-crypto', kwargs={'username': post.author.profile.name}) + '?id={}'.format(post.uuid) + '&crypto={}'.format(settings.DEFAULT_CRYPTO), 'Buy with cryptocurrency on {}'.format(settings.SITE_NAME), translate(request, 'Buy with crypto', lang, 'en')))
+                path = os.path.join(settings.BASE_DIR, 'web/site/', '{}/{}.html'.format(lang, post.friendly_name))
+                if (not os.path.exists(path)) or overwrite:
+                    try:
+                        index = render_to_string('web/post.html', context)
+                        with open(path, 'w') as file:
+                            file.write(index)
+                    except:
+                        import traceback
+                        print(traceback.format_exc())
+```
+
+
+--- File: lotteharper-main/web/generate_private.py ---
+```python
+start_lang = 'tl'
+overwrite = True
+test_mode = False
+single_lan

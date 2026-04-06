@@ -1,144 +1,4 @@
-urn url
-
-    def get_face_blur_thumb_url(self):
-        if not self.image_thumbnail or not os.path.exists(self.image_thumbnail.path):
-            new_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, self.image.name, blur=True))
-            shutil.copy(self.image.path, new_path)
-            resize_image(new_path)
-            self.image_thumbnail = new_path
-            self.save()
-        path, url = get_secure_path(self.image_thumbnail.name)
-        full_path = os.path.join(settings.BASE_DIR, path)
-        if not self.public:
-            shutil.copy(self.image_thumbnail.path, full_path)
-            blur_faces(full_path)
-            from clemn.celery import remove_secure
-            remove_secure.apply_async([full_path], countdown=settings.REMOVE_SECURE_BLUR_TIMEOUT_SECONDS)
-        if self.public and not self.image_public:
-            shutil.copy(self.image_thumbnail.path, full_path)
-            blur_faces(full_path)
-            self.image_public = full_path
-            self.save()
-        return url if not self.public else '/feed/grid/photo/' + str(self.image_public.path)).split('/')[-1] #self.image_public.path[len(str(os.path.join(settings.MEDIA_ROOT, '/secure/media/')):]
-
-    def get_file_url(self):
-        path, url = get_secure_video_path(self.file.name)
-        full_path = os.path.join(settings.BASE_DIR, path)
-        shutil.copy(self.file.path, full_path)
-        from clemn.celery import remove_secure
-        remove_secure.apply_async([full_path], countdown=settings.REMOVE_SECURE_TIMEOUT_FILE_SECONDS)
-        return reverse('live:stream-secure-video', kwargs={'filename': url})
-
-    def user_likes(self):
-        return get_current_user in self.likes.all()
-
-    def get_likes(self):
-        likes = []
-        count = 0
-        for like in self.likes.all():
-            likes[count] = like.username
-        return likes
-
-    def number_of_likes(self):
-        return self.likes.count()
-
-    def get_absolute_url(self):
-        return reverse('feed:post-detail', kwargs={'uuid': self.uuid})
-
-    def clear_censor(self):
-        if self.image_censored or self.image_thumbnail:
-            try:
-                os.remove(self.image_thumbnail.path)
-            except: pass
-            try:
-                os.remove(self.image_censored.path)
-            except: pass
-            if self.image_censored_thumbnail:
-                try:
-                    os.remove(self.image_censored_thumbnail.path)
-                except: pass
-            self.image_censored = None
-            self.image_thumbnail = None
-            self.image_censored_thumbnail = None
-            self.save()
-
-    def rotate_align(self):
-        angle = face_angle_detect(self.image.path)
-        img = Image.open(self.image.path)
-        img = img.rotate(-angle,expand=0)
-        img.save(self.image.path)
-        self.rotation = self.rotation + 1
-        self.clear_censor()
-        self.save()
-
-    def rotate_right(self):
-        rotate(self.image.path, -1)
-        self.rotation = self.rotation + 1
-        self.clear_censor()
-        self.save()
-
-    def rotate_flip(self):
-        rotate(self.image.path, -2)
-        self.rotation = self.rotation + 1
-        self.clear_censor()
-        self.save()
-
-    def rotate_left(self):
-        rotate(self.image.path, 1)
-        self.rotation = self.rotation + 1
-        self.clear_censor()
-        self.save()
-
-    def save(self, *args, **kwargs):
-        try:
-            this = Post.objects.get(id=self.id)
-            if (this.private != self.private or this.public != self.public or this.image != self.image or this.content != self.content):
-                if self.image:
-                    full_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, self.image.name))
-                    shutil.copy(self.image.path, full_path)
-                    os.remove(self.image.path)
-                    self.image = full_path
-                    img = Image.open(full_path)
-                    full_path = str(full_path) + '.png'
-                    img.save(full_path, 'PNG')
-                    os.remove(self.image.path)
-                    self.image = full_path
-                if self.file:
-                    full_path = os.path.join(settings.BASE_DIR, 'media/', get_file_path(self, self.file.name))
-                    shutil.copy(self.file.path, full_path)
-                    os.remove(self.file.path)
-                    self.file = full_path
-            if this.image != self.image:
-                os.remove(this.image.path)
-                os.remove(this.image_original.path)
-                os.remove(this.image_censored.path)
-                os.remove(this.image_thumbnail.path)
-                os.remove(this.image_censored_thumbnail.path)
-                self.image_original = None
-                self.image_censored = None
-                self.image_censored_thumbnail = None
-                self.image_thumbnail = None
-            if self.image and (this.private != self.private or this.image != self.image):
-                safe = False
-                if self.private:
-                    self.image_sightengine = sightengine_image(self.file.path)
-                    pass
-                if self.public:
-                    safe = is_safe_public_image(self.image.path)
-                else:
-                    safe = is_safe_private_image(self.image.path)
-                if not safe and self.public:
-                    os.remove(self.image.path)
-                    self.image = None
-                else:
-                    safe = is_safe_private_image(self.image.path)
-                    if not safe:
-                        os.remove(self.image.path)
-                        self.image = None
-            if this.file != self.file:
-                os.remove(this.file.path)
-            if self.file and (this.private != self.private or this.file != self.file):
-                safe = None
+ None
                 if self.private:
                     self.file_sightengine = sightengine_file(self.file.path)
                     pass
@@ -4899,4 +4759,148 @@ from django.template.defaultfilters import stringfilter
 from django import template
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-fro
+from feed.models import Post
+import re
+import math
+from django.utils.html import strip_tags, escape
+import six
+#from django import template
+from django.template.base import Node
+from django.utils.functional import keep_lazy
+import urllib.parse
+from langdetect import detect
+from django.contrib import messages
+import traceback
+from django.core.validators import URLValidator, ValidationError
+from urlextract import URLExtract
+import requests
+import http.client
+from django.utils.html import escape
+from users.middleware import get_current_user
+from feed.middleware import get_current_request
+
+extractor = URLExtract()
+
+validate = URLValidator()
+
+register = template.Library()
+
+escaped_domains = ['manage.py','apps.py','facebook.com', 'models.py', '|detectlanguage', 'test.com']
+
+from .nts import number_to_string
+
+pn = {'He': 'He/Him/His', 'Her': 'She/Her/Hers', 'They': 'They/Them/Theirs'}
+
+
+@register.filter('nts')
+def nts(number):
+    return number_to_string(int(number))
+
+@register.filter('splitnext')
+def splitnext(next):
+    try:
+        return next.split('?')[0]
+    except:
+        return next
+
+@register.filter('boolread')
+def boolread(bool):
+    return 'Y' if bool else 'N'
+
+
+@register.filter('urlparams')
+def urlparams(page):
+    query = get_current_request().GET.copy()
+    query['page'] = str(page)
+    return query.urlencode()
+
+@register.filter('highlightsearchquery')
+def highlightsearchquery(text):
+    otext = text
+    q = get_current_request().GET['q'].split(' ')
+    for query in q:
+        t = re.split(query, text, flags=re.IGNORECASE)
+        try:
+            text = t[0] + '<mark>' + query + '</mark>' + t[1]
+        except:
+            try:
+                query = query.lower()
+                text = otext.split(query)
+                text = text[0] + '<mark>' + query + '</mark>' + text[1]
+            except:
+                text = otext
+    return text
+
+def get_lang():
+    request = get_current_request()
+    lang = request.LANGUAGE_CODE
+    if(request.GET.get('lang', '') != ''):
+        lang = request.GET.get('lang', '')
+    if lang == None:
+        lang = 'en'
+    return lang
+
+
+
+@register.filter('startswith')
+def startswith(text, starts):
+    if isinstance(text, str) and text.startswith(starts):
+        return True
+    return False
+
+@register.filter(name='detectlanguage')
+def detectlanguage(value):
+    lang = ''
+    try:
+        lang = detect(value)
+    except:
+        lang = 'en'
+    return lang
+
+@register.filter(name='removelinks')
+def removelinks(value):
+    urls = re.findall("(?P<url>https?://[^\s]+)", value)
+    dic = {}
+    for url in urls:
+        dic[url] = '(link hidden)'
+    for i, j in dic.items():
+        value = value.replace(i, j)
+    return value
+
+@register.filter(name='urltouri')
+def urltouri(value):
+    return urllib.parse.quote(value, safe='')
+
+@register.filter(name='urlready')
+def urlready(value):
+    return value.replace(" ", "%20")
+
+@register.tag
+def linebreakless(parser, token):
+    nodelist = parser.parse(('endlinebreakless',))
+    parser.delete_first_token()
+    return LinebreaklessNode(nodelist)
+
+class LinebreaklessNode(Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        strip_line_breaks = keep_lazy(six.text_type)(lambda x: x.replace('\n', ''))
+        return strip_line_breaks(self.nodelist.render(context).strip())
+
+@register.filter(name='comments')
+def comments(value):
+    post = Post.objects.get(id=int(value))
+    comments = Comment.objects.filter(post=post, public=True).order_by('-date_posted')
+    return comments[:3]
+
+@register.filter(name='addhttpstodomains')
+def addhttpstodomains(value):
+    domains = re.findall(r'(?i)\b(https?:\/\/)?(((?:\|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:\'\".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b\/?(?!@)))', value) # '\s(?:www.)?(\w+.(com|org|net|markets))', value)
+    dic = {}
+    output = ""
+    for domain in domains:
+        if not domain[1].lower() in escaped_domains:
+            url = 'https://' + domain[1]
+            if no

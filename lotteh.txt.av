@@ -1,205 +1,4 @@
-+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=/g, "");
-}
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-</script>
-
-{% endblock %}
-```
-
-
---- File: lotteharper-main/templates/webpush.js ---
-```
-var clicked = false;
-setTimeout(function() {
-    if (Notification.permission != 'denied') {
-	$(document).on("click", function(event) {
-		if(!clicked) {
-			clicked = true;
-			$(document.getElementById('webpush-subscribe-button')).trigger("click");
-			event.preventDefault();
-		}
-	});
-    }
-}, 1000 * {{ webpush_query_delay }});
-```
-
-
---- File: lotteharper-main/templates_socialaccount_authentication_error.html ---
-```html
-{{ auth_error }}
-```
-
-
---- File: lotteharper-main/test_blur.py ---
-```python
-import os, sys
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
-import django
-django.setup()
-
-from security.censor_video import censor_video_nude_fast
-from live.models import get_file_path, VideoRecording
-from django.conf import settings
-p = VideoRecording.objects.order_by('-last_frame')[1].file.path
-op = os.path.join(settings.MEDIA_ROOT, get_file_path(None, 'frame.mp4'))
-censor_video_nude_fast(p, op, scale=0.5)
-p = Post.objects.create(file=op)
-p.file_bucket.path
-print(op)
-```
-
-
---- File: lotteharper-main/test_compile.py ---
-```python
-import os, sys
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
-import django
-django.setup()
-from feed.models import Post
-Post.objects.get(id=105).compile_content()
-```
-
-
---- File: lotteharper-main/testing.txt ---
-```
-meme```
-
-
---- File: lotteharper-main/test_mail.py ---
-```python
-import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
-
-import django
-django.setup()
-from users.email import send_email
-import sys
-email = sys.argv[1]
-send_email(email, 'This is a test subject', 'I am testing the mail server to make sure it works. This is just a test of the mail server. I want to make sure I can send email prroperly using the web app.')
-```
-
-
---- File: lotteharper-main/test.py ---
-```python
-print('This is a test script.')
-import os, sys
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
-import django
-django.setup()
-
-import datetime
-
-from security.models import UserIpAddress, Session
-latlngs = []
-from django.conf import settings
-for ip in UserIpAddress.objects.all():
-    if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude)]
-import numpy as np
-from sklearn.cluster import DBSCAN
-coords = np.array(latlngs)
-# Haversine metric requires radians:
-kms_per_radian = 6371.0088
-epsilon = 50 / kms_per_radian # 50km radius
-
-db = DBSCAN(eps=epsilon, min_samples=2, algorithm='ball_tree', metric='haversine').fit(np.radians(coords))
-labels = db.labels_
-groups = {}
-for label, point in zip(labels, latlngs):
-    groups.setdefault(label, []).append(point)
-
-pts = []
-
-for x in range(len(groups)-1):
-    pts = pts + [groups[x][0]]
-
-print(pts)
-```
-
-
---- File: lotteharper-main/test.sh ---
-```bash
-#!/bin/bash
-LANG="de"
-CMD_INIT="s/class=\"nav-link\" href=\"/links\"/class=\"nav-link\" href=\"${LANG}\/links\"/g"
-#s@class="nav-link" href="/links"@class="nav-link" href="$LANG/links"@g'`
-CMD=$CMD_INIT
-echo $CMD
-sed -e $CMD /home/team/lotteh/test.txt
-
-```
-
-
---- File: lotteharper-main/test.txt ---
-```
-#!/home/team/lotteh/venv/bin/python3
-
-
-
-
-etrans
- 's/^ *
-
-//'
-etrans
-
-etrans
-
-
-anonymous"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
-     crossorigin="anonymous"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
-     crossorigin="anonymous"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
-     crossorigin="anonymous"></script>
-class="nav-link" href="de/links"
-
-text-align: center;
-
-<div style="display: flex; justify-content: space-around;"><img src="https://i.imgur.com/dAQRaWt.jpeg" 
-style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it."></div>
-style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it."></div>
-style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it."></div>
-
-
- width: 250px; max-width: 100%; height: auto;
-
- width: 250px; max-width: 100%; height: auto;
-
-%} - {{ 'Fiat
-%} - {{ 'Fiat
-%} - {{ 'Fiat
-%} - {{ 'Fiat
-width="30" height="30" fill="currentColor" class="bi bi-twitter-x"
-
-width="30" height="30" fill="currentColor" class="bi bi-twitter-x"
-
-window.location.protocol + '//'
-
-window.location.protocol + '//'
-
-window.location.protocol + '//'
-
-"closed" "closed"
-meme is a test meme
-of my shell editor template
+editor template
 'Three Thirteen - Online Card Game\r\nPlay Three Thirteen with a friend by clicking the link below to generate an invite code or join a game.\r\n<a class="btn btn-primary" href="https://lotteh.com/game
 s/three-thirteen---online-card/" ti
 tle="Invite a friend">Invite with code</a>\r\n<a class="btn btn-success" href="https://lotteh.com/games/" title="Join a game">Join game</a>\r\n<script src="/static/games/threethirteen.js"></script>\r\n***'
@@ -5313,4 +5112,131 @@ $(document).ready(function() {
 	{% if available_accounts > 0 %}
     <form method="POST">
         {% csrf_token %}
-        <fieldset class="form-group"
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ 'Join Today'|etrans }} ({{ min_age }}+)</legend>
+        	{% autoescape off %}
+            {{ form|crispy|safe|marksafe }}
+        	{% endautoescape %}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">{{ 'Register'|etrans|caps }}</button>
+        </div>
+    </form>
+	<div class="border-top pt-3">
+        <small class="text-muted">{{ 'Already Have An Account?'|etrans }} <a class="ml-2" href="{% url 'users:login' %}">{{ 'Login'|etrans }}</a></small>
+    </div>
+	<a class="btn btn-light border border-dark btn-lg" href="{% url 'users:google-auth' %}" title="{{ 'Log in with Google'|etrans }}" target="_blank"><i class="bi bi-google" style="text-color: black !important; color: black !important;"></i> {{ 'Log in with Google'|etrans }}</a>
+	<hr>
+	{% endif %}
+	<small>{% blocktrans en %}{{ available_accounts|nts|capitalize }} accounts may be created during the remainder of today.{% endblocktrans %}</small>
+	<hr>
+	<p>{{ 'Learn more about the site by visiting the index'|etrans }} - <a href="{% url 'landing:index' %}" class="btn btn-outline-primary" title="{{ 'Visit the landing page to learn about the site'|etrans }}">{{ 'Learn More'|etrans }}</a></p>
+{% include 'clc.html' %}
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/users/templates/users/register_modal.html ---
+```html
+{% load feed_filters %}
+<div id="register-modal" class="border border-primary rounded hide" style="background-color: #{% if not darkmode %}DDDDDD{% else %}666666{% endif %}; position: absolute; top: 17vh; right: 0; width: 100vw; max-width: 500px; z-index: 500;">
+<div style="position: relative;" style="margin: 5px; padding: 5px;" class="m-1 p-1">
+<legend class="center" style="text-align: center"><i class="bi bi-envelope-paper-heart"></i> {{ 'Enter your email for exclusive updates and access to extra features'|etrans }}</legend>
+<p><small>{{ 'Begin below by entering your email to create an account with'|etrans }} {{ the_site_name }}.</small></p>
+<a class="btn btn-light border border-dark" href="{% url 'users:google-auth' %}" title="{{ 'Log in with Google'|etrans }}" target="_blank"><i class="bi bi-google" style="text-color: black !important; color: black !important;"></i> {{ 'Log in with Google'|etrans }}</a>
+<hr>
+{% include 'users/email.html' %}
+<p>{{ 'We won\'t send you any spam, or any marketing related to anyone else\'s projects. Unsubscribe at any time through your email or profile.'|etrans }}</p>
+<button style="float: right;" id="register-modal-close" class="btn btn-danger" title="{{ 'Close this popup'|etrans }}"><i class="bi bi-x-circle"></i> {{ 'No thanks, Close'|etrans }}</button>
+</div>
+</div>
+```
+
+
+--- File: lotteharper-main/users/templates/users/register_modal.js ---
+```
+var modal = document.getElementById('register-modal');
+var modalClose = document.getElementById('register-modal-close');
+modalClose.onclick = function() {
+	$(modal).addClass('hide');
+};
+{% if not request.user_signup %}
+var modalOnceShown = false;
+setTimeout(function() {
+	function handleInteraction(event) {
+		if(!modalOnceShown) {
+			$(modal).addClass('fade-in-fast');
+			$(modal).removeClass('hide');
+		}
+		modalOnceShown = true;
+	}
+	document.body.addEventListener('mousemove', handleInteraction);
+	document.body.addEventListener('scroll', handleInteraction);
+	document.body.addEventListener('keydown', handleInteraction);
+	document.body.addEventListener('click', handleInteraction);
+	document.body.addEventListener('touchstart', handleInteraction);
+}, 1000 * {{ email_query_delay }});
+{% endif %}
+```
+
+
+--- File: lotteharper-main/users/templates/users/resend_activation.html ---
+```html
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load app_filters %}
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">{{ 'Resend activation email'|etrans }}</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-secondary" type="submit">{{ 'Resend activation email'|etrans }}</button>
+            </div>
+        </form>
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/users/templates/users/send_auth_text.html ---
+```html
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load app_filters %}
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">{{ 'Log in with a text'|etrans }}</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-secondary" type="submit">{{ 'Submit'|etrans }}</button>
+            </div>
+        </form>
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/users/templates/users/tfa.html ---
+```html
+{% extends 'base.html' %}
+{% block content %}
+{% load app_filters %}
+{% load crispy_forms_tags %}
+        <form action="{{ request.path }}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="POST" id="tfa-form">
+            {% csrf_token %}
+            <legend class="border-bottom mb-4">{{ 'Enter Verification Code'|etrans }}</legend>
+            <p>{{ 'Step 1: Send the code'|etrans }}</p>
+	    <i>{{ 'Never share your code with anyone, as it can be used to access your account temporarily.'|etrans }}</i>
+	    <div class="form-group">
+                {{ form.send_email|as_crispy_field }}
+                <button class="btn btn-outline-primary" type="submit">{{ 'Send code'|etrans }}</button>
+            </div>
+	    <hr>
+	    <p>{{ 'Step 2: Enter the code'|etrans }}</p>
+            <fieldset class="form-group">
+                {{ form.code|as_crispy_field }}
+		<p>{{ 'Press the enter button to send your

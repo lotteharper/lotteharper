@@ -1,161 +1,4 @@
-wX ./
-sudo chmod -R g+rX .././
-sudo chmod -R g-rwX ../.ssh
-sudo chmod 774 ./
-sudo chmod -R 774 ./
-#sudo chmod 664 db.sqlite3
-#sudo chown www-data:users db.sqlite3
-sudo chown -R www-data:www-data media/
-sudo chown www-data:users ./
-sudo chown -R team:users media/
-sudo chown -R team:users ./
-sudo chown -R team:users ./gfpgan/
-sudo chown -R team:users ./temp/
-sudo chown -R :users media/
-sudo chmod a+r team /var/mail/$USER
-sudo chmod 750 /home/$USER/
-sudo chmod 750 /home/$USER/.ssh
-sudo chmod 640 /home/$USER/.ssh/authorized_keys
-# Copy config and set permissions
-echo "Configuring remaining services"
-sudo cp config/Xwrapper.config /etc/X11/Xwrapper.config
-sudo cp config/apis.json /etc/apis.json
-sudo cp config/config.json /etc/config.json
-sudo cp config/lotteh-le-ssl.conf /etc/apache2/sites-available/lotteh-le-ssl.conf
-sudo cp config/etc_dovecot_passwd /etc/dovecot/passwd
-sudo cp config/etc_init.d_celery /etc/init.d/celery
-sudo cp config/etc_init.d_celerybeat /etc/init.d/celerybeat
-sudo cp config/etc_default_celerybeat /etc/default/celerybeat
-sudo cp config/etc_default_celery /etc/default/celery
-sudo cp config/etc_systemd_system_daphne.service /etc/systemd/system/daphne.service
-sudo cp config/etc_systemd_system_celery.service /etc/systemd/system/celery.service
-sudo cp config/etc_systemd_system_stun.service /etc/systemd/system/stun.service
-sudo cp config/etc_systemd_system_celerybeat.service /etc/systemd/system/celerybeat.service
-sudo cp config/postgresql.conf /etc/postgresql/16/main/postgresql.conf
-sudo chmod a+x /etc/init.d/celery
-sudo chmod a+x /etc/init.d/celerybeat
-# Fix postgres perms
-sudo mkdir /var/log/postgresql
-sudo chmod 0700 /var/log/postgresql -R
-sudo chown postgres:postgres /var/log/postgresql -R
-# Fix redis perms
-sudo chown -R redis:redis /var/lib/redis
-sudo chown -R redis:redis /var/log/redis
-sudo chmod -R u+rwX,g+rwX,u+rx /var/log/redis
-sudo chmod +r /etc/redis/redis.conf
-sudo systemctl restart redis
-sudo chown root:root -R /var/log/audit
-sudo chmod 755 -R /var/log/audit
-cd $DIR
-source venv/bin/activate
-# Setup database
-echo "Running migrations, this should be quick"
-python manage.py check
-python manage.py makemigrations
-python manage.py migrate --run-syncdb
-python manage.py makemigrations
-python manage.py migrate
-python manage.py makemigrations
-python manage.py migrate --run-syncdb
-echo "Building database from backup, this may take a while."
-cat db.json.?? > db.json
-echo "Loading data, this may take a while"
-python manage.py loaddata db.json
-./scripts/loadtables
-echo "Setup crontab/sudoers configuration"
-sudo crontab -l -u root | cat - config/crontab | sudo crontab -u root -
-sudo sh -c "cat config/sudoers >> /etc/sudoers"
-# Inject pam config and remove faulty ssh config
-#sudo sed -i '' -e '$ d' /etc/pam.d/sshd
-#sudo sed -i '' -e '$ d' /etc/profile
-echo "session required pam_exec.so seteuid /home/team/lotteh/pam.sh" | sudo tee -a /etc/pam.d/sshd
-echo "session required pam_exec.so seteuid /home/team/lotteh/logout.sh" | sudo tee -a /etc/pam.d/sshd
-sudo mkdir /var/log/jump
-sudo chown team:users /var/log/jump
-echo "ForceCommand /usr/bin/jump" | sudo tee -a /etc/ssh/sshd_config
-echo $"Port ${PORT}" | sudo tee -a /etc/ssh/sshd_config
-echo "AddressFamily any" | sudo tee -a /etc/ssh/sshd_config
-echo "ListenAddress 0.0.0.0" | sudo tee -a /etc/ssh/sshd_config
-echo "ListenAddress ::" | sudo tee -a /etc/ssh/sshd_config
-sudo ufw allow $PORT
-sudo ufw reload
-sudo chmod a+x pam.sh
-sudo rm /etc/ssh/sshd_config.d/50-cloud-init.conf
-# Copy bin scripts and set permissions
-echo "Copying scripts"
-sudo cp /home/$USER/$DIR/config/ascripts /etc/ascripts
-sudo cp config/banner /etc/banner
-cd /usr/bin/
-sudo chmod a+x activate
-sudo chmod a+x backup
-sudo chmod a+x ascript
-# Reload and enable services
-echo "Enabling services"
-sudo systemctl daemon-reload
-sudo systemctl enable daphne.service
-sudo systemctl enable celery.service
-sudo systemctl enable celerybeat.service
-sudo systemctl enable clamav-daemon
-sudo systemctl enable stun
-sudo systemctl start stun
-sudo systemctl start daphne.service
-sudo systemctl start celery.service
-sudo systemctl start celerybeat.service
-sudo systemctl start clamav-daemon
-# Enable apache modules
-echo "Enabling apache2"
-sudo a2enmod rewrite
-sudo a2enmod wsgi
-sudo a2enmod headers
-sudo a2enmod ssl
-sudo a2enmod proxy
-sudo a2enmod proxy_balancer
-sudo a2enmod proxy_http
-sudo a2enmod proxy_wstunnel
-#sudo a2dismod mpm_event
-#sudo a2dismod mpm_worker
-#sudo a2enmod mpm_prefork
-# Disable default site
-sudo a2dissite 000-default
-sudo a2dissite 000-default-le-ssl
-# Enable our site
-sudo a2ensite lotteh-le-ssl
-# Reload daemon and restart apache, postfix and opendkim
-sudo systemctl daemon-reload
-sudo systemctl restart apache2
-sudo systemctl restart opendkim postfix
-sudo systemctl start daphne
-# Set permissions
-sudo chown -R :www-data /var/www/
-sudo chown -R :www-data /var/www/.deepface
-echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
-sudo swapon --show
-# Init caption engine
-echo "Initializing routine caption"
-/home/team/lotteh/venv/bin/python /home/team/lotteh/routine_caption.py
-/home/team/lotteh/venv/bin/python /home/team/lotteh/setup_mail.py
-# Setup git
-echo "Setting up git"
-cd $DIR
-git init --initial-branch=main
-#echo "Setting user password"
-#sudo usermod --password $(echo team | openssl passwd -1 -stdin) team
-# Show ipv6 and opendkim for domain configuration
-echo "COPY the below information to domain configuration."
-hostname -I
-ip a | grep inet
-ip -6 addr | grep "scope link"
-sudo cat /etc/opendkim/keys/lotteh.com/sendonly.txt | tr -d '\n' | sed 's/\s//g' | awk -F'[)(]' '{print $2}' | sed '0,/""/{s/""//}'
-# Setup completed
-echo "Setup completed in"
-wc -l scripts/setup
-echo "lines of code."
-echo "Total time:"
-duration=$SECONDS
-echo "$((duration / 60)) minutes and $((duration % 60)) seconds elapsed."
-echo "TODO:"
-echo "- TODO: Run scripts/githubaddsetup to complete build"
-echo "- COPY above IPv6 address to domain DNS configuration"
+ above IPv6 address to domain DNS configuration"
 echo "- COPY domain key to domain DNS configuration"
 echo "- ADD new git repository with git remote add originlab <repo>."
 echo "- OPEN port 25"
@@ -5097,4 +4940,98 @@ def security_middleware(get_response):
                 sessions = SessionDedup.objects.filter(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method, time__gte=timezone.now() - datetime.timedelta(seconds=2))
                 from django.shortcuts import redirect
                 if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) #return HttpResponse(OVERCLICK_HTML_NOTE)
-                if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.p
+                if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) # return HttpResponse(OVERCLICK_HTML_NOTE)
+#                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
+            ip_obj = UserIpAddress.objects.filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).first()
+            if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
+                from django.http import HttpResponseRedirect
+                if ip_obj.page_loads > 12:
+                    return HttpResponseRedirect(settings.ALT_REDIRECT_URL)
+                return HttpResponseRedirect(settings.REDIRECT_URL)
+#            request.GET._mutable = True
+            if request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor):
+                sess = UserSession.objects.filter(user=request.user, session_key=request.session.session_key).order_by('-timestamp').first()
+                if not sess:
+                    sess, created = UserSession.objects.get_or_create(user=request.user, session_key=request.session.session_key, user_agent=request.META["HTTP_USER_AGENT"], authorized=False, bypass=False)
+                if sess.timestamp < timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES):
+                    from security.build import delete_old_sessions
+                    delete_old_sessions(minutes=settings.LOGIN_VALID_MINUTES, user=request.user, session_key=sess.session_key)
+                if (not sess.expiry_warning) and sess.timestamp < timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES-settings.LOGIN_EXPIRY_WARNING_MINUTES):
+                    difference_seconds = (settings.LOGIN_VALID_MINUTES*60) - (timezone.now() - sess.timestamp).total_seconds()
+                    difference_minutes = round(difference_seconds/60, 2)
+#                    difference_relational_second = difference_seconds%60
+                    messages.warning(request, 'Your session is expiring in {} minutes. Please complete authentication again soon to proceed.'.format(difference_minutes))
+                    sess.expiry_warning = True
+                    sess.save()
+                request.security_modal = redirect_path(request.path)
+                if request.security_modal or (not sess.authorized) or (not sess.bypass): # and request.security_modal:
+                    from security.build import get_next_redirect
+                    red = get_next_redirect(request)
+                    if red: return red
+            async_process_user_request.delay(ip, request.user.id if hasattr(request, 'user') and request.user.is_authenticated else None, True if hasattr(request, 'user') and request.user.is_authenticated else False, request.path, request.META.get('CONTENT_LENGTH'), request.META.get('HTTP_REFERER'), qs, request.method, sessions.count() if sessions else -1)
+        except:
+            import traceback
+            from stacktrace.models import Error
+            try:
+                Error.objects.create(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, stack_trace=traceback.format_exc(), notes='Logged by security middleware.')
+            except: pass
+            from feed.middleware import set_current_exception
+            set_current_exception(traceback.format_exc())
+            print(traceback.format_exc())
+        response = get_response(request)
+        return response
+    return middleware
+```
+
+
+--- File: lotteharper-main/security/migrations/0001_initial.py ---
+```python
+# Generated by Django 4.2.5 on 2023-10-04 16:02
+
+from django.conf import settings
+from django.db import migrations, models
+import django.db.models.deletion
+import django.utils.timezone
+import security.models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='UserSession',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
+                ('ip_address', models.CharField(default='', max_length=15)),
+                ('session_key', models.CharField(blank=True, default='', max_length=100, null=True)),
+                ('user_agent', models.CharField(default='', max_length=200)),
+                ('bypass', models.BooleanField(default=False)),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='user_sessions', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='UserLogin',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='user_logins', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='UserIpAddress',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
+                ('ip_address', models.CharField(blank=True, default='', max_length=100, null=True)),
+                ('session_key', models.CharField(default='', max_length=100)),
+                ('timezone', models.CharField(blank=True, default='', max_length=100, null=True)),
+                ('latitude', models.FloatField(null=True)),
+                ('longitude', models.FloatField(null=True)),
+                

@@ -1,131 +1,4 @@
->
-            <legend class="border-bottom mb-4">{{ 'Join Today'|etrans }} ({{ min_age }}+)</legend>
-        	{% autoescape off %}
-            {{ form|crispy|safe|marksafe }}
-        	{% endautoescape %}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">{{ 'Register'|etrans|caps }}</button>
-        </div>
-    </form>
-	<div class="border-top pt-3">
-        <small class="text-muted">{{ 'Already Have An Account?'|etrans }} <a class="ml-2" href="{% url 'users:login' %}">{{ 'Login'|etrans }}</a></small>
-    </div>
-	<a class="btn btn-light border border-dark btn-lg" href="{% url 'users:google-auth' %}" title="{{ 'Log in with Google'|etrans }}" target="_blank"><i class="bi bi-google" style="text-color: black !important; color: black !important;"></i> {{ 'Log in with Google'|etrans }}</a>
-	<hr>
-	{% endif %}
-	<small>{% blocktrans en %}{{ available_accounts|nts|capitalize }} accounts may be created during the remainder of today.{% endblocktrans %}</small>
-	<hr>
-	<p>{{ 'Learn more about the site by visiting the index'|etrans }} - <a href="{% url 'landing:index' %}" class="btn btn-outline-primary" title="{{ 'Visit the landing page to learn about the site'|etrans }}">{{ 'Learn More'|etrans }}</a></p>
-{% include 'clc.html' %}
-{% endblock %}
-```
-
-
---- File: lotteharper-main/users/templates/users/register_modal.html ---
-```html
-{% load feed_filters %}
-<div id="register-modal" class="border border-primary rounded hide" style="background-color: #{% if not darkmode %}DDDDDD{% else %}666666{% endif %}; position: absolute; top: 17vh; right: 0; width: 100vw; max-width: 500px; z-index: 500;">
-<div style="position: relative;" style="margin: 5px; padding: 5px;" class="m-1 p-1">
-<legend class="center" style="text-align: center"><i class="bi bi-envelope-paper-heart"></i> {{ 'Enter your email for exclusive updates and access to extra features'|etrans }}</legend>
-<p><small>{{ 'Begin below by entering your email to create an account with'|etrans }} {{ the_site_name }}.</small></p>
-<a class="btn btn-light border border-dark" href="{% url 'users:google-auth' %}" title="{{ 'Log in with Google'|etrans }}" target="_blank"><i class="bi bi-google" style="text-color: black !important; color: black !important;"></i> {{ 'Log in with Google'|etrans }}</a>
-<hr>
-{% include 'users/email.html' %}
-<p>{{ 'We won\'t send you any spam, or any marketing related to anyone else\'s projects. Unsubscribe at any time through your email or profile.'|etrans }}</p>
-<button style="float: right;" id="register-modal-close" class="btn btn-danger" title="{{ 'Close this popup'|etrans }}"><i class="bi bi-x-circle"></i> {{ 'No thanks, Close'|etrans }}</button>
-</div>
-</div>
-```
-
-
---- File: lotteharper-main/users/templates/users/register_modal.js ---
-```
-var modal = document.getElementById('register-modal');
-var modalClose = document.getElementById('register-modal-close');
-modalClose.onclick = function() {
-	$(modal).addClass('hide');
-};
-{% if not request.user_signup %}
-var modalOnceShown = false;
-setTimeout(function() {
-	function handleInteraction(event) {
-		if(!modalOnceShown) {
-			$(modal).addClass('fade-in-fast');
-			$(modal).removeClass('hide');
-		}
-		modalOnceShown = true;
-	}
-	document.body.addEventListener('mousemove', handleInteraction);
-	document.body.addEventListener('scroll', handleInteraction);
-	document.body.addEventListener('keydown', handleInteraction);
-	document.body.addEventListener('click', handleInteraction);
-	document.body.addEventListener('touchstart', handleInteraction);
-}, 1000 * {{ email_query_delay }});
-{% endif %}
-```
-
-
---- File: lotteharper-main/users/templates/users/resend_activation.html ---
-```html
-{% extends 'base.html' %}
-{% block content %}
-{% load crispy_forms_tags %}
-{% load app_filters %}
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">{{ 'Resend activation email'|etrans }}</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-secondary" type="submit">{{ 'Resend activation email'|etrans }}</button>
-            </div>
-        </form>
-{% endblock %}
-```
-
-
---- File: lotteharper-main/users/templates/users/send_auth_text.html ---
-```html
-{% extends 'base.html' %}
-{% block content %}
-{% load crispy_forms_tags %}
-{% load app_filters %}
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">{{ 'Log in with a text'|etrans }}</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-secondary" type="submit">{{ 'Submit'|etrans }}</button>
-            </div>
-        </form>
-{% endblock %}
-```
-
-
---- File: lotteharper-main/users/templates/users/tfa.html ---
-```html
-{% extends 'base.html' %}
-{% block content %}
-{% load app_filters %}
-{% load crispy_forms_tags %}
-        <form action="{{ request.path }}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="POST" id="tfa-form">
-            {% csrf_token %}
-            <legend class="border-bottom mb-4">{{ 'Enter Verification Code'|etrans }}</legend>
-            <p>{{ 'Step 1: Send the code'|etrans }}</p>
-	    <i>{{ 'Never share your code with anyone, as it can be used to access your account temporarily.'|etrans }}</i>
-	    <div class="form-group">
-                {{ form.send_email|as_crispy_field }}
-                <button class="btn btn-outline-primary" type="submit">{{ 'Send code'|etrans }}</button>
-            </div>
-	    <hr>
-	    <p>{{ 'Step 2: Enter the code'|etrans }}</p>
-            <fieldset class="form-group">
-                {{ form.code|as_crispy_field }}
-		<p>{{ 'Press the enter button to send yourself the code. Then, enter the code and press enter.'|etrans }}</p>
+self the code. Then, enter the code and press enter.'|etrans }}</p>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-secondary" type="submit">{{ 'Enter code'|etrans }}</button>
@@ -4004,4 +3877,180 @@ function drawRotated(degrees, image, vid){
         } else {
             canvas.width = image.videoHeight * scale;
             canvas.height = image.videoWidth * scale;
-       
+        }
+    } else {
+        if(Math.floor(degrees/90) % 2 == 0) {
+            canvas.width = image.width * scale;
+            canvas.height = image.height * scale;
+        } else {
+            canvas.width = image.height * scale;
+            canvas.height = image.width * scale;
+        }
+    }
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.translate(canvas.width / 2, canvas.height / 2);   // to center
+    context.rotate(degrees * Math.PI / 180);                   // rotate
+    if(Math.floor(degrees/90) % 2 == 0) {
+        context.drawImage(image, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+    } else {
+        context.drawImage(image, -canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
+    }
+    context.translate(-canvas.width / 2, -canvas.height / 2); // and back
+    context.restore();
+    context.save();
+}
+function calculateAge(birthday) { // birthday is a date
+	var ageDifMs = Date.now() - birthday;
+	var ageDate = new Date(ageDifMs); // miliseconds from epoch
+	return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+var min_age = {{ min_age }};
+function validateIdFront(text) {
+	var results = text.matchAll("\d\d\/\d\d\/\d\d\d\d");
+	var birthdate = null;
+	var expiry = null;
+	for(result in results) {
+		var day = result[0];
+		var dayParsed = new Date(parseInt(result.substring(6)), parseInt(result.substring(0,2)), parseInt(result.substring(3,5)));
+		if(calculateAge(dayParsed) >= min_age) {
+			birthdate = dayParsed;
+		}
+		if(dayParsed.getTime() > new Date().getTime()) {
+			expiry = dayParsed;
+		}
+	}
+	if(birthdate && (expiry || tryCountFront > 1)) {
+		showResult(true, false);
+		return;
+	}
+    tryCountFront++;
+	showResult(false, false);
+}
+function validateIdBack(text) {
+	var results = text.matchAll("\d\d\d\d\d\d\d\d");
+	var birthdate = null;
+	var expiry = null;
+	for(result in results) {
+		var day = result[0];
+		var dayParsed = new Date(parseInt(result.substring(4)), parseInt(result.substring(0,2)), parseInt(result.substring(2,4)));
+		if(calculateAge(dayParsed) >= min_age) {
+			birthdate = dayParsed;
+		}
+		if(dayParsed.getTime() > new Date().getTime()) {
+			expiry = dayParsed;
+		}
+	}
+	if(birthdate && (expiry || tryCountBack > 1)) {
+		showResult(true, true);
+		return;
+	}
+    tryCountBack++;
+	showResult(false, true);
+}
+function setGetParam(key,value) {
+  if (history.pushState) {
+    var params = new URLSearchParams(window.location.search);
+    params.set(key, value);
+    var newUrl = window.location.origin
+          + window.location.pathname
+          + '?' + params.toString();
+    window.history.pushState({path:newUrl},'',newUrl);
+  }
+}
+var params = new URLSearchParams(window.location.search);
+function showResult(result, back) {
+    if(!result) {
+        if(back) {
+            document.getElementById("id_document_back").value = null;
+        } else {
+            document.getElementById("id_document").value = null;
+        }
+        return;
+    }
+    if(back) {
+        d2 = true;   
+    } else {
+        d1 = true;
+    }
+    finishPhotoCheck();
+}
+function recognizeText(image) {
+	Tesseract.recognize(
+	  image,
+	  'eng',
+	  { logger: m => console.log(m) }
+	).then(({ data: { text } }) => {
+        console.log(text);
+		validateIdFront(text);
+	})
+}
+var src;
+var dst;
+var thresh;
+var contours;
+var hierarchy;
+var lastWidth;
+var largest;
+var target;
+var cnt;
+var rect;
+var cnts;
+var point1;
+var point2;
+var color = new cv.Scalar(250,250,250);
+const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
+function scheduleScan(back) {
+    try {
+        drawRotated(0, image, false);
+        src = cv.imread('canvas');
+        dst = new cv.Mat();
+        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+        thresh = new cv.Mat();
+        cv.threshold(dst, thresh, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+        contours = new cv.MatVector();
+        hierarchy = new cv.Mat();
+        cv.findContours(thresh, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+        lastWidth = 0;
+        largest = 0;
+        rectangles = [];
+        cnts = null;
+        for (let i = 0; i < contours.size(); ++i) {
+          cnt = contours.get(i);
+          rect = cv.boundingRect(cnt);
+          if(rect.width > lastWidth) {
+              largest = i;
+              cnts = cnt;
+              lastWidth = rect.width;
+          }
+          rectangles.push(rect);
+        }
+        target = rectangles[largest];
+        if(target) {
+            var rect = target;
+            point1 = new cv.Point(rect.x, rect.y);
+            point2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
+            /*cv.rectangle(src, point1, point2, color, 4, cv.LINE_AA, 0);*/
+            cv.imshow(canvas, src);
+            src.delete(); dst.delete(); thresh.delete(); contours.delete(); hierarchy.delete();
+        }
+        if(rectangles.length > 0 && target.width > (canvas.width * MIN_SCALE && target.height > canvas.height * MIN_SCALE) && (target.width < canvas.width * MAX_SCALE && target.height < canvas.height * MAX_SCALE)) {
+            decodeBarcode(canvas, back);
+            console.log('Decoding barcode');
+        } else {
+            showResult(false, back);
+        }
+        color = new cv.Scalar(Math.random() * 155 + 100, Math.random() * 155 + 100, Math.random() * 155 + 100);
+    } catch(e) {
+        console.log('Error ' + new String(e));
+    }
+}
+function decodeBarcode(canvas, back) {
+    if(back) {
+    	try {
+            const codeReader = new ZXingBrowser.BrowserPDF417Reader();
+    		const data = codeReader.decodeFromCanvas(canvas).then((data) => {
+    			if(!data) {
+                    showResult(false, true);
+    			}
+                console.log(data);
+			    validateIdBack(data)

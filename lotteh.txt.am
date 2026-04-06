@@ -1,112 +1,4 @@
-method:'POST',
-        success: function(data) {
-            if(data.startsWith(window.location.protocol + '//')) {
-                window.location.href = data;
-            } else { console.log('Invalid response from server.'); }
-        },
-    });
-}
-{% elif payment_processor == 'helcim' %}
-var checkoutToken;
-function payFee() {
-    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
-    $.ajax({
-        url: '{{ base_url }}{% url 'payments:invoice' %}?vendor=' + vendor + '&email=' + email + '&price=' + price + '&product=' + product + '&pid=' + pid,
-        method:'POST',
-        success: function(data) {
-            var j = JSON.parse(data);
-            checkoutToken = j.checkoutToken;
-            $(document.getElementById("clemn-navbar")).autoHidingNavbar().hide();
-            appendHelcimPayIframe(j.checkoutToken);
-        },
-    });
-}
-window.addEventListener('message', (event) => {
-
-  const helcimPayJsIdentifierKey = 'helcim-pay-js-' + checkoutToken;
-
-  if(event.data.eventName === helcimPayJsIdentifierKey){
-
-    if(event.data.eventStatus === 'ABORTED'){
-      console.error('Transaction failed!', event.data.eventMessage);
-    }
-
-    if(event.data.eventStatus === 'SUCCESS'){
-      validateResponse(event.data.eventMessage)
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
-    }
-  }
-});
-
-function validateResponse(eventMessage) {
-  const payload = {
-    'rawDataResponse': eventMessage.data,
-  };
-  return fetch('{{ base_url }}/payments/helcim/', {body: payload, method: "POST"});
-}
-{% elif payment_processor == 'stripe' %}
-var stripe = Stripe('{{ stripe_pubkey }}');
-function payFee(){
-    var email = {% if request.user.is_authenticated %}"{{ request.user.email }}"{% else %}document.getElementById('id_email').value{% endif %};
-      fetch("/payments/checkout/monthly/?plan={{ fee }}&vendor={{ profile.stripe_id }}&email=" + email)
-          .then((result) => {
-            return result.json();
-          })
-          .then((data) => {
-            return stripe.redirectToCheckout({ sessionId: data.sessionId });
-          });
-}
-{% endif %}
-{% endblock %}
-
-```
-
-
---- File: lotteharper-main/payments/templates/payments/subscribe_crypto.html ---
-```html
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load app_filters %}
-{% block head %}
-<script src="https://js.stripe.com/v3/"></script>
-<script src="https://crypto-js.stripe.com/crypto-onramp-outer.js"></script>
-{% endblock %}
-{% block content %}
-<div class="container rounded shadow col-md-6 mx-auto">
-<h1><i class="bi bi-currency-bitcoin"></i> {{ 'Subscribe to'|etrans }} @{{ username }} {{ 'with'|etrans }} {{ request.GET.crypto }}</h1>
-<div style="display: inline-block;">
-<img align="left" src="{{ model.get_face_blur_url }}" style="width:33%; margin-right: 10px;" class="rounded"></img>
-<img class="mr-2 img-fluid rounded" src="{{ post.get_blur_thumb_url }}" style="float: left; width: 40%; max-width: 400px;" alt="{{ 'See photos like these'|etrans }}"></img>
-</div>
-<p>{{ 'This purchase is subject to'|etrans }} <a href="{% url 'misc:terms' %}" title="{{ 'View the terms and coniditons'|etrans }}">{{ 'the terms and conditions and privacy policy'|etrans }}</a> {{ 'of'|etrans }} {{ the_site_name }}.</p>
-<div style="display: flex; justify-content: space-around;">
-<div class="dropdown" style="display: inline-block;">
-  <a class="btn btn-outline-dark pink-borders dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="bi bi-currency-bitcoin"></i> {{ 'Change Currency'|etrans }}
-  </a>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-	<div style="max-height: 50vh; overflow: scroll;">
-        <li><a class="dropdown-item" href="{{ request.path }}?lightning=t&crypto=BTC">BTC (Lightning Network)</a></li>
-    {% for currency in currencies %}
-        <li><a class="dropdown-item" href="{{ request.path }}?crypto={{ currency }}">{{ currency }}{% if forloop.counter < 6 %} - {{ 'Fiat options'|etrans }}{% endif %}</a></li>
-    {% endfor %}
-	</div>
-  </ul>
-</div>
-</div>
-<p>{{ 'Want to pay for this Crypto purchase with card?'|etrans }} <button onclick="payWithCard();" class="btn btn-outline-primary" title="{{ 'Pay for your cryptocurrency purchase with card, bank, or other payment method'|etrans }}">{{ 'Pay with Card in Crypto'|etrans }}</button></p>
-<div id="onramp-element" style="max-width: 500px" class="mx-auto">
-<!--{% if request.GET.crypto == 'ALPH' %}<p>{{ 'To pay with your'|etrans }} Alephium (ALPH) {{ 'please'|etrans }} <a href="https://bridge.alephium.org/" title="{{ 'Use the'|etrans }} Alephium Bridge {{ 'to send'|etrans }} Alephium (ALPH)" target="_blank">{{ 'use the'|etrans }} Alephium Bridge {{ 'to send cryptocurrency to the wallet in the invoice using'|etrans }} ETH {{ 'and'|etrans }} Alephium (ALPH)</a></p>{% endif %}-->
-<form id="payment-form" method="POST" enctype="multipart/form-data">
-{% csrf_token %}
-<legend class="border-bottom mb-4">{{ 'Step 1: Send'|etrans }} {{ request.GET.crypto }}</legend>
-<fieldset class="form-group">
-<p>{{ 'Send'|etrans }} {{ crypto_fee|cryptoformat }} {{ request.GET.crypto|fixalph }} <button class="btn btn-sm btn-info" type="button" onclick="copyAmount();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button> (${{ usd_fee|sub_fee }}) {{ 'to the following wallet address:'|etrans }}</p>
-<b><i style="overflow-wrap: break-word;">{{ crypto_address }}</i></b>
-<button class="btn btn-sm btn-info" type="button" onclick="copyAddress();"><i class="bi bi-clipboard-check-fill"></i> {{ 'Copy'|etrans }}</button>
-<hr style="background-color: green;">
-<p>{% if not request.user.is_authenticated %}{{ 'Enter your email and press'|etrans }}{% else %}{{ 'Press'|etrans }}{% endif %} {{ 'the "Send" button to confirm your payment once you have initiated the transfer.'|etrans }}</p>
+you have initiated the transfer.'|etrans }}</p>
 {{ form|crispy }}
 </fieldset>
 <button id="submit-button" type="submit" class="btn btn-outline-success">{{ 'Verify'|etrans }}</button>
@@ -2352,4 +2244,117 @@ def surrogacy(request, username):
     inp_t = translate(request, 'Intended Parent', src='en')
     sgm_t = translate(request, 'Surrogate Mother', src='en')
     print('Render agreement')
-    agreement = render_agreement(request, vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user if request.user.is_authenticated else None, vendor).replace
+    agreement = render_agreement(request, vendor.profile.name if not vendor.verifications.last() else vendor.verifications.last().full_name, request.user if request.user.is_authenticated else None, vendor).replace('__________________________________, Surrogate Mother', '{}, {}'.format(signature if signature else '__________________________________', sgm_t), 1).replace('__________________________________, Intended Parent', '{}, {}'.format(parent_signature if parent_signature else '__________________________________', inp_t), 1)
+    print('Agreement rendered')
+    post = Post.objects.filter(public=True, private=False, published=True, feed='private').exclude(image=None).order_by('?').first()
+    print('Got post')
+    r = render(request, 'payments/surrogacy_checkout.html', {'title': 'Surrogacy Plans', 'stripe_pubkey': settings.STRIPE_PUBLIC_KEY, 'post': post, 'vendor': vendor, 'agreement': agreement, 'surrogacy_fee': settings.SURROGACY_FEE, 'business_type': settings.BUSINESS_TYPE, 'helcim_key': settings.HELCIM_KEY, 'form': CardPaymentForm(), 'preload': False, 'down_payment': settings.SURROGACY_DOWN_PAYMENT, 'weekly_payment': (settings.SURROGACY_FEE - settings.SURROGACY_DOWN_PAYMENT)/36})
+    print('Post render')
+    if request.user.is_authenticated: patch_cache_control(r, private=True)
+    else: patch_cache_control(r, public=True)
+    print('Serve')
+    return r
+
+@vary_on_cookie
+@cache_page(60*60*24*7)
+def surrogacy_info(request, username):
+    from django.conf import settings
+    from django.shortcuts import render
+    from django.contrib.auth.models import User
+    from feed.models import Post
+    from contact.forms import ContactForm
+    vendor = User.objects.get(profile__name=username, profile__vendor=True)
+    post_ids = Post.objects.filter(public=True, private=False, published=True, feed='private').exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
+    post = Post.objects.filter(id__in=post_ids).order_by('?').first()
+    r = render(request, 'payments/surrogacy_info.html', {'title': 'Surrogacy Plan Information', 'post': post, 'vendor': vendor, 'surrogacy_fee': settings.SURROGACY_FEE, 'contact_form': ContactForm(), 'preload': False})
+    if request.user.is_authenticated: patch_cache_control(r, private=True)
+    else: patch_cache_control(r, public=True)
+    return r
+
+
+@login_required
+@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
+def connect_account(request):
+    from django.shortcuts import redirect
+    from .stripe import create_connected_account
+    return redirect(create_connected_account(request.user.id))
+
+@login_required
+def model_subscription_cancel(request, username):
+    import stripe
+    from django.contrib.auth.models import User
+    from payments.models import Subscription
+    from django.contrib import messages
+    from django.shortcuts import redirect
+    from django.urls import reverse
+    vendor = User.objects.get(profile__name=username, profile__vendor=True)
+    for sub in Subscription.objects.filter(user=request.user, model=vendor, active=True):
+        stripe.Subscription.delete(sub.stripe_subscription_id)
+        sub.active = False
+        sub.save()
+        messages.success(request, 'You have cancelled your subscription. Please consider another plan.')
+    return redirect(reverse('app:app'))
+
+@login_required
+def subscription_cancel(request):
+    import stripe
+    from django.urls import reverse
+    from django.shortcuts import redirect
+    from django.contrib import messages
+    if request.user.profile.idscan_active:
+        stripe.Subscription.delete(request.user.profile.stripe_subscription_id)
+        request.user.profile.idscan_active = False
+        request.user.profile.save()
+        request.user.save()
+        messages.success(request, 'You have cancelled your subscription. Please consider another plan.')
+    return redirect(reverse('payments:idscan'))
+
+@login_required
+def webdev_subscription_cancel(request):
+    import stripe
+    from django.contrib import messages
+    from django.shortcuts import redirect
+    from django.urls import reverse
+    if request.user.profile.webdev_active:
+        stripe.Subscription.delete(request.user.profile.stripe_subscription_service_id)
+        request.user.profile.webdev_active = False
+        request.user.profile.save()
+        request.user.save()
+        messages.success(request, 'You have cancelled your subscription. Please consider another plan.')
+    return redirect(reverse('payments:webdev'))
+
+@csrf_exempt
+def webhook(request):
+    payload = request.body
+    event = None
+    import stripe
+    from django.conf import settings
+    stripe.api_key = settings.STRIPE_API_KEY
+    from payments.stripe import PRICE_IDS
+    from payments.stripe import PROFILE_MEMBERSHIP_PRICE_IDS
+    from payments.stripe import PHOTO_PRICE_IDS
+    from payments.stripe import WEBDEV_PRICE_IDS
+    from payments.stripe import WEBDEV_MONTHLY_PRICE_IDS
+    from payments.stripe import WEBDEV_DESCRIPTIONS
+    from payments.stripe import PROFILE_MEMBERSHIP
+    from payments.stripe import PHOTO_PRICE
+    from payments.stripe import CART_ID
+    from payments.models import Subscription, PurchasedProduct
+    from users.models import Profile
+    from security.models import SecurityProfile
+    price_scans = ['5','10', '20', '50', '100', '200', '500', '1000', '2000', '5000']
+    price_dev = ['100', '200', '500', '1000', '2000', '5000']
+    try:
+        import json
+        event = stripe.Event.construct_from(
+            json.loads(payload), settings.STRIPE_API_KEY
+        )
+    except ValueError as e:
+        from django.http import HttpResponse
+        return HttpResponse(status=400)
+    session = event.data['object']
+    account = None
+    invoice = stripe.Invoice.retrieve(session.get('invoice'))
+    account = invoice['transfer_data']['destination'] if invoice['transfer_data'] else None
+    print(str(invoice))
+    if event.type == 'checkout.session.completed' or event

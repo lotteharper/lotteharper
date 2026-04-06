@@ -1,174 +1,3 @@
-({type:"answer", answer, to:broadcasterId}));
-                }
-                else if (data.type === "candidate") {
-                    if (pc) await pc.addIceCandidate(data.candidate);
-                }
-                else if (data.type === "broadcaster_online") {
-                    signalingSocket.close();
-                    openSignalingSocket();
-                }
-                else if (data.type === "rotation") {
-                    video.style.transform = 'rotate(' + (data.data*90)%360 + 'deg);';
-                }
-            };
-        }
-        openSignalingSocket();
-        const stunConfig = { iceServers: [{urls: "stun:lotteh.com:3478"}] };
-        let pc;
-        function openChatSocket() {
-            chatSocket = new WebSocket(
-                "wss://" + window.location.host + "/ws/chat/{{ vendor.profile.name }}/?lang={{ lang }}"
-            );
-            chatSocket.onerror = function() {
-                if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
-                chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
-            };
-            chatSocket.onclose = function() {
-                if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
-                chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
-            };
-            chatSocket.onmessage = function(event) {
-                let data = JSON.parse(event.data);
-                let chatbox = document.getElementById('chatbox');
-                chatbox.innerHTML += `<div><b>${data.username}:</b> ${data.message}</div>`;
-                chatbox.scrollBy(0, 1000);
-            };
-        }
-        openChatSocket();
-        const inputField = document.getElementById('chatinput');
-        inputField.addEventListener('keydown', function(event) {     
-            if (event.keyCode === 13) { // 13 is the keyCode for the Enter key
-                event.preventDefault(); // Prevent default Enter key behavior
-                sendChat();
-            }
-        });
-        let chatbox = document.getElementById('chatbox');
-        chatbox.scrollBy(0, 9999999);
-    }
-    var streamBegan = false;
-    Object.keys(window).forEach(key => {
-        if (/^on(key|click)/.test(key)) {
-            window.addEventListener(key.slice(2), event => {
-                if(!streamBegan) {
-                    streamBegan = true;
-                    $('#hideafterbegin').addClass('hide');
-                    beginStream();
-                }
-            });
-        }
-    });
-});
-function sendChat() {
-    let input = document.getElementById('chatinput');
-    if(input.value != "") {
-        chatSocket.send(JSON.stringify({
-            message: input.value,
-            username: "{% if request.user.is_authenticated %}@{{ request.user.profile.name }}"{% else %}Guest " + guestID{% endif %}
-        }));
-        input.value = "";
-    }
-}
-{% endblock %}
-```
-
-
---- File: lotteharper-main/stream/tests.py ---
-```python
-from django.test import TestCase
-
-# Create your tests here.
-```
-
-
---- File: lotteharper-main/stream/urls.py ---
-```python
-from django.urls import path
-from . import views
-
-app_name='stream'
-
-urlpatterns = [
-    path('', views.stream, name='stream'),
-    path('<str:username>/', views.watch, name='watch'),
-]
-```
-
-
---- File: lotteharper-main/stream/views.py ---
-```python
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.contrib.auth.decorators import user_passes_test
-from verify.tests import pediatric_identity_verified
-from vendors.tests import is_vendor
-from django.views.decorators.cache import cache_page, never_cache
-from django.views.decorators.vary import vary_on_cookie
-
-@login_required
-@user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
-@user_passes_test(is_vendor)
-def stream(request):
-    from django.contrib.auth.models import User
-    from django.conf import settings
-    context = {
-        'title': 'Watch stream',
-        'description': 'Stream on Lotte Harper. ' + settings.BASE_DESCRIPTION,
-    }
-    return render(request, 'stream/stream.html', context)
-
-@cache_page(60*15)
-@vary_on_cookie
-def watch(request, username):
-    from django.http import Http404
-    from django.contrib.auth.models import User
-    user = User.objects.filter(profile__name=username, profile__vendor=True).order_by('-profile__last_seen').first()
-    if not user:
-        from django.contrib import messages
-        messages.warning(request, 'This streamer is not available, friend. Please try another page.')
-        raise Http404
-    from django.conf import settings
-    context = {
-        'title': 'Watch stream',
-        'description': 'Watch {}\'s stream on Lotte Harper. ' + settings.BASE_DESCRIPTION,
-        'vendor': user,
-        'camera_name': settings.DEFAULT_CAMERA_NAME if not (request.GET.get('camera', None) and request.user.is_authenticated and request.user.profile.vendor and request.user == user) else request.GET.get('camera', None)
-    }
-    response = render(request, 'stream/watch.html', context)
-    from django.views.decorators.cache import patch_cache_control
-    if request.user.is_authenticated:
-        patch_cache_control(response, private=True)
-    else:
-        patch_cache_control(response, public=True)
-    return response
-```
-
-
---- File: lotteharper-main/survey/admin.py ---
-```python
-from django.contrib import admin
-
-# Register your models here.
-```
-
-
---- File: lotteharper-main/survey/apps.py ---
-```python
-from django.apps import AppConfig
-
-
-class SurveyConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'survey'
-```
-
-
---- File: lotteharper-main/survey/forms.py ---
-```python
-from django import forms
-from .models import Survey, Answer
-from feed.middleware import get_current_user
-
-class UpdateSurveyForm(forms.ModelForm):
     question = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}))
     def __init__(self, *args, **kwargs):
         surv = kwargs.pop('surv', None)
@@ -5111,4 +4940,205 @@ function buf_to_base64(buffer) {
     }
 
   return btoa(s)
-        .replace(/\
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=/g, "");
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+{% endblock %}
+```
+
+
+--- File: lotteharper-main/templates/webpush.js ---
+```
+var clicked = false;
+setTimeout(function() {
+    if (Notification.permission != 'denied') {
+	$(document).on("click", function(event) {
+		if(!clicked) {
+			clicked = true;
+			$(document.getElementById('webpush-subscribe-button')).trigger("click");
+			event.preventDefault();
+		}
+	});
+    }
+}, 1000 * {{ webpush_query_delay }});
+```
+
+
+--- File: lotteharper-main/templates_socialaccount_authentication_error.html ---
+```html
+{{ auth_error }}
+```
+
+
+--- File: lotteharper-main/test_blur.py ---
+```python
+import os, sys
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
+import django
+django.setup()
+
+from security.censor_video import censor_video_nude_fast
+from live.models import get_file_path, VideoRecording
+from django.conf import settings
+p = VideoRecording.objects.order_by('-last_frame')[1].file.path
+op = os.path.join(settings.MEDIA_ROOT, get_file_path(None, 'frame.mp4'))
+censor_video_nude_fast(p, op, scale=0.5)
+p = Post.objects.create(file=op)
+p.file_bucket.path
+print(op)
+```
+
+
+--- File: lotteharper-main/test_compile.py ---
+```python
+import os, sys
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
+import django
+django.setup()
+from feed.models import Post
+Post.objects.get(id=105).compile_content()
+```
+
+
+--- File: lotteharper-main/testing.txt ---
+```
+meme```
+
+
+--- File: lotteharper-main/test_mail.py ---
+```python
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
+
+import django
+django.setup()
+from users.email import send_email
+import sys
+email = sys.argv[1]
+send_email(email, 'This is a test subject', 'I am testing the mail server to make sure it works. This is just a test of the mail server. I want to make sure I can send email prroperly using the web app.')
+```
+
+
+--- File: lotteharper-main/test.py ---
+```python
+print('This is a test script.')
+import os, sys
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lotteh.settings')
+import django
+django.setup()
+
+import datetime
+
+from security.models import UserIpAddress, Session
+latlngs = []
+from django.conf import settings
+for ip in UserIpAddress.objects.all():
+    if ip.latitude and ip.longitude: latlngs = latlngs + [(ip.latitude, ip.longitude)]
+import numpy as np
+from sklearn.cluster import DBSCAN
+coords = np.array(latlngs)
+# Haversine metric requires radians:
+kms_per_radian = 6371.0088
+epsilon = 50 / kms_per_radian # 50km radius
+
+db = DBSCAN(eps=epsilon, min_samples=2, algorithm='ball_tree', metric='haversine').fit(np.radians(coords))
+labels = db.labels_
+groups = {}
+for label, point in zip(labels, latlngs):
+    groups.setdefault(label, []).append(point)
+
+pts = []
+
+for x in range(len(groups)-1):
+    pts = pts + [groups[x][0]]
+
+print(pts)
+```
+
+
+--- File: lotteharper-main/test.sh ---
+```bash
+#!/bin/bash
+LANG="de"
+CMD_INIT="s/class=\"nav-link\" href=\"/links\"/class=\"nav-link\" href=\"${LANG}\/links\"/g"
+#s@class="nav-link" href="/links"@class="nav-link" href="$LANG/links"@g'`
+CMD=$CMD_INIT
+echo $CMD
+sed -e $CMD /home/team/lotteh/test.txt
+
+```
+
+
+--- File: lotteharper-main/test.txt ---
+```
+#!/home/team/lotteh/venv/bin/python3
+
+
+
+
+etrans
+ 's/^ *
+
+//'
+etrans
+
+etrans
+
+
+anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6209985848112194"
+     crossorigin="anonymous"></script>
+class="nav-link" href="de/links"
+
+text-align: center;
+
+<div style="display: flex; justify-content: space-around;"><img src="https://i.imgur.com/dAQRaWt.jpeg" 
+style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it."></div>
+style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it."></div>
+style="border-radius: 50%; width: 250px; max-width: 100%; height: auto;" alt="Welcome to my website! I&#x27;m an engineer living in Seattle. This is my personal website. I build websites, electronics, video games, and apps. I am a woman in tech making critical software available to those who need it."></div>
+
+
+ width: 250px; max-width: 100%; height: auto;
+
+ width: 250px; max-width: 100%; height: auto;
+
+%} - {{ 'Fiat
+%} - {{ 'Fiat
+%} - {{ 'Fiat
+%} - {{ 'Fiat
+width="30" height="30" fill="currentColor" class="bi bi-twitter-x"
+
+width="30" height="30" fill="currentColor" class="bi bi-twitter-x"
+
+window.location.protocol + '//'
+
+window.location.protocol + '//'
+
+window.location.protocol + '//'
+
+"closed" "closed"
+meme is a test meme
+of my shell 
