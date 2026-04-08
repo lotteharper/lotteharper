@@ -33,6 +33,7 @@ def generate_code_book(value, lang='en', src='en'):
                 code = t.split('\n', 1)[1] if len(t.split('\n', 1)[1]) > 0 else False
             else:
                 text = t
+        except: pass
         if language == 'html': language = 'markup'
         if code:
             lines = []
@@ -46,7 +47,7 @@ def generate_code_book(value, lang='en', src='en'):
             out = '\n'.join(lines)
             op = op + [{'text': translate(None, strip_tags(split[0]), target=lang, src=src), 'lang': language, 'code': html.escape(out) if language != 'markup' else '<!-- {} -->'.format(out)}]
         elif text:
-            op = op + [{'text': translate(None, strip_tags(split[0]), target=lang, src=src}]
+            op = op + [{'text': translate(None, strip_tags(split[0]), target=lang, src=src)}]
     from django.template.loader import render_to_string
     return render_to_string('feed/book.html', {'value': op}), title
 
@@ -185,6 +186,7 @@ def generate_book(text, out_path_docx):
                 text = t
                 for line in text.split('\n'):
                     paragraph = add_paragraph(spell(line))
+        except: pass
         if code:
             run = True
             while run:

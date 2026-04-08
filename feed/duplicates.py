@@ -19,8 +19,9 @@ def remove_post_duplicates():
                 duplicates.append(post.id)
     for d in duplicates:
         post = Post.objects.get(id=d)
-        if not (post.file or post.file_bucket):
+        if (not (post.file or post.file_bucket)) and (not post.content):
             post.private = True
             post.published = False
             post.save()
             delay_delete_post.apply_async([d], countdown=60*2)
+
