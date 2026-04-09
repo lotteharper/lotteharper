@@ -11,6 +11,7 @@
   </a>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <li><a class="dropdown-item" href="{% url 'app:app' %}?k={% get_key %}">App</a></li>
+    <li><a class="dropdown-item" href="{% url 'links:links' request.user.profile.name  %}">My Links</a></li>
     <li><a class="dropdown-item" href="{% url 'feed:profile' request.user.profile.name %}">Public Profile</a></li>
     <li><a class="dropdown-item" href="{% url 'feed:profile' request.user.profile.name %}?show=true">Private Profile</a></li>
     <li><a class="dropdown-item" href="{% url 'feed:profile-grid' request.user.profile.name %}">Public Grid</a></li>

@@ -15,7 +15,6 @@
 </form>
 {% else %}
 <div style="display: flex; justify-content: space-around;"><img src="{{ links_user.profile.get_image_url }}" style="border-radius: 50%; width: 250px;" alt="{{ links_user.profile.id|transbio|striptags }}"></div>
-{% include 'language.html' %}
 <hr style="visibility: hidden;">
 <div style="display: inline-block;">
 {% for link in links %}

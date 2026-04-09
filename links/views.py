@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 from vendors.tests import is_vendor
 from barcode.tests import pediatric_document_scanned
-from django.views.decorators.cache import patch_cache_control, cache_page
+from django.views.decorators.cache import patch_cache_control, cache_page, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.contrib.auth.decorators import login_required
 
@@ -55,14 +55,15 @@ def my_links(request):
     messages.warning(request, 'You must be a vendor to see this page.')
     return redirect(reverse('/'))
 
-@cache_page(60*60)
+#@cache_page(60*60)
+@never_cache
 def links(request, username):
     from .models import SharedLink
     from django.contrib.auth.models import User
     from django.contrib import messages
     user = User.objects.filter(profile__name=username).order_by('-profile__last_seen').first()
     if not user: user = User.objects.filter(profile__name__icontains=username).order_by('-profile__last_seen').first()
-    links = SharedLink.objects.filter(user=user).order_by('created')
+    links = SharedLink.objects.filter(user=user).exclude(url='').exclude(description='').order_by('created')
     response = render(request, 'links/links.html', {
         'title': '@{}\'s links'.format(user.profile.name),
         'links': links,

@@ -1,4 +1,4 @@
-3
+4
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,21 +13,12 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main d5dded5] open source
- 43 files changed, 1658 insertions(+), 1262 deletions(-)
- delete mode 100644 Restart=on-failure
- create mode 100755 assemblecode.sh.save
- delete mode 100644 feed/.views.py.swp
- create mode 100755 feed/views.py.save
- delete mode 100755 image_generator.py
- delete mode 100755 index.html
- delete mode 100755 index.html.1
- delete mode 100755 index.html.2
- delete mode 100755 install
- delete mode 100755 install.sh
- delete mode 100755 misc/ads.txt
+[main 9b640a5] open source
+ 34 files changed, 102 insertions(+), 31 deletions(-)
+ delete mode 100644 "[Service]\nRestart=on-failure\nRestartSec=5s"
+ delete mode 100755 feed/classifier_model.onnx
+ mode change 100755 => 100644 web/__pycache__/generate_links.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-assemblecode.sh.save

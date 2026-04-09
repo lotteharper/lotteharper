@@ -64,7 +64,7 @@ def generate_site():
         'model_name': User.objects.get(id=settings.MY_ID).profile.name,
         'model': User.objects.get(id=settings.MY_ID),
         'my_profile': User.objects.get(id=settings.MY_ID).profile,
-        'shared_links': User.objects.get(id=settings.MY_ID).shared_link.order_by('created'),
+        'shared_links': User.objects.get(id=settings.MY_ID).shared_link.exclude(url='').exclude(description='').order_by('created'),
         'links_user': User.objects.get(id=settings.MY_ID),
         'typical_response_time': settings.TYPICAL_RESPONSE_TIME_HOURS,
         'contact_form': ContactForm(),
