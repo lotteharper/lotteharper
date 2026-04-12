@@ -84,28 +84,30 @@ def send_html_email(user, mail_subject, html_message, attachments=None):
 def send_html_email_backend(sender, to_emails, mail_subject, html_message, attachments=None, cc=None, bcc=None):
     from django.core.mail.backends.smtp import EmailBackend
     backend = EmailBackend(host=settings.DOMAIN, port=settings.EMAIL_PORT, username=sender.profile.bash, password=sender.profile.email_password, use_tls=True)
-    username = user.username
-    if to_email == '':
+    if to_emails == []:
         return None
-    unsub_link = settings.BASE_URL + user.profile.create_unsubscribe_link()
-    html_message = '<!DOCTYPE html><html><head><link rel="shortcut-icon" type="image/x-icon" href="{}/email/static/lotteh.png" /></head><body><div style="background-color: {}; padding: 5px; border-radius: 10px;"><img alt="Our company logo" src="{}{}" style="border-radius: 50%; width: 40px; height: 40px;"></img><div style="display: inline-block; padding: 10px; position: relative; top:-10px;"><h1>{}</h1></div></div><div style="background-color: {}; white-space: pre-wrap;">\n'.format(settings.BASE_URL, settings.HEADER_COLOR, settings.BASE_URL, settings.EMAIL_ICON_URL, settings.SITE_NAME, settings.BACKGROUND_COLOR) + html_message + '\n\n</div><div style="background-color: {}; padding: 10px; border-radius: 10px;"><p style="display: inline;">If you would like to stop receiving these emails, please <a href="{}" title="Unsubscribe from all {} emails">unsubscribe</a>.</p>  <b>Email: <a href="mailto:{}">{}</a> Phone: <a href="tel:{}">{}</a> - <a href="{}" title="Visit {}">{}</a></div></body></html>'.format(settings.FOOTER_COLOR, unsub_link, settings.SITE_NAME, settings.EMAIL_ADDRESS, settings.EMAIL_ADDRESS, settings.PHONE_NUMBER, phone_number_format(settings.PHONE_NUMBER), settings.BASE_URL, settings.SITE_NAME, settings.BASE_URL)
-    msg = EmailMultiAlternatives(mail_subject, strip_tags(html_message), '{} <{}@{}>'.format(sender.profile.name, sender.profile.bash, settings.MAIL_NAME), to_emails, connection=backend)
-    if cc: msg.cc = cc.replace(' ', '').split(',')
-    if bcc: msg.bcc = bcc.replace(' ', '').split(',')
-    msg.attach_alternative(html_message, "text/html")
-    if attachments:
-        for a in attachments:
-            msg.attach_file(a)
-    profile = user.profile
-    try:
-        msg.send(fail_silently=False)
-        if not profile.email_valid:
-            profile.email_valid=True
+    from django.contrib.auth.models import User
+    users = User.objects.filter(email__in=to_emails)
+    for user in users:
+        unsub_link = settings.BASE_URL + user.profile.create_unsubscribe_link()
+        html_message = '<!DOCTYPE html><html><head><link rel="shortcut-icon" type="image/x-icon" href="{}/email/static/lotteh.png" /></head><body><div style="background-color: {}; padding: 5px; border-radius: 10px;"><img alt="Our company logo" src="{}{}" style="border-radius: 50%; width: 40px; height: 40px;"></img><div style="display: inline-block; padding: 10px; position: relative; top:-10px;"><h1>{}</h1></div></div><div style="background-color: {}; white-space: pre-wrap;">\n'.format(settings.BASE_URL, settings.HEADER_COLOR, settings.BASE_URL, settings.EMAIL_ICON_URL, settings.SITE_NAME, settings.BACKGROUND_COLOR) + html_message + '\n\n</div><div style="background-color: {}; padding: 10px; border-radius: 10px;"><p style="display: inline;">If you would like to stop receiving these emails, please <a href="{}" title="Unsubscribe from all {} emails">unsubscribe</a>.</p>  <b>Email: <a href="mailto:{}">{}</a> Phone: <a href="tel:{}">{}</a> - <a href="{}" title="Visit {}">{}</a></div></body></html>'.format(settings.FOOTER_COLOR, unsub_link, settings.SITE_NAME, settings.EMAIL_ADDRESS, settings.EMAIL_ADDRESS, settings.PHONE_NUMBER, phone_number_format(settings.PHONE_NUMBER), settings.BASE_URL, settings.SITE_NAME, settings.BASE_URL)
+        msg = EmailMultiAlternatives(mail_subject, strip_tags(html_message), '{} <{}@{}>'.format(sender.profile.name, sender.profile.bash, settings.MAIL_NAME), to_emails, connection=backend)
+        if cc: msg.cc = cc.replace(' ', '').split(',')
+        if bcc: msg.bcc = bcc.replace(' ', '').split(',')
+        msg.attach_alternative(html_message, "text/html")
+        if attachments:
+            for a in attachments:
+                msg.attach_file(a)
+        profile = user.profile
+        try:
+            msg.send(fail_silently=False)
+            if not profile.email_valid:
+                profile.email_valid=True
+                profile.save()
+        except:
+            print(traceback.format_exc())
+            profile.email_valid=False
             profile.save()
-    except:
-        print(traceback.format_exc())
-        profile.email_valid=False
-        profile.save()
 
 def send_html_email_template(user, mail_subject, html_message, attachments=None):
     posts = Post.objects.filter(author__id=settings.MY_ID, enhanced=True, private=False, public=True, published=True, recipient=None).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]

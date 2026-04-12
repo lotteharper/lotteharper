@@ -20,7 +20,7 @@ class ScheduledEmail(models.Model):
 
     def send(self):
         from users.username_generator import generate_username as get_random_username
-        from users.email import send_html_email_template, send_html_email_backend, send_html_email_backend_template
+        from users.email import send_html_email_template, send_html_email_backend, send_html_email_backend
         if self.sent: return
         recipients = []
         if len(self.recipient.replace(' ','').split(',')) > 1:

@@ -954,6 +954,10 @@ app.conf.beat_schedule = {
         'task': 'lotteh.celery.reset_chat_camera_keys',
         'schedule': crontab(day_of_month='*', hour=0, minute=0),
     },
+    'send-routine-emails': {
+        'task': 'lotteh.celery.send_scheduled_emails',
+        'schedule': crontab(hour='*', minute='*'),
+    },
     'send-routine-engagement-emails': {
         'task': 'lotteh.celery.send_emails',
         'schedule': crontab(day_of_week=5, hour=6, minute=0),
