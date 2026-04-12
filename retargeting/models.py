@@ -22,6 +22,7 @@ class ScheduledEmail(models.Model):
         from users.username_generator import generate_username as get_random_username
         from users.email import send_html_email_template, send_html_email_backend, send_html_email_backend_template
         if self.sent: return
+        recipients = []
         if len(self.recipient.replace(' ','').split(',')) > 1:
             for recipient in self.recipient.replace(' ','').split(','):
                 if not User.objects.filter(email=recipient).count():
@@ -38,9 +39,10 @@ class ScheduledEmail(models.Model):
                         SecurityProfile.objects.get_or_create(user=user)
                 user = User.objects.filter(email=recipient).order_by('-date_posted')
                 if user.subscribed:
-                    send_html_email_backend(self.sender, recipient, self.subject, self.content, cc=self.cc, bcc=self.bcc)
+                    recipients.append(recipient)
+            send_html_email_backend(self.sender, recipients, self.subject, self.content, cc=self.cc, bcc=self.bcc)
         elif self.recipient:
-            send_html_email_backend(self.sender, self.recipient, self.subject, self.content, cc=self.cc, bcc=self.bcc)
+            send_html_email_backend(self.sender, [self.recipient], self.subject, self.content, cc=self.cc, bcc=self.bcc)
         else:
             users = User.objects.filter(is_active=True, profile__email_verified=True, profile__subscribed=True)
             for user in users:

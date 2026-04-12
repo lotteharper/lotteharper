@@ -244,6 +244,7 @@ jq 'walk(if type == "string" or type == "number" or type == "boolean" then null 
 sudo chmod -R 774 ./*
 sudo chown -R :users ./*
 sed -i -s "8s@[0-9][0-9][0-9][0-9][0-9][0-9]@000000@g" config/banner
+sudo chown -R team:users /home/team/lotteh-backup-open/
 git config --global --add safe.directory /home/team/lotteh-backup-open
 git init --initial-branch=main
 git add --all
