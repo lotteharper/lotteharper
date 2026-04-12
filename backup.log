@@ -1,4 +1,4 @@
-6
+7
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,20 +13,132 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 8e10e0c] open source
- 34 files changed, 25 insertions(+), 22 deletions(-)
- create mode 100644 media/audio/fingerprints/063e80cc-9a3d-4701-a3b0-73d856e8b75a.npy
- create mode 100644 media/audio/fingerprints/1910b3aa-4c97-48fc-96b0-1a473ffe4d03.npy
- create mode 100644 media/audio/fingerprints/1ad57814-11ac-4686-affd-de5a9025a052.npy
- create mode 100644 media/audio/fingerprints/1df9984a-eb6c-41ee-a7d1-feb1fd5fcd32.npy
- create mode 100644 media/audio/fingerprints/5756cdf6-f35f-42a8-a854-da9cef0a9234.npy
- create mode 100644 media/audio/fingerprints/9e385e9d-e1a4-428d-8389-211429f599a5.npy
- create mode 100644 media/audio/fingerprints/b4c321ca-317b-4599-a868-3d08acd969b7.npy
- create mode 100644 media/audio/fingerprints/c45c6267-86c5-4b33-beb8-3c3f70ce8123.npy
- create mode 100644 media/audio/fingerprints/c68daa87-610b-4946-aa68-fb33ce41429c.npy
- create mode 100644 media/audio/fingerprints/e934ba49-6c29-4043-b796-46257345b706.npy
- create mode 100644 media/audio/fingerprints/f217ab9f-41a3-42be-97b9-3db8ba22a744.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
+backup.log
+backup_date.txt
+backup_init_date.txt
+celerybeat-schedule
+email_list.txt
+requirements.txt
+app/
+audio/
+barcode/
+birthcontrol/
+chat/
+config/
+config/Xwrapper.config
+config/apis-example.json
+config/apis.json
+config/ascripts
+config/banner
+config/config-example.json
+config/config.json
+config/crontab
+config/etc_default_celery
+config/etc_default_opendkim
+config/etc_dovecot_conf.d_10-auth.conf
+config/etc_dovecot_conf.d_10-mail.conf
+config/etc_dovecot_conf.d_10-master.conf
+config/etc_dovecot_dovecot.conf
+config/etc_dovecot_passwd
+config/etc_init.d_celery
+config/etc_init.d_celerybeat
+config/etc_opendkim.conf
+config/etc_pam.d_login
+config/etc_pam.d_sshd
+config/etc_postfix_main.cf
+config/etc_postfix_master.cf
+config/etc_systemd_system_celery.service
+config/etc_systemd_system_celerybeat.service
+config/etc_systemd_system_daphne.service
+config/etc_systemd_system_stun.service
+config/lotteh-le-ssl.conf
+config/postgresql.conf
+config/sudoers
+contact/
+crypto/
+data/
+data/address.json.aa
+data/audio.json.aa
+data/auth.json.aa
+data/barcode.json.aa
+data/birthcontrol.json.aa
+data/chat.json.aa
+data/contact.json.aa
+data/cookielaw.json.aa
+data/crypto.json.aa
+data/events.json.aa
+data/face.json.aa
+data/feed.bid.json.aa
+data/feed.post.json.aa
+data/games.json.aa
+data/links.json.aa
+data/live.json.aa
+data/live.userplaylist.json.aa
+data/live.videocamera.json.aa
+data/live.videorecording.json.aa
+data/meetings.json.aa
+data/payments.json.aa
+data/security.biometric.json.aa
+data/security.credential.json.aa
+data/security.mrzscan.json.aa
+data/security.nfcscan.json.aa
+data/security.otptoken.json.aa
+data/security.pincode.json.aa
+data/security.securityprofile.json.aa
+data/security.session.json.aa
+data/security.session.json.ab
+data/security.session.json.ac
+data/security.session.json.ad
+data/security.useripaddress.json.aa
+data/security.userlogin.json.aa
+data/security.usersession.json.aa
+data/security.vivokeyscan.json.aa
+data/sessions.json.aa
+data/sessions.json.ab
+data/stream.json.aa
+data/survey.json.aa
+data/translate.json.aa
+data/translate.json.ab
+data/translate.json.ac
+data/translate.json.ad
+data/translate.json.ae
+data/translate.json.af
+data/translate.json.ag
+data/translate.json.ah
+data/translate.json.ai
+data/translate.json.aj
+data/translate.json.ak
+data/translate.json.al
+data/translate.json.am
+data/translate.json.an
+data/translate.json.ao
+data/translate.json.ap
+data/translate.json.aq
+data/translate.json.ar
+data/translate.json.as
+data/translate.json.at
+data/translate.json.au
+data/translate.json.av
+data/translate.json.aw
+data/translate.json.ax
+data/translate.json.ay
+data/translate.json.az
+data/translate.json.ba
+data/translate.json.bb
+data/translate.json.bc
+data/translate.json.bd
+data/translate.json.be
+data/translate.json.bf
+data/translate.json.bg
+data/translate.json.bh
+data/translate.json.bi
+data/translate.json.bj
+data/translate.json.bk
+data/translate.json.bl
+data/translate.json.bm
+data/translate.json.bn
+data/translate.json.bo

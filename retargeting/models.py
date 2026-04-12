@@ -11,6 +11,8 @@ class ScheduledEmail(models.Model):
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='scheduled_emails', null=True, blank=True)
     recipient = models.CharField(blank=True, max_length=255)
     subject = models.CharField(blank=True, max_length=255)
+    cc = models.CharField(blank=True, max_length=1024)
+    bcc = models.CharField(blank=True, max_length=1024)
     content = models.TextField(blank=True)
     send_at = models.DateTimeField(default=timezone.now)
     sent = models.BooleanField(default=False)
@@ -36,9 +38,9 @@ class ScheduledEmail(models.Model):
                         SecurityProfile.objects.get_or_create(user=user)
                 user = User.objects.filter(email=recipient).order_by('-date_posted')
                 if user.subscribed:
-                    send_html_email_backend(self.sender, recipient, self.subject, self.content)
+                    send_html_email_backend(self.sender, recipient, self.subject, self.content, cc=self.cc, bcc=self.bcc)
         elif self.recipient:
-            send_html_email_backend(self.sender, self.recipient, self.subject, self.content)
+            send_html_email_backend(self.sender, self.recipient, self.subject, self.content, cc=self.cc, bcc=self.bcc)
         else:
             users = User.objects.filter(is_active=True, profile__email_verified=True, profile__subscribed=True)
             for user in users:
