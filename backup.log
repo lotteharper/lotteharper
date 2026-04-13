@@ -1,4 +1,4 @@
-7
+1
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,191 +13,44 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
+[main 74ed83e] open source
+ 60 files changed, 490 insertions(+), 5906 deletions(-)
+ delete mode 100755 barcode/templates/barcode/scan.html.save
+ delete mode 100755 barcode/templates/barcode/scan.html.save.1
+ delete mode 100755 birthcontrol/templates/birthcontrol/take.html.save
+ delete mode 100755 chat/templates/chat/rtc.js.save
+ delete mode 100755 face/templates/face/face.html.save
+ delete mode 100755 face/templates/face/face.html.save.1
+ delete mode 100755 face/templates/face/face.html.save.2
+ delete mode 100755 feed/templates/feed/_post.html.save
+ delete mode 100755 feed/templates/feed/modal.html.save
+ delete mode 100755 feed/templates/feed/modal.js.save
+ delete mode 100755 feed/templates/feed/modal.js.save.1
+ delete mode 100755 feed/templates/feed/new_post.html.save
+ delete mode 100755 feed/templates/feed/profile.html.save
+ delete mode 100755 go/templates/go/go.html.save
+ delete mode 100755 go/templates/go/go.html.save.1
+ delete mode 100755 live/templates/live/_remote.html.save
+ delete mode 100755 live/templates/live/compressor.js.save
+ delete mode 100755 live/templates/live/golive.html.save
+ delete mode 100755 live/templates/live/golivevideo.html.save
+ delete mode 100755 live/templates/live/golivevideo.html.save.1
+ delete mode 100755 live/templates/live/live.html.save
+ delete mode 100755 live/templates/live/live.html.save.1
+ delete mode 100755 live/templates/live/live.html.save.2
+ delete mode 100755 live/templates/live/livevideo.html.save
+ delete mode 100755 live/templates/live/screencast.html.save
+ create mode 100644 media/audio/fingerprints/52f56a55-410a-4067-a207-d6f12fcbba1a.npy
+ create mode 100644 media/audio/fingerprints/f4eca80b-0d9c-4b86-95ce-18ae7dcb6714.npy
+ delete mode 100755 meetings/templates/meetings/meeting.html.save
+ delete mode 100755 payments/templates/payments/buy_photo_card.html.save
+ delete mode 100755 recordings/templates/recordings/recording.html.save
+ delete mode 100755 recovery/templates/recovery/recovery.html.save
+ delete mode 100755 shell/templates/shell/edit.html.save
+ delete mode 100755 shell/templates/shell/terminal.html.save
+ delete mode 100755 users/templates/users/login.html.save
+ delete mode 100755 users/templates/users/profile.html.save
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
 .gitignore
-backup.log
-backup_date.txt
-backup_init_date.txt
-celerybeat-schedule
-email_list.txt
-requirements.txt
-app/
-audio/
-barcode/
-birthcontrol/
-chat/
-config/
-config/Xwrapper.config
-config/apis-example.json
-config/apis.json
-config/ascripts
-config/banner
-config/config-example.json
-config/config.json
-config/crontab
-config/etc_default_celery
-config/etc_default_opendkim
-config/etc_dovecot_conf.d_10-auth.conf
-config/etc_dovecot_conf.d_10-mail.conf
-config/etc_dovecot_conf.d_10-master.conf
-config/etc_dovecot_dovecot.conf
-config/etc_dovecot_passwd
-config/etc_init.d_celery
-config/etc_init.d_celerybeat
-config/etc_opendkim.conf
-config/etc_pam.d_login
-config/etc_pam.d_sshd
-config/etc_postfix_main.cf
-config/etc_postfix_master.cf
-config/etc_systemd_system_celery.service
-config/etc_systemd_system_celerybeat.service
-config/etc_systemd_system_daphne.service
-config/etc_systemd_system_stun.service
-config/lotteh-le-ssl.conf
-config/postgresql.conf
-config/sudoers
-contact/
-crypto/
-data/
-data/address.json.aa
-data/audio.json.aa
-data/auth.json.aa
-data/barcode.json.aa
-data/birthcontrol.json.aa
-data/chat.json.aa
-data/contact.json.aa
-data/cookielaw.json.aa
-data/crypto.json.aa
-data/events.json.aa
-data/face.json.aa
-data/feed.bid.json.aa
-data/feed.post.json.aa
-data/games.json.aa
-data/links.json.aa
-data/live.json.aa
-data/live.userplaylist.json.aa
-data/live.videocamera.json.aa
-data/live.videorecording.json.aa
-data/meetings.json.aa
-data/payments.json.aa
-data/security.biometric.json.aa
-data/security.credential.json.aa
-data/security.mrzscan.json.aa
-data/security.nfcscan.json.aa
-data/security.otptoken.json.aa
-data/security.pincode.json.aa
-data/security.securityprofile.json.aa
-data/security.session.json.aa
-data/security.session.json.ab
-data/security.session.json.ac
-data/security.session.json.ad
-data/security.useripaddress.json.aa
-data/security.userlogin.json.aa
-data/security.usersession.json.aa
-data/security.vivokeyscan.json.aa
-data/sessions.json.aa
-data/sessions.json.ab
-data/stream.json.aa
-data/survey.json.aa
-data/translate.json.aa
-data/translate.json.ab
-data/translate.json.ac
-data/translate.json.ad
-data/translate.json.ae
-data/translate.json.af
-data/translate.json.ag
-data/translate.json.ah
-data/translate.json.ai
-data/translate.json.aj
-data/translate.json.ak
-data/translate.json.al
-data/translate.json.am
-data/translate.json.an
-data/translate.json.ao
-data/translate.json.ap
-data/translate.json.aq
-data/translate.json.ar
-data/translate.json.as
-data/translate.json.at
-data/translate.json.au
-data/translate.json.av
-data/translate.json.aw
-data/translate.json.ax
-data/translate.json.ay
-data/translate.json.az
-data/translate.json.ba
-data/translate.json.bb
-data/translate.json.bc
-data/translate.json.bd
-data/translate.json.be
-data/translate.json.bf
-data/translate.json.bg
-data/translate.json.bh
-data/translate.json.bi
-data/translate.json.bj
-data/translate.json.bk
-data/translate.json.bl
-data/translate.json.bm
-data/translate.json.bn
-data/translate.json.bo
-data/translate.json.bp
-data/translate.json.bq
-data/translate.json.br
-data/translate.json.bs
-data/translate.json.bt
-data/translate.json.bu
-data/translate.json.bv
-data/translate.json.bw
-data/translate.json.bx
-data/translate.json.by
-data/translate.json.bz
-data/translate.json.ca
-data/translate.json.cb
-data/translate.json.cc
-data/translate.json.cd
-data/translate.json.ce
-data/translate.json.cf
-data/translate.json.cg
-data/translate.json.ch
-data/translate.json.ci
-data/translate.json.cj
-data/translate.json.ck
-data/translate.json.cl
-data/translate.json.cm
-data/translate.json.cn
-data/translate.json.co
-data/translate.json.cp
-data/tts.json.aa
-data/users.emailaddress.json.aa
-data/users.profile.json.aa
-data/vendors.json.aa
-data/verify.json.aa
-data/voice.json.aa
-data/webauth.json.aa
-data/webpush.json.aa
-desktop/
-events/
-face/
-feed/
-games/
-go/
-hot/
-hypnosis/
-interactive/
-keys/
-kick/
-landing/
-links/
-live/
-scripts/
-scripts/initialize
-scripts/initialize_site
-
-sent 7,666,342,980 bytes  received 5,072 bytes  154,875,718.22 bytes/sec
-total size is 12,007,408,299  speedup is 1.57
-Reinitialized existing Git repository in /home/team/lotteh-backup-open/.git/
-branch 'main' set up to track 'originhub/main'.
-Backup to Write-Once-Read-Many Mirror
-Downloading zip as none was found...

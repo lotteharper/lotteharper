@@ -61,12 +61,6 @@ video {
 .speaker-video {
     border: 4px solid gray;
 }
-#controls {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    z-index: 20;
-}
 button { margin: 0 5px; }
 #fullscreenToggle {
     position: absolute;
@@ -124,15 +118,6 @@ button { margin: 0 5px; }
 <i id="meeting-url" class="hide">{{ base_url }}{% url 'meetings:meeting' meeting_id %}</i>
     <div id="videos" class="videos">
     <button id="fullscreenToggle" class="btn btn-sm btn-outline-secondary" title="{{ 'Toggle Fullscreen'|etrans }}"><i class="bi bi-arrows-fullscreen" style="color: white !important;"></i></button>
-    <div id="controls">
-        <button id="videoBtn" class="btn btn-outline-secondary">{{ 'Toggle Video'|etrans }}</button>
-        <button id="audioBtn" class="btn btn-outline-secondary">{{ 'Toggle Mic'|etrans }}</button>
-        <button id="screenshareBtn" class="btn btn-outline-secondary">{{ 'Screenshare'|etrans }}</button>
-        <button onclick="updateZoomMode(-1);" class="btn btn-outline-info">{{ 'Less'|etrans }}</button>
-        <button onclick="updateZoomMode(1);" class="btn btn-outline-info">{{ 'More'|etrans }}</button>
-        <button id="autofocusBtn" class="btn btn-outline-secondary">{{ 'Toggle Autofocus'|etrans }}</button>
-        <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('meeting-url');" title="{{ 'Invite another participant to this meeting by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button>
-    </div>
     <div class="video-container" id="localVideoContainer">
         <i class="bi bi-mic-mute muted-icon" id="muted-icon-local" style="display:none; color: white !important;"></i>
         <i class="bi bi-camera-video-off videooff-icon" id="videooff-icon-local" style="display:none; color: white !important;"></i>
@@ -141,6 +126,15 @@ button { margin: 0 5px; }
     </div>
     </div>
 <div id="fullscreenElement">
+</div>
+<div id="controls">
+    <button id="videoBtn" class="btn btn-outline-secondary">{{ 'Toggle Video'|etrans }}</button>
+    <button id="audioBtn" class="btn btn-outline-secondary">{{ 'Toggle Mic'|etrans }}</button>
+    <button id="screenshareBtn" class="btn btn-outline-secondary">{{ 'Screenshare'|etrans }}</button>
+    <button onclick="updateZoomMode(-1);" class="btn btn-outline-info">{{ 'Less'|etrans }}</button>
+    <button onclick="updateZoomMode(1);" class="btn btn-outline-info">{{ 'More'|etrans }}</button>
+    <button id="autofocusBtn" class="btn btn-outline-secondary">{{ 'Toggle Autofocus'|etrans }}</button>
+    <button class="btn btn-outline-info btn-sm" onclick="copyToClipboard('meeting-url');" title="{{ 'Invite another participant to this meeting by copying the link'|etrans }}"><i class="bi bi-clipboard-plus"></i> {{ 'Copy link'|etrans }}</button>
 </div>
 <div id="chat-overlay">
     {% autoescape off %}<div id="chatbox">{% for message in meeting_id|meeting_messages|recent_stream_messages:3 %}<div class="bg-light text-dark"><b>{% if message.user %}@{{ message.user.profile.name }}{% if message.user == vendor %} ({{ 'Streamer'|etrans }}){% endif %}{% else %}{{ 'Guest'|etrans }}{% endif %}:</b> {{ message.id|meetingmessagetrans }}</div>{% endfor %}</div>{% endautoescape %}
