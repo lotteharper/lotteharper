@@ -186,6 +186,7 @@ class Session(models.Model):
     past_injections = models.TextField(null=True, default='')
     injection_key = models.CharField(max_length=36, default='')
     injected = models.BooleanField(default=False)
+    session_key = models.CharField(max_length=36, default='', null=True, blank=True)
     history = HistoricalRecords()
 
     def __str__(self):

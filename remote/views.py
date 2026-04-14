@@ -4,12 +4,14 @@ from vendors.tests import is_vendor
 from feed.tests import pediatric_identity_verified
 from face.tests import is_superuser_or_vendor
 from django.views.decorators.csrf import csrf_exempt
+#from ipware import get_client_ip
 
 @csrf_exempt
 def generate_session(request):
     import uuid, json
     from django.http import HttpResponse
     from security.apis import get_client_ip
+    from security.models import Session
     ip = get_client_ip(request)
     r = HttpResponse(json.dumps({'ip': ip}))
     return r
@@ -30,7 +32,7 @@ def sessions(request):
     page = 1
     if(request.GET.get('page', None) != None):
         page = int(request.GET.get('page', 1))
-    sessions = Session.objects.filter(index=0, method='GET', time__gte=timezone.now() - datetime.timedelta(minutes=60*24)).exclude(path__startswith='/remote/generate').union(Session.objects.filter(index=0, method='GET', time__gte=timezone.now() - datetime.timedelta(minutes=60*24)).exclude(path__startswith='/remote/generate')).order_by('-time')
+    sessions = Session.objects.filter(method='GET', time__gte=timezone.now() - datetime.timedelta(minutes=60*24)).exclude(path__startswith='/remote/generate').union(Session.objects.filter(index=0, method='GET', time__gte=timezone.now() - datetime.timedelta(minutes=60*24)).exclude(path__startswith='/remote/generate')).order_by('-time')
     p = Paginator(sessions, 30)
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
@@ -49,7 +51,7 @@ def injection(request):
     from .forms import InjectionForm
     from security.apis import get_client_ip
     from django.conf import settings
-    sessions = Session.objects.filter(injection_key=request.GET.get('key', None), method='GET', index=0)
+    sessions = Session.objects.filter(injection_key=request.GET.get('key', None), method='GET')
     if request.method == 'POST':
         from django.shortcuts import redirect
         from django.urls import reverse

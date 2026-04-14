@@ -23,7 +23,7 @@ def update_sessions():
         sess = Session.objects.filter(time__gte=timezone.now() - datetime.timedelta(minutes=60*24*7)).exclude(injection_key__in=sessions).exclude(injection='')
         for s in sess:
             if not s.injection_key in sessions.keys():
-                sessions[s.injection_key] = s
+                sessions[s.injection_key] = s.injection
         last_update = timezone.now()
 
 @sync_to_async
@@ -37,8 +37,6 @@ def get_session(session_id):
     global sessions
     if session_id in sessions.keys(): return sessions[session_id]
     return False
-#    session = Session.objects.filter(injection_key=session_id, time__gte=timezone.now() - datetime.timedelta(minutes=60*24*7), index=settings.SESSION_INDEX).last()
-#    return session
 
 @sync_to_async
 def clear_session(session_id):
@@ -67,14 +65,27 @@ def set_id(self):
         s.ip_address = self.ip
         s.save()
 
+@sync_to_async
+def init_session(ip, path, session_key, user_id):
+    from django.contrib.auth.models import User
+    session = Session.objects.filter(ip_address=ip, session_key=session_key, path=path, user=User.objects.get(id=user_id) if user_id else None, time__gte=timezone.now() - datetime.timedelta(minutes=60*24*7)).order_by('-time').first()
+    if not session: return False
+#    if not session:
+#        session = Session.objects.create(ip_address=ip, session_key=session_key, path=path, user=User.objects.get(id=user_id) if user_id else None, time__gte=timezone.now() - datetime.timedelta(minutes=60*24*7)).order_by('-time').first()
+    return session.injection_key
+
 async def remote_thread(self):
-    key = await generate_session(self)
+    key = None
+    while not key:
+        key = await init_session(self.ip, self.path, self.session_key, self.user_id)
+        await asyncio.sleep(10)
+#    print('{} {} {} {}'.format(self.ip, self.path, self.session_key, self.user_id))
     self.session_id = key
     while self.connected:
         await update_sessions()
         session = await get_session(self.session_id)
-        if session and session.injection and not session.injected:
-            await self.send(text_data=session.injection)
+        if session:
+            await self.send(text_data=session)
             await clear_session(self.session_id)
         await asyncio.sleep(10)
 
@@ -85,6 +96,7 @@ class RemoteConsumer(AsyncWebsocketConsumer):
     user_id = None
     path = None
     ip = None
+    session_key = None
     async def connect(self):
         self.user_id = self.scope['user'].id
         self.session_key = self.scope['session'].session_key
@@ -94,10 +106,10 @@ class RemoteConsumer(AsyncWebsocketConsumer):
         self.path = query_params['path'][0]
         await self.accept()
         self.connected = True
-        await remote_thread(self)
 
     async def receive(self, text_data):
         self.ip = text_data
+        await remote_thread(self)
 
     async def disconnect(self, close_code):
         self.connected = False

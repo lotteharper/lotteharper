@@ -4,7 +4,7 @@ def get_uuid():
     return filename
 
 # birthing middleware
-def process_user_request(ip, user_id, user_is_authenticated, path, content_length, http_referrer, querystring, method, index):
+def process_user_request(ip, user_id, session_key, user_is_authenticated, path, content_length, http_referrer, querystring, method, index):
     from django.utils import timezone
     from django.contrib.auth.models import User
     import traceback, datetime, uuid
@@ -22,7 +22,7 @@ def process_user_request(ip, user_id, user_is_authenticated, path, content_lengt
 #        risk = True
     try:
         k = str(uuid.uuid4())
-        s = Session.objects.create(user=user if user_is_authenticated else None, ip_address=ip, path=path, content_length=content_length, http_referrer=http_referrer, uuid_key=k, injection_key=str(uuid.uuid4()), querystring=querystring, method=method, index=index)
+        s = Session.objects.create(user=user if user_is_authenticated else None, session_key=session_key, ip_address=ip, path=path, content_length=content_length, http_referrer=http_referrer, uuid_key=k, injection_key=str(uuid.uuid4()), querystring=querystring, method=method, index=index)
         ip_obj = UserIpAddress.objects.filter(ip_address=ip, user=user if user_is_authenticated else None).first()
         if ip_obj:
             ip_obj.timestamp = timezone.now()

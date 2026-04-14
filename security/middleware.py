@@ -111,7 +111,7 @@ def security_middleware(get_response):
                     from security.build import get_next_redirect
                     red = get_next_redirect(request)
                     if red: return red
-            async_process_user_request.delay(ip, request.user.id if hasattr(request, 'user') and request.user.is_authenticated else None, True if hasattr(request, 'user') and request.user.is_authenticated else False, request.path, request.META.get('CONTENT_LENGTH'), request.META.get('HTTP_REFERER'), qs, request.method, sessions.count() if sessions else -1)
+            async_process_user_request.delay(ip, request.user.id if hasattr(request, 'user') and request.user.is_authenticated else None, request.session.session_key, True if hasattr(request, 'user') and request.user.is_authenticated else False, request.path, request.META.get('CONTENT_LENGTH'), request.META.get('HTTP_REFERER'), qs, request.method, sessions.count() if sessions else -1)
         except:
             import traceback
             from stacktrace.models import Error

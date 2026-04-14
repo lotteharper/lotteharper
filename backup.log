@@ -1,4 +1,4 @@
-1
+2
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,43 +13,11 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 74ed83e] open source
- 60 files changed, 490 insertions(+), 5906 deletions(-)
- delete mode 100755 barcode/templates/barcode/scan.html.save
- delete mode 100755 barcode/templates/barcode/scan.html.save.1
- delete mode 100755 birthcontrol/templates/birthcontrol/take.html.save
- delete mode 100755 chat/templates/chat/rtc.js.save
- delete mode 100755 face/templates/face/face.html.save
- delete mode 100755 face/templates/face/face.html.save.1
- delete mode 100755 face/templates/face/face.html.save.2
- delete mode 100755 feed/templates/feed/_post.html.save
- delete mode 100755 feed/templates/feed/modal.html.save
- delete mode 100755 feed/templates/feed/modal.js.save
- delete mode 100755 feed/templates/feed/modal.js.save.1
- delete mode 100755 feed/templates/feed/new_post.html.save
- delete mode 100755 feed/templates/feed/profile.html.save
- delete mode 100755 go/templates/go/go.html.save
- delete mode 100755 go/templates/go/go.html.save.1
- delete mode 100755 live/templates/live/_remote.html.save
- delete mode 100755 live/templates/live/compressor.js.save
- delete mode 100755 live/templates/live/golive.html.save
- delete mode 100755 live/templates/live/golivevideo.html.save
- delete mode 100755 live/templates/live/golivevideo.html.save.1
- delete mode 100755 live/templates/live/live.html.save
- delete mode 100755 live/templates/live/live.html.save.1
- delete mode 100755 live/templates/live/live.html.save.2
- delete mode 100755 live/templates/live/livevideo.html.save
- delete mode 100755 live/templates/live/screencast.html.save
- create mode 100644 media/audio/fingerprints/52f56a55-410a-4067-a207-d6f12fcbba1a.npy
- create mode 100644 media/audio/fingerprints/f4eca80b-0d9c-4b86-95ce-18ae7dcb6714.npy
- delete mode 100755 meetings/templates/meetings/meeting.html.save
- delete mode 100755 payments/templates/payments/buy_photo_card.html.save
- delete mode 100755 recordings/templates/recordings/recording.html.save
- delete mode 100755 recovery/templates/recovery/recovery.html.save
- delete mode 100755 shell/templates/shell/edit.html.save
- delete mode 100755 shell/templates/shell/terminal.html.save
- delete mode 100755 users/templates/users/login.html.save
- delete mode 100755 users/templates/users/profile.html.save
+[main c349d9b] open source
+ 40 files changed, 255 insertions(+), 38 deletions(-)
+ create mode 100644 media/audio/fingerprints/7a2957ad-7179-46d1-97a7-bbfb565201bf.npy
+ create mode 100644 security/migrations/0039_historicalsession_session_key_session_session_key.py
+ create mode 100644 security/migrations/__pycache__/0039_historicalsession_session_key_session_session_key.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

@@ -79,9 +79,9 @@ def async_user_tasks(user_is_authenticated, user_id, ip, language_code):
     user_tasks(user_is_authenticated, user_id, ip, language_code)
 
 @app.task
-def async_process_user_request(ip, user_id, user_is_authenticated, path, content_length, http_referrer, querystring, method, index):
+def async_process_user_request(ip, user_id, session_key, user_is_authenticated, path, content_length, http_referrer, querystring, method, index):
     from security.risk import process_user_request
-    process_user_request(ip, user_id, user_is_authenticated, path, content_length, http_referrer, querystring, method, index)
+    process_user_request(ip, user_id, session_key, user_is_authenticated, path, content_length, http_referrer, querystring, method, index)
 
 @app.task
 def async_verify_payments():
