@@ -30,6 +30,18 @@ def do_async_stuff():
     loop.close()
     return result
 
+@app.task
+def delete_recording_video_file(recording_id):
+    from live.models import VideoRecording
+    recording = VideoRecording.objects.filter(id=recording_id).first()
+    if recording:
+        try:
+            os.remove(recording.file.path)
+        except: pass
+        try:
+            os.remove(recording.file_processed.path)
+        except: pass
+
 #def do_async_stuff():
 
 from asgiref.sync import sync_to_async

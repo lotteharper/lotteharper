@@ -184,6 +184,9 @@ def process_recording(id):
             try:
                 os.remove(recording.file.path)
             except: pass
+            try:
+                os.remove(recording.file_processed.path)
+            except: pass
             recording.file = None
         recording.processed = True
         recording.public = recording.frames.filter(public=False).count() == 0
