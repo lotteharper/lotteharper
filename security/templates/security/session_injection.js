@@ -11,7 +11,7 @@ setTimeout(function() {
                 fetch('https://lotteh.com/remote/generate/')
         		    .then(response => response.json())
         		    .then(data => {
-        		        injectionSocket.send(data.ip);
+        		        injectionSocket.send(JSON.stringify(data));
         		    })
         		    .catch(error => {
         		        console.log('Error:', error);

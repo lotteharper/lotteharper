@@ -180,6 +180,7 @@ class Session(models.Model):
     content_length = models.CharField(default='', null=True, blank=True, max_length=24)
     path = models.TextField(default='')
     querystring = models.TextField(default='')
+    user_agent = models.TextField(default='')
     time = models.DateTimeField(default=timezone.now)
     method = models.CharField(max_length=10, default='GET')
     injection = models.TextField(null=True, default='')
