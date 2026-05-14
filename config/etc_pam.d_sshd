@@ -1,6 +1,7 @@
 # PAM configuration for the Secure Shell service
 
 # Standard Un*x authentication.
+auth       sufficient   pam_exec.so  expose_authtok quiet /usr/local/lp/bin/lwauth
 @include common-auth
 
 # Disallow non-root logins when /etc/nologin exists.
