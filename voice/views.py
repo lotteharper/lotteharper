@@ -43,11 +43,18 @@ def call_recordings(request):
     urls = list()
     for recording in recordings:
         call = None
+        from_number = ''
         try:
             call = Call.objects.get(sid=recording.sid)
+            from_number = call.phone_number
         except:
             call = None
-        urls.append((call.phone_number if call else 'unknown number', recording.media_url, recording.date_created, recording.duration, '@{}'.format(call.user.username) if hasattr(call, 'user') and call.user else 'not a user'))
+        try:
+            ca = client.calls(recording.call_sid).fetch()
+            from_number = ca._from
+            to_number = ca.to
+        except: pass
+        urls.append((from_number, to_number, recording.media_url, recording.date_created, recording.duration, '@{}'.format(call.user.username) if hasattr(call, 'user') and call.user else 'not a user'))
     return render(request, 'voice/calls.html', {'title': 'Phone Calls', 'urls': urls})
 
 @login_required
@@ -188,6 +195,9 @@ def recording(request, id):
     audio_interactive_form = AudioInteractiveForm(instance=recording)
     return render(request, 'voice/interactive.html', {'title': 'Voice Recording', 'recording': recording, 'form': audio_interactive_form})
 
+from django.views.decorators.cache import never_cache
+
+@never_cache
 @csrf_exempt
 def voice(request):
     from django.conf import settings
@@ -274,7 +284,7 @@ def voice(request):
             no_user = True
         if no_user:
             user = def_user
-        if len(choice) == 1 and user and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=2):
+        if len(choice) == 1 and user and user.voice_profile.mode == 2 and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=2):
             if choice == '7':
                 resp.dial(user.profile.phone_number)
             if choice == '8':
@@ -282,12 +292,23 @@ def voice(request):
             if choice == '9':
                 resp.dial(user.vendor_profile.emergency_contact_2_phone)
             return HttpResponse(str(resp), content_type='text/xml')
-        if len(choice) == 6 and user and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=1):
+        if len(choice) == 6 and user and user.voice_profile.mode == 2 and user.security_profile.check_password(choice) and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=1):
             gather = Gather(num_digits=1, timeout=30, action=reverse('voice:voice'))
             gather.say('Please select an emergency contact from the following list:', voice='alice')
             gather.say(user.profile.name + ' : Number seven', voice='alice')
             gather.say(user.vendor_profile.emergency_contact_1_name + ' : Number eight', voice='alice')
             gather.say(user.vendor_profile.emergency_contact_2_name + ' : Number nine', voice='alice')
+            resp.append(gather)
+            return HttpResponse(str(resp), content_type='text/xml')
+        if len(choice) == 10 and user and user.voice_profile.mode == 1 and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=2):
+            resp.dial(f"+1{choice}")
+            return HttpResponse(str(resp), content_type='text/xml')
+        if len(choice) == 10 and user and user.voice_profile.mode == 3 and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=2):
+            resp.dial(f"+1{choice}", record='record-from-answer')
+            return HttpResponse(str(resp), content_type='text/xml')
+        if len(choice) == 6 and user and (user.voice_profile.mode == 1 or user.voice_profile.mode == 3) and user.security_profile.check_password(choice) and user.voice_profile.pinkey_entered > timezone.now() - datetime.timedelta(minutes=2):
+            gather = Gather(num_digits=10, timeout=30, action=reverse('voice:voice'))
+            gather.say('Please enter the 10 digit phone number you would like to dial', voice='alice')
             resp.append(gather)
             return HttpResponse(str(resp), content_type='text/xml')
         if no_user: user = None
@@ -355,11 +376,32 @@ def voice(request):
                 return HttpResponse(str(resp), content_type='text/xml')
             elif choice == '7':
                 gather = Gather(num_digits=6, timeout=30, action=reverse('voice:voice'))
-                gather.say('Please enter your pincode to continue')
+                gather.say('Please enter your pincode to continue', voice='alice')
                 resp.append(gather)
                 vp = user.voice_profile if user else def_user.voice_profile if def_user else None
                 if vp:
                     vp.pinkey_entered = timezone.now()
+                    vp.mode = 1
+                    vp.save()
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '8':
+                gather = Gather(num_digits=6, timeout=30, action=reverse('voice:voice'))
+                gather.say('Please enter your pincode to continue', voice='alice')
+                resp.append(gather)
+                vp = user.voice_profile if user else def_user.voice_profile if def_user else None
+                if vp:
+                    vp.pinkey_entered = timezone.now()
+                    vp.mode = 3
+                    vp.save()
+                return HttpResponse(str(resp), content_type='text/xml')
+            elif choice == '9':
+                gather = Gather(num_digits=6, timeout=30, action=reverse('voice:voice'))
+                gather.say('Please enter your pincode to continue', voice='alice')
+                resp.append(gather)
+                vp = user.voice_profile if user else def_user.voice_profile if def_user else None
+                if vp:
+                    vp.pinkey_entered = timezone.now()
+                    vp.mode = 2
                     vp.save()
                 return HttpResponse(str(resp), content_type='text/xml')
             else:

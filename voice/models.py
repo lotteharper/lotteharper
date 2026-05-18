@@ -28,6 +28,7 @@ class VoiceProfile(models.Model):
     interactive = models.TextField(default='', null=True, blank=True)
     call_logs = models.TextField(default='', null=True, blank=True)
     pinkey_entered = models.DateTimeField(default=timezone.now)
+    mode = models.IntegerField(default=0)
 
 class Choice(models.Model):
     option = models.TextField(default='', null=True, blank=True)

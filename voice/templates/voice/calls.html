@@ -3,9 +3,9 @@
 {% block content %}
 <h1>Phone Call Recordings</h1>
 {% for url in urls %}
-<p>From {{ url.0 }} ({{ url.4 }}) at {{ url.2 }} with duration {{ url.3 }} seconds</p>
+<p>From {{ url.0 }} To {{ url.1 }} ({{ url.5 }}) at {{ url.3 }} with duration {{ url.4 }} seconds</p>
 <div>
-    <audio controls src="{{ url.1 }}" style="width: 100%;">
+    <audio controls src="{{ url.2 }}" style="width: 100%;">
         Your browser does not support the
         <code>audio</code> element.
     </audio>
