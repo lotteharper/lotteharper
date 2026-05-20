@@ -6,7 +6,7 @@ from translate.languages import SELECTOR_LANGUAGES
 
 MAX_TRANS = 5000
 TRANSLATION_CACHE_TIMEOUT = 60*60*24*30*12
-SIMULTANEOUS_THREADS = 10
+SIMULTANEOUS_THREADS = 100
 
 def split_text_by_length(text, max_len=MAX_TRANS):
     words = text.split()
