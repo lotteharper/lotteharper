@@ -1,3 +1,4 @@
+import asyncio
 from django.conf import settings
 import traceback
 from langdetect import detect, detect_langs
@@ -26,6 +27,7 @@ def split_text_by_length(text, max_len=MAX_TRANS):
     return parts
 
 def translate(request, content, target=None, src=None):
+    import time
     from django.core.cache import cache
     global MAX_TRANS
 #    from django.core.cache import caches
@@ -81,12 +83,13 @@ def translate(request, content, target=None, src=None):
     pronunciation = ''
     content = content.replace('\n', '<br/>')
     content_fragments = split_text_by_length(content, max_len=MAX_TRANS)
-    def thread(target, src, to_trans, count, result, result_pronun):
-        translator = Translator()
+    async def thread(target, src, to_trans, count, result, result_pronun):
         try:
-            trans = translator.translate(to_trans, src=src, dest=target)
-            result[count] = str(trans.text)
-            result_pronun[count] = str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
+            if to_trans != None and to_trans != '':
+                async with Translator() as translator:
+                    trans = await translator.translate(to_trans, src=src, dest=target)
+                    result[count] = str(trans.text)
+                    result_pronun[count] = str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
         except:
             print(traceback.format_exc())
             pass
@@ -99,8 +102,9 @@ def translate(request, content, target=None, src=None):
     while thread_count < len(content_fragments):
         for i in range(SIMULTANEOUS_THREADS):
             if thread_count < len(content_fragments):
-                threads[thread_count] = threading.Thread(target=thread, args=(lang_code, lang, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun))
+                threads[thread_count] = threading.Thread(target=asyncio.run, args=(thread(lang_code, lang, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun),))
                 threads[thread_count].start()
+                time.sleep(1)
                 thread_count += 1
             else: break
         for i in range(len(threads)):
@@ -130,6 +134,7 @@ def translate(request, content, target=None, src=None):
     return text
 
 def translate_html(request, html, target=None, src=None):
+    import time
     from django.utils.html import strip_tags
     if strip_tags(html) == html: return translate(request, html, target=target, src=src)
     from django.core.cache import cache
@@ -158,10 +163,15 @@ def translate_html(request, html, target=None, src=None):
     trans = CachedTranslation.objects.filter(src_hash=db_key).order_by('timestamp').first()
     if trans:
         return trans.dest_content
-    def thread(target, src, to_trans, count, result):
-        translated = translate(None, to_trans, target=target, src=src)
-        result[count] = translated
-        return
+    async def thread(target, src, to_trans, count, result):
+        try:
+            if to_trans != None and to_trans != '':
+                async with Translator() as translator:
+                    trans = await translator.translate(to_trans, src=src, dest=target)
+                    result[count] = str(trans.text)
+        except:
+            print(traceback.format_exc())
+            pass
     result_soup = []
     from django.utils.html import strip_tags
     from bs4 import BeautifulSoup, NavigableString
@@ -206,8 +216,9 @@ def translate_html(request, html, target=None, src=None):
     while thread_count < len(result_soup):
         for i in range(SIMULTANEOUS_THREADS):
             if thread_count < len(result_soup):
-                threads[thread_count] = threading.Thread(target=thread, args=(target, src, result_soup[thread_count], thread_count, result_arr))
+                threads[thread_count] = threading.Thread(target=asyncio.run, args=(thread(target, src, result_soup[thread_count], thread_count, result_arr),))
                 threads[thread_count].start()
+                time.sleep(1)
                 thread_count += 1
             else: break
         for i in range(len(threads)):

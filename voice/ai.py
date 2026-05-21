@@ -11,10 +11,8 @@ def get_ai_response(text, lang):
     from openai import OpenAI
     from django.conf import settings
     client = OpenAI(api_key=settings.OPENAI_KEY)
-    completion = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "user", "content": lego}
-        ]
+    response = client.responses.create(
+        model="gpt-5.5",
+        input=lego
     )
-    return translate(None, completion.choices[0].message.content, src=settings.DEFAULT_LANG, target=lang if lang else settings.DEFAULT_LANG) if lang != settings.DEFAULT_LANG else completion.choices[0].message.content
+    return translate(None, response.output_text, src=settings.DEFAULT_LANG, target=lang if lang else settings.DEFAULT_LANG) if lang != settings.DEFAULT_LANG else response.output_text
