@@ -86,33 +86,19 @@ def translate(request, content, target=None, src=None):
     pronunciation = ''
     content = content.replace('\n', '<br/>')
     content_fragments = split_text_by_length(content, max_len=MAX_TRANS)
-    async def thread(target, src, to_trans, count, result, result_pronun):
-        try:
-            if to_trans != None and to_trans != '':
-                async with Translator() as translator:
-                    trans = await translator.translate(to_trans, src=src, dest=target)
-                    result[count] = str(trans.text)
-                    result_pronun[count] = str(trans.pronunciation[0]) if hasattr(trans, 'pronunciation') and trans.pronunciation else ''
-        except:
-            print(traceback.format_exc())
-            pass
-    import threading
-    thread_count = 0
-    threads = [None] * len(content_fragments)
-    result = [None] * len(content_fragments)
-    result_arr = [None] * len(content_fragments)
-    result_arr_pronun = [None] * len(content_fragments)
-    while thread_count < len(content_fragments):
-        for i in range(SIMULTANEOUS_THREADS):
-            if thread_count < len(content_fragments):
-                threads[thread_count] = threading.Thread(target=asyncio.run, args=(thread(lang_code, lang, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun),))
-                threads[thread_count].start()
-#                time.sleep(1)
-                thread_count += 1
-            else: break
-        for i in range(len(threads)):
-            if threads[i]: threads[i].join()
-            else: break
+    async def translate_fragments(fragments, src, dest, concurrency=10):
+        sem = asyncio.Semaphore(concurrency)
+        async with Translator() as translator:
+            async def one(i, text):
+                async with sem:
+                    result = await translator.translate(text, src=src, dest=dest)
+                    return i, result.text
+
+            tasks = [one(i, text) for i, text in enumerate(fragments)]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        return results
+    results = asyncio.run(translate_fragments(content_fragments, src, lang_code))
+    result_arr = [item[1] for item in results]
     try: translator.client.close()
     except: pass
     translator = None
@@ -121,11 +107,8 @@ def translate(request, content, target=None, src=None):
     for x in range(len(result_arr)):
         text = result_arr[x]
         if text:
-            pronun = result_arr_pronun[x]
             if len(result_text) > 0 and result_text[-1:] != ' ': result_text = result_text + ' '
-            if len(pronunciation_text) > 0 and pronunciation_text[-1:] != ' ': pronunciation_text = pronunciation_text + ' '
             result_text = result_text + text
-            pronunciation_text = pronunciation_text + pronun
     text = result_text.replace('<br/>', '\n')
     pronunciation = pronunciation_text
     if len(text) > 0:
@@ -214,22 +197,19 @@ def translate_html(request, html, target=None, src=None):
         translation = translate(request, html, target=target, src=src)
         cache.set(cache_key, translation, timeout=TRANSLATION_CACHE_TIMEOUT)
 #    print(result_soup)
-    threads = [None] * len(result_soup)
-    result = [None] * len(result_soup)
-    thread_count = 0
-    import threading
-    result_arr = [None] * len(result_soup)
-    while thread_count < len(result_soup):
-        for i in range(SIMULTANEOUS_THREADS):
-            if thread_count < len(result_soup):
-                threads[thread_count] = threading.Thread(target=asyncio.run, args=(thread(target, src, result_soup[thread_count], thread_count, result_arr),))
-                threads[thread_count].start()
-#                time.sleep(1)
-                thread_count += 1
-            else: break
-        for i in range(len(threads)):
-            if threads[i]: threads[i].join()
-            else: break
+    async def translate_fragments(fragments, src, dest, concurrency=10):
+        sem = asyncio.Semaphore(concurrency)
+        async with Translator() as translator:
+            async def one(i, text):
+                async with sem:
+                    result = await translator.translate(text, src=src, dest=dest)
+                    return i, result.text
+
+            tasks = [one(i, text) for i, text in enumerate(fragments)]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        return results
+    results = asyncio.run(translate_fragments(result_soup, src, target))
+    result_arr = [item[1] for item in results]
     count = 0
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code'] and tag.string:
@@ -266,12 +246,15 @@ def translate_html(request, html, target=None, src=None):
     return result
 
 def translate_multiple(request, split, target=None, src=None):
+    import hashlib
     from django.core.cache import cache
 #    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
 #    cache = caches['translation_cache']
-    cache_key = f"translation:{src}:{target}:{hash(split)}"
-    db_key = f"{src}:{target}:{hash(split)}"
+    hash_object = hashlib.md5(str(split).encode('utf-8'))
+    src_hash = hash_object.hexdigest()
+    cache_key = f"translation:{src}:{target}:{src_hash}"
+    db_key = f"{src}:{target}:{src_hash}"
     if target == src:
         return split
     translation = cache.get(cache_key)
@@ -285,20 +268,22 @@ def translate_multiple(request, split, target=None, src=None):
     from feed.middleware import get_current_request
     from django.conf import settings
     from threading import Thread
-    result = [None] * len(split)
-    threads = [None] * len(split)
     if not request: request = get_current_request()
     if not target:
         target = request.user.profile.preferred_language if hasattr(request, 'user') and hasattr(request.user, 'profile') and not request.GET.get('lang', False) else request.LANGUAGE_CODE if request and not request.GET.get('lang') else request.GET.get('lang') if request and request.GET.get('lang', None) else settings.DEFAULT_LANG
     if not src: src = settings.DEFAULT_LANG
-    def transthread(split, index, result, src, target):
-        result[index] = translate(None, split[index], target=target, src=src)
-    for x in range(len(split)):
-        threads[x] = Thread(target=transthread, args=(split, x, result, src, target))
-        threads[x].start()
-    for i in range(len(threads)):
-        if threads[i]: threads[i].join()
-        else: break
+    async def translate_fragments(fragments, src, dest, concurrency=10):
+        sem = asyncio.Semaphore(concurrency)
+        async with Translator() as translator:
+            async def one(i, text):
+                async with sem:
+                    result = await translator.translate(text, src=src, dest=dest)
+                    return i, result.text
+
+            tasks = [one(i, text) for i, text in enumerate(fragments)]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        return results
+    result = asyncio.run(translate_fragments(split, src, target))
     if len(result) > 0:
         try:
             CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=result, src=src, dest=target)
