@@ -9,6 +9,31 @@ MAX_TRANS = 5000
 TRANSLATION_CACHE_TIMEOUT = 60*60*24*30*12
 SIMULTANEOUS_THREADS = 100
 
+def unbatch_strings(strings, max_len=4000, sep="\n|||TRANS|||\\n"):
+    res = []
+    for string in strings:
+        res += string.split(sep)
+    return res
+
+def batch_strings(strings, max_len=4000, sep="\n|||TRANS|||\\n"):
+    batches = []
+    current = []
+    current_len = 0
+
+    for s in strings:
+        extra = len(s) + (len(sep) if current else 0)
+        if current and current_len + extra > max_len:
+            batches.append(current)
+            current = [s]
+            current_len = len(s)
+        else:
+            current.append(s)
+            current_len += extra
+
+    if current:
+        batches.append(current)
+    return batches
+
 def split_text_by_length(text, max_len=MAX_TRANS):
     words = text.split()
     parts = []
@@ -208,8 +233,10 @@ def translate_html(request, html, target=None, src=None):
             tasks = [one(i, text) for i, text in enumerate(fragments)]
             results = await asyncio.gather(*tasks, return_exceptions=True)
         return results
-    results = asyncio.run(translate_fragments(result_soup, src, target))
-    result_arr = [item[1] for item in results]
+    results = batch_strings(result_soup)[0]
+    result = asyncio.run(translate_fragments(results, src, target))
+    result_ar = [item[1] for item in result]
+    result_arr = unbatch_strings(result_ar)
     count = 0
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code'] and tag.string:
@@ -283,10 +310,13 @@ def translate_multiple(request, split, target=None, src=None):
             tasks = [one(i, text) for i, text in enumerate(fragments)]
             results = await asyncio.gather(*tasks, return_exceptions=True)
         return results
-    result = asyncio.run(translate_fragments(split, src, target))
-    if len(result) > 0:
+    results = batch_strings(split)
+    result = asyncio.run(translate_fragments(results, src, target))
+    result_ar = [item[1] for item in result]
+    result_arr = unbatch_strings(result_ar)
+    if len(result_arr) > 0:
         try:
-            CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=result, src=src, dest=target)
+            CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=str(result), src=src, dest=target)
         except: pass
     cache.set(cache_key, result, timeout=TRANSLATION_CACHE_TIMEOUT)
     return result
