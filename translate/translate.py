@@ -28,13 +28,16 @@ def split_text_by_length(text, max_len=MAX_TRANS):
 
 def translate(request, content, target=None, src=None):
     import time
+    import hashlib
     from django.core.cache import cache
     global MAX_TRANS
 #    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
 #    cache = caches['translation_cache']
-    cache_key = f"translation:{src}:{target}:{hash(content)}"
-    db_key = f"{src}:{target}:{hash(content)}"
+    hash_object = hashlib.md5(content.encode('utf-8'))
+    src_hash = hash_object.hexdigest()
+    cache_key = f"translation:{src}:{target}:{src_hash}"
+    db_key = f"{src}:{target}:{src_hash}"
     if (not content) or content == '' or content == None or (src != None and target != None and target == src): return content
     translation = cache.get(cache_key)
     if translation is not None:
@@ -42,14 +45,14 @@ def translate(request, content, target=None, src=None):
     lang = src
     if not src:
         lang = settings.DEFAULT_LANG
-        try:
-            lang = detect(content)
-            langs = detect_langs(content)
-            for item in langs:
-                if item.lang.startswith(settings.DEFAULT_LANG):
-                    lang = settings.DEFAULT_LANG
-                    break
-        except: lang = settings.DEFAULT_LANG
+#        try:
+#            lang = detect(content)
+#            langs = detect_langs(content)
+#            for item in langs:
+#                if item.lang.startswith(settings.DEFAULT_LANG):
+#                    lang = settings.DEFAULT_LANG
+#                    break
+#        except: lang = settings.DEFAULT_LANG
     lang_code = None
     if target:
         lang_code = target
@@ -104,7 +107,7 @@ def translate(request, content, target=None, src=None):
             if thread_count < len(content_fragments):
                 threads[thread_count] = threading.Thread(target=asyncio.run, args=(thread(lang_code, lang, content_fragments[thread_count], thread_count, result_arr, result_arr_pronun),))
                 threads[thread_count].start()
-                time.sleep(1)
+#                time.sleep(1)
                 thread_count += 1
             else: break
         for i in range(len(threads)):
@@ -127,7 +130,7 @@ def translate(request, content, target=None, src=None):
     pronunciation = pronunciation_text
     if len(text) > 0:
         try:
-            CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation, src_hash=hash(content))
+            CachedTranslation.objects.get_or_create(src_content=content, dest_content=text, src=lang, dest=lang_code, pronunciation=pronunciation, src_hash=db_key)
         except: pass
     else: return content
     cache.set(cache_key, text, timeout=TRANSLATION_CACHE_TIMEOUT)
@@ -135,14 +138,17 @@ def translate(request, content, target=None, src=None):
 
 def translate_html(request, html, target=None, src=None):
     import time
+    import hashlib
     from django.utils.html import strip_tags
     if strip_tags(html) == html: return translate(request, html, target=target, src=src)
     from django.core.cache import cache
 #    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
 #    cache = caches['translation_cache']
-    cache_key = f"translation:{src}:{target}:{hash(html)}"
-    db_key = f"{src}:{target}:{hash(html)}"
+    hash_object = hashlib.md5(html.encode('utf-8'))
+    src_hash = hash_object.hexdigest()
+    cache_key = f"translation:{src}:{target}:{src_hash}"
+    db_key = f"{src}:{target}:{src_hash}"
     translation = cache.get(cache_key)
     if translation is not None:
         return translation
@@ -218,7 +224,7 @@ def translate_html(request, html, target=None, src=None):
             if thread_count < len(result_soup):
                 threads[thread_count] = threading.Thread(target=asyncio.run, args=(thread(target, src, result_soup[thread_count], thread_count, result_arr),))
                 threads[thread_count].start()
-                time.sleep(1)
+#                time.sleep(1)
                 thread_count += 1
             else: break
         for i in range(len(threads)):

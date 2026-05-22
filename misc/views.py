@@ -5,6 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from users.tests import is_superuser_or_vendor
 
+def test(request):
+    from django.shortcuts import render
+    return render(request, 'misc/test.html')
+
 @never_cache
 def logo(request):
     from django.shortcuts import render

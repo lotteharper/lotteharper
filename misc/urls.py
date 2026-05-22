@@ -5,6 +5,7 @@ from . import views
 app_name='misc'
 
 urlpatterns = [
+    path('test/', views.test, name='test'),
     path('search/', views.search, name='search'),
     path('terms/', views.terms, name='terms'),
     path('auth/', views.authenticated, name='auth'),
