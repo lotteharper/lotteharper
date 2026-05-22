@@ -245,6 +245,8 @@ def logout_visitor(request):
     if request.user.is_authenticated:
         from security.build import async_build_session
         async_build_session(request.user.id, request.session.session_key)
+    from security.models import UserSession
+    UserSession.objects.filter(user=request.user, session_key=request.session.session_key).delete()
     logout(request)
     return render(request, 'users/logout.html', {'small': True, 'title': 'You have been logged out of {}'.format(settings.SITE_NAME)})
 
@@ -353,6 +355,9 @@ def tfa(request, username, usertoken):
             elif not token_validated:
                 messages.warning(request, 'The URL token has expired or was not recognized. Please try again.')
                 from django.contrib.auth import logout
+                if request.user.is_authenticated:
+                    from security.models import UserSession
+                    UserSession.objects.filter(user=request.user, session_key=request.session.session_key).delete()
                 logout(request)
                 return redirect(reverse('users:login'))
             if p.tfa_attempts > 3:
@@ -739,8 +744,6 @@ def login(request):
                 if not profile.enable_facial_recognition_bypass:
                     response = redirect(user.profile.create_face_url() + qs)
                 elif not user.profile.enable_two_factor_authentication:
-                    from users.logout import logout_user
-                    if settings.LIMIT_BYPASS_LOGIN: logout_user(user)
                     resolve_multiple_accounts(request, user)
                     auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                     response = redirect(reverse('app:app'))

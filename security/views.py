@@ -244,7 +244,7 @@ def logins(request):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    the_logins = UserSession.objects.filter(user=request.user, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2)).order_by('-timestamp')
+    the_logins = UserSession.objects.filter(user=request.user, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES)).order_by('-timestamp')
     return render(request, 'security/bypass.html', {
         'title': 'Approve Logins',
         'logins': list(the_logins),
