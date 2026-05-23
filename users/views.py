@@ -245,9 +245,10 @@ def logout_visitor(request):
     if request.user.is_authenticated:
         from security.build import async_build_session
         async_build_session(request.user.id, request.session.session_key)
-    from security.models import UserSession
-    UserSession.objects.filter(user=request.user, session_key=request.session.session_key).delete()
-    logout(request)
+    if request.user.is_authenticated:
+        from security.models import UserSession
+        UserSession.objects.filter(user=request.user, session_key=request.session.session_key).delete()
+        logout(request)
     return render(request, 'users/logout.html', {'small': True, 'title': 'You have been logged out of {}'.format(settings.SITE_NAME)})
 
 def passwordless_login(request):

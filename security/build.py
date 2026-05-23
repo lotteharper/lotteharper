@@ -1,5 +1,3 @@
-
-
 def delete_old_sessions(minutes=20160, user=None, session_key=None):
     from .models import UserSession
     from datetime import timedelta
@@ -8,10 +6,13 @@ def delete_old_sessions(minutes=20160, user=None, session_key=None):
     us = None
     if user == None:
         us = UserSession.objects.filter(timestamp__lte=timezone.now() - timedelta(minutes=minutes))
+        UserSession.objects.filter(timestamp__lte=timezone.now() - timedelta(minutes=minutes), session_key=session_key).delete()
     elif user and session_key == None:
         us = UserSession.objects.filter(user=user, timestamp__lte=timezone.now() - timedelta(minutes=minutes))
+        UserSession.objects.filter(user=user, timestamp__lte=timezone.now() - timedelta(minutes=minutes), session_key=session_key).delete()
     else:
         us = UserSession.objects.filter(user=user, timestamp__lte=timezone.now() - timedelta(minutes=minutes), session_key=session_key)
+        UserSession.objects.filter(user=user, timestamp__lte=timezone.now() - timedelta(minutes=minutes), session_key=session_key).delete()
     for u in us:
         Session.objects.filter(session_key=u.session_key).delete()
 
