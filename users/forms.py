@@ -56,7 +56,9 @@ class UserRegisterForm(forms.Form):
         from translate.translate import translate_multiple
         from feed.middleware import get_current_request
         r = get_current_request()
-        password, password1, password2, password_mismatch, birthday, of_age, in_agreement, username, email, captcha = translate_multiple(r, ['Enter a password to protect your account', password_validation.password_validators_help_text_html(), "Enter the same password as before, for verification.",'The two password fields didn\'t match.', 'Your birthday', 'By checking this box, you confirm that you are older than ' + '{} ({})'.format(number_to_string(settings.MIN_AGE), settings.MIN_AGE) + ' years of age, born on or before {}.'.format(get_past_date().strftime("%B %d, %Y")), mark_safe('By checking this box, you are agreeing to the') + ' <a href="/terms/" title="Read the terms of service and privacy policy">Terms of Service and Privacy Policy</a>.', 'Your username', 'Enter your email', 'Please check the box to verify you are human.'], src='en')
+        result = tuple(translate_multiple(r, ['Enter a password to protect your account', password_validation.password_validators_help_text_html(), "Enter the same password as before, for verification.",'The two password fields didn\'t match.', 'Your birthday', 'By checking this box, you confirm that you are older than ' + '{} ({})'.format(number_to_string(settings.MIN_AGE), settings.MIN_AGE) + ' years of age, born on or before {}.'.format(get_past_date().strftime("%B %d, %Y")), mark_safe('By checking this box, you are agreeing to the') + ' <a href="/terms/" title="Read the terms of service and privacy policy">Terms of Service and Privacy Policy</a>.', 'Enter your username', 'Enter your email', 'Please check the box to verify you are human.'], src='en'))
+        print(result)
+        password, password1, password2, password_mismatch, birthday, of_age, in_agreement, username, email, captcha = result
         self.fields['password2'].error_messages['password_mismatch'] = password_mismatch
         self.fields['birthday'].initial = get_past_date()
         self.fields['password1'].help_text = password1

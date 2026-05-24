@@ -15,24 +15,13 @@ def unbatch_strings(strings, max_len=4000, sep="\n|||TRANS|||\\n"):
         res += string.split(sep)
     return res
 
-def batch_strings(strings, max_len=4000, sep="\n|||TRANS|||\\n"):
-    batches = []
-    current = []
-    current_len = 0
-
-    for s in strings:
-        extra = len(s) + (len(sep) if current else 0)
-        if current and current_len + extra > max_len:
-            batches.append(current)
-            current = [s]
-            current_len = len(s)
-        else:
-            current.append(s)
-            current_len += extra
-
-    if current:
-        batches.append(current)
-    return batches
+def batch_strings(strings, sep="\n|||TRANS|||\\n"):
+    string = ''
+    for i in range(len(strings)):
+        string = string + strings[i]
+        if i < len(strings)-1:
+            string = string + sep
+    return string
 
 def split_text_by_length(text, max_len=MAX_TRANS):
     words = text.split()
@@ -233,7 +222,9 @@ def translate_html(request, html, target=None, src=None):
             tasks = [one(i, text) for i, text in enumerate(fragments)]
             results = await asyncio.gather(*tasks, return_exceptions=True)
         return results
-    results = batch_strings(result_soup)[0]
+    results = [batch_strings(result_soup)]
+    if len(results[0]) > 4000:
+        results = split_text_by_length(results[0])
     result = asyncio.run(translate_fragments(results, src, target))
     result_ar = [item[1] for item in result]
     result_arr = unbatch_strings(result_ar)
@@ -285,12 +276,17 @@ def translate_multiple(request, split, target=None, src=None):
     if target == src:
         return split
     translation = cache.get(cache_key)
+    import json
     if translation is not None:
-        return translation
+        import ast
+        translation_list = ast.literal_eval(translation)
+        return translation_list
     from .models import CachedTranslation
     trans = CachedTranslation.objects.filter(src_hash=db_key).order_by('timestamp').first()
     if trans:
-        return trans.dest_content
+        import ast
+        translation_list = ast.literal_eval(trans.dest_content)
+        return translation_list
     from translate.translate import translate
     from feed.middleware import get_current_request
     from django.conf import settings
@@ -310,13 +306,15 @@ def translate_multiple(request, split, target=None, src=None):
             tasks = [one(i, text) for i, text in enumerate(fragments)]
             results = await asyncio.gather(*tasks, return_exceptions=True)
         return results
-    results = batch_strings(split)
+    results = [batch_strings(split)]
+    if len(results[0]) > 4000:
+        results = split_text_by_length(results[0])
     result = asyncio.run(translate_fragments(results, src, target))
     result_ar = [item[1] for item in result]
     result_arr = unbatch_strings(result_ar)
     if len(result_arr) > 0:
         try:
-            CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=str(result), src=src, dest=target)
+            CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=str(result_arr), src=src, dest=target)
         except: pass
-    cache.set(cache_key, result, timeout=TRANSLATION_CACHE_TIMEOUT)
-    return result
+    cache.set(cache_key, str(result_arr), timeout=TRANSLATION_CACHE_TIMEOUT)
+    return result_arr

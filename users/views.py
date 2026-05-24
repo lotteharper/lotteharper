@@ -670,7 +670,7 @@ def register(request):
         if user:
             form = UserRegisterForm(initial={'email': email})
         else:
-            form = UserRegisterForm(initial={'email': email})
+            form = UserRegisterForm()
     import pytz
     available = settings.NEW_USERS_PER_DAY - User.objects.filter(date_joined__gte=datetime.datetime.combine(datetime.date.today() - datetime.timedelta(days=1), datetime.time(9,0)).astimezone(pytz.timezone(settings.TIME_ZONE))).count()
     from django.shortcuts import render
