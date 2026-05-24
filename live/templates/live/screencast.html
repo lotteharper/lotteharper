@@ -120,9 +120,9 @@ video {
 {% endif %}
 <hr>
 <div class="display: inline-block;">
-    <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam</button>
-    <button class="btn btn-outline-info" id="startScreenShare" title="Start Screen Share">Start Screen Share</button>
-    <button class="btn btn-outline-primary" id="mergeStreams" title="Merge Streams">Merge Streams</button>
+    <button class="btn btn-outline-success" id="startWebcam" title="Start Webcam">Start Webcam and Screenshare</button>
+<!--    <button class="btn btn-outline-info" id="startScreenShare" title="Start Screen Share">Start Screen Share</button>
+    <button class="btn btn-outline-primary" id="mergeStreams" title="Merge Streams">Merge Streams</button>-->
     <button class="btn btn-outline-danger" id="startRecording" title="Record Resulting Stream">Record Resulting Stream</button>
     <button class="btn btn-outline-warning" id="stopRecording" title="Stop Recording">Stop Recording</button>
     <button class="btn btn-outline-light" id="stopAllStreams" title="Stop All Streams"{% if not darkmode %} style="color: black !important;"{% endif %}>Stop All Streams</button>
@@ -356,6 +356,24 @@ const cancelVideoFrame = function(id) {
   clearTimeout(id);
 };
 
+async function startScreenShareFn() {
+  if(!localScreenStream) {
+  localScreenStream = await navigator.mediaDevices.getDisplayMedia({
+    video: { height: { ideal: {{ camera.width|parsevideoheight }} }, width: { ideal: {{ camera.width|parsevideowidth }} }, frameRate: { ideal: {{ fps }} } },
+    audio: { echoCancellation: {% if camera.echo_cancellation %}true{% else %}false{% endif %},},
+  }).catch((error) => {
+    console.log(error);
+    $('#errormessage').removeClass('hide');
+  });
+  if (localScreenStream) {
+    screen = await attachToDOM("justScreenShare", localScreenStream);
+  }
+    setTimeout(async function() {
+      await mergeStreamsFn();
+    }, 6000);
+  }
+}
+
 async function startWebcamFn() {
   if(!localCamStream) {
     CAMERA_ID = generateRandomString(8);
@@ -369,21 +387,7 @@ async function startWebcamFn() {
     if (localCamStream && !document.getElementById("justWebcam")) {
         cam = await attachToDOM("justWebcam", localCamStream);
     }
-  }
-}
-
-async function startScreenShareFn() {
-  if(!localScreenStream) {
-  localScreenStream = await navigator.mediaDevices.getDisplayMedia({
-    video: { height: { ideal: {{ camera.width|parsevideoheight }} }, width: { ideal: {{ camera.width|parsevideowidth }} }, frameRate: { ideal: {{ fps }} } },
-    audio: { echoCancellation: {% if camera.echo_cancellation %}true{% else %}false{% endif %},},
-  }).catch((error) => {
-    console.log(error);
-    $('#errormessage').removeClass('hide');
-  });
-  if (localScreenStream) {
-    screen = await attachToDOM("justScreenShare", localScreenStream);
-  }
+    await startScreenShareFn();
   }
 }
 
