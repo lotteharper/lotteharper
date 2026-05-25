@@ -8,20 +8,13 @@ from translate.languages import SELECTOR_LANGUAGES
 MAX_TRANS = 5000
 TRANSLATION_CACHE_TIMEOUT = 60*60*24*30*12
 SIMULTANEOUS_THREADS = 100
+SEPARATOR = "\n|||TRANS|||\n"
 
-def unbatch_strings(strings, max_len=4000, sep="\n|||TRANS|||\\n"):
-    res = []
-    for string in strings:
-        res += string.split(sep)
-    return res
+def batch_strings(strings: list[str]) -> str:
+    return SEPARATOR.join(strings)
 
-def batch_strings(strings, sep="\n|||TRANS|||\\n"):
-    string = ''
-    for i in range(len(strings)):
-        string = string + strings[i]
-        if i < len(strings)-1:
-            string = string + sep
-    return string
+def unbatch_strings(batched: str) -> list[str]:
+    return [""] if batched == "" else batched.split(SEPARATOR)
 
 def split_text_by_length(text, max_len=MAX_TRANS):
     words = text.split()
