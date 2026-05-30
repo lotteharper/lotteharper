@@ -64,7 +64,7 @@
 }
 {% endif %}
 {% if request.user.vendor_profile.video_intro_font %}
-@font-face { font-family: 'Vendor Specified'; src: url('http://lotteh.com/media/font/1b4fbd97-b397-41e8-bb69-17dbb972a369.ttf'); }
+@font-face { font-family: 'Vendor Specified ({{ request.user.profile.name }})'; src: url('{{ request.user.vendor_profile.video_intro_font.url }}'); }
 {% endif %}
 {% endblock %}
 {% block head %}
