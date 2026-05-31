@@ -286,6 +286,9 @@ def translate_html(request, html, target=None, src=None):
             _, translated_text = item
             translated_parts.extend(unbatch_strings(translated_text))
 
+    for i in range(0, len(translated_parts)-1):
+        translated_parts[i] = translated_parts[i].replace('|||TRANS|||', '').replace('\n|||TRANS|||\n', '').replace('|||TRANS|||\n', '').replace('\n|||TRANS|||', '')
+
     # Keep exact alignment with extracted items
     if len(translated_parts) < len(extracted):
         translated_parts.extend([""] * (len(extracted) - len(translated_parts)))
@@ -648,6 +651,8 @@ def translate_multiple(request, split, target=None, src=None):
         result_arr.extend(unbatch_strings(translated_batch))
 
     result_arr = result_arr[:len(split)]
+    for i in range(0, len(result_arr)-1):
+        result_arr[i] = result_arr[i].replace('|||TRANS|||', '').replace('\n|||TRANS|||\n', '').replace('|||TRANS|||\n', '').replace('\n|||TRANS|||', '')
 
     if result_arr:
         try:
