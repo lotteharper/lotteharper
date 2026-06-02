@@ -370,6 +370,11 @@ python manage.py loaddata db.json
 ./scripts/loadtables
 # Fix venv again
 cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
+# Download EDSR and LapSRN Models
+cd $DIR/enhance
+wget 'https://github.com/Saafke/EDSR_Tensorflow/raw/refs/heads/master/models/EDSR_x2.pb'
+wget 'https://github.com/Saafke/EDSR_Tensorflow/raw/refs/heads/master/models/EDSR_x4.pb'
+wget 'https://github.com/fannymonori/TF-LapSRN/raw/refs/heads/master/export/LapSRN_x8.pb'
 # Fix ssl
 ./scripts/sslsetup
 sudo systemctl start apache2 daphne celery celerybeat

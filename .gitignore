@@ -29,6 +29,9 @@ pytorch-animeGAN
 Bento4-SDK
 nsfwjs
 lotteharper.zip
+enhance/EDSR_x2.pb
+enhance/EDSR_x4.pb
+enhance/LapSRN_x8.pb
 db.json.*
 client_secret.json
 client_secret_pub.json
@@ -55,3 +58,4 @@ keys/
 secure/
 email/
 celerybeat-schedule/
+*/migrations/0*_*.py

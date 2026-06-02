@@ -13,8 +13,8 @@ def send_retargeting_email():
     from live.models import VideoRecording
     import datetime
     posts = Post.objects.filter(author__id=settings.MY_ID, enhanced=True, private=False, public=True, published=True, recipient=None).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
-    post = Post.objects.filter(id__in=posts).exclude(image_offsite=None).order_by('?').first()
-    photo_url = post.image_offsite
+    post = Post.objects.filter(id__in=posts).order_by('?').first()
+    photo_url = None if not post else post.image_offsite if post.image_offsite else post.image_bucket.url if post.image_bucket else None
     days = 3
     for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__subscribed=True):
         videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60), youtube_processed=True).exclude(youtube_id=None).order_by('?')[:7]
@@ -43,8 +43,8 @@ def send_retargeting_emails():
     import datetime
 
     posts = Post.objects.filter(author__id=settings.MY_ID, enhanced=True, private=False, public=True, published=True, recipient=None).exclude(image=None).order_by('-date_posted').values_list('id', flat=True)[:settings.FREE_POSTS]
-    post = Post.objects.filter(id__in=posts).exclude(image_offsite=None).order_by('?').first()
-    photo_url = post.image_offsite
+    post = Post.objects.filter(id__in=posts).order_by('?').first()
+    photo_url = None if not post else post.image_offsite if post.image_offsite else post.image_bucket.url if post.image_bucket else None
     days = 3
     for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
         videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60), youtube_processed=True).exclude(youtube_id=None).order_by('?')[:7]
