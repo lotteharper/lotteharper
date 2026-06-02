@@ -974,7 +974,7 @@ def update_post(request, pk):
                     return {'time': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date, 'auction_message': decrypt_cbc(post.auction_message, settings.AES_KEY)} #.strftime('%m-%d-%Y')
                 except:
                     return {'time': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:00'), 'date': post.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).date} #.strftime('%m-%d-%Y')
-            if ('***' in post.content or '```' in post.content) and not request.GET.get('raw', None): return HttpResponseRedirect(request.path + '?raw=t')
+            if ('***' in post.content or '`' + '`' + '`'  in post.content) and not request.GET.get('raw', None): return HttpResponseRedirect(request.path + '?raw=t')
             context = {'title': 'Edit post', 'form': ScheduledPostForm(initial=get_init(post), instance=post)}
             censor = not minor_identity_verified(request.user)
             context['nudity_censor'] = censor

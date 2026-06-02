@@ -54,7 +54,7 @@ def generate_code_book(value, lang='en', src='en'):
     from django.utils.html import strip_tags
     op = []
     title = value.split('\n')[0]
-    v = re.split('(```)', value.replace('‘','\'').replace('’','\'')) #.split('```')
+    v = re.split('(' + '`' + '`' + '`' + ')', value.replace('‘','\'').replace('’','\'')) #.split('```')
     language = ''
     nextislang = False
     nextiscode = False
@@ -62,7 +62,7 @@ def generate_code_book(value, lang='en', src='en'):
     codeortext = False
     for t in v:
         if t == '': continue
-        if t == '```':
+        if t == '`' + '`' + '`':
             codeortext = not codeortext
             continue
         language = ''

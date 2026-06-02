@@ -765,7 +765,7 @@ class Post(models.Model):
         if (not this or this.private != self.private or this.public != self.public or this.image != self.image) and self.image:
             from lotteh.celery import upload_post
             upload_post.delay(self.id)
-        if (this and ((this.content != self.content) or (not this))) and len(self.content) > settings.POST_READER_LENGTH and '```' in self.content and self.posted:
+        if (this and ((this.content != self.content) or (not this))) and len(self.content) > settings.POST_READER_LENGTH and '`' + '`' + '`' in self.content and self.posted:
             from lotteh.celery import write_post_book
             write_post_book.delay(self.id)
             print('Scheduling write book')

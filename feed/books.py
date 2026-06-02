@@ -13,7 +13,7 @@ def generate_code_book(value, lang='en', src='en'):
     from django.utils.html import strip_tags
     op = []
     title = value.split('\n')[0]
-    v = re.split('(```)', value.replace('‘','\'').replace('’','\'')) #.split('```')
+    v = re.split('(' + '`' + '`' + '`' + ')', value.replace('‘','\'').replace('’','\''))
     language = ''
     nextislang = False
     nextiscode = False
@@ -21,7 +21,7 @@ def generate_code_book(value, lang='en', src='en'):
     codeortext = False
     for t in v:
         if t == '': continue
-        if t == '```':
+        if t == '`' + '`' + '`':
             codeortext = not codeortext
             continue
         language = ''
@@ -204,24 +204,14 @@ def generate_book(text, out_path_docx):
 
     images = []
     import re
-    v = re.split('(```)', text) #.split('```')
+    v = re.split('(' + '`' + '`' + '`' + ')', text)
     language = ''
     codeortext = False
     for t in v:
         if t == '': continue
-        if t == '```':
+        if t == '`' + '`' + '`':
             codeortext = not codeortext
             continue
-#        if t == '```' and not (nextislang or nextiscode):
-#            nextislang = True
-#            nextiscode = False
-#            language = ''
-#            text = ''
-#            code = ''
-#            continue
-#        elif t == '```' and nextislang:
-#            nextislang = False
-#            continue
         language = ''
         text = ''
         code = ''

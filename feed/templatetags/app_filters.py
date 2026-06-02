@@ -130,7 +130,7 @@ def scoretotals(user):
 
 @register.filter('isabook')
 def isabook(postcont):
-    return True if '```' in postcont else False
+    return True if '`' + '`' + '`'  in postcont else False
 
 @register.filter('getelementbyindex')
 def getelementbyinex(thearr, index):
@@ -1045,7 +1045,7 @@ def highlightcode(value):
     if not value: return value
     if not settings.USE_PRISM: return value
     op = []
-    v = re.split('(```)', value.replace('‘','\'').replace('’','\'')) #.split('```')
+    v = re.split('(' + '`' + '`' + '`'  + ')', value.replace('‘','\'').replace('’','\'')) #.split('```')
     language = ''
     nextislang = False
     nextiscode = False
@@ -1053,19 +1053,9 @@ def highlightcode(value):
     codeortext = False
     for t in v:
         if t == '': continue
-        if t == '```':
+        if t == '`' + '`' + '`' :
             codeortext = not codeortext
             continue
-#        if t == '```' and not (nextislang or nextiscode):
-#            nextislang = True
-#            nextiscode = False
-#            language = ''
-#            text = ''
-#            code = ''
-#            continue
-#        elif t == '```' and nextislang:
-#            nextislang = False
-#            continue
         language = ''
         text = ''
         code = ''

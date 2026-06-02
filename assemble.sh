@@ -19,7 +19,7 @@ read_files_recursive() {
             elif [ "$ext" == "" ]; then
                 language="bash"
             fi
-            if [[ "$ext" != "pyc" && "$ext" != "pb" && "$ext" != "h5" && "$ext" != "xml" && "$ext" != "zip" && "$ext" != "onnx" && "$ext" != "ipqs" ]]; then
+            if [[ "$ext" != "pyc" && "$ext" != "pb" && "$ext" != "h5" && "$ext" != "xml" && "$ext" != "pt" && "$ext" != "zip" && "$ext" != "onnx" && "$ext" != "ipqs" ]]; then
                 # If it's a file, print the name and content
                 echo "--- File: $item ---"
                 echo $"\`\`\`$language"
