@@ -239,6 +239,7 @@ echo "secure/" >> .gitignore
 echo "email/" >> .gitignore
 echo "celerybeat-schedule/" >> .gitignore
 echo "*/migrations/0*_*.py" >> .gitignore
+echo "*/migrations/__pycache__" >> .gitignore
 mv scripts/initialize_site scripts/initialize
 jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/config.json > config/config-example.json
 jq 'walk(if type == "string" or type == "number" or type == "boolean" then null else . end)' config/apis.json > config/apis-example.json
