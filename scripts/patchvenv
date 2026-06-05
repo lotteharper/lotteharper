@@ -9,3 +9,4 @@ cp scripts/serializers_json_lowmem.py venv/lib/python$PYTHON_VERSION/site-packag
 cp scripts/googletrans_client.py venv/lib/python$PYTHON_VERSION/site-packages/googletrans/client.py
 cp scripts/ijson.py venv/lib/python$PYTHON_VERSION/site-packages/django/core/serializers/json.py
 cp scripts/nude.py venv/lib/python$PYTHON_VERSION/site-packages/nude.py
+cp scripts/known_root_certs.py venv/lib/python$PYTHON_VERSION/site-packages/webauthn/helpers/known_root_certs.py
