@@ -41,6 +41,7 @@ def translate(request, content, target=None, src=None):
 #    from django.core.cache import caches
     global TRANSLATION_CACHE_TIMEOUT
 #    cache = caches['translation_cache']
+    if not content: return content
     hash_object = hashlib.md5(content.encode('utf-8'))
     src_hash = hash_object.hexdigest()
     cache_key = f"translation:{src}:{target}:{src_hash}"

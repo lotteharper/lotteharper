@@ -88,7 +88,8 @@ def google_pub_auth_callback(request):
     authorization_code = None
     import json
     url_working = settings.BASE_URL + request.get_full_path().replace(' ', '%20')
-    if request.method == 'POST':
+    print(url_working)
+    if request.method == 'GET':
         email, name, picture, token, refresh = parse_pub_callback_url(request, url_working)
         from django.contrib.auth.models import User
         user = User.objects.filter(email=email).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user

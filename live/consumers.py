@@ -7,6 +7,8 @@ from asgiref.sync import sync_to_async
 
 import subprocess
 
+
+
 def push_stream(input_file, rtmp_url):
     return
 
@@ -52,6 +54,48 @@ def push_stream(input_file, rtmp_url):
 #        rtmp_url                     # RTMP destination
 #    ]
 #    return subprocess.Popen(cmd)
+
+import subprocess
+import os
+
+def stream_mp4_to_youtube(video_path, stream_url, stream_key):
+    # Combine the base URL and the private stream key
+    rtmp_destination = f"{stream_url}/{stream_key}"
+    # Check if the local MP4 file exists before starting
+    if not os.path.exists(video_path):
+        print(f"Error: The file '{video_path}' was not found.")
+        return
+    # Build the FFmpeg command line arguments
+    ffmpeg_command = [
+        'ffmpeg',
+        '-re',                        # Read input at native frame rate (essential for live streaming)
+        '-i', video_path,             # Path to your local MP4 file
+        '-c:v', 'libx264',            # Encode video to H.264 (YouTube standard)
+        '-preset', 'veryfast',        # Balanced CPU usage preset for compression
+        '-maxrate', '3000k',          # Cap the maximum video bitrate
+        '-bufsize', '6000k',          # Buffer size constraint
+        '-pix_fmt', 'yuv420p',        # Ensure pixel format compatibility
+        '-g', '60',                   # Enforce a keyframe interval (GOP) every 2 seconds for 30fps
+        '-c:a', 'aac',                # Encode audio to AAC format
+        '-b:a', '128k',               # Set audio bitrate
+        '-ar', '44100',               # Set audio sampling rate to 44.1 kHz
+        '-f', 'flv',                  # Flash Video format container required for RTMP streaming
+        rtmp_destination              # Target YouTube stream URL endpoint
+    ]
+    try:
+        # Run the FFmpeg process through Python subprocess
+        process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        # Read and print the FFmpeg output logs in real-time
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+        rc = process.poll()
+        return rc
+    except: pass
+
 
 @sync_to_async
 def get_camera_data(camera_user, camera_name, index, request_user):
@@ -150,6 +194,11 @@ def update_camera(self, user_id, camera_user, camera_name, camera_data, key=None
         recording.save()
     process_recording.apply_async([recording.id], countdown=(settings.LIVE_INTERVAL/1000) * 12)
     process_live.apply_async([camera.id, frame.id], countdown=settings.LIVE_INTERVAL)
+    if camera.broadcast_youtube:
+        if (not self.stream_url) or (not self.stream_key):
+            from recordings.youtube import create_youtube_stream
+            self.stream_url, self.stream_key = create_youtube_stream(camera.title, camera.description, camera.privacy_status, camera.user, email=camera.upload_email)
+        stream_mp4_to_youtube(path, self.stream_url, self.stream_key)
     return frame.confirmation_id
 
 @sync_to_async
@@ -295,6 +344,7 @@ class CameraConsumer(AsyncWebsocketConsumer):
     user_id = None
     nologo = False
     stream_key = None
+    stream_url = None
     async def connect(self):
         self.camera_user = self.scope['url_route']['kwargs']['username']
         self.camera_name = self.scope['url_route']['kwargs']['name']

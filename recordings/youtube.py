@@ -127,6 +127,11 @@ def is_video_processed(user, video_id, email=None):
         return False
     return True
 
+def create_youtube_stream(title, description, privacy_status, user, email=None):
+    from django.conf import settings
+    youtube = get_authenticated_service(user.id, email if email and os.path.exists(os.path.join(settings.BASE_DIR, f"keys/{user.id}/", email)) else user.email)
+    return create_stream(youtube, title, description, privacy_status)
+
 def remove_empty_videos_from_playlist(user, playlist_id, email=None):
     from django.conf import settings
     youtube = get_authenticated_service(user.id, email if email and os.path.exists(os.path.join(settings.BASE_DIR, f"keys/{user.id}/", email)) else user.email)
@@ -239,13 +244,8 @@ def list_youtube_playlists(user, email=None):
         print(f"An error occurred: {e}")
         return None
 
-def create_stream(youtube, title, description, privacy_status, frameRate):
-    """Creates a new liveStream resource."""
-    print("Creating a new live stream...")
-    if frameRate >= 60: frameRate = 60
-    if frameRate >= 30: frameRate = 30
-    else: frameRate = 30
-    insert_response = youtube.liveStreams().insert(
+def create_stream(youtube, title, description, privacy_status):
+    response = youtube.liveStreams().insert(
         part="snippet,cdn",
         body=dict(
             snippet=dict(
@@ -253,20 +253,18 @@ def create_stream(youtube, title, description, privacy_status, frameRate):
                 description=description
             ),
             cdn=dict(
-                resolution="1080p",  # 1080p stream resolution
-                frameRate=f"{frameRate}fps",
-                ingestionType="rtmp"
+                frameRate=f"variable",
+                ingestionType="rtmp",
+                resolution="variable",
             )
         )
     ).execute()
-    stream_id = insert_response["id"]
-    ingestion_address = insert_response["cdn"]["ingestionInfo"]["ingestionAddress"]
-    stream_name = insert_response["cdn"]["ingestionInfo"]["streamName"]
+    stream_id = response["id"]
+    ingestion_info = response["cdn"]["ingestionInfo"]
+    stream_url = ingestion_info["ingestionAddress"]
+    stream_key = ingestion_info["streamName"]
 
-    print(f"Created live stream with ID: {stream_id}")
-    print(f"RTMP Ingestion URL: {ingestion_address}/{stream_name}")
-
-    return stream_id, f"{ingestion_address}/{stream_name}"
+    return stream_url, stream_key
 
 def create_broadcast(youtube, title, description, privacy_status):
     """Creates a new liveBroadcast resource."""

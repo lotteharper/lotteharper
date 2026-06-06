@@ -1,3 +1,35 @@
+def create_live_stream(youtube, title="My Python Live Stream"):
+    """Creates a new live stream resource and extracts the URL and Key."""
+    
+    # Define stream details and Content Distribution Network (CDN) settings
+    body = {
+        "snippet": {
+            "title": title,
+            "description": "Stream created automatically via Python."
+        },
+        "cdn": {
+            "frameRate": "variable",
+            "ingestionType": "rtmp",  # Use rtmp or rtmps
+            "resolution": "variable"  # Allows the encoder to dictate resolution
+        }
+    }
+
+    # Execute the insert request to create the stream resource
+    # 'snippet,cdn' parts ensure the key details are returned in the response
+    request = youtube.liveStreams().insert(
+        part="snippet,cdn",
+        body=body
+    )
+    response = request.execute()
+
+    # Extract ingestion information from the response payload
+    ingestion_info = response["cdn"]["ingestionInfo"]
+    
+    stream_url = ingestion_info["ingestionAddress"]
+    stream_key = ingestion_info["streamName"]
+
+    return stream_url, stream_key
+
 def download_image_from_url(image_url, save_path):
     import requests
     """
