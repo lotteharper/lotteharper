@@ -1,4 +1,4 @@
-1
+2
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,17 +13,13 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 5fb4e48] open source
- 27 files changed, 23 insertions(+), 17 deletions(-)
- create mode 100644 media/audio/fingerprints/11aafff7-3f97-4ba3-bcb8-e0d0078c2814.npy
- create mode 100644 media/audio/fingerprints/15a64b65-5d47-4f11-bd4b-961db48615e6.npy
- create mode 100644 media/audio/fingerprints/444ac3a3-8277-40ee-ad95-3303051a7a54.npy
- create mode 100644 media/audio/fingerprints/8fd0e89e-387b-4c85-b5d4-d691da0bc889.npy
- create mode 100644 media/audio/fingerprints/9110345e-aea2-49cf-ad86-5d8d7586cf11.npy
- create mode 100644 media/audio/fingerprints/a526dafe-ffcd-453a-ad5b-11cd767331e4.npy
- create mode 100644 media/audio/fingerprints/b80909b8-0c9d-4271-a685-22f44e4afa87.npy
- create mode 100644 media/audio/fingerprints/f6f1fc3d-bae1-4ba6-a3e0-7db3fd5dac00.npy
- create mode 100644 media/audio/fingerprints/f792a78a-7024-4e82-b964-20a8b09dba2b.npy
+[main fe9c37c] open source
+ 30 files changed, 29 insertions(+), 24 deletions(-)
+ mode change 100755 => 100644 live/__pycache__/upload.cpython-312.pyc
+ create mode 100644 media/audio/fingerprints/050ae9b5-d305-415d-9d8c-2c58238f0c30.npy
+ create mode 100644 media/audio/fingerprints/8b81c4dc-33fe-47a0-a011-6e913564fdf0.npy
+ create mode 100644 media/audio/fingerprints/a6e82b80-3c47-4749-9bac-b83d8ea49527.npy
+ create mode 100644 media/audio/fingerprints/d62bc699-b006-4e75-8d6e-809da56733b1.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
