@@ -55,6 +55,7 @@ def scan_barcode(request):
     from feed.templatetags.nts import number_to_string
     from .barcode import barcode_valid
     from .idscan import scan_id as scan_id_back
+    from barcode.tests import pediatric_document_scanned
     from PIL import Image
     flow = None
     if request.GET.get('flow', False): flow = VeriFlow.objects.filter(uid=request.GET.get('flow', None), expires__gte=timezone.now()-datetime.timedelta(minutes=15))
@@ -78,8 +79,8 @@ def scan_barcode(request):
         return redirect(request.user.profile.create_face_url() + '?next=/barcode/')
     if request.user.is_authenticated and (not back and (request.user.profile.id_front_scanned and not request.user.profile.id_back_scanned and not foreign and not request.user.profile.idscan_active and not request.GET.get('download'))):
         return redirect(request.path + get_qs(request.GET) + '&back=true')
-    if request.user.is_authenticated and ((request.user.profile.id_front_scanned and request.user.profile.id_back_scanned and not foreign and not request.user.profile.idscan_active and not request.GET.get('download'))):
-        return redirect(request.GET.get('next') or '/')
+#    if request.user.is_authenticated and ((pediatric_document_scanned(request.user) and request.user.profile.id_back_scanned and not foreign and not request.user.profile.idscan_active and not request.GET.get('download'))):
+#        return redirect(request.GET.get('next') or '/')
     if request.method == 'POST' and not fraud_detect(request, True) and ((not request.user.is_authenticated) or (request.user.profile.idscan_used < request.user.profile.idscan_plan if request.user.profile.idscan_active else True)):
         if request.user.is_authenticated:
             request.user.profile.idscan_used = request.user.profile.idscan_used + 1
@@ -118,7 +119,9 @@ def scan_barcode(request):
                     if not res:
                         scan.rotate()
                         res = barcode_valid(scan)
-                    birthday, expiry = res
+                    try:
+                        birthday, expiry = res
+                    except: birthday = res
                     if not birthday:
                         is_valid = False
                         messages.warning(request, 'Your ID was not accepted due to missing or invalid documentation.')

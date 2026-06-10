@@ -39,9 +39,13 @@ class DocumentScan(models.Model):
 #            os.remove(self.document.path)
 #        super(DocumentScan, self).delete()
 
-    def get_base64_image(self):
-        with open(str(self.document_isolated.path), mode='rb') as image_file:
-            return 'data:image/png;base64,' + base64.b64encode(image_file.read()).decode("utf-8")
+    def get_base64_image(self, key):
+        import urllib.parse
+        import base64
+        from security.crypto import encrypt_cbc
+        with open(self.document_isolated.path, 'rb') as file:
+            image1 = base64.b64encode(file.read()).decode('utf-8')
+        return urllib.parse.quote_plus(encrypt_cbc(image1, key))
 
     def __str__(self):
         import pytz
@@ -60,7 +64,7 @@ class DocumentScan(models.Model):
         import os, shutil
         from .isolate import write_isolated
         this = DocumentScan.objects.filter(id=self.id).first()
-        if this and this.verified: return
+#        if this and this.verified: return
         max = settings.BARCODE_SIZE # 500
         super(DocumentScan, self).save(*args, **kwargs)
         if ((not this) and self.document) or (this and (this.document != self.document)):

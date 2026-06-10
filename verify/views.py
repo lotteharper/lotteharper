@@ -275,8 +275,8 @@ def verify(request):
     if request.user.faces.filter(authorized=True, authentic=True).count() == 0:
         messages.warning(request, 'Please take a photo of your face to continue.')
         return redirect(request.user.profile.create_face_url())
-    if request.user.profile.identity_verified or request.user.profile.identity_verifying:
-        return redirect(reverse('app:app'))
+#    if request.user.profile.identity_verified or request.user.profile.identity_verifying:
+#        return redirect(reverse('app:app'))
     if request.method == "POST":
         verification = None
         form = VerificationForm(request.POST, request.FILES)

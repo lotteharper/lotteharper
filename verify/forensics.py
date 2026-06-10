@@ -78,7 +78,10 @@ def text_has_valid_birthday_and_expiry(image_text, seperator='/'):
             expiry = date_on_id
     if bday_valid and expiry_valid:
         return (bday, expiry)
-    return False
+    elif bday_valid:
+        return bday
+    else:
+        return False
 
 def text_matches_name(image_text, name):
     split = name.lower().split(" ")
