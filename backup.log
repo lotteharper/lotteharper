@@ -1,4 +1,4 @@
-3
+4
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,29 +13,9 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main ad6ad20] open source
- 44 files changed, 677 insertions(+), 364 deletions(-)
- mode change 100755 => 100644 barcode/__pycache__/isolate.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/models.cpython-312.pyc
- mode change 100755 => 100644 barcode/__pycache__/views.cpython-312.pyc
- create mode 100644 media/documents/00c12af1-741b-40d0-8473-62e8a8888700-20260609-225319-2.png.png
- create mode 100644 media/documents/12cdeb71-585b-4f56-8f26-f819b63c0b17-20260609-225112-2.png
- create mode 100644 media/documents/23cdec4b-7647-4481-9678-fa5f533533f3-20260609-224923-2.png
- create mode 100644 media/documents/2832c930-d1e4-4383-bab8-8f272b28e2a7-20260609-223441-2.png.png
- create mode 100644 media/documents/348cb665-13aa-4b51-8229-2c5b5cd5b269-20260609-224923-2.png.png
- create mode 100644 media/documents/3e3cb02e-311b-436c-b3d4-71150c57f67a-20260609-225319-2.png
- create mode 100644 media/documents/3eb2de5b-9573-40b5-8cd6-382633db89e5-20260609-224923-2.png
- create mode 100644 media/documents/3eeab3f7-9d7a-4b9b-acc0-983fdb7d91d8-20260609-225112-2.png
- create mode 100644 media/documents/4c4e0744-4a31-41ca-8bc5-1b31ca00a33a-20260609-223441-2.png
- create mode 100644 media/documents/4fddd1b3-2854-41cd-91ca-f750899f6efa-20260609-223441-2.png
- create mode 100644 media/documents/b055fb41-ebf5-4920-acaa-13b252041983-20260609-225319-2.png
- create mode 100644 media/documents/f8aaee3c-8fbc-484d-9435-25910a87034d-20260609-225112-2.png.png
- mode change 100755 => 100644 verify/__pycache__/blur_detection.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/forensics.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/verify.cpython-312.pyc
- mode change 100755 => 100644 verify/__pycache__/views.cpython-312.pyc
- create mode 100644 web/__pycache__/generate_recovery.cpython-312.pyc
- create mode 100755 web/generate_recovery.py
+[main 0e144a3] open source
+ 30 files changed, 51 insertions(+), 29 deletions(-)
+ create mode 100644 media/audio/fingerprints/cfc070db-53bc-45b6-af14-f3667cb99905.npy
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

@@ -66,9 +66,10 @@ def google_auth_callback(request):
     from django.shortcuts import redirect
     from django.conf import settings
     from django.urls import reverse
+    from urllib.parse import unquote
     authorization_code = None
     import json
-    url_working = settings.BASE_URL + request.get_full_path().replace(' ', '%20')
+    url_working = settings.BASE_URL + unquote(request.get_full_path())
     if request.method == 'POST':
         email, token, refresh = parse_callback_url(request, request.user.id, url_working)
         print(email)
@@ -85,11 +86,12 @@ def google_pub_auth_callback(request):
     from django.shortcuts import redirect
     from django.conf import settings
     from django.urls import reverse
+    from urllib.parse import unquote
     authorization_code = None
     import json
-    url_working = settings.BASE_URL + request.get_full_path().replace(' ', '%20')
+    url_working = settings.BASE_URL + unquote(request.get_full_path())
     print(url_working)
-    if request.method == 'GET':
+    if request.method == 'POST':
         email, name, picture, token, refresh = parse_pub_callback_url(request, url_working)
         from django.contrib.auth.models import User
         user = User.objects.filter(email=email).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
