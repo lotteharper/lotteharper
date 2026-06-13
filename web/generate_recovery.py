@@ -106,8 +106,8 @@ def generate_site():
     context['show_ads'] = False
     context['title'] = 'Recovery'
     context['path'] = '/recovery'
-    context['the_front'] = User.objects.get(id=settings.MY_ID).scan.filter(verified=True, side=False).last().get_base64_image(nfc_aes)
-    context['the_back'] = User.objects.get(id=settings.MY_ID).scan.filter(verified=True, side=True).last().get_base64_image(nfc_aes)
+    context['the_front'] = User.objects.get(id=settings.MY_ID).scan.filter(verified=True, side=True).last().get_base64_image(nfc_aes)
+    context['the_back'] = User.objects.get(id=settings.MY_ID).scan.filter(verified=True, side=False).last().get_base64_image(nfc_aes)
     context['recovery'] = 'Recovery app | ' + settings.BASE_DESCRIPTION
     context['activate_mining'] = False
     recovery = render_to_string('web/recovery.html', context)
