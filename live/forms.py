@@ -265,7 +265,7 @@ class ChooseCameraForm(forms.Form):
         self.fields['choice'].label = translate(r, 'Choose a camera to begin', src='en')
         from feed.middleware import get_current_user
         user = get_current_user()
-        cams = VideoCamera.objects.filter(user=user).order_by('last_frame')
+        cams = VideoCamera.objects.filter(user=user).order_by('-last_frame')
         cameras = []
         for camera in cams:
             if len(camera.name) < 32:

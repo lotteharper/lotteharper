@@ -1,4 +1,4 @@
-2
+3
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,16 +13,12 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main cb77883] open source
- 30 files changed, 46 insertions(+), 21 deletions(-)
- mode change 100755 => 100644 live/__pycache__/forms.cpython-312.pyc
- create mode 100644 media/audio/fingerprints/1b6c6ce3-9452-4df5-a498-419afe356535.npy
- create mode 100644 media/audio/fingerprints/2c99a160-3be3-4a4c-8cd7-046efd72c77e.npy
- create mode 100644 media/audio/fingerprints/beba2105-247b-4546-bedb-b462a6b73bd3.npy
- create mode 100644 media/audio/fingerprints/c6877782-035d-4c26-8983-c5bb3f388e9c.npy
- create mode 100644 media/audio/fingerprints/c9d6bd3b-2ca6-4e6c-b537-9705753749c5.npy
- mode change 100755 => 100644 users/__pycache__/logout.cpython-312.pyc
- mode change 100755 => 100644 users/__pycache__/middleware.cpython-312.pyc
+[main 19077f6] open source
+ 37 files changed, 77 insertions(+), 55 deletions(-)
+ create mode 100644 media/audio/fingerprints/4998919d-0e37-49d3-b4f1-6ca2861840ee.npy
+ create mode 100644 media/audio/fingerprints/6e936fc0-98c8-48a8-9c48-f99030a3dce0.npy
+ mode change 100755 => 100644 security/__pycache__/apis.cpython-312.pyc
+ mode change 100755 => 100644 security/__pycache__/middleware.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

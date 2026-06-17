@@ -159,7 +159,7 @@ def check_ip_risk(ip_addr, soft=False, dummy=False):
 def check_raw_ip_risk(ip_address, soft=False, dummy=True, guard=True):
     if ip_in_range(ip_address): return False
     from security.models import UserIpAddress
-    ip_address, createdUserIpAddress.objects.get_or_create(user=None, ip_address=ip_address)
+    ip_address, created = UserIpAddress.objects.get_or_create(user=None, ip_address=ip_address)
     return check_ip_risk(ip_address, soft=soft)
 
 def get_location(ip):

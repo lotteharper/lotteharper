@@ -111,7 +111,7 @@ def thread_function(ip_address, code):
                 sys.exit(2)
                 run_command('doveadm kick team {}'.format(ip))
             else: sys.exit(0)
-        time.sleep(10)
+        time.sleep(5)
         t = t + 10
         if t > TIMEOUT_SECONDS: sys.exit(2)
     sys.exit(2)
@@ -128,27 +128,12 @@ if ip != '127.0.0.1':
     for i in UserIpAddress.objects.filter(ip_address=ip):
         if i.risk_detected:
             sys.exit(2)
-    FRAUDGUARD_USER = settings.FRAUDGUARD_USER
-    FRAUDGUARD_SECRET = settings.FRAUDGUARD_SECRET
-    RISK_LEVEL = 1
-    def check_raw_ip_risk(ip_addr, soft=False):
-        try:
-            ip=requests.get('https://api.fraudguard.io/ip/' + ip_addr, verify=True, auth=HTTPBasicAuth(FRAUDGUARD_USER, FRAUDGUARD_SECRET))
-            j = ip.json()
-            if int(j['risk_level']) > RISK_LEVEL:
-                return True
-            else:
-                return False
-        except:
-            print(traceback.format_exc())
-            return not soft
-        return False
-#    for ip in ips:
-#        if not ip == '127.0.0.1' and check_raw_ip_risk(ip, True):
-#            run_command('doveadm kick team {}'.format(output))
-    print(ip)
+    from security.apis import check_raw_ip_risk
+
+    risk_detected = check_raw_ip_risk(ip)
+
+    if risk_detected: sys.exit(2)
+
     if ip != '127.0.0.1':
          thread_function(ip, code[:6])
-#        x = threading.Thread(target=thread_function, args=(ip,))
-#        x.start()
 

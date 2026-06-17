@@ -180,6 +180,8 @@ def update_camera(self, user_id, camera_user, camera_name, camera_data, key=None
                 last_frame=timestamp,
                 camera_id=videouid
             )
+            camera.last_frame = timestamp
+            camera.save()
 
     path = os.path.join(settings.MEDIA_ROOT, get_file_path(camera, 'frame.' + camera.mimetype.split(';')[0]))
     with open(path, "wb") as file:
