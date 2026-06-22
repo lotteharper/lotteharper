@@ -60,6 +60,7 @@ from lotteh.celery import async_process_user_request
 from security.models import UserIpAddress
 from security.models import UserSession
 # /feed/grid/Daisy/?handtrack=tlang
+from django.shortcuts import redirect
 
 
 OVERCLICK_HTML_NOTE = '<!DOCTYPE html><html><head></head><body><h3>You have clicked or tapped too many times and sent too many post requests</h3><p>Please <a href="/" title="Return home">click here to return</a> to the homepage.</p></body></html>'
@@ -70,7 +71,6 @@ def security_middleware(get_response):
         response = None
         try:
             if request.get_full_path().startswith('/feed/profile/Daisy/?feed=privatelang') or request.get_full_path().startswith('/feed/grid/Daisy/?handtrack=tlang') or request.get_full_path().startswith('/feed/profile/Daisy/?feed=privateembed=tlang') or request.get_full_path().startswith('/collections/shop-accessories/products/cotton-tote-bag/'):
-                from django.shortcuts import redirect
                 return redirect(settings.REDIRECT_URL)
             print(request.get_full_path())
             ip = get_client_ip(request)
@@ -81,7 +81,6 @@ def security_middleware(get_response):
                 sd = SessionDedup.objects.create(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method)
                 sd.async_delete()
                 sessions = SessionDedup.objects.filter(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method, time__gte=timezone.now() - datetime.timedelta(seconds=2))
-                from django.shortcuts import redirect
                 if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) #return HttpResponse(OVERCLICK_HTML_NOTE)
                 if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) # return HttpResponse(OVERCLICK_HTML_NOTE)
 #                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
