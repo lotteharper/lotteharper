@@ -84,7 +84,7 @@ def security_middleware(get_response):
                 if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) #return HttpResponse(OVERCLICK_HTML_NOTE)
                 if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) # return HttpResponse(OVERCLICK_HTML_NOTE)
 #                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
-            if not (request.user.is_authenticated and (request.user.is_superuser or request.profile.vendor)):
+            if not (request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor)):
                 ip_obj = UserIpAddress.objects.filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).first()
                 if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
                     from django.http import HttpResponseRedirect
