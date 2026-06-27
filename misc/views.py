@@ -5,6 +5,21 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from users.tests import is_superuser_or_vendor
 
+@cache_page(60*60*24*3)
+def blog(request):
+    from feed.models import Post
+    from feed.feeds import get_post_feeds
+    feeds = get_post_feeds()
+    from django.shortcuts import render
+    from django.conf import settings
+    context = {
+        'feeds': feeds,
+        'posts': Post.objects.filter(feed='private', public=True, private=False, safe=True).order_by('-date_posted')[:3],
+        'blog_posts': Post.objects.filter(public=True, private=False, safe=True).order_by('-date_posted')[3:10],
+        'github_url': settings.GITHUB_URL, 'resume_url': settings.RESUME_URL, 'linkedin_url': settings.LINKEDIN_URL, 'twitter_url': settings.TWITTER_LINK,
+    }
+    return render(request, 'misc/blog.html', context)
+
 def test(request):
     from django.shortcuts import render
     return render(request, 'misc/test.html')
@@ -282,10 +297,12 @@ def search(request):
     if(request.GET.get('page', None) != None):
         page = int(request.GET.get('page'))
     qs = request.GET.get('q',None)
+    posts = []
     if not qs:
         messages.warning(request, "Please enter a valid querystring to search {}".format(settings.SITE_NAME))
         qs = ''
-    posts = get_posts_for_multilingual_query(request, qs) if settings.MULTILINGUAL_SEARCH else get_posts_for_query(request, qs)
+    else:
+        posts = get_posts_for_multilingual_query(request, qs) if settings.MULTILINGUAL_SEARCH else get_posts_for_query(request, qs)
     p = Paginator(posts, 10)
     if page > p.num_pages or page < 1:
         messages.warning(request, "The page you requested, " + str(page) + ", does not exist. You have been redirected to the first page.")
