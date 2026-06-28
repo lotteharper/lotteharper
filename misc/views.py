@@ -5,7 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from users.tests import is_superuser_or_vendor
 
-@cache_page(60*60*24*3)
+#@cache_page(60*60*24*3)
+@never_cache
 def blog(request):
     from feed.models import Post
     from feed.feeds import get_post_feeds
@@ -14,8 +15,9 @@ def blog(request):
     from django.conf import settings
     context = {
         'feeds': feeds,
-        'posts': Post.objects.filter(feed='private', public=True, private=False, safe=True).order_by('-date_posted')[:3],
-        'blog_posts': Post.objects.filter(public=True, private=False, safe=True).order_by('-date_posted')[3:10],
+        'posts': Post.objects.filter(feed='private', public=True, private=False, safe=True).order_by('-date_posted')[:5],
+        'private_posts': Post.objects.filter(feed='private', public=True, private=False, safe=True).order_by('-date_posted')[5:15],
+        'blog_posts': Post.objects.filter(feed='blog', public=True, private=False, safe=True).order_by('-date_posted')[:10],
         'github_url': settings.GITHUB_URL, 'resume_url': settings.RESUME_URL, 'linkedin_url': settings.LINKEDIN_URL, 'twitter_url': settings.TWITTER_LINK,
     }
     return render(request, 'misc/blog.html', context)

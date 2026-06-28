@@ -63,14 +63,14 @@ def nfc_verified(request):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and ((user.nfc_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
+    return user.is_authenticated and ((user.nfc_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES) or user.nfc_scans.count() == 0) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
 
 def vivokey_verified(request):
     user = request.user
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user.is_authenticated and ((user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
+    return user.is_authenticated and ((user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=request.session.session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES) or user.vivokey_scans.count() == 0) or user.user_sessions.filter(bypass=True, session_key=request.session.session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
 
 def otp_verified(request):
     user = request.user
@@ -109,13 +109,13 @@ def nfc_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and ((user.nfc_scans.filter(valid=True, session_key=session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
+    return user and ((user.nfc_scans.filter(valid=True, session_key=session_key).count() > 0 and user.nfc_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.NFC_SCAN_REQUIRED_MINUTES) or user.nfc_scans.count() == 0) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
 
 def vivokey_verified_skey(user, session_key):
     from django.utils import timezone
     import datetime
     from django.conf import settings
-    return user and ((user.vivokey_scans.filter(valid=True, session_key=session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES)) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
+    return user and ((user.vivokey_scans.filter(valid=True, session_key=session_key).count() > 0 and user.vivokey_scans.filter(valid=True, session_key=session_key).last().timestamp > timezone.now() - datetime.timedelta(minutes=settings.VIVOKEY_SCAN_REQUIRED_MINUTES) or user.vivokey_scans.count() == 0) or user.user_sessions.filter(bypass=True, session_key=session_key, timestamp__gte=timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES*2), expires__gte=timezone.now(), deauth=False).count() > 0)
 
 def otp_verified_skey(user, session_key):
     from django.utils import timezone

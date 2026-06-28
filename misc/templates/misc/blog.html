@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-
+    <link rel="shortcut icon" href="/media/static/favicon.ico">
     <title>{{ the_site_name }}</title>
         {% if not bs4 %}
         <link rel="stylesheet" href="/static/main.css">
@@ -35,6 +34,7 @@
             <a class="text-muted" href="{% url 'users:register' %}">Subscribe</a>
           </div>
           <div class="col-4 text-center">
+            <img src="{{ icon_url }}" alt="{{ the_site_name }}" width="30" height="30" style="border-radius: 50%;">
             <a class="blog-header-logo text-dark" href="{% url 'feed:profile' my_user.profile.name %}">{{ the_site_name }}</a>
           </div>
           <div class="col-4 d-flex justify-content-end align-items-center">
@@ -42,6 +42,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-3"><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
             </a>
             <a class="btn btn-sm btn-outline-secondary" href="{% url 'users:register' %}">{{ 'Sign up'|etrans }}</a>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'users:login' %}">{{ 'Log in'|etrans }}</a>
           </div>
         </div>
       </header>
@@ -96,8 +97,41 @@
           </div>
         </div>
       </div>
-    </div>
 
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <strong class="d-inline-block mb-2 text-primary">{{ posts.3.feed|caps }}</strong>
+              <h3 class="mb-0">
+                <a class="text-dark" href="{{ posts.3.get_absolute_url }}">(Featured post) {{ posts.3.id|shorttitle }}</a>
+              </h3>
+              <div class="mb-1 text-muted">{{ posts.3.date_posted }}</div>
+              <p class="card-text mb-auto">{{ posts.3.id|shortdescription }}</p>
+              <a href="{{ posts.3.get_absolute_url }}">Continue reading</a>
+            </div>
+            {% if posts.3.image %}
+            <img class="card-img-right flex-auto d-none d-md-block" src="{{ posts.3.get_image_thumb_url }}" alt="Card image cap" style="width: 170px; height: 170px;">
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <strong class="d-inline-block mb-2 text-primary">{{ posts.4.feed|caps }}</strong>
+              <h3 class="mb-0">
+                <a class="text-dark" href="{{ posts.4.get_absolute_url }}">{{ posts.4.id|shorttitle }}</a>
+              </h3>
+              <div class="mb-1 text-muted">{{ posts.4.date_posted }}</div>
+              <p class="card-text mb-auto">{{ posts.4.id|shortdescription }}</p>
+              <a href="{{ posts.4.get_absolute_url }}">Continue reading</a>
+            </div>
+            {% if posts.4.image %}
+            <img class="card-img-right flex-auto d-none d-md-block" src="{{ posts.4.get_image_thumb_url }}" alt="Card image cap" style="width: 170px; height: 170px;">
+            {% endif %}
+          </div>
+        </div>
+      </div>
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8 blog-main">
@@ -105,19 +139,39 @@
             From the press
           </h3>
 
+          {% for post in private_posts %}
+          <div class="blog-post">
+            <h2 class="blog-post-title">{{ post.id|shorttitle }}</h2>
+            <p class="blog-post-meta">{{ post.date_posted }} by <a href="{% url 'feed:profile' post.author.profile.name%}">{{ post.author.profile.name }}</a> in feed {{ post.feed|caps }}</p>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+            <img src="{{ post.get_image_thumb_url }}" alt="Card image cap" style="width: 100%; height: auto;">
+            {% endif %}
+            <a href="{{ post.get_absolute_url }}">Continue reading</a>
+            <hr style="visibility: hidden;">
+          </div><!-- /.blog-post -->
+          {% endfor %}
+
+          <nav class="blog-pagination">
+            <a class="btn btn-outline-primary" href="{% url 'feed:profile' my_user.profile.name %}?page=2&feed=private">Older</a>
+            <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+          </nav>
+
           {% for post in blog_posts %}
           <div class="blog-post">
             <h2 class="blog-post-title">{{ post.id|shorttitle }}</h2>
             <p class="blog-post-meta">{{ post.date_posted }} by <a href="{% url 'feed:profile' post.author.profile.name%}">{{ post.author.profile.name }}</a> in feed {{ post.feed|caps }}</p>
             <p>{{ post.content }}</p>
             {% if post.image %}
-            <img src="{{ post.get_image_thumb_url }}" alt="Card image cap">
+            <img src="{{ post.get_image_thumb_url }}" alt="Card image cap" style="width: 100%; height: auto;">
             {% endif %}
+            <a href="{{ post.get_absolute_url }}">Continue reading</a>
+            <hr style="visibility: hidden;">
           </div><!-- /.blog-post -->
           {% endfor %}
 
           <nav class="blog-pagination">
-            <a class="btn btn-outline-primary" href="{% url 'feed:profile' my_user.profile.name %}?feed=private">Older</a>
+            <a class="btn btn-outline-primary" href="{% url 'feed:profile' my_user.profile.name %}?page=2&feed=blog">Older</a>
             <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
           </nav>
 
@@ -135,8 +189,8 @@
               <li><a href="{% url 'feed:profile' my_user.profile.name %}?feed=private">Profile</a></li>
               <li><a href="{% url 'feed:profile-grid' my_user.profile.name %}?feed=private">Grid</a></li>
               <li><a href="{% url 'feed:profile' my_user.profile.name %}?feed=news">News</a></li>
-              <li><a href="{% url 'landing:index' %}">Index</a></li>
-              <li><a href="{% url 'landing:landing' %}">Landing</a></li>
+              <li><a href="{% url 'landing:landing' %}">About</a></li>
+              <li><a href="{% url 'landing:index' %}">Landing</a></li>
             </ol>
           </div>
 
@@ -162,6 +216,110 @@
       </p>
     </footer>
 
+        {% block javascripts %}{% endblock %}
+        <script>
+        {% linebreakless %}
+        {% include 'security/session_injection.js' %}
+        $(document).ready(function() {
+                {% if not hidenavbar %}
+                {% if polling_now %}
+            var hideVoteCookie = getCookie("hidevotebanner") != '';
+            if(document.getElementById('vote-banner') && hideVoteCookie) { document.getElementById('vote-banner').classList.add('fade-hidden'); }
+            else if(document.getElementById('vote-banner')) { document.getElementById('vote-banner').classList.remove('fade-hidden');
+            document.getElementById('vote-banner').classList.remove('hide'); }
+            {% endif %}
+            try {
+                $(document.getElementById("clemn-navbar")).autoHidingNavbar().show();
+            } catch {}
+                {% endif %}
+                {% if splash %}
+                        {% include 'feed/modal.js' %}
+                {% endif %}
+                {% include 'accl_logout.js' %}
+                {% include 'clock.js' %}
+                {% if not webpush_override and not request.path == '/verify/age/' and not request.has_push_cookie %}
+                        {% include 'webpush.js' %}
+                {% elif webpush_override %}
+                        {% include 'webpush.js' %}
+                {% endif %}
+                setTimeout(function() {
+                        $("#django-messages-container").addClass("fade-hidden");
+                        setTimeout(function() {
+                                $("#django-messages-container").addClass("shrink-fast");
+                                setTimeout(function() {
+                                        $("#django-messages-container").addClass("hide");
+                                }, 1000);
+                        }, 2000);
+                }, 20000);
+            {% if preload and not disable_preload %}
+                {% if load_timeout %}
+            setTimeout(function(){
+                        $('body').addClass('loaded');
+                        $('#loader-wrapper-init').addClass('hide');
+                }, {% if load_timeout %}{{ load_timeout }}{% else %}{% endif %});
+            {% else %}
+                $('body').addClass('loaded');
+                $('#loader-wrapper-init').addClass('hide');
+            {% endif %}
+                setTimeout(function() {
+                        $('#loader-wrapper-init').addClass('fade-hidden-fast');
+                }, 100);
+            {% endif %}
+            try {
+                var qrdiv = document.getElementById("shareqrcode");
+                    if(!qrdiv) return;
+                var qr = $('#shareqrcode').kjua({text: '{{ base_url }}{{ request.path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}', render: 'svg'});
+                var image = qrdiv.querySelector('svg');
+                image.style.width = "100%";
+                image.style.height = "auto";
+                image.style.maxWidth = "400px";
+                function downloadSVG() {
+                    const svg = document.getElementById('shareqrcode').querySelector('svg');
+
+                    const serializer = new XMLSerializer();
+                    let source = serializer.serializeToString(svg);
+
+                    if (!source.match(/^<svg[^>]+xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/)) {
+                        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                    }
+                    if (!source.match(/^<svg[^>]+\"http:\/\/www\.w3\.org\/1999\/xlink\"/)) {
+                        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+                    }
+                    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+                    const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = url;
+                    downloadLink.download = ('{{ the_site_name }} - QR Code').replaceAll(' ', '_');
+
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                }
+                function downloadQr(){
+                    downloadSVG();
+                }
+                qrdiv.onclick = downloadQr;
+            } catch(error) {
+                document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+            }
+        });
+        {% include 'report.js' %}
+        </script>
+        {% if show_ads and not hiderrm %}
+        {% include 'rrm.html' %}
+        {% endif %}
+{% endlinebreakless %}
+
+        <script>
+            if (navigator.serviceWorker) {
+                navigator.serviceWorker.register (
+                    '/serviceworker.js',
+                    {scope: '/'}
+                )
+            }
+        </script>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
