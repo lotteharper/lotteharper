@@ -25,6 +25,12 @@
   </head>
 
   <body>
+        {% if show_ads %}
+        {% include 'google_adsense_head_code.html' %}
+        {% endif %}
+        {% if not hidega %}
+        {% include 'gtmbody.html' %}
+        {% endif %}
         {% load cookielaw_tags %}
         {% if cookielaw.notset %}{% rejectable_cookielaw_banner %}{% endif %}
     <div class="container">
@@ -191,6 +197,7 @@
               <li><a href="{% url 'feed:profile' my_user.profile.name %}?feed=news">News</a></li>
               <li><a href="{% url 'landing:landing' %}">About</a></li>
               <li><a href="{% url 'landing:index' %}">Landing</a></li>
+              <li><a href="https://glamgirlx.com">Glam Girl X</a></li>
             </ol>
           </div>
 
@@ -202,6 +209,7 @@
               <li><a href="{{ linkedin_url }}">LinkedIn</a></li>
               <li><a href="{{ youtube_link }}">YouTube</a></li>
               <li><a href="{{ podcast_link }}">Podcast</a></li>
+              <li><a href="https://push.fm/fl/b9nhmydl">Music</a></li>
             </ol>
           </div>
         </aside><!-- /.blog-sidebar -->
