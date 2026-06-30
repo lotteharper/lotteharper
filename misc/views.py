@@ -5,8 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from users.tests import is_superuser_or_vendor
 
-#@cache_page(60*60*24*3)
-@never_cache
+#@never_cache
+@cache_page(60*60*24*3)
 def blog(request):
     from feed.models import Post
     from feed.feeds import get_post_feeds
