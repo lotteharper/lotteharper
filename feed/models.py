@@ -654,11 +654,7 @@ class Post(models.Model):
                     os.remove(self.file.path)
                     self.file = full_path
             if this and this.image != self.image:
-                os.remove(this.image.path)
-                os.remove(this.image_original.path)
-                os.remove(this.image_censored.path)
-                os.remove(this.image_thumbnail.path)
-                os.remove(this.image_censored_thumbnail.path)
+                this.delete_image()
                 self.image_original = None
                 self.image_censored = None
                 self.image_censored_thumbnail = None
@@ -689,7 +685,7 @@ class Post(models.Model):
 #                        os.remove(self.image.path)
 #                        self.image = None
             if this and this.file != self.file:
-                os.remove(this.file.path)
+                this.delete_file()
             if self.file and (not this or this.private != self.private or this.file != self.file):
                 if self.public or settings.NUDITY_FILTER:
                     if (self.file.name.split('.')[-1] in ['webm', 'mkv', 'mp4']) and is_nude_video(self.file.path):
@@ -803,30 +799,82 @@ class Post(models.Model):
             import traceback
             print(traceback.format_exc())
 
+    def delete_image(self):
+        import traceback
+        from feed.storage import MediaStorage
+        storage = MediaStorage()
+        # Helper to safely delete files
+        def safe_delete_local(file_field):
+            try:
+                if file_field and hasattr(file_field, 'path'):
+                    os.remove(file_field.path)
+            except:
+                pass
+        def safe_delete_s3(file_field):
+            try:
+                if file_field and file_field.name:
+                    storage.delete(file_field.name)
+            except Exception as e:
+                print(traceback.format_exc())
+        # Delete all image variants
+        safe_delete_local(self.image)
+        safe_delete_s3(self.image_bucket)
+        
+        safe_delete_local(self.image_thumbnail)
+        safe_delete_s3(self.image_thumbnail_bucket)
+        
+        safe_delete_local(self.image_censored)
+        safe_delete_s3(self.image_censored_bucket)
+        
+        safe_delete_local(self.image_censored_thumbnail)
+        safe_delete_s3(self.image_censored_thumbnail_bucket)
+        
+        safe_delete_local(self.image_public)
+        safe_delete_s3(self.image_public_bucket)
+        
+        safe_delete_local(self.image_original)
+        safe_delete_s3(self.image_original_bucket)
+
+    def delete_file(self):
+        import traceback
+        from feed.storage import MediaStorage
+        storage = MediaStorage()
+        # Helper to safely delete files
+        def safe_delete_local(file_field):
+            try:
+                if file_field and hasattr(file_field, 'path'):
+                    os.remove(file_field.path)
+            except:
+                pass
+        def safe_delete_s3(file_field):
+            try:
+                if file_field and file_field.name:
+                    storage.delete(file_field.name)
+            except Exception as e:
+                print(traceback.format_exc())
+        # Delete all file variants
+        safe_delete_local(self.file)
+        safe_delete_s3(self.file_bucket)
+        safe_delete_local(self.file_sample)
+        safe_delete_s3(self.file_sample_bucket)
+
+    def delete_file(self):
+        try:
+            os.remove(self.file.path)
+        except: pass
+        try:
+            self.file_bucket.delete(str(self.file_bucket.name))
+        except: print(traceback.format_exc())
+        try:
+            os.remove(self.file_sample.path)
+        except: pass
+        try:
+            self.file_sample_bucket.delete(str(self.file_sample_bucket.name))
+        except: print(traceback.format_exc())
+
     def delete(self):
-        if self.image:
-            try:
-                os.remove(self.image.path)
-            except: pass
-            try:
-                os.remove(self.image_thumbnail.path)
-            except: pass
-            try:
-                os.remove(self.image_censored.path)
-            except: pass
-            try:
-                os.remove(self.image_censored_thumbnail.path)
-            except: pass
-            try:
-                os.remove(self.image_public.path)
-            except: pass
-            try:
-                os.remove(self.image_original.path)
-            except: pass
-        if self.file:
-            try:
-                os.remove(self.file.path)
-            except: pass
+        self.delete_image()
+        self.delete_file()
         try:
             super(Post, self).delete()
         except: pass

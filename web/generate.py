@@ -1,6 +1,6 @@
-start_lang = 'tl'
+start_lang = 'en'
 overwrite = True
-test_mode = False
+test_mode = True
 single_lang = False
 force_copy = False
 force_overwrite = False
@@ -47,7 +47,7 @@ def generate_site():
     languages = SELECTOR_LANGUAGES.keys()
     from translate.translate import translate
     from feed.middleware import set_current_request
-    nfc_aes = User.objects.get(id=settings.MY_ID).vivokey_scans.last().nfc_id.replace(':','').upper() + 'FF'
+    nfc_aes = User.objects.get(id=settings.MY_ID).nfc_scans.last().nfc_id.replace(':','').upper() + 'FF'
     if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
     langs = list(languages) #SELECTOR_LANGUAGES.keys() # languages
     context = {

@@ -23,4 +23,5 @@ class MediaStorage(S3Boto3Storage):
     def delete(self, name):
         cache_key = self._get_cache_key(name)
         cache.delete(cache_key)
-        self.storage.delete(name)
+        super().delete(name)
+#        self.storage.delete(name)
