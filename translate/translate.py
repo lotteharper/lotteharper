@@ -204,20 +204,11 @@ def translate_html(request, html, target=None, src=None):
         current_len = 0
 
         for s in strings:
-            s = "" if s is None else str(s)
-            added_len = len(s) if not current_batch else len(SEPARATOR) + len(s)
-
-            if current_batch and current_len + added_len > max_len:
-                batches.append(current_batch)
-                current_batch = [s]
-                current_len = len(s)
-            else:
-                current_batch.append(s)
-                current_len += added_len
-
-        if current_batch:
-            batches.append(current_batch)
-
+           if len(s) > max_len:
+              split = split_text_by_length(s, max_len=max_len)
+              batches += split
+           else:
+              batches += [s]
         return batches
 
     extracted = []
@@ -286,9 +277,6 @@ def translate_html(request, html, target=None, src=None):
         else:
             _, translated_text = item
             translated_parts.extend(unbatch_strings(translated_text))
-
-    for i in range(0, len(translated_parts)-1):
-        translated_parts[i] = translated_parts[i].replace('|||TRANS|||', '').replace('\n|||TRANS|||\n', '').replace('|||TRANS|||\n', '').replace('\n|||TRANS|||', '')
 
     # Keep exact alignment with extracted items
     if len(translated_parts) < len(extracted):
@@ -554,26 +542,17 @@ def unbatch_strings(batched: str) -> list[str]:
     return [""] if batched == "" else batched.split(SEPARATOR)
 
 
-def make_batches(strings: list[str], max_len: int = MAX_TRANS) -> list[list[str]]:
+def make_batches(strings, max_len=MAX_TRANS):
     batches = []
     current_batch = []
     current_len = 0
 
     for s in strings:
-        s = "" if s is None else str(s)
-        added_len = len(s) if not current_batch else len(SEPARATOR) + len(s)
-
-        if current_batch and current_len + added_len > max_len:
-            batches.append(current_batch)
-            current_batch = [s]
-            current_len = len(s)
-        else:
-            current_batch.append(s)
-            current_len += added_len
-
-    if current_batch:
-        batches.append(current_batch)
-
+       if len(s) > max_len:
+          split = split_text_by_length(s, max_len=max_len)
+          batches += split
+       else:
+          batches += [s]
     return batches
 
 
@@ -623,7 +602,7 @@ def translate_multiple(request, split, target=None, src=None):
         src = settings.DEFAULT_LANG
 
     batches = make_batches(split, max_len=MAX_TRANS)
-    batched_payloads = [batch_strings(batch) for batch in batches]
+    batched_payloads = [batch for batch in batches]
 
     async def translate_fragments(fragments, src, dest, concurrency=10):
         sem = asyncio.Semaphore(concurrency)
@@ -650,10 +629,6 @@ def translate_multiple(request, split, target=None, src=None):
     result_arr = []
     for translated_batch in translated_batches:
         result_arr.extend(unbatch_strings(translated_batch))
-
-    result_arr = result_arr[:len(split)]
-    for i in range(0, len(result_arr)-1):
-        result_arr[i] = result_arr[i].replace('|||TRANS|||', '').replace('\n|||TRANS|||\n', '').replace('|||TRANS|||\n', '').replace('\n|||TRANS|||', '')
 
     if result_arr:
         try:
