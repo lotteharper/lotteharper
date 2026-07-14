@@ -22,6 +22,9 @@ def get_transcript(filename, save_fingerprint=True):
         except:
             import traceback
             print(traceback.format_exc())
+            try:
+                os.remove(path)
+            except: pass
             return '', fingerprint
 
 def get_wav_transcript(path):
@@ -40,4 +43,7 @@ def get_wav_transcript(path):
             os.remove(path)
             return res if res else ''
         except:
+            try:
+                os.remove(path)
+            except: pass
             return ''

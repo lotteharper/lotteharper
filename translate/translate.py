@@ -264,7 +264,7 @@ def translate_html(request, html, target=None, src=None):
         return results
 
     batches = make_batches(extracted, max_len=4000)
-    batched_payloads = [batch_strings(batch) for batch in batches]
+    batched_payloads = [batch for batch in batches]
 
     translated_results = asyncio.run(translate_fragments(batched_payloads, src, target))
 
@@ -428,14 +428,16 @@ def old_translate_html(request, html, target=None, src=None):
             tasks = [one(i, text) for i, text in enumerate(fragments)]
             results = await asyncio.gather(*tasks, return_exceptions=True)
         return results
-    results = [batch_strings(result_soup)]
-    if len(results[0]) > 4000:
-        results = split_text_by_length(results[0])
+    results = []
+    for result in result_soup:
+        if len(result) > 4000:
+            results += split_text_by_length(result)
+        else: results += [result]
     result = asyncio.run(translate_fragments(results, src, target))
     result_ar = [item[1] for item in result]
     result_arr = []
     for res in result_ar:
-        result_arr += unbatch_strings(res)
+        result_arr += res
     count = 0
     for tag in soup.find_all(string=True):
         if tag.parent.name not in ['script', 'style', 'pre', 'code'] and tag.string:
@@ -515,13 +517,13 @@ def old_translate_multiple(request, split, target=None, src=None):
             results = await asyncio.gather(*tasks, return_exceptions=True)
         return results
     results = []
-    for res in split:
-        results += batch_strings(split)
-    if len(results[0]) > 4000:
-        results = split_text_by_length(results[0])
+    for result in split:
+        if len(result) > 4000:
+            results += split_text_by_length(result)
+        else: results += [result]
     result = asyncio.run(translate_fragments(results, src, target))
     result_ar = [item[1] for item in result]
-    result_arr = unbatch_strings(result_ar)
+    result_arr = result_ar
     if len(result_arr) > 0:
         try:
             CachedTranslation.objects.get_or_create(src_content=split, src_hash=db_key, dest_content=str(result_arr), src=src, dest=target)
