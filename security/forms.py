@@ -4,7 +4,7 @@ from django import forms
 from .models import MRZScan, NFCScan, VivoKeyScan
 
 class OTPForm(forms.Form):
-    otp = forms.IntegerField(required=True)
+    otp = forms.IntegerField(widget=forms.NumberInput(attrs={'autofocus': 'autofocus', 'inputmode': 'numeric', 'pattern': '[0-9]*', 'step': '1', 'autocomplete': 'off'}), required=True)
     def __init__(self, *args, **kwargs):
         super(OTPForm, self).__init__(*args, **kwargs)
         self.fields['otp'].label = 'One time passcode'
