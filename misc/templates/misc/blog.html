@@ -23,6 +23,9 @@
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
     <link href="blog.css" rel="stylesheet">
+    <style>
+       @font-face { font-family: 'EmojiFlag'; src: url('/static/fonts/NotoColorEmoji-flagsonly.ttf'); }
+    </style>
   </head>
 
   <body>
@@ -34,6 +37,7 @@
         {% endif %}
         {% load cookielaw_tags %}
         {% if cookielaw.notset %}{% rejectable_cookielaw_banner %}{% endif %}
+    {% if request.user.is_authenticated %}{% include 'navbar.html' %}<div style="height: 60px;"></div>{% endif %}
     <div class="container">
       <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
@@ -224,7 +228,7 @@
         <a href="#">Back to top</a>
       </p>
     </footer>
-
+        <script src="/static/main.js"></script>
         {% block javascripts %}{% endblock %}
         <script>
         {% linebreakless %}
