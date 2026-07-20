@@ -8,6 +8,12 @@
 {% if profile.user.vendor_profile.video_intro_font %}
 @font-face { font-family: 'Vendor Specified ({{ profile.name }})'; src: url('{{ profile.user.vendor_profile.video_intro_font.url }}'); }
 {% endif %}
+
+/* disable scrolling while we adjust the page during updates */
+html.no-scroll, body.no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+}
 </style>
 {% endblock %}
 {% load app_filters %}
@@ -53,7 +59,7 @@
 <div id="page{{ page }}">
 {% with profile.get_image_url as profile_url %}
 {% for post in posts  %}
-	{% include 'feed/_post.html' %}
+        {% include 'feed/_post.html' %}
 {% endfor %}
 {% endwith %}
 {% include 'banner_ad.html' %}
@@ -70,27 +76,27 @@
 {% block javascript %}
 {% if use_prism %}Prism.highlightAll();{% endif %}
 $('#minified').on('click', function(e) {
-	$('#profile').removeClass('hide');
-	$('#minified').addClass('fade-hidden-fast');
-	setTimeout(function() {
+        $('#profile').removeClass('hide');
+        $('#minified').addClass('fade-hidden-fast');
+        setTimeout(function() {
         $('#profile').removeClass('fade-in');
-		$('#minified').addClass('hide');
-	});
+                $('#minified').addClass('hide');
+        });
 });
 var showTipMenu = false;
 var tipMenu = document.getElementById('tip-menu');
 if(tipMenu) {
-	var tipMenuDropdown = document.getElementById('tip-menu-dropdown');
-	tipMenu.addEventListener('click', function() {
-		showTipMenu = !showTipMenu;
-		if(showTipMenu) {
-			$(tipMenu).removeClass('collapsed');
-			$(tipMenuDropdown).addClass('show');
-		} else {
-			$(tipMenu).addClass('collapsed');
-			$(tipMenuDropdown).removeClass('show');
-		}
-	});
+        var tipMenuDropdown = document.getElementById('tip-menu-dropdown');
+        tipMenu.addEventListener('click', function() {
+                showTipMenu = !showTipMenu;
+                if(showTipMenu) {
+                        $(tipMenu).removeClass('collapsed');
+                        $(tipMenuDropdown).addClass('show');
+                } else {
+                        $(tipMenu).addClass('collapsed');
+                        $(tipMenuDropdown).removeClass('show');
+                }
+        });
 }
 function resizeImages() {
     var imgs = document.getElementsByTagName("img");
@@ -99,7 +105,7 @@ function resizeImages() {
     }
 }
 function reportWindowSize() {
-	resizeImages();
+        resizeImages();
 }
 window.onresize = reportWindowSize;
 var si;
@@ -130,27 +136,94 @@ var lpage = {{ page }};
 var total_pages = {{ num_pages }};
 var firstLoad = false;
 var urlParams = new URLSearchParams(document.location.search);
+
+/* --- Smooth scroll + stable-prepend helpers --- */
+function disableUserScroll() {
+    document.documentElement.classList.add('no-scroll');
+    document.body.classList.add('no-scroll');
+}
+function enableUserScroll() {
+    document.documentElement.classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll');
+}
+
+/* wait for images inside `el` to load (or timeout) to avoid layout shifts when measuring */
+function waitForImages(el, timeoutMs) {
+    return new Promise(resolve => {
+        if (!el) return resolve();
+        const imgs = Array.from(el.querySelectorAll('img'));
+        if (imgs.length === 0) return resolve();
+        let remaining = imgs.length;
+        let done = false;
+        const onFinish = () => {
+            if (done) return;
+            done = true;
+            resolve();
+        };
+        imgs.forEach(img => {
+            if (img.complete) {
+                if (--remaining === 0) onFinish();
+            } else {
+                img.addEventListener('load', () => { if (--remaining === 0) onFinish(); }, {once:true});
+                img.addEventListener('error', () => { if (--remaining === 0) onFinish(); }, {once:true});
+            }
+        });
+        setTimeout(onFinish, timeoutMs);
+    });
+}
+
+/* Smoothly scroll by `delta` pixels and resolve after durationMs.
+   We lock user scrolling during the animation to avoid interruptions. */
+function smoothScrollBy(delta, durationMs) {
+    return new Promise(resolve => {
+        if (!delta) { resolve(); return; }
+        disableUserScroll();
+        // Use smooth behavior and fall back to timeout for completion
+        window.scrollBy({ top: delta, behavior: 'smooth' });
+        setTimeout(() => {
+            enableUserScroll();
+            resolve();
+        }, durationMs || 450);
+    });
+}
+
+/* Find the first visible page element (closest to top) and return { el, top } where top is boundingClientRect().top */
+function getFirstVisiblePageInfo() {
+    const pages = Array.from(document.querySelectorAll('[id^="page"]'));
+    let best = null;
+    for (const p of pages) {
+        const r = p.getBoundingClientRect();
+        if (r.bottom >= 0 && r.top < window.innerHeight) {
+            if (!best || r.top < best.top) {
+                best = { el: p, top: r.top };
+            }
+        }
+    }
+    return best;
+}
+/* --- End helpers --- */
+
 function updateURLParameter2(param, paramVal) {
-	urlParams = new URLSearchParams(document.location.search);
-	{% if request.GET.embed %}return;{% endif %}
+        urlParams = new URLSearchParams(document.location.search);
+        {% if request.GET.embed %}return;{% endif %}
         if (history.pushState) {
-		var extra = "";
-		var likes = urlParams.get('likes');
-		if(likes) {
-			extra = "&likes=t";
-		}
-		var show = urlParams.get('show');
-		if(show) {
-			extra = extra + "&show=t";
-		}
-		var feed = urlParams.get('feed');
-		if(feed) {
-			extra = extra + "&feed=" + feed;
-		}
-		var lang = urlParams.get('lang');
-		if(lang) {
-			extra = extra + "&lang=" + lang;
-		}
+                var extra = "";
+                var likes = urlParams.get('likes');
+                if(likes) {
+                        extra = "&likes=t";
+                }
+                var show = urlParams.get('show');
+                if(show) {
+                        extra = extra + "&show=t";
+                }
+                var feed = urlParams.get('feed');
+                if(feed) {
+                        extra = extra + "&feed=" + feed;
+                }
+                var lang = urlParams.get('lang');
+                if(lang) {
+                        extra = extra + "&lang=" + lang;
+                }
                 const url = "?" + param + "=" + paramVal + extra;
                 var newurl = document.location.pathname + url;
                 window.history.pushState({},'',newurl);
@@ -158,25 +231,25 @@ function updateURLParameter2(param, paramVal) {
 }
 function clearUrlParameter() {
     urlParams = new URLSearchParams(document.location.search);
-	{% if request.GET.embed %}return;{% endif %}
-	if (history.pushState) {
-		var extra = "";
-		var likes = urlParams.get('likes');
-		if(likes) {
-			extra = "&likes=t";
-		}
-		var show = urlParams.get('show');
-		if(show) {
-			extra = extra + "&show=t";
-		}
-		var feed = urlParams.get('feed');
-		if(feed) {
-			extra = extra + "&feed=" + feed;
-		}
-		var lang = urlParams.get('lang');
-		if(lang) {
-			extra = extra + "&lang=" + lang;
-		}
+        {% if request.GET.embed %}return;{% endif %}
+        if (history.pushState) {
+                var extra = "";
+                var likes = urlParams.get('likes');
+                if(likes) {
+                        extra = "&likes=t";
+                }
+                var show = urlParams.get('show');
+                if(show) {
+                        extra = extra + "&show=t";
+                }
+                var feed = urlParams.get('feed');
+                if(feed) {
+                        extra = extra + "&feed=" + feed;
+                }
+                var lang = urlParams.get('lang');
+                if(lang) {
+                        extra = extra + "&lang=" + lang;
+                }
                 const url = "?" + extra;
                 var newurl = document.location.pathname + url;
                 window.history.pushState({},'',newurl);
@@ -185,7 +258,7 @@ function clearUrlParameter() {
 function isElementVisible(element) {
         var position = element.getBoundingClientRect();
         if(position.top < window.innerHeight && position.bottom >= 0) {
-    		return true;
+                return true;
         }
         return false;
 }
@@ -194,12 +267,12 @@ var lastScroll = 0;
 var load_next = false;
 var load_last = false;
 setInterval(function() {
-	if(load_next){
-        	loadNext(true);
-	}
-	if(load_last){
-		loadNext(false);
-	}
+        if(load_next){
+                loadNext(true);
+        }
+        if(load_last){
+                loadNext(false);
+        }
 }, 10000);
 $(window).scroll(function() {
    if(Math.abs(lastScroll - $(window).scrollTop()) > 25){
@@ -207,14 +280,14 @@ $(window).scroll(function() {
    }
    lastScroll = $(window).scrollTop();
    if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {
-	load_next = true;
+        load_next = true;
    } else {
-	load_next = false;
+        load_next = false;
    }
    if($(window).scrollTop() < $(document).height()/scroll_factor) {
-	load_last = true;
+        load_last = true;
    } else {
-	load_last = false;
+        load_last = false;
    }
 });
 var firstLoad = false;
@@ -222,7 +295,7 @@ var loading = false;
 var lloading = false;
 loadNext(true);
 if(urlParams.get('page') != null) {
-	loadNext(false);
+        loadNext(false);
 }
 var garbage_disposal_limit = 6;
 function garbage_disposal(npage){
@@ -251,11 +324,11 @@ function likeForm() {
     for (i of btns) {
         if(!i.classList.contains("ready")){
                 i.classList.add("ready");
-	$(i).attr('last-action', new String(new Date().getTime()));
+        $(i).attr('last-action', new String(new Date().getTime()));
         $(i).on('submit', function(e) {
             e.preventDefault();
-	    if(parseInt($(i).prop('last-action')) - new Date().getTime() > -1000) { e.preventDefault(); return; };
-	    $(i).attr('last-action', new String(new Date().getTime()));
+            if(parseInt($(i).prop('last-action')) - new Date().getTime() > -1000) { e.preventDefault(); return; };
+            $(i).attr('last-action', new String(new Date().getTime()));
             var button = $(this).find(':submit');
             button.toggleClass('btn-success');
             button.toggleClass('btn-warning');
@@ -282,13 +355,13 @@ function likeForm() {
 function publishForm() {
     let btns = document.querySelectorAll('#publishForm');
     for (i of btns) {
-	  if(!$(i).hasClass('init')) {
+          if(!$(i).hasClass('init')) {
             $(i).addClass('init');
-	    $(i).attr('last-action', new String(new Date().getTime()));
+            $(i).attr('last-action', new String(new Date().getTime()));
         $(i).on('submit', function(e) {
-	    if(parseInt($(i).prop('last-action')) - new Date().getTime() > -1000) { e.preventDefault(); return; };
-	    $(i).attr('last-action', new String(new Date().getTime()));
-	    e.preventDefault();
+            if(parseInt($(i).prop('last-action')) - new Date().getTime() > -1000) { e.preventDefault(); return; };
+            $(i).attr('last-action', new String(new Date().getTime()));
+            e.preventDefault();
             $(this).find(':submit').html('<i class="bi bi-cloud-snow-fill"></i>');
             $.ajax({
                 url: $(this).attr('action') || window.location.pathname,
@@ -303,31 +376,31 @@ function publishForm() {
                 }
             });
         });
-	  }
+          }
     }
 }
 function editForm() {
-	var elements = document.querySelectorAll(".edit-form");
-	for(var x = 0; x < elements.length; x++) {
-	    if(!$(elements[x]).hasClass('init')) {
-            	$(elements[x]).addClass('init');
-		$(elements[x]).attr('last-action', new String(new Date().getTime()));
+        var elements = document.querySelectorAll(".edit-form");
+        for(var x = 0; x < elements.length; x++) {
+            if(!$(elements[x]).hasClass('init')) {
+                $(elements[x]).addClass('init');
+                $(elements[x]).attr('last-action', new String(new Date().getTime()));
                 $(elements[x]).on('click', function(event) {
-			if(parseInt($(elements[x]).prop('last-action')) - new Date().getTime() > -1000) return;
-			$(elements[x]).attr('last-action', new String(new Date().getTime()));
+                        if(parseInt($(elements[x]).prop('last-action')) - new Date().getTime() > -1000) return;
+                        $(elements[x]).attr('last-action', new String(new Date().getTime()));
                         console.log('edit');
-			var edit_iframe = document.querySelector("#iframe" + event.target.id);
-			if(edit_iframe) {
-				if($(edit_iframe).hasClass('hide')) {
+                        var edit_iframe = document.querySelector("#iframe" + event.target.id);
+                        if(edit_iframe) {
+                                if($(edit_iframe).hasClass('hide')) {
                                     edit_iframe.src = edit_iframe.dataset.src;
-				} else {
+                                } else {
                                      edit_iframe.src = '';
-				}
-				$(edit_iframe).toggleClass('hide');
-			}
-		});     
+                                }
+                                $(edit_iframe).toggleClass('hide');
+                        }
+                });
             }
-	}
+        }
 }
 function staticClocksDyn() {
     var clockScripts = document.getElementsByClassName('clock-script');
@@ -339,118 +412,146 @@ function staticClocksDyn() {
     }
 }
 var time = new String(new Date().toISOString());
-function loadNext(next){
-        if(((!lloading && !next && lpage > 1) || (!loading && next && page < {{ num_pages }}))) {
-                if(!next) {
-                        lloading = true;
-                        lpage = lpage - 1;
-                } else {
-                        loading = true;
-                        page = page + 1;
-                }
-                var scrollContainer = document.getElementById("scroll-container");
-                npage = null;
-                if(!next) {
-                        npage = lpage;
-                } else {
-                        npage = page;
-                }
-		console.log(npage);
-                if(npage < 1 || npage > total_pages){
-                        return;
-                }
-		var extra = "";
-		var likes = urlParams.get('likes');
-		if(likes) {
-			extra = "&likes=t";
-		}
-		var show = urlParams.get('show');
-		if(show) {
-			extra = extra + "&show=t";
-		}
-		var feed = urlParams.get('feed');
-		if(feed) {
-			extra = extra + "&feed=" + feed;
-		}
-		var lang = urlParams.get('lang');
-		if(lang) {
-			extra = extra + "&lang=" + lang;
-		}
-                const url = "?page=" + npage + "&scroll_page=t" + extra + "&time=" + time;
-		$.ajax({
-			url: url,
-			method: 'POST',
-			timeout: 1000 * 60 * 30,
-        		tryCount: 0,
-        		retryLimit: 5,
-        		error: (xhr, textStatus, errorThrown) => {
-        	        	this.tryCount++;
-        	        	if(this.tryCount >= this.retryLimit) return;
-                        setTimeout(function() {$.ajax(this);}, 7000);
-            		},
-            			success: (data) => {		
-                                if(!data.startsWith("<div ")){
-                    					setTimeout(function() {$.ajax(this);}, 10000);
-                                        return;
-                                }
-                        function finishPage(){
-                                if(npage == 1) {
-                                        document.getElementById("hide-at-begin").style.visibility = "hidden";
-                                        document.getElementById("hide-at-begin").style.height = "0px";
-                                } else if(npage > 3 && !next) {
-                                        document.getElementById("hide-at-begin").style.visibility = "visible";
-                                        document.getElementById("hide-at-begin").style.height = "auto";
-                                }
-                                if(npage == {{ num_pages }}){
-                                        document.getElementById("hide-at-end").style.visibility = "hidden";
-                                        document.getElementById("hide-at-end").style.height = "0px";
-                                } else if(npage < {{ num_pages }} - 3 && next) {
-                                        document.getElementById("hide-at-end").style.visibility = "visible";
-                                        document.getElementById("hide-at-end").style.height = "auto";
-                                }
-                                var initHeight = null;
-                                if(next){
-                                        scrollContainer.insertAdjacentHTML("beforeend", data);
-                                        function scrollWindow(npage) {
-                                                document.getElementById("page" + npage).style.visibility = "visible";
-                                                document.getElementById("page" + npage).style.height = "auto";
-                                                window.scrollBy(0,-document.getElementById("page" + npage).offsetHeight + 3365);
-                                                loading = false;
-                                        }
-                    					resizeImages();
-                                        scrollWindow(npage);
-                                } else {
-                                        scrollContainer.insertAdjacentHTML("afterbegin", data);
-                                        function fix2(npage) {
-                                                document.getElementById("page" + npage).style.height = "auto";
-                                                document.getElementById("page" + npage).style.visibility = "visible";
-                                                window.scrollBy(0, document.getElementById("page" + npage).offsetHeight);
-                                                lloading = false;
-                                        }
-                                        fix2(npage);
-                                }
-                    staticClocksDyn();
-    				likeForm();
-    				publishForm();
-    				editForm();
-    				{% if use_prism %}Prism.highlightAll();{% endif %}
-                            }
-                            finishPage();
-                        },
-                    });
-                $(function() {
-                        $(window).scroll(function() {
-                                if(document.getElementById("page" + npage) && isElementVisible(document.getElementById("page" + npage))){
-                                        if(npage == total_pages || npage == 1 || !npage){
-                                                clearUrlParameter();
-                                        } else {
-			                    			updateURLParameter2("page", npage);
-                                    	}
-			                  	}
-                        });
-                });
-                garbage_disposal(npage);
+
+/* Replacement loadNext with stable-prepend smooth scrolling */
+async function loadNext(next){
+    if(((!lloading && !next && lpage > 1) || (!loading && next && page < {{ num_pages }}))) {
+        if(!next) {
+            lloading = true;
+            lpage = lpage - 1;
+        } else {
+            loading = true;
+            page = page + 1;
         }
+
+        var scrollContainer = document.getElementById("scroll-container");
+        npage = next ? page : lpage;
+        if(npage < 1 || npage > total_pages){
+            if(next) loading = false; else lloading = false;
+            return;
+        }
+
+        var extra = "";
+        var likes = urlParams.get('likes');
+        if(likes) { extra = "&likes=t"; }
+        var show = urlParams.get('show');
+        if(show) { extra = extra + "&show=t"; }
+        var feed = urlParams.get('feed');
+        if(feed) { extra = extra + "&feed=" + feed; }
+        var lang = urlParams.get('lang');
+        if(lang) { extra = extra + "&lang=" + lang; }
+
+        const url = "?page=" + npage + "&scroll_page=t" + extra + "&time=" + time;
+
+        // If we are PREPENDING, capture the first visible page and its viewport top BEFORE insertion
+        let refInfo = null;
+        if (!next) {
+            refInfo = getFirstVisiblePageInfo(); // {el, top}
+        }
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            timeout: 1000 * 60 * 30,
+            tryCount: 0,
+            retryLimit: 5,
+            error: (xhr, textStatus, errorThrown) => {
+                this.tryCount++;
+                if(this.tryCount >= this.retryLimit) {
+                    if(next) loading = false; else lloading = false;
+                    return;
+                }
+                setTimeout(() => { $.ajax(this); }, 7000);
+            },
+            success: async (data) => {
+                if(!data.startsWith("<div ")) {
+                    setTimeout(() => { $.ajax(this); }, 10000);
+                    if(next) loading = false; else lloading = false;
+                    return;
+                }
+
+                // Insert the HTML
+                if(next){
+                    // append at end
+                    scrollContainer.insertAdjacentHTML("beforeend", data);
+                    var pageEl = document.getElementById("page" + npage);
+                    if (pageEl) {
+                        pageEl.style.visibility = "visible";
+                        pageEl.style.height = "auto";
+                    }
+                    // For append we generally do not shift viewport. Clear loading flag.
+                    loading = false;
+                } else {
+                    // prepend at start
+                    scrollContainer.insertAdjacentHTML("afterbegin", data);
+                    var pageEl = document.getElementById("page" + npage);
+                    if (pageEl) {
+                        pageEl.style.visibility = "visible";
+                        pageEl.style.height = "auto";
+                    }
+
+                    // Wait briefly for images to stabilise layout
+                    try {
+                        await waitForImages(pageEl, 3000);
+                    } catch(e) {
+                        // ignore and continue
+                    }
+
+                    // If we captured a reference element, compute how much it moved and scroll by that delta
+                    if (refInfo && refInfo.el && refInfo.el.id) {
+                        const newEl = document.getElementById(refInfo.el.id);
+                        if (newEl) {
+                            const oldTop = refInfo.top;
+                            const newTop = newEl.getBoundingClientRect().top;
+                            const delta = newTop - oldTop; // positive if element moved down
+                            // Smoothly scroll by delta so the same element remains visually stable
+                            await smoothScrollBy(delta, 450);
+                        }
+                    }
+                    lloading = false;
+                }
+
+                // Common post-insert work
+                staticClocksDyn();
+                likeForm();
+                publishForm();
+                editForm();
+                {% if use_prism %}Prism.highlightAll();{% endif %}
+
+                // update visibility of hide-at-begin / hide-at-end like before
+                if(npage == 1) {
+                    document.getElementById("hide-at-begin").style.visibility = "hidden";
+                    document.getElementById("hide-at-begin").style.height = "0px";
+                } else if(npage > 3 && !next) {
+                    document.getElementById("hide-at-begin").style.visibility = "visible";
+                    document.getElementById("hide-at-begin").style.height = "auto";
+                }
+                if(npage == {{ num_pages }}) {
+                    document.getElementById("hide-at-end").style.visibility = "hidden";
+                    document.getElementById("hide-at-end").style.height = "0px";
+                } else if(npage < {{ num_pages }} - 3 && next) {
+                    document.getElementById("hide-at-end").style.visibility = "visible";
+                    document.getElementById("hide-at-end").style.height = "auto";
+                }
+
+                // attach scroll/URL update for the newly inserted page just like before
+                $(function() {
+                    $(window).scroll(function() {
+                        if(document.getElementById("page" + npage) && isElementVisible(document.getElementById("page" + npage))){
+                            if(npage == total_pages || npage == 1 || !npage){
+                                clearUrlParameter();
+                            } else {
+                                updateURLParameter2("page", npage);
+                            }
+                        }
+                    });
+                });
+
+                // garbage-collect old pages
+                garbage_disposal(npage);
+            }
+        });
+    }
 }
 $(function() {
         var p = "page{{ page }}";
@@ -459,9 +560,9 @@ $(function() {
                         if({% if not page %}true || {% endif %}{{ page }} == total_pages || {{ page }} == 1) {
                                 clearUrlParameter();
                         } else {
-				{% if page %}updateURLParameter2("page", {{ page }});{% endif %}
-                	}
-		}
+                                {% if page %}updateURLParameter2("page", {{ page }});{% endif %}
+                        }
+                }
         });
 });
 {% include 'navbarfix.js' %}

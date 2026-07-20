@@ -1,5 +1,5 @@
 {% load app_filters %}
-{% load feed_filters %}
+{% load feed_filters %}{% linebreakless %}
 <!doctype html>
 <html lang="{{ lang }}">
   <head>
@@ -8,13 +8,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="/media/static/favicon.ico">
-        <link rel="manifest" href="/site.webmanifest">
+    <link rel="manifest" href="/site.webmanifest">
     <title>{{ the_site_name }}</title>
-        {% if not bs4 %}
-        <link rel="stylesheet" href="/static/main.css">
-        {% else %}
-        <link rel="stylesheet" href="/static/main-bs4.css">
-        {% endif %}
+    {% if not bs4 %}
+    <link rel="stylesheet" href="/static/main.css">
+    {% else %}
+    <link rel="stylesheet" href="/static/main-bs4.css">
+    {% endif %}
     <link rel="canonical" href="{{ base_url }}">
 
     <!-- Bootstrap core CSS -->
@@ -27,17 +27,17 @@
        @font-face { font-family: 'EmojiFlag'; src: url('/static/fonts/NotoColorEmoji-flagsonly.ttf'); }
     </style>
   </head>
-
   <body>
-        {% if show_ads %}
-        {% include 'google_adsense_head_code.html' %}
-        {% endif %}
-        {% if not hidega %}
-        {% include 'gtmbody.html' %}
-        {% endif %}
-        {% load cookielaw_tags %}
-        {% if cookielaw.notset %}{% rejectable_cookielaw_banner %}{% endif %}
-    {% if request.user.is_authenticated %}{% include 'navbar.html' %}<div style="height: 60px;"></div>{% endif %}
+    {% if show_ads %}
+    {% include 'google_adsense_head_code.html' %}
+    {% endif %}
+    {% if not hidega %}
+    {% include 'gtmbody.html' %}
+    {% endif %}
+    {% load cookielaw_tags %}
+    {% if cookielaw.notset %}{% rejectable_cookielaw_banner %}{% endif %}
+    {% include 'navbar.html' %}
+    <div style="height: 120px;"></div>
     <div class="container">
       <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
@@ -59,14 +59,16 @@
       </header>
 
       <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-between">
-          {% for feed in feeds %}
-          <a class="p-2 text-muted" href="{% url 'feed:profile' my_user.profile.name %}?feed={{ feed }}">{{ feed|caps }}</a>
-          {% endfor %}
-        </nav>
+          <div class="mx-auto" style="width: 100%; overflow-x: scroll;">
+              <nav class="nav d-flex justify-content-between">
+                {% for feed in feeds %}
+                <a class="p-2 text-muted" href="{% url 'feed:profile' my_user.profile.name %}?feed={{ feed }}">{{ feed|caps }}</a>
+                {% endfor %}
+              </nav>
+          </div>
       </div>
 
-      <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+      <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url('{{ posts.0.get_image_thumb_url }}'); background-size: cover; background-position: center; min-height: 300px;">
         <div class="col-md-6 px-0">
           <h1 class="display-4 font-italic" style="color: white;">{{ posts.0.id|shorttitle }}</h1>
           <p class="lead my-3">{{ posts.0.id|shortdescription }}</p>
@@ -228,123 +230,116 @@
         <a href="#">Back to top</a>
       </p>
     </footer>
-        <script src="/static/main.js"></script>
-        {% block javascripts %}{% endblock %}
-        <script>
-        {% linebreakless %}
-        {% include 'security/session_injection.js' %}
-        $(document).ready(function() {
-                {% if not hidenavbar %}
-                {% if polling_now %}
-            var hideVoteCookie = getCookie("hidevotebanner") != '';
-            if(document.getElementById('vote-banner') && hideVoteCookie) { document.getElementById('vote-banner').classList.add('fade-hidden'); }
-            else if(document.getElementById('vote-banner')) { document.getElementById('vote-banner').classList.remove('fade-hidden');
-            document.getElementById('vote-banner').classList.remove('hide'); }
-            {% endif %}
-            try {
-                $(document.getElementById("clemn-navbar")).autoHidingNavbar().show();
-            } catch {}
-                {% endif %}
-                {% if splash %}
-                        {% include 'feed/modal.js' %}
-                {% endif %}
-                {% include 'accl_logout.js' %}
-                {% include 'clock.js' %}
-                {% if not webpush_override and not request.path == '/verify/age/' and not request.has_push_cookie %}
-                        {% include 'webpush.js' %}
-                {% elif webpush_override %}
-                        {% include 'webpush.js' %}
-                {% endif %}
-                setTimeout(function() {
-                        $("#django-messages-container").addClass("fade-hidden");
-                        setTimeout(function() {
-                                $("#django-messages-container").addClass("shrink-fast");
-                                setTimeout(function() {
-                                        $("#django-messages-container").addClass("hide");
-                                }, 1000);
-                        }, 2000);
-                }, 20000);
-            {% if preload and not disable_preload %}
-                {% if load_timeout %}
-            setTimeout(function(){
-                        $('body').addClass('loaded');
-                        $('#loader-wrapper-init').addClass('hide');
-                }, {% if load_timeout %}{{ load_timeout }}{% else %}{% endif %});
-            {% else %}
-                $('body').addClass('loaded');
-                $('#loader-wrapper-init').addClass('hide');
-            {% endif %}
-                setTimeout(function() {
-                        $('#loader-wrapper-init').addClass('fade-hidden-fast');
-                }, 100);
-            {% endif %}
-            try {
-                var qrdiv = document.getElementById("shareqrcode");
-                    if(!qrdiv) return;
-                var qr = $('#shareqrcode').kjua({text: '{{ base_url }}{{ request.path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}', render: 'svg'});
-                var image = qrdiv.querySelector('svg');
-                image.style.width = "100%";
-                image.style.height = "auto";
-                image.style.maxWidth = "400px";
-                function downloadSVG() {
-                    const svg = document.getElementById('shareqrcode').querySelector('svg');
-
-                    const serializer = new XMLSerializer();
-                    let source = serializer.serializeToString(svg);
-
-                    if (!source.match(/^<svg[^>]+xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/)) {
-                        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-                    }
-                    if (!source.match(/^<svg[^>]+\"http:\/\/www\.w3\.org\/1999\/xlink\"/)) {
-                        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-                    }
-                    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-
-                    const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
-
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = url;
-                    downloadLink.download = ('{{ the_site_name }} - QR Code').replaceAll(' ', '_');
-
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                }
-                function downloadQr(){
-                    downloadSVG();
-                }
-                qrdiv.onclick = downloadQr;
-            } catch(error) {
-                document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
-            }
-        });
-        {% include 'report.js' %}
-        </script>
-        {% if show_ads and not hiderrm %}
-        {% include 'rrm.html' %}
+    <script src="/static/main.js"></script>
+    {% block javascripts %}{% endblock %}
+    <script>
+    {% include 'security/session_injection.js' %}
+    $(document).ready(function() {
+            {% if not hidenavbar %}
+            {% if polling_now %}
+        var hideVoteCookie = getCookie("hidevotebanner") != '';
+        if(document.getElementById('vote-banner') && hideVoteCookie) { document.getElementById('vote-banner').classList.add('fade-hidden'); }
+        else if(document.getElementById('vote-banner')) { document.getElementById('vote-banner').classList.remove('fade-hidden');
+        document.getElementById('vote-banner').classList.remove('hide'); }
         {% endif %}
-{% endlinebreakless %}
-
-        <script>
-            if (navigator.serviceWorker) {
-                navigator.serviceWorker.register (
-                    '/serviceworker.js',
-                    {scope: '/'}
-                )
-            }
-        </script>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-        {% if not headjs %}
-        {% if not bs4 %}
-        <script src="/static/main.js"></script>
+        try {
+            $(document.getElementById("clemn-navbar")).autoHidingNavbar().show();
+        } catch {}
+            {% endif %}
+            {% if splash %}
+                    {% include 'feed/modal.js' %}
+            {% endif %}
+            {% include 'accl_logout.js' %}
+            {% include 'clock.js' %}
+            {% if not webpush_override and not request.path == '/verify/age/' and not request.has_push_cookie %}
+                    {% include 'webpush.js' %}
+            {% elif webpush_override %}
+                    {% include 'webpush.js' %}
+            {% endif %}
+            setTimeout(function() {
+                    $("#django-messages-container").addClass("fade-hidden");
+                    setTimeout(function() {
+                            $("#django-messages-container").addClass("shrink-fast");
+                            setTimeout(function() {
+                                    $("#django-messages-container").addClass("hide");
+                            }, 1000);
+                    }, 2000);
+            }, 20000);
+        {% if preload and not disable_preload %}
+            {% if load_timeout %}
+        setTimeout(function(){
+                    $('body').addClass('loaded');
+                    $('#loader-wrapper-init').addClass('hide');
+            }, {% if load_timeout %}{{ load_timeout }}{% else %}{% endif %});
         {% else %}
-        <script src="/static/main-bs4.js"></script>
+            $('body').addClass('loaded');
+            $('#loader-wrapper-init').addClass('hide');
         {% endif %}
+            setTimeout(function() {
+                    $('#loader-wrapper-init').addClass('fade-hidden-fast');
+            }, 100);
         {% endif %}
+        try {
+            var qrdiv = document.getElementById("shareqrcode");
+                if(!qrdiv) return;
+            var qr = $('#shareqrcode').kjua({text: '{{ base_url }}{{ request.path }}{% if request.GET %}?{% for key, value in request.GET.items %}{{key}}={{value}}{% if forloop.counter < request.GET|length %}&{% endif %}{% endfor %}{% endif %}', render: 'svg'});
+            var image = qrdiv.querySelector('svg');
+            image.style.width = "100%";
+            image.style.height = "auto";
+            image.style.maxWidth = "400px";
+            function downloadSVG() {
+                const svg = document.getElementById('shareqrcode').querySelector('svg');
+
+                const serializer = new XMLSerializer();
+                let source = serializer.serializeToString(svg);
+
+                if (!source.match(/^<svg[^>]+xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/)) {
+                    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                }
+                if (!source.match(/^<svg[^>]+\"http:\/\/www\.w3\.org\/1999\/xlink\"/)) {
+                    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+                }
+                source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+                const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = ('{{ the_site_name }} - QR Code').replaceAll(' ', '_');
+
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+            function downloadQr(){
+                downloadSVG();
+            }
+            qrdiv.onclick = downloadQr;
+        } catch(error) {
+            document.getElementById('javascript-console').insertAdjacentHTML("beforeend", '<div>' + new String(error) + '</div>');
+        }
+    });
+    {% include 'report.js' %}
+    </script>
+    {% if show_ads and not hiderrm %}
+    {% include 'rrm.html' %}
+    {% endif %}
+
+    <script>
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register (
+                '/serviceworker.js',
+                {scope: '/'}
+            )
+        }
+    </script>
+    {% if not headjs %}
+    {% if not bs4 %}
+    <script src="/static/main.js"></script>
+    {% else %}
+    <script src="/static/main-bs4.js"></script>
+    {% endif %}
+    {% endif %}
     <script>
       Holder.addTheme('thumb', {
         bg: '#55595c',
@@ -354,3 +349,4 @@
     </script>
   </body>
 </html>
+{% endlinebreakless %}

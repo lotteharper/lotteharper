@@ -557,14 +557,18 @@ class Post(models.Model):
         try:
             if self.image and os.path.exists(self.image.path): return
         except: pass
-        with self.image_bucket.storage.open(str(self.image_bucket), mode='rb') as bucket_file:
-            full_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, 'image.png'))
-            with open(full_path, "wb") as image_file:
-                image_file.write(bucket_file.read())
-                image_file.close()
-            self.image = full_path
-            self.save()
-            bucket_file.close()
+        try:
+            with self.image_bucket.storage.open(str(self.image_bucket), mode='rb') as bucket_file:
+                full_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, 'image.png'))
+                with open(full_path, "wb") as image_file:
+                    image_file.write(bucket_file.read())
+                    image_file.close()
+                self.image = full_path
+                self.save()
+                bucket_file.close()
+        except:
+            import traceback
+            print(traceback.format_exc())
 
     def download_thumbnail(self):
         import os
@@ -572,14 +576,18 @@ class Post(models.Model):
         try:
             if self.image_thumbnail and os.path.exists(self.image_thumbnail.path): return
         except: pass
-        with self.image_thumbnail_bucket.storage.open(str(self.image_thumbnail_bucket), mode='rb') as bucket_file:
-            full_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, 'image.png'))
-            with open(full_path, "wb") as image_file:
-                image_file.write(bucket_file.read())
-                image_file.close()
-            self.image_thumbnail = full_path
-            self.save()
-            bucket_file.close()
+        try:
+            with self.image_thumbnail_bucket.storage.open(str(self.image_thumbnail_bucket), mode='rb') as bucket_file:
+                full_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, 'image.png'))
+                with open(full_path, "wb") as image_file:
+                    image_file.write(bucket_file.read())
+                    image_file.close()
+                self.image_thumbnail = full_path
+                self.save()
+                bucket_file.close()
+        except:
+            import traceback
+            print(traceback.format_exc())
 
     def download_file(self):
         import os

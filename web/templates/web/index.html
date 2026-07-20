@@ -3,41 +3,78 @@
 <meta property="og:image" content="{{ model.profile.get_image_url }}">
 <meta name="pinterest:image" content="{{ model.profile.get_image_url }}"/>
 <style>
-iframe { 
+iframe {
   width: 100%;
   aspect-ratio: 16 / 9;
 }
+
+/* disable scrolling while we adjust the page during updates */
+html.no-scroll, body.no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+/* subtle fade-in for newly inserted images */
+.photo-fade-in {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.photo-fade-in.photo-visible {
+  opacity: 1;
+  transform: none;
+}
 </style>
-{% endblock %}{% block content %}
+{% endblock %}
+
+{% block content %}
 {% load feed_filters %}
 {% load app_filters %}
 <div id="pg0">
-<div class="mx-auto" style="width: 100%; max-width: 800px;"><img src="{{ model.profile.get_cover_image }}" width="100%" class="rounded"></img></div>
-<h1>{{ 'My Photos'|etrans }}</h1>
-<legend>{{ model_name }}</legend>
-{% autoescape off %}
-<p>{{ model.profile.id|transbio|addhttpstodomains|embedlinks|tagusers }}</p>
-{% endautoescape %}
-<p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
-<p>{{ 'Visit my GitHub to see my'|etrans }} <a href="{{ github_url }}" title="{{ 'My projects on GitHub'|etrans }}">{{ 'projects'|etrans }}</a>.</p>
-{% if model.vendor_profile.video_embed %}{% autoescape off %}
-{{ model.vendor_profile.video_embed }}
-{% endautoescape %}{% endif %}
-{% include 'banner_ad.html' %}
-<hr>
-<div id="photo-page">
-{% autoescape off %}
-{{ init_images }}
-{% endautoescape %}
+  <div class="mx-auto" style="width: 100%; max-width: 800px;">
+    <img src="{{ model.profile.get_cover_image }}" width="100%" class="rounded" />
+  </div>
+
+  <h1>{{ 'My Photos'|etrans }}</h1>
+  <legend>{{ model_name }}</legend>
+
+  {% autoescape off %}
+  <p>{{ model.profile.id|transbio|addhttpstodomains|embedlinks|tagusers }}</p>
+  {% endautoescape %}
+
+  <p style="text-align: center;"><small>{{ model.profile.last_seen }}</small></p>
+  <p>{{ 'Visit my GitHub to see my'|etrans }} <a href="{{ github_url }}" title="{{ 'My projects on GitHub'|etrans }}">{{ 'projects'|etrans }}</a>.</p>
+
+  {% if model.vendor_profile.video_embed %}{% autoescape off %}
+  {{ model.vendor_profile.video_embed }}
+  {% endautoescape %}{% endif %}
+
+  {% include 'banner_ad.html' %}
+  <hr>
+
+  <div id="photo-page">
+    {% autoescape off %}
+    {{ init_images }}
+    {% endautoescape %}
+  </div>
 </div>
-</div>
+
 {% include 'web/social.html' %}
 {% endblock %}
+
 {% block footer %}
 {% endblock %}
+
 {% block javascript %}
 
 {% autoescape off %}
+/*
+  JS behavior:
+  - Ensures first images (starting from index 0) load first.
+  - Appends batches of images as the user scrolls near the bottom.
+  - Disables user scrolling briefly while new content is inserted + stabilised to avoid layout jumps.
+  - Uses a small fade-in for the newly-inserted images.
+*/
 function setGetParam(key,value) {
   if (history.pushState) {
     var params = new URLSearchParams(window.location.search);
@@ -59,59 +96,203 @@ $(".pagebutton").on("click", function() {
     $("#pg" + page).removeClass("hide");
     return false;
 });
+
 var params = new URLSearchParams(window.location.search);
-var images = `{{ images }}`.split('\n');
-{% endautoescape %}
-var container = document.getElementById('photo-page');
-var lcount = 12;
-var ncount = 12;
-var load_next = false;
-var load_last = false;
+
+/* images is supplied by the template as newline-separated HTML snippets.
+   Example: '<div id="div0">...</div>\n<div id="div1">...</div>\n...' */
+var images = `{{ images }}`.split('\n').filter(function(s){ return s && s.trim(); });
+
 var photoPage = document.getElementById('photo-page');
-var scroll_factor = 6;
-var disposal_limit = 40;
-function garbageDisposal(count) {
-    var d = document.getElementById('div' + new String(count - disposal_limit));
-    if(d) { d.remove();}
-    d = document.getElementById('div' + new String(count + disposal_limit));
-    if(d) { d.remove();}
+var batchSize = 12;           // how many images to insert per batch
+var initialLoad = 12;        // how many images to load initially (starting from index 0)
+var nextIndex = 0;           // next index to append (starts at 0 to ensure first photo shown first)
+var loading = false;
+var scrollFactor = 6;
+var disposal_limit = 80;     // keep a sliding window of inserted elements
+
+/* disable / enable user scroll while we perform layout-sensitive updates */
+function disableUserScroll() {
+  document.documentElement.classList.add('no-scroll');
+  document.body.classList.add('no-scroll');
 }
-const adsenseAd = `<iframe width="100%" src="/{{ lang }}/ad" height="700px">
-</iframe>
-<hr>`;
+function enableUserScroll() {
+  document.documentElement.classList.remove('no-scroll');
+  document.body.classList.remove('no-scroll');
+}
+
+/* wait for images inside element to complete loading (or timeout) */
+function waitForImages(el, timeoutMs) {
+  return new Promise(resolve => {
+    if (!el) return resolve();
+    var imgs = Array.from(el.querySelectorAll('img'));
+    if (imgs.length === 0) return resolve();
+    var remaining = imgs.length;
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      resolve();
+    }
+    imgs.forEach(function(img){
+      if (img.complete) {
+        remaining--;
+        if (remaining <= 0) finish();
+      } else {
+        img.addEventListener('load', function(){ remaining--; if (remaining<=0) finish(); }, { once: true });
+        img.addEventListener('error', function(){ remaining--; if (remaining<=0) finish(); }, { once: true });
+      }
+    });
+    setTimeout(finish, timeoutMs || 3000);
+  });
+}
+
+/* Insert a batch of images starting from nextIndex. Appends to the end.
+   We briefly disable scrolling while inserting and waiting for images to stabilise to avoid jumps.
+*/
+async function appendBatch() {
+  if (loading) return;
+  if (nextIndex >= images.length) return;
+  loading = true;
+  disableUserScroll();
+
+  var frag = document.createElement('div');
+  var insertedIds = [];
+
+  var count = 0;
+  while (count < batchSize && nextIndex < images.length) {
+    // ensure each snippet includes an id like id="divN" as in the original markup
+    var html = images[nextIndex].trim();
+    // wrap snippet in a container so we can manipulate classes for fade-in
+    var wrapperId = 'div' + nextIndex;
+    var wrapped = `<div id="${wrapperId}" class="photo-fade-in">${html}</div>`;
+    frag.insertAdjacentHTML('beforeend', wrapped + '<hr>');
+    insertedIds.push(wrapperId);
+    nextIndex++;
+    count++;
+  }
+
+  // append the batch
+  photoPage.appendChild(frag);
+
+  // optionally insert an ad iframe after each batch (keeps previous behavior)
+  var adsenseAd = document.createElement('div');
+  adsenseAd.innerHTML = `<iframe width="100%" src="/{{ lang }}/ad" height="700px"></iframe><hr>`;
+  photoPage.appendChild(adsenseAd);
+
+  // Wait for images in the newly inserted elements to load (short timeout)
+  try {
+    // build temporary element that contains the newly inserted nodes for waiting
+    var tempEl = document.createElement('div');
+    insertedIds.forEach(id => {
+      var el = document.getElementById(id);
+      if (el) tempEl.appendChild(el.cloneNode(true));
+    });
+    await waitForImages(tempEl, 3000);
+  } catch(e) {
+    // continue even if waiting fails
+    console.warn('waitForImages error', e);
+  }
+
+  // Make the inserted items visible via CSS transition
+  requestAnimationFrame(function(){
+    insertedIds.forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.classList.add('photo-visible');
+    });
+  });
+
+  // garbage disposal: remove items far outside the sliding window to keep DOM small
+  // keep around [nextIndex - disposal_limit, nextIndex + disposal_limit]
+  try {
+    var minKeep = Math.max(0, nextIndex - disposal_limit);
+    var maxKeep = Math.min(images.length - 1, nextIndex + disposal_limit);
+    // remove items with index < minKeep
+    for (var i = 0; i < minKeep; i++) {
+      var id = 'div' + i;
+      var d = document.getElementById(id);
+      if (d) d.remove();
+    }
+    // remove items with index > maxKeep
+    for (var i = maxKeep + 1; i < images.length; i++) {
+      var id = 'div' + i;
+      var d = document.getElementById(id);
+      if (d) d.remove();
+    }
+  } catch(e) {
+    // ignore
+  }
+
+  // small delay to let paint complete before re-enabling scroll
+  setTimeout(function(){
+    enableUserScroll();
+    loading = false;
+  }, 260);
+}
+
+/* If user scrolls near bottom, append more images.
+   We use a periodic check (like original code) but avoid rapid-fire calls by gating with `loading`. */
+var checkInterval = 700; // ms
 setInterval(function() {
-    if($(window).scrollTop() + $(window).height() > $(document).height() - $(document).height()/scroll_factor) {
-      load_next = true;
-    } else {
-      load_next = false;
+  var scrollTop = $(window).scrollTop();
+  var visibleHeight = $(window).height();
+  var docHeight = $(document).height();
+
+  var nearBottom = (scrollTop + visibleHeight) > (docHeight - docHeight/scrollFactor);
+  if (nearBottom) {
+    appendBatch();
+  }
+}, checkInterval);
+
+/* On initial load: ensure first images are loaded first (start from index 0) */
+document.addEventListener('DOMContentLoaded', function() {
+  // clear any server-rendered init_images if present so we control starting slice reliably
+  // If you prefer to keep server-rendered init_images, comment out the next line.
+  photoPage.innerHTML = '';
+
+  // preload the first batch synchronously (so first photo is index 0)
+  (async function initialLoad() {
+    // clamp initialLoad to images length
+    initialLoad = Math.min(initialLoad, images.length);
+    if (initialLoad <= 0) return;
+    disableUserScroll();
+    var frag = document.createElement('div');
+    var insertedIds = [];
+    for (var i = 0; i < initialLoad; i++) {
+      var html = images[i].trim();
+      var wrapperId = 'div' + i;
+      frag.insertAdjacentHTML('beforeend', `<div id="${wrapperId}" class="photo-fade-in">${html}</div><hr>`);
+      insertedIds.push(wrapperId);
+      nextIndex = i + 1;
     }
-    if($(window).scrollTop() + $(window).height() < $(document).height() - ($(document).height() - $(document).height()/scroll_factor)) {
-      load_last = true;
-    } else {
-      load_last = false;
+    photoPage.appendChild(frag);
+
+    // Wait for first-batch images to load to avoid layout shifts
+    try {
+      var tempEl = document.createElement('div');
+      insertedIds.forEach(id => {
+        var el = document.getElementById(id);
+        if (el) tempEl.appendChild(el.cloneNode(true));
+      });
+      await waitForImages(tempEl, 4000);
+    } catch(e) {
+      console.warn('initial waitForImages failed', e);
     }
-    if(ncount < images.length && load_next) {
-        for(var x = 0; x < 10; x++) {
-           if(!document.getElementById('div' + new String(ncount)) && images[ncount]) {
-               photoPage.insertAdjacentHTML("beforeend", images[ncount] + '<hr>');
-               garbageDisposal(ncount);
-               ncount = ncount + 1;
-            } else {
-                ncount = ncount + 1;
-            }
-        }
-	photoPage.insertAdjacentHTML("beforeend", adsenseAd);
-    }
-    if(lcount > 0 && load_last) {
-        for(var x = 0; x < 10; x++) {
-           if(!document.getElementById('div' + new String(lcount)) && images[lcount]) {
-               photoPage.insertAdjacentHTML("afterbegin", images[lcount] + '<hr>');
-               garbageDisposal(lcount);
-               lcount = lcount - 1;
-            } else {
-                lcount = lcount - 1;
-            }
-        }
-    }
-}, 3000);
+
+    // reveal with transition
+    requestAnimationFrame(function(){
+      insertedIds.forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.classList.add('photo-visible');
+      });
+    });
+
+    // small pause to ensure layout is stable
+    setTimeout(function(){
+      enableUserScroll();
+    }, 300);
+  })();
+});
+{% endautoescape %}
+
 {% endblock %}

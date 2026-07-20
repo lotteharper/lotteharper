@@ -129,7 +129,8 @@ class VendorProfileUpdateForm(forms.ModelForm):
         self.fields['emergency_contact_1_phone'].label = translate(r, 'Emergency contact 1 phone number including +1', src='en')
         self.fields['emergency_contact_2_name'].label = translate(r, 'Emergency contact 2 name', src='en')
         self.fields['emergency_contact_2_phone'].label = translate(r, 'Emergency contact 2 phone number including +1', src='en')
-
+        self.fields['video_link'].required = False
+        self.fields['content_link'].required = False
         from verify.tests import minor_identity_verified
         if not minor_identity_verified(user): self.fields.pop('activate_surrogacy')
 
