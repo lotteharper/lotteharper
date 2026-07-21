@@ -1,6 +1,6 @@
-start_lang = 'en'
+start_lang = 'hmn'
 overwrite = True
-test_mode = True
+test_mode = False
 single_lang = False
 force_copy = False
 force_overwrite = False
@@ -49,7 +49,7 @@ def generate_site():
     from feed.middleware import set_current_request
     nfc_aes = User.objects.get(id=settings.MY_ID).nfc_scans.last().nfc_id.replace(':','').upper() + 'FF'
     if test_mode: languages = ['en', 'de', 'fr'] if not single_lang else ['en']
-    langs = list(languages) #SELECTOR_LANGUAGES.keys() # languages
+    langs = list(languages)[list(languages).index(start_lang):] #SELECTOR_LANGUAGES.keys() # languages
     context = {
         'site_name': settings.STATIC_SITE_NAME,
         'author_name': settings.AUTHOR_NAME,
