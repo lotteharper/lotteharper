@@ -1,4 +1,4 @@
-2
+3
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,10 +13,30 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main e888047] open source
- 25 files changed, 61 insertions(+), 23 deletions(-)
- create mode 100644 media/audio/fingerprints/2f88fcc2-e49b-4f00-91f9-3d6c1df15aa3.npy
- create mode 100644 media/audio/fingerprints/cb088e54-3944-4c0a-be38-a30beffb71cb.npy
+[main 4e17bf7] open source
+ 50 files changed, 1001 insertions(+), 22 deletions(-)
+ create mode 100644 booking/.views.py.swp
+ create mode 100755 booking/__init__.py
+ create mode 100644 booking/__pycache__/__init__.cpython-312.pyc
+ create mode 100644 booking/__pycache__/admin.cpython-312.pyc
+ create mode 100644 booking/__pycache__/apps.cpython-312.pyc
+ create mode 100644 booking/__pycache__/models.cpython-312.pyc
+ create mode 100644 booking/__pycache__/urls.cpython-312.pyc
+ create mode 100644 booking/__pycache__/views.cpython-312.pyc
+ create mode 100755 booking/admin.py
+ create mode 100755 booking/apps.py
+ create mode 100644 booking/migrations/0001_initial.py
+ create mode 100644 booking/migrations/0002_historicalbooking.py
+ create mode 100755 booking/migrations/__init__.py
+ create mode 100644 booking/migrations/__pycache__/0001_initial.cpython-312.pyc
+ create mode 100644 booking/migrations/__pycache__/0002_historicalbooking.cpython-312.pyc
+ create mode 100644 booking/migrations/__pycache__/__init__.cpython-312.pyc
+ create mode 100755 booking/models.py
+ create mode 100644 booking/templates/booking/calendar.html
+ create mode 100755 booking/tests.py
+ create mode 100644 booking/urls.py
+ create mode 100755 booking/views.py
+ mode change 100755 => 100644 lotteh/__pycache__/urls.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
