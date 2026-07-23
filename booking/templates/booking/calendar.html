@@ -9,96 +9,224 @@
         box-sizing: border-box;
     }
 
+    html, body {
+        height: 100%;
+    }
+
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
+        min-width: 100vw;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 20px;
     }
 
     .booking-container {
         background: white;
         border-radius: 12px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        max-width: 1000px;
+        max-width: 1200px;
         width: 100%;
         overflow: hidden;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
     }
 
     .booking-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        padding: 30px;
         text-align: center;
+        flex-shrink: 0;
     }
 
     .booking-header h1 {
-        font-size: 28px;
-        margin-bottom: 10px;
+        font-size: 24px;
+        margin-bottom: 8px;
     }
 
     .booking-header p {
-        font-size: 14px;
+        font-size: 13px;
         opacity: 0.9;
     }
 
     .booking-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        padding: 30px;
+        overflow: auto;
+        flex: 1;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .booking-content {
             grid-template-columns: 1fr;
         }
     }
 
-    /* Calendar Section */
-    .calendar-section h2 {
-        font-size: 18px;
-        color: #333;
-        margin-bottom: 20px;
+    @media (max-width: 640px) {
+        .booking-container {
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .booking-header {
+            padding: 15px;
+        }
+
+        .booking-header h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .booking-header p {
+            font-size: 12px;
+        }
+
+    }
+
+    /* Month Navigation */
+    .month-navigation {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
         gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .month-nav-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 12px;
+        flex: 0 1 auto;
+    }
+
+    .month-nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .month-nav-btn:active {
+        transform: translateY(0);
+    }
+
+    .month-nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .month-selector {
+        flex: 1;
+        min-width: 140px;
+        text-align: center;
+    }
+
+    .month-selector select {
+        padding: 8px 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+        width: 100%;
+    }
+
+    .month-selector select:hover {
+        border-color: #667eea;
+    }
+
+    .month-selector select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Calendar Section */
+    .calendar-section h2 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .month-header {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 12px;
     }
 
     .calendar-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 8px;
+        gap: 4px;
     }
 
     .weekday-header {
         text-align: center;
         font-weight: 600;
         color: #667eea;
-        font-size: 12px;
-        padding: 10px;
+        font-size: 10px;
+        padding: 6px 2px;
         text-transform: uppercase;
+        background: #f5f5f5;
+        border-radius: 4px;
     }
 
     .date-btn {
-        padding: 12px;
+        aspect-ratio: 1;
+        padding: 6px;
         border: 2px solid #e0e0e0;
         background: white;
-        border-radius: 8px;
+        border-radius: 6px;
         cursor: pointer;
         font-size: 12px;
-        font-weight: 500;
-        transition: all 0.3s ease;
+        font-weight: 600;
+        transition: all 0.2s ease;
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (max-width: 640px) {
+        .date-btn {
+            min-height: 42px;
+            font-size: 11px;
+            padding: 4px;
+        }
     }
 
     .date-btn:hover:not(:disabled) {
         border-color: #667eea;
         background: #f0f3ff;
-        transform: translateY(-2px);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    }
+
+    .date-btn:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .date-btn.empty {
+        background: #fafafa;
+        cursor: default;
+        border: none;
+        pointer-events: none;
     }
 
     .date-btn.past-date {
@@ -108,18 +236,21 @@
         border-color: #ddd;
     }
 
+    .date-btn.past-date:hover {
+        transform: none;
+    }
+
     .date-btn.selected {
         background: #667eea;
         color: white;
         border-color: #667eea;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
     }
 
-    .date-btn:disabled {
-        background: #fff3f3;
-        color: #d32f2f;
-        border-color: #ffcdd2;
-        cursor: not-allowed;
+    .date-btn.today {
+        border-color: #667eea;
+        background: #f0f3ff;
+        box-shadow: inset 0 0 0 2px #667eea;
     }
 
     .booked-indicator {
@@ -134,56 +265,78 @@
 
     /* Time Slot Section */
     .time-section h2 {
-        font-size: 18px;
+        font-size: 16px;
         color: #333;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
     .selected-date-display {
         background: #f5f5f5;
-        padding: 12px;
-        border-radius: 8px;
+        padding: 10px;
+        border-radius: 6px;
         text-align: center;
         font-weight: 600;
         color: #667eea;
-        margin-bottom: 15px;
-        min-height: 20px;
+        margin-bottom: 12px;
+        min-height: 18px;
+        font-size: 13px;
     }
 
     .time-slots {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        max-height: 300px;
+        gap: 6px;
+        max-height: 250px;
         overflow-y: auto;
-        padding-right: 5px;
+        padding-right: 3px;
+    }
+
+    @media (max-width: 768px) {
+        .time-slots {
+            grid-template-columns: repeat(3, 1fr);
+            max-height: 200px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .time-slots {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+        }
     }
 
     .time-slot {
-        padding: 12px;
+        padding: 10px 6px;
         border: 2px solid #e0e0e0;
         background: white;
-        border-radius: 8px;
+        border-radius: 6px;
         cursor: pointer;
         text-align: center;
         font-weight: 500;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
+        font-size: 12px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .time-slot:hover:not(:disabled) {
         border-color: #667eea;
         background: #f0f3ff;
-        transform: translateY(-2px);
+        transform: translateY(-1px);
+    }
+
+    .time-slot:active:not(:disabled) {
+        transform: translateY(0);
     }
 
     .time-slot.selected {
         background: #667eea;
         color: white;
         border-color: #667eea;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
     }
 
     .time-slot.booked {
@@ -192,6 +345,7 @@
         border-color: #ffcdd2;
         cursor: not-allowed;
         opacity: 0.6;
+        font-size: 10px;
     }
 
     .time-slot:disabled {
@@ -202,39 +356,39 @@
     /* Form Section */
     .form-section {
         background: #f9f9f9;
-        padding: 25px;
-        border-radius: 8px;
+        padding: 15px;
+        border-radius: 6px;
         border: 1px solid #e0e0e0;
     }
 
     .form-section h2 {
-        font-size: 18px;
+        font-size: 14px;
         color: #333;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .form-group label {
         display: block;
         font-weight: 600;
         color: #333;
-        margin-bottom: 8px;
-        font-size: 14px;
+        margin-bottom: 4px;
+        font-size: 12px;
     }
 
     .form-group input,
     .form-group textarea {
         width: 100%;
-        padding: 10px 12px;
+        padding: 8px 10px;
         border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        font-size: 14px;
+        border-radius: 4px;
+        font-size: 13px;
         font-family: inherit;
         transition: border-color 0.3s ease;
     }
@@ -248,7 +402,7 @@
 
     .form-group textarea {
         resize: vertical;
-        min-height: 80px;
+        min-height: 60px;
     }
 
     .form-group.required label::after {
@@ -258,15 +412,15 @@
 
     .booking-summary {
         background: white;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 4px solid #667eea;
-        margin-bottom: 20px;
-        font-size: 14px;
+        padding: 10px;
+        border-radius: 4px;
+        border-left: 3px solid #667eea;
+        margin-bottom: 12px;
+        font-size: 12px;
     }
 
     .booking-summary p {
-        margin: 5px 0;
+        margin: 3px 0;
         color: #555;
     }
 
@@ -276,20 +430,32 @@
 
     .btn-container {
         display: flex;
-        gap: 10px;
+        gap: 6px;
+        flex-wrap: wrap;
     }
 
     .btn {
         flex: 1;
-        padding: 12px;
+        min-width: 120px;
+        padding: 10px 12px;
         border: none;
-        border-radius: 6px;
-        font-size: 14px;
+        border-radius: 4px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.4px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (max-width: 640px) {
+        .btn {
+            flex: 1 1 calc(50% - 3px);
+            padding: 12px 10px;
+            font-size: 11px;
+        }
     }
 
     .btn-primary {
@@ -298,8 +464,12 @@
     }
 
     .btn-primary:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:active:not(:disabled) {
+        transform: translateY(0);
     }
 
     .btn-primary:disabled {
@@ -318,10 +488,10 @@
     }
 
     .alert {
-        padding: 12px 15px;
-        border-radius: 6px;
-        margin-bottom: 15px;
-        font-size: 14px;
+        padding: 10px 12px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-size: 12px;
         display: none;
     }
 
@@ -347,18 +517,12 @@
         border: 1px solid #fff59d;
     }
 
-    .loading {
-        display: none;
-        text-align: center;
-        padding: 20px;
-    }
-
     .spinner {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #667eea;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #667eea;
         border-radius: 50%;
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         animation: spin 1s linear infinite;
         margin: 0 auto;
     }
@@ -371,118 +535,171 @@
     .empty-state {
         text-align: center;
         color: #999;
-        padding: 30px 20px;
-        font-size: 14px;
+        padding: 20px 10px;
+        font-size: 12px;
     }
 
-    .empty-state svg {
-        width: 48px;
-        height: 48px;
-        margin-bottom: 10px;
-        opacity: 0.5;
+    /* Scrollbar styling */
+    .time-slots::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .time-slots::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .time-slots::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 10px;
+    }
+
+    .time-slots::-webkit-scrollbar-thumb:hover {
+        background: #764ba2;
+    }
+
+    /* Prevent horizontal scroll on mobile */
+    @media (max-width: 640px) {
+        body {
+            overflow-x: hidden;
+        }
+
+        .booking-container {
+            border-radius: 8px;
+        }
+    }
+
+    /* Safe area for notch devices */
+    @supports (padding: max(0px)) {
+        body {
+            padding-left: max(10px, env(safe-area-inset-left));
+            padding-right: max(10px, env(safe-area-inset-right));
+            padding-top: max(10px, env(safe-area-inset-top));
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<div style="height: 400px;"></div>
 <div class="booking-container">
     <div class="booking-header">
-        <h1>📅 Book Your Appointment</h1>
+        <h1>📅 Book Your Appointment with {{ booking_user.profile.name }}</h1>
         <p>Select a date and time that works best for you</p>
     </div>
 
-    <div class="booking-content">
+<div class="booking-content" style="width: 100% !important;">
         <!-- Calendar Section -->
         <div class="calendar-section">
             <h2>📆 Select Date</h2>
+            
+            <!-- Month Navigation -->
+            <div class="month-navigation">
+                <button class="month-nav-btn" onclick="changeMonth(-1)">← Previous</button>
+                <div class="month-selector">
+                    <select id="monthSelector" onchange="selectMonth()">
+                        {% for month_opt in available_months %}
+                            <option value="{{ month_opt.month }}-{{ month_opt.year }}" {% if month_opt.month == current_month and month_opt.year == current_year %}selected{% endif %}>
+                                {{ month_opt.display }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="month-nav-btn" onclick="changeMonth(1)">Next →</button>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="month-header">{{ month_name }} {{ current_year }}</div>
+            
             <div class="calendar-grid">
                 <!-- Weekday headers -->
-                <div class="weekday-header">Sun</div>
-                <div class="weekday-header">Mon</div>
-                <div class="weekday-header">Tue</div>
-                <div class="weekday-header">Wed</div>
-                <div class="weekday-header">Thu</div>
-                <div class="weekday-header">Fri</div>
-                <div class="weekday-header">Sat</div>
+                {% for header in weekday_headers %}
+                    <div class="weekday-header">{{ header|slice:":3" }}</div>
+                {% endfor %}
 
                 <!-- Date buttons -->
-                {% for date in dates %}
-                    {% if date == today %}
-                        <button class="date-btn" data-date="{{ date|date:'Y-m-d' }}" data-day="{{ date|date:'D' }}">
-                            {{ date|date:'d' }}
-                            <span style="display: block; font-size: 10px; opacity: 0.7;">Today</span>
-                        </button>
-                    {% else %}
-                        <button class="date-btn" data-date="{{ date|date:'Y-m-d' }}" data-day="{{ date|date:'D' }}">
-                            {{ date|date:'d' }}
-                        </button>
-                    {% endif %}
+                {% for week in calendar_days %}
+                    {% for day in week %}
+                        {% if day == None %}
+                            <div class="date-btn empty"></div>
+                        {% else %}
+                            <button 
+                                class="date-btn {% if day.is_past %}past-date{% endif %} {% if day.is_today %}today{% endif %}" 
+                                data-date="{{ day.date }}"
+                                {% if day.is_past %}disabled{% endif %}
+                            >
+                                {{ day.day }}
+                                {% if day.is_today %}<span style="display: block; font-size: 10px;">Today</span>{% endif %}
+                            </button>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Time Slot Section -->
-        <div class="time-section">
-            <h2>⏰ Select Time</h2>
-            <div class="selected-date-display" id="selectedDateDisplay"></div>
-            <div id="timeSlotsContainer" style="display: none;">
-                <div class="time-slots" id="timeSlots"></div>
+        <!-- Time Slot & Form Section -->
+        <div>
+            <!-- Time Slot Section -->
+            <div class="time-section" style="margin-bottom: 30px;">
+                <h2>⏰ Select Time</h2>
+                <div class="selected-date-display" id="selectedDateDisplay"></div>
+                <div id="timeSlotsContainer" style="display: none;">
+                    <div class="time-slots" id="timeSlots"></div>
+                </div>
+                <div class="empty-state" id="emptyTimeState">
+                    Select a date to view available times
+                </div>
             </div>
-            <div class="empty-state" id="emptyTimeState">
-                Select a date to view available times
+
+            <!-- Booking Form Section -->
+            <div class="form-section">
+                <h2>📝 Your Information</h2>
+                
+                <div id="alertContainer"></div>
+
+                <form id="bookingForm" method="POST" action="{% url 'booking:create_booking' %}">
+                    {% csrf_token %}
+
+                    <div class="booking-summary" id="bookingSummary" style="display: none;">
+                        <p><strong>Date:</strong> <span id="summaryDate"></span></p>
+                        <p><strong>Time:</strong> <span id="summaryTime"></span></p>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="customerName">Full Name</label>
+                        <input type="text" id="customerName" name="customer_name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="customerEmail">Email Address</label>
+                        <input type="email" id="customerEmail" name="customer_email" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" name="notes" placeholder="Any special requests or information..."></textarea>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" id="resetBtn">Reset</button>
+                        <button type="submit" class="btn btn-primary" id="bookingBtn" disabled>
+                            Confirm Booking
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="selectedDate" name="date">
+                    <input type="hidden" id="selectedTime" name="time">
+                </form>
             </div>
-        </div>
-    </div>
-
-    <!-- Booking Form Section -->
-    <div style="padding: 30px; border-top: 1px solid #e0e0e0;">
-        <div class="form-section">
-            <h2>📝 Your Information</h2>
-            
-            <div id="alertContainer"></div>
-
-            <form id="bookingForm" method="POST" action="{% url 'booking:create_booking' %}">
-                {% csrf_token %}
-
-                <div class="booking-summary" id="bookingSummary" style="display: none;">
-                    <p><strong>Date:</strong> <span id="summaryDate"></span></p>
-                    <p><strong>Time:</strong> <span id="summaryTime"></span></p>
-                </div>
-
-                <div class="form-group required">
-                    <label for="customerName">Full Name</label>
-                    <input type="text" id="customerName" name="customer_name" placeholder="John Doe" required>
-                </div>
-
-                <div class="form-group required">
-                    <label for="customerEmail">Email Address</label>
-                    <input type="email" id="customerEmail" name="customer_email" placeholder="john@example.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">Additional Notes</label>
-                    <textarea id="notes" name="notes" placeholder="Any special requests or information..."></textarea>
-                </div>
-
-                <div class="btn-container">
-                    <button type="button" class="btn btn-secondary" id="resetBtn">Reset</button>
-                    <button type="submit" class="btn btn-primary" id="bookingBtn" disabled>
-                        Confirm Booking
-                    </button>
-                </div>
-
-                <input type="hidden" id="selectedDate" name="date">
-                <input type="hidden" id="selectedTime" name="time">
-            </form>
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block javascripts %}
@@ -491,10 +708,12 @@
     const state = {
         selectedDate: null,
         selectedTime: null,
+        currentMonth: {{ current_month }},
+        currentYear: {{ current_year }},
     };
 
     // Elements
-    const dateButtons = document.querySelectorAll('.date-btn');
+    const dateButtons = document.querySelectorAll('.date-btn:not(.empty)');
     const timeSlots = document.getElementById('timeSlots');
     const timeSlotsContainer = document.getElementById('timeSlotsContainer');
     const emptyTimeState = document.getElementById('emptyTimeState');
@@ -504,6 +723,7 @@
     const resetBtn = document.getElementById('resetBtn');
     const alertContainer = document.getElementById('alertContainer');
     const bookingSummary = document.getElementById('bookingSummary');
+    const monthSelector = document.getElementById('monthSelector');
 
     // Format date for display
     function formatDateDisplay(dateStr) {
@@ -517,6 +737,28 @@
         setTimeout(() => {
             alertContainer.innerHTML = '';
         }, 5000);
+    }
+
+    // Change month
+    function changeMonth(offset) {
+        let newMonth = state.currentMonth + offset;
+        let newYear = state.currentYear;
+
+        if (newMonth < 1) {
+            newMonth = 12;
+            newYear--;
+        } else if (newMonth > 12) {
+            newMonth = 1;
+            newYear++;
+        }
+
+        window.location.href = `?month=${newMonth}&year=${newYear}`;
+    }
+
+    // Select month from dropdown
+    function selectMonth() {
+        const [month, year] = monthSelector.value.split('-');
+        window.location.href = `?month=${month}&year=${year}`;
     }
 
     // Fetch available times for selected date
@@ -580,7 +822,7 @@
     // Select date
     function selectDate(dateStr, button) {
         // Remove previous selection
-        dateButtons.forEach(btn => btn.classList.remove('selected'));
+        document.querySelectorAll('.date-btn.selected').forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
 
         state.selectedDate = dateStr;
@@ -631,7 +873,7 @@
         document.getElementById('selectedDate').value = '';
         document.getElementById('selectedTime').value = '';
 
-        dateButtons.forEach(btn => btn.classList.remove('selected'));
+        document.querySelectorAll('.date-btn.selected').forEach(btn => btn.classList.remove('selected'));
         document.querySelectorAll('.time-slot.selected').forEach(btn => btn.classList.remove('selected'));
         
         selectedDateDisplay.textContent = '';
@@ -653,6 +895,7 @@
         bookingBtn.innerHTML = '<div class="spinner"></div>';
 
         const formData = new FormData(bookingForm);
+        formData.append('username', '{{ booking_user.profile.name }}');
 
         try {
             const response = await fetch(bookingForm.action, {
@@ -684,8 +927,8 @@
         }
     });
 
-    // Event listeners
-    dateButtons.forEach(button => {
+    // Event listeners for date buttons
+    document.querySelectorAll('.date-btn:not(.empty):not(:disabled)').forEach(button => {
         button.addEventListener('click', () => selectDate(button.dataset.date, button));
     });
 

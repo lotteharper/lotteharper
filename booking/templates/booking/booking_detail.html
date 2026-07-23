@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+{% load feed_filters %}
+{% block head %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #667eea;
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    .detail-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .detail-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+    }
+
+    .detail-header h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .detail-header p {
+        opacity: 0.9;
+        font-size: 14px;
+    }
+
+    .detail-content {
+        padding: 30px;
+    }
+
+    .detail-section {
+        margin-bottom: 30px;
+    }
+
+    .detail-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .detail-section h3 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #667eea;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 15px;
+        margin-bottom: 12px;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .detail-value {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .detail-value.highlight {
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-date {
+        background: #f0f3ff;
+        color: #667eea;
+    }
+
+    .badge-time {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .badge-status {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+        background: #e8e8e8;
+    }
+
+    .timeline {
+        border-left: 3px solid #e0e0e0;
+        padding-left: 20px;
+        margin-top: 15px;
+    }
+
+    .timeline-item {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -26px;
+        top: 5px;
+        width: 12px;
+        height: 12px;
+        background: #667eea;
+        border-radius: 50%;
+    }
+
+    .timeline-date {
+        font-size: 12px;
+        color: #999;
+        font-weight: 600;
+    }
+
+    .timeline-text {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'booking:booked_times_list' booking.user.profile.name %}" class="back-link">← Back to Bookings</a>
+
+    <div class="detail-card">
+        <div class="detail-header">
+            <h1>Booking Details</h1>
+            <p>Appointment #{{ booking.id }}</p>
+        </div>
+
+        <div class="detail-content">
+            <!-- Customer Information -->
+            <div class="detail-section">
+                <h3>👤 Customer Information</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Name</div>
+                    <div class="detail-value">{{ booking.customer_name }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value">
+                        <a href="mailto:{{ booking.customer_email }}" style="color: #667eea;">
+                            {{ booking.customer_email }}
+                        </a>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value">{{ booking.phone|default:"Not provided" }}</div>
+                </div>
+            </div>
+
+            <!-- Appointment Details -->
+            <div class="detail-section">
+                <h3>📅 Appointment Details</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Date</div>
+                    <div class="detail-value">
+                        <span class="badge badge-date">{{ booking.date|date:"F d, Y (l)" }}</span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Start Time</div>
+                    <div class="detail-value">
+                        <span class="badge badge-time">{{ booking.start_time|time:"g:i A" }}</span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">End Time</div>
+                    <div class="detail-value">
+                        <span class="badge badge-time">{{ booking.end_time|time:"g:i A" }}</span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Duration</div>
+                    <div class="detail-value">1 Hour</div>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="detail-section">
+                <h3>🔖 Status</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        {% if booking.date < today %}
+                            <span class="badge" style="background: #f5f5f5; color: #999;">Completed</span>
+                        {% elif booking.date == today %}
+                            <span class="badge" style="background: #fff3e0; color: #f57c00;">Today</span>
+                        {% else %}
+                            <span class="badge" style="background: #e8f5e9; color: #2e7d32;">Upcoming</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Booked</div>
+                    <div class="detail-value highlight">
+                        {% if booking.is_booked %}✓ Yes{% else %}✗ No{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            {% if booking.notes %}
+                <div class="detail-section">
+                    <h3>📝 Notes</h3>
+                    <div class="detail-value" style="white-space: pre-wrap; line-height: 1.6;">
+                        {{ booking.notes }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Timestamps -->
+            <div class="detail-section">
+                <h3>⏱️ Timestamps</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Created</div>
+                    <div class="detail-value">{{ booking.created_at|date:"F d, Y g:i A" }}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Updated</div>
+                    <div class="detail-value">{{ booking.updated_at|date:"F d, Y g:i A" }}</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <a href="mailto:{{ booking.customer_email }}" class="btn btn-primary">✉️ Email Customer</a>
+                <a href="{% url 'booking:booked_times_list' booking.user.profile.name %}" class="btn btn-secondary">← Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

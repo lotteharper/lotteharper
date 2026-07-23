@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+{% load feed_filters %}
+{% block head %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .stat-card.primary {
+        border-top: 4px solid #667eea;
+    }
+
+    .stat-card.success {
+        border-top: 4px solid #2e7d32;
+    }
+
+    .stat-card.warning {
+        border-top: 4px solid #f57c00;
+    }
+
+    .stat-card .number {
+        font-size: 36px;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 10px;
+    }
+
+    .stat-card.success .number {
+        color: #2e7d32;
+    }
+
+    .stat-card.warning .number {
+        color: #f57c00;
+    }
+
+    .stat-card .label {
+        font-size: 13px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+
+    .stat-card .sublabel {
+        font-size: 12px;
+        color: #bbb;
+        margin-top: 8px;
+    }
+
+    /* Charts Section */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .chart-card {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-card h3 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .chart-bar {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .chart-label {
+        min-width: 100px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .chart-bar-container {
+        flex: 1;
+        margin: 0 15px;
+        height: 25px;
+        background: #f0f0f0;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .chart-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        min-width: 5px;
+        transition: width 0.3s ease;
+    }
+
+    .chart-value {
+        min-width: 40px;
+        text-align: right;
+        font-size: 13px;
+        font-weight: 600;
+        color: #667eea;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .table-card h3 {
+        font-size: 16px;
+        color: #333;
+        padding: 25px 25px 15px;
+        font-weight: 700;
+    }
+
+    .simple-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .simple-table th {
+        padding: 15px 25px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e0e0e0;
+        background: #f9f9f9;
+    }
+
+    .simple-table td {
+        padding: 15px 25px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 14px;
+    }
+
+    .simple-table tbody tr:hover {
+        background: #f9f9f9;
+    }
+
+    .date-badge {
+        background: #f0f3ff;
+        color: #667eea;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .count-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .occupancy-bar {
+        width: 100%;
+        height: 20px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    .occupancy-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>📊 Booking Statistics</h1>
+        <p>Overview of booking trends and analytics</p>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="stats-grid">
+        <div class="stat-card primary">
+            <div class="number">{{ total_booked }}</div>
+            <div class="label">Total Booked</div>
+            <div class="sublabel">out of {{ total_slots }} slots</div>
+        </div>
+
+        <div class="stat-card success">
+            <div class="number">{{ occupancy_rate }}%</div>
+            <div class="label">Occupancy Rate</div>
+            <div class="sublabel">capacity utilization</div>
+        </div>
+
+        <div class="stat-card success">
+            <div class="number">{{ upcoming_count }}</div>
+            <div class="label">Upcoming</div>
+            <div class="sublabel">scheduled appointments</div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="number">{{ past_count }}</div>
+            <div class="label">Completed</div>
+            <div class="sublabel">past appointments</div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+        <!-- Bookings by Month -->
+        <div class="chart-card">
+            <h3>📈 Bookings by Month</h3>
+            {% for month_data in bookings_by_month %}
+                <div class="chart-bar">
+                    <div class="chart-label">{{ month_data.month|truncatechars:7 }}</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: {% widthratio month_data.count 10 100 %}%"></div>
+                    </div>
+                    <div class="chart-value">{{ month_data.count }}</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Bookings by Hour -->
+        <div class="chart-card">
+            <h3>⏰ Bookings by Hour</h3>
+            {% for hour, count in bookings_by_hour.items %}
+                <div class="chart-bar">
+                    <div class="chart-label">{{ hour }}</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: {% widthratio count 10 100 %}%"></div>
+                    </div>
+                    <div class="chart-value">{{ count }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Most Booked Days -->
+    {% if most_booked_days %}
+        <div class="table-card">
+            <h3>🔥 Most Booked Days</h3>
+            <table class="simple-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Bookings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in most_booked_days %}
+                        <tr>
+                            <td>
+                                <span class="date-badge">{{ day.date|date:"F d, Y" }}</span>
+                            </td>
+                            <td>{{ day.date|date:"l" }}</td>
+                            <td>
+                                <span class="count-badge">{{ day.count }} booking{{ day.count|pluralize }}</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -34,6 +34,7 @@
 <hr style="background-color: red;">
 {% blocktrans en %}
 <div style="display: flex; justify-content: space-around;">
+<a class="btn btn-outline-primary" href="{% url 'booking:booking_calendar' profile.name %}" title="{{ 'Book an appointment with' }} {{ profile_user.profile.name }}">{{ 'Booking' }}</a>
 <a class="btn btn-outline-primary" href="{% url 'chat:chat' profile.name %}" title="{{ 'Live chat' }}">{{ 'Chat' }}</a>
 <a href="{% url 'face:faces' %}?model={{ profile.name }}" class="btn btn-outline-info" title="{{ 'All login photos' }}">{{ 'Faces' }}</a>
 </div>

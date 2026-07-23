@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+{% load feed_filters %}
+
+{% block head %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        opacity: 0.9;
+        font-size: 14px;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .stat-card .number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 5px;
+    }
+
+    .stat-card .label {
+        font-size: 12px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Filters Section */
+    .filters-section {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filters-section h3 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .filters-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .filter-group input,
+    .filter-group select {
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.3s ease;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #333;
+    }
+
+    .btn-secondary:hover {
+        background: #e0e0e0;
+    }
+
+    /* Bookings Table */
+    .bookings-table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .bookings-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .bookings-table thead {
+        background: #f5f5f5;
+    }
+
+    .bookings-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .bookings-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 14px;
+    }
+
+    .bookings-table tr:hover {
+        background: #f9f9f9;
+    }
+
+    .bookings-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .booking-row-link {
+        color: #667eea;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .booking-row-link:hover {
+        text-decoration: underline;
+    }
+
+    .date-badge {
+        background: #f0f3ff;
+        color: #667eea;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .time-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .status-past {
+        color: #999;
+        font-size: 12px;
+    }
+
+    .status-upcoming {
+        color: #2e7d32;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 30px;
+        padding: 20px;
+    }
+
+    .page-link {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        color: #667eea;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .page-link:hover {
+        background: #f0f3ff;
+        border-color: #667eea;
+    }
+
+    .page-link.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+
+    .empty-state svg {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .filters-row {
+            grid-template-columns: 1fr;
+        }
+
+        .bookings-table {
+            font-size: 12px;
+        }
+
+        .bookings-table th,
+        .bookings-table td {
+            padding: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>📋 Booked Appointments for {{ booking_user.profile.name }}</h1>
+        <p>Manage and view all scheduled bookings</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">{{ total_bookings }}</div>
+            <div class="label">Total Booked</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ today_bookings }}</div>
+            <div class="label">Today</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ upcoming_bookings }}</div>
+            <div class="label">Upcoming</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ past_bookings }}</div>
+            <div class="label">Past</div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <h3>🔍 Filters & Search</h3>
+        <form method="GET" class="filters-row">
+            <div class="filter-group">
+                <label for="search">Search</label>
+                <input type="text" id="search" name="search" placeholder="Name, email, or phone..." value="{{ search_query }}">
+            </div>
+
+            <div class="filter-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
+                    <option value="upcoming" {% if status_filter == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                    <option value="past" {% if status_filter == 'past' %}selected{% endif %}>Past</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="month">Month</label>
+                <select id="month" name="month">
+                    <option value="">All Months</option>
+                    {% for month in available_months %}
+                        <option value="{{ month|date:'Y-m' }}" {% if month|date:'Y-m' == month_filter %}selected{% endif %}>
+                            {{ month|date:'F Y' }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sort">Sort By</label>
+                <select id="sort" name="sort">
+                    <option value="-date" {% if sort_by == '-date' %}selected{% endif %}>Newest Date</option>
+                    <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Oldest Date</option>
+                    <option value="-start_time" {% if sort_by == '-start_time' %}selected{% endif %}>Latest Time</option>
+                    <option value="start_time" {% if sort_by == 'start_time' %}selected{% endif %}>Earliest Time</option>
+                    <option value="customer_name" {% if sort_by == 'customer_name' %}selected{% endif %}>Customer Name</option>
+                </select>
+            </div>
+
+            <div class="filter-buttons">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="{% url 'booking:booked_times_list' booking_user.profile.name %}" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="bookings-table-container">
+        {% if bookings %}
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>
+                                <strong>{{ booking.customer_name }}</strong>
+                            </td>
+                            <td>
+                                <a href="mailto:{{ booking.customer_email }}" style="color: #667eea; text-decoration: none;">
+                                    {{ booking.customer_email }}
+                                </a>
+                            </td>
+                            <td>{{ booking.phone|default:"—" }}</td>
+                            <td>
+                                <span class="date-badge">
+                                    {{ booking.date|date:"M d, Y" }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="time-badge">
+                                    {{ booking.start_time|time:"g:i A" }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if booking.date < today %}
+                                    <span class="status-past">Past</span>
+                                {% elif booking.date == today %}
+                                    <span class="status-upcoming" style="color: #ff9800;">Today</span>
+                                {% else %}
+                                    <span class="status-upcoming">Upcoming</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'booking:booking_detail' booking.id %}" class="booking-row-link">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="page-link">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="page-link active">{{ num }}</span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <p>No bookings found matching your criteria.</p>
+                <a href="{% url 'booking:booked_times_list' booking_user.profile.name %}" class="btn btn-primary">View All Bookings</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
