@@ -1,4 +1,4 @@
-4
+5
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,21 +13,8 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 327ede6] open source
- 45 files changed, 2177 insertions(+), 215 deletions(-)
- delete mode 100644 booking/.views.py.swp
- create mode 100644 booking/migrations/0003_booking_user_historicalbooking_user.py
- create mode 100644 booking/migrations/0004_booking_client_historicalbooking_client.py
- create mode 100644 booking/migrations/__pycache__/0003_booking_user_historicalbooking_user.cpython-312.pyc
- create mode 100644 booking/migrations/__pycache__/0004_booking_client_historicalbooking_client.cpython-312.pyc
- create mode 100644 booking/templates/booking/booked_times_list.html
- create mode 100644 booking/templates/booking/booking_detail.html
- create mode 100644 booking/templates/booking/booking_stats.html
- create mode 100755 data/translate.json.ab
- mode change 100755 => 100644 events/__pycache__/qrcode.cpython-312.pyc
- create mode 100644 media/events/3264e24e-6517-44c0-a59a-dde8b366f9d5.png
- create mode 100644 media/events/b428dd4e-afcc-4ddb-8671-aa3b262db523.png
- mode change 100755 => 100644 users/__pycache__/email.cpython-312.pyc
+[main 36f2708] open source
+ 25 files changed, 97 insertions(+), 38 deletions(-)
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
