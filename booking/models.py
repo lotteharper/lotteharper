@@ -2,13 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import time, timedelta, datetime
-from simple_history.models import HistoricalRecords
-from django.contrib.auth.models import User
 
 class Booking(models.Model):
     """Model for storing hourly bookings"""
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='bookings')
-    client = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='client_bookings')
     title = models.CharField(max_length=255)
     date = models.DateField()
     start_time = models.TimeField()
@@ -20,7 +16,6 @@ class Booking(models.Model):
     notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
 
     class Meta:
         ordering = ['date', 'start_time']
@@ -31,7 +26,9 @@ class Booking(models.Model):
 
     def clean(self):
         """Validate that booking date is not in the past"""
-        today = timezone.now().date()
+        now = timezone.now()
+        today = now.date()
+        current_time = now.time()
         
         if self.date is None:
             raise ValidationError("Booking date is required.")
@@ -43,8 +40,7 @@ class Booking(models.Model):
         
         # If booking is for today, ensure time hasn't passed
         if self.date == today:
-            current_time = timezone.now().time()
-            if self.start_time and self.start_time < current_time:
+            if self.start_time and self.start_time <= current_time:
                 raise ValidationError(
                     f"Cannot create bookings for past times. Current time is {current_time.strftime('%H:%M')}."
                 )
@@ -57,8 +53,9 @@ class Booking(models.Model):
     @classmethod
     def get_available_slots(cls, date):
         """Get all available time slots for a given date"""
-        today = timezone.now().date()
-        current_time = timezone.now().time()
+        now = timezone.now()
+        today = now.date()
+        current_time = now.time()
         
         # Don't allow bookings for past dates
         if date is None or date < today:
@@ -77,8 +74,8 @@ class Booking(models.Model):
         while current_datetime < end_datetime:
             slot_time = current_datetime.time()
             
-            # If booking is for today, skip times that have already passed
-            if date == today and slot_time < current_time:
+            # If booking is for today, skip times that have already passed or are current
+            if date == today and slot_time <= current_time:
                 current_datetime += timedelta(hours=1)
                 continue
             

@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.utils import timezone
-from datetime import timedelta, datetime, date
-from calendar import monthcalendar, month_name
-from .models import Booking
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
+from datetime import timedelta, datetime, date, time
+from calendar import monthcalendar, month_name
+from .models import Booking
 
 def booking_calendar(request, name):
     """Main booking calendar view with full month display"""
@@ -60,6 +61,7 @@ def booking_calendar(request, name):
             'year': future_date.year,
             'display': future_date.strftime('%B %Y'),
         })
+    
     from django.contrib.auth.models import User
     from django.shortcuts import get_object_or_404
     user = get_object_or_404(User, profile__name=name)
@@ -69,13 +71,11 @@ def booking_calendar(request, name):
         'current_year': current_year,
         'month_name': month_name[current_month],
         'today': today,
+        'booking_user': user,
         'available_months': available_months,
         'weekday_headers': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        'booking_user': user,
-        'full': True,
     }
     return render(request, 'booking/calendar.html', context)
-
 
 @require_http_methods(["GET"])
 def get_available_times(request):
@@ -96,22 +96,22 @@ def get_available_times(request):
             'booked_times': booked_times_str,
             'date': date_str,
         })
-    except ValueError:
+    except ValueError as e:
         return JsonResponse({'error': 'Invalid date format'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 @require_http_methods(["POST"])
 def create_booking(request):
-    from django.contrib.auth.models import User
-    from django.shortcuts import get_object_or_404
     """Create a new booking"""
-    date_str = request.POST.get('date')
-    time_str = request.POST.get('time')
-    customer_name = request.POST.get('customer_name')
-    customer_email = request.POST.get('customer_email')
-    phone = request.POST.get('phone')
-    notes = request.POST.get('notes')
-    username = request.POST.get('username')
-    
+    date_str = request.POST.get('date', '').strip()
+    time_str = request.POST.get('time', '').strip()
+    customer_name = request.POST.get('customer_name', '').strip()
+    customer_email = request.POST.get('customer_email', '').strip()
+    phone = request.POST.get('phone', '').strip()
+    notes = request.POST.get('notes', '').strip()
+    username = request.POST.get('username').strip()
+
     try:
         # Validate inputs
         if not date_str:
@@ -134,30 +134,36 @@ def create_booking(request):
         except ValueError:
             return JsonResponse({'error': 'Invalid time format. Use HH:MM'}, status=400)
         
-        today = timezone.now().date()
-        current_time = timezone.now().time()
-        result_datetime = datetime.combine(datetime.today(), start_time) + timedelta(hours=1)
-        end_time = result_datetime.time()
-        d = selected_date
-        from zoneinfo import ZoneInfo
-        t = start_time
-        from django.conf import settings
-        location = settings.TIME_ZONE
-
-        # 2. Combine and apply location info
-        dt_naive = datetime.combine(d, t)
-        dt_aware = dt_naive.replace(tzinfo=ZoneInfo(location))
-
+        # Get current date and time with timezone awareness
+        now = timezone.now()
+        today = now.date()
+        current_time = now.time()
         
         # Check if date is in the past
         if selected_date < today:
             return JsonResponse({'error': 'Cannot book appointments for past dates.'}, status=400)
         
         # Check if time is in the past (for today's bookings)
-        if selected_date == today and start_time < current_time:
-            return JsonResponse({'error': 'Cannot book appointments for past times.'}, status=400)
+        if selected_date == today and start_time <= current_time:
+            current_time_str = current_time.strftime('%H:%M')
+            return JsonResponse({
+                'error': f'Cannot book appointments for past times. Current time is {current_time_str}. Please select a time after this.'
+            }, status=400)
         
-
+        # Calculate end time
+        end_datetime = datetime.combine(selected_date, start_time) + timedelta(hours=1)
+        end_time = end_datetime.time()
+        
+        # Check if slot is already booked
+        existing_booking = Booking.objects.filter(
+            date=selected_date,
+            start_time=start_time,
+            is_booked=True
+        ).exists()
+        
+        if existing_booking:
+            return JsonResponse({'error': 'This time slot is already booked'}, status=400)
+        
         vendor_user = get_object_or_404(User, profile__name=username)
         e = customer_email
         from users.username_generator import generate_username as get_random_username
@@ -207,30 +213,27 @@ def create_booking(request):
         return JsonResponse({
             'success': True,
             'booking_id': booking.id,
-            'message': f'Booking confirmed for {selected_date} at {time_str}'
+            'message': f'Booking confirmed for {selected_date.strftime("%B %d, %Y")} at {time_str}'
         })
+    except ValidationError as ve:
+        return JsonResponse({'error': str(ve)}, status=400)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+        print(f"Booking error: {str(e)}")
+        return JsonResponse({'error': f'Error creating booking: {str(e)}'}, status=400)
 
 @login_required
-def booked_times_list(request, name):
+def booked_times_list(request):
     """Display all booked appointments with filtering and search"""
-    from django.contrib.auth.models import User
-    from django.shortcuts import get_object_or_404
-    user = get_object_or_404(User, profile__name=name)
-    if user != request.user:
-        from django.core.exceptions import PermissionDenied
-        raise PermissionDenied
     today = timezone.now().date()
     
     # Get filter parameters
-    status_filter = request.GET.get('status', 'all')  # all, upcoming, past
+    status_filter = request.GET.get('status', 'all')
     search_query = request.GET.get('search', '')
-    sort_by = request.GET.get('sort', '-date')  # -date, date, -start_time, start_time, customer_name
+    sort_by = request.GET.get('sort', '-date')
     month_filter = request.GET.get('month', '')
     
     # Base queryset - only booked appointments
-    bookings = Booking.objects.filter(is_booked=True, user=user)
+    bookings = Booking.objects.filter(is_booked=True)
     
     # Apply status filter
     if status_filter == 'upcoming':
@@ -241,10 +244,10 @@ def booked_times_list(request, name):
     # Apply search filter
     if search_query:
         bookings = bookings.filter(
-            models.Q(customer_name__icontains=search_query) |
-            models.Q(customer_email__icontains=search_query) |
-            models.Q(phone__icontains=search_query) |
-            models.Q(title__icontains=search_query)
+            Q(customer_name__icontains=search_query) |
+            Q(customer_email__icontains=search_query) |
+            Q(phone__icontains=search_query) |
+            Q(title__icontains=search_query)
         )
     
     # Apply month filter
@@ -263,9 +266,9 @@ def booked_times_list(request, name):
     
     # Calculate stats
     total_bookings = bookings.count()
-    upcoming_bookings = Booking.objects.filter(user=user, is_booked=True, date__gte=today).count()
-    past_bookings = Booking.objects.filter(user=user, is_booked=True, date__lt=today).count()
-    today_bookings = Booking.objects.filter(user=user, is_booked=True, date=today).count()
+    upcoming_bookings = Booking.objects.filter(is_booked=True, date__gte=today).count()
+    past_bookings = Booking.objects.filter(is_booked=True, date__lt=today).count()
+    today_bookings = Booking.objects.filter(is_booked=True, date=today).count()
     
     # Pagination
     paginator = Paginator(bookings, 15)
@@ -273,7 +276,7 @@ def booked_times_list(request, name):
     page_obj = paginator.get_page(page_number)
     
     # Get available months for filter
-    available_months = Booking.objects.filter(user=user, is_booked=True).dates('date', 'month', order='DESC')
+    available_months = Booking.objects.filter(is_booked=True).dates('date', 'month', order='DESC')
     
     context = {
         'page_obj': page_obj,
@@ -288,7 +291,6 @@ def booked_times_list(request, name):
         'sort_by': sort_by,
         'month_filter': month_filter,
         'available_months': available_months,
-        'booking_user': user,
     }
     
     return render(request, 'booking/booked_times_list.html', context)
@@ -297,9 +299,11 @@ def booked_times_list(request, name):
 def booking_detail(request, booking_id):
     """Display detailed view of a single booking"""
     booking = Booking.objects.get(id=booking_id)
+    today = timezone.now().date()
     
     context = {
         'booking': booking,
+        'today': today,
     }
     return render(request, 'booking/booking_detail.html', context)
 
@@ -339,7 +343,6 @@ def booking_stats(request):
         bookings_by_hour[hour] = bookings_by_hour.get(hour, 0) + 1
     
     # Most booked days
-    from django.db.models import Count
     most_booked_days = Booking.objects.filter(is_booked=True).values('date').annotate(
         count=Count('date')
     ).order_by('-count')[:5]
@@ -356,3 +359,4 @@ def booking_stats(request):
     }
     
     return render(request, 'booking/booking_stats.html', context)
+
