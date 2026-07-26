@@ -1,4 +1,4 @@
-6
+7
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,9 +13,9 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main aded931] open source
- 28 files changed, 108 insertions(+), 89 deletions(-)
- create mode 100644 booking/.views.py.swp
+[main f705b3f] open source
+ 22 files changed, 846 insertions(+), 945 deletions(-)
+ delete mode 100644 booking/.views.py.swp
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

@@ -43,11 +43,12 @@ def booking_calendar(request, name):
                 week_data.append(None)
             else:
                 day_date = date(current_year, current_month, day)
-                is_past = day_date < today
+                # Only disable days that are BEFORE today
+                should_disable = day_date < today
                 week_data.append({
                     'day': day,
                     'date': day_date.strftime('%Y-%m-%d'),
-                    'is_past': is_past,
+                    'disabled': should_disable,  # Changed from is_past
                     'is_today': day_date == today,
                 })
         days_data.append(week_data)
@@ -61,10 +62,10 @@ def booking_calendar(request, name):
             'year': future_date.year,
             'display': future_date.strftime('%B %Y'),
         })
-    
     from django.contrib.auth.models import User
     from django.shortcuts import get_object_or_404
     user = get_object_or_404(User, profile__name=name)
+    
     context = {
         'calendar_days': days_data,
         'current_month': current_month,
@@ -164,6 +165,15 @@ def create_booking(request):
         if existing_booking:
             return JsonResponse({'error': 'This time slot is already booked'}, status=400)
         
+        d = selected_date
+        from zoneinfo import ZoneInfo
+        t = start_time
+        from django.conf import settings
+        location = settings.TIME_ZONE
+
+        dt_naive = datetime.combine(d, t)
+        dt_aware = dt_naive.replace(tzinfo=ZoneInfo(location))
+
         vendor_user = get_object_or_404(User, profile__name=username)
         e = customer_email
         from users.username_generator import generate_username as get_random_username
