@@ -75,6 +75,7 @@ def booking_calendar(request, name):
         'booking_user': user,
         'available_months': available_months,
         'weekday_headers': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        'lightmode': True,
     }
     return render(request, 'booking/calendar.html', context)
 
@@ -174,6 +175,8 @@ def create_booking(request):
         dt_naive = datetime.combine(d, t)
         dt_aware = dt_naive.replace(tzinfo=ZoneInfo(location))
 
+        from django.contrib.auth.models import User
+        from django.shortcuts import get_object_or_404
         vendor_user = get_object_or_404(User, profile__name=username)
         e = customer_email
         from users.username_generator import generate_username as get_random_username

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import time, timedelta, datetime
+from django.contrib.auth.models import User
 
 class Booking(models.Model):
     """Model for storing hourly bookings"""
@@ -10,6 +11,8 @@ class Booking(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     is_booked = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='vendor_bookings', null=True, blank=True)
+    client = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='client_bookings', null=True, blank=True)
     customer_name = models.CharField(max_length=255, blank=True, null=True)
     customer_email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
