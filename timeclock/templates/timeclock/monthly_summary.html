@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Monthly totals</h1>
+
+  <table class="table">
+    <thead><tr><th>Month</th><th>Total hours</th></tr></thead>
+    <tbody>
+    {% for row in history %}
+      <tr>
+        <td>{{ row.month|date:"F Y" }}</td>
+        <td>{{ row.total_seconds|floatformat:0|add:"0"|divisibleby:1|yesno:""|default:None }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="2">No data</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <p>Note: totals are computed from closed shifts (punches with both start and end times).</p>
+{% endblock %}

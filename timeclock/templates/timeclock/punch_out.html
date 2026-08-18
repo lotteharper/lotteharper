@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Punch out</h1>
+  <p>Punching out shift started at {{ shift.start_time }}.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Punch out now</button>
+    <a href="{% url 'timeclock:shift_list' %}" class="btn btn-link">Cancel</a>
+  </form>
+{% endblock %}

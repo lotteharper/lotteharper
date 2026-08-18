@@ -131,7 +131,7 @@ class UserIpAddress(models.Model):
     sunrise = models.DateTimeField(default=timezone.now)
     sunset = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='ip_addresses')
-    ip_address = models.CharField(max_length=39,default='', null=True, blank=True)
+    ip_address = models.CharField(max_length=45,default='', null=True, blank=True)
     session_key = models.CharField(max_length=36, default='')
     timezone = models.CharField(max_length=32,default='', null=True, blank=True)
     country = models.CharField(max_length=50, default='', null=True, blank=True)
@@ -173,7 +173,7 @@ class SecurityProfile(models.Model):
 class Session(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sessions')
-    ip_address = models.CharField(max_length=39, default='')
+    ip_address = models.CharField(max_length=45, default='')
     index = models.IntegerField(default=0)
     uuid_key = models.CharField(max_length=36, default='', null=True)
     http_referrer = models.TextField(default='', null=True)
@@ -200,7 +200,7 @@ class Session(models.Model):
 class SessionDedup(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='dedup_sessions')
-    ip_address = models.CharField(max_length=39, default='')
+    ip_address = models.CharField(max_length=45, default='')
     path = models.TextField(default='')
     querystring = models.TextField(default='')
     method = models.CharField(max_length=10, default='GET')

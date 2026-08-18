@@ -188,7 +188,10 @@ def check_raw_ip_risk(ip_address: str, soft: bool = False, dummy: bool = True, g
     if ip_in_range(ip_address):
         return False
 
-    ip_obj, _ = UserIpAddress.objects.get_or_create(user=None, ip_address=ip_address)
+    try:
+        ip_obj, _ = UserIpAddress.objects.get_or_create(user=None, ip_address=ip_address)
+    except:
+        ip_obj = UserIpAddress.objects.filter(ip_address=ip_address).order_by('-timestamp').first()
     return check_ip_risk(ip_obj, soft=soft, dummy=dummy)
 
 

@@ -132,6 +132,7 @@ INSTALLED_APPS = [
     'defender',
     'cookielaw',
     'booking',
+    'timeclock',
 #    '',
 ]
 

@@ -202,8 +202,8 @@ class Post(models.Model):
         from django.conf import settings
         import os
         from feed.middleware import get_current_request
-        if settings.USE_OFFSITE and self.image_offsite and self.public and (not get_current_request().user.is_authenticated if get_current_request() else True): return self.image_offsite
-        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}.png'.format(self.uuid))): return self.get_web_url()
+#        if settings.USE_OFFSITE and self.image_offsite and self.public and (not get_current_request().user.is_authenticated if get_current_request() else True): return self.image_offsite
+#        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}.png'.format(self.uuid))): return self.get_web_url()
         if self.image_bucket: return self.image_bucket.url
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         from feed.models import Post
@@ -216,8 +216,8 @@ class Post(models.Model):
         from feed.middleware import get_current_request
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         import os
-        if (not gen) and settings.USE_OFFSITE and self.image_thumb_offsite and self.public and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
-        if (not gen) and os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
+#        if (not gen) and settings.USE_OFFSITE and self.image_thumb_offsite and self.public and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
+#        if (not gen) and os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
         if (not gen) and self.image_thumbnail_bucket: return self.image_thumbnail_bucket.url
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         from feed.logo import add_logo
@@ -247,7 +247,7 @@ class Post(models.Model):
         from django.conf import settings
         from feed.middleware import get_current_request
         import os
-        if (not gen) and settings.USE_OFFSITE and self.image_offsite and self.public and (not get_current_request().user.is_authenticated if get_current_request() else True): return self.image_offsite
+#        if (not gen) and settings.USE_OFFSITE and self.image_offsite and self.public and (not get_current_request().user.is_authenticated if get_current_request() else True): return self.image_offsite
 #        if (not gen) and os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}.png'.format(self.uuid))): return self.get_web_thumb_url()
         if (not gen) and self.image_censored_bucket: return self.image_censored_bucket.url
         full_path = None
@@ -302,7 +302,7 @@ class Post(models.Model):
     def get_blur_thumb_url(self, gen=False):
         from django.conf import settings
         from feed.middleware import get_current_request
-        if settings.USE_OFFSITE and self.image_thumb_offsite and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
+#        if settings.USE_OFFSITE and self.image_thumb_offsite and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
         import os
 #        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
         try:
@@ -336,8 +336,8 @@ class Post(models.Model):
     def get_face_blur_url(self):
         from django.conf import settings
         import os
-        if settings.USE_OFFSITE and self.image_offsite and self.public and (not get_current_request().user.is_authenticated if get_current_request() else True): return self.image_offsite
-        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}.png'.format(self.uuid))): return self.get_web_thumb_url()
+#        if settings.USE_OFFSITE and self.image_offsite and self.public and (not get_current_request().user.is_authenticated if get_current_request() else True): return self.image_offsite
+#        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}.png'.format(self.uuid))): return self.get_web_thumb_url()
         if self.image_public_bucket: return self.image_public.url
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         from feed.logo import add_logo
@@ -346,9 +346,9 @@ class Post(models.Model):
     def get_face_blur_thumb_url(self, static=False):
         from django.conf import settings
         from feed.middleware import get_current_request
-        if settings.USE_OFFSITE and self.image_thumb_offsite and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
+#        if settings.USE_OFFSITE and self.image_thumb_offsite and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
         import os
-        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
+#        if os.path.exists(os.path.join(settings.BASE_DIR, 'web/site/media/images/', '{}-thumb.png'.format(self.uuid))): return self.get_web_thumb_url()
         from django.conf import settings
         from security.secure import get_secure_path, get_private_secure_path, get_secure_video_path
         from feed.logo import add_logo

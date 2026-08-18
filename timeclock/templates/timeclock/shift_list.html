@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Your shifts</h1>
+
+  <p>
+    <a href="{% url 'timeclock:punch_in' %}" class="btn btn-primary">Punch in</a>
+    <a href="{% url 'timeclock:punch_out' %}" class="btn btn-secondary">Punch out</a>
+    <a href="{% url 'timeclock:monthly_summary' %}" class="btn btn-info">Monthly summary</a>
+  </p>
+
+  <table class="table">
+    <thead><tr><th>Start</th><th>End</th><th>Duration</th><th>Expired</th><th>Notes</th></tr></thead>
+    <tbody>
+    {% for s in shifts %}
+      <tr class="{% if s.expired %}table-warning{% endif %}">
+        <td>{{ s.start_time }}</td>
+        <td>{% if s.end_time %}{{ s.end_time }}{% else %}-- active --{% endif %}</td>
+        <td>
+          {% if s.end_time %}
+            {{ s.duration|default_if_none:"" }}
+          {% else %}
+            {{ s.duration }}
+          {% endif %}
+        </td>
+        <td>{{ s.expired }}</td>
+        <td>{{ s.notes|default:"" }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">No shifts found</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
