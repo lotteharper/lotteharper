@@ -1,4 +1,4 @@
-2
+3
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,38 +13,8 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 40c83d7] open source
- 67 files changed, 505 insertions(+), 40 deletions(-)
- create mode 100644 media/audio/fingerprints/4bf16a32-f75a-4ecb-bb63-4fa95b2150f9.npy
- create mode 100644 media/audio/fingerprints/919d0d0b-2c50-41fd-ba74-9b7c5aa08015.npy
- create mode 100644 media/audio/fingerprints/9b068140-9c0f-438d-8fdc-1c151e5d5a87.npy
- mode change 100755 => 100644 security/__pycache__/models.cpython-312.pyc
- create mode 100644 security/migrations/0041_alter_historicalsession_ip_address_and_more.py
- create mode 100644 security/migrations/__pycache__/0041_alter_historicalsession_ip_address_and_more.cpython-312.pyc
- create mode 100755 timeclock/__init__.py
- create mode 100644 timeclock/__pycache__/__init__.cpython-312.pyc
- create mode 100644 timeclock/__pycache__/admin.cpython-312.pyc
- create mode 100644 timeclock/__pycache__/apps.cpython-312.pyc
- create mode 100644 timeclock/__pycache__/forms.cpython-312.pyc
- create mode 100644 timeclock/__pycache__/models.cpython-312.pyc
- create mode 100644 timeclock/__pycache__/urls.cpython-312.pyc
- create mode 100644 timeclock/__pycache__/views.cpython-312.pyc
- create mode 100755 timeclock/admin.py
- create mode 100755 timeclock/apps.py
- create mode 100644 timeclock/forms.py
- create mode 100644 timeclock/migrations/0001_initial.py
- create mode 100644 timeclock/migrations/0002_historicalshift.py
- create mode 100755 timeclock/migrations/__init__.py
- create mode 100644 timeclock/migrations/__pycache__/0001_initial.cpython-312.pyc
- create mode 100644 timeclock/migrations/__pycache__/0002_historicalshift.cpython-312.pyc
- create mode 100644 timeclock/migrations/__pycache__/__init__.cpython-312.pyc
- create mode 100755 timeclock/models.py
- create mode 100644 timeclock/templates/timeclock/monthly_summary.html
- create mode 100644 timeclock/templates/timeclock/punch_out.html
- create mode 100644 timeclock/templates/timeclock/shift_list.html
- create mode 100755 timeclock/tests.py
- create mode 100644 timeclock/urls.py
- create mode 100755 timeclock/views.py
+[main da7e59d] open source
+ 22 files changed, 23 insertions(+), 21 deletions(-)
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
