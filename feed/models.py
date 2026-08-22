@@ -343,7 +343,7 @@ class Post(models.Model):
         from feed.logo import add_logo
         import os, shutil
 
-    def get_face_blur_thumb_url(self, static=False):
+    def get_face_blur_thumb_url(self, static=False, gen=False):
         from django.conf import settings
         from feed.middleware import get_current_request
 #        if settings.USE_OFFSITE and self.image_thumb_offsite and not get_current_request().user.is_authenticated if get_current_request() else False: return self.image_thumb_offsite
@@ -354,8 +354,8 @@ class Post(models.Model):
         from feed.logo import add_logo
         import shutil
         from retargeting.path import get_email_path
-        if self.image_thumbnail_bucket and not static: return self.image_thumbnail_bucket.url
-        elif static and self.image_thumbnail_bucket and not self.image_static:
+        if not gen and self.image_thumbnail_bucket and not static: return self.image_thumbnail_bucket.url
+        elif not gen and static and self.image_thumbnail_bucket and not self.image_static:
             path, url = get_email_path(self.image_thumbnail_bucket.name)
             with open(path, mode='wb') as write_file:
                 with self.image_thumbnail_bucket.storage.open(str(self.image_thumbnail_bucket), mode='rb') as image_file:
@@ -644,7 +644,7 @@ class Post(models.Model):
                 if len(self.content) < settings.POST_READER_LENGTH: self.content = censor(self.content)
 #                else: self.public = False
             this = Post.objects.filter(id=self.id).first()
-#            super(Post, self).save(*args, **kwargs)
+            super(Post, self).save(*args, **kwargs)
             if (not this or this.private != self.private or this.public != self.public or this.image != self.image):
                 if self.image:
                     full_path = os.path.join(settings.BASE_DIR, 'media/', get_image_path(self, self.image.name))
@@ -744,7 +744,7 @@ class Post(models.Model):
             try:
                 shutil.copy(self.image.path, full_path)
                 self.image_original = full_path
-            except: self.image = None
+            except: pass
         if self.image and os.path.exists(self.image.path) and self.image.name != 'static/default.png':
             img = Image.open(self.image.path)
             if img.height > settings.MAX_IMAGE_DIMENSION or img.width > settings.MAX_IMAGE_DIMENSION:

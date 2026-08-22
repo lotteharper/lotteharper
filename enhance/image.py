@@ -141,13 +141,13 @@ def bucket_post(post_id):
     from feed.models import Post
     from feed.upload import upload_post
     p = Post.objects.get(id=post_id)
-    try:
-        if not (p.image or os.path.exists(p.image.path)):
-            p.enhanced = True
-            p.uploaded = True
-            p.save()
-            return
-    except: return
+#    try:
+#        if not (p.image or os.path.exists(p.image.path)):
+#            p.enhanced = True
+#            p.uploaded = True
+#            p.save()
+#            return
+#    except: return
     try:
         os.remove(p.image_censored.path)
     except: pass
@@ -164,11 +164,11 @@ def bucket_post(post_id):
     p.image_censored_thumbnail = None
     p.image_thumbnail = None
     p.image_public = None
-    if not p.image or not os.path.exists(p.image.path):
-        p.uploaded = True
-        p.enhanced = True
-        if Post.objects.filter(id=post_id).first(): p.save()
-        return
+#    if not p.image or not os.path.exists(p.image.path):
+#        p.uploaded = True
+#        p.enhanced = True
+#        if Post.objects.filter(id=post_id).first(): p.save()
+#        return
     towrite = p.image_bucket.storage.open(p.image.path, mode='wb')
     with p.image.open('rb') as file:
         towrite.write(file.read())
@@ -180,14 +180,14 @@ def bucket_post(post_id):
             towrite.write(file.read())
         towrite.close()
         p.image_original_bucket = p.image_original.path
-    p.get_image_thumb_url()
+    p.get_image_thumb_url(gen=True)
     if p.image_thumbnail and os.path.exists(p.image_thumbnail.path):
         towrite = p.image_thumbnail_bucket.storage.open(p.image_thumbnail.path, mode='wb')
         with p.image_thumbnail.open('rb') as file:
             towrite.write(file.read())
         towrite.close()
         p.image_thumbnail_bucket = p.image_thumbnail.path
-    p.get_face_blur_thumb_url()
+    p.get_face_blur_thumb_url(gen=True)
     if p.image_public and os.path.exists(p.image_public.path):
         towrite = p.image_public_bucket.storage.open(p.image_public.path, mode='wb')
         with p.image_public.open('rb') as file:
