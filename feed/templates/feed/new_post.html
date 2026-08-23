@@ -268,21 +268,26 @@ $(document).ready(function() {
 var current = 0;
 function uploadFile(data, cntr) {
     var pcounter = cntr;
+    // find the progress elements by the consistent id: "progressN"
     progress[pcounter] = document.getElementById("progress" + pcounter);
     progressLabel[pcounter] = document.getElementById("progress-label-" + pcounter);
+
     var id = data.get("confirmation_id");
     $.ajax({
         xhr: function() {
             let thexhr = new window.XMLHttpRequest();
-            thexhr.upload.theProgress = document.getElementById("progress-" + pcounter);
+            // attach the reference elements to the upload target so the event handler can access them as "this"
+            thexhr.upload.theProgress = document.getElementById("progress" + pcounter);
             thexhr.upload.progressLabel = document.getElementById("progress-label-" + pcounter);
             thexhr.upload.addEventListener("progress", function(evt) {
                 if (evt.lengthComputable) {
                     var percentComplete = Math.floor(evt.loaded / evt.total * 100);
-                    if(this.theProgress) {
+                    if (this.theProgress) {
+                        // update progress element and ensure attribute is set
                         this.theProgress.value = percentComplete;
+                        this.theProgress.setAttribute('value', percentComplete);
                     }
-                    if(this.progressLabel) {
+                    if (this.progressLabel) {
                         this.progressLabel.textContent = percentComplete + '%';
                     }
                 }
@@ -313,7 +318,10 @@ function uploadFile(data, cntr) {
                         $(posted).addClass("fade-hidden");
                         $(progress[pcounter]).addClass("fade-hidden");
                         $(progressLabel[pcounter]).addClass("fade-hidden");
-                        progress[pcounter].value = 100;
+                        if (progress[pcounter]) {
+                            progress[pcounter].value = 100;
+                            progress[pcounter].setAttribute('value', 100);
+                        }
                         setTimeout(function() {
                                 $(posted).addClass("hide");
                                 $(posted).removeClass("fade-hidden");
@@ -340,7 +348,10 @@ $("#progressBars").append(
     '<div style="margin-bottom:0.5em;"><progress id="progress' + current + '" value="0" max="100"></progress> ' +
     '<span id="progress-label-' + current + '">0%</span></div>'
 );
-            setTimeout(function(fd, current) { uploadFile(fd, current) }, current * {{ upload_interval }}, fd, current);
+// use closure to capture fd and index properly
+(function(fd_copy, idx) {
+    setTimeout(function() { uploadFile(fd_copy, idx); }, idx * {{ upload_interval }});
+})(fd, current);
             current++;
                 }
         }
@@ -355,7 +366,9 @@ $("#progressBars").append(
     '<div style="margin-bottom:0.5em;"><progress id="progress' + current + '" value="0" max="100"></progress> ' +
     '<span id="progress-label-' + current + '">0%</span></div>'
 );
-            setTimeout(function(fd, current) { uploadFile(fd, current) }, current * {{ upload_interval }}, fd, current);
+(function(fd_copy, idx) {
+    setTimeout(function() { uploadFile(fd_copy, idx); }, idx * {{ upload_interval }});
+})(fd, current);
             current++;
                 }
         }
@@ -367,7 +380,9 @@ $("#progressBars").append(
     '<div style="margin-bottom:0.5em;"><progress id="progress' + current + '" value="0" max="100"></progress> ' +
     '<span id="progress-label-' + current + '">0%</span></div>'
 );
-        setTimeout(function(fd, current) { uploadFile(fd, current) }, current * {{ upload_interval }}, fd, current);
+(function(fd_copy, idx) {
+    setTimeout(function() { uploadFile(fd_copy, idx); }, idx * {{ upload_interval }});
+})(fd, current);
         current++;
         }
         form.reset();
@@ -510,7 +525,7 @@ $(document).ready(function() {
             ['view', ['fullscreen', 'codeview', 'help']],
             ['misc', ['undo', 'redo']]
         ],
-    });    
+    });
     {% endif %}
 });
 {% endblock %}

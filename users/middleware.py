@@ -49,7 +49,7 @@ def simple_middleware(get_response):
     # One-time configuration and initialization.
     def middleware(request):
         response = None
-        if any(x in request.path for x in ["favicon.ico", "jsi18n", "static"]):
+        if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js"]):
             return self.get_response(request)
         try:
             if request.user.is_authenticated and not request.user.is_active:

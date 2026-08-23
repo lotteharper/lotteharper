@@ -629,7 +629,58 @@ class Post(models.Model):
         import pytz
         return self.date_posted.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H:%M:%S')
 
+    def _normalize_file_attr(self, value):
+        """
+        Normalize a file-like attribute which might be:
+          - a FieldFile (has .path and .name)
+          - a plain string path (we treat it as path)
+          - a list/tuple of any of the above (take first element)
+          - None
+        Returns a tuple (path, name, original_value). `path` may be None if not available.
+        """
+        import os
+        if value is None:
+            return None, None, None
+        # If it's a list/tuple, pick the first element
+        if isinstance(value, (list, tuple)):
+            if len(value) == 0:
+                return None, None, None
+            value = value[0]
+        # FieldFile-like (has .path and .name)
+        if hasattr(value, 'path') or hasattr(value, 'name'):
+            path = getattr(value, 'path', None)
+            name = getattr(value, 'name', None)
+            return path, name, value
+        # If it's a string path
+        if isinstance(value, str):
+            return value, os.path.basename(value), value
+        # Unknown type
+        return None, None, None
+
+    def _ensure_normalized_attrs(self):
+        """
+        For fields that your model frequently uses as either FieldFile or string path or lists,
+        normalize them to their first element if they are lists. This keeps older code that
+        expects string paths working and avoids 'list' attribute errors.
+        """
+        # Only set attr to the first element if they are lists/tuples
+        for attr in ('image', 'image_thumbnail', 'image_censored', 'image_original',
+                     'image_public', 'file', 'file_sample',
+                     'image_bucket', 'image_thumbnail_bucket', 'image_censored_bucket',
+                     'image_original_bucket', 'file_bucket', 'file_sample_bucket'):
+            try:
+                val = getattr(self, attr, None)
+                if isinstance(val, (list, tuple)):
+                    setattr(self, attr, val[0] if len(val) > 0 else None)
+            except Exception:
+                # defensive: ignore if attribute access fails
+                pass
+
+    # --- Modified save() method (call normalization early) ---
     def save(self, *args, **kwargs):
+        # Normalize list-valued file attributes early so existing code that accesses
+        # self.image.path / self.file.path won't get a list.
+        self._ensure_normalized_attrs()
 #        import PIL
 #        PIL.Image.MAX_IMAGE_PIXELS = 93312000000
         from PIL import Image

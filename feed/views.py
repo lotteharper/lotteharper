@@ -804,6 +804,26 @@ def new_post_confirm(request, id):
     from django.http import HttpResponse
     return HttpResponse('y' if Post.objects.filter(confirmation_id=id, date_uploaded__gte=timezone.now() - datetime.timedelta(minutes=5)).count() > 0 else 'n')
 
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from django.conf import settings
+from django.utils import timezone
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.db import transaction
+from django.utils.datastructures import MultiValueDict
+import datetime
+
+from .models import get_file_path, get_image_path
+from feed.models import Post
+from .forms import PostForm, ScheduledPostForm
+from django.contrib.auth.models import User
+
+# referenced in original file
+from verify.tests import minor_identity_verified
+from security.security import fraud_detect
+from .duplicates import remove_post_duplicates
 
 @never_cache
 @login_required
@@ -848,7 +868,6 @@ def new_post(request):
 #            form.instance.published = True
             if request.GET.get('save', False):
                 post = form.save()
-                post.upload()
                 return HttpResponse(200)
             form.instance.posted = True
             files = request.FILES.getlist('image')
@@ -871,7 +890,6 @@ def new_post(request):
                 form.instance.file = path
             post = form.save()
             post.upload()
-#            Post.objects.create(public=True, private=False, published=False, posted=False, content='', author=request.user)
             first = True
             files = request.FILES.getlist('image')
             if files:

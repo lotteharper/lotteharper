@@ -141,13 +141,13 @@ def bucket_post(post_id):
     from feed.models import Post
     from feed.upload import upload_post
     p = Post.objects.get(id=post_id)
-#    try:
-#        if not (p.image or os.path.exists(p.image.path)):
-#            p.enhanced = True
-#            p.uploaded = True
-#            p.save()
-#            return
-#    except: return
+    try:
+        if not (p.image or os.path.exists(p.image.path)):
+            p.enhanced = True
+            p.uploaded = True
+            p.save()
+            return
+    except: return
     try:
         os.remove(p.image_censored.path)
     except: pass
