@@ -1,4 +1,4 @@
-7
+4
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,9 +13,14 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 7da8226] open source
- 35 files changed, 532 insertions(+), 707 deletions(-)
- mode change 100755 => 100644 photobooth/__pycache__/forms.cpython-312.pyc
+[main e870270] open source
+ 31 files changed, 424 insertions(+), 427 deletions(-)
+ create mode 100644 media/documents/2535a78d-26ca-4fde-be90-83aa0853e15a-20260903-190417-2.png
+ create mode 100644 media/documents/311b3eab-628e-4ff5-9d96-b58dde932e68-20260903-190417-2.jpg
+ create mode 100644 media/documents/311b3eab-628e-4ff5-9d96-b58dde932e68-20260903-190417-2.jpg.png
+ create mode 100644 media/documents/62c6e49b-6521-4f9b-bc42-c522d5756b5f-20260903-190417-2.jpg
+ create mode 100644 media/documents/62c6e49b-6521-4f9b-bc42-c522d5756b5f-20260903-190417-2.jpg.png
+ create mode 100644 media/documents/b28ca255-5610-41e5-b5fb-2058c32776be-20260903-190417-2.png
 sending incremental file list
 ./
 .gitignore
