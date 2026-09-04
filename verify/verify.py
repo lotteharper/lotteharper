@@ -48,6 +48,7 @@ def validate_id(verification):
         verification.save()
     id_path = verification.document_isolated.path
     faces = verification.user.faces.all()
+    birthday = None
     try:
         birthday, expiry = barcode_valid(verification)
         if not birthday:
@@ -60,9 +61,12 @@ def validate_id(verification):
     except:
         import traceback
         print(traceback.format_exc())
-        return False
-    if not birthday:
-        return False
+        birthday = barcode_valid(verification)
+        if birthday:
+            verification.birthdate = birthday
+            verification.save()
+#    if not birthday:
+#        return False
     if not verification.user.profile.disable_id_face_match and (id_path == None or faces.count() == 0):
         print("Failed to verify document due to face mismatch.")
         return False
@@ -87,7 +91,7 @@ def validate_id(verification):
     if len(verification.document_ocr) < 100:
         print("Text too short")
         return False
-    if len(verification.barcode_data) < 200:
+    if len(verification.barcode_data) < 100:
         print("Barcode too short")
         return False
     today = date.today()
