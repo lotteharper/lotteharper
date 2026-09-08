@@ -28,6 +28,8 @@ ip_countries = {}
 
 def feed_context(request):
     context_data = dict()
+    if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal"]):
+        return context_data
     try:
         context_data['lang'] = get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG
     except: context_data['lang'] = settings.DEFAULT_LANG
