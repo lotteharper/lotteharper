@@ -50,7 +50,8 @@ def simple_middleware(get_response):
     def middleware(request):
         response = None
         if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal"]):
-            return self.get_response(request)
+            response = get_response(request)
+            return response
         try:
             if request.user.is_authenticated and not request.user.is_active:
                 from django.contrib.auth import logout

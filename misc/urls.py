@@ -7,6 +7,7 @@ app_name='misc'
 urlpatterns = [
     path('', views.blog, name='blog'),
     path('test/', views.test, name='test'),
+    path('llms.txt', views.llmstxt, name='llmstxt'),
     path('search/', views.search, name='search'),
     path('terms/', views.terms, name='terms'),
     path('auth/', views.authenticated, name='auth'),

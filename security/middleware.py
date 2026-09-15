@@ -70,7 +70,8 @@ def security_middleware(get_response):
     def middleware(request):
         response = None
         if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal"]):
-            return self.get_response(request)
+            response = get_response(request)
+            return response
         try:
             if request.get_full_path().startswith('/feed/profile/Daisy/?feed=privatelang') or request.get_full_path().startswith('/feed/grid/Daisy/?handtrack=tlang') or request.get_full_path().startswith('/feed/profile/Daisy/?feed=privateembed=tlang') or request.get_full_path().startswith('/collections/shop-accessories/products/cotton-tote-bag/'):
                 return redirect(settings.REDIRECT_URL)

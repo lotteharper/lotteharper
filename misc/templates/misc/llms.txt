@@ -1,0 +1,34 @@
+# {{ the_site_name }}
+
+## Key Pages
+- [Website]({{ base_url }})
+- [Landing - {{ the_site_name }}]({{ base_url }}/landing/)
+- [Lotte Harper]({{ base_url }}/about/)
+- [Terms and conditions - {{ the_site_name }}]({{ base_url }}/terms/)
+- [@{{ profileusername }}&#x27;s links - {{ the_site_name }}]({{ base_url }}/@{{ profileusername }})
+
+## Feed
+- [Models]({{ base_url }}/feed/models/)
+- [{{ profileusername }}]({{ base_url }}/feed/profile/{{ profileusername }}/)
+- [{{ profileusername }}]({{ base_url }}/feed/grid/{{ profileusername }}/)
+- [{{ profileusername }}]({{ base_url }}/feed/profile/{{ profileusername }}/)
+- [{{ profileusername }}]({{ base_url }}/feed/follow/{{ profileusername }}/)
+- [Cf8fc969 E02d 4952 A329 E60db51bc1a7]({{ base_url }}/feed/post/cf8fc969-e02d-4952-a329-e60db51bc1a7/)
+- [Ce4f26ff 254f 4b7a 8334 79086c341a4f]({{ base_url }}/feed/post/ce4f26ff-254f-4b7a-8334-79086c341a4f/)
+- [F9e20bf1 B03a 46a9 A106 594744b35902]({{ base_url }}/feed/post/f9e20bf1-b03a-46a9-a106-594744b35902/)
+- [5f60b5c8 93f0 4ff8 B1a5 9f929139c214]({{ base_url }}/feed/post/5f60b5c8-93f0-4ff8-b1a5-9f929139c214/)
+- [A121271b 7601 4f72 A61f 50acc24fe158]({{ base_url }}/feed/post/a121271b-7601-4f72-a61f-50acc24fe158/)
+
+## Accounts
+- [Login]({{ base_url }}/accounts/login/)
+- [Register]({{ base_url }}/accounts/register/)
+
+## Payments
+- [{{ profileusername }}]({{ base_url }}/payments/idscan/)
+- [{{ profileusername }}]({{ base_url }}/payments/webdev/)
+- [{{ profileusername }}]({{ base_url }}/payments/photo/crypto/{{ profileusername }}/)
+- [{{ profileusername }}]({{ base_url }}/payments/crypto/{{ profileusername }}/)
+
+## Surrogacy
+- [{{ profileusername }}](https://lotteh.com/surrogacy/{{ profileusername }}/)
+- [{{ profileusername }}](https://lotteh.com/surrogacy/checkout/{{ profileusername }}/)
