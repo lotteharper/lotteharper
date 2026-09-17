@@ -1,4 +1,4 @@
-3
+4
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,12 +13,10 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 2cf54f6] open source
- 27 files changed, 3042 insertions(+), 1564 deletions(-)
- create mode 100644 media/audio/fingerprints/17b37337-3268-4da7-84df-5a1a38abd561.npy
- create mode 100644 media/audio/fingerprints/f1a6aa3d-1dc5-4ada-86be-a61bf6246087.npy
- mode change 100755 => 100644 static/games/threethirteen.js
- create mode 100644 static/games/threethirteenold.js
+[main 67cdb76] open source
+ 17 files changed, 144 insertions(+), 25 deletions(-)
+ create mode 100644 media/audio/fingerprints/26225808-61d2-43a2-85a0-bc71a2a43273.npy
+ create mode 100644 media/audio/fingerprints/d551a5f3-43aa-41a7-b571-f8cd5d604ad5.npy
 sending incremental file list
 ./
 .gitignore

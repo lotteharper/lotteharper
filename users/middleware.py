@@ -49,7 +49,7 @@ def simple_middleware(get_response):
     # One-time configuration and initialization.
     def middleware(request):
         response = None
-        if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal"]):
+        if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal", "remote/generate"]):
             response = get_response(request)
             return response
         try:

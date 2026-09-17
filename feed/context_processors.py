@@ -10,6 +10,7 @@ from misc.views import current_time
 from django.utils import timezone
 from security.tests import face_mrz_or_nfc_verified
 from translate.languages import SELECTOR_LANGUAGES
+from types import SimpleNamespace
 
 def utc_to_local(utc_dt, local_tz):
     local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
@@ -28,7 +29,10 @@ ip_countries = {}
 
 def feed_context(request):
     context_data = dict()
-    if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal"]):
+    context_data['base_description'] = settings.BASE_DESCRIPTION
+    context_data['the_site_name'] = settings.SITE_NAME
+    context_data['base_url'] = settings.BASE_URL
+    if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal", "remote/generate"]):
         return context_data
     try:
         context_data['lang'] = get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG
@@ -63,7 +67,6 @@ def feed_context(request):
     context_data['podcast_link'] = settings.PODCAST_LINK
     context_data['static_url'] = settings.STATIC_SITE_URL
     context_data['admin_email'] = settings.EMAIL_ADDRESS
-    context_data['base_description'] = settings.BASE_DESCRIPTION
     context_data['webpush_query_delay'] = settings.WEBPUSH_QUERY_DELAY_SECONDS
     context_data['email_query_delay'] = settings.EMAIL_QUERY_DELAY_SECONDS
     context_data['currentyear'] = datetime.now().year
@@ -73,7 +76,6 @@ def feed_context(request):
     context_data['agent_name'] = settings.AGENT_NAME
     context_data['agent_phone'] = settings.AGENT_PHONE
     context_data['agent_address'] = settings.ADDRESS
-    context_data['the_site_name'] = settings.SITE_NAME
     context_data['domain_name'] = settings.DOMAIN
     context_data['adult_content'] = settings.ADULT_CONTENT
     if settings.ACTIVATE_MINING:
@@ -83,8 +85,6 @@ def feed_context(request):
         context_data['full'] = True
     context_data['main_phone'] = settings.PHONE_NUMBER #'+19705857901'
     NoneType = type(None)
-    context_data['stacktrace_context'] = traceback.format_exc() if str(traceback.format_exc()) != 'NoneType: None\n' else ''
-    context_data['base_url'] = settings.BASE_URL
     user = None
     if hasattr(request, 'user'):
         user = request.user
@@ -109,15 +109,20 @@ def feed_context(request):
     context_data['REDIRECT_URL'] = settings.REDIRECT_URL
     if request.GET.get('hidenavbar'): context_data['hidenavbar'] = True
     context_data['webpush'] = {"group": "guests"}
-    ip = UserIpAddress.objects.filter(user=None if not hasattr(request, 'user') or not request.user.is_authenticated else request.user, ip_address=get_client_ip(request)).first()
-    user_session = None
-    if user and user.is_authenticated: user_session = UserSession.objects.filter(user=user, session_key=request.session.session_key).order_by('-timestamp').first()
+    ip_pre = UserIpAddress.objects.values('timezone', 'sunset', 'sunrise', 'country', 'ip_address').filter(user=None if not hasattr(request, 'user') or not request.user.is_authenticated else request.user, ip_address=get_client_ip(request)).order_by('-timestamp').first()
+    try:
+        ip = SimpleNamespace(**ip_pre)
+    except: ip = None
+#    user_session = None
+#    if user and user.is_authenticated:
+#        user_session_pre = UserSession.objects.values('country').filter(user=user, session_key=request.session.session_key).order_by('-timestamp').first()
+#        user_session = SimpleNamespace(**user_session_pre)
     context_data['current_time'] = str(datetime.now())
     context_data['current_time_text'] = current_time(datetime.now())
     context_data['current_time_digits'] = timezone.now().strftime('%A %B %d, %Y - %H:%M:%S')
     h = int(datetime.now().astimezone(pytz.timezone(settings.TIME_ZONE)).strftime('%H'))
     context_data['clock_color'] = '#ffcccb' if h >= 9 and h < 21 else 'lightblue'
-    if ip != None and ip.latitude != None and ip.longitude != None:
+    if ip != None and ip.sunset != None and ip.sunrise != None:
         async_get_sun.delay(user.id if user else None, request.user.is_authenticated if hasattr(request, 'user') else False, ip.ip_address)
         sunset = ip.sunset
         sunrise = ip.sunrise
@@ -130,9 +135,9 @@ def feed_context(request):
         h = int(now.strftime('%H'))
         context_data['clock_color'] = '#ffcccb' if h >= 9 and h < 21 else 'lightblue'
     country = None
-    if hasattr(request, 'user') and user_session and user_session.country:
-        country = user_session.country
-    elif ip and ip.country:
+#    if hasattr(request, 'user') and user_session and user_session.country:
+#        country = user_session.country
+    if ip and ip.country:
         country = ip.country
     else: country = None
     context_data['user_country'] = country
@@ -147,4 +152,5 @@ def feed_context(request):
     context_data['polling_now'] = timezone.now() < datetime(2024, 11, 6).replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
 #    context_data['bitcoin_address'] = settings.BITCOIN_WALLET
 #    context_data['ethereum_address'] = settings.ETHEREUM_WALLET
+    context_data['stacktrace_context'] = traceback.format_exc() if str(traceback.format_exc()) != 'NoneType: None\n' else ''
     return context_data

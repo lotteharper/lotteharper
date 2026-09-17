@@ -41,12 +41,12 @@ BASE_URL = PROTOCOL + '://' + DOMAIN
 
 # Static site
 STATIC_DOMAIN = 'glamgirlx.com'
-ADD_DOMAIN = 'qoshlli.com'
-OLD_DOMAIN = 'femmebabe.com'
+ADD_DOMAIN = ''
+OLD_DOMAIN = ''
 
 ADD_URL = PROTOCOL + '://' + ADD_DOMAIN
 
-ALLOWED_HOSTS = [DOMAIN, STATIC_DOMAIN, ADD_DOMAIN, OLD_DOMAIN, '172.234.244.64', '2600:3c0a::f03c:95ff:feda:ca7a']
+ALLOWED_HOSTS = [DOMAIN, STATIC_DOMAIN, '172.234.244.64', '2600:3c0a::f03c:95ff:feda:ca7a']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -221,6 +221,7 @@ DATABASES = {
             'MAX_OVERFLOW': 500,
             'RECYCLE': -1,
         },
+        'CONN_MAX_AGE': 600,
     },
 }
 

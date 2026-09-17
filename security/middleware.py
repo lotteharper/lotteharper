@@ -69,7 +69,7 @@ OVERCLICK_HTML_NOTE = '<!DOCTYPE html><html><head></head><body><h3>You have clic
 def security_middleware(get_response):
     def middleware(request):
         response = None
-        if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal"]):
+        if any(x in request.path for x in ["favicon.ico", "jsi18n", "static", "serviceworker.js", "site.webmanifest", "ads.txt", "robots.txt", "security/modal", "remote/generate"]):
             response = get_response(request)
             return response
         try:
@@ -83,12 +83,14 @@ def security_middleware(get_response):
                 from .models import SessionDedup
                 sd = SessionDedup.objects.create(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method)
                 sd.async_delete()
-                sessions = SessionDedup.objects.filter(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method, time__gte=timezone.now() - datetime.timedelta(seconds=2))
+                sessions = SessionDedup.objects.values('id').filter(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method, time__gte=timezone.now() - datetime.timedelta(seconds=2))
                 if sessions.count() < settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) #return HttpResponse(OVERCLICK_HTML_NOTE)
                 if sessions.count() > settings.SESSION_INDEX and request.method == 'POST': return redirect(request.path + qs) # return HttpResponse(OVERCLICK_HTML_NOTE)
 #                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
             if not (request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor)):
-                ip_obj = UserIpAddress.objects.filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).first()
+                ip_ob = UserIpAddress.objects.values('risk_detected', 'page_loads').filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).order_by('-timestamp').first()
+                from types import SimpleNamespace
+                ip_obj = SimpleNamespace(**ip_ob)
                 if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
                     from django.http import HttpResponseRedirect
                     if ip_obj.page_loads > 12:
@@ -96,7 +98,9 @@ def security_middleware(get_response):
                     return HttpResponseRedirect(settings.REDIRECT_URL)
 #            request.GET._mutable = True
             if request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor):
-                sess = UserSession.objects.filter(user=request.user, session_key=request.session.session_key).order_by('-timestamp').first()
+                se = UserSession.objects.values('authorized', 'bypass', 'timestamp', 'session_key', 'expiry_warning').filter(user=request.user, session_key=request.session.session_key).order_by('-timestamp').first()
+                from types import SimpleNamespace
+                sess = SimpleNamespace(**se)
                 if not sess:
                     sess, created = UserSession.objects.get_or_create(user=request.user, session_key=request.session.session_key, user_agent=request.META["HTTP_USER_AGENT"], authorized=False, bypass=False)
                 if sess.timestamp < timezone.now() - datetime.timedelta(minutes=settings.LOGIN_VALID_MINUTES):
