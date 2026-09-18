@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 
 register = template.Library()
 
@@ -234,7 +235,6 @@ def transbio(target):
     from django.conf import settings
     return translate_html(get_current_request(), post.bio, target=get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG, src=post.language_code if post.language_code else settings.DEFAULT_LANG)
 
-
 def do_blocktrans(parser, token):
     nodelist = parser.parse(('endblocktrans',))
     parser.delete_first_token()
@@ -242,7 +242,7 @@ def do_blocktrans(parser, token):
 
 class TransNode(template.Node):
     src = None
-    def __init__(self, nodelist, src=None):
+    def __init__(self, nodelist, src=settings.DEFAULT_LANG):
         self.nodelist = nodelist
         self.src = src
 
@@ -250,8 +250,8 @@ class TransNode(template.Node):
         output = self.nodelist.render(context)
         from translate.translate import translate_html
         from feed.middleware import get_current_request
-        from django.conf import settings
-        return translate_html(get_current_request(), output, target=get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG, src=self.src if self.src else None)
+        target = get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG
+        return translate_html(get_current_request(), output, target=target, src=self.src if self.src else None)
 
 register.tag('blocktrans', do_blocktrans)
 

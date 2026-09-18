@@ -27,6 +27,9 @@ def generate_random_string(length):
 
 ip_countries = {}
 
+my_user = None
+admin_user = None
+
 def feed_context(request):
     context_data = dict()
     context_data['base_description'] = settings.BASE_DESCRIPTION
@@ -37,6 +40,12 @@ def feed_context(request):
     try:
         context_data['lang'] = get_current_request().user.profile.preferred_language if hasattr(get_current_request(), 'user') and hasattr(get_current_request().user, 'profile') and not get_current_request().GET.get('lang', False) else get_current_request().LANGUAGE_CODE if get_current_request() and not get_current_request().GET.get('lang') else get_current_request().GET.get('lang') if get_current_request() and get_current_request().GET.get('lang', None) else settings.DEFAULT_LANG
     except: context_data['lang'] = settings.DEFAULT_LANG
+    global my_user
+    global admin_user
+    if not my_user:
+        my_user = User.objects.filter(id=settings.MY_ID).first()
+    if not admin_user:
+        admin_user = User.objects.filter(id=settings.ADMIN_ID).first()
     context_data['selector_languages'] = SELECTOR_LANGUAGES
     context_data['use_prism'] = settings.USE_PRISM
     context_data['use_allauth'] = settings.USE_ALLAUTH
@@ -52,8 +61,6 @@ def feed_context(request):
     context_data['default_crypto'] = settings.DEFAULT_CRYPTO
     context_data['activate_mining'] = settings.ACTIVATE_MINING
     context_data['statement_descriptor'] = settings.STATEMENT_DESCRIPTOR
-    my_user = User.objects.filter(id=settings.MY_ID).first()
-    admin_user = User.objects.filter(id=settings.ADMIN_ID).first()
     context_data['adminusername'] = admin_user.profile.name if admin_user and hasattr(admin_user, 'profile') else None
     context_data['profileusername'] = my_user.profile.name if my_user and hasattr(my_user, 'profile') else 'Daisy'
     context_data['myusername'] = my_user.profile.name if my_user and hasattr(my_user, 'profile') else 'Daisy'
