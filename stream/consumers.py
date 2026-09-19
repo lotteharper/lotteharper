@@ -44,6 +44,40 @@ def translate_message(self, message, lang):
     return translate_html(None, message, target=self.lang, src=lang)
 
 
+@sync_to_async
+def increment_watchcount(slug):
+    from django.core.cache import cache
+
+    # cache.add() only succeeds when the key does not already exist.
+    # This initializes the counter to zero before incrementing it.
+    cache.add(slug, 0, timeout=600)
+
+    try:
+        return cache.incr(slug)
+    except ValueError:
+        # Handles a backend where the key disappeared between add/incr.
+        cache.set(slug, 1, timeout=600)
+        return 1
+
+
+@sync_to_async
+def decrement_watchcount(slug):
+    from django.core.cache import cache
+
+    try:
+        count = cache.decr(slug)
+    except ValueError:
+        count = 0
+
+    if count <= 0:
+        cache.delete(slug)
+        return 0
+
+    # Refresh the expiration time after each update.
+    cache.touch(slug, timeout=600)
+    return count
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
     lang = 'en'
     async def connect(self):
@@ -54,6 +88,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if 'lang' in query_params and query_params['lang']: self.lang = query_params['lang'][0]
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
+
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -86,56 +121,163 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 open_channels = {}
 channel_rotation = {}
 
-class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
-    broadcast = None
-    async def connect(self):
-        # Get channel name from URL
-        self.channel_name_param = self.scope['url_route']['kwargs']['channel_name']
-        self.camera_name_param = self.scope['url_route']['kwargs']['camera_name']
-        self.verbose_name = f"{self.channel_name_param}_{self.camera_name_param}"
-        self.room_group_name = f"webrtc_{self.verbose_name}"
-        # Determine if this connection is the broadcaster (logged in as <channel_name>)
-        user = self.scope["user"]
-        username = await get_user_name(self.scope['user'].id)
-        auth = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
-        global open_channels
-        channel_open = self.verbose_name in open_channels.keys()
-        from urllib.parse import parse_qs
-        query_params = parse_qs(self.scope["query_string"].decode())
-        if 'broadcast' in query_params and query_params['broadcast']: self.broadcast = query_params['broadcast'][0]
-        self.is_broadcaster = user.is_authenticated and user.username == self.channel_name_param and username == self.channel_name_param and auth and self.broadcast and not channel_open
 
-        # Add to group
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+@sync_to_async
+def get_watchcount(slug):
+    from django.core.cache import cache
+
+    return cache.get(slug, 0) or 0
+
+
+class WebRTCSignalingConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.channel_name_param = self.scope["url_route"]["kwargs"]["channel_name"]
+        self.camera_name_param = self.scope["url_route"]["kwargs"]["camera_name"]
+
+        self.verbose_name = (
+            f"{self.channel_name_param}_{self.camera_name_param}"
+        )
+        self.room_group_name = f"webrtc_{self.verbose_name}"
+
+        self.is_broadcaster = False
+        self.counted_as_viewer = False
+
+        user = self.scope["user"]
+
+        # Keep your existing authentication logic here.
+        username = await get_user_name(user.id) if user.is_authenticated else False
+        auth = (
+            await get_auth(
+                user.id,
+                self.scope["session"].session_key,
+            )
+            if user.is_authenticated
+            else False
+        )
+        from urllib.parse import parse_qs
+        query_params = parse_qs(
+            self.scope["query_string"].decode()
+        )
+
+        broadcast = query_params.get("broadcast", [None])[0]
+
+        channel_open = self.verbose_name in open_channels
+
+        self.is_broadcaster = bool(
+            user.is_authenticated
+            and user.username == self.channel_name_param
+            and username == self.channel_name_param
+            and auth
+            and broadcast
+            and not channel_open
+        )
+
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name,
+        )
         await self.accept()
 
-        # If viewer, notify broadcaster of new connection
+        # Count viewers, but do not count the broadcaster.
+        self.watchcount_slug = f"watchcount:{self.channel_name_param}"
+
+        if not self.is_broadcaster:
+            self.counted_as_viewer = True
+            await increment_watchcount(self.watchcount_slug)
+
+        # Always send the current count to every connection, including
+        # the broadcaster.
+        await self.send_watch_count()
+        await self.broadcast_watch_count()
+
         if not self.is_broadcaster:
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     "type": "new_viewer",
                     "viewer_channel": self.channel_name,
-                }
+                },
             )
-            global channel_rotation
-            rot = channel_rotation[self.room_group_name] if self.room_group_name in channel_rotation else 0
-            await self.send(text_data=json.dumps({"type": "rotation", "data": rot,}))
-        elif self.is_broadcaster:
+
+            rotation = channel_rotation.get(self.room_group_name, 0)
+
+            await self.send(
+                text_data=json.dumps(
+                    {
+                        "type": "rotation",
+                        "data": rotation,
+                    }
+                )
+            )
+        else:
             open_channels[self.verbose_name] = self
+
             await self.channel_layer.group_send(
-                self.room_group_name, {"type": "broadcaster_online"}
+                self.room_group_name,
+                {
+                    "type": "broadcaster_online",
+                },
             )
+
+            # Make sure existing viewers also receive the count when the
+            # broadcaster connects.
 
     async def disconnect(self, close_code):
-        if self.is_broadcaster:
-            global open_channels
-            del open_channels[self.verbose_name]
-            await self.channel_layer.group_send(
-                self.room_group_name, {"type": "broadcaster_offline"}
-            )
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        if getattr(self, "counted_as_viewer", False):
+            await decrement_watchcount(self.watchcount_slug)
+            self.counted_as_viewer = False
 
+            await self.broadcast_watch_count()
+
+        if getattr(self, "is_broadcaster", False):
+            open_channels.pop(self.verbose_name, None)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "broadcaster_offline",
+                },
+            )
+
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name,
+        )
+
+    async def send_watch_count(self):
+        count = await get_watchcount(self.watchcount_slug)
+
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "watchcount",
+                    "count": count,
+                }
+            )
+        )
+
+    async def broadcast_watch_count(self):
+        count = await get_watchcount(self.watchcount_slug)
+
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "watchcount",
+                "count": count,
+            },
+        )
+
+    async def watchcount(self, event):
+        # Do not exclude the broadcaster. The broadcaster also has a
+        # #watchcount element in the template.
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "watchcount",
+                    "count": event["count"],
+                }
+            )
+        )
     async def receive(self, text_data):
         data = json.loads(text_data)
 

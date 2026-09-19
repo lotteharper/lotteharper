@@ -235,8 +235,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 @sync_to_async
 def initiate_stream(self):
     from live.models import VideoCamera
-    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     from verify.tests import pediatric_identity_verified
+    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     from django.core.exceptions import PermissionDenied
     user_id = self.user_id
     camera_name = self.camera_name

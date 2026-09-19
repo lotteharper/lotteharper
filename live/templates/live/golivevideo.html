@@ -76,6 +76,7 @@ video {
 {% if request.GET.with %}
 <div style="z-index: 1; position: absolute;">
 {% endif %}
+<i><b id="watchcount">~</b> watching now</i>
 <p id="errormessage" class="hide" style="text-color: red;">{{ 'Please enable your camera in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="Reload page" class="btn btn-outline-primary">{{ 'Reload'|etrans }}</button></p>
 <div id="video-container">
     <div style="text-align: center;" id="rec-status"></div>
@@ -560,6 +561,9 @@ function openSignalingSocket() {
         else if (data.type === "new_viewer") {
             // Call handleViewer with the viewer's channel name
             handleViewer(data.id);
+        }
+        else if (data.type === "watchcount") {
+            document.getElementById('watchcount').innerHTML = data.count;
         }
     };
     signalingSocket.onopen = async (event) => {
