@@ -1,1463 +1,2084 @@
-// By Charlotte Grace Harper. V1.0.33 fixing - REVISED
-(function threethirteen(){
-  var gameSocket;
-  var gameReady = false;
-  const TURNTIME = 5; // Turn time in seconds
-  var currentTurn = 0;
-  var lastPlayerScore = 0;
-  var lastOpponentScore = 0;
-  const suitnames = ["S", "H", "C", "D"];
-  const cardnames = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-  const cardsroot = "https://lotteh.com/media/games/cards/";
-  
-  try {
-    var postUuid = document.getElementById("post_id").innerHTML;
-    var gameCode = document.getElementById("game_code").innerHTML;
-  } catch { return; }
-  
-  var player2;
-  var user;
-  var preparingForNextRound = false;
-  let isFinished = false;
-  var gameIsWon = false;
-  var opponentWinsOnNextDiscard = false;
-  var gameOverOnNextDiscard = false;
-  var recoveringState = false;
-  
-  function docReady(fn) {
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      setTimeout(fn, 1);
-    } else {
-      document.addEventListener("DOMContentLoaded", fn);
-    }
-  }
-  
-  var startedGame = false;
-  var gameSocketReloadTimeout;
-  
-  function openGameSocket() {
-    gameSocket = new WebSocket("wss://" + window.location.hostname + '/ws/games/' + postUuid + '/' + gameCode + '/');
-    gameSocket.addEventListener("open", (event) => {
-      console.log('Socket open.');
-      send("join,x,"+user);
-    });
-    gameSocket.addEventListener("message", (event) => {
-      read(event.data);
-    });
-    gameSocket.addEventListener("close", (event) => {
-      console.log('Socket closed.');
-      if(gameSocketReloadTimeout) clearTimeout(gameSocketReloadTimeout);
-      gameSocketReloadTimeout = setTimeout(function() {
-        openGameSocket();
-      }, 10000);
-    });
-    gameSocket.addEventListener("error", (event) => {
-      console.log('Socket error.');
-      if(gameSocketReloadTimeout) clearTimeout(gameSocketReloadTimeout);
-      gameSocketReloadTimeout = setTimeout(function() {
-        openGameSocket();
-      }, 10000);
-    });
-  }
-  
-  setTimeout(function() {
-    openGameSocket();
-  }, 5000);
-  
-  let seed = 10000 + parseInt(document.getElementById('game_id').innerHTML);
-  
-  function RNG(seed) {
-    this.m = 0x80000000;
-    this.a = 1103515245;
-    this.c = 12345;
-    this.state = seed ? seed : Math.floor(Math.random() * (this.m - 1));
-  }
-  
-  RNG.prototype.nextInt = function() {
-    this.state = (this.a * this.state + this.c) % this.m;
-    return this.state;
-  }
-  
-  RNG.prototype.nextFloat = function() {
-    return this.nextInt() / (this.m - 1);
-  }
-  
-  RNG.prototype.nextRange = function(start, end) {
-    let rangeSize = end - start;
-    let randomUnder1 = this.nextInt() / this.m;
-    return start + Math.floor(randomUnder1 * rangeSize);
-  }
-  
-  RNG.prototype.choice = function(array) {
-    return array[this.nextRange(0, array.length)];
-  }
-  
-  let rng = new RNG(seed);
-  let canvasid = "game";
-  let canvas = document.getElementById(canvasid);
-  let width = canvas.width;
-  let height = canvas.height;
+(function threeThirteen() {
+  "use strict";
 
-  let TEXTTYPE = "bold " + 42 + "px Arial";
-  let TEXTTYPE2 = "bold " + 70 + "px Arial";
-  let TEXTTYPE3 = "bold " + 40 + "px Arial";
+  const PLAYER_ONE = "Player 1";
+  const PLAYER_TWO = "Player 2";
 
-  let last = 0;
-  let stage = new createjs.Stage(canvasid);
-  let container = new createjs.Container();
+  const CARD_NAMES = [
+    "A", "2", "3", "4", "5", "6", "7",
+    "8", "9", "10", "J", "Q", "K"
+  ];
 
-  background = new createjs.Shape();
-  background.graphics.beginFill("#b0afb3").drawRect(0, 0, window.innerWidth, window.innerHeight);
+  const SUITS = ["S", "H", "C", "D"];
+  const CARD_ROOT = "https://lotteh.com/media/games/cards/";
+  const CARD_SCALE = 0.9;
+
+  const postElement = document.getElementById("post_id");
+  const codeElement = document.getElementById("game_code");
+  const gameElement = document.getElementById("game_id");
+  const playerElement = document.getElementById("player");
+  const canvas = document.getElementById("game");
+
+  if (
+    !postElement ||
+    !codeElement ||
+    !gameElement ||
+    !playerElement ||
+    !canvas ||
+    typeof createjs === "undefined"
+  ) {
+    return;
+  }
+
+  const postUuid = postElement.innerHTML.trim();
+  const gameCode = codeElement.innerHTML.trim();
+  const gameId = String(gameElement.innerHTML).trim();
+
+  const user = playerElement.innerHTML.trim() === "y"
+    ? PLAYER_ONE
+    : PLAYER_TWO;
+
+  const opponent = user === PLAYER_ONE
+    ? PLAYER_TWO
+    : PLAYER_ONE;
+
+  const adElement = document.getElementById("dontshowad");
+  const adHeight =
+    adElement &&
+    adElement.innerHTML.trim() === "true"
+      ? 0
+      : 120;
+
+  const TEXT = "bold 42px Arial";
+  const SMALL_TEXT = "bold 30px Arial";
+  const LARGE_TEXT = "bold 70px Arial";
+
+  const cardImages = [];
+  const backImage = new Image();
+
+  let imagesLoaded = 0;
+  let started = false;
+
+  let socket = null;
+  let reconnectTimer = null;
+
+  let stateReceived = false;
+  let gameReady = false;
+
+  let currentRound = 3;
+  let currentCard = 0;
+  let deck = [];
+
+  let playerCards = [];
+  let playerSuits = [];
+  let opponentCards = [];
+  let opponentSuits = [];
+
+  let discardCards = [];
+  let discardSuits = [];
+
+  let canDraw = false;
+  let canDiscard = false;
+  let roundComplete = false;
+  let gameFinished = false;
+  let pendingWinner = null;
+  let roundKey = "";
+
+  let playerScore = 0;
+  let opponentScore = 0;
+  let history = [];
+
+  let roundSettlement = false;
+  let roundWinner = null;
+  let settlementActionSent = false;
+
+  let playerObjects = [];
+  let opponentObjects = [];
+  let deckBitmap = null;
+  let discardBitmap = null;
+  let roundDialog = null;
+  let joinDialog = null;
+
+  let playerScoreText = null;
+  let opponentScoreText = null;
+  let currentPlayerText = null;
+  let roundText = null;
+
+  const stage = new createjs.Stage(canvas);
+  const background = new createjs.Shape();
+  const container = new createjs.Container();
+
   stage.addChild(background);
   stage.addChild(container);
 
-  var dontshowad;
-  try {
-    dontshowad = document.getElementById("dontshowad").innerHTML;
-  } catch { }
-  
-  var ADHEIGHT = 120;
-  if(dontshowad == "true"){
-    ADHEIGHT = 0;
-  }
-  
-  var totalScore = 0;
-  let id;
-  var player1;
-  let canvasHeight;
-  
-  try {
-    id = document.getElementById("game_id").innerHTML;
-    player = document.getElementById("player").innerHTML;
-    player1 = 'Player 1';
-    player2 = 'Player 2';
-    user = 'Player 2';
-    var canPlayerDraw = false;
-    if(player == 'y') {
-      user = 'Player 1';
+  let leftBound = 0;
+  let topBound = 0;
+  let boardSize = 0;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = Math.max(0, window.innerHeight - adHeight);
+
+    background.graphics.clear();
+    background.graphics
+      .beginFill("#b0afb3")
+      .drawRect(0, 0, canvas.width, canvas.height);
+
+    boardSize = Math.min(canvas.width, canvas.height);
+
+    if (boardSize <= 0) {
+      stage.update();
+      return;
     }
-    rng = new RNG(parseInt(id));
-    stage.canvas.width = window.innerWidth;
-    canvasHeight = window.innerHeight-ADHEIGHT;
-    stage.canvas.height = canvasHeight;
-  } catch {
-    stage.canvas.height = 0;
-  }
-  
-  var canPlayerDiscard = false;
-  if(user == player2){
-    canPlayerDraw = false;
-  }
-  
-  let less = window.innerWidth;
-  if(canvasHeight < less){
-    less = canvasHeight;
-  }
-  scale = container.scale = less / 1000;
 
-  leftbound = (stage.canvas.width - less)/2/scale;
-  topbound = ((canvasHeight - less)/2)/scale;
+    container.scaleX = boardSize / 1000;
+    container.scaleY = boardSize / 1000;
 
-  var cardScale = 0.9;
-  var cardCount = 53;
-  var suits = ["S","H","C","D"]
-  var cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
-  var images = []
-  
-  for(var x = 0; x < suits.length; x++){
-    suit = suits[x];
-    images[x] = []
-    for(var y = 0; y < cards.length; y++){
-      card = cards[y];
-      images[x][y] = new Image();
-      images[x][y].src = cardsroot + card + suit + ".png";
-      images[x][y].onload = handleImageLoad;
+    leftBound =
+      (canvas.width - boardSize) /
+      2 /
+      container.scaleX;
+
+    topBound =
+      (canvas.height - boardSize) /
+      2 /
+      container.scaleY;
+
+    stage.update();
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  /*
+   * ----------------------------------------------------------------------
+   * Wildcards
+   * ----------------------------------------------------------------------
+   */
+
+  function getWildcardValue() {
+    return currentRound - 1;
+  }
+
+  function isWildcardValue(value) {
+    return Number(value) === getWildcardValue();
+  }
+
+  function isWildcardCard(value, suit) {
+    return (
+      isWildcardValue(value) &&
+      Number(suit) >= 0 &&
+      Number(suit) < 4
+    );
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Card deck and dealing
+   * ----------------------------------------------------------------------
+   */
+
+  function RNG(seed) {
+    this.state = seed >>> 0;
+  }
+
+  RNG.prototype.next = function() {
+    this.state =
+      (1664525 * this.state + 1013904223) >>> 0;
+    return this.state;
+  };
+
+  RNG.prototype.range = function(min, max) {
+    return min + this.next() % (max - min);
+  };
+
+  function makeDeck(round) {
+    const cards = [];
+    const rng = new RNG(
+      (10000 + Number(gameId || 0) + round * 7919) >>> 0
+    );
+
+    for (let suit = 0; suit < 4; suit++) {
+      for (let value = 0; value < 13; value++) {
+        cards.push({ value, suit });
+      }
+    }
+
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = rng.range(0, i + 1);
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+
+    return cards;
+  }
+
+  function getDeckCard(index) {
+    if (!deck[index]) {
+      return null;
+    }
+
+    return {
+      value: deck[index].value,
+      suit: deck[index].suit
+    };
+  }
+
+  function addCard(cards, suits, card) {
+    if (!card) {
+      return false;
+    }
+
+    cards.push(card.value);
+    suits.push(card.suit);
+    return true;
+  }
+
+  function getRoundStarter(round) {
+    return round % 2 === 1
+      ? PLAYER_ONE
+      : PLAYER_TWO;
+  }
+
+  function sortCards(cards, suits, byValue) {
+    const combined = cards.map(function(value, index) {
+      return {
+        value,
+        suit: suits[index]
+      };
+    });
+
+    combined.sort(function(a, b) {
+      if (byValue && a.value !== b.value) {
+        return b.value - a.value;
+      }
+
+      if (a.suit !== b.suit) {
+        return b.suit - a.suit;
+      }
+
+      return b.value - a.value;
+    });
+
+    return {
+      cards: combined.map(item => item.value),
+      suits: combined.map(item => item.suit)
+    };
+  }
+
+  function dealRound(round) {
+    currentRound = Math.max(
+      3,
+      Math.min(13, Number(round) || 3)
+    );
+
+    deck = makeDeck(currentRound);
+
+    playerCards = [];
+    playerSuits = [];
+    opponentCards = [];
+    opponentSuits = [];
+    discardCards = [];
+    discardSuits = [];
+
+    for (let i = 0; i < currentRound; i++) {
+      const first = getDeckCard(i);
+      const second = getDeckCard(currentRound + i);
+
+      if (user === PLAYER_ONE) {
+        addCard(playerCards, playerSuits, first);
+        addCard(opponentCards, opponentSuits, second);
+      } else {
+        addCard(opponentCards, opponentSuits, first);
+        addCard(playerCards, playerSuits, second);
+      }
+    }
+
+    const openingDiscard = getDeckCard(currentRound * 2);
+
+    if (openingDiscard) {
+      discardCards.push(openingDiscard.value);
+      discardSuits.push(openingDiscard.suit);
+    }
+
+    currentCard = currentRound * 2 + 1;
+
+    let sorted = sortCards(
+      playerCards,
+      playerSuits,
+      true
+    );
+
+    playerCards = sorted.cards;
+    playerSuits = sorted.suits;
+
+    sorted = sortCards(
+      opponentCards,
+      opponentSuits,
+      true
+    );
+
+    opponentCards = sorted.cards;
+    opponentSuits = sorted.suits;
+
+    roundComplete = false;
+    roundKey = "";
+    pendingWinner = null;
+
+    canDiscard = false;
+    canDraw = getRoundStarter(currentRound) === user;
+
+    setRoundText();
+    setCurrentPlayer(canDraw);
+    redrawAll();
+  }
+
+  function resetNewGame() {
+    currentRound = 3;
+    currentCard = 0;
+    deck = [];
+
+    playerCards = [];
+    playerSuits = [];
+    opponentCards = [];
+    opponentSuits = [];
+    discardCards = [];
+    discardSuits = [];
+
+    playerScore = 0;
+    opponentScore = 0;
+
+    canDraw = false;
+    canDiscard = false;
+    roundComplete = false;
+    gameFinished = false;
+    pendingWinner = null;
+    roundKey = "";
+    roundSettlement = false;
+    roundWinner = null;
+    settlementActionSent = false;
+    history = [];
+
+    drawPlayerScore("--");
+    drawOpponentScore("--");
+
+    dealRound(3);
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Rendering
+   * ----------------------------------------------------------------------
+   */
+
+  function clearObjects(objects) {
+    objects.forEach(function(object) {
+      if (object && container.contains(object)) {
+        container.removeChild(object);
+      }
+    });
+
+    objects.length = 0;
+  }
+
+  function drawCard(suit, value, x, y) {
+    if (
+      !cardImages[suit] ||
+      !cardImages[suit][value]
+    ) {
+      return null;
+    }
+
+    const bitmap = new createjs.Bitmap(
+      cardImages[suit][value]
+    );
+
+    bitmap.scaleX = CARD_SCALE;
+    bitmap.scaleY = CARD_SCALE;
+    bitmap.x = leftBound + x - 125 * CARD_SCALE;
+    bitmap.y = topBound + y - 175 * CARD_SCALE;
+
+    container.addChild(bitmap);
+    return bitmap;
+  }
+
+  function drawFaceDownCard(x, y) {
+    const bitmap = new createjs.Bitmap(backImage);
+
+    bitmap.scaleX = CARD_SCALE;
+    bitmap.scaleY = CARD_SCALE;
+    bitmap.x = leftBound + x - 125 * CARD_SCALE;
+    bitmap.y = topBound + y - 175 * CARD_SCALE;
+
+    container.addChild(bitmap);
+    return bitmap;
+  }
+
+  function drawWildcardMarker(bitmap) {
+    const marker = new createjs.Text(
+      "WILD",
+      "bold 18px Arial",
+      "#8a0010"
+    );
+
+    marker.x = bitmap.x + 28;
+    marker.y = bitmap.y + 24;
+    marker.textAlign = "center";
+    marker.mouseEnabled = false;
+
+    container.addChild(marker);
+    return marker;
+  }
+
+  function drawPlayerHand() {
+    clearObjects(playerObjects);
+
+    for (let i = playerCards.length - 1; i >= 0; i--) {
+      const row = i > 6 ? 140 : 30;
+      const offset = i > 6 ? 7 : 0;
+      const x = 1000 - (1000 / 7) * (i - offset);
+      const y = 1000 - row;
+
+      const bitmap = drawCard(
+        playerSuits[i],
+        playerCards[i],
+        x,
+        y
+      );
+
+      if (!bitmap) {
+        continue;
+      }
+
+      bitmap.value = playerCards[i];
+      bitmap.suit = playerSuits[i];
+      playerObjects.push(bitmap);
+
+      if (isWildcardCard(bitmap.value, bitmap.suit)) {
+        bitmap.alpha = 0.92;
+        playerObjects.push(drawWildcardMarker(bitmap));
+      }
+
+      bitmap.on("mousedown", function(event) {
+        if (
+          !gameReady ||
+          gameFinished ||
+          !canDiscard ||
+          playerCards.length !== currentRound + 1
+        ) {
+          return;
+        }
+
+        if (
+          roundSettlement &&
+          roundWinner === user
+        ) {
+          return;
+        }
+
+        const value = event.currentTarget.value;
+        const suit = event.currentTarget.suit;
+
+        if (isWildcardCard(value, suit)) {
+          return;
+        }
+
+        if (!discardPlayerCard(value, suit)) {
+          return;
+        }
+
+        if (!sendAction(
+          "discard," +
+          value +
+          "." +
+          suit +
+          "," +
+          user
+        )) {
+          return;
+        }
+
+        if (
+          !roundSettlement &&
+          pendingWinner === user
+        ) {
+          sendAction(
+            "round_complete," +
+            currentRound +
+            "," +
+            user
+          );
+          pendingWinner = null;
+        }
+
+        if (
+          roundSettlement &&
+          roundWinner !== user
+        ) {
+          completeSettlementTurn();
+        }
+      });
+    }
+
+    stage.update();
+  }
+
+  function drawOpponentHand(faceUp) {
+    clearObjects(opponentObjects);
+
+    for (let i = 0; i < opponentCards.length; i++) {
+      const row = i > 6 ? 140 : 30;
+      const offset = i > 6 ? 7 : 0;
+      const x =
+        1000 -
+        (1000 / 7) *
+        (i - offset + 1);
+
+      const bitmap = faceUp
+        ? drawCard(
+            opponentSuits[i],
+            opponentCards[i],
+            x,
+            row
+          )
+        : drawFaceDownCard(x, row);
+
+      if (!bitmap) {
+        continue;
+      }
+
+      opponentObjects.push(bitmap);
+
+      if (
+        faceUp &&
+        isWildcardCard(
+          opponentCards[i],
+          opponentSuits[i]
+        )
+      ) {
+        bitmap.alpha = 0.92;
+        opponentObjects.push(drawWildcardMarker(bitmap));
+      }
+    }
+
+    stage.update();
+  }
+
+  function drawDeck() {
+    if (deckBitmap && container.contains(deckBitmap)) {
+      container.removeChild(deckBitmap);
+    }
+
+    deckBitmap = drawFaceDownCard(300, 500);
+    deckBitmap.mouseEnabled = true;
+
+    deckBitmap.on("mousedown", function() {
+      if (
+        !gameReady ||
+        gameFinished ||
+        !canDraw ||
+        playerCards.length !== currentRound
+      ) {
+        return;
+      }
+
+      if (
+        roundSettlement &&
+        roundWinner === user
+      ) {
+        return;
+      }
+
+      if (drawPlayerFromDeck(false)) {
+        sendAction("draw,deck," + user);
+      }
+    });
+  }
+
+  function drawDiscard() {
+    if (discardBitmap && container.contains(discardBitmap)) {
+      container.removeChild(discardBitmap);
+    }
+
+    discardBitmap = null;
+
+    if (discardCards.length === 0) {
+      stage.update();
+      return;
+    }
+
+    const index = discardCards.length - 1;
+
+    discardBitmap = drawCard(
+      discardSuits[index],
+      discardCards[index],
+      700,
+      500
+    );
+
+    if (!discardBitmap) {
+      return;
+    }
+
+    if (
+      isWildcardCard(
+        discardCards[index],
+        discardSuits[index]
+      )
+    ) {
+      discardBitmap.alpha = 0.94;
+      drawWildcardMarker(discardBitmap);
+    }
+
+    discardBitmap.mouseEnabled = true;
+
+    discardBitmap.on("mousedown", function() {
+      if (
+        !gameReady ||
+        gameFinished ||
+        !canDraw ||
+        playerCards.length !== currentRound
+      ) {
+        return;
+      }
+
+      if (
+        roundSettlement &&
+        roundWinner === user
+      ) {
+        return;
+      }
+
+      if (drawPlayerFromDiscard(false)) {
+        sendAction("draw,discard," + user);
+      }
+    });
+
+    stage.update();
+  }
+
+  function redrawAll() {
+    drawPlayerHand();
+    drawOpponentHand(false);
+    drawDeck();
+    drawDiscard();
+    stage.update();
+  }
+
+  function drawInterface() {
+    const radius = 10;
+    const size = 100;
+
+    const playerPanel = new createjs.Shape();
+    playerPanel.graphics
+      .beginFill("lightyellow")
+      .drawRoundRect(
+        leftBound,
+        topBound + 550,
+        size,
+        size,
+        radius
+      );
+
+    const opponentPanel = new createjs.Shape();
+    opponentPanel.graphics
+      .beginFill("#f0655b")
+      .drawRoundRect(
+        leftBound,
+        topBound + 350,
+        size,
+        size,
+        radius
+      );
+
+    playerScoreText = new createjs.Text("--", TEXT, "#000000");
+    playerScoreText.x = leftBound + 50;
+    playerScoreText.y = topBound + 580;
+    playerScoreText.textAlign = "center";
+
+    opponentScoreText = new createjs.Text("--", TEXT, "#000000");
+    opponentScoreText.x = leftBound + 50;
+    opponentScoreText.y = topBound + 380;
+    opponentScoreText.textAlign = "center";
+
+    currentPlayerText = new createjs.Text(
+      "☆",
+      LARGE_TEXT,
+      "#E8CD71"
+    );
+    currentPlayerText.x = leftBound + 50;
+    currentPlayerText.textAlign = "center";
+
+    const circle = new createjs.Shape();
+    circle.graphics
+      .beginFill("#E8CD71")
+      .drawCircle(0, 0, 50);
+    circle.x = leftBound + 500;
+    circle.y = topBound + 500;
+
+    roundText = new createjs.Text(
+      "",
+      LARGE_TEXT,
+      "#000000"
+    );
+    roundText.x = leftBound + 500;
+    roundText.y = topBound + 470;
+    roundText.textAlign = "center";
+
+    container.addChild(playerPanel);
+    container.addChild(opponentPanel);
+    container.addChild(playerScoreText);
+    container.addChild(opponentScoreText);
+    container.addChild(currentPlayerText);
+    container.addChild(circle);
+    container.addChild(roundText);
+
+    drawSortButtons();
+    setRoundText();
+    setCurrentPlayer(getRoundStarter(currentRound) === user);
+  }
+
+  function drawSortButtons() {
+    const radius = 10;
+    const size = 100;
+
+    const suitButton = new createjs.Shape();
+    suitButton.graphics
+      .beginFill("lightgreen")
+      .drawRoundRect(
+        leftBound + 900,
+        topBound + 350,
+        size,
+        size,
+        radius
+      );
+
+    const suitText = new createjs.Text("333", TEXT, "#000000");
+    suitText.x = leftBound + 950;
+    suitText.y = topBound + 380;
+    suitText.textAlign = "center";
+
+    suitButton.on("mousedown", function() {
+      const sorted = sortCards(
+        playerCards,
+        playerSuits,
+        false
+      );
+
+      playerCards = sorted.cards;
+      playerSuits = sorted.suits;
+      drawPlayerHand();
+    });
+
+    const valueButton = new createjs.Shape();
+    valueButton.graphics
+      .beginFill("lightblue")
+      .drawRoundRect(
+        leftBound + 900,
+        topBound + 550,
+        size,
+        size,
+        radius
+      );
+
+    const valueText = new createjs.Text("456", TEXT, "#000000");
+    valueText.x = leftBound + 950;
+    valueText.y = topBound + 580;
+    valueText.textAlign = "center";
+
+    valueButton.on("mousedown", function() {
+      const sorted = sortCards(
+        playerCards,
+        playerSuits,
+        true
+      );
+
+      playerCards = sorted.cards;
+      playerSuits = sorted.suits;
+      drawPlayerHand();
+    });
+
+    container.addChild(suitButton);
+    container.addChild(suitText);
+    container.addChild(valueButton);
+    container.addChild(valueText);
+  }
+
+  function setCurrentPlayer(mayDraw) {
+    if (currentPlayerText) {
+      currentPlayerText.y = mayDraw
+        ? topBound + 670
+        : topBound + 270;
     }
   }
 
-  var backImage = new Image();
-  backImage.src = cardsroot + "back.png";
-  backImage.onload = handleImageLoad;
-  var imageCount = 0;
-  
-  function handleImageLoad(event) {
-    imageCount++;
-    if(imageCount == cardCount){
+  function setRoundText() {
+    if (roundText) {
+      roundText.text =
+        CARD_NAMES[currentRound - 1] ||
+        String(currentRound);
+    }
+  }
+
+  function drawPlayerScore(value) {
+    if (playerScoreText) {
+      playerScoreText.text = String(value);
+    }
+  }
+
+  function drawOpponentScore(value) {
+    if (opponentScoreText) {
+      opponentScoreText.text = String(value);
+    }
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Turn operations
+   * ----------------------------------------------------------------------
+   */
+
+  function setTurnAfterAction(type, actor) {
+    const localActor = actor === user;
+
+    if (type === "draw") {
+      canDraw = false;
+      canDiscard = localActor;
+      setCurrentPlayer(false);
+      return;
+    }
+
+    if (type === "discard") {
+      canDraw = !localActor;
+      canDiscard = false;
+      setCurrentPlayer(!localActor);
+    }
+  }
+
+  function recycleDiscard() {
+    if (discardCards.length <= 1) {
+      return false;
+    }
+
+    const top = discardCards.length - 1;
+    const recycled = [];
+
+    for (let i = 0; i < top; i++) {
+      recycled.push({
+        value: discardCards[i],
+        suit: discardSuits[i]
+      });
+    }
+
+    deck = recycled;
+    currentCard = 0;
+
+    discardCards = [discardCards[top]];
+    discardSuits = [discardSuits[top]];
+
+    drawDiscard();
+    return true;
+  }
+
+  function losingPlayerMaySettle() {
+    return (
+      roundSettlement &&
+      roundWinner &&
+      roundWinner !== user &&
+      !gameFinished
+    );
+  }
+
+  function drawPlayerFromDeck(replayMode) {
+    if (
+      !replayMode &&
+      (
+        !canDraw ||
+        gameFinished ||
+        (
+          roundComplete &&
+          !losingPlayerMaySettle()
+        )
+      )
+    ) {
+      return false;
+    }
+
+    if (playerCards.length !== currentRound) {
+      return false;
+    }
+
+    if (currentCard >= deck.length && !recycleDiscard()) {
+      return false;
+    }
+
+    const card = getDeckCard(currentCard);
+
+    if (!card) {
+      return false;
+    }
+
+    currentCard++;
+    addCard(playerCards, playerSuits, card);
+
+    if (!replayMode) {
+      canDraw = false;
+      canDiscard = true;
+      setCurrentPlayer(false);
+    }
+
+    drawPlayerHand();
+    return true;
+  }
+
+  function drawPlayerFromDiscard(replayMode) {
+    if (
+      !replayMode &&
+      (
+        !canDraw ||
+        gameFinished ||
+        (
+          roundComplete &&
+          !losingPlayerMaySettle()
+        )
+      )
+    ) {
+      return false;
+    }
+
+    if (
+      playerCards.length !== currentRound ||
+      discardCards.length === 0
+    ) {
+      return false;
+    }
+
+    const index = discardCards.length - 1;
+
+    addCard(
+      playerCards,
+      playerSuits,
+      {
+        value: discardCards[index],
+        suit: discardSuits[index]
+      }
+    );
+
+    discardCards.pop();
+    discardSuits.pop();
+
+    if (!replayMode) {
+      canDraw = false;
+      canDiscard = true;
+      setCurrentPlayer(false);
+    }
+
+    drawPlayerHand();
+    drawDiscard();
+
+    return true;
+  }
+
+  function drawOpponentFromDeck(replayMode) {
+    if (opponentCards.length !== currentRound) {
+      return false;
+    }
+
+    if (currentCard >= deck.length && !recycleDiscard()) {
+      return false;
+    }
+
+    const card = getDeckCard(currentCard);
+
+    if (!card) {
+      return false;
+    }
+
+    currentCard++;
+    addCard(opponentCards, opponentSuits, card);
+
+    if (!replayMode) {
+      setTurnAfterAction("draw", opponent);
+    }
+
+    drawOpponentHand(false);
+    return true;
+  }
+
+  function drawOpponentFromDiscard(replayMode) {
+    if (
+      opponentCards.length !== currentRound ||
+      discardCards.length === 0
+    ) {
+      return false;
+    }
+
+    const index = discardCards.length - 1;
+
+    addCard(
+      opponentCards,
+      opponentSuits,
+      {
+        value: discardCards[index],
+        suit: discardSuits[index]
+      }
+    );
+
+    discardCards.pop();
+    discardSuits.pop();
+
+    if (!replayMode) {
+      setTurnAfterAction("draw", opponent);
+    }
+
+    drawOpponentHand(false);
+    drawDiscard();
+
+    return true;
+  }
+
+  function completeSettlementTurn() {
+    if (
+      !roundSettlement ||
+      settlementActionSent ||
+      gameFinished ||
+      roundWinner === user
+    ) {
+      return false;
+    }
+
+    settlementActionSent = true;
+
+    const sent = sendAction(
+      "round_advance," +
+      currentRound +
+      "," +
+      user
+    );
+
+    if (!sent) {
+      settlementActionSent = false;
+      return false;
+    }
+
+    advanceRound();
+    return true;
+  }
+
+  function discardPlayerCard(value, suit) {
+    if (
+      !gameReady ||
+      gameFinished ||
+      !canDiscard ||
+      playerCards.length !== currentRound + 1
+    ) {
+      return false;
+    }
+
+    if (
+      roundSettlement &&
+      roundWinner === user
+    ) {
+      return false;
+    }
+
+    if (isWildcardCard(value, suit)) {
+      return false;
+    }
+
+    const index = playerCards.findIndex(function(card, i) {
+      return (
+        card === value &&
+        playerSuits[i] === suit
+      );
+    });
+
+    if (index < 0) {
+      return false;
+    }
+
+    playerCards.splice(index, 1);
+    playerSuits.splice(index, 1);
+
+    discardCards.push(value);
+    discardSuits.push(suit);
+
+    canDraw = false;
+    canDiscard = false;
+
+    drawPlayerHand();
+    drawDiscard();
+
+    if (roundSettlement) {
+      return true;
+    }
+
+    setCurrentPlayer(false);
+
+    const score = calculateScore(
+      playerCards,
+      playerSuits
+    );
+
+    pendingWinner =
+      playerCards.length === currentRound &&
+      score === 0
+        ? user
+        : null;
+
+    return true;
+  }
+
+  function discardPlayerDuringReplay(value, suit) {
+    const index = playerCards.findIndex(function(card, i) {
+      return (
+        card === value &&
+        playerSuits[i] === suit
+      );
+    });
+
+    if (index < 0) {
+      return false;
+    }
+
+    playerCards.splice(index, 1);
+    playerSuits.splice(index, 1);
+    discardCards.push(value);
+    discardSuits.push(suit);
+
+    drawPlayerHand();
+    drawDiscard();
+    return true;
+  }
+
+  function discardOpponentCard(value, suit) {
+    if (isWildcardCard(value, suit)) {
+      return false;
+    }
+
+    const index = opponentCards.findIndex(function(card, i) {
+      return (
+        card === value &&
+        opponentSuits[i] === suit
+      );
+    });
+
+    if (index < 0) {
+      return false;
+    }
+
+    opponentCards.splice(index, 1);
+    opponentSuits.splice(index, 1);
+    discardCards.push(value);
+    discardSuits.push(suit);
+
+    drawOpponentHand(false);
+    drawDiscard();
+    return true;
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Scoring
+   * ----------------------------------------------------------------------
+   */
+
+  function calculateScore(cards, suits) {
+    const counts = [];
+    let wildcards = 0;
+
+    for (let suit = 0; suit < 4; suit++) {
+      counts[suit] = [];
+
+      for (let value = 0; value < 13; value++) {
+        counts[suit][value] = 0;
+      }
+    }
+
+    for (let i = 0; i < cards.length; i++) {
+      if (isWildcardValue(cards[i])) {
+        wildcards++;
+      } else if (
+        Number.isInteger(suits[i]) &&
+        suits[i] >= 0 &&
+        suits[i] < 4 &&
+        Number.isInteger(cards[i]) &&
+        cards[i] >= 0 &&
+        cards[i] < 13
+      ) {
+        counts[suits[i]][cards[i]]++;
+      }
+    }
+
+    const memo = new Map();
+
+    function cloneCounts(state) {
+      return state.map(row => row.slice());
+    }
+
+    function makeKey(state, wild) {
+      return (
+        wild +
+        ":" +
+        state.map(row => row.join("")).join("|")
+      );
+    }
+
+    function deadwoodValue(value) {
+      return Math.min(value + 1, 10);
+    }
+
+    function findFirstCard(state) {
+      for (let suit = 0; suit < 4; suit++) {
+        for (let value = 0; value < 13; value++) {
+          if (state[suit][value] > 0) {
+            return { suit, value };
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function solve(state, wild) {
+      const key = makeKey(state, wild);
+
+      if (memo.has(key)) {
+        return memo.get(key);
+      }
+
+      const firstCard = findFirstCard(state);
+
+      if (!firstCard) {
+        let best = wild * 3;
+
+        for (
+          let meldSize = 3;
+          meldSize <= 4 && meldSize <= wild;
+          meldSize++
+        ) {
+          best = Math.min(
+            best,
+            solve(state, wild - meldSize)
+          );
+        }
+
+        memo.set(key, best);
+        return best;
+      }
+
+      let best = deadwoodValue(firstCard.value);
+
+      const sameValueSuits = [];
+
+      for (let suit = 0; suit < 4; suit++) {
+        if (state[suit][firstCard.value] > 0) {
+          sameValueSuits.push(suit);
+        }
+      }
+
+      for (
+        let mask = 1;
+        mask < (1 << sameValueSuits.length);
+        mask++
+      ) {
+        if (!(mask & 1)) {
+          continue;
+        }
+
+        const selected = [];
+
+        for (
+          let bit = 0;
+          bit < sameValueSuits.length;
+          bit++
+        ) {
+          if (mask & (1 << bit)) {
+            selected.push(sameValueSuits[bit]);
+          }
+        }
+
+        for (
+          let usedWildcards = 0;
+          usedWildcards <= 4 && usedWildcards <= wild;
+          usedWildcards++
+        ) {
+          const meldSize = selected.length + usedWildcards;
+
+          if (meldSize < 3) {
+            continue;
+          }
+
+          const next = cloneCounts(state);
+
+          selected.forEach(function(suit) {
+            next[suit][firstCard.value]--;
+          });
+
+          best = Math.min(
+            best,
+            solve(next, wild - usedWildcards)
+          );
+        }
+      }
+
+      for (let length = 3; length <= 13; length++) {
+        const minimumStart = Math.max(
+          0,
+          firstCard.value - length + 1
+        );
+
+        const maximumStart = Math.min(
+          firstCard.value,
+          13 - length
+        );
+
+        for (
+          let start = minimumStart;
+          start <= maximumStart;
+          start++
+        ) {
+          const next = cloneCounts(state);
+          let missing = 0;
+
+          for (
+            let value = start;
+            value < start + length;
+            value++
+          ) {
+            if (next[firstCard.suit][value] > 0) {
+              next[firstCard.suit][value]--;
+            } else {
+              missing++;
+            }
+          }
+
+          if (missing > wild || missing > 4) {
+            continue;
+          }
+
+          for (
+            let usedWildcards = missing;
+            usedWildcards <= 4 && usedWildcards <= wild;
+            usedWildcards++
+          ) {
+            best = Math.min(
+              best,
+              solve(next, wild - usedWildcards)
+            );
+          }
+        }
+      }
+
+      for (
+        let meldSize = 3;
+        meldSize <= 4 && meldSize <= wild;
+        meldSize++
+      ) {
+        best = Math.min(
+          best,
+          solve(state, wild - meldSize)
+        );
+      }
+
+      memo.set(key, best);
+      return best;
+    }
+
+    return solve(counts, wildcards);
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Round completion and settlement
+   * ----------------------------------------------------------------------
+   */
+
+  function finishRound(winner) {
+    const key = currentRound + ":" + winner;
+
+    if (
+      gameFinished ||
+      roundKey === key
+    ) {
+      return;
+    }
+
+    roundKey = key;
+    roundWinner = winner;
+    roundSettlement = true;
+    roundComplete = true;
+    settlementActionSent = false;
+
+    playerScore += calculateScore(
+      playerCards,
+      playerSuits
+    );
+
+    opponentScore += calculateScore(
+      opponentCards,
+      opponentSuits
+    );
+
+    drawPlayerScore(playerScore);
+    drawOpponentScore(opponentScore);
+
+    if (currentRound >= 13) {
+      gameFinished = true;
+      canDraw = false;
+      canDiscard = false;
+      drawFinishedDialog();
+      return;
+    }
+
+    const loserMayDraw = winner !== user;
+
+    canDraw = loserMayDraw;
+    canDiscard = false;
+
+    showRoundSettlementDialog(winner);
+    setCurrentPlayer(loserMayDraw);
+    stage.update();
+  }
+
+  function advanceRound() {
+    if (
+      gameFinished ||
+      !roundSettlement ||
+      currentRound >= 13
+    ) {
+      return false;
+    }
+
+    removeRoundDialog();
+
+    const nextRound = currentRound + 1;
+
+    currentRound = nextRound;
+    currentCard = 0;
+
+    roundSettlement = false;
+    roundWinner = null;
+    settlementActionSent = false;
+    roundComplete = false;
+    roundKey = "";
+    pendingWinner = null;
+
+    canDraw = getRoundStarter(currentRound) === user;
+    canDiscard = false;
+
+    dealRound(currentRound);
+    setCurrentPlayer(canDraw);
+    redrawAll();
+
+    return true;
+  }
+
+  function showRoundSettlementDialog(winner) {
+    removeRoundDialog();
+
+    roundDialog = new createjs.Container();
+    roundDialog.mouseEnabled = false;
+    roundDialog.mouseChildren = false;
+
+    const panel = new createjs.Shape();
+    panel.graphics
+      .beginFill(
+        winner === user
+          ? "lightgreen"
+          : "lightblue"
+      )
+      .drawRoundRect(
+        leftBound + 100,
+        topBound + 300,
+        800,
+        340,
+        25
+      );
+
+    panel.mouseEnabled = false;
+
+    const message = new createjs.Text(
+      winner === user
+        ? "You won the round"
+        : "Your opponent won the round",
+      TEXT,
+      "#000000"
+    );
+
+    message.x = leftBound + 500;
+    message.y = topBound + 360;
+    message.textAlign = "center";
+    message.mouseEnabled = false;
+
+    const detail = new createjs.Text(
+      winner === user
+        ? "Your opponent may take one final turn"
+        : "You may take one final turn",
+      SMALL_TEXT,
+      "#000000"
+    );
+
+    detail.x = leftBound + 500;
+    detail.y = topBound + 455;
+    detail.textAlign = "center";
+    detail.mouseEnabled = false;
+
+    const instruction = new createjs.Text(
+      winner === user
+        ? "Waiting for opponent..."
+        : "Draw and discard to continue",
+      SMALL_TEXT,
+      "#000000"
+    );
+
+    instruction.x = leftBound + 500;
+    instruction.y = topBound + 525;
+    instruction.textAlign = "center";
+    instruction.mouseEnabled = false;
+
+    roundDialog.addChild(
+      panel,
+      message,
+      detail,
+      instruction
+    );
+
+    container.addChildAt(
+      roundDialog,
+      Math.max(0, container.getNumChildren() - 1)
+    );
+
+    if (winner === user) {
+      drawPlayerHand();
+      drawOpponentHand(false);
+    } else {
+      drawPlayerHand();
+      drawOpponentHand(true);
+    }
+
+    stage.update();
+  }
+
+  function removeRoundDialog() {
+    if (
+      roundDialog &&
+      container.contains(roundDialog)
+    ) {
+      container.removeChild(roundDialog);
+    }
+
+    roundDialog = null;
+  }
+
+  function drawFinishedDialog() {
+    removeRoundDialog();
+
+    const panel = new createjs.Shape();
+    panel.graphics
+      .beginFill("#f4f0d0")
+      .drawRoundRect(
+        leftBound + 100,
+        topBound + 250,
+        800,
+        500,
+        25
+      );
+
+    const title = new createjs.Text(
+      "Game complete",
+      TEXT,
+      "#000000"
+    );
+    title.x = leftBound + 500;
+    title.y = topBound + 300;
+    title.textAlign = "center";
+
+    const result =
+      playerScore < opponentScore
+        ? "You won!"
+        : playerScore > opponentScore
+          ? "Your opponent won!"
+          : "It's a tie!";
+
+    const resultText = new createjs.Text(
+      result,
+      TEXT,
+      "#000000"
+    );
+    resultText.x = leftBound + 500;
+    resultText.y = topBound + 410;
+    resultText.textAlign = "center";
+
+    const scores = new createjs.Text(
+      PLAYER_ONE + ": " +
+      (user === PLAYER_ONE ? playerScore : opponentScore) +
+      "\n" +
+      PLAYER_TWO + ": " +
+      (user === PLAYER_TWO ? playerScore : opponentScore),
+      SMALL_TEXT,
+      "#000000"
+    );
+
+    scores.x = leftBound + 500;
+    scores.y = topBound + 520;
+    scores.textAlign = "center";
+    scores.lineHeight = 60;
+
+    container.addChild(panel);
+    container.addChild(title);
+    container.addChild(resultText);
+    container.addChild(scores);
+    stage.update();
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * History / protocol
+   * ----------------------------------------------------------------------
+   */
+
+  function normaliseAction(value) {
+    return String(value || "")
+      .trim()
+      .replace(/\/+$/, "");
+  }
+
+  function isReplayableAction(action) {
+    action = normaliseAction(action);
+
+    if (!action) {
+      return false;
+    }
+
+    const parts = action.split(",");
+    const type = parts[0];
+
+    if (
+      type === "join" ||
+      type === "x" ||
+      type === "y" ||
+      type === "<SCORE>"
+    ) {
+      return false;
+    }
+
+    if (type === "draw") {
+      return (
+        parts.length === 3 &&
+        (
+          parts[1] === "deck" ||
+          parts[1] === "discard"
+        ) &&
+        Boolean(parts[2])
+      );
+    }
+
+    if (type === "discard") {
+      if (parts.length !== 3) {
+        return false;
+      }
+
+      const cardParts = parts[1].split(".");
+      const value = Number(cardParts[0]);
+      const suit = Number(cardParts[1]);
+
+      return (
+        cardParts.length === 2 &&
+        Number.isInteger(value) &&
+        Number.isInteger(suit) &&
+        value >= 0 &&
+        value < 13 &&
+        suit >= 0 &&
+        suit < 4 &&
+        Boolean(parts[2])
+      );
+    }
+
+    if (type === "round_complete") {
+      const roundNumber = Number(parts[1]);
+
+      return (
+        parts.length === 3 &&
+        Number.isInteger(roundNumber) &&
+        roundNumber >= 3 &&
+        roundNumber <= 13 &&
+        Boolean(parts[2])
+      );
+    }
+
+    if (type === "round_advance") {
+      const roundNumber = Number(parts[1]);
+
+      return (
+        parts.length === 3 &&
+        Number.isInteger(roundNumber) &&
+        roundNumber >= 3 &&
+        roundNumber <= 13 &&
+        Boolean(parts[2])
+      );
+    }
+
+    return false;
+  }
+
+  function setTurnAfterAction(type, actor) {
+    const localActor = actor === user;
+
+    if (type === "draw") {
+      canDraw = false;
+      canDiscard = localActor;
+      setCurrentPlayer(false);
+      return;
+    }
+
+    if (type === "discard") {
+      canDraw = !localActor;
+      canDiscard = false;
+      setCurrentPlayer(!localActor);
+    }
+  }
+
+  function processAction(action, replayMode) {
+    action = normaliseAction(action);
+
+    if (!isReplayableAction(action)) {
+      return;
+    }
+
+    const parts = action.split(",");
+    const type = parts[0];
+    const actor = parts[parts.length - 1];
+    const localActor = actor === user;
+
+    if (type === "round_complete") {
+      const completedRound = Number(parts[1]);
+      const winner = parts[2];
+
+      if (
+        completedRound === currentRound &&
+        winner &&
+        !roundComplete
+      ) {
+        finishRound(winner);
+      }
+
+      return;
+    }
+
+    if (type === "round_advance") {
+      const completedRound = Number(parts[1]);
+
+      if (
+        completedRound !== currentRound ||
+        !roundSettlement ||
+        gameFinished
+      ) {
+        return;
+      }
+
+      if (localActor && !replayMode) {
+        return;
+      }
+
+      advanceRound();
+      return;
+    }
+
+    if (type === "draw") {
+      let applied = false;
+
+      if (replayMode) {
+        if (localActor) {
+          applied =
+            parts[1] === "deck"
+              ? drawPlayerFromDeck(true)
+              : drawPlayerFromDiscard(true);
+        } else {
+          applied =
+            parts[1] === "deck"
+              ? drawOpponentFromDeck(true)
+              : drawOpponentFromDiscard(true);
+        }
+      } else if (!localActor) {
+        applied =
+          parts[1] === "deck"
+            ? drawOpponentFromDeck(true)
+            : drawOpponentFromDiscard(true);
+      }
+
+      if (applied || replayMode || localActor) {
+        setTurnAfterAction("draw", actor);
+      }
+
+      return;
+    }
+
+    if (type === "discard") {
+      const cardParts = parts[1].split(".");
+      const value = Number(cardParts[0]);
+      const suit = Number(cardParts[1]);
+
+      if (
+        !Number.isInteger(value) ||
+        !Number.isInteger(suit)
+      ) {
+        return;
+      }
+
+      if (replayMode) {
+        if (localActor) {
+          discardPlayerDuringReplay(value, suit);
+        } else {
+          discardOpponentCard(value, suit);
+        }
+
+        if (!roundSettlement) {
+          setTurnAfterAction("discard", actor);
+        }
+
+        return;
+      }
+
+      if (localActor) {
+        return;
+      }
+
+      if (discardOpponentCard(value, suit)) {
+        if (!roundSettlement) {
+          setTurnAfterAction("discard", actor);
+        }
+      }
+    }
+  }
+
+  function rebuildFromHistory(actions) {
+    const validActions = actions.filter(isReplayableAction);
+
+    stateReceived = true;
+    gameReady = false;
+
+    currentRound = 3;
+    currentCard = 0;
+    deck = [];
+
+    playerCards = [];
+    playerSuits = [];
+    opponentCards = [];
+    opponentSuits = [];
+    discardCards = [];
+    discardSuits = [];
+
+    playerScore = 0;
+    opponentScore = 0;
+    roundComplete = false;
+    gameFinished = false;
+    pendingWinner = null;
+    roundKey = "";
+    roundSettlement = false;
+    roundWinner = null;
+    settlementActionSent = false;
+
+    dealRound(3);
+
+    if (validActions.length === 0) {
+      history = [];
+      gameReady = true;
+      redrawAll();
+      stage.update();
+      return;
+    }
+
+    validActions.forEach(function(action) {
+      processAction(action, true);
+    });
+
+    history = validActions.slice();
+    gameReady = true;
+
+    if (!roundComplete && !gameFinished) {
+      if (playerCards.length === currentRound) {
+        canDraw = getRoundStarter(currentRound) === user;
+        canDiscard = false;
+      } else if (playerCards.length === currentRound + 1) {
+        canDraw = false;
+        canDiscard = true;
+      }
+
+      setCurrentPlayer(canDraw);
+    }
+
+    setRoundText();
+    redrawAll();
+    stage.update();
+  }
+
+  function receiveState(message) {
+    if (
+      !message ||
+      message.type !== "game_state" ||
+      String(message.game_id) !== gameId
+    ) {
+      rebuildFromHistory([]);
+      return;
+    }
+
+    const actions = Array.isArray(message.history)
+      ? message.history
+      : [];
+
+    rebuildFromHistory(actions);
+  }
+
+  function receiveAction(action) {
+    action = normaliseAction(action);
+
+    if (!isReplayableAction(action)) {
+      return;
+    }
+
+    processAction(action, false);
+
+    history.push(action);
+    gameReady = true;
+    stage.update();
+  }
+
+  function receiveMessage(text) {
+    let message;
+
+    try {
+      message = JSON.parse(text);
+    } catch (error) {
+      if (!stateReceived) {
+        rebuildFromHistory([]);
+      }
+
+      return;
+    }
+
+    if (message.type === "game_state") {
+      receiveState(message);
+      return;
+    }
+
+    if (
+      message.type === "game_action" &&
+      stateReceived
+    ) {
+      receiveAction(message.action);
+    }
+  }
+
+  function sendAction(action) {
+    if (
+      !socket ||
+      socket.readyState !== WebSocket.OPEN
+    ) {
+      return false;
+    }
+
+    socket.send(normaliseAction(action) + "/");
+    return true;
+  }
+
+  function openSocket() {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
+
+    socket = new WebSocket(
+      "wss://" +
+      window.location.hostname +
+      "/ws/games/" +
+      postUuid +
+      "/" +
+      gameCode +
+      "/"
+    );
+
+    socket.addEventListener("open", function() {
+      stateReceived = false;
+      gameReady = false;
+      history = [];
+
+      sendAction("x");
+    });
+
+    socket.addEventListener("message", function(event) {
+      receiveMessage(event.data);
+    });
+
+    socket.addEventListener("close", scheduleReconnect);
+    socket.addEventListener("error", scheduleReconnect);
+  }
+
+  function scheduleReconnect() {
+    if (reconnectTimer) {
+      return;
+    }
+
+    reconnectTimer = setTimeout(function() {
+      reconnectTimer = null;
+      stateReceived = false;
+      gameReady = false;
+      history = [];
+      openSocket();
+    }, 5000);
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Image loading and startup
+   * ----------------------------------------------------------------------
+   */
+
+  function imageLoaded() {
+    imagesLoaded++;
+
+    if (
+      imagesLoaded >= 53 &&
+      !started
+    ) {
+      started = true;
       beginGame();
     }
   }
 
-  function drawCard(suit,card,x,y){
-    var bitmap = new createjs.Bitmap(images[suit][card]);
-    bitmap.scale = cardScale;
-    bitmap.x = leftbound + x-250 * cardScale/2;
-    bitmap.y = topbound + y-350 * cardScale/2;
-    container.addChild(bitmap);
-    stage.update();
-    return bitmap
-  }
+  for (let suit = 0; suit < SUITS.length; suit++) {
+    cardImages[suit] = [];
 
-  var playerHandCards = [];
-  var playerHandSuits = [];
-  var opponentHandCards = [];
-  var opponentHandSuits = [];
+    for (let value = 0; value < CARD_NAMES.length; value++) {
+      const image = new Image();
 
-  var yo1 = 140;
-  var yo2 = 30;
+      image.onload = imageLoaded;
+      image.onerror = imageLoaded;
 
-  var opponentHandCount = 0;
-  var opponentHandObjects = []
-  
-  function drawOpponentHand(){
-    opponentHandCount = 0;
-    // FIXED: Safely remove all opponent hand objects
-    for(var i = 0; i < opponentHandObjects.length; i++){
-      try {
-        if(opponentHandObjects[i] && container.contains(opponentHandObjects[i])){
-          container.removeChild(opponentHandObjects[i]);
-        }
-      } catch(e) {
-        console.log("Error removing opponent card: " + e);
-      }
-    }
-    opponentHandObjects = []
-    
-    for(var i = currentRound - 1; i >= 0; i--){
-      yoffset = yo2;
-      ioffset = 0;
-      if(i > 6){
-        yoffset = yo1;
-        ioffset = 7;
-      }
-      opponentHandObjects[opponentHandCount] = drawFacedownCard(1000-(1000/7 * (i-ioffset)), yoffset);
-      opponentHandCount++;
+      image.src =
+        CARD_ROOT +
+        CARD_NAMES[value] +
+        SUITS[suit] +
+        ".png";
+
+      cardImages[suit][value] = image;
     }
   }
 
-  function drawFacedownCard(x,y){
-    var bitmap = new createjs.Bitmap(backImage);
-    bitmap.scale = cardScale;
-    bitmap.x = leftbound + x-250 * cardScale/2;
-    bitmap.y = topbound + y - 350 * cardScale/2;
-    container.addChild(bitmap);
-    stage.update();
-    return bitmap;
-  }
+  backImage.onload = imageLoaded;
+  backImage.onerror = imageLoaded;
+  backImage.src = CARD_ROOT + "back.png";
 
-  var playerHandCount = 0;
-  var playerHandObjects = []
+  function beginGame() {
+    drawInterface();
+    resetNewGame();
 
-  var currentRound = 3;
-  const nsuits = [0, 1, 2, 3];
-  const values = [0,1,2,3,4,5,6,7,8,9,10,11,12];
-
-  var deck = [];
-
-  function createAndShuffleDeck(){
-    deck = [];
-    for (let i = 0; i < nsuits.length; i++) {
-      for (let x = 0; x < values.length; x++) {
-        let card = { Value: values[x], Suit: nsuits[i] };
-        deck.push(card);
-      }
-    }
-    for (let i = deck.length - 1; i > 0; i--) {
-      let j = Math.floor(rng.nextFloat() * i);
-      let temp = deck[i];
-      deck[i] = deck[j];
-      deck[j] = temp;
-    }
-  }
-
-  createAndShuffleDeck();
-
-  opponentHandCards = []
-  opponentHandSuits = []
-  playerHandCards = []
-  playerHandSuits = []
-  
-  var deckCount = currentRound*2+1
-  var firstdiscard = deck[currentRound*2 + 1].Value
-  var firstdiscardsuit = deck[currentRound*2 + 1].Suit
-  
-  if(user == player1){
-    for (let i = 0; i < currentRound; i++) {
-      playerHandCards[i] = deck[i].Value
-      playerHandSuits[i] = deck[i].Suit
-    }
-    for (let i = currentRound; i < currentRound*2; i++) {
-      opponentHandCards[i-currentRound] = deck[i].Value
-      opponentHandSuits[i-currentRound] = deck[i].Suit
-    }
-  } else {
-    for (let i = 0; i < currentRound; i++) {
-      opponentHandCards[i] = deck[i].Value
-      opponentHandSuits[i] = deck[i].Suit
-    }
-    for (let i = currentRound; i < currentRound*2; i++) {
-      playerHandCards[i-currentRound] = deck[i].Value
-      playerHandSuits[i-currentRound] = deck[i].Suit
-    }
-  }
-
-  var discardcard = [firstdiscard]
-  var discardsuit = [firstdiscardsuit]
-
-  function drawOpponentHandFaceup(){
-    sortOpponentHand(false);
-    sortOpponentHand(true);
-    opponentHandCount = 0;
-    // FIXED: Safely remove all opponent hand objects
-    for(var i = 0; i < opponentHandObjects.length; i++){
-      try {
-        if(opponentHandObjects[i] && container.contains(opponentHandObjects[i])){
-          container.removeChild(opponentHandObjects[i]);
-        }
-      } catch(e) {
-        console.log("Error removing opponent card: " + e);
-      }
-    }
-    opponentHandObjects = []
-    
-    for(var i = 0; i < opponentHandCards.length; i++){
-      yoffset = yo2;
-      ioffset = 0;
-      if(i > 6){
-        yoffset = yo1;
-        ioffset = 7;
-      }
-      opponentHandObjects[opponentHandCount] = drawCard(opponentHandSuits[i],opponentHandCards[i],1000-(1000/7 * (i-ioffset+1)), yoffset);
-      if(i > 6){
-        container.setChildIndex(opponentHandObjects[opponentHandCount], container.getNumChildren()-12);
-      }
-      opponentHandCount++;
-    }
-  }
-  
-  function playerDiscard(card, suit){
-    console.log("canPlayerDiscard: " + canPlayerDiscard);
-    if(card + 1 != currentRound && playerHandCards.length > currentRound) {
-      canPlayerDiscard = false;
-      canPlayerDraw = false;
-      nCards = []
-      nSuits = []
-      var count = 0;
-      var first = true;
-      for(var x = 0; x < playerHandCards.length; x++){
-        if(!(suit == playerHandSuits[x] && card == playerHandCards[x]) && first){
-          nCards[count] = playerHandCards[x]
-          nSuits[count] = playerHandSuits[x]
-          count++;
-        } else if(!first) {
-          nCards[count] = playerHandCards[x]
-          nSuits[count] = playerHandSuits[x]
-          count++;
-        } else {
-          first = false;
-        }
-      }
-      discardcard[discardcard.length] = card
-      discardsuit[discardsuit.length] = suit
-      playerHandCards = nCards
-      playerHandSuits = nSuits
-      drawDiscard();
-      drawHand();
-      checkOpponentWin();
-      canPlayerDraw = true;
-      canPlayerDiscard = false;
-      
-      if(opponentWinsOnNextDiscard){
-        opponentWonGame();
-      } else {
-        canPlayerDiscard = false;
-        canPlayerDraw = false;
-      }
-      setCurrentPlayer(false);
-      currentTurn = currentTurn + 1;
-    }
-  }
-
-  function drawHand(){
-    canPlayerDiscard = false;
-    var playerHandCount = 0;
-    // FIXED: Safely remove all player hand objects
-    for(var i = 0; i < playerHandObjects.length; i++){
-      try {
-        if(playerHandObjects[i] && container.contains(playerHandObjects[i])){
-          container.removeChild(playerHandObjects[i]);
-        }
-      } catch(e) {
-        console.log("Error removing player card: " + e);
-      }
-    }
-    playerHandObjects = []
-    
-    for(var i = playerHandCards.length-1; i >= 0; i--){
-      yoffset = yo2;
-      ioffset = 0;
-      if(i > 6){
-        yoffset = yo1;
-        ioffset = 7;
-      }
-      playerHandObjects[playerHandCount] = drawCard(playerHandSuits[i],playerHandCards[i],1000-(1000/7 * (i-ioffset)), 1000-yoffset);
-      playerHandObjects[playerHandCount].suit = playerHandSuits[i]
-      playerHandObjects[playerHandCount].card = playerHandCards[i]
-      playerHandObjects[playerHandCount].on("mousedown", function(event) {
-        var allAlike = true;
-        var lastObject = playerHandObjects[0];
-        for(object of playerHandObjects) {
-          if(object.card != lastObject.card) allAlike = false;
-          lastObject = object;
-        }
-        if(gameReady && playerHandCards.length > currentRound && (event.target.card != playerHandObjects.length - 2 || (allAlike && event.target.card == playerHandObjects.length - 2))){
-          playerDiscard(event.target.card, event.target.suit);
-          send("discard," + event.target.card + "." + event.target.suit + "," + user)
-        }
-      });
-      playerHandCount++;
-    }
-  }
-
-  var playerSorted = false;
-
-  function sortHand(numberOrSuit){
-    playerSorted = numberOrSuit;
-    if(!numberOrSuit){
-      sortHand(true);
-    }
-    var list = [];
-    for (var j = 0; j < playerHandCards.length; j++)
-      list.push({'card': playerHandCards[j], 'suit': playerHandSuits[j]});
-    
-    if(numberOrSuit){
-      list.sort(function(a, b) {
-        return ((a.card > b.card) ? -1 : ((a.card == b.card) ? 0 : 1));
-      });
-    } else {
-      list.sort(function(a, b) {
-        return ((a.suit > b.suit) ? -1 : ((a.suit == b.suit) ? 0 : 1));
-      });
-    }
-
-    for (var k = 0; k < list.length; k++) {
-      playerHandCards[k] = list[k].card;
-      playerHandSuits[k] = list[k].suit;
-    }
-  }
-
-  function sortOpponentHand(numberOrSuit){
-    if(!numberOrSuit){
-      sortOpponentHand(true);
-    }
-    var list = [];
-    for (var j = 0; j < opponentHandCards.length; j++)
-      list.push({'card': opponentHandCards[j], 'suit': opponentHandSuits[j]});
-    
-    if(numberOrSuit){
-      list.sort(function(a, b) {
-        return ((a.card > b.card) ? -1 : ((a.card == b.card) ? 0 : 1));
-      });
-    } else {
-      list.sort(function(a, b) {
-        return ((a.suit > b.suit) ? -1 : ((a.suit == b.suit) ? 0 : 1));
-      });
-    }
-
-    for (var k = 0; k < list.length; k++) {
-      opponentHandCards[k] = list[k].card;
-      opponentHandSuits[k] = list[k].suit;
-    }
-  }
-
-  function Card(valueInput, suitInput) {
-    var suit = suitInput;
-    var value = Number(valueInput);
-    var counted = true;
-    var scoringMode = "";
-    var ignored = false;
-
-    this.getSuit = function() {return suit};
-    this.setSuit = function(s) {suit = s};
-    this.getValue = function() {return value};
-    this.setValue = function(v) {value = Number(v)};
-    this.isCounted = function() {return counted};
-    this.setCounted = function(cnt) {counted = cnt};
-    this.getScoringMode = function() {return scoringMode};
-    this.setScoringMode = function(s) {scoringMode = s};
-    this.ignored = function() {return ignored};
-    this.setIgnored = function(i) {ignored = i};
-  }
-
-  var allCardsPlayed;
-
-  function isWildcard(value){
-    return value.getValue() == currentRound-1
-  }
-
-  function Hand(cards, jokers) {
-    this.cards = clone(cards);
-    this.jokers = jokers;
-    this.melds = [];
-    this.value = this.leftoverValue();
-  }
-
-  Hand.prototype.findMelds = function(suit, number) {
-    if (suit == undefined || number == undefined) {
-      suit = number = 0;
-      this.value = this.leftoverValue();
-    }
-
-    if (this.jokers > 2) {
-      for (var i = 0; i < this.jokers; i++) {
-        this.melds.push({s:-1, n:-1});
-      }
-      this.value -= currentRound * this.jokers
-    }
-
-    while (this.value > 0) {
-      while (number > 15 || this.cards[suit][number] == 0) {
-        if (++number > 15) {
-          number = 0;
-          if (++suit > 3) return;
-        }
-      }
-      for (var meldType = 0; meldType < 2; meldType++) {
-        var meld = meldType ? this.findSet(suit, number) : this.findRun(suit, number);
-
-        for (var len = 3; len <= meld.length; len++) {
-          var test = new Hand(this.cards, this.jokers);
-          test.removeCards(meld.slice(0, len));
-
-          meldType ? test.findMelds(suit, number) : test.findMelds(0, 0);
-
-          if (test.value < this.value) {
-            this.value = test.value;
-            this.melds.length = 0;
-            this.melds = [].concat(meld.slice(0, len), test.melds);
-          }
-        }
-      }
-      number++;
-    }
-  }
-
-  Hand.prototype.findRun = function(s, n) {
-    var run = [], jokers = this.jokers;
-    while (n < 14) {
-      if ((n == 13 && this.cards[s][0] > 0) || this.cards[s][n] > 0) {
-        run.push({s:s, n:n});
-      } else if (jokers > 0) {
-        run.push({s:-1, n:-1});
-        jokers--;
-      }
-      else break;
-      n++;
-    }
-
-    while (jokers-- > 0) {
-      run.push({s:-1, n:-1});
-    }
-    return run;
-  }
-
-  Hand.prototype.findSet = function(s, n) {
-    var set = [];
-    while (s < 4) {
-      for (var i = 0; i < this.cards[s][n]; i++) {
-        set.push({s:s, n:n});
-      }
-      s++;
-    }
-
-    for (var i = 0; i < this.jokers; i++) {
-      set.push({s:-1, n:-1});
-    }
-    return set;
-  }
-
-  Hand.prototype.removeCards = function(cards) {
-    for (var i = 0; i < cards.length; i++) {
-      if (cards[i].s >= 0 && cards[i].n < 13) {
-        this.cards[cards[i].s][cards[i].n]--;
-      } else if (cards[i].n == 13){
-        this.cards[cards[i].s][0]--;
-      } else this.jokers--;
-    }
-    this.value = this.leftoverValue();
-  }
-
-  Hand.prototype.leftoverValue = function() {
-    var leftover = 0;
-    for (var i = 0; i < 4; i++) {
-      for (var j = 0; j < 13; j++) {
-        value = j + 1;
-        if(value > 10){
-          value = 10;
-        }
-        leftover += this.cards[i][j] * value;
-      }
-    }
-    return leftover + this.jokers * currentRound
-  }
-
-  function clone(a) {
-    var b = [];
-    for (var i = 0; i < a.length; i++) {
-      b[i] = a[i].slice();
-    }
-    return b;
-  }
-
-  function showHand(c, j, v) {
-    var num = "    A 2 3 4 5 6 7 8 9 T J Q K";
-    console.log(num);
-    for (var i = 0; i < 4; i++) {
-      console.log(["SPD ","CLB ","HRT ","DMD "][i] + c[i]);
-    }
-    console.log("    jokers: " + j + "  value: " + v);
-  }
-
-  function showResult(m, v) {
-    if (m.length == 0) console.log("no melds found");
-    while (m.length) {
-      var c = m.shift();
-      if (c.s == -1) console.log("joker *");
-      else console.log(["clubs","dmnds","heart","spade"][c.s] + " " + "3456789TJQK".charAt(c.n));
-    }
-    console.log("leftover value: " + v);
-  }
-
-  function calculateScore(ndeck) {
-    var matrix = [];
-    var jokers = 0;
-    var round = currentRound;
-
-    for (var i = 0; i < 4; i++) {
-      matrix[i] = [];
-      for (var j = 0; j < 13; j++) {
-        matrix[i][j] = 0;
-      }
-    }
-    
-    for(var x = 0; x < ndeck.length; x++){
-      card = ndeck[x]
-      if(isWildcard(card)){
-        jokers++;
-      } else {
-        matrix[card.getSuit()][card.getValue()]+=1;
-      }
-    }
-    
-    var x = new Hand(matrix, jokers);
-    x.findMelds();
-    return x.value;
-  }
-
-  function stringCard(card) {
-    var result = "";
-    result += card.getValue();
-    result += " of ";
-    result += card.getSuit();
-    return result;
-  }
-
-  function stringDeck(deck) {
-    var result = "";
-    deck.forEach(function(item) {
-      result += item.getValue() + " of " + item.getSuit() + "|";
-    });
-    return result;
-  }
-
-  function drawGameFinishedDialog(){
-    var bitmap2 = new createjs.Bitmap(backImage);
-    bitmap2.scale = cardScale * 2;
-    bitmap2.x = leftbound + 300-250 * cardScale/2*2;
-    bitmap2.y = topbound + 500-350 * cardScale/2*2;
-    container.addChild(bitmap2);
-    var toDisplay = []
-    var player1txt = ""
-    var player2txt = ""
-    if(playerscore < opponentscore){
-      toDisplay[2] = "You won!"
-      if(user == player1){
-        player1txt = "☆"
-      } else {
-        player2txt = "☆"
-      }
-    } else if(playerscore > opponentscore){
-      toDisplay[2] = "Your opponent won!"
-      if(user == player1){
-        player2txt = "☆"
-      } else {
-        player1txt = "☆"
-      }
-    } else {
-      toDisplay[2] = "It's a tie!"
-      player1txt = "☆"
-      player2txt = "☆"
-    }
-    if(user == player1){
-      toDisplay[0] = player1txt + player1 + ": " + playerscore
-    } else {
-      toDisplay[0] = player1txt + player1 + ": " + opponentscore
-    }
-    if(user == player1){
-      toDisplay[1] = player2txt + player2 + ": " + opponentscore
-    } else {
-      toDisplay[1] = player2txt + player2 + ": " + playerscore
-    }
-    var texts = []
-    var extra = 0
-    for(x = 0; x < toDisplay.length; x++){
-      if(x == toDisplay.length - 1){
-        extra = 300;
-      }
-      texts[x] = new createjs.Text(toDisplay[x], TEXTTYPE3, "#000000")
-      texts[x].x = leftbound + 500 - 400;
-      texts[x].y = topbound + 500 - 270 + 80 * x + extra;
-      container.addChild(texts[x]);
-    }
-    dropConfetti();
-    stage.update();
-    if(user == player1){
-      send('<SCORE>,' + player1 + ',' + playerscore + ',' + opponentscore + '/');
-    } else {
-      send('<SCORE>,' + player2 + ',' + opponentscore + ',' + playerscore + '/');
-    }
-  }
-
-  function prepareForNextRound(){
-    preparingForNextRound = true;
-  }
-
-  function nextRound(){
-    createAndShuffleDeck();
-
-    opponentHandCards = []
-    opponentHandSuits = []
-
-    playerHandCards = []
-    playerHandSuits = []
-    
-    var cr = currentRound + 1
-    var deckCount = cr*2+1
-    canPlayerDiscard = false;
-    console.log("Current round: " + cr);
-    
-    // FIXED: Properly initialize currentCard for new round
-    var currentCard = cr*2 + 3;
-    
-    if(user == player1){
-      console.log("Ready player 1")
-      for (let i = 0; i < cr; i++) {
-        playerHandCards[i] = deck[i].Value
-        playerHandSuits[i] = deck[i].Suit
-      }
-      for (let i = cr; i < cr*2; i++) {
-        opponentHandCards[i-cr] = deck[i].Value
-        opponentHandSuits[i-cr] = deck[i].Suit
-      }
-      if(cr%2 == 0){
-        canPlayerDraw = false;
-      } else {
-        canPlayerDraw = true;
-      }
-    } else {
-      console.log("Ready player 2")
-      for (let i = 0; i < cr; i++) {
-        opponentHandCards[i] = deck[i].Value
-        opponentHandSuits[i] = deck[i].Suit
-      }
-      for (let i = cr; i < cr*2; i++) {
-        playerHandCards[i-cr] = deck[i].Value
-        playerHandSuits[i-cr] = deck[i].Suit
-      }
-      if(cr%2 == 0){
-        canPlayerDraw = true;
-      } else {
-        canPlayerDraw = false;
-      }
-    }
-    
-    firstdiscard = deck[cr*2 + 1].Value
-    firstdiscardsuit = deck[cr*2 + 1].Suit
-
-    discardcard = [firstdiscard]
-    discardsuit = [firstdiscardsuit]
-    setCurrentPlayer(canPlayerDraw);
-    currentRound = currentRound + 1;
-    preparingForNextRound = false;
-    
-    if(currentRound == 14){
-      drawGameFinishedDialog();
-    } else {
-      gameOverOnNextDiscard = false;
-      opponentWinsOnNextDiscard = false;
-      
-      // FIXED: Safely remove discard pile elements
-      try {
-        if(discard && container.contains(discard)){
-          container.removeChild(discard);
-        }
-        if(lastDiscard && container.contains(lastDiscard)){
-          container.removeChild(lastDiscard);
-        }
-      } catch(e) {
-        console.log("Error removing discard: " + e);
-      }
-      
-      sortHand(false);
-      drawHand();
-      drawDiscard()
-      drawOpponentHand();
-      if(currentRound%2 == 0){
-        canPlayerDraw = (user != player1);
-      } else {
-        canPlayerDraw = (user == player1);
-      }
-      setCurrentPlayer(canPlayerDraw);
-      setRoundText();
-    }
-  }
-
-  function checkPlayerWin(){
-    ndeck = []
-    for(var x = 0; x < playerHandCards.length; x++){
-      ndeck[ndeck.length] = (new Card(playerHandCards[x], playerHandSuits[x]))
-    }
-    score = calculateScore(ndeck)
-    if(score == 0){
-      gameOverOnNextDiscard = true;
-      wonGame();
-    }
-  }
-
-  function checkOpponentWin(){
-    ndeck2 = []
-    for(var x = 0; x < opponentHandCards.length; x++){
-      ndeck2[ndeck2.length] = (new Card(opponentHandCards[x], opponentHandSuits[x]))
-    }
-    score = calculateScore(ndeck2);
-    sortOpponentHand(true);
-    if(score == 0) {
-      opponentWinsOnNextDiscard = true;
-      drawOpponentHandFaceup();
-    }
-  }
-
-  var radius = 10;
-  var buttonSize = 100;
-  
-  function drawSortButtons(){
-    var button333 = new createjs.Shape();
-    button333.graphics.beginFill("lightgreen").drawRoundRectComplex(leftbound + 1000 - buttonSize, topbound + 350 , buttonSize, buttonSize, radius,radius,radius,radius);
-    var text333 = new createjs.Text("333", TEXTTYPE, "#000000")
-    text333.x = leftbound + 1000 - 50;
-    text333.textAlign = 'center';
-    text333.y = topbound + 350 +30;
-
-    container.addChild(button333)
-    container.addChild(text333)
-    button333.on("mousedown", function(event) {
-      sortHand(false);
-      sortHand(true);
-      drawHand();
+    createjs.Ticker.framerate = 60;
+    createjs.Ticker.addEventListener("tick", function() {
+      stage.update();
     });
 
-    var button456 = new createjs.Shape();
-    button456.graphics.beginFill("lightblue").drawRoundRectComplex(leftbound + 1000 - buttonSize, topbound + 550 , buttonSize, buttonSize, radius,radius,radius,radius);
-    var text456 = new createjs.Text("456", TEXTTYPE, "#000000")
-    text456.x = leftbound + 1000-50;
-    text456.textAlign = 'center';
-    text456.y = topbound + 550+30;
-
-    container.addChild(button456)
-    container.addChild(text456)
-    button456.on("mousedown", function(event) {
-      sortHand(false);
-      drawHand();
-    });
-  }
-
-  var discardx = 700;
-  var discardy = 500;
-  var discard;
-  var lastDiscard;
-
-  var discardcard = [firstdiscard]
-  var discardsuit = [firstdiscardsuit]
-
-  function takeDiscard(){
-    if(discard && container.contains(discard)){
-      container.removeChild(discard);
-    }
-    playerHandCards[playerHandCards.length] = discardcard[discardcard.length-1]
-    playerHandSuits[playerHandSuits.length] = discardsuit[discardsuit.length-1]
-    discardcard.splice(discardcard.length-1, 1);
-    discardsuit.splice(discardsuit.length-1, 1);
-    drawHand();
-    if(discardcard.length > 0){
-      drawDiscard();
-    }
-  }
-
-  function opponentDrawDeck(){
-    if(currentCard < 52){
-      opponentHandCards[opponentHandCards.length] = deck[currentCard].Value
-      opponentHandSuits[opponentHandSuits.length] = deck[currentCard].Suit
-      currentCard++;
-    } else {
-      ndeck = []
-      for(var x = 0; x < discardcard.length; x++){
-        ndeck[ndeck.length] = (new Card(discardcard[x], discardsuit[x]))
-      }
-      currentCard = 1;
-      discardcard = [ndeck[0].Value]
-      discardsuit = [ndeck[0].Suit]
-      deck = []
-      for(var x = 1; x < ndeck.length; x++){
-        deck[x-1] = ndeck[x]
-      }
-      drawDiscard();
-    }
-    drawOpponentHand();
-    canPlayerDraw = false;
-  }
-
-  function opponentTakeDiscard(){
-    if(discard && container.contains(discard)){
-      container.removeChild(discard);
-    }
-    opponentHandCards[opponentHandCards.length] = discardcard[discardcard.length-1]
-    opponentHandSuits[opponentHandSuits.length] = discardsuit[discardsuit.length-1]
-    discardcard.splice(discardcard.length-1, 1);
-    discardsuit.splice(discardsuit.length-1, 1);
-    drawOpponentHand();
-    if(discardcard.length > 0){
-      drawDiscard();
-    }
-    canPlayerDraw = false;
-  }
-
-  function opponentDiscard(input){
-    theDiscard = input.split('.')
-    discardCard = parseInt(theDiscard[0])
-    discardSuit = parseInt(theDiscard[1])
-    
-    nCards = []
-    nSuits = []
-    var count = 0;
-    var first = true;
-    
-    for(var x = 0; x < opponentHandCards.length; x++){
-      if(!(discardSuit == opponentHandSuits[x] && discardCard == opponentHandCards[x]) && first){
-        nCards[count] = opponentHandCards[x];
-        nSuits[count] = opponentHandSuits[x];
-        count++;
-      } else if (!first) {
-        nCards[count] = opponentHandCards[x];
-        nSuits[count] = opponentHandSuits[x];
-        count++;
-      } else {
-        first = false;
-      }
-    }
-    
-    discardcard[discardcard.length] = discardCard
-    discardsuit[discardsuit.length] = discardSuit
-    opponentHandCards = nCards
-    opponentHandSuits = nSuits
-    drawOpponentHand();
-    drawDiscard();
-    checkPlayerWin();
-    checkOpponentWin();
-    canPlayerDraw = true;
-    canPlayerDiscard = false;
-    
-    if(gameOverOnNextDiscard){
-      wonGame();
-    }
-    
-    setCurrentPlayer(true);
-  }
-
-  function drawDiscard(){
-    if(lastDiscard && container.contains(lastDiscard)){
-      container.removeChild(lastDiscard);
-    }
-    lastDiscard = discard
-    discard = drawCard(discardsuit[discardsuit.length-1],discardcard[discardcard.length-1],discardx,discardy);
-    discard.on("mousedown", function(event) {
-      if(gameReady){
-        console.log("canPlayerDraw: " + canPlayerDraw);
-        if(canPlayerDraw && playerHandCards.length < currentRound + 1){
-          takeDiscard();
-          canPlayerDraw = false;
-          canPlayerDiscard = true;
-          send("draw,discard,"+user)
-        }
-      }
-    });
-  }
-  
-  var currentCard = currentRound*2 + 1 + 2;
-  
-  function drawCardFromDeck(){
-    if(canPlayerDraw) {
-      if(currentCard < 52){
-        playerHandCards[playerHandCards.length] = deck[currentCard].Value
-        playerHandSuits[playerHandSuits.length] = deck[currentCard].Suit
-        currentCard++;
-      } else {
-        ndeck = []
-        for(var x = 0; x < discardcard.length; x++){
-          ndeck[ndeck.length] = (new Card(discardcard[x], discardsuit[x]))
-        }
-        currentCard = 1;
-        discardcard = [ndeck[0].Value]
-        discardsuit = [ndeck[0].Suit]
-        deck = []
-        for(var x = 1; x < ndeck.length; x++){
-          deck[x-1] = ndeck[x]
-        }
-        drawDiscard();
-      }
-      canPlayerDraw = false;
-      canPlayerDiscard = true;
-      drawHand();
-    }
-  }
-
-  function drawDeck(cardsInDeck) {
-    var deckoffset = 5;
-    for(var x = 0; x < cardsInDeck; x++){
-      drawFacedownCard(300+deckoffset*(cardsInDeck-x),500+deckoffset*(cardsInDeck-x));
-    }
-    cardDeck = drawFacedownCard(300,500);
-    cardDeck.on("mousedown", function(event) {
-      if(gameReady){
-        console.log('Can player draw is ' + canPlayerDraw);
-        if(canPlayerDraw && playerHandCards.length < currentRound + 1){
-          drawCardFromDeck();
-          canPlayerDraw = false;
-          canPlayerDiscard = true;
-          send("draw,deck,"+user)
-        }
-      }
-    });
-  }
-
-  function beginGame(){
-    sortHand(false);
-    drawHand();
-    drawDeck(4);
-    drawOpponentHand();
-    drawDiscard();
-    drawSortButtons();
+    gameReady = true;
+    openSocket();
     stage.update();
   }
-
-  let gameplay;
-
-  function send(text){
-    gameSocket.send(text + '/');
-    canPlayerDraw = false;
-    currentTurn++;
-  }
-
-  var opjContainer;
-  var joinShowed = false;
-  
-  function opponentJoinedGame(){
-    if(!joinShowed){
-      opjContainer = new createjs.Container();
-      var opjText = new createjs.Text("Opponent Joined Game", TEXTTYPE, "#000000")
-      opjText.x = leftbound + 500;
-      opjText.y = topbound + 270;
-      opjText.textAlign = 'center';
-      opjContainer.addChild(opjText);
-      setTimeout(() => {
-        if(container.contains(opjContainer)){
-          container.removeChild(opjContainer);
-        }
-      }, 5000);
-      container.addChild(opjContainer);
-    }
-    if(user == player1){
-      canPlayerDraw = true;
-    }
-    joinShowed = true;
-  }
-  
-  var playerscore = 0;
-  var psoffset = 30;
-  var playerScore = new createjs.Shape();
-  playerScore.graphics.beginFill("lightyellow").drawRoundRectComplex(leftbound, topbound + 550 , buttonSize, buttonSize, radius,radius,radius,radius);
-  var playerScoreText = new createjs.Text("--", TEXTTYPE, "#000000")
-  playerScoreText.x = leftbound + 50;
-  playerScoreText.textAlign = 'center';
-  playerScoreText.y = topbound + 550 + 30;
-
-  var currentPlayer = new createjs.Text("☆", TEXTTYPE2, "#E8CD71")
-  currentPlayer.x = leftbound + 50;
-  currentPlayer.textAlign = 'center';
-  if(user == player1){
-    currentPlayer.y = topbound + 700-psoffset;
-  } else {
-    currentPlayer.y = topbound + 300-psoffset;
-  }
-
-  container.addChild(currentPlayer)
-
-  function setCurrentPlayer(userOrOpponent){
-    if(userOrOpponent) {
-      currentPlayer.y = topbound + 700-psoffset;
-    } else {
-      currentPlayer.y = topbound + 300-psoffset;
-    }
-  }
-
-  var circle = new createjs.Shape();
-  circle.graphics.beginFill("#E8CD71").drawCircle(0, 0, 50);
-  circle.x = leftbound + 500;
-  circle.y = topbound + 500;
-  container.addChild(circle);
-
-  var roundtext = new createjs.Text("", TEXTTYPE2, "#000000")
-  roundtext.x = leftbound + 500;
-  roundtext.y = topbound + 500 - 30;
-  roundtext.textAlign = 'center';
-
-  container.addChild(roundtext)
-
-  function setRoundText(){
-    roundtext.text = cardnames[currentRound-1];
-    stage.update();
-  }
-  setRoundText();
-
-  var opponentscore = 0;
-
-  var opponentScore = new createjs.Shape();
-  opponentScore.graphics.beginFill("#f0655b").drawRoundRectComplex(leftbound, topbound + 350 , buttonSize, buttonSize, radius,radius,radius,radius);
-  var opponentScoreText = new createjs.Text("--", TEXTTYPE, "#000000")
-  opponentScoreText.x = leftbound + 50;
-  opponentScoreText.textAlign = 'center';
-  opponentScoreText.y = topbound + 350 + 30;
-  container.addChild(playerScore)
-  container.addChild(opponentScore)
-  container.addChild(opponentScoreText)
-  container.addChild(playerScoreText)
-
-  function drawPlayerScore(input){
-    playerScoreText.text = input
-  }
-
-  function drawOpponentScore(input){
-    opponentScoreText.text = input
-  }
-
-  var recovered = false;
-  
-  function recoverState(gp){
-    recoveringState = true;
-    for(let i = 0; i < gp.length-1; i++){
-      console.log("Recovering turn: " + gp[i]);
-      sp = gp[i].split(",");
-      
-      if(sp[0] == "join" && sp[2] != user){
-        console.log("Opponent Joined");
-      } else if(sp[0] == "draw" && sp[2] != user){
-        if(sp[1] == "deck"){
-          opponentDrawDeck();
-        } else if(sp[1] == "discard"){
-          opponentTakeDiscard();
-        }
-      } else if(sp[0] == "discard" && sp[2] != user){
-        opponentDiscard(sp[1]);
-        canPlayerDraw = true;
-      } else if(sp[0] == "draw" && sp[2] == user){
-        canPlayerDraw = true;
-        if(sp[1] == "deck"){
-          drawCardFromDeck();
-        } else if(sp[1] == "discard"){
-          takeDiscard();
-        }
-        canPlayerDraw = false;
-        canPlayerDiscard = true;
-      } else if(sp[0] == "discard" && sp[2] == user){
-        canPlayerDiscard = true;
-        theDiscard = sp[1].split('.')
-        discardCard = parseInt(theDiscard[0])
-        discardSuit = parseInt(theDiscard[1])
-        playerDiscard(discardCard, discardSuit);
-        canPlayerDiscard = false;
-        if(gameIsWon){
-          if(container.contains(wonContainer)){
-            container.removeChild(wonContainer);
-          }
-          nextRound();
-          gameIsWon = false;
-        }
-      }
-    }
-    currentTurn = gp.length-1;
-    recoveringState = false;
-  }
-
-  function readCallback(){
-    gp = gameplay;
-    if(!gameReady){
-      gameReady = true;
-    }
-    if(!recovered && gp.length > 2){
-      console.log("Recovering state");
-      recovered = true;
-      recoverState(gp);
-    } else if(!recovered){
-      recovered = true;
-    }
-    
-    var ind = currentTurn;
-    var end = gp.length - 1;
-    if(gp.length <= 2) currentTurn = 0;
-    
-    for(let i = currentTurn; i < end; i++){
-      sp = gp[i].split(",");
-      
-      if(sp[0] == "join" && sp[2] != user){
-        opponentJoinedGame();
-        currentTurn = i+1;
-      } else if(sp[0] == "draw" && sp[2] != user){
-        if(sp[1] == "deck"){
-          opponentDrawDeck();
-        } else if(sp[1] == "discard"){
-          opponentTakeDiscard();
-        }
-        canPlayerDraw = false;
-        currentTurn = i+1;
-      } else if(sp[0] == "discard" && sp[2] != user){
-        if(gameIsWon) {
-          nextRound();
-          gameIsWon = false;
-          if(container.contains(wonContainer)){
-            container.removeChild(wonContainer);
-          }
-        }
-        opponentDiscard(sp[1]);
-        canPlayerDraw = true;
-        currentTurn = i+1;
-      }
-    }
-    stage.update();
-  }
-
-  function read(text){
-    gameplay = text.split("/");
-    readCallback();
-  }
-
-  function gameplayArray(){
-    return gameplay.split('/');
-  }
-
-  function createArray(length) {
-    let arr = new Array(length || 0),
-      i = length;
-
-    if (arguments.length > 1) {
-      let args = Array.prototype.slice.call(arguments, 1);
-      while (i--) arr[length - 1 - i] = createArray.apply(this, args);
-    }
-    return arr;
-  }
-
-  var colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
-  var COLORS = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
-  let confettiCount = 60;
-  let confetti = [];
-  let confettivx = [];
-  let confettivy = [];
-  let confettiv = 10;
-  let confettimin = -600;
-  var droppedConfetti = false;
-
-  function drawConfetti() {
-    for (i = 0; i < confettiCount; i++) {
-      confetti[i] = new createjs.Shape();
-      confetti[i].graphics.beginFill(COLORS[0, rng.nextRange(0, COLORS.length)]).drawCircle(0, 0, rng.nextRange(7, 15));
-      confetti[i].x = rng.nextRange(0, stage.canvas.width);
-      confetti[i].y = rng.nextRange(stage.canvas.height + 30);
-      confetti[i].visible = false;
-      confettivx[i] = rng.nextRange(-1, 1) / 5.0;
-      confettivy[i] = rng.nextRange(-1, 1) / 5.0;
-      stage.addChild(confetti[i]);
-    }
-  }
-
-  function dropConfetti() {
-    drawConfetti();
-    droppedConfetti = false;
-    for (i = 0; i < confettiCount; i++) {
-      confetti[i].visible = true;
-      confetti[i].y = rng.nextRange(confettimin, -20);
-      confetti[i].x = rng.nextRange(0, stage.canvas.width);
-      confettivx[i] = rng.nextRange(-3, 3) / 7.0;
-      confettivy[i] = rng.nextRange(-3, 3) / 3.0;
-    }
-  }
-
-  drawConfetti();
-
-  createjs.Ticker.setFPS(60);
-  createjs.Ticker.addEventListener("tick", stage);
-  createjs.Ticker.addEventListener("tick", handleTick2);
-  
-  function handleTick2(event) {
-    if (!droppedConfetti) {
-      dropped = true;
-      for (i = 0; i < confettiCount; i++) {
-        if (confetti[i].y < window.innerHeight + 20) {
-          confetti[i].x = confetti[i].x + confettivx[i]
-          confetti[i].y = confetti[i].y + confettivy[i] + confettiv
-          dropped = false;
-        } else {
-          confetti[i].visible = false;
-        }
-      }
-      if (dropped) {
-        droppedConfetti = true;
-      }
-    }
-    stage.update();
-  }
-
-  function calculateAndDrawScores(){
-    lastOpponentScore = calculateOpponentScore();
-    lastPlayerScore = calculatePlayerScore();
-    opponentscore+=lastOpponentScore;
-    playerscore+=lastPlayerScore;
-    drawOpponentScore(opponentscore);
-    drawPlayerScore(playerscore);
-  }
-
-  let wonContainer;
-  let wonDialog;
-  
-  function wonGame() {
-    if(!gameIsWon){
-      calculateAndDrawScores();
-      gameIsWon = true;
-      wonContainer = new createjs.Container();
-      wonDialog = new createjs.Shape();
-      wonDialog.graphics.beginFill("lightgreen").drawCircle(0, 0, 1000);
-      wonDialog.y = topbound + 1000 + 900;
-      wonDialog.x = leftbound + 500;
-      var txt = "";
-      if(lastPlayerScore == 0 && lastOpponentScore == 0){
-        txt = "You both won!"
-      } else if(lastPlayerScore == 0) {
-        txt = "You won!"
-      } else if(lastOpponentScore == 0) {
-        txt = "Your opponent won!"
-      }
-      txt = txt + " (Tap)"
-      let wonText = new createjs.Text(txt, TEXTTYPE, "#000000")
-      wonText.x = leftbound + 500;
-      wonText.y = topbound + 935;
-      wonText.textAlign = 'center'
-      drawOpponentHandFaceup();
-      prepareForNextRound();
-      wonContainer.addChild(wonDialog);
-      wonContainer.addChild(wonText);
-      container.addChild(wonContainer);
-      if(!recoveringState) {
-        wonContainer.on("mousedown", function(event) {
-          if(container.contains(wonContainer)){
-            container.removeChild(wonContainer);
-          }
-          nextRound();
-          gameIsWon = false;
-        });
-      } else {
-        if(container.contains(wonContainer)){
-          container.removeChild(wonContainer);
-        }
-        nextRound();
-        gameIsWon = false;
-      }
-    }
-  }
-
-  function calculateOpponentScore(){
-    ndeck2 = []
-    for(var x = 0; x < opponentHandCards.length; x++){
-      ndeck2[ndeck2.length] = (new Card(opponentHandCards[x], opponentHandSuits[x]))
-    }
-    score = calculateScore(ndeck2)
-    return score
-  }
-
-  function calculatePlayerScore(){
-    ndeck = []
-    for(var x = 0; x < playerHandCards.length; x++){
-      ndeck[ndeck.length] = (new Card(playerHandCards[x], playerHandSuits[x]))
-    }
-    score = calculateScore(ndeck)
-    return score
-  }
-
-  function opponentWonGame() {
-    if(!gameIsWon){
-      calculateAndDrawScores();
-      if(user == player1){
-        if((currentRound+1)%2 == 1){
-          canPlayerDraw = true;
-        } else {
-          canPlayerDraw = false;
-        }
-      } else {
-        if((currentRound+1)%2 == 0){
-          canPlayerDraw = true;
-        } else {
-          canPlayerDraw = false;
-        }
-      }
-      gameIsWon = true;
-      wonContainer = new createjs.Container();
-      wonDialog = new createjs.Shape();
-      wonDialog.graphics.beginFill("lightblue").drawCircle(0, 0, 1000);
-      wonDialog.y = topbound + 1000 + 900;
-      wonDialog.x = leftbound + 500;
-      var txt = ""
-      if(lastPlayerScore == 0 && lastOpponentScore == 0){
-        txt = "You both won!"
-      } else if(lastPlayerScore == 0) {
-        txt = "You won!"
-      } else if(lastOpponentScore == 0) {
-        txt = "Your opponent won!"
-      }
-      txt = txt + " (Tap)"
-      let wonText = new createjs.Text(txt, TEXTTYPE, "#000000")
-      wonText.textAlign = 'center'
-      wonText.x = leftbound + 500;
-      wonText.y = topbound + 935;
-      wonContainer.on("mousedown", function(event) {
-        if(container.contains(wonContainer)){
-          container.removeChild(wonContainer);
-        }
-        gameIsWon = false
-        nextRound();
-      });
-      drawOpponentHandFaceup();
-      prepareForNextRound();
-      wonContainer.addChild(wonDialog);
-      wonContainer.addChild(wonText);
-      container.addChild(wonContainer);
-    }
-  }
-  
-  let ticks = 0;
-  stage.update();
 })();
