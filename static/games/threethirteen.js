@@ -1,4 +1,4 @@
-(function threeThirteen() {
+(function threeThirteenGame() {
   "use strict";
 
   const PLAYER_ONE = "Player 1";
@@ -53,9 +53,380 @@
   const SMALL_TEXT = "bold 30px Arial";
   const LARGE_TEXT = "bold 70px Arial";
 
+  /*
+   * ----------------------------------------------------------------------
+   * Card object model
+   * ----------------------------------------------------------------------
+   */
+
+  function Card(value, suit) {
+    this.value = Number(value);
+    this.suit = Number(suit);
+  }
+
+  Card.prototype.getValue = function() {
+    return this.value;
+  };
+
+  Card.prototype.getSuit = function() {
+    return this.suit;
+  };
+
+  Card.prototype.clone = function() {
+    return new Card(this.value, this.suit);
+  };
+
+  function cloneMatrix(matrix) {
+    const copy = [];
+
+    for (let i = 0; i < matrix.length; i++) {
+      copy[i] = matrix[i].slice();
+    }
+
+    return copy;
+  }
+
+  function roundWildcardValue(roundNumber) {
+    return Number(roundNumber || currentRound || 3) - 1;
+  }
+
+  function isWildcardCard(card, roundNumber) {
+    if (!card || typeof card.getValue !== "function") {
+      return false;
+    }
+
+    const wildcardValue = roundWildcardValue(roundNumber);
+
+    return Number(card.getValue()) === wildcardValue;
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Scoring helper, based on the original hand object design
+   * ----------------------------------------------------------------------
+   */
+
+  function Hand(cards, jokers, roundNumber) {
+    this.roundNumber = Number(roundNumber || currentRound || 3);
+    this.cards = cloneMatrix(cards);
+    this.jokers = Number(jokers || 0);
+    this.melds = [];
+    this.value = this.leftoverValue();
+  }
+
+  Hand.prototype.findMelds = function(startSuit, startNumber) {
+    if (
+      typeof startSuit === "undefined" ||
+      typeof startNumber === "undefined"
+    ) {
+      startSuit = 0;
+      startNumber = 0;
+      this.value = this.leftoverValue();
+    }
+
+    if (this.jokers > 2) {
+      for (let i = 0; i < this.jokers; i++) {
+        this.melds.push({ s: -1, n: -1 });
+      }
+
+      this.value -= this.roundNumber * this.jokers;
+    }
+
+    while (this.value > 0) {
+      while (
+        startNumber > 15 ||
+        !this.cards[startSuit] ||
+        this.cards[startSuit][startNumber] === 0
+      ) {
+        startNumber++;
+
+        if (startNumber > 15) {
+          startNumber = 0;
+          startSuit++;
+
+          if (startSuit > 3) {
+            return;
+          }
+        }
+      }
+
+      for (let meldType = 0; meldType < 2; meldType++) {
+        const meld = meldType
+          ? this.findSet(startSuit, startNumber)
+          : this.findRun(startSuit, startNumber);
+
+        for (let length = 3; length <= meld.length; length++) {
+          const test = new Hand(
+            this.cards,
+            this.jokers,
+            this.roundNumber
+          );
+
+          test.removeCards(meld.slice(0, length));
+
+          if (meldType) {
+            test.findMelds(startSuit, startNumber);
+          } else {
+            test.findMelds(0, 0);
+          }
+
+          if (test.value < this.value) {
+            this.value = test.value;
+            this.melds.length = 0;
+            this.melds = [].concat(
+              meld.slice(0, length),
+              test.melds
+            );
+          }
+        }
+      }
+
+      startNumber++;
+    }
+  };
+
+  Hand.prototype.findRun = function(suit, number) {
+    const run = [];
+    let jokers = this.jokers;
+
+    while (number < 14) {
+      if (
+        (number === 13 && this.cards[suit][0] > 0) ||
+        (number < 13 && this.cards[suit][number] > 0)
+      ) {
+        run.push({ s: suit, n: number });
+      } else if (jokers > 0) {
+        run.push({ s: -1, n: -1 });
+        jokers--;
+      } else {
+        break;
+      }
+
+      number++;
+    }
+
+    while (jokers-- > 0) {
+      run.push({ s: -1, n: -1 });
+    }
+
+    return run;
+  };
+
+  Hand.prototype.findSet = function(suit, number) {
+    const set = [];
+
+    for (let currentSuit = suit; currentSuit < 4; currentSuit++) {
+      const count = this.cards[currentSuit][number] || 0;
+
+      for (let i = 0; i < count; i++) {
+        set.push({ s: currentSuit, n: number });
+      }
+    }
+
+    for (let i = 0; i < this.jokers; i++) {
+      set.push({ s: -1, n: -1 });
+    }
+
+    return set;
+  };
+
+  Hand.prototype.removeCards = function(cards) {
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i];
+
+      if (card.s >= 0 && card.n < 13) {
+        this.cards[card.s][card.n]--;
+      } else if (card.s >= 0 && card.n === 13) {
+        this.cards[card.s][0]--;
+      } else {
+        this.jokers--;
+      }
+    }
+
+    this.value = this.leftoverValue();
+  };
+
+  Hand.prototype.leftoverValue = function() {
+    let leftover = 0;
+
+    for (let suit = 0; suit < 4; suit++) {
+      for (let number = 0; number < 13; number++) {
+        let value = number + 1;
+
+        if (value > 10) {
+          value = 10;
+        }
+
+        leftover += this.cards[suit][number] * value;
+      }
+    }
+
+    leftover += this.jokers * this.roundNumber;
+
+    return leftover;
+  };
+
+  function buildMatrixFromCards(cards, roundNumber) {
+    const matrix = [];
+
+    for (let suit = 0; suit < 4; suit++) {
+      matrix[suit] = [];
+
+      for (let value = 0; value < 13; value++) {
+        matrix[suit][value] = 0;
+      }
+    }
+
+    let jokers = 0;
+
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i];
+
+      if (!card || typeof card.getValue !== "function") {
+        continue;
+      }
+
+      if (isWildcardCard(card, roundNumber)) {
+        jokers++;
+        continue;
+      }
+
+      const suit = Number(card.getSuit());
+      const value = Number(card.getValue());
+
+      if (
+        Number.isInteger(suit) &&
+        suit >= 0 &&
+        suit < 4 &&
+        Number.isInteger(value) &&
+        value >= 0 &&
+        value < 13
+      ) {
+        matrix[suit][value]++;
+      }
+    }
+
+    return { matrix, jokers };
+  }
+
+  function calculateScore(cards, roundNumber) {
+    const round = Number(roundNumber || globalCurrentRound || 3);
+
+    const { matrix, jokers } = buildMatrixFromCards(cards, round);
+
+    const hand = new Hand(matrix, jokers, round);
+    hand.findMelds();
+
+    return hand.value;
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Deterministic shuffle
+   * ----------------------------------------------------------------------
+   */
+
+  function hashSeed(value) {
+    const text = String(value);
+
+    let hash = 2166136261;
+
+    for (let i = 0; i < text.length; i++) {
+      hash ^= text.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+
+    return hash >>> 0;
+  }
+
+  function createSeededRandom(seed) {
+    let state = seed >>> 0;
+
+    return function() {
+      state = (state + 0x6D2B79F5) >>> 0;
+
+      let value = state;
+      value = Math.imul(value ^ (value >>> 15), value | 1);
+      value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+
+      return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function getDeckSeed(roundNumber) {
+    return hashSeed(
+      "three-thirteen:" +
+      String(gameId) +
+      ":round:" +
+      String(Number(roundNumber))
+    );
+  }
+
+  function createDeck(roundNumber) {
+    const round = Number(roundNumber);
+
+    if (
+      !Number.isInteger(round) ||
+      round < 3 ||
+      round > 13
+    ) {
+      throw new RangeError(
+        "Three Thirteen round must be between 3 and 13."
+      );
+    }
+
+    const cards = [];
+
+    for (let suit = 0; suit < 4; suit++) {
+      for (let value = 0; value < 13; value++) {
+        cards.push(new Card(value, suit));
+      }
+    }
+
+    const random = createSeededRandom(
+      getDeckSeed(round)
+    );
+
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+
+      const temp = cards[i];
+      cards[i] = cards[j];
+      cards[j] = temp;
+    }
+
+    return cards;
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Game state
+   * ----------------------------------------------------------------------
+   */
+
+  let currentRound = 3;
+  let globalCurrentRound = 3;
+
+  function getRoundStarter(roundNumber) {
+    return Number(roundNumber || currentRound) % 2 === 1
+      ? PLAYER_ONE
+      : PLAYER_TWO;
+  }
+
+  function imageLoaded() {
+    imagesLoaded++;
+
+    if (
+      imagesLoaded >= 53 &&
+      !started
+    ) {
+      started = true;
+      beginGame();
+    }
+  }
+
   const cardImages = [];
   const backImage = new Image();
-
   let imagesLoaded = 0;
   let started = false;
 
@@ -65,17 +436,15 @@
   let stateReceived = false;
   let gameReady = false;
 
-  let currentRound = 3;
-  let currentCard = 0;
-  let deck = [];
-
   let playerCards = [];
   let playerSuits = [];
   let opponentCards = [];
   let opponentSuits = [];
-
   let discardCards = [];
   let discardSuits = [];
+
+  let deck = [];
+  let currentCard = 0;
 
   let canDraw = false;
   let canDiscard = false;
@@ -83,6 +452,7 @@
   let gameFinished = false;
   let pendingWinner = null;
   let roundKey = "";
+  let roundScoreApplied = false;
 
   let playerScore = 0;
   let opponentScore = 0;
@@ -97,7 +467,6 @@
   let deckBitmap = null;
   let discardBitmap = null;
   let roundDialog = null;
-  let joinDialog = null;
 
   let playerScoreText = null;
   let opponentScoreText = null;
@@ -150,128 +519,16 @@
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
 
-  /*
-   * ----------------------------------------------------------------------
-   * Wildcards
-   * ----------------------------------------------------------------------
-   */
+  function dealRound(roundNumber) {
+    globalCurrentRound = Number(roundNumber || 3);
+    currentRound = globalCurrentRound;
 
-  function getWildcardValue() {
-    return currentRound - 1;
-  }
-
-  function isWildcardValue(value) {
-    return Number(value) === getWildcardValue();
-  }
-
-  function isWildcardCard(value, suit) {
-    return (
-      isWildcardValue(value) &&
-      Number(suit) >= 0 &&
-      Number(suit) < 4
-    );
-  }
-
-  /*
-   * ----------------------------------------------------------------------
-   * Card deck and dealing
-   * ----------------------------------------------------------------------
-   */
-
-  function RNG(seed) {
-    this.state = seed >>> 0;
-  }
-
-  RNG.prototype.next = function() {
-    this.state =
-      (1664525 * this.state + 1013904223) >>> 0;
-    return this.state;
-  };
-
-  RNG.prototype.range = function(min, max) {
-    return min + this.next() % (max - min);
-  };
-
-  function makeDeck(round) {
-    const cards = [];
-    const rng = new RNG(
-      (10000 + Number(gameId || 0) + round * 7919) >>> 0
-    );
-
-    for (let suit = 0; suit < 4; suit++) {
-      for (let value = 0; value < 13; value++) {
-        cards.push({ value, suit });
-      }
-    }
-
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = rng.range(0, i + 1);
-      [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-
-    return cards;
-  }
-
-  function getDeckCard(index) {
-    if (!deck[index]) {
-      return null;
-    }
-
-    return {
-      value: deck[index].value,
-      suit: deck[index].suit
-    };
-  }
-
-  function addCard(cards, suits, card) {
-    if (!card) {
-      return false;
-    }
-
-    cards.push(card.value);
-    suits.push(card.suit);
-    return true;
-  }
-
-  function getRoundStarter(round) {
-    return round % 2 === 1
-      ? PLAYER_ONE
-      : PLAYER_TWO;
-  }
-
-  function sortCards(cards, suits, byValue) {
-    const combined = cards.map(function(value, index) {
-      return {
-        value,
-        suit: suits[index]
-      };
-    });
-
-    combined.sort(function(a, b) {
-      if (byValue && a.value !== b.value) {
-        return b.value - a.value;
-      }
-
-      if (a.suit !== b.suit) {
-        return b.suit - a.suit;
-      }
-
-      return b.value - a.value;
-    });
-
-    return {
-      cards: combined.map(item => item.value),
-      suits: combined.map(item => item.suit)
-    };
-  }
-
-  function dealRound(round) {
-    currentRound = Math.max(
-      3,
-      Math.min(13, Number(round) || 3)
-    );
-
-    deck = makeDeck(currentRound);
+    /*
+     * This is the key fix: every round is shuffled deterministically
+     * from the shared game ID and round number, so both players
+     * get the same starting deck order.
+     */
+    deck = createDeck(currentRound);
 
     playerCards = [];
     playerSuits = [];
@@ -281,48 +538,30 @@
     discardSuits = [];
 
     for (let i = 0; i < currentRound; i++) {
-      const first = getDeckCard(i);
-      const second = getDeckCard(currentRound + i);
+      const first = deck.shift().clone();
+      const second = deck.shift().clone();
 
       if (user === PLAYER_ONE) {
-        addCard(playerCards, playerSuits, first);
-        addCard(opponentCards, opponentSuits, second);
+        playerCards.push(first);
+        opponentCards.push(second);
       } else {
-        addCard(opponentCards, opponentSuits, first);
-        addCard(playerCards, playerSuits, second);
+        opponentCards.push(first);
+        playerCards.push(second);
       }
     }
 
-    const openingDiscard = getDeckCard(currentRound * 2);
-
-    if (openingDiscard) {
-      discardCards.push(openingDiscard.value);
-      discardSuits.push(openingDiscard.suit);
+    if (deck.length > 0) {
+      const openingDiscard = deck.shift().clone();
+      discardCards.push(openingDiscard);
+      discardSuits.push(openingDiscard.getSuit());
     }
 
-    currentCard = currentRound * 2 + 1;
-
-    let sorted = sortCards(
-      playerCards,
-      playerSuits,
-      true
-    );
-
-    playerCards = sorted.cards;
-    playerSuits = sorted.suits;
-
-    sorted = sortCards(
-      opponentCards,
-      opponentSuits,
-      true
-    );
-
-    opponentCards = sorted.cards;
-    opponentSuits = sorted.suits;
+    currentCard = 0;
 
     roundComplete = false;
     roundKey = "";
     pendingWinner = null;
+    roundScoreApplied = false;
 
     canDiscard = false;
     canDraw = getRoundStarter(currentRound) === user;
@@ -334,8 +573,7 @@
 
   function resetNewGame() {
     currentRound = 3;
-    currentCard = 0;
-    deck = [];
+    globalCurrentRound = 3;
 
     playerCards = [];
     playerSuits = [];
@@ -356,7 +594,7 @@
     roundSettlement = false;
     roundWinner = null;
     settlementActionSent = false;
-    history = [];
+    roundScoreApplied = false;
 
     drawPlayerScore("--");
     drawOpponentScore("--");
@@ -381,15 +619,18 @@
   }
 
   function drawCard(suit, value, x, y) {
+    const cardIndex = Number(value);
+    const suitIndex = Number(suit);
+
     if (
-      !cardImages[suit] ||
-      !cardImages[suit][value]
+      !cardImages[suitIndex] ||
+      !cardImages[suitIndex][cardIndex]
     ) {
       return null;
     }
 
     const bitmap = new createjs.Bitmap(
-      cardImages[suit][value]
+      cardImages[suitIndex][cardIndex]
     );
 
     bitmap.scaleX = CARD_SCALE;
@@ -438,9 +679,15 @@
       const x = 1000 - (1000 / 7) * (i - offset);
       const y = 1000 - row;
 
+      const card = playerCards[i];
+
+      if (!card) {
+        continue;
+      }
+
       const bitmap = drawCard(
-        playerSuits[i],
-        playerCards[i],
+        card.getSuit(),
+        card.getValue(),
         x,
         y
       );
@@ -449,11 +696,11 @@
         continue;
       }
 
-      bitmap.value = playerCards[i];
-      bitmap.suit = playerSuits[i];
+      bitmap.cardValue = card.getValue();
+      bitmap.cardSuit = card.getSuit();
       playerObjects.push(bitmap);
 
-      if (isWildcardCard(bitmap.value, bitmap.suit)) {
+      if (isWildcardCard(card, currentRound)) {
         bitmap.alpha = 0.92;
         playerObjects.push(drawWildcardMarker(bitmap));
       }
@@ -475,10 +722,10 @@
           return;
         }
 
-        const value = event.currentTarget.value;
-        const suit = event.currentTarget.suit;
+        const value = event.currentTarget.cardValue;
+        const suit = event.currentTarget.cardSuit;
 
-        if (isWildcardCard(value, suit)) {
+        if (isWildcardCard(new Card(value, suit), currentRound)) {
           return;
         }
 
@@ -498,6 +745,14 @@
         }
 
         if (
+          roundSettlement &&
+          roundWinner !== user
+        ) {
+          completeSettlementTurn();
+          return;
+        }
+
+        if (
           !roundSettlement &&
           pendingWinner === user
         ) {
@@ -507,14 +762,8 @@
             "," +
             user
           );
-          pendingWinner = null;
-        }
 
-        if (
-          roundSettlement &&
-          roundWinner !== user
-        ) {
-          completeSettlementTurn();
+          pendingWinner = null;
         }
       });
     }
@@ -533,10 +782,16 @@
         (1000 / 7) *
         (i - offset + 1);
 
+      const card = opponentCards[i];
+
+      if (!card) {
+        continue;
+      }
+
       const bitmap = faceUp
         ? drawCard(
-            opponentSuits[i],
-            opponentCards[i],
+            card.getSuit(),
+            card.getValue(),
             x,
             row
           )
@@ -550,10 +805,7 @@
 
       if (
         faceUp &&
-        isWildcardCard(
-          opponentCards[i],
-          opponentSuits[i]
-        )
+        isWildcardCard(card, currentRound)
       ) {
         bitmap.alpha = 0.92;
         opponentObjects.push(drawWildcardMarker(bitmap));
@@ -606,11 +858,16 @@
       return;
     }
 
-    const index = discardCards.length - 1;
+    const topCard = discardCards[discardCards.length - 1];
+
+    if (!topCard) {
+      stage.update();
+      return;
+    }
 
     discardBitmap = drawCard(
-      discardSuits[index],
-      discardCards[index],
+      topCard.getSuit(),
+      topCard.getValue(),
       700,
       500
     );
@@ -619,12 +876,7 @@
       return;
     }
 
-    if (
-      isWildcardCard(
-        discardCards[index],
-        discardSuits[index]
-      )
-    ) {
+    if (isWildcardCard(topCard, currentRound)) {
       discardBitmap.alpha = 0.94;
       drawWildcardMarker(discardBitmap);
     }
@@ -758,14 +1010,8 @@
     suitText.textAlign = "center";
 
     suitButton.on("mousedown", function() {
-      const sorted = sortCards(
-        playerCards,
-        playerSuits,
-        false
-      );
-
-      playerCards = sorted.cards;
-      playerSuits = sorted.suits;
+      const sorted = sortPlayerCards();
+      playerCards = sorted;
       drawPlayerHand();
     });
 
@@ -786,14 +1032,8 @@
     valueText.textAlign = "center";
 
     valueButton.on("mousedown", function() {
-      const sorted = sortCards(
-        playerCards,
-        playerSuits,
-        true
-      );
-
-      playerCards = sorted.cards;
-      playerSuits = sorted.suits;
+      const sorted = sortPlayerCards(true);
+      playerCards = sorted;
       drawPlayerHand();
     });
 
@@ -801,6 +1041,20 @@
     container.addChild(suitText);
     container.addChild(valueButton);
     container.addChild(valueText);
+  }
+
+  function sortPlayerCards(byValue) {
+    return playerCards.slice().sort(function(a, b) {
+      if (byValue && a.getValue() !== b.getValue()) {
+        return b.getValue() - a.getValue();
+      }
+
+      if (a.getSuit() !== b.getSuit()) {
+        return a.getSuit() - b.getSuit();
+      }
+
+      return b.getValue() - a.getValue();
+    });
   }
 
   function setCurrentPlayer(mayDraw) {
@@ -833,7 +1087,7 @@
 
   /*
    * ----------------------------------------------------------------------
-   * Turn operations
+   * Turn functions
    * ----------------------------------------------------------------------
    */
 
@@ -859,21 +1113,18 @@
       return false;
     }
 
-    const top = discardCards.length - 1;
+    const topCard = discardCards[discardCards.length - 1];
     const recycled = [];
 
-    for (let i = 0; i < top; i++) {
-      recycled.push({
-        value: discardCards[i],
-        suit: discardSuits[i]
-      });
+    for (let i = 0; i < discardCards.length - 1; i++) {
+      recycled.push(discardCards[i].clone());
     }
 
-    deck = recycled;
+    deck = recycled.slice();
     currentCard = 0;
 
-    discardCards = [discardCards[top]];
-    discardSuits = [discardSuits[top]];
+    discardCards = [topCard.clone()];
+    discardSuits = [topCard.getSuit()];
 
     drawDiscard();
     return true;
@@ -911,14 +1162,14 @@
       return false;
     }
 
-    const card = getDeckCard(currentCard);
+    const card = deck[currentCard];
 
     if (!card) {
       return false;
     }
 
     currentCard++;
-    addCard(playerCards, playerSuits, card);
+    playerCards.push(card.clone());
 
     if (!replayMode) {
       canDraw = false;
@@ -952,16 +1203,13 @@
       return false;
     }
 
-    const index = discardCards.length - 1;
+    const topCard = discardCards[discardCards.length - 1];
 
-    addCard(
-      playerCards,
-      playerSuits,
-      {
-        value: discardCards[index],
-        suit: discardSuits[index]
-      }
-    );
+    if (!topCard) {
+      return false;
+    }
+
+    playerCards.push(topCard.clone());
 
     discardCards.pop();
     discardSuits.pop();
@@ -974,7 +1222,6 @@
 
     drawPlayerHand();
     drawDiscard();
-
     return true;
   }
 
@@ -987,14 +1234,14 @@
       return false;
     }
 
-    const card = getDeckCard(currentCard);
+    const card = deck[currentCard];
 
     if (!card) {
       return false;
     }
 
     currentCard++;
-    addCard(opponentCards, opponentSuits, card);
+    opponentCards.push(card.clone());
 
     if (!replayMode) {
       setTurnAfterAction("draw", opponent);
@@ -1012,16 +1259,13 @@
       return false;
     }
 
-    const index = discardCards.length - 1;
+    const topCard = discardCards[discardCards.length - 1];
 
-    addCard(
-      opponentCards,
-      opponentSuits,
-      {
-        value: discardCards[index],
-        suit: discardSuits[index]
-      }
-    );
+    if (!topCard) {
+      return false;
+    }
+
+    opponentCards.push(topCard.clone());
 
     discardCards.pop();
     discardSuits.pop();
@@ -1036,6 +1280,29 @@
     return true;
   }
 
+  function scoreCompletedRound() {
+    if (roundScoreApplied) {
+      return false;
+    }
+
+    playerScore += calculateScore(
+      playerCards,
+      currentRound
+    );
+
+    opponentScore += calculateScore(
+      opponentCards,
+      currentRound
+    );
+
+    roundScoreApplied = true;
+
+    drawPlayerScore(playerScore);
+    drawOpponentScore(opponentScore);
+
+    return true;
+  }
+
   function completeSettlementTurn() {
     if (
       !roundSettlement ||
@@ -1046,7 +1313,23 @@
       return false;
     }
 
+    if (!scoreCompletedRound()) {
+      return false;
+    }
+
     settlementActionSent = true;
+
+    if (currentRound >= 13) {
+      gameFinished = true;
+      roundSettlement = false;
+      roundComplete = true;
+      canDraw = false;
+      canDiscard = false;
+
+      drawFinishedDialog();
+      stage.update();
+      return true;
+    }
 
     const sent = sendAction(
       "round_advance," +
@@ -1081,26 +1364,20 @@
       return false;
     }
 
-    if (isWildcardCard(value, suit)) {
-      return false;
-    }
-
-    const index = playerCards.findIndex(function(card, i) {
+    const match = playerCards.findIndex(function(card) {
       return (
-        card === value &&
-        playerSuits[i] === suit
+        Number(card.getValue()) === Number(value) &&
+        Number(card.getSuit()) === Number(suit)
       );
     });
 
-    if (index < 0) {
+    if (match < 0) {
       return false;
     }
 
-    playerCards.splice(index, 1);
-    playerSuits.splice(index, 1);
-
-    discardCards.push(value);
-    discardSuits.push(suit);
+    const card = playerCards.splice(match, 1)[0];
+    discardCards.push(card.clone());
+    discardSuits.push(card.getSuit());
 
     canDraw = false;
     canDiscard = false;
@@ -1114,14 +1391,9 @@
 
     setCurrentPlayer(false);
 
-    const score = calculateScore(
-      playerCards,
-      playerSuits
-    );
-
     pendingWinner =
       playerCards.length === currentRound &&
-      score === 0
+      calculateScore(playerCards, currentRound) === 0
         ? user
         : null;
 
@@ -1129,21 +1401,20 @@
   }
 
   function discardPlayerDuringReplay(value, suit) {
-    const index = playerCards.findIndex(function(card, i) {
+    const match = playerCards.findIndex(function(card) {
       return (
-        card === value &&
-        playerSuits[i] === suit
+        Number(card.getValue()) === Number(value) &&
+        Number(card.getSuit()) === Number(suit)
       );
     });
 
-    if (index < 0) {
+    if (match < 0) {
       return false;
     }
 
-    playerCards.splice(index, 1);
-    playerSuits.splice(index, 1);
-    discardCards.push(value);
-    discardSuits.push(suit);
+    const card = playerCards.splice(match, 1)[0];
+    discardCards.push(card.clone());
+    discardSuits.push(card.getSuit());
 
     drawPlayerHand();
     drawDiscard();
@@ -1151,240 +1422,24 @@
   }
 
   function discardOpponentCard(value, suit) {
-    if (isWildcardCard(value, suit)) {
-      return false;
-    }
-
-    const index = opponentCards.findIndex(function(card, i) {
+    const match = opponentCards.findIndex(function(card) {
       return (
-        card === value &&
-        opponentSuits[i] === suit
+        Number(card.getValue()) === Number(value) &&
+        Number(card.getSuit()) === Number(suit)
       );
     });
 
-    if (index < 0) {
+    if (match < 0) {
       return false;
     }
 
-    opponentCards.splice(index, 1);
-    opponentSuits.splice(index, 1);
-    discardCards.push(value);
-    discardSuits.push(suit);
+    const card = opponentCards.splice(match, 1)[0];
+    discardCards.push(card.clone());
+    discardSuits.push(card.getSuit());
 
     drawOpponentHand(false);
     drawDiscard();
     return true;
-  }
-
-  /*
-   * ----------------------------------------------------------------------
-   * Scoring
-   * ----------------------------------------------------------------------
-   */
-
-  function calculateScore(cards, suits) {
-    const counts = [];
-    let wildcards = 0;
-
-    for (let suit = 0; suit < 4; suit++) {
-      counts[suit] = [];
-
-      for (let value = 0; value < 13; value++) {
-        counts[suit][value] = 0;
-      }
-    }
-
-    for (let i = 0; i < cards.length; i++) {
-      if (isWildcardValue(cards[i])) {
-        wildcards++;
-      } else if (
-        Number.isInteger(suits[i]) &&
-        suits[i] >= 0 &&
-        suits[i] < 4 &&
-        Number.isInteger(cards[i]) &&
-        cards[i] >= 0 &&
-        cards[i] < 13
-      ) {
-        counts[suits[i]][cards[i]]++;
-      }
-    }
-
-    const memo = new Map();
-
-    function cloneCounts(state) {
-      return state.map(row => row.slice());
-    }
-
-    function makeKey(state, wild) {
-      return (
-        wild +
-        ":" +
-        state.map(row => row.join("")).join("|")
-      );
-    }
-
-    function deadwoodValue(value) {
-      return Math.min(value + 1, 10);
-    }
-
-    function findFirstCard(state) {
-      for (let suit = 0; suit < 4; suit++) {
-        for (let value = 0; value < 13; value++) {
-          if (state[suit][value] > 0) {
-            return { suit, value };
-          }
-        }
-      }
-
-      return null;
-    }
-
-    function solve(state, wild) {
-      const key = makeKey(state, wild);
-
-      if (memo.has(key)) {
-        return memo.get(key);
-      }
-
-      const firstCard = findFirstCard(state);
-
-      if (!firstCard) {
-        let best = wild * 3;
-
-        for (
-          let meldSize = 3;
-          meldSize <= 4 && meldSize <= wild;
-          meldSize++
-        ) {
-          best = Math.min(
-            best,
-            solve(state, wild - meldSize)
-          );
-        }
-
-        memo.set(key, best);
-        return best;
-      }
-
-      let best = deadwoodValue(firstCard.value);
-
-      const sameValueSuits = [];
-
-      for (let suit = 0; suit < 4; suit++) {
-        if (state[suit][firstCard.value] > 0) {
-          sameValueSuits.push(suit);
-        }
-      }
-
-      for (
-        let mask = 1;
-        mask < (1 << sameValueSuits.length);
-        mask++
-      ) {
-        if (!(mask & 1)) {
-          continue;
-        }
-
-        const selected = [];
-
-        for (
-          let bit = 0;
-          bit < sameValueSuits.length;
-          bit++
-        ) {
-          if (mask & (1 << bit)) {
-            selected.push(sameValueSuits[bit]);
-          }
-        }
-
-        for (
-          let usedWildcards = 0;
-          usedWildcards <= 4 && usedWildcards <= wild;
-          usedWildcards++
-        ) {
-          const meldSize = selected.length + usedWildcards;
-
-          if (meldSize < 3) {
-            continue;
-          }
-
-          const next = cloneCounts(state);
-
-          selected.forEach(function(suit) {
-            next[suit][firstCard.value]--;
-          });
-
-          best = Math.min(
-            best,
-            solve(next, wild - usedWildcards)
-          );
-        }
-      }
-
-      for (let length = 3; length <= 13; length++) {
-        const minimumStart = Math.max(
-          0,
-          firstCard.value - length + 1
-        );
-
-        const maximumStart = Math.min(
-          firstCard.value,
-          13 - length
-        );
-
-        for (
-          let start = minimumStart;
-          start <= maximumStart;
-          start++
-        ) {
-          const next = cloneCounts(state);
-          let missing = 0;
-
-          for (
-            let value = start;
-            value < start + length;
-            value++
-          ) {
-            if (next[firstCard.suit][value] > 0) {
-              next[firstCard.suit][value]--;
-            } else {
-              missing++;
-            }
-          }
-
-          if (missing > wild || missing > 4) {
-            continue;
-          }
-
-          for (
-            let usedWildcards = missing;
-            usedWildcards <= 4 && usedWildcards <= wild;
-            usedWildcards++
-          ) {
-            best = Math.min(
-              best,
-              solve(next, wild - usedWildcards)
-            );
-          }
-        }
-      }
-
-      for (
-        let meldSize = 3;
-        meldSize <= 4 && meldSize <= wild;
-        meldSize++
-      ) {
-        best = Math.min(
-          best,
-          solve(state, wild - meldSize)
-        );
-      }
-
-      memo.set(key, best);
-      return best;
-    }
-
-    return solve(counts, wildcards);
   }
 
   /*
@@ -1408,35 +1463,13 @@
     roundSettlement = true;
     roundComplete = true;
     settlementActionSent = false;
+    roundScoreApplied = false;
 
-    playerScore += calculateScore(
-      playerCards,
-      playerSuits
-    );
-
-    opponentScore += calculateScore(
-      opponentCards,
-      opponentSuits
-    );
-
-    drawPlayerScore(playerScore);
-    drawOpponentScore(opponentScore);
-
-    if (currentRound >= 13) {
-      gameFinished = true;
-      canDraw = false;
-      canDiscard = false;
-      drawFinishedDialog();
-      return;
-    }
-
-    const loserMayDraw = winner !== user;
-
-    canDraw = loserMayDraw;
+    canDraw = winner !== user;
     canDiscard = false;
 
     showRoundSettlementDialog(winner);
-    setCurrentPlayer(loserMayDraw);
+    setCurrentPlayer(canDraw);
     stage.update();
   }
 
@@ -1454,11 +1487,13 @@
     const nextRound = currentRound + 1;
 
     currentRound = nextRound;
+    globalCurrentRound = nextRound;
     currentCard = 0;
 
     roundSettlement = false;
     roundWinner = null;
     settlementActionSent = false;
+    roundScoreApplied = false;
     roundComplete = false;
     roundKey = "";
     pendingWinner = null;
@@ -1466,9 +1501,7 @@
     canDraw = getRoundStarter(currentRound) === user;
     canDiscard = false;
 
-    dealRound(currentRound);
-    setCurrentPlayer(canDraw);
-    redrawAll();
+    dealRound(nextRound);
 
     return true;
   }
@@ -1721,23 +1754,6 @@
     return false;
   }
 
-  function setTurnAfterAction(type, actor) {
-    const localActor = actor === user;
-
-    if (type === "draw") {
-      canDraw = false;
-      canDiscard = localActor;
-      setCurrentPlayer(false);
-      return;
-    }
-
-    if (type === "discard") {
-      canDraw = !localActor;
-      canDiscard = false;
-      setCurrentPlayer(!localActor);
-    }
-  }
-
   function processAction(action, replayMode) {
     action = normaliseAction(action);
 
@@ -1778,6 +1794,10 @@
 
       if (localActor && !replayMode) {
         return;
+      }
+
+      if (!roundScoreApplied) {
+        scoreCompletedRound();
       }
 
       advanceRound();
@@ -1858,6 +1878,7 @@
     gameReady = false;
 
     currentRound = 3;
+    globalCurrentRound = 3;
     currentCard = 0;
     deck = [];
 
@@ -1877,6 +1898,7 @@
     roundSettlement = false;
     roundWinner = null;
     settlementActionSent = false;
+    roundScoreApplied = false;
 
     dealRound(3);
 
@@ -2029,21 +2051,9 @@
 
   /*
    * ----------------------------------------------------------------------
-   * Image loading and startup
+   * Startup
    * ----------------------------------------------------------------------
    */
-
-  function imageLoaded() {
-    imagesLoaded++;
-
-    if (
-      imagesLoaded >= 53 &&
-      !started
-    ) {
-      started = true;
-      beginGame();
-    }
-  }
 
   for (let suit = 0; suit < SUITS.length; suit++) {
     cardImages[suit] = [];
