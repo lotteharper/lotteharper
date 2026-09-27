@@ -1303,50 +1303,49 @@
     return true;
   }
 
-  function completeSettlementTurn() {
-    if (
-      !roundSettlement ||
-      settlementActionSent ||
-      gameFinished ||
-      roundWinner === user
-    ) {
-      return false;
-    }
+function completeSettlementTurn() {
+  if (
+    !roundSettlement ||
+    settlementActionSent ||
+    gameFinished ||
+    roundWinner === user
+  ) {
+    return false;
+  }
 
-    if (!scoreCompletedRound()) {
-      return false;
-    }
+  if (!scoreCompletedRound()) {
+    return false;
+  }
 
-    settlementActionSent = true;
+  settlementActionSent = true;
 
-    if (currentRound >= 13) {
-      gameFinished = true;
-      roundSettlement = false;
-      roundComplete = true;
-      canDraw = false;
-      canDiscard = false;
+  if (currentRound >= 13) {
+    gameFinished = true;
+    roundSettlement = false;
+    roundComplete = true;
+    canDraw = false;
+    canDiscard = false;
 
-      drawFinishedDialog();
-      stage.update();
-      return true;
-    }
-
-    const sent = sendAction(
-      "round_advance," +
-      currentRound +
-      "," +
-      user
-    );
-
-    if (!sent) {
-      settlementActionSent = false;
-      return false;
-    }
-
-    advanceRound();
+    drawFinishedDialog();
+    stage.update();
     return true;
   }
 
+  const sent = sendAction(
+    "round_advance," +
+    currentRound +
+    "," +
+    user
+  );
+
+  if (!sent) {
+    settlementActionSent = false;
+    return false;
+  }
+
+  advanceRound();
+  return true;
+}
   function discardPlayerCard(value, suit) {
     if (
       !gameReady ||
@@ -1473,38 +1472,53 @@
     stage.update();
   }
 
-  function advanceRound() {
-    if (
-      gameFinished ||
-      !roundSettlement ||
-      currentRound >= 13
-    ) {
-      return false;
-    }
+function advanceRound() {
+  if (
+    gameFinished ||
+    !roundSettlement ||
+    currentRound >= 13
+  ) {
+    return false;
+  }
 
-    removeRoundDialog();
+  removeRoundDialog();
 
-    const nextRound = currentRound + 1;
+  const nextRound = currentRound + 1;
 
-    currentRound = nextRound;
-    globalCurrentRound = nextRound;
-    currentCard = 0;
-
+  /*
+   * Round 13 is the final round. Do not attempt to deal round 14.
+   */
+  if (nextRound > 13) {
+    gameFinished = true;
     roundSettlement = false;
-    roundWinner = null;
-    settlementActionSent = false;
-    roundScoreApplied = false;
-    roundComplete = false;
-    roundKey = "";
-    pendingWinner = null;
-
-    canDraw = getRoundStarter(currentRound) === user;
+    roundComplete = true;
+    canDraw = false;
     canDiscard = false;
 
-    dealRound(nextRound);
-
+    drawFinishedDialog();
+    stage.update();
     return true;
   }
+
+  currentRound = nextRound;
+  globalCurrentRound = nextRound;
+  currentCard = 0;
+
+  roundSettlement = false;
+  roundWinner = null;
+  settlementActionSent = false;
+  roundScoreApplied = false;
+  roundComplete = false;
+  roundKey = "";
+  pendingWinner = null;
+
+  canDraw = getRoundStarter(currentRound) === user;
+  canDiscard = false;
+
+  dealRound(nextRound);
+
+  return true;
+}
 
   function showRoundSettlementDialog(winner) {
     removeRoundDialog();
