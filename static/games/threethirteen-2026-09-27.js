@@ -102,7 +102,7 @@
 
   /*
    * ----------------------------------------------------------------------
-   * Scoring helper based on the original hand-object implementation
+   * Scoring helper, based on the original hand object design
    * ----------------------------------------------------------------------
    */
 
@@ -523,6 +523,11 @@
     globalCurrentRound = Number(roundNumber || 3);
     currentRound = globalCurrentRound;
 
+    /*
+     * This is the key fix: every round is shuffled deterministically
+     * from the shared game ID and round number, so both players
+     * get the same starting deck order.
+     */
     deck = createDeck(currentRound);
 
     playerCards = [];
@@ -766,86 +771,49 @@
     stage.update();
   }
 
-function drawOpponentHand(faceUp) {
-  clearObjects(opponentObjects);
+  function drawOpponentHand(faceUp) {
+    clearObjects(opponentObjects);
 
-  const cardCount = opponentCards.length;
+    for (let i = 0; i < opponentCards.length; i++) {
+      const row = i > 6 ? 140 : 30;
+      const offset = i > 6 ? 7 : 0;
+      const x =
+        1000 -
+        (1000 / 7) *
+        (i - offset + 1);
 
-  if (cardCount === 0) {
+      const card = opponentCards[i];
+
+      if (!card) {
+        continue;
+      }
+
+      const bitmap = faceUp
+        ? drawCard(
+            card.getSuit(),
+            card.getValue(),
+            x,
+            row
+          )
+        : drawFaceDownCard(x, row);
+
+      if (!bitmap) {
+        continue;
+      }
+
+      opponentObjects.push(bitmap);
+
+      if (
+        faceUp &&
+        isWildcardCard(card, currentRound)
+      ) {
+        bitmap.alpha = 0.92;
+        opponentObjects.push(drawWildcardMarker(bitmap));
+      }
+    }
+
     stage.update();
-    return;
   }
-
-  /*
-   * Display cards in rows at the top of the screen.
-   * Row 1: up to 7 cards
-   * Row 2: remaining cards (only if > 7), positioned directly below row 1
-   */
-  const row1Count = Math.min(7, cardCount);
-  const row2Count = cardCount - row1Count;
-
-  const row1Y = 80;
-  const row2Y = 240;
-  const cardSpacing = 130;
-
-  for (let i = cardCount; i >= 0; i--) {
-    const card = opponentCards[i];
-
-    if (!card) {
-      continue;
-    }
-
-    let row;
-    let indexInRow;
-    let y;
-    let rowCardCount;
-
-    if (i < row1Count) {
-      row = 1;
-      indexInRow = i;
-      y = row1Y;
-      rowCardCount = row1Count;
-    } else {
-      row = 2;
-      indexInRow = i - row1Count;
-      y = row2Y;
-      rowCardCount = row2Count;
-    }
-
-    /*
-     * Center each row horizontally.
-     */
-    const totalRowWidth = rowCardCount * cardSpacing;
-    const leftOffset = (1000 - totalRowWidth) / 2;
-    const x = leftOffset + indexInRow * cardSpacing + 65;
-
-    const bitmap = faceUp
-      ? drawCard(
-          card.getSuit(),
-          card.getValue(),
-          x,
-          y
-        )
-      : drawFaceDownCard(x, y);
-
-    if (!bitmap) {
-      continue;
-    }
-
-    opponentObjects.push(bitmap);
-
-    if (
-      faceUp &&
-      isWildcardCard(card, currentRound)
-    ) {
-      bitmap.alpha = 0.92;
-      opponentObjects.push(drawWildcardMarker(bitmap));
-    }
-  }
-
-  stage.update();
-}
-
 
   function drawDeck() {
     if (deckBitmap && container.contains(deckBitmap)) {
@@ -1335,42 +1303,49 @@ function drawOpponentHand(faceUp) {
     return true;
   }
 
-  function completeSettlementTurn() {
-    if (
-      !roundSettlement ||
-      settlementActionSent ||
-      gameFinished ||
-      roundWinner === user
-    ) {
-      return false;
-    }
+function completeSettlementTurn() {
+  if (
+    !roundSettlement ||
+    settlementActionSent ||
+    gameFinished ||
+    roundWinner === user
+  ) {
+    return false;
+  }
 
-    if (!scoreCompletedRound()) {
-      return false;
-    }
+  if (!scoreCompletedRound()) {
+    return false;
+  }
 
-    settlementActionSent = true;
+  settlementActionSent = true;
 
-    /*
-     * Always send round_advance for the final round too.
-     * This lets both clients show the finished dialog.
-     */
-    const sent = sendAction(
-      "round_advance," +
-      currentRound +
-      "," +
-      user
-    );
+  if (currentRound >= 13) {
+    gameFinished = true;
+    roundSettlement = false;
+    roundComplete = true;
+    canDraw = false;
+    canDiscard = false;
 
-    if (!sent) {
-      settlementActionSent = false;
-      return false;
-    }
-
-    advanceRound();
+    drawFinishedDialog();
+    stage.update();
     return true;
   }
 
+  const sent = sendAction(
+    "round_advance," +
+    currentRound +
+    "," +
+    user
+  );
+
+  if (!sent) {
+    settlementActionSent = false;
+    return false;
+  }
+
+  advanceRound();
+  return true;
+}
   function discardPlayerCard(value, suit) {
     if (
       !gameReady ||
@@ -1497,52 +1472,53 @@ function drawOpponentHand(faceUp) {
     stage.update();
   }
 
-  function advanceRound() {
-    if (
-      gameFinished ||
-      !roundSettlement
-    ) {
-      return false;
-    }
+function advanceRound() {
+  if (
+    gameFinished ||
+    !roundSettlement ||
+    currentRound >= 13
+  ) {
+    return false;
+  }
 
-    removeRoundDialog();
+  removeRoundDialog();
 
-    /*
-     * This is the final round. Stop before dealing round 14.
-     */
-    if (currentRound >= 13) {
-      gameFinished = true;
-      roundSettlement = false;
-      roundComplete = true;
-      canDraw = false;
-      canDiscard = false;
+  const nextRound = currentRound + 1;
 
-      drawFinishedDialog();
-      stage.update();
-      return true;
-    }
-
-    const nextRound = currentRound + 1;
-
-    currentRound = nextRound;
-    globalCurrentRound = nextRound;
-    currentCard = 0;
-
+  /*
+   * Round 13 is the final round. Do not attempt to deal round 14.
+   */
+  if (nextRound > 13) {
+    gameFinished = true;
     roundSettlement = false;
-    roundWinner = null;
-    settlementActionSent = false;
-    roundScoreApplied = false;
-    roundComplete = false;
-    roundKey = "";
-    pendingWinner = null;
-
-    canDraw = getRoundStarter(currentRound) === user;
+    roundComplete = true;
+    canDraw = false;
     canDiscard = false;
 
-    dealRound(nextRound);
-
+    drawFinishedDialog();
+    stage.update();
     return true;
   }
+
+  currentRound = nextRound;
+  globalCurrentRound = nextRound;
+  currentCard = 0;
+
+  roundSettlement = false;
+  roundWinner = null;
+  settlementActionSent = false;
+  roundScoreApplied = false;
+  roundComplete = false;
+  roundKey = "";
+  pendingWinner = null;
+
+  canDraw = getRoundStarter(currentRound) === user;
+  canDiscard = false;
+
+  dealRound(nextRound);
+
+  return true;
+}
 
   function showRoundSettlementDialog(winner) {
     removeRoundDialog();
