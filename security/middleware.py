@@ -98,7 +98,7 @@ def security_middleware(get_response):
                     return HttpResponseRedirect(settings.REDIRECT_URL)
 #            request.GET._mutable = True
             if request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor):
-                se = UserSession.objects.values('authorized', 'bypass', 'timestamp', 'session_key', 'expiry_warning').filter(user=request.user, session_key=request.session.session_key).order_by('-timestamp').first()
+                se = UserSession.objects.values('id', 'authorized', 'bypass', 'timestamp', 'session_key', 'expiry_warning').filter(user=request.user, session_key=request.session.session_key).order_by('-timestamp').first()
                 from types import SimpleNamespace
                 sess = SimpleNamespace(**se)
                 if not sess:
@@ -111,6 +111,7 @@ def security_middleware(get_response):
                     difference_minutes = round(difference_seconds/60, 2)
 #                    difference_relational_second = difference_seconds%60
                     messages.warning(request, 'Your session is expiring in {} minutes. Please complete authentication again soon to proceed.'.format(difference_minutes))
+                    sess = UserSession.objects.get(id=sess.id)
                     sess.expiry_warning = True
                     sess.save()
                 request.security_modal = redirect_path(request.path)
