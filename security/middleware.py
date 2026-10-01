@@ -79,6 +79,7 @@ def security_middleware(get_response):
             ip = get_client_ip(request)
             qs = get_qs(request.GET)
             sessions = None
+            async_process_user_request.delay(ip, request.user.id if hasattr(request, 'user') and request.user.is_authenticated else None, request.session.session_key, True if hasattr(request, 'user') and request.user.is_authenticated else False, request.path, request.META.get('CONTENT_LENGTH'), request.META.get('HTTP_REFERER'), qs, request.method, sessions.count() if sessions else -1)
             if request.method == 'POST':
                 from .models import SessionDedup
                 sd = SessionDedup.objects.create(user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None, ip_address=ip[:39] if ip else None, path=request.path, querystring=qs, method=request.method)
@@ -89,13 +90,14 @@ def security_middleware(get_response):
 #                print('{} - {} - {}'.format(ip, request.method, request.path + ((qs) if qs else '') + '*' + str(sessions.count())))
             if not (request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor)):
                 ip_ob = UserIpAddress.objects.values('risk_detected', 'page_loads').filter(ip_address=ip, user=request.user if hasattr(request, 'user') and request.user.is_authenticated else None).order_by('-timestamp').first()
-                from types import SimpleNamespace
-                ip_obj = SimpleNamespace(**ip_ob)
-                if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
-                    from django.http import HttpResponseRedirect
-                    if ip_obj.page_loads > 12:
-                        return HttpResponseRedirect(settings.ALT_REDIRECT_URL)
-                    return HttpResponseRedirect(settings.REDIRECT_URL)
+                if ip_ob:
+                    from types import SimpleNamespace
+                    ip_obj = SimpleNamespace(**ip_ob)
+                    if ip_obj and ip_obj.risk_detected and not request.path == '/kick/reasess/':
+                        from django.http import HttpResponseRedirect
+                        if ip_obj.page_loads > 12:
+                            return HttpResponseRedirect(settings.ALT_REDIRECT_URL)
+                        return HttpResponseRedirect(settings.REDIRECT_URL)
 #            request.GET._mutable = True
             if request.user.is_authenticated and (request.user.is_superuser or request.user.profile.vendor):
                 se = UserSession.objects.values('id', 'authorized', 'bypass', 'timestamp', 'session_key', 'expiry_warning').filter(user=request.user, session_key=request.session.session_key).order_by('-timestamp').first()
@@ -119,7 +121,6 @@ def security_middleware(get_response):
                     from security.build import get_next_redirect
                     red = get_next_redirect(request)
                     if red: return red
-            async_process_user_request.delay(ip, request.user.id if hasattr(request, 'user') and request.user.is_authenticated else None, request.session.session_key, True if hasattr(request, 'user') and request.user.is_authenticated else False, request.path, request.META.get('CONTENT_LENGTH'), request.META.get('HTTP_REFERER'), qs, request.method, sessions.count() if sessions else -1)
         except:
             import traceback
             from stacktrace.models import Error

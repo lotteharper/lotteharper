@@ -4,7 +4,9 @@ from security.apis import get_client_ip
 from threading import local
 from django.shortcuts import redirect
 from django.urls import reverse
+from users.models import Profile
 _user = local()
+
 
 class CurrentUserMiddleware(MiddlewareMixin):
     def process_request(self, request):
@@ -53,7 +55,8 @@ def simple_middleware(get_response):
             response = get_response(request)
             return response
         try:
-            if request.user.is_authenticated and not request.user.is_active:
+            user = request.user
+            if user.is_authenticated and not user.is_active:
                 from django.contrib.auth import logout
                 logout(request)
             if not request.session.session_key:
@@ -68,12 +71,19 @@ def simple_middleware(get_response):
                 from django.http import HttpResponseRedirect
                 return HttpResponseRedirect(request.path + '?' + qs)
             ip = get_client_ip(request)
-            async_user_tasks.delay(request.user.is_authenticated, request.user.id if request.user.is_authenticated else None, ip, request.LANGUAGE_CODE)
-            if request.user.is_authenticated and (request.user.profile.enable_two_factor_authentication or request.user.profile.vendor) and not request.path.startswith('/accounts/tfa/') and not request.path.startswith('/accounts/logout/') and not request.path.startswith("/face/") and not request.path.startswith("/verify/"):
-                if not request.user.profile.phone_number or len(request.user.profile.phone_number) < 11:
-                    from django.http import HttpResponseRedirect
-                    from django.urls import reverse
-                    return HttpResponseRedirect(reverse('users:tfa_onboarding'))
+            async_user_tasks.delay(user.is_authenticated, user.id if user.is_authenticated else None, ip, request.LANGUAGE_CODE)
+            if user.is_authenticated:
+                pr = Profile.objects.values('id', 'enable_two_factor_authentication', 'vendor').get(user=user)
+                from types import SimpleNamespace
+                profile = SimpleNamespace(**pr)
+                if (profile.enable_two_factor_authentication or profile.vendor) and not request.path.startswith('/accounts/tfa/') and not request.path.startswith('/accounts/logout/') and not request.path.startswith("/face/") and not request.path.startswith("/verify/"):
+                    pr = Profile.objects.values('phone_number').get(id=profile.id)
+                    from types import SimpleNamespace
+                    profile = SimpleNamespace(**pr)
+                    if not profile.phone_number or len(profile.phone_number) < 11:
+                        from django.http import HttpResponseRedirect
+                        from django.urls import reverse
+                        return HttpResponseRedirect(reverse('users:tfa_onboarding'))
             response = get_response(request)
             if request.COOKIES.get('user_signup', False):
                 request.user_signup = True
