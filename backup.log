@@ -1,4 +1,4 @@
-4
+5
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,25 +13,8 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 9ed3ec9] open source
- 27 files changed, 62 insertions(+), 20 deletions(-)
- create mode 100644 media/audio/fingerprints/25420de7-f0ae-4617-a1fd-d383c036d634.npy
- create mode 100644 media/audio/fingerprints/2776fac6-ad14-465c-8b13-be51fc33dc3b.npy
- create mode 100644 media/audio/fingerprints/31f43024-9eb8-47ab-a0bc-78cd5d08f30f.npy
- create mode 100644 media/audio/fingerprints/4baf12a3-b404-455f-aa51-5c217348140f.npy
- create mode 100644 media/audio/fingerprints/5c81d1a5-02c1-42c8-ac3a-a7706c767b9b.npy
- create mode 100644 media/audio/fingerprints/62f7bbfe-6fae-4eef-bd0b-184e3ad27a9e.npy
- create mode 100644 media/audio/fingerprints/6a054971-1b91-432a-8fef-0a0c807e9c6b.npy
- create mode 100644 media/audio/fingerprints/6dd2c569-abd7-4593-836a-c6cf2ae2756e.npy
- create mode 100644 media/audio/fingerprints/7bd1ae97-c6e1-497c-9897-ffff1f0ed784.npy
- create mode 100644 media/audio/fingerprints/8c5ca8e1-8838-4cae-8fc9-a3278924b898.npy
- create mode 100644 media/audio/fingerprints/9572ef85-f553-45f7-b3a4-430e38704302.npy
- create mode 100644 media/audio/fingerprints/b5a437d6-2c21-4acf-9178-f9119e1a82a4.npy
- create mode 100644 media/audio/fingerprints/c1759e24-0812-42e6-a279-6740cffc8481.npy
- create mode 100644 media/audio/fingerprints/cd87ffd4-8931-4862-88bf-8391f0961e76.npy
- create mode 100644 media/audio/fingerprints/f863ab22-7f46-41e9-8075-da8385713f57.npy
- create mode 100644 media/audio/fingerprints/fdb4759e-9515-4703-9e93-532ce966d876.npy
- delete mode 100644 users/.middleware.py.swp
+[main 7dc68b4] open source
+ 6 files changed, 12 insertions(+), 5 deletions(-)
 sending incremental file list
 ./
 .gitignore
