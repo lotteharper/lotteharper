@@ -1289,7 +1289,6 @@
     // ---------------------------------------------------------------------
     const inventory = Array.from({ length: 27 }, () => null);
     const chestContents = new Map();
-    const pendingContainerUpdates = new Map();
     const keys = Object.create(null);
     const remotePlayers = new Map();
     const pendingWorldEdits = new Map();
@@ -1322,6 +1321,28 @@
     let lastNetworkUpdate = 0;
     let hasLoadedServerState = false;
     let inventoryDirty = false;
+
+    function chestStorageKey() {
+      return `voxel-game-chests-${roomName}`;
+    }
+
+    function loadChestContents() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(chestStorageKey()) || "{}");
+        for (const [key, items] of Object.entries(saved)) {
+          if (Array.isArray(items) && items.length === 27) {
+            chestContents.set(key, items);
+          }
+        }
+      } catch {
+        chestContents.clear();
+      }
+    }
+
+    function saveChestContents() {
+      const payload = Object.fromEntries(chestContents);
+      localStorage.setItem(chestStorageKey(), JSON.stringify(payload));
+    }
 
     const previousPadActions = {
       jump: false,
@@ -1658,114 +1679,9 @@
           renderChest();
           renderInventory();
           syncInventory();
-          syncChest(activeChestKey, items);
+          saveChestContents();
         });
         chestGrid.appendChild(element);
-      }
-    }
-
-    function containerCoordinates(key) {
-        const coordinates = key.split(",").map(Number);
-        return coordinates.length === 3 && coordinates.every(Number.isInteger)
-          ? coordinates
-          : null;
-      }
-
-    function syncChest(key, slots) {
-        const coordinates = containerCoordinates(key);
-        if (!coordinates || !Array.isArray(slots) || slots.length !== 27) return;
-
-        const message = {
-          type: "container_update",
-          x: coordinates[0],
-          y: coordinates[1],
-          z: coordinates[2],
-          kind: "chest",
-          data: { slots: slots.map(item => item ? { ...item } : null) }
-        };
-
-        if (
-          !hasLoadedServerState ||
-          !worldSocket ||
-          worldSocket.readyState !== WebSocket.OPEN
-        ) {
-          pendingContainerUpdates.set(key, message);
-          return;
-        }
-
-        worldSocket.send(JSON.stringify(message));
-      }
-
-    function applyContainerState(container) {
-        if (
-          !container ||
-          container.kind !== "chest" ||
-          !Number.isInteger(container.x) ||
-          !Number.isInteger(container.y) ||
-          !Number.isInteger(container.z) ||
-          !container.data ||
-          !Array.isArray(container.data.slots) ||
-          container.data.slots.length !== 27
-        ) {
-          return;
-        }
-
-        const slots = container.data.slots.map(item => {
-          if (
-            !item ||
-            typeof item.type !== "string" ||
-            typeof item.color !== "string" ||
-            !/^#[0-9a-fA-F]{6}$/.test(item.color) ||
-            !Number.isInteger(item.count) ||
-            item.count < 1 ||
-            item.count > 64
-          ) {
-            return null;
-          }
-          return {
-            type: item.type,
-            color: item.color.toLowerCase(),
-            count: item.count
-          };
-        });
-
-        const key = blockKey(container.x, container.y, container.z);
-        chestContents.set(key, slots);
-        if (activeChestKey === key) renderChest();
-      }
-
-    function applyServerContainers(containers) {
-        if (!Array.isArray(containers)) return;
-        chestContents.clear();
-        for (const container of containers) applyContainerState(container);
-      }
-
-    function requestChest(key) {
-        const coordinates = containerCoordinates(key);
-        if (
-          !coordinates ||
-          !hasLoadedServerState ||
-          !worldSocket ||
-          worldSocket.readyState !== WebSocket.OPEN
-        ) {
-          return;
-        }
-        worldSocket.send(JSON.stringify({
-          type: "container_get",
-          x: coordinates[0],
-          y: coordinates[1],
-          z: coordinates[2]
-        }));
-      }
-
-    function flushPendingContainerUpdates() {
-        for (const [key, message] of pendingContainerUpdates) {
-          if (
-            !worldSocket ||
-            worldSocket.readyState !== WebSocket.OPEN
-          ) return;
-          worldSocket.send(JSON.stringify(message));
-          pendingContainerUpdates.delete(key);
       }
     }
 
@@ -1778,7 +1694,6 @@
         inventoryPanel.classList.remove("open");
         chestTitle.textContent = "Chest at " + key;
         renderChest();
-        requestChest(key);
         document.pointerLockElement && document.exitPointerLock?.();
       }
     }
@@ -2034,7 +1949,6 @@
       }
 
       applyServerEdits(message.edits);
-      applyServerContainers(message.containers);
       hasLoadedServerState = true;
       lastNetworkUpdate = performance.now();
 
@@ -2055,7 +1969,6 @@
       }
 
       flushPendingWorldEdits();
-      flushPendingContainerUpdates();
 
       if (inventoryDirty) {
         worldSocket.send(JSON.stringify({
@@ -2086,11 +1999,6 @@
 
         if (message.type === "inventory_saved") {
           inventoryDirty = false;
-          return;
-        }
-
-        if (message.type === "container_state") {
-          applyContainerState(message.container);
           return;
         }
 
@@ -3357,6 +3265,7 @@
         selectedSlot = Number(event.code.slice(5)) - 1;
         gamepadInventoryCursor = selectedSlot;
         renderInventory();
+        loadChestContents();
       }
 
       if (inventoryOpen) return;
@@ -3396,9 +3305,7 @@
         startMining("mouse");
       } else if (event.button === 0) {
         event.preventDefault();
-        const wasChestOpen = chestOpen;
         placeBlock();
-        if (!wasChestOpen && chestOpen) event.stopPropagation();
       }
 
       if (document.pointerLockElement !== canvas) {
@@ -3524,9 +3431,7 @@
         } else if (action === "mine") {
           startMining("touch");
         } else if (action === "place") {
-          const wasChestOpen = chestOpen;
           placeBlock();
-          if (!wasChestOpen && chestOpen) event.stopPropagation();
         }
       });
 
@@ -3745,11 +3650,6 @@
 
         if (message.type === "inventory_saved") {
           inventoryDirty = false;
-          return;
-        }
-
-        if (message.type === "container_state") {
-          applyContainerState(message.container);
           return;
         }
 
