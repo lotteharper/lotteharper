@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Voxel Terrain Game</title>
+    <style>
+    {% include 'game/styles.css' %}
+    </style>
+  </head>
+
+  <body>
+    <div class="hint">
+      WASD move · Space jump · Right-click mine (hold 1s) · Left-click place ·
+      E inventory
+      <span id="controllerStatus">· Controller: not connected</span>
+    </div>
+
+    <div id="coordinates" aria-label="Player coordinates">
+      X 0.0 · Y 0.0 · Z 0.0
+    </div>
+
+    <canvas id="c"></canvas>
+
+    <div id="mineProgress" aria-hidden="true"></div>
+    <div id="crosshair" aria-hidden="true"></div>
+
+    <div id="touchControls" aria-label="Touch game controls">
+      <div id="moveStick" class="touch-stick" aria-label="Movement joystick">
+        <span class="touch-stick-knob"></span>
+        <span class="stick-label">MOVE</span>
+      </div>
+
+      <div id="lookStick" class="touch-stick" aria-label="Look joystick">
+        <span class="touch-stick-knob"></span>
+        <span class="stick-label">LOOK</span>
+      </div>
+
+      <div class="touch-actions">
+        <button type="button" data-touch-action="jump">
+          A<br />
+          Jump
+        </button>
+
+        <button type="button" data-touch-action="mine">
+          Mine<br />
+          Hold 1s
+        </button>
+
+        <button type="button" data-touch-action="place">
+          Place
+        </button>
+
+        <button type="button" id="bagButton">Bag</button>
+      </div>
+    </div>
+
+    <div id="hotbar"></div>
+
+    <div id="inventoryPanel">
+      <h2 id="inventoryTitle">Inventory — drag or select a slot</h2>
+
+      <div id="inventoryGrid"></div>
+
+      <section class="craftingPanel">
+        <h3>Crafting</h3>
+        <div id="craftingRecipes"></div>
+        <p
+          id="craftStatus"
+          class="craftStatus"
+          aria-live="polite"
+        ></p>
+      </section>
+    </div>
+
+    <script type="module">
+    {% include 'game/game.js' %}
+    </script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+:root {
+  --slot-size: 48px;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #dce8f2;
+  font-family: sans-serif;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #dce8f2;
+  touch-action: none;
+}
+
+.hint {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 5;
+  max-width: calc(100vw - 160px);
+  padding: 7px 9px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 90%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+#controllerStatus {
+  color: #555;
+}
+
+#coordinates {
+  position: fixed;
+  top: max(8px, env(safe-area-inset-top));
+  right: 8px;
+  z-index: 5;
+  padding: 7px 9px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 90%);
+  color: #222;
+  font: 12px/1.2 monospace;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#crosshair {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+#crosshair::before,
+#crosshair::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: "";
+  background: #fff;
+  box-shadow: 0 0 2px #000, 0 0 4px #000;
+  transform: translate(-50%, -50%);
+}
+
+#crosshair::before {
+  width: 2px;
+  height: 18px;
+}
+
+#crosshair::after {
+  width: 18px;
+  height: 2px;
+}
+
+#mineProgress {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 4;
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from -90deg,
+      #31e66b var(--progress, 0deg),
+      transparent var(--progress, 0deg)
+    );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent 69%,
+    #000 72%
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent 69%,
+    #000 72%
+  );
+}
+
+/* Continue the remaining rules from the original style block here,
+   one selector per block, with declarations on separate lines. */

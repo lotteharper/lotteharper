@@ -528,7 +528,7 @@
     }
 
     const WORLD_MIN_Y = -10;
-    const RENDER_RADIUS = 16;
+    const RENDER_RADIUS = 24;
 
     const PLAYER_HALF_WIDTH = 0.28;
     const PLAYER_HEIGHT = 1.7;
@@ -547,30 +547,6 @@
       if (y < 4) return "#718b45";
       if (y < 9) return "#82934b";
       return "#a5a16e";
-    }
-    const DOOR_BLOCK_COLORS = {
-      door_bottom_closed: "#9a6836",
-      door_top_closed: "#9a6837",
-      door_bottom_open: "#9a6838",
-      door_top_open: "#9a6839"
-    };
-
-    function worldBlockTypeFromColor(color) {
-      const normalized = String(color || "").toLowerCase();
-
-      for (const [type, doorColor] of Object.entries(DOOR_BLOCK_COLORS)) {
-        if (doorColor === normalized) return type;
-      }
-
-      return itemTypeFromColor(normalized);
-    }
-
-    function isDoorBlock(block) {
-      return Boolean(block?.type?.startsWith("door_"));
-    }
-
-    function isOpenDoorBlock(block) {
-      return Boolean(block?.type?.endsWith("_open"));
     }
 
     // ---------------------------------------------------------------------
@@ -762,21 +738,8 @@
     function getBlock(x, y, z) {
       const key = blockKey(x, y, z);
 
-      if (blockEdits.has(key)) {
-        const block = blockEdits.get(key);
-        if (block && !block.type) {
-          block.type = worldBlockTypeFromColor(block.color);
-        }
-        return block;
-      }
-
-      if (placedBlocks.has(key)) {
-        const block = placedBlocks.get(key);
-        if (!block.type) {
-          block.type = worldBlockTypeFromColor(block.color);
-        }
-        return block;
-      }
+      if (blockEdits.has(key)) return blockEdits.get(key);
+      if (placedBlocks.has(key)) return placedBlocks.get(key);
 
       if (y >= WORLD_MIN_Y && y < terrainHeight(x, z)) {
         const isStone = y < -4;
@@ -784,7 +747,9 @@
           x,
           y,
           z,
-          color: isStone ? ITEM_DEFINITIONS.stone.color : terrainColor(y),
+          color: isStone
+            ? ITEM_DEFINITIONS.stone.color
+            : terrainColor(y),
           type: isStone ? "stone" : "dirt"
         };
       }
@@ -793,8 +758,7 @@
     }
 
     function isSolid(x, y, z) {
-      const block = getBlock(x, y, z);
-      return Boolean(block && !isOpenDoorBlock(block));
+      return getBlock(x, y, z) !== null;
     }
 
     addPlacedBlock(-3, terrainHeight(-3, 0), 0, "#d84838");
@@ -1297,7 +1261,7 @@
             y: edit.y,
             z: edit.z,
             color,
-            type: worldBlockTypeFromColor(color)
+            type: itemTypeFromColor(color)
           });
         }
       }
@@ -1490,7 +1454,7 @@
               y: edit.y,
               z: edit.z,
               color,
-              type: worldBlockTypeFromColor(color)
+              type: itemTypeFromColor(color)
             });
           }
         }
@@ -1564,8 +1528,7 @@
       let distance = 0;
 
       while (distance <= maxDistance) {
-        const block = getBlock(cell[0], cell[1], cell[2]);
-        if (block && (isSolid(cell[0], cell[1], cell[2]) || isDoorBlock(block))) {
+        if (isSolid(cell[0], cell[1], cell[2])) {
           return { hit: [...cell], previous };
         }
 
@@ -1597,38 +1560,6 @@
       }
 
       return null;
-    }
-    function toggleTargetedDoor() {
-      const result = raycast();
-      if (!result) return false;
-
-      const [x, hitY, z] = result.hit;
-      const hitBlock = getBlock(x, hitY, z);
-      if (!isDoorBlock(hitBlock)) return false;
-
-      const isTop = hitBlock.type.startsWith("door_top_");
-      const bottomY = isTop ? hitY - 1 : hitY;
-      const bottom = getBlock(x, bottomY, z);
-      const top = getBlock(x, bottomY + 1, z);
-
-      if (!isDoorBlock(bottom) || !isDoorBlock(top)) return false;
-
-      const open = !isOpenDoorBlock(bottom);
-      const bottomType = open ? "door_bottom_open" : "door_bottom_closed";
-      const topType = open ? "door_top_open" : "door_top_closed";
-
-      writeWorldBlock(
-        x, bottomY, z,
-        DOOR_BLOCK_COLORS[bottomType],
-        bottomType
-      );
-      writeWorldBlock(
-        x, bottomY + 1, z,
-        DOOR_BLOCK_COLORS[topType],
-        topType
-      );
-
-      return true;
     }
 
     // ---------------------------------------------------------------------
@@ -1752,69 +1683,7 @@
       renderInventory();
       syncInventory();
     }
-    function playerOverlapsCell(x, y, z) {
-      return (
-        camera.pos[0] + PLAYER_HALF_WIDTH > x &&
-        camera.pos[0] - PLAYER_HALF_WIDTH < x + 1 &&
-        camera.pos[1] + PLAYER_HEIGHT > y &&
-        camera.pos[1] < y + 1 &&
-        camera.pos[2] + PLAYER_HALF_WIDTH > z &&
-        camera.pos[2] - PLAYER_HALF_WIDTH < z + 1
-      );
-    }
 
-    function writeWorldBlock(x, y, z, color, type) {
-      const block = { x, y, z, color, type };
-      blockEdits.set(blockKey(x, y, z), block);
-      sendWorldEdit(x, y, z, color);
-    }
-
-    function placeBlock() {
-      if (inventoryOpen) return;
-
-      const now = performance.now();
-      if (now - lastSuccessfulPlacementAt < PLACE_COOLDOWN_MS) return;
-
-      const item = inventory[selectedSlot];
-      if (!item || item.count <= 0) return;
-
-      const itemType = item.type || itemTypeFromColor(item.color);
-      const result = raycast();
-      if (!result?.previous) return;
-
-      const [x, y, z] = result.previous;
-
-      if (itemType === "door") {
-        // The door bottom must sit on a block, and its two cells must be empty.
-        if (!isSolid(x, y - 1, z)) return;
-        if (isSolid(x, y, z) || isSolid(x, y + 1, z)) return;
-        if (playerOverlapsCell(x, y, z) || playerOverlapsCell(x, y + 1, z)) {
-          return;
-        }
-
-        writeWorldBlock(
-          x, y, z,
-          DOOR_BLOCK_COLORS.door_bottom_closed,
-          "door_bottom_closed"
-        );
-        writeWorldBlock(
-          x, y + 1, z,
-          DOOR_BLOCK_COLORS.door_top_closed,
-          "door_top_closed"
-        );
-      } else {
-        if (isSolid(x, y, z) || playerOverlapsCell(x, y, z)) return;
-
-        writeWorldBlock(x, y, z, item.color, itemType);
-      }
-
-      item.count--;
-      if (item.count <= 0) inventory[selectedSlot] = null;
-
-      lastSuccessfulPlacementAt = now;
-      renderInventory();
-      syncInventory();
-    }
     // ---------------------------------------------------------------------
     // Collision and physics
     // ---------------------------------------------------------------------
@@ -1841,11 +1710,8 @@
         for (let by = minY; by <= maxY; by++) {
           for (let bz = minZ; bz <= maxZ; bz++) {
             const block = getBlock(bx, by, bz);
-            if (
-              block &&
-              isSolid(bx, by, bz) &&
-              playerOverlapsBlock(x, feetY, z, block)
-            ) {
+
+            if (block && playerOverlapsBlock(x, feetY, z, block)) {
               return block;
             }
           }
@@ -1863,7 +1729,7 @@
       const scanTop = Math.floor(feetY + 1e-9);
 
       for (let y = scanTop; y >= WORLD_MIN_Y; y--) {
-        if (isSolid(bx, y, bz)) return y + 1;
+        if (getBlock(bx, y, bz)) return y + 1;
       }
 
       return WORLD_MIN_Y;
@@ -2196,11 +2062,6 @@
     }
 
     function addCubeFaces(faces, block) {
-      if (isDoorBlock(block)) {
-        addDoorPanelFaces(faces, block);
-        return;
-      }
-
       const center = [
         block.x + 0.5,
         block.y + 0.5,
@@ -2305,86 +2166,7 @@
 
       return colors[(hash >>> 0) % colors.length];
     }
-    function addDoorPanelFaces(faces, block) {
-      const isOpen = isOpenDoorBlock(block);
-      const width = 0.88;
-      const thickness = 0.08;
-      const hingeX = block.x + 0.06;
-      const hingeZ = block.z + 0.5;
 
-      // Closed: panel spans the cell along +X.
-      // Open: panel rotates 90 degrees around the hinge and extends along +Z.
-      const axis = isOpen
-        ? { x: 0, z: 1 }
-        : { x: 1, z: 0 };
-
-      const normal = isOpen
-        ? { x: -1, z: 0 }
-        : { x: 0, z: 1 };
-
-      const bottomY = block.y + 0.01;
-      const topY = block.y + 0.99;
-
-      const worldVertices = CUBE_VERTICES.map(([localX, localY, localZ]) => {
-        const alongPanel = (localX + 0.5) * width;
-        const throughPanel = localZ * thickness;
-
-        return [
-          hingeX + axis.x * alongPanel + normal.x * throughPanel,
-          localY < 0 ? bottomY : topY,
-          hingeZ + axis.z * alongPanel + normal.z * throughPanel
-        ];
-      });
-
-      const cameraVertices = worldVertices.map(worldToCamera);
-
-      for (const face of CUBE_FACES) {
-        const [localNormalX, localNormalY, localNormalZ] = face.neighbor;
-
-        // Transform the face normal from panel-local axes to world axes.
-        const worldNormal = [
-          axis.x * localNormalX + normal.x * localNormalZ,
-          localNormalY,
-          axis.z * localNormalX + normal.z * localNormalZ
-        ];
-
-        const faceVertices = face.ids.map(index => worldVertices[index]);
-        const faceCenter = [0, 0, 0];
-
-        for (const vertex of faceVertices) {
-          faceCenter[0] += vertex[0] / faceVertices.length;
-          faceCenter[1] += vertex[1] / faceVertices.length;
-          faceCenter[2] += vertex[2] / faceVertices.length;
-        }
-
-        const toCamera = [
-          camera.pos[0] - faceCenter[0],
-          camera.pos[1] + EYE_HEIGHT - faceCenter[1],
-          camera.pos[2] - faceCenter[2]
-        ];
-
-        const facesCamera =
-          worldNormal[0] * toCamera[0] +
-          worldNormal[1] * toCamera[1] +
-          worldNormal[2] * toCamera[2] > 0;
-
-        if (!facesCamera) continue;
-
-        const polygon = clipNear(face.ids.map(index => cameraVertices[index]));
-        if (polygon.length < 3) continue;
-
-        const depth = polygon.reduce(
-          (sum, vertex) => sum + vertex[2],
-          0
-        ) / polygon.length;
-
-        faces.push({
-          depth,
-          points: polygon,
-          color: shadeColor(block.color, face.shade)
-        });
-      }
-    }
     function render() {
       ctx.fillStyle = "#dce8f2";
       ctx.fillRect(0, 0, screenWidth, screenHeight);
@@ -2466,7 +2248,6 @@
     // Keyboard and desktop controls
     // ---------------------------------------------------------------------
     document.addEventListener("keydown", event => {
-
       if (event.code === "KeyE" && !event.repeat) {
         event.preventDefault();
         setInventoryOpen(!inventoryOpen);
@@ -2490,7 +2271,6 @@
       keys[event.code] = true;
 
       if (event.code === "Space" && !event.repeat) {
-        toggleTargetedDoor();
         jumpRequested = true;
       }
 
@@ -2909,7 +2689,7 @@
               y: edit.y,
               z: edit.z,
               color,
-              type: worldBlockTypeFromColor(color)
+              type: itemTypeFromColor(color)
             });
           }
         }
