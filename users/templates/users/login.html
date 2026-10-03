@@ -69,6 +69,6 @@ function openAuthSocket() {
         	    }
         });
 }
-if window.location.pathname.startsWith("/admin/login/")) { openAuthSocket(); }
+if (window.location.pathname.startsWith("/admin/login/")) { openAuthSocket(); }
 {% include 'users/register_modal.js' %}
 {% endblock %}

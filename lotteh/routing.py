@@ -18,6 +18,8 @@ from stream import consumers as stream_consumers
 from meetings import consumers as meetings_consumers
 from django.core.asgi import get_asgi_application
 from django.conf import settings
+from game.consumers import WorldConsumer
+
 
 django_asgi_app = get_asgi_application()
 
@@ -44,7 +46,8 @@ websocket_urlpatterns = [
     re_path(r'ws/chat/(?P<room_name>\w+)/$', stream_consumers.ChatConsumer.as_asgi()),
     path('ws/meeting/<str:meeting_id>/', meetings_consumers.MeetingConsumer.as_asgi()),
     path('ws/meeting/chat/<str:meeting_id>/', meetings_consumers.ChatConsumer.as_asgi()),
-]
+    re_path(r"^ws/world/(?P<room>[a-zA-Z0-9_-]{1,48})/$", WorldConsumer.as_asgi()),
+    ]
 
 application = ProtocolTypeRouter(
     {

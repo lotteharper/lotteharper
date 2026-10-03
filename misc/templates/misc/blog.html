@@ -195,6 +195,14 @@
           </div>
 
           <div class="p-3">
+            <h4 class="font-italic">Contact and Booking</h4>
+            <ol class="list-unstyled mb-0">
+              <li><a href="{% url 'contact:form' %}">Contact</a></li>
+              <li><a href="{% url 'booking:booking_calendar' my_user.profile.name %}">Booking</a></li>
+            </ol>
+          </div>
+
+          <div class="p-3">
             <h4 class="font-italic">Archives</h4>
             <ol class="list-unstyled mb-0">
               <li><a href="{% url 'feed:profile' my_user.profile.name %}?feed=private">Profile</a></li>

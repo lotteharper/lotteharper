@@ -1,0 +1,345 @@
+import json
+import math
+import re
+import time
+
+from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django.db import transaction
+from django.utils import timezone
+
+from .models import WorldBlockEdit, WorldPlayer
+
+
+ROOM_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,48}$")
+COLOR_PATTERN = re.compile(r"^#[0-9a-fA-F]{6}$")
+EMPTY_INVENTORY = [None] * 27
+
+
+def clean_position(value):
+    if not isinstance(value, dict):
+        return None
+
+    position = {}
+    for name in ("x", "y", "z", "yaw", "pitch"):
+        number = value.get(name)
+
+        if isinstance(number, bool) or not isinstance(number, (int, float)):
+            return None
+        if not math.isfinite(number):
+            return None
+
+        position[name] = max(-1_000_000.0, min(1_000_000.0, float(number)))
+
+    return position
+
+
+def clean_inventory(value):
+    if not isinstance(value, list) or len(value) != 27:
+        return None
+
+    inventory = []
+    for slot in value:
+        if slot is None:
+            inventory.append(None)
+            continue
+
+        if not isinstance(slot, dict):
+            return None
+
+        color = slot.get("color")
+        count = slot.get("count")
+
+        if not isinstance(color, str) or not COLOR_PATTERN.fullmatch(color):
+            return None
+        if isinstance(count, bool) or not isinstance(count, int):
+            return None
+        if count < 1 or count > 64:
+            return None
+
+        inventory.append({"color": color.lower(), "count": count})
+
+    return inventory
+
+
+class WorldConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        user = self.scope.get("user")
+        room = self.scope["url_route"]["kwargs"].get("room", "")
+
+        if (
+            not user
+            or not user.is_authenticated
+            or not ROOM_PATTERN.fullmatch(room)
+        ):
+            await self.close(code=4401)
+            return
+
+        self.user_id = user.pk
+        self.room = room
+        self.room_group = f"world_{room}"
+        self.last_position = None
+        self.last_position_saved_at = None
+
+        # Finds or creates the WorldPlayer row linked to this user and room.
+        state = await self.load_player_state()
+        self.player_id = state["player_id"]
+        self.last_position = state["position"]
+
+        await self.channel_layer.group_add(self.room_group, self.channel_name)
+        await self.accept()
+
+        await self.send_json({
+            "type": "welcome",
+            "player_id": self.player_id,
+            # None for a new player; the browser then sends its spawn position.
+            "position": state["position"],
+            "inventory": state["inventory"],
+            "players": state["players"],
+            "edits": await self.load_room_edits(),
+        })
+
+        if state["position"] is not None:
+            await self.channel_layer.group_send(
+                self.room_group,
+                {
+                    "type": "room.message",
+                    "message": {
+                        "type": "player_state",
+                        "player_id": self.player_id,
+                        "position": state["position"],
+                    },
+                },
+            )
+
+    async def disconnect(self, close_code):
+        if not hasattr(self, "room_group"):
+            return
+
+        if hasattr(self, "player_id"):
+            # Save the latest received location when the player leaves.
+            await self.set_player_offline(self.last_position)
+
+            await self.channel_layer.group_send(
+                self.room_group,
+                {
+                    "type": "room.message",
+                    "message": {
+                        "type": "player_left",
+                        "player_id": self.player_id,
+                    },
+                },
+            )
+
+        await self.channel_layer.group_discard(
+            self.room_group,
+            self.channel_name,
+        )
+
+    async def receive(self, text_data=None, bytes_data=None):
+        try:
+            message = json.loads(text_data or "")
+        except (json.JSONDecodeError, TypeError):
+            return
+
+        if not isinstance(message, dict):
+            return
+
+        message_type = message.get("type")
+
+        if message_type == "position":
+            await self.receive_position(message.get("position"))
+        elif message_type == "inventory":
+            await self.receive_inventory(message.get("inventory"))
+        elif message_type == "world_edit":
+            await self.receive_world_edit(message)
+
+    async def receive_position(self, raw_position):
+        position = clean_position(raw_position)
+        if position is None:
+            return
+
+        self.last_position = position
+        now = time.monotonic()
+
+        # Persist the first position packet immediately. Later updates are
+        # saved at most once per second to limit database writes.
+        if (
+            self.last_position_saved_at is None
+            or now - self.last_position_saved_at >= 1.0
+        ):
+            await self.save_position(position)
+            self.last_position_saved_at = now
+
+        await self.channel_layer.group_send(
+            self.room_group,
+            {
+                "type": "room.message",
+                "message": {
+                    "type": "player_state",
+                    "player_id": self.player_id,
+                    "position": position,
+                },
+            },
+        )
+
+    async def receive_inventory(self, raw_inventory):
+        inventory = clean_inventory(raw_inventory)
+        if inventory is None:
+            return
+
+        await self.save_inventory(inventory)
+        await self.send_json({"type": "inventory_saved"})
+
+    async def receive_world_edit(self, message):
+        coordinates = []
+
+        for name in ("x", "y", "z"):
+            value = message.get(name)
+            if isinstance(value, bool) or not isinstance(value, int):
+                return
+            if abs(value) > 1_000_000:
+                return
+            coordinates.append(value)
+
+        color = message.get("color")
+        if color is not None and (
+            not isinstance(color, str)
+            or not COLOR_PATTERN.fullmatch(color)
+        ):
+            return
+
+        x, y, z = coordinates
+        edit = {
+            "x": x,
+            "y": y,
+            "z": z,
+            "color": color.lower() if isinstance(color, str) else None,
+        }
+
+        await self.persist_world_edit(edit)
+
+        await self.channel_layer.group_send(
+            self.room_group,
+            {
+                "type": "room.message",
+                "message": {
+                    "type": "world_edit",
+                    "edit": edit,
+                },
+            },
+        )
+
+    async def room_message(self, event):
+        await self.send_json(event["message"])
+
+    async def send_json(self, data):
+        await self.send(text_data=json.dumps(data))
+
+    @database_sync_to_async
+    def load_player_state(self):
+        with transaction.atomic():
+            player, created = WorldPlayer.objects.get_or_create(
+                user_id=self.user_id,
+                room=self.room,
+            )
+
+            player.is_online = True
+            player.save(update_fields=("is_online", "updated_at"))
+
+            other_players = list(
+                WorldPlayer.objects.filter(
+                    room=self.room,
+                    is_online=True,
+                )
+                .exclude(pk=player.pk)
+                .values("player_id", "position")
+            )
+
+            # New players keep the browser's generated spawn. Existing players
+            # receive their saved coordinates to restore in the browser.
+            position = None if created else clean_position(player.position)
+            inventory = clean_inventory(player.inventory)
+
+            return {
+                "player_id": str(player.player_id),
+                "position": position,
+                "inventory": (
+                    inventory if inventory is not None else EMPTY_INVENTORY
+                ),
+                "players": [
+                    {
+                        "id": str(other["player_id"]),
+                        "position": other["position"],
+                    }
+                    for other in other_players
+                ],
+            }
+
+    @database_sync_to_async
+    def save_position(self, position):
+        WorldPlayer.objects.filter(
+            user_id=self.user_id,
+            room=self.room,
+        ).update(
+            position=position,
+            updated_at=timezone.now(),
+        )
+
+    @database_sync_to_async
+    def save_inventory(self, inventory):
+        WorldPlayer.objects.filter(
+            user_id=self.user_id,
+            room=self.room,
+        ).update(
+            inventory=inventory,
+            updated_at=timezone.now(),
+        )
+
+    @database_sync_to_async
+    def set_player_offline(self, last_position):
+        updates = {
+            "is_online": False,
+            "updated_at": timezone.now(),
+        }
+
+        if last_position is not None:
+            updates["position"] = last_position
+
+        WorldPlayer.objects.filter(
+            user_id=self.user_id,
+            room=self.room,
+        ).update(**updates)
+
+    @database_sync_to_async
+    def load_room_edits(self):
+        rows = WorldBlockEdit.objects.filter(
+            room=self.room
+        ).values("x", "y", "z", "color", "is_removed")
+
+        return [
+            {
+                "x": row["x"],
+                "y": row["y"],
+                "z": row["z"],
+                "color": None if row["is_removed"] else row["color"],
+            }
+            for row in rows
+        ]
+
+    @database_sync_to_async
+    def persist_world_edit(self, edit):
+        removed = edit["color"] is None
+
+        WorldBlockEdit.objects.update_or_create(
+            room=self.room,
+            x=edit["x"],
+            y=edit["y"],
+            z=edit["z"],
+            defaults={
+                "color": None if removed else edit["color"],
+                "is_removed": removed,
+            },
+        )
+
+

@@ -133,6 +133,7 @@ INSTALLED_APPS = [
     'cookielaw',
     'booking',
     'timeclock',
+    'game',
 #    '',
 ]
 
@@ -300,8 +301,8 @@ OLD_CACHES = {
 
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
+    "https://{}".format(DOMAIN),
     "https://{}".format(STATIC_DOMAIN),
-    "https://{}".format(ADD_DOMAIN),
 ]
 
 LANGUAGE_CODE = 'en-us'
