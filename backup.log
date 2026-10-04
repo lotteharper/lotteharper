@@ -1,4 +1,4 @@
-6
+7
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -13,9 +13,8 @@ numpy
 urllib3
 webauthn
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 5e0d3ed] open source
- 33 files changed, 5463 insertions(+), 1210 deletions(-)
- create mode 100644 game/templates/game/game2026-10-03.html
+[main 2c4ccc4] open source
+ 25 files changed, 1286 insertions(+), 1070 deletions(-)
 sending incremental file list
 ./
 .gitignore
