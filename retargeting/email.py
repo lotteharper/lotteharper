@@ -1,4 +1,4 @@
-EMAIL_AFTER_DAYS = 3
+aEMAIL_AFTER_DAYS = 3
 
 def send_retargeting_email():
     from users.email import send_html_email
@@ -17,7 +17,7 @@ def send_retargeting_email():
     photo_url = None if not post else post.image_offsite if post.image_offsite else post.image_bucket.url if post.image_bucket else None
     days = 3
     for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__subscribed=True):
-        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60), youtube_processed=True).exclude(youtube_id=None).order_by('?')[:7]
+        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60)).order_by('?')[:7]
         html_message = render_to_string('retargeting/routine_retargeting_email.html', {
             'site_name': settings.SITE_NAME,
             'user': user,
@@ -47,7 +47,7 @@ def send_retargeting_emails():
     photo_url = None if not post else post.image_offsite if post.image_offsite else post.image_bucket.url if post.image_bucket else None
     days = 3
     for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
-        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60), youtube_processed=True).exclude(youtube_id=None).order_by('?')[:7]
+        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60)).order_by('?')[:7]
         html_message = render_to_string('retargeting/retargeting_email.html', {
             'site_name': settings.SITE_NAME,
             'user': user,
@@ -60,7 +60,7 @@ def send_retargeting_emails():
         send_html_email(user, 'Come back to {}, {}'.format(settings.SITE_NAME, user.username), html_message)
     days = 7
     for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
-        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60), youtube_processed=True).exclude(youtube_id=None).order_by('?')[:7]
+        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60)).order_by('?')[:7]
         html_message = render_to_string('retargeting/retargeting_email_2.html', {
             'site_name': settings.SITE_NAME,
             'user': user,
@@ -81,7 +81,7 @@ def send_retargeting_emails():
             send_user_text(user, 'Hey {}, it\'s been three weeks since you joined me on {}. Want to come back and see what\'s new? Visit {}'.format(user.username, settings.SITE_NAME, settings.BASE_URL))
     days = 30
     for user in User.objects.filter(is_active=True, profile__email_verified=True, profile__date_joined__lte=timezone.now() - timedelta(hours=24*days), profile__date_joined__gte=timezone.now() - timedelta(hours=24*(days+1)), profile__subscribed=True):
-        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60), youtube_processed=True).exclude(youtube_id=None).order_by('?')[:7]
+        videos = VideoRecording.objects.filter(user__id=settings.MY_ID, processed=True, uploaded=True, last_frame__gte=timezone.now() - datetime.timedelta(days=7), last_frame__lte=timezone.now() - datetime.timedelta(minutes=60)).order_by('?')[:7]
         html_message = render_to_string('retargeting/retargeting_email_3.html', {
             'site_name': settings.SITE_NAME,
             'user': user,
