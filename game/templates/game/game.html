@@ -1254,13 +1254,19 @@
       return null;
     }
 
+    function isWaterPoolColumn(x, z) {
+      const poolField = valueNoise3(x / 10, 0.2, z / 10, 29);
+      const poolShape = valueNoise3(x / 3.5, 0.2, z / 3.5, 31);
+      return poolField > 0.78 && poolShape > 0.38;
+    }
+
     // Natural terrain block (or null for air/caves) at a position.
     function generatedTerrainBlock(x, y, z) {
       if (y < WORLD_MIN_Y) return null;
 
       const top = terrainHeight(x, z);
       if (y >= top) return null;
-      if (y === 0 && top <= 2) {
+      if (top >= -1 && top <= 1 && y === top - 1 && isWaterPoolColumn(x, z)) {
         return { x, y, z, color: ITEM_DEFINITIONS.water.color, type: "water" };
       }
       if (isCaveAir(x, y, z, top)) return null;
@@ -1315,6 +1321,10 @@
 
     function blockType(block) {
       return block && (block.type || itemTypeFromColor(block.color));
+    }
+
+    function isCollidableBlock(block) {
+      return block !== null && blockType(block) !== "water";
     }
 
     function isThinBlock(block) {
@@ -1396,6 +1406,11 @@
     let touchMoveY = 0;
     let touchLookX = 0;
     let touchLookY = 0;
+    const touchJoystickResets = new Set();
+
+    function resetTouchJoysticks() {
+      for (const reset of touchJoystickResets) reset();
+    }
 
     let gamepadInventoryCursor = 0;
     let gamepadDragSource = null;
@@ -2008,6 +2023,7 @@
 
       if (inventoryOpen) {
         stopMining();
+        resetTouchJoysticks();
         if (document.pointerLockElement === canvas) {
           document.exitPointerLock?.();
         }
@@ -2814,7 +2830,7 @@
           for (let bz = minZ; bz <= maxZ; bz++) {
             const block = getBlock(bx, by, bz);
 
-            if (block && playerOverlapsBlock(x, feetY, z, block)) {
+            if (isCollidableBlock(block) && playerOverlapsBlock(x, feetY, z, block)) {
               return block;
             }
           }
@@ -2833,7 +2849,7 @@
 
       for (let y = scanTop; y >= WORLD_MIN_Y; y--) {
         const block = getBlock(bx, y, bz);
-        if (!block) continue;
+        if (!isCollidableBlock(block)) continue;
 
         // Thin blocks only support weight where their geometry actually is.
         if (block.type === "door" || block.type === "fence") {
@@ -2874,6 +2890,25 @@
       }
 
       return support;
+    }
+
+    function playerInWater() {
+      const minX = Math.floor(camera.pos[0] - PLAYER_HALF_WIDTH);
+      const maxX = Math.floor(camera.pos[0] + PLAYER_HALF_WIDTH);
+      const minZ = Math.floor(camera.pos[2] - PLAYER_HALF_WIDTH);
+      const maxZ = Math.floor(camera.pos[2] + PLAYER_HALF_WIDTH);
+      const minY = Math.floor(camera.pos[1] + 0.001);
+      const maxY = Math.floor(camera.pos[1] + PLAYER_HEIGHT - 0.001);
+
+      for (let x = minX; x <= maxX; x++) {
+        for (let y = minY; y <= maxY; y++) {
+          for (let z = minZ; z <= maxZ; z++) {
+            if (blockType(getBlock(x, y, z)) === "water") return true;
+          }
+        }
+      }
+
+      return false;
     }
 
     function tryHorizontalMove(dx, dz) {
@@ -2926,12 +2961,7 @@
         sideways /= divisor;
 
         const yaw = camera.rot[1];
-        const feetBlock = getBlock(
-          Math.floor(camera.pos[0]),
-          Math.floor(camera.pos[1] + 0.05),
-          Math.floor(camera.pos[2])
-        );
-        const distance = MOVE_SPEED * (feetBlock?.type === "water" ? 0.38 : 1) * dt;
+        const distance = MOVE_SPEED * (playerInWater() ? 0.62 : 1) * dt;
 
         const dx = (
           Math.sin(yaw) * forward +
@@ -2982,7 +3012,7 @@
         for (let z = minZ; z <= maxZ; z++) {
           for (let y = minY; y <= maxY; y++) {
             const block = getBlock(x, y, z);
-            if (!block) continue;
+            if (!isCollidableBlock(block)) continue;
 
             const bounds = blockBounds(block);
             const horizontalOverlap =
@@ -3369,6 +3399,12 @@
 
         if (!faceFacesCamera(center, [nx, ny, nz])) continue;
         if (isOpaqueCube(block.x + nx, block.y + ny, block.z + nz)) continue;
+        if (
+          type === "water" &&
+          blockType(getBlock(block.x + nx, block.y + ny, block.z + nz)) === "water"
+        ) {
+          continue;
+        }
 
         const polygon = clipNear(face.ids.map(index => vertices[index]));
         if (polygon.length < 3) continue;
@@ -3558,8 +3594,6 @@
         ctx.closePath();
         ctx.fillStyle = face.color;
         ctx.fill();
-        ctx.strokeStyle = "rgba(0,0,0,0.12)";
-        ctx.stroke();
       }
 
       ctx.restore();
@@ -3640,7 +3674,11 @@
         if (!wasChestOpen && chestOpen) event.stopPropagation();
       }
 
-      if (!chestOpen && document.pointerLockElement !== canvas) {
+      if (
+        event.pointerType !== "touch" &&
+        !chestOpen &&
+        document.pointerLockElement !== canvas
+      ) {
         canvas.requestPointerLock?.();
       }
     });
@@ -3671,6 +3709,7 @@
       if (!element) return;
 
       let activePointerId = null;
+      const knob = element.querySelector(".touch-stick-knob");
 
       function update(event) {
         const rect = element.getBoundingClientRect();
@@ -3688,7 +3727,6 @@
           dy *= factor;
         }
 
-        const knob = element.querySelector(".touch-stick-knob");
         knob.style.setProperty("--knob-x", `${dx}px`);
         knob.style.setProperty("--knob-y", `${dy}px`);
         onMove(dx / maxDistance, dy / maxDistance);
@@ -3709,20 +3747,28 @@
         update(event);
       });
 
-      function release(event) {
-        if (event.pointerId !== activePointerId) return;
-
+      function reset() {
         activePointerId = null;
-        const knob = element.querySelector(".touch-stick-knob");
         knob.style.setProperty("--knob-x", "0px");
         knob.style.setProperty("--knob-y", "0px");
         onRelease();
       }
 
+      function release(event) {
+        if (event.pointerId !== activePointerId) return;
+        reset();
+      }
+
       element.addEventListener("pointerup", release);
       element.addEventListener("pointercancel", release);
       element.addEventListener("lostpointercapture", release);
+      touchJoystickResets.add(reset);
     }
+
+    window.addEventListener("blur", resetTouchJoysticks);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) resetTouchJoysticks();
+    });
 
     bindVirtualJoystick(
       document.getElementById("moveStick"),
