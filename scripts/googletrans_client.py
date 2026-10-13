@@ -10,6 +10,8 @@ import re
 import json
 
 import httpcore
+setattr(httpcore, 'SyncHTTPTransport', 'AsyncHTTPProxy')
+
 import httpx
 from httpx import Timeout
 
@@ -26,8 +28,6 @@ from googletrans.models import Translated, Detected, TranslatedPart
 EXCLUDES = ('en', 'ca', 'fr')
 
 RPC_ID = 'MkEWBc'
-
-setattr(httpcore, 'SyncHTTPTransport', 'AsyncHTTPProxy')
 
 class Translator:
     """Google Translate ajax API implementation class

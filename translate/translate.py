@@ -268,8 +268,8 @@ def translate_html(request, html, target=None, src=None):
         async with Translator() as translator:
             async def one(i, text):
                 async with sem:
-                    result = await translator.translate(text, src=src, dest=dest)
-                    return i, result.text
+                    result = translate(request, text, target=dest, src=src) #await translator.translate(text, src=src, dest=dest)
+                    return i, result
 
             tasks = [one(i, text) for i, text in enumerate(fragments)]
             results = await asyncio.gather(*tasks, return_exceptions=True)

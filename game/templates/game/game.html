@@ -66,6 +66,19 @@
       pointer-events: none;
     }
 
+    #healthBar {
+      position: fixed;
+      top: 82px;
+      left: 8px;
+      z-index: 5;
+      padding: 6px 9px;
+      border-radius: 4px;
+      background: rgba(60, 20, 20, 0.78);
+      color: #ff8b8b;
+      font: bold 13px/1.2 sans-serif;
+      pointer-events: none;
+    }
+
     #fullscreenButton {
       position: fixed;
       top: calc(max(8px, env(safe-area-inset-top)) + 72px);
@@ -479,6 +492,7 @@
 
   <div id="coordinates" aria-label="Player coordinates">X 0.0 · Y 0.0 · Z 0.0</div>
   <div id="timeOfDay" aria-label="Time of day">Day 12:00</div>
+  <div id="healthBar" aria-label="Health">❤ 20 / 20</div>
 
   <button id="fullscreenButton" type="button" aria-pressed="false" title="Enter fullscreen">⛶ Fullscreen</button>
 
@@ -541,6 +555,7 @@
     const chestGrid = document.getElementById("chestGrid");
     const chestTitle = document.getElementById("chestTitle");
     const timeOfDayElement = document.getElementById("timeOfDay");
+    const healthBarElement = document.getElementById("healthBar");
     const inventoryGrid = document.getElementById("inventoryGrid");
     const craftingRecipesElement = document.getElementById("craftingRecipes");
     const craftStatusElement = document.getElementById("craftStatus");
@@ -753,6 +768,18 @@
       coal:          { name: "Coal",           color: "#252525" },
       torch:         { name: "Torch",          color: "#ffb52e", light: 1 },
       water:         { name: "Water",          color: "#1877d2" },
+      bucket:        { name: "Bucket",         color: "#a9b7c6" },
+      water_bucket:  { name: "Water Bucket",   color: "#4b91d1" },
+      grass:         { name: "Grass",          color: "#5e9e43" },
+      seeds:         { name: "Seeds",          color: "#d6b548" },
+      sapling:        { name: "Sapling",        color: "#4d9a3a" },
+      wheat:          { name: "Wheat",          color: "#e3c14d" },
+      bread:         { name: "Bread",          color: "#d69b4a" },
+      arrows:        { name: "Arrows",         color: "#d5d5d5" },
+      crop:          { name: "Wheat Crop",     color: "#7eaa38" },
+      flower_red:    { name: "Red Flower",     color: "#e34343" },
+      flower_yellow: { name: "Yellow Flower",  color: "#f2d447" },
+      flower_blue:   { name: "Blue Flower",    color: "#4b77dc" },
       chest:         { name: "Chest",          color: "#9b5b2e" },
       copper_ore:    { name: "Copper Ore",    color: "#c26f3d" },
       iron_ore:      { name: "Iron Ore",      color: "#cdb8a6" },
@@ -763,6 +790,12 @@
       gold_pickaxe:    { name: "Gold Pickaxe",    color: "#ffd54a" },
       diamond_pickaxe: { name: "Diamond Pickaxe", color: "#6cf0f2" }
     };
+    for (const tier of ["wood", "stone", "copper", "iron", "gold", "diamond"]) {
+      const ore = tier === "wood" ? "planks" : tier === "stone" ? "stone" : `${tier}_ore`;
+      ITEM_DEFINITIONS[`${tier}_shovel`] = { name: `${tier[0].toUpperCase() + tier.slice(1)} Shovel`, color: ITEM_DEFINITIONS[`${tier}_pickaxe`]?.color || "#9aa" };
+      ITEM_DEFINITIONS[`${tier}_sword`] = { name: `${tier[0].toUpperCase() + tier.slice(1)} Sword`, color: ITEM_DEFINITIONS[`${tier}_pickaxe`]?.color || "#9aa" };
+    }
+    ITEM_DEFINITIONS.bow = { name: "Bow", color: "#9b6738" };
 
     // ---------------------------------------------------------------------
     // Tool tiers and ore requirements
@@ -787,6 +820,10 @@
       wood_axe: 1,
       stone_axe: 2
     };
+    for (const tier of ["wood", "stone", "copper", "iron", "gold", "diamond"]) {
+      TOOL_TIERS[`${tier}_shovel`] = PICKAXE_TIERS[`${tier}_pickaxe`];
+      TOOL_TIERS[`${tier}_sword`] = PICKAXE_TIERS[`${tier}_pickaxe`];
+    }
 
     const ORE_REQUIRED_TIER = {
       coal: 1,
@@ -803,12 +840,16 @@
     }
 
     function isToolType(type) {
-      return type in TOOL_TIERS;
+      return type in TOOL_TIERS || type === "bow" || type === "arrows" ||
+        type === "bucket" || type === "water_bucket";
     }
 
     function itemIcon(type) {
-      if (!isToolType(type)) return "";
-      return /_axe$/.test(type) ? "🪓" : "⛏";
+      if (!isToolType(type)) return type === "bow" ? "🏹" : "";
+      if (/_axe$/.test(type)) return "🪓";
+      if (/_shovel$/.test(type)) return "🛠";
+      if (/_sword$/.test(type)) return "⚔";
+      return "⛏";
     }
 
     function itemInfoText(type) {
@@ -817,7 +858,7 @@
       }
 
       if (type in TOOL_TIERS) {
-        return `Axe tier ${TOOL_TIERS[type]} of ${Math.max(...Object.values(TOOL_TIERS))}`;
+        return `Tier ${TOOL_TIERS[type]} tool`;
       }
 
       if (type in ORE_REQUIRED_TIER) {
@@ -888,6 +929,18 @@
         ingredients: { stone: 3, sticks: 2 },
         output: { type: "stone_axe", count: 1 }
       },
+      ...["wood", "stone", "copper", "iron", "gold", "diamond"].flatMap(tier => {
+        const material = tier === "wood" ? "planks" : tier === "stone" ? "stone" : `${tier}_ore`;
+        return [
+          { id: `${tier}_shovel`, label: `${tier[0].toUpperCase() + tier.slice(1)} Shovel`, ingredients: { [material]: 1, sticks: 2 }, output: { type: `${tier}_shovel`, count: 1 } },
+          { id: `${tier}_sword`, label: `${tier[0].toUpperCase() + tier.slice(1)} Sword`, ingredients: { [material]: 2, sticks: 1 }, output: { type: `${tier}_sword`, count: 1 } }
+        ];
+      }),
+      { id: "bow", label: "Bow", ingredients: { planks: 3, sticks: 3 }, output: { type: "bow", count: 1 } },
+      { id: "arrows", label: "4 Arrows", ingredients: { stone: 1, sticks: 1 }, output: { type: "arrows", count: 4 } },
+      { id: "bucket_copper", label: "Bucket", ingredients: { copper_ore: 3 }, output: { type: "bucket", count: 1 } },
+      { id: "bucket_iron", label: "Bucket", ingredients: { iron_ore: 3 }, output: { type: "bucket", count: 1 } },
+      { id: "bread", label: "Bread", ingredients: { wheat: 3 }, output: { type: "bread", count: 1 } },
       {
         id: "door",
         label: "3 Doors",
@@ -984,18 +1037,19 @@
     // in radians (0 = closed, PI/2 = open). The panel pivots about the hinge
     // post at the cell corner, so an open door lies flush with the hinge side.
     function doorFootprint(state, angle) {
-      const pivot = DOOR_THICKNESS / 2;
-      const cosine = Math.cos(angle);
-      const sine = Math.sin(angle);
+      const hingeX = state.hingeRight ? 1 : 0;
+      const swingAngle = angle * (state.hingeRight ? -1 : 1);
+      const cosine = Math.cos(swingAngle);
+      const sine = Math.sin(swingAngle);
       const corners = [
         [0, 0], [1, 0], [1, DOOR_THICKNESS], [0, DOOR_THICKNESS]
       ];
 
       return corners.map(([u, v]) => {
-        let x = pivot + (u - pivot) * cosine - (v - pivot) * sine;
-        let z = pivot + (u - pivot) * sine + (v - pivot) * cosine;
-
-        if (state.hingeRight) x = 1 - x;
+        const x = hingeX + (u - hingeX) * cosine -
+          (v - DOOR_THICKNESS / 2) * sine;
+        const z = DOOR_THICKNESS / 2 + (u - hingeX) * sine +
+          (v - DOOR_THICKNESS / 2) * cosine;
 
         switch (state.facing) {
           case 1: return [1 - z, x];
@@ -1281,9 +1335,30 @@
         x,
         y,
         z,
-        color: terrainColor(y),
+        color: y === top - 1 ? ITEM_DEFINITIONS.grass.color : terrainColor(y),
         type: "dirt"
       };
+    }
+
+    function generatedFlower(x, y, z) {
+      const top = terrainHeight(x, z);
+      if (y !== top || top < 0 || isWaterPoolColumn(x, z)) return null;
+      const chance = hash3(x, 0, z, 71);
+      if (chance > 0.965) {
+        const types = ["flower_red", "flower_yellow", "flower_blue"];
+        const type = types[Math.floor(hash3(x, 1, z, 73) * types.length)];
+        return { x, y, z, color: ITEM_DEFINITIONS[type].color, type };
+      }
+      return null;
+    }
+
+    function generatedGrass(x, y, z) {
+      const top = terrainHeight(x, z);
+      if (y !== top || top < 0 || isWaterPoolColumn(x, z)) return null;
+      if (hash3(x, 0, z, 79) > 0.92) {
+        return { x, y, z, color: ITEM_DEFINITIONS.grass.color, type: "grass" };
+      }
+      return null;
     }
 
     // ---------------------------------------------------------------------
@@ -1292,6 +1367,8 @@
     const placedBlocks = new Map();
     // Null entries are tombstones for mined blocks.
     const blockEdits = new Map();
+    const cropStates = new Map();
+    const saplingStates = new Map();
 
     function blockKey(x, y, z) {
       return `${x},${y},${z}`;
@@ -1312,7 +1389,8 @@
         return generatedTerrainBlock(x, y, z);
       }
 
-      return generatedTreeBlock(x, y, z);
+      return generatedGrass(x, y, z) || generatedFlower(x, y, z) ||
+        generatedTreeBlock(x, y, z);
     }
 
     function isSolid(x, y, z) {
@@ -1324,7 +1402,10 @@
     }
 
     function isCollidableBlock(block) {
-      return block !== null && blockType(block) !== "water";
+      return block !== null && ![
+        "water", "torch", "grass", "flower_red", "flower_yellow",
+        "flower_blue", "crop", "sapling"
+      ].includes(blockType(block));
     }
 
     function isThinBlock(block) {
@@ -1332,7 +1413,13 @@
       return type === "door" ||
         type === "fence" ||
         type === "torch" ||
-        type === "water";
+        type === "water" ||
+        type === "grass" ||
+        type === "crop" ||
+        type === "flower_red" ||
+        type === "flower_yellow" ||
+        type === "flower_blue" ||
+        type === "sapling";
     }
 
     // Doors are thin, so they do not hide the faces of neighboring blocks.
@@ -1393,10 +1480,99 @@
     const pendingWorldEdits = new Map();
 
     let selectedSlot = 0;
+    const MAX_HEALTH = 20;
+    let playerHealth = MAX_HEALTH;
+    let lastDamageAt = -Infinity;
+    let lastHealthRegenAt = 0;
     let inventoryOpen = false;
     let chestOpen = false;
     let activeChestKey = null;
     let jumpRequested = false;
+
+    function updateHealthBar() {
+      healthBarElement.textContent = `❤ ${Math.ceil(playerHealth)} / ${MAX_HEALTH}`;
+      healthBarElement.style.color = playerHealth <= 5 ? "#ff4b4b" : "#ff9a9a";
+    }
+
+    function takeDamage(amount) {
+      const now = performance.now();
+      if (now - lastDamageAt < 650 || playerHealth <= 0) return;
+      lastDamageAt = now;
+      playerHealth = Math.max(0, playerHealth - amount);
+      updateHealthBar();
+      if (playerHealth === 0) {
+        playerHealth = MAX_HEALTH;
+        camera.pos = [0, terrainHeight(0, -10), -10];
+        camera.velocityY = 0;
+        showToast("You fainted and woke up at spawn.");
+      }
+    }
+
+    function heal(amount) {
+      playerHealth = Math.min(MAX_HEALTH, playerHealth + amount);
+      updateHealthBar();
+    }
+
+    function cropHasWater(x, y, z) {
+      for (let dx = -4; dx <= 4; dx++) {
+        for (let dz = -4; dz <= 4; dz++) {
+          if (Math.abs(dx) + Math.abs(dz) <= 4 &&
+              blockType(getBlock(x + dx, y - 1, z + dz)) === "water") return true;
+        }
+      }
+      return false;
+    }
+
+    let lastCropGrowthAt = 0;
+    function updateCrops(now) {
+      if (now - lastCropGrowthAt < 1000) return;
+      lastCropGrowthAt = now;
+      for (const [key, stage] of cropStates) {
+        const [x, y, z] = key.split(",").map(Number);
+        if (stage < 7 && cropHasWater(x, y, z)) cropStates.set(key, stage + 1);
+      }
+    }
+
+    let lastSaplingGrowthAt = 0;
+    function growSaplings(now) {
+      if (now - lastSaplingGrowthAt < 1000) return;
+      lastSaplingGrowthAt = now;
+
+      for (const [key, plantedAt] of saplingStates) {
+        if (now - plantedAt < 8000) continue;
+        const [x, y, z] = key.split(",").map(Number);
+        const height = 3 + Math.floor(hash3(x, y, z, 83) * 3);
+        const trunkTop = y + height;
+        const edits = [];
+
+        for (let trunkY = y; trunkY < trunkTop; trunkY++) {
+          edits.push({ x, y: trunkY, z, color: ITEM_DEFINITIONS.log.color });
+        }
+        for (let dx = -2; dx <= 2; dx++) {
+          for (let dz = -2; dz <= 2; dz++) {
+            for (let dy = 0; dy <= 2; dy++) {
+              if (Math.abs(dx) + Math.abs(dz) + Math.max(0, dy - 1) > 3) continue;
+              const leafX = x + dx;
+              const leafY = trunkTop + dy;
+              const leafZ = z + dz;
+              if (getBlock(leafX, leafY, leafZ)) continue;
+              edits.push({
+                x: leafX, y: leafY, z: leafZ, color: ITEM_DEFINITIONS.leaves.color
+              });
+            }
+          }
+        }
+
+        removeBlock(x, y, z);
+        for (const edit of edits) {
+          blockEdits.set(blockKey(edit.x, edit.y, edit.z), {
+            ...edit, type: itemTypeFromColor(edit.color)
+          });
+          sendWorldEdit(edit.x, edit.y, edit.z, edit.color);
+        }
+        saplingStates.delete(key);
+      }
+    }
 
     let gamepadMoveX = 0;
     let gamepadMoveY = 0;
@@ -2316,6 +2492,11 @@
           return;
         }
 
+        if (message.type === "damage" && Number.isFinite(message.amount)) {
+          takeDamage(Math.max(0, Math.min(20, message.amount)));
+          return;
+        }
+
         if (message.type === "world_edit" && message.edit) {
           const edit = message.edit;
 
@@ -2612,13 +2793,36 @@
         return;
       }
 
-      if (
-        !block ||
-        !addToInventory(
-          block.color,
-          block.type || itemTypeFromColor(block.color)
-        )
-      ) {
+      if (targetType === "crop") {
+        const stage = cropStates.get(key) || 0;
+        if (stage >= 7) {
+          addToInventory(ITEM_DEFINITIONS.wheat.color, "wheat");
+          addToInventory(ITEM_DEFINITIONS.seeds.color, "seeds");
+        } else {
+          addToInventory(ITEM_DEFINITIONS.seeds.color, "seeds");
+        }
+        cropStates.delete(key);
+      } else if (targetType === "flower_red" || targetType === "flower_yellow" ||
+                 targetType === "flower_blue") {
+        addToInventory(block.color, targetType);
+      } else if (targetType === "grass") {
+        addToInventory(block.color, targetType);
+        addToInventory(ITEM_DEFINITIONS.seeds.color, "seeds");
+      } else if (targetType === "leaves") {
+        addToInventory(block.color, "leaves");
+        if (Math.random() < 0.6) {
+          addToInventory(ITEM_DEFINITIONS.sapling.color, "sapling");
+        }
+      }
+
+      const specialHarvest = targetType === "crop" ||
+        targetType === "flower_red" || targetType === "flower_yellow" ||
+        targetType === "flower_blue" || targetType === "grass" ||
+        targetType === "leaves";
+      if (!specialHarvest && (!block || !addToInventory(
+        block.color,
+        block.type || itemTypeFromColor(block.color)
+      ))) {
         stopMining();
         return;
       }
@@ -2700,6 +2904,67 @@
         : null;
     }
 
+    function attackTarget() {
+      const item = inventory[selectedSlot];
+      const type = item ? (item.type || itemTypeFromColor(item.color)) : "hand";
+      const isBow = type === "bow";
+      const isWeapon = type === "hand" || /_sword$/.test(type) || isBow;
+      if (!isWeapon) return false;
+      if (isBow) {
+        if (!item || countInventoryItem("arrows") < 1) {
+          showToast("You need arrows for the bow.");
+          return true;
+        }
+        const arrow = inventory.findIndex(entry =>
+          entry && (entry.type || itemTypeFromColor(entry.color)) === "arrows");
+        inventory[arrow].count--;
+        if (!inventory[arrow].count) inventory[arrow] = null;
+        syncInventory();
+      }
+      const yaw = camera.rot[1];
+      const pitch = camera.rot[0];
+      const direction = [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch),
+        Math.cos(yaw) * Math.cos(pitch)];
+      let target = null;
+      let best = isBow ? 18 : 3.2;
+      for (const [id, position] of remotePlayers) {
+        const delta = [position.x - camera.pos[0], position.y + 0.9 -
+          (camera.pos[1] + EYE_HEIGHT), position.z - camera.pos[2]];
+        const distance = Math.hypot(...delta);
+        const dot = (delta[0] * direction[0] + delta[1] * direction[1] +
+          delta[2] * direction[2]) / (distance || 1);
+        if (dot > 0.94 && distance < best) {
+          best = distance;
+          target = id;
+        }
+      }
+      if (target) {
+        const damage = isBow ? 5 : type === "hand" ? 1 :
+          2 + (TOOL_TIERS[type] || 1);
+        if (worldSocket?.readyState === WebSocket.OPEN) {
+          worldSocket.send(JSON.stringify({
+            type: "combat", target_id: target, damage
+          }));
+        }
+        showToast(`${isBow ? "Arrow" : "Hit"} struck ${target}.`);
+      }
+      return true;
+    }
+
+    function useHeldFood() {
+      const item = inventory[selectedSlot];
+      if (!item) return false;
+      let type = item.type || itemTypeFromColor(item.color);
+      if (type !== "bread") return false;
+      if (playerHealth >= MAX_HEALTH) return true;
+      heal(6);
+      item.count--;
+      if (!item.count) inventory[selectedSlot] = null;
+      renderInventory();
+      syncInventory();
+      return true;
+    }
+
     // Interact key (F): toggle the door under the crosshair, if any.
     function useTarget() {
       if (inventoryOpen || chestOpen) return;
@@ -2720,13 +2985,12 @@
       if (now - lastSuccessfulPlacementAt < PLACE_COOLDOWN_MS) return;
 
       const result = raycast();
-
-      // Using (place/left-click, touch Place, gamepad trigger) on a door
-      // swings it open or closed instead of placing a block.
       if (result) {
         const [hx, hy, hz] = result.hit;
         const hitBlock = getBlock(hx, hy, hz);
 
+        // Door and chest interaction does not depend on the selected item, so
+        // clicking or tapping still works with an empty hand.
         if (hitBlock && hitBlock.type === "door") {
           if (toggleDoor(hx, hy, hz)) lastSuccessfulPlacementAt = now;
           return;
@@ -2737,22 +3001,69 @@
         }
       }
 
+      const held = inventory[selectedSlot];
+      const heldType = held ? (held.type || itemTypeFromColor(held.color)) : "hand";
+      if (!held || heldType === "bow" || /_sword$/.test(heldType)) {
+        attackTarget();
+        lastSuccessfulPlacementAt = now;
+        return;
+      }
+
       const item = inventory[selectedSlot];
-      if (!item || item.count <= 0) return;
+      if (useHeldFood()) return;
+      if (!item || item.count <= 0) {
+        attackTarget();
+        return;
+      }
       if (!result || !result.previous) return;
 
-      const type = item.type || itemTypeFromColor(item.color);
+      let type = item.type || itemTypeFromColor(item.color);
 
       if (isToolType(type)) {
+        if (type === "bucket" || type === "water_bucket") {
+          const [hx, hy, hz] = result.hit;
+          const hitBlock = getBlock(hx, hy, hz);
+          if (type === "bucket" && hitBlock?.type === "water") {
+            item.type = "water_bucket";
+            item.color = ITEM_DEFINITIONS.water_bucket.color;
+            renderInventory();
+            syncInventory();
+            showToast("Water collected without removing the source.");
+          } else if (type === "water_bucket") {
+            const [wx, wy, wz] = hitBlock?.type === "water"
+              ? [hx, hy, hz] : result.previous;
+            if (wx !== undefined) {
+              blockEdits.set(blockKey(wx, wy, wz),
+                { x: wx, y: wy, z: wz, color: ITEM_DEFINITIONS.water.color, type: "water" });
+              sendWorldEdit(wx, wy, wz, ITEM_DEFINITIONS.water.color);
+              item.type = "bucket";
+              item.color = ITEM_DEFINITIONS.bucket.color;
+              renderInventory();
+              syncInventory();
+            }
+          }
+          return;
+        }
         showToast("Tools can't be placed — switch to a block.");
         return;
       }
 
-      const [x, y, z] = result.previous;
-      if (isSolid(x, y, z)) return;
+      const hit = getBlock(...result.hit);
+      const [x, y, z] = hit?.type === "water" ? result.hit : result.previous;
+      if (isSolid(x, y, z) && blockType(getBlock(x, y, z)) !== "water") return;
       if (type === "door" && isSolid(x, y + 1, z)) return;
 
-      let color = item.color;
+      if (type === "seeds") {
+        if (y <= WORLD_MIN_Y || !cropHasWater(x, y, z)) {
+          showToast("Wheat must be planted beside water.");
+          return;
+        }
+        cropStates.set(blockKey(x, y, z), 0);
+        type = "crop";
+      } else if (type === "sapling") {
+        saplingStates.set(blockKey(x, y, z), performance.now());
+      }
+      let color = type === "crop" ? ITEM_DEFINITIONS.crop.color : item.color;
       let bounds = { minX: x, maxX: x + 1, minZ: z, maxZ: z + 1 };
 
       if (type === "door") {
@@ -2995,6 +3306,7 @@
       );
 
       if (camera.velocityY <= 0 && camera.pos[1] <= support) {
+        if (camera.velocityY < -11) takeDamage(Math.min(6, Math.ceil((-camera.velocityY - 10) / 2)));
         camera.pos[1] = support;
         camera.velocityY = 0;
         camera.grounded = true;
@@ -3249,9 +3561,10 @@
 
     function addDoorFaces(faces, block) {
       const state = doorStateFromColor(block.color);
-      if (!state) return;
+      if (!state || state.upper) return;
 
       const key = blockKey(block.x, block.y, block.z);
+      const hasUpperHalf = Boolean(doorPartner(block.x, block.y, block.z));
       const target = state.open ? 1 : 0;
       let swing = doorSwing.get(key);
 
@@ -3278,7 +3591,7 @@
         camera.pos[0], camera.pos[1] + EYE_HEIGHT, camera.pos[2]
       ];
       const y0 = block.y;
-      const y1 = block.y + 1;
+      const y1 = block.y + (hasUpperHalf ? 2 : 1);
 
       const pushQuad = (points, normal, shade) => {
         const center = points.reduce(
@@ -3330,6 +3643,25 @@
         );
       }
 
+      const a = corners[0];
+      const b = corners[1];
+      const edgeX = b[0] - a[0];
+      const edgeZ = b[1] - a[1];
+      const panelNormal = [edgeZ, 0, -edgeX];
+      const panelPoints = [
+        [corners[0][0], y0, corners[0][1]],
+        [corners[1][0], y0, corners[1][1]],
+        [corners[1][0], y1, corners[1][1]],
+        [corners[0][0], y1, corners[0][1]]
+      ];
+
+      // A door has two broad faces in addition to its thin edge faces. Draw
+      // both sides so it remains visible when the camera is close to or
+      // passing through the panel.
+      pushQuad(panelPoints, panelNormal, 0.92);
+      pushQuad(panelPoints.slice().reverse(),
+        [-panelNormal[0], 0, -panelNormal[2]], 0.82);
+
       pushQuad(corners.map(c => [c[0], y1, c[1]]), [0, 1, 0], 1.12);
       pushQuad(corners.map(c => [c[0], y0, c[1]]), [0, -1, 0], 0.62);
     }
@@ -3367,8 +3699,42 @@
       }
     }
 
+    function addCrossFaces(faces, block) {
+      const type = blockType(block);
+      const stage = type === "crop" ? (cropStates.get(blockKey(block.x, block.y, block.z)) || 0) : 1;
+      const height = type === "crop" ? 0.25 + stage * 0.1 : 0.72;
+      const color = type === "crop"
+        ? (stage >= 7 ? "#d6b63e" : "#6c9f32")
+        : block.color;
+      const y0 = block.y;
+      const y1 = y0 + height;
+      const quads = [
+        [[block.x + 0.12, y0, block.z + 0.12], [block.x + 0.88, y0, block.z + 0.88],
+          [block.x + 0.88, y1, block.z + 0.88], [block.x + 0.12, y1, block.z + 0.12]],
+        [[block.x + 0.88, y0, block.z + 0.12], [block.x + 0.12, y0, block.z + 0.88],
+          [block.x + 0.12, y1, block.z + 0.88], [block.x + 0.88, y1, block.z + 0.12]]
+      ];
+      for (const points of quads) {
+        const polygon = clipNear(points.map(worldToCamera));
+        if (polygon.length >= 3) {
+          faces.push({
+            depth: polygon.reduce((sum, vertex) => sum + vertex[2], 0) / polygon.length,
+            points: polygon,
+            color: shadeColor(color, 1)
+          });
+        }
+      }
+    }
+
     function addCubeFaces(faces, block) {
       const type = blockType(block);
+
+      if (type === "flower_red" || type === "flower_yellow" ||
+          type === "flower_blue" || type === "grass" ||
+          type === "sapling" || type === "crop") {
+        addCrossFaces(faces, block);
+        return;
+      }
 
       if (type === "door" && doorStateFromColor(block.color)) {
         addDoorFaces(faces, block);
@@ -3666,7 +4032,13 @@
 
       if (event.button === 2) {
         event.preventDefault();
-        startMining("mouse");
+        const held = inventory[selectedSlot];
+        const heldType = held ? (held.type || itemTypeFromColor(held.color)) : "hand";
+        if (heldType === "seeds") {
+          placeBlock();
+        } else {
+          startMining("mouse");
+        }
       } else if (event.button === 0) {
         event.preventDefault();
         const wasChestOpen = chestOpen;
@@ -4050,6 +4422,11 @@
           return;
         }
 
+        if (message.type === "damage" && Number.isFinite(message.amount)) {
+          takeDamage(Math.max(0, Math.min(20, message.amount)));
+          return;
+        }
+
         if (message.type === "world_edit" && message.edit) {
           const edit = message.edit;
 
@@ -4097,6 +4474,7 @@
     // Initialize
     // ---------------------------------------------------------------------
     renderInventory();
+    updateHealthBar();
     updateCoordinates();
     connectWorldSocket();
 
@@ -4118,6 +4496,13 @@
       }
 
       updatePhysics(dt);
+      if (now - lastDamageAt > 4000 && now - lastHealthRegenAt > 1000 &&
+          playerHealth < MAX_HEALTH) {
+        lastHealthRegenAt = now;
+        heal(1);
+      }
+      updateCrops(now);
+      growSaplings(now);
       updateMining(now);
       syncPlayerPosition(now);
       updateCoordinates();
