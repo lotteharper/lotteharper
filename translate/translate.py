@@ -37,14 +37,27 @@ import asyncio
 from googletrans import Translator
 
 def trans(src, target, segments):
+    content = ','.join(segments)
+    import hashlib
+    from django.core.cache import cache
+    global TRANSLATION_CACHE_TIMEOUT
+    global SEPERATOR
+    hash_object = hashlib.md5(content.encode('utf-8'))
+    src_hash = hash_object.hexdigest()
+    cache_key = f"translation:{src}:{target}:{src_hash}"
+    db_key = f"{src}:{target}:{src_hash}"
+    translation = cache.get(cache_key)
+    if translation is not None:
+        return translation.split(SEPARATOR)
+
     results = [None] * len(segments)
 
     def thread(target, src, to_trans, count, results):
         try:
             if to_trans != None and to_trans != '':
                 translator = Translator()
-                translated = translator.translate(to_trans, src=src, dest=target).text
-                results[count] = translated
+                translated = translator.translate(to_trans, src=src, dest=target)
+                results[count] = translated.text
         except:
             print(traceback.format_exc())
             pass
@@ -56,8 +69,8 @@ def trans(src, target, segments):
         threads.append(t)
     for thread in threads:
         thread.join()
+    cache.set(cache_key, SEPARATOR.join(results), timeout=TRANSLATION_CACHE_TIMEOUT)
     return results
-
 
 
 def translate(request, content, target=None, src=None):
@@ -115,8 +128,8 @@ def translate(request, content, target=None, src=None):
     if translation is not None:
         return translation
     from .models import CachedTranslation
-    trans = CachedTranslation.objects.filter(src_hash=db_key).order_by('timestamp').first()
-    if trans: return trans.dest_content
+    transla = CachedTranslation.objects.filter(src_hash=db_key).order_by('timestamp').first()
+    if transla: return transla.dest_content
     text = ''
     pronunciation = ''
     content = content.replace('\n', '<br/>')
@@ -198,9 +211,9 @@ def translate_html(request, html, target=None, src=None):
     if translation is not None:
         return translation
 
-    trans = CachedTranslation.objects.filter(src_hash=db_key).order_by("timestamp").first()
-    if trans:
-        return trans.dest_content
+    transla = CachedTranslation.objects.filter(src_hash=db_key).order_by("timestamp").first()
+    if transla:
+        return transla.dest_content
 
     soup = BeautifulSoup(html, "html.parser")
 
@@ -287,7 +300,7 @@ def translate_html(request, html, target=None, src=None):
             # Preserve alignment with placeholders
             translated_parts.extend([""] * len(batches[len(translated_parts) if False else 0]))
         else:
-            _, translated_text = item
+            translated_text = item
             translated_parts.extend(unbatch_strings(translated_text))
 
     # Keep exact alignment with extracted items
@@ -428,7 +441,7 @@ def translate_multiple(request, split, target=None, src=None):
         if isinstance(item, Exception):
             translated_batches.append("")
         else:
-            _, translated_text = item
+            translated_text = item
             translated_batches.append(translated_text)
 
     result_arr = []

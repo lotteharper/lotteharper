@@ -3720,7 +3720,7 @@
           faces.push({
             depth: polygon.reduce((sum, vertex) => sum + vertex[2], 0) / polygon.length,
             points: polygon,
-            color: shadeColor(color, 1)
+            color: shadeColor(color, worldLight)
           });
         }
       }
