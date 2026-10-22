@@ -16,6 +16,7 @@ vendor_urls = ['/feed/grid/',
     '/feed/follow/',
     '/payments/photo/crypto/',
     '/payments/crypto/',
+    '/booking/',
     '/@'
 ]
 
