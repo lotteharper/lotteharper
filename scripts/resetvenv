@@ -16,19 +16,19 @@ pip3 install distutils
 # Get and build dependencies
 echo "Getting and building dependencies, this may take a whike"
 cd $DIR
-cd violence-detection
-pip3 install -r requirements.txt
-cd $DIR
+#cd violence-detection
+#pip3 install -r requirements.txt
+#cd $DIR
 cd dlib
 source venv-new/bin/activate
-python setup.py install
+python3 setup.py install
 cd $DIR
 source venv-new/bin/activate
 cd $DIR/GFPGAN/
 echo "Installing python dependencies"
 pip install basicsr
 pip install facexlib
-pip install -r requirements.txt
+pip install -r reqs.txt
 python setup.py develop
 cd $DIR
 source venv-new/bin/activate
@@ -45,13 +45,10 @@ pip3 install channels["daphne"]
 pip3 install Pillow==9.5.0
 pip3 install librosa
 pip3 install -U 'Twisted[tls,http2]'
-pip3 install tensorflow[and-cuda]
-pip3 install tensorrt==10.0.1
 pip3 install setuptools==69.5.1
 pip3 install nudepy==0.4
 pip3 install torch==2.2.0
 pip3 install torchvision==0.17.0
-pip3 install tensorflow[and-cuda]
 pip3 install googletrans==4.0.0-rc1
 pip3 install git+https://github.com/IPQualityScore/PythonIPQSDBReader
 pip3 install --pre torch-tensorrt --index-url https://download.pytorch.org/whl/nightly/cu124
@@ -81,6 +78,7 @@ sudo pkill python3
 sudo rm venv/bin/python
 sudo rm venv/bin/python3
 python -m venv venv
+ln -s /home/team/lotteh/venv/bin/python /usr/bin/python
 source venv/bin/activate
 python manage.py check
 #sudo startservices

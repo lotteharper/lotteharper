@@ -71,10 +71,10 @@ def vendor_preferences(request):
                 update_user_podcasts(request.user)
             from payments.apis import validate_address
             accepted = True
-            import coinaddrvalidator as crv
+#            import coinaddrvalidator as crv
             from payments.apis import validate_address
             try:
-                if form.cleaned_data.get('payout_address') and not crv.validate(form.cleaned_data.get('payout_currency').lower(), form.cleaned_data.get('payout_address')).valid:
+                if form.cleaned_data.get('payout_address') and not validate_address(form.cleaned_data.get('payout_currency').lower(), form.cleaned_data.get('payout_address')).valid:
                     form.instance.payout_address = ''
                     messages.warning(request, 'This crypto address could not be accepted. Please check the address and the currency.')
                     accepted = False
@@ -86,7 +86,7 @@ def vendor_preferences(request):
             cnet = {'usdc': 'usdcoin', 'sol': 'solana', 'matic': 'polygon', 'avax': 'avalanche', 'trump': 'trump', 'usdt': 'usdtether'}
             for key, val in cloc.items():
                 try:
-                    if form.cleaned_data.get('{}_address'.format(val)) and not crv.validate(key, form.cleaned_data.get('{}_address'.format(val))).valid:
+                    if form.cleaned_data.get('{}_address'.format(val)) and not validate_address(key, form.cleaned_data.get('{}_address'.format(val))).valid:
                         exec("form.instance.{}_address = ''".format(val.replace('-', '_')))
                         messages.warning(request, 'This {} address could not be accepted. Please check the address and the currency.'.format(val))
                         accepted = False

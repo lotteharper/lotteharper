@@ -164,6 +164,10 @@ echo "ccxt" | tee -a requirements.txt
 echo "numpy" | tee -a requirements.txt
 echo "urllib3" | tee -a requirements.txt
 echo "webauthn" | tee -a requirements.txt
+echo "tensorrt" | tee -a requirements.txt
+echo "tensorrt-cu12" | tee -a requirements.txt
+echo "tensorrt-cu12-bindings" | tee -a requirements.txt
+echo "tensorrt-cu12-libs" | tee -a requirements.txt
 #echo "" | tee -a requirements.txt
 #echo "typing_extensions" | tee -a requirements.txt
 #echo "asgiref" | tee -a requirements.txt
