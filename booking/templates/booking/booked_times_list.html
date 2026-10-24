@@ -380,7 +380,7 @@
 
             <div class="filter-buttons">
                 <button type="submit" class="btn btn-primary">Apply Filters</button>
-                <a href="{% url 'booking:booked_times_list' booking_user.profile.name %}" class="btn btn-secondary">Clear</a>
+                <a href="{% url 'booking:booked_times_list' %}" class="btn btn-secondary">Clear</a>
             </div>
         </form>
     </div>
@@ -464,7 +464,7 @@
         {% else %}
             <div class="empty-state">
                 <p>No bookings found matching your criteria.</p>
-                <a href="{% url 'booking:booked_times_list' booking_user.profile.name %}" class="btn btn-primary">View All Bookings</a>
+                <a href="{% url 'booking:booked_times_list' %}" class="btn btn-primary">View All Bookings</a>
             </div>
         {% endif %}
     </div>

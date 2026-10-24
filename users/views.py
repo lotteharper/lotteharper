@@ -71,7 +71,7 @@ def google_auth_callback(request):
     import json
     url_working = settings.BASE_URL + unquote(request.get_full_path())
     if request.method == 'POST':
-        email, token, refresh = parse_callback_url(request, request.user.id, url_working)
+        email, token, refresh = parse_callback_url(request, request.user.id, request.POST.get('auth'))
         print(email)
         from django.contrib import messages
         messages.success(request, 'Successfully linked a YouTube account')
@@ -90,9 +90,10 @@ def google_pub_auth_callback(request):
     authorization_code = None
     import json
     url_working = settings.BASE_URL + unquote(request.get_full_path())
-    print(url_working)
+#    print(url_working)
     if request.method == 'POST':
-        email, name, picture, token, refresh = parse_pub_callback_url(request, url_working)
+        print(request.POST.get('auth'))
+        email, name, picture, token, refresh = parse_pub_callback_url(request, request.POST.get('auth'))
         from django.contrib.auth.models import User
         user = User.objects.filter(email=email).order_by('-profile__last_seen').first() if not request.user.is_authenticated else request.user
         if not user:

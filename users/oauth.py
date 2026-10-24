@@ -19,6 +19,8 @@ def get_imgur_url():
     url = 'https://api.imgur.com/oauth2/authorize?client_id={}&response_type=token&state={}'.format(settings.IMGUR_ID, str(uuid.uuid4()))
     return url
 
+from django.utils.crypto import get_random_string
+
 def get_auth_url(request, email):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(str(os.path.join(settings.BASE_DIR, 'client_secret.json')),
     scopes=['https://www.googleapis.com/auth/youtube.force-ssl',
@@ -27,6 +29,8 @@ def get_auth_url(request, email):
         'https://www.googleapis.com/auth/userinfo.email',
         'openid',
    ])
+    request.session['code_verifier'] = get_random_string(length=100)
+    flow.code_verifier = request.session['code_verifier']
     flow.redirect_uri = settings.BASE_URL + reverse('users:oauth')
     authorization_url, state = None, None
     if email:
@@ -49,6 +53,8 @@ def get_pub_auth_url(request, email):
         'https://www.googleapis.com/auth/userinfo.profile',
         'openid',
     ])
+    request.session['code_verifier'] = get_random_string(length=100)
+    flow.code_verifier = request.session['code_verifier']
     flow.redirect_uri = settings.BASE_URL + reverse('users:google-auth-callback')
     authorization_url, state = None, None
     if email:
@@ -101,6 +107,7 @@ def parse_callback_url(request, user_id, response):
     flow.redirect_uri = settings.BASE_URL + reverse('users:oauth')
     from urllib.parse import unquote_plus
     import json
+    flow.code_verifier = request.session['code_verifier']
     flow.fetch_token(authorization_response=response) #json.dumps(request.GET.dict()))
     credentials = flow.credentials
     from recordings.youtube import save_credentials
@@ -124,6 +131,7 @@ def parse_pub_callback_url(request, response):
     flow.redirect_uri = settings.BASE_URL + reverse('users:google-auth-callback')
     from urllib.parse import unquote_plus
     import json
+    flow.code_verifier = request.session['code_verifier']
     flow.fetch_token(authorization_response=response) #json.dumps(request.GET.dict()))
     credentials = flow.credentials
     creds = get_user_info(credentials)

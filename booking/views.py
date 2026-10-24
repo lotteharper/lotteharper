@@ -246,7 +246,7 @@ def booked_times_list(request):
     month_filter = request.GET.get('month', '')
     
     # Base queryset - only booked appointments
-    bookings = Booking.objects.filter(is_booked=True)
+    bookings = Booking.objects.filter(user=request.user, is_booked=True)
     
     # Apply status filter
     if status_filter == 'upcoming':

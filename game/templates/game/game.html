@@ -3534,6 +3534,10 @@
     let frameDeltaMs = 16;
     let renderFrameId = 0;
     let worldLight = 1;
+    // Faces are painter-sorted rather than depth-tested. Keep door surfaces
+    // just in front of coplanar block faces so a door does not flicker with
+    // the block behind its hinge edge.
+    const DOOR_RENDER_DEPTH_BIAS = 0.01;
 
     function updateDayNight() {
       const cycle = 30 * 60 * 1000;
@@ -3609,9 +3613,15 @@
         if (polygon.length < 3) return;
 
         faces.push({
-          depth: polygon.reduce((sum, v) => sum + v[2], 0) / polygon.length,
+          depth:
+            polygon.reduce((sum, v) => sum + v[2], 0) / polygon.length -
+            DOOR_RENDER_DEPTH_BIAS,
+          renderPriority: 1,
           points: polygon,
-          color: shadeColor(ITEM_DEFINITIONS.door.color, shade)
+          color: shadeColor(
+            ITEM_DEFINITIONS.door.color,
+            shade * worldLight
+          )
         });
       };
 
@@ -3642,25 +3652,6 @@
           shade
         );
       }
-
-      const a = corners[0];
-      const b = corners[1];
-      const edgeX = b[0] - a[0];
-      const edgeZ = b[1] - a[1];
-      const panelNormal = [edgeZ, 0, -edgeX];
-      const panelPoints = [
-        [corners[0][0], y0, corners[0][1]],
-        [corners[1][0], y0, corners[1][1]],
-        [corners[1][0], y1, corners[1][1]],
-        [corners[0][0], y1, corners[0][1]]
-      ];
-
-      // A door has two broad faces in addition to its thin edge faces. Draw
-      // both sides so it remains visible when the camera is close to or
-      // passing through the panel.
-      pushQuad(panelPoints, panelNormal, 0.92);
-      pushQuad(panelPoints.slice().reverse(),
-        [-panelNormal[0], 0, -panelNormal[2]], 0.82);
 
       pushQuad(corners.map(c => [c[0], y1, c[1]]), [0, 1, 0], 1.12);
       pushQuad(corners.map(c => [c[0], y0, c[1]]), [0, -1, 0], 0.62);
@@ -3765,9 +3756,12 @@
 
         if (!faceFacesCamera(center, [nx, ny, nz])) continue;
         if (isOpaqueCube(block.x + nx, block.y + ny, block.z + nz)) continue;
+        const neighbor = getBlock(
+          block.x + nx, block.y + ny, block.z + nz
+        );
         if (
           type === "water" &&
-          blockType(getBlock(block.x + nx, block.y + ny, block.z + nz)) === "water"
+          blockType(neighbor) === "water"
         ) {
           continue;
         }
@@ -3939,7 +3933,10 @@
         if (swing.seen < renderFrameId - 1) doorSwing.delete(key);
       }
 
-      faces.sort((a, b) => b.depth - a.depth);
+      faces.sort((a, b) =>
+        b.depth - a.depth ||
+        (a.renderPriority || 0) - (b.renderPriority || 0)
+      );
 
       ctx.save();
       ctx.beginPath();

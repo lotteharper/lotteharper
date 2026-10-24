@@ -36,14 +36,21 @@ def character_phone_number(phone):
         count += 1
         if count == 3: count = 0
     return phone[:2] + number_chars
+import pycountry
+
+def get_flag_by_name(country_name):
+    try:
+        # Performs a fuzzy search to catch variants and typos
+        results = pycountry.countries.search_fuzzy(country_name)
+        return results[0].flag
+    except LookupError:
+        return "Flag not found"
+    except: return 'n/a'
+
 
 @register.filter('getflag')
 def getflag(country):
-    try:
-        import countryflag
-        return countryflag.getflag(country)
-    except:
-        return 'n/a'
+    return get_flag_by_name(country)
 
 @register.filter('detrans')
 def detrans(input):
