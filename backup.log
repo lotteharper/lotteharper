@@ -1,4 +1,4 @@
-6
+7
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -17,17 +17,8 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 3e646d9] open source
- 45 files changed, 181 insertions(+), 63 deletions(-)
- mode change 100755 => 100644 booking/__pycache__/urls.cpython-312.pyc
- mode change 100755 => 100644 booking/__pycache__/views.cpython-312.pyc
- mode change 100755 => 100644 feed/templatetags/__pycache__/app_filters.cpython-312.pyc
- mode change 100755 => 100644 game/__pycache__/views.cpython-312.pyc
- mode change 100755 => 100644 game/templates/game/game.html
- create mode 100644 media/audio/fingerprints/3a230d9f-cb6a-442e-a2fa-02110b51564c.npy
- create mode 100644 media/audio/fingerprints/ff887c59-3f1f-43a4-a725-2b73fe1f2dd0.npy
- mode change 100755 => 100644 users/__pycache__/oauth.cpython-312.pyc
- mode change 100755 => 100644 users/__pycache__/views.cpython-312.pyc
+[main b97695d] open source
+ 18 files changed, 930 insertions(+), 1120 deletions(-)
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
