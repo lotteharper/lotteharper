@@ -1,4 +1,4 @@
-2
+3
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -17,8 +17,12 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 03b00b6] open source
- 21 files changed, 255 insertions(+), 209 deletions(-)
+[main 1054e6f] open source
+ 24 files changed, 5321 insertions(+), 910 deletions(-)
+ mode change 100755 => 100644 games/__pycache__/consumers.cpython-312.pyc
+ mode change 100755 => 100644 games/consumers.py
+ create mode 100755 static/games/threethirteen-2026-10-27.js
+ mode change 100755 => 100644 static/games/threethirteen.js
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

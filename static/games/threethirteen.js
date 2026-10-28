@@ -55,7 +55,7 @@
 
   /*
    * ----------------------------------------------------------------------
-   * Card object model
+   * Card model and scoring
    * ----------------------------------------------------------------------
    */
 
@@ -77,34 +77,33 @@
   };
 
   function cloneMatrix(matrix) {
-    const copy = [];
-
-    for (let i = 0; i < matrix.length; i++) {
-      copy[i] = matrix[i].slice();
-    }
-
-    return copy;
+    return matrix.map(function(row) {
+      return row.slice();
+    });
   }
 
   function roundWildcardValue(roundNumber) {
-    return Number(roundNumber || currentRound || 3) - 1;
+    const round = Number(
+      roundNumber || currentRound || 3
+    );
+
+    /*
+     * Card values are zero-based:
+     * A=0, 2=1, 3=2, ..., K=12.
+     *
+     * Therefore, round 3 uses value 2, round 4 uses value 3,
+     * and round 13 uses value 12.
+     */
+    return round - 1;
   }
 
   function isWildcardCard(card, roundNumber) {
-    if (!card || typeof card.getValue !== "function") {
-      return false;
-    }
-
-    const wildcardValue = roundWildcardValue(roundNumber);
-
-    return Number(card.getValue()) === wildcardValue;
+    return Boolean(
+      card &&
+      typeof card.getValue === "function" &&
+      Number(card.getValue()) === roundWildcardValue(roundNumber)
+    );
   }
-
-  /*
-   * ----------------------------------------------------------------------
-   * Scoring helper based on the original hand-object implementation
-   * ----------------------------------------------------------------------
-   */
 
   function Hand(cards, jokers, roundNumber) {
     this.roundNumber = Number(roundNumber || currentRound || 3);
@@ -172,7 +171,6 @@
 
           if (test.value < this.value) {
             this.value = test.value;
-            this.melds.length = 0;
             this.melds = [].concat(
               meld.slice(0, length),
               test.melds
@@ -231,9 +229,7 @@
   };
 
   Hand.prototype.removeCards = function(cards) {
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-
+    cards.forEach(function(card) {
       if (card.s >= 0 && card.n < 13) {
         this.cards[card.s][card.n]--;
       } else if (card.s >= 0 && card.n === 13) {
@@ -241,7 +237,7 @@
       } else {
         this.jokers--;
       }
-    }
+    }, this);
 
     this.value = this.leftoverValue();
   };
@@ -251,13 +247,8 @@
 
     for (let suit = 0; suit < 4; suit++) {
       for (let number = 0; number < 13; number++) {
-        let value = number + 1;
-
-        if (value > 10) {
-          value = 10;
-        }
-
-        leftover += this.cards[suit][number] * value;
+        leftover += this.cards[suit][number] *
+          Math.min(number + 1, 10);
       }
     }
 
@@ -279,16 +270,14 @@
 
     let jokers = 0;
 
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-
+    cards.forEach(function(card) {
       if (!card || typeof card.getValue !== "function") {
-        continue;
+        return;
       }
 
       if (isWildcardCard(card, roundNumber)) {
         jokers++;
-        continue;
+        return;
       }
 
       const suit = Number(card.getSuit());
@@ -304,17 +293,19 @@
       ) {
         matrix[suit][value]++;
       }
-    }
+    });
 
-    return { matrix, jokers };
+    return {
+      matrix: matrix,
+      jokers: jokers
+    };
   }
 
   function calculateScore(cards, roundNumber) {
-    const round = Number(roundNumber || globalCurrentRound || 3);
+    const round = Number(roundNumber || currentRound || 3);
+    const result = buildMatrixFromCards(cards, round);
+    const hand = new Hand(result.matrix, result.jokers, round);
 
-    const { matrix, jokers } = buildMatrixFromCards(cards, round);
-
-    const hand = new Hand(matrix, jokers, round);
     hand.findMelds();
 
     return hand.value;
@@ -322,13 +313,12 @@
 
   /*
    * ----------------------------------------------------------------------
-   * Deterministic shuffle
+   * Deterministic deck
    * ----------------------------------------------------------------------
    */
 
   function hashSeed(value) {
     const text = String(value);
-
     let hash = 2166136261;
 
     for (let i = 0; i < text.length; i++) {
@@ -383,14 +373,12 @@
       }
     }
 
-    const random = createSeededRandom(
-      getDeckSeed(round)
-    );
+    const random = createSeededRandom(getDeckSeed(round));
 
     for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(random() * (i + 1));
-
       const temp = cards[i];
+
       cards[i] = cards[j];
       cards[j] = temp;
     }
@@ -400,33 +388,16 @@
 
   /*
    * ----------------------------------------------------------------------
-   * Game state
+   * State
    * ----------------------------------------------------------------------
    */
 
   let currentRound = 3;
   let globalCurrentRound = 3;
 
-  function getRoundStarter(roundNumber) {
-    return Number(roundNumber || currentRound) % 2 === 1
-      ? PLAYER_ONE
-      : PLAYER_TWO;
-  }
-
-  function imageLoaded() {
-    imagesLoaded++;
-
-    if (
-      imagesLoaded >= 53 &&
-      !started
-    ) {
-      started = true;
-      beginGame();
-    }
-  }
-
   const cardImages = [];
   const backImage = new Image();
+
   let imagesLoaded = 0;
   let started = false;
 
@@ -437,9 +408,7 @@
   let gameReady = false;
 
   let playerCards = [];
-  let playerSuits = [];
   let opponentCards = [];
-  let opponentSuits = [];
   let discardCards = [];
   let discardSuits = [];
 
@@ -451,8 +420,8 @@
   let roundComplete = false;
   let gameFinished = false;
   let pendingWinner = null;
+  let localRoundCompleteSent = false;
   let roundKey = "";
-  let roundScoreApplied = false;
 
   let playerScore = 0;
   let opponentScore = 0;
@@ -460,13 +429,22 @@
 
   let roundSettlement = false;
   let roundWinner = null;
+  let settlementTurnPlayer = null;
+  let loserFinalTurnComplete = false;
   let settlementActionSent = false;
+  let roundScoreApplied = false;
+  let opponentHandRevealed = false;
 
   let playerObjects = [];
   let opponentObjects = [];
   let deckBitmap = null;
   let discardBitmap = null;
   let roundDialog = null;
+  let settlementAdvanceButton = null;
+  let settlementInstruction = null;
+
+  let confettiPieces = [];
+  let confettiRunning = false;
 
   let playerScoreText = null;
   let opponentScoreText = null;
@@ -483,6 +461,18 @@
   let leftBound = 0;
   let topBound = 0;
   let boardSize = 0;
+
+  function getRoundStarter(roundNumber) {
+    return Number(roundNumber || currentRound) % 2 === 1
+      ? PLAYER_ONE
+      : PLAYER_TWO;
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Layout
+   * ----------------------------------------------------------------------
+   */
 
   function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -519,16 +509,19 @@
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
 
-  function dealRound(roundNumber) {
-    globalCurrentRound = Number(roundNumber || 3);
-    currentRound = globalCurrentRound;
+  /*
+   * ----------------------------------------------------------------------
+   * Round setup
+   * ----------------------------------------------------------------------
+   */
 
+  function dealRound(roundNumber) {
+    currentRound = Number(roundNumber || 3);
+    globalCurrentRound = currentRound;
     deck = createDeck(currentRound);
 
     playerCards = [];
-    playerSuits = [];
     opponentCards = [];
-    opponentSuits = [];
     discardCards = [];
     discardSuits = [];
 
@@ -540,23 +533,31 @@
         playerCards.push(first);
         opponentCards.push(second);
       } else {
-        opponentCards.push(first);
         playerCards.push(second);
+        opponentCards.push(first);
       }
     }
 
     if (deck.length > 0) {
       const openingDiscard = deck.shift().clone();
+
       discardCards.push(openingDiscard);
       discardSuits.push(openingDiscard.getSuit());
     }
 
     currentCard = 0;
-
     roundComplete = false;
     roundKey = "";
     pendingWinner = null;
+    localRoundCompleteSent = false;
+
+    roundSettlement = false;
+    roundWinner = null;
+    settlementTurnPlayer = null;
+    loserFinalTurnComplete = false;
+    settlementActionSent = false;
     roundScoreApplied = false;
+    opponentHandRevealed = false;
 
     canDiscard = false;
     canDraw = getRoundStarter(currentRound) === user;
@@ -570,13 +571,6 @@
     currentRound = 3;
     globalCurrentRound = 3;
 
-    playerCards = [];
-    playerSuits = [];
-    opponentCards = [];
-    opponentSuits = [];
-    discardCards = [];
-    discardSuits = [];
-
     playerScore = 0;
     opponentScore = 0;
 
@@ -585,11 +579,18 @@
     roundComplete = false;
     gameFinished = false;
     pendingWinner = null;
+    localRoundCompleteSent = false;
     roundKey = "";
+
     roundSettlement = false;
     roundWinner = null;
+    settlementTurnPlayer = null;
+    loserFinalTurnComplete = false;
     settlementActionSent = false;
     roundScoreApplied = false;
+    opponentHandRevealed = false;
+
+    clearConfetti();
 
     drawPlayerScore("--");
     drawOpponentScore("--");
@@ -614,18 +615,18 @@
   }
 
   function drawCard(suit, value, x, y) {
-    const cardIndex = Number(value);
     const suitIndex = Number(suit);
+    const valueIndex = Number(value);
 
     if (
       !cardImages[suitIndex] ||
-      !cardImages[suitIndex][cardIndex]
+      !cardImages[suitIndex][valueIndex]
     ) {
       return null;
     }
 
     const bitmap = new createjs.Bitmap(
-      cardImages[suitIndex][cardIndex]
+      cardImages[suitIndex][valueIndex]
     );
 
     bitmap.scaleX = CARD_SCALE;
@@ -634,6 +635,7 @@
     bitmap.y = topBound + y - 175 * CARD_SCALE;
 
     container.addChild(bitmap);
+
     return bitmap;
   }
 
@@ -646,6 +648,7 @@
     bitmap.y = topBound + y - 175 * CARD_SCALE;
 
     container.addChild(bitmap);
+
     return bitmap;
   }
 
@@ -662,6 +665,7 @@
     marker.mouseEnabled = false;
 
     container.addChild(marker);
+
     return marker;
   }
 
@@ -673,7 +677,6 @@
       const offset = i > 6 ? 7 : 0;
       const x = 1000 - (1000 / 7) * (i - offset);
       const y = 1000 - row;
-
       const card = playerCards[i];
 
       if (!card) {
@@ -712,7 +715,7 @@
 
         if (
           roundSettlement &&
-          roundWinner === user
+          settlementTurnPlayer !== user
         ) {
           return;
         }
@@ -720,6 +723,9 @@
         const value = event.currentTarget.cardValue;
         const suit = event.currentTarget.cardSuit;
 
+        /*
+         * Wildcards are not discarded by this interface.
+         */
         if (isWildcardCard(new Card(value, suit), currentRound)) {
           return;
         }
@@ -739,26 +745,27 @@
           return;
         }
 
-        if (
-          roundSettlement &&
-          roundWinner !== user
-        ) {
-          completeSettlementTurn();
+        if (roundSettlement) {
+          updateSettlementAdvanceButton();
           return;
         }
 
-        if (
-          !roundSettlement &&
-          pendingWinner === user
-        ) {
-          sendAction(
+        if (pendingWinner === user && !localRoundCompleteSent) {
+          if (sendAction(
             "round_complete," +
             currentRound +
             "," +
             user
-          );
+          )) {
+            localRoundCompleteSent = true;
+            pendingWinner = null;
 
-          pendingWinner = null;
+            /*
+             * The server may not echo our own action, so the
+             * winning client enters settlement immediately.
+             */
+            finishRound(user);
+          }
         }
       });
     }
@@ -766,86 +773,69 @@
     stage.update();
   }
 
-function drawOpponentHand(faceUp) {
-  clearObjects(opponentObjects);
+  function drawOpponentHand(faceUp) {
+    clearObjects(opponentObjects);
 
-  const cardCount = opponentCards.length;
+    const cardCount = opponentCards.length;
 
-  if (cardCount === 0) {
+    if (cardCount === 0) {
+      stage.update();
+      return;
+    }
+
+    const row1Count = Math.min(7, cardCount);
+    const row2Count = cardCount - row1Count;
+    const row1Y = 80;
+    const row2Y = 240;
+    const cardSpacing = 130;
+
+    for (let i = cardCount - 1; i >= 0; i--) {
+      const card = opponentCards[i];
+
+      if (!card) {
+        continue;
+      }
+
+      const firstRow = i < row1Count;
+      const indexInRow = firstRow
+        ? i
+        : i - row1Count;
+
+      const rowCardCount = firstRow
+        ? row1Count
+        : row2Count;
+
+      const y = firstRow ? row1Y : row2Y;
+      const totalRowWidth = rowCardCount * cardSpacing;
+      const leftOffset = (1000 - totalRowWidth) / 2;
+      const x = leftOffset + indexInRow * cardSpacing + 65;
+
+      const bitmap = faceUp
+        ? drawCard(
+            card.getSuit(),
+            card.getValue(),
+            x,
+            y
+          )
+        : drawFaceDownCard(x, y);
+
+      if (!bitmap) {
+        continue;
+      }
+
+      opponentObjects.push(bitmap);
+
+      if (
+        faceUp &&
+        isWildcardCard(card, currentRound)
+      ) {
+        bitmap.alpha = 0.92;
+        opponentObjects.push(drawWildcardMarker(bitmap));
+      }
+    }
+
     stage.update();
-    return;
   }
-
-  /*
-   * Display cards in rows at the top of the screen.
-   * Row 1: up to 7 cards
-   * Row 2: remaining cards (only if > 7), positioned directly below row 1
-   */
-  const row1Count = Math.min(7, cardCount);
-  const row2Count = cardCount - row1Count;
-
-  const row1Y = 80;
-  const row2Y = 240;
-  const cardSpacing = 130;
-
-  for (let i = cardCount; i >= 0; i--) {
-    const card = opponentCards[i];
-
-    if (!card) {
-      continue;
-    }
-
-    let row;
-    let indexInRow;
-    let y;
-    let rowCardCount;
-
-    if (i < row1Count) {
-      row = 1;
-      indexInRow = i;
-      y = row1Y;
-      rowCardCount = row1Count;
-    } else {
-      row = 2;
-      indexInRow = i - row1Count;
-      y = row2Y;
-      rowCardCount = row2Count;
-    }
-
-    /*
-     * Center each row horizontally.
-     */
-    const totalRowWidth = rowCardCount * cardSpacing;
-    const leftOffset = (1000 - totalRowWidth) / 2;
-    const x = leftOffset + indexInRow * cardSpacing + 65;
-
-    const bitmap = faceUp
-      ? drawCard(
-          card.getSuit(),
-          card.getValue(),
-          x,
-          y
-        )
-      : drawFaceDownCard(x, y);
-
-    if (!bitmap) {
-      continue;
-    }
-
-    opponentObjects.push(bitmap);
-
-    if (
-      faceUp &&
-      isWildcardCard(card, currentRound)
-    ) {
-      bitmap.alpha = 0.92;
-      opponentObjects.push(drawWildcardMarker(bitmap));
-    }
-  }
-
-  stage.update();
-}
-
 
   function drawDeck() {
     if (deckBitmap && container.contains(deckBitmap)) {
@@ -853,6 +843,11 @@ function drawOpponentHand(faceUp) {
     }
 
     deckBitmap = drawFaceDownCard(300, 500);
+
+    if (!deckBitmap) {
+      return;
+    }
+
     deckBitmap.mouseEnabled = true;
 
     deckBitmap.on("mousedown", function() {
@@ -867,7 +862,7 @@ function drawOpponentHand(faceUp) {
 
       if (
         roundSettlement &&
-        roundWinner === user
+        settlementTurnPlayer !== user
       ) {
         return;
       }
@@ -893,7 +888,6 @@ function drawOpponentHand(faceUp) {
     const topCard = discardCards[discardCards.length - 1];
 
     if (!topCard) {
-      stage.update();
       return;
     }
 
@@ -927,7 +921,7 @@ function drawOpponentHand(faceUp) {
 
       if (
         roundSettlement &&
-        roundWinner === user
+        settlementTurnPlayer !== user
       ) {
         return;
       }
@@ -936,15 +930,19 @@ function drawOpponentHand(faceUp) {
         sendAction("draw,discard," + user);
       }
     });
-
-    stage.update();
   }
 
   function redrawAll() {
     drawPlayerHand();
-    drawOpponentHand(false);
+
+    drawOpponentHand(
+      roundSettlement && opponentHandRevealed
+    );
+
     drawDeck();
     drawDiscard();
+    updateSettlementAdvanceButton();
+
     stage.update();
   }
 
@@ -953,6 +951,7 @@ function drawOpponentHand(faceUp) {
     const size = 100;
 
     const playerPanel = new createjs.Shape();
+
     playerPanel.graphics
       .beginFill("lightyellow")
       .drawRoundRect(
@@ -964,6 +963,7 @@ function drawOpponentHand(faceUp) {
       );
 
     const opponentPanel = new createjs.Shape();
+
     opponentPanel.graphics
       .beginFill("#f0655b")
       .drawRoundRect(
@@ -989,13 +989,16 @@ function drawOpponentHand(faceUp) {
       LARGE_TEXT,
       "#E8CD71"
     );
+
     currentPlayerText.x = leftBound + 50;
     currentPlayerText.textAlign = "center";
 
     const circle = new createjs.Shape();
+
     circle.graphics
       .beginFill("#E8CD71")
       .drawCircle(0, 0, 50);
+
     circle.x = leftBound + 500;
     circle.y = topBound + 500;
 
@@ -1004,17 +1007,20 @@ function drawOpponentHand(faceUp) {
       LARGE_TEXT,
       "#000000"
     );
+
     roundText.x = leftBound + 500;
     roundText.y = topBound + 470;
     roundText.textAlign = "center";
 
-    container.addChild(playerPanel);
-    container.addChild(opponentPanel);
-    container.addChild(playerScoreText);
-    container.addChild(opponentScoreText);
-    container.addChild(currentPlayerText);
-    container.addChild(circle);
-    container.addChild(roundText);
+    container.addChild(
+      playerPanel,
+      opponentPanel,
+      playerScoreText,
+      opponentScoreText,
+      currentPlayerText,
+      circle,
+      roundText
+    );
 
     drawSortButtons();
     setRoundText();
@@ -1026,6 +1032,7 @@ function drawOpponentHand(faceUp) {
     const size = 100;
 
     const suitButton = new createjs.Shape();
+
     suitButton.graphics
       .beginFill("lightgreen")
       .drawRoundRect(
@@ -1037,17 +1044,18 @@ function drawOpponentHand(faceUp) {
       );
 
     const suitText = new createjs.Text("333", TEXT, "#000000");
+
     suitText.x = leftBound + 950;
     suitText.y = topBound + 380;
     suitText.textAlign = "center";
 
     suitButton.on("mousedown", function() {
-      const sorted = sortPlayerCards();
-      playerCards = sorted;
+      playerCards = sortPlayerCards(false);
       drawPlayerHand();
     });
 
     const valueButton = new createjs.Shape();
+
     valueButton.graphics
       .beginFill("lightblue")
       .drawRoundRect(
@@ -1059,20 +1067,22 @@ function drawOpponentHand(faceUp) {
       );
 
     const valueText = new createjs.Text("456", TEXT, "#000000");
+
     valueText.x = leftBound + 950;
     valueText.y = topBound + 580;
     valueText.textAlign = "center";
 
     valueButton.on("mousedown", function() {
-      const sorted = sortPlayerCards(true);
-      playerCards = sorted;
+      playerCards = sortPlayerCards(true);
       drawPlayerHand();
     });
 
-    container.addChild(suitButton);
-    container.addChild(suitText);
-    container.addChild(valueButton);
-    container.addChild(valueText);
+    container.addChild(
+      suitButton,
+      suitText,
+      valueButton,
+      valueText
+    );
   }
 
   function sortPlayerCards(byValue) {
@@ -1119,7 +1129,7 @@ function drawOpponentHand(faceUp) {
 
   /*
    * ----------------------------------------------------------------------
-   * Turn functions
+   * Turn actions
    * ----------------------------------------------------------------------
    */
 
@@ -1146,28 +1156,29 @@ function drawOpponentHand(faceUp) {
     }
 
     const topCard = discardCards[discardCards.length - 1];
-    const recycled = [];
+    const recycled = discardCards
+      .slice(0, -1)
+      .map(function(card) {
+        return card.clone();
+      });
 
-    for (let i = 0; i < discardCards.length - 1; i++) {
-      recycled.push(discardCards[i].clone());
-    }
-
-    deck = recycled.slice();
+    deck = recycled;
     currentCard = 0;
 
     discardCards = [topCard.clone()];
     discardSuits = [topCard.getSuit()];
 
     drawDiscard();
+
     return true;
   }
 
   function losingPlayerMaySettle() {
     return (
       roundSettlement &&
-      roundWinner &&
-      roundWinner !== user &&
-      !gameFinished
+      !gameFinished &&
+      settlementTurnPlayer === user &&
+      !loserFinalTurnComplete
     );
   }
 
@@ -1210,6 +1221,9 @@ function drawOpponentHand(faceUp) {
     }
 
     drawPlayerHand();
+    drawDiscard();
+    updateSettlementAdvanceButton();
+
     return true;
   }
 
@@ -1242,7 +1256,6 @@ function drawOpponentHand(faceUp) {
     }
 
     playerCards.push(topCard.clone());
-
     discardCards.pop();
     discardSuits.pop();
 
@@ -1254,6 +1267,8 @@ function drawOpponentHand(faceUp) {
 
     drawPlayerHand();
     drawDiscard();
+    updateSettlementAdvanceButton();
+
     return true;
   }
 
@@ -1279,7 +1294,12 @@ function drawOpponentHand(faceUp) {
       setTurnAfterAction("draw", opponent);
     }
 
-    drawOpponentHand(false);
+    drawOpponentHand(
+      roundSettlement && opponentHandRevealed
+    );
+
+    drawDiscard();
+
     return true;
   }
 
@@ -1298,7 +1318,6 @@ function drawOpponentHand(faceUp) {
     }
 
     opponentCards.push(topCard.clone());
-
     discardCards.pop();
     discardSuits.pop();
 
@@ -1306,68 +1325,12 @@ function drawOpponentHand(faceUp) {
       setTurnAfterAction("draw", opponent);
     }
 
-    drawOpponentHand(false);
+    drawOpponentHand(
+      roundSettlement && opponentHandRevealed
+    );
+
     drawDiscard();
 
-    return true;
-  }
-
-  function scoreCompletedRound() {
-    if (roundScoreApplied) {
-      return false;
-    }
-
-    playerScore += calculateScore(
-      playerCards,
-      currentRound
-    );
-
-    opponentScore += calculateScore(
-      opponentCards,
-      currentRound
-    );
-
-    roundScoreApplied = true;
-
-    drawPlayerScore(playerScore);
-    drawOpponentScore(opponentScore);
-
-    return true;
-  }
-
-  function completeSettlementTurn() {
-    if (
-      !roundSettlement ||
-      settlementActionSent ||
-      gameFinished ||
-      roundWinner === user
-    ) {
-      return false;
-    }
-
-    if (!scoreCompletedRound()) {
-      return false;
-    }
-
-    settlementActionSent = true;
-
-    /*
-     * Always send round_advance for the final round too.
-     * This lets both clients show the finished dialog.
-     */
-    const sent = sendAction(
-      "round_advance," +
-      currentRound +
-      "," +
-      user
-    );
-
-    if (!sent) {
-      settlementActionSent = false;
-      return false;
-    }
-
-    advanceRound();
     return true;
   }
 
@@ -1383,7 +1346,7 @@ function drawOpponentHand(faceUp) {
 
     if (
       roundSettlement &&
-      roundWinner === user
+      settlementTurnPlayer !== user
     ) {
       return false;
     }
@@ -1400,6 +1363,7 @@ function drawOpponentHand(faceUp) {
     }
 
     const card = playerCards.splice(match, 1)[0];
+
     discardCards.push(card.clone());
     discardSuits.push(card.getSuit());
 
@@ -1410,6 +1374,11 @@ function drawOpponentHand(faceUp) {
     drawDiscard();
 
     if (roundSettlement) {
+      loserFinalTurnComplete = true;
+      scoreCompletedRound();
+      updateSettlementAdvanceButton();
+      stage.update();
+
       return true;
     }
 
@@ -1437,11 +1406,13 @@ function drawOpponentHand(faceUp) {
     }
 
     const card = playerCards.splice(match, 1)[0];
+
     discardCards.push(card.clone());
     discardSuits.push(card.getSuit());
 
     drawPlayerHand();
     drawDiscard();
+
     return true;
   }
 
@@ -1458,19 +1429,125 @@ function drawOpponentHand(faceUp) {
     }
 
     const card = opponentCards.splice(match, 1)[0];
+
     discardCards.push(card.clone());
     discardSuits.push(card.getSuit());
 
-    drawOpponentHand(false);
+    drawOpponentHand(
+      roundSettlement && opponentHandRevealed
+    );
+
     drawDiscard();
+
     return true;
   }
 
   /*
    * ----------------------------------------------------------------------
-   * Round completion and settlement
+   * Settlement and scoring
    * ----------------------------------------------------------------------
    */
+
+  function scoreCompletedRound() {
+    if (roundScoreApplied) {
+      return true;
+    }
+
+    if (
+      playerCards.length !== currentRound ||
+      opponentCards.length !== currentRound
+    ) {
+      return false;
+    }
+
+    playerScore += calculateScore(
+      playerCards,
+      currentRound
+    );
+
+    opponentScore += calculateScore(
+      opponentCards,
+      currentRound
+    );
+
+    roundScoreApplied = true;
+
+    drawPlayerScore(playerScore);
+    drawOpponentScore(opponentScore);
+
+    return true;
+  }
+
+  function canAdvanceSettlement() {
+    return (
+      roundSettlement &&
+      !gameFinished &&
+      !settlementActionSent &&
+      loserFinalTurnComplete &&
+      roundScoreApplied
+    );
+  }
+
+  function updateSettlementAdvanceButton() {
+    if (
+      !settlementAdvanceButton ||
+      !settlementAdvanceButton.background ||
+      !settlementAdvanceButton.label
+    ) {
+      return;
+    }
+
+    const enabled = canAdvanceSettlement();
+
+    if (settlementInstruction) {
+      settlementInstruction.text = loserFinalTurnComplete
+        ? "Both hands scored"
+        : settlementTurnPlayer === user
+          ? "Draw and discard your final card"
+          : "Waiting for the opposing player's final turn";
+    }
+
+    settlementAdvanceButton.enabled = enabled;
+    settlementAdvanceButton.mouseEnabled = enabled;
+
+    settlementAdvanceButton.background.alpha =
+      enabled ? 1 : 0.45;
+
+    settlementAdvanceButton.label.alpha =
+      enabled ? 1 : 0.45;
+
+    settlementAdvanceButton.label.text =
+      currentRound >= 13
+        ? "Finish game"
+        : "Advance to next round";
+
+    stage.update();
+  }
+
+  function completeSettlementTurn() {
+    if (!canAdvanceSettlement()) {
+      return false;
+    }
+
+    settlementActionSent = true;
+    updateSettlementAdvanceButton();
+
+    const sent = sendAction(
+      "round_advance," +
+      currentRound +
+      "," +
+      user
+    );
+
+    if (!sent) {
+      settlementActionSent = false;
+      updateSettlementAdvanceButton();
+      return false;
+    }
+
+    advanceRound();
+    return true;
+  }
 
   function finishRound(winner) {
     const key = currentRound + ":" + winner;
@@ -1488,16 +1565,37 @@ function drawOpponentHand(faceUp) {
     roundComplete = true;
     settlementActionSent = false;
     roundScoreApplied = false;
+    loserFinalTurnComplete = false;
+    opponentHandRevealed = true;
 
-    canDraw = winner !== user;
+    settlementTurnPlayer =
+      winner === PLAYER_ONE
+        ? PLAYER_TWO
+        : PLAYER_ONE;
+
+    canDraw = settlementTurnPlayer === user;
     canDiscard = false;
+
+    /*
+     * Both hands are face up at the end of the round.
+     */
+    drawPlayerHand();
+    drawOpponentHand(true);
+    drawDeck();
+    drawDiscard();
 
     showRoundSettlementDialog(winner);
     setCurrentPlayer(canDraw);
+    updateSettlementAdvanceButton();
     stage.update();
   }
 
   function advanceRound() {
+    /*
+     * Do not require loserFinalTurnComplete here. The local button
+     * validates it, while the remote client may receive round_advance
+     * before it independently reconstructs that flag.
+     */
     if (
       gameFinished ||
       !roundSettlement
@@ -1505,11 +1603,9 @@ function drawOpponentHand(faceUp) {
       return false;
     }
 
+    scoreCompletedRound();
     removeRoundDialog();
 
-    /*
-     * This is the final round. Stop before dealing round 14.
-     */
     if (currentRound >= 13) {
       gameFinished = true;
       roundSettlement = false;
@@ -1517,8 +1613,12 @@ function drawOpponentHand(faceUp) {
       canDraw = false;
       canDiscard = false;
 
+      opponentHandRevealed = false;
+      settlementTurnPlayer = null;
+
       drawFinishedDialog();
       stage.update();
+
       return true;
     }
 
@@ -1530,11 +1630,15 @@ function drawOpponentHand(faceUp) {
 
     roundSettlement = false;
     roundWinner = null;
+    settlementTurnPlayer = null;
+    loserFinalTurnComplete = false;
     settlementActionSent = false;
     roundScoreApplied = false;
     roundComplete = false;
     roundKey = "";
     pendingWinner = null;
+    localRoundCompleteSent = false;
+    opponentHandRevealed = false;
 
     canDraw = getRoundStarter(currentRound) === user;
     canDiscard = false;
@@ -1544,14 +1648,24 @@ function drawOpponentHand(faceUp) {
     return true;
   }
 
+  /*
+   * ----------------------------------------------------------------------
+   * Settlement dialog
+   * ----------------------------------------------------------------------
+   *
+   * The deck and discard are at approximately y=500.
+   * This panel starts at y=625, below them.
+   */
+
   function showRoundSettlementDialog(winner) {
     removeRoundDialog();
 
     roundDialog = new createjs.Container();
-    roundDialog.mouseEnabled = false;
-    roundDialog.mouseChildren = false;
+    roundDialog.mouseEnabled = true;
+    roundDialog.mouseChildren = true;
 
     const panel = new createjs.Shape();
+
     panel.graphics
       .beginFill(
         winner === user
@@ -1559,74 +1673,109 @@ function drawOpponentHand(faceUp) {
           : "lightblue"
       )
       .drawRoundRect(
-        leftBound + 100,
-        topBound + 300,
-        800,
-        340,
-        25
+        leftBound + 70,
+        topBound + 662,
+        860,
+        46,
+        16
       );
 
     panel.mouseEnabled = false;
 
     const message = new createjs.Text(
       winner === user
-        ? "You won the round"
-        : "Your opponent won the round",
-      TEXT,
+        ? "Round won"
+        : "Round over",
+      "bold 28px Arial",
       "#000000"
     );
 
-    message.x = leftBound + 500;
-    message.y = topBound + 360;
+    message.x = leftBound + 200;
+    message.y = topBound + 672;
     message.textAlign = "center";
     message.mouseEnabled = false;
 
-    const detail = new createjs.Text(
-      winner === user
-        ? "Your opponent may take one final turn"
-        : "You may take one final turn",
-      SMALL_TEXT,
-      "#000000"
-    );
-
-    detail.x = leftBound + 500;
-    detail.y = topBound + 455;
-    detail.textAlign = "center";
-    detail.mouseEnabled = false;
-
     const instruction = new createjs.Text(
-      winner === user
-        ? "Waiting for opponent..."
-        : "Draw and discard to continue",
-      SMALL_TEXT,
+      settlementTurnPlayer === user
+        ? "Draw and discard your final card"
+        : "Waiting for the opposing player's final turn",
+      "bold 20px Arial",
       "#000000"
     );
 
-    instruction.x = leftBound + 500;
-    instruction.y = topBound + 525;
-    instruction.textAlign = "center";
+    instruction.x = leftBound + 410;
+    instruction.y = topBound + 674;
+    instruction.textAlign = "left";
     instruction.mouseEnabled = false;
+
+    const advanceButton = new createjs.Container();
+    const buttonBackground = new createjs.Shape();
+
+    buttonBackground.graphics
+      .beginFill("#e8cd71")
+      .drawRoundRect(
+        0,
+        0,
+        270,
+        38,
+        10
+      );
+
+    const buttonLabel = new createjs.Text(
+      currentRound >= 13
+        ? "Finish game"
+        : "Advance to next round",
+      "bold 20px Arial",
+      "#000000"
+    );
+
+    buttonLabel.x = 135;
+    buttonLabel.y = 10;
+    buttonLabel.textAlign = "center";
+    buttonLabel.mouseEnabled = false;
+
+    advanceButton.x = leftBound + 650;
+    advanceButton.y = topBound + 666;
+    advanceButton.background = buttonBackground;
+    advanceButton.label = buttonLabel;
+    advanceButton.hitArea = new createjs.Shape();
+    advanceButton.hitArea.graphics
+      .beginFill("#000000")
+      .drawRect(0, 0, 270, 38);
+    advanceButton.cursor = "pointer";
+
+    advanceButton.addChild(
+      buttonBackground,
+      buttonLabel
+    );
+
+    advanceButton.on("mousedown", function() {
+      if (
+        advanceButton.enabled &&
+        canAdvanceSettlement()
+      ) {
+        completeSettlementTurn();
+      }
+    });
+
+    settlementAdvanceButton = advanceButton;
+    settlementInstruction = instruction;
 
     roundDialog.addChild(
       panel,
       message,
-      detail,
-      instruction
+      instruction,
+      advanceButton
     );
 
-    container.addChildAt(
-      roundDialog,
-      Math.max(0, container.getNumChildren() - 1)
-    );
+    container.addChild(roundDialog);
 
-    if (winner === user) {
-      drawPlayerHand();
-      drawOpponentHand(false);
-    } else {
-      drawPlayerHand();
-      drawOpponentHand(true);
-    }
+    drawPlayerHand();
+    drawOpponentHand(true);
+    drawDeck();
+    drawDiscard();
 
+    updateSettlementAdvanceButton();
     stage.update();
   }
 
@@ -1639,29 +1788,157 @@ function drawOpponentHand(faceUp) {
     }
 
     roundDialog = null;
+    settlementAdvanceButton = null;
+    settlementInstruction = null;
   }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Confetti
+   * ----------------------------------------------------------------------
+   */
+
+  function clearConfetti() {
+    confettiPieces.forEach(function(piece) {
+      if (
+        piece &&
+        piece.shape &&
+        container.contains(piece.shape)
+      ) {
+        container.removeChild(piece.shape);
+      }
+    });
+
+    confettiPieces.length = 0;
+    confettiRunning = false;
+  }
+
+  function createConfettiPiece() {
+    const colors = [
+      "#e74c3c",
+      "#f1c40f",
+      "#2ecc71",
+      "#3498db",
+      "#9b59b6",
+      "#e67e22",
+      "#1abc9c",
+      "#ff69b4",
+      "#ffffff"
+    ];
+
+    const width = 8 + Math.random() * 14;
+    const height = 12 + Math.random() * 22;
+    const shape = new createjs.Shape();
+
+    shape.graphics
+      .beginFill(
+        colors[Math.floor(Math.random() * colors.length)]
+      )
+      .drawRect(
+        -width / 2,
+        -height / 2,
+        width,
+        height
+      );
+
+    shape.x = Math.random() * 1000;
+    shape.y = -20 - Math.random() * 500;
+    shape.rotation = Math.random() * 360;
+    shape.alpha = 0.8 + Math.random() * 0.2;
+
+    container.addChild(shape);
+
+    return {
+      shape: shape,
+      velocityX: -1.5 + Math.random() * 3,
+      velocityY: 1.5 + Math.random() * 3,
+      gravity: 0.04 + Math.random() * 0.08,
+      rotationSpeed: -5 + Math.random() * 10,
+      sway: Math.random() * Math.PI * 2,
+      swaySpeed: 0.03 + Math.random() * 0.05,
+      swayAmount: 0.3 + Math.random() * 1.2
+    };
+  }
+
+  function startConfetti() {
+    clearConfetti();
+    confettiRunning = true;
+
+    for (let i = 0; i < 180; i++) {
+      confettiPieces.push(createConfettiPiece());
+    }
+  }
+
+  function updateConfetti() {
+    if (!confettiRunning) {
+      return;
+    }
+
+    let remaining = 0;
+
+    confettiPieces.forEach(function(piece) {
+      if (!piece || !piece.shape) {
+        return;
+      }
+
+      const shape = piece.shape;
+
+      piece.velocityY += piece.gravity;
+      piece.sway += piece.swaySpeed;
+
+      shape.x +=
+        piece.velocityX +
+        Math.sin(piece.sway) * piece.swayAmount;
+
+      shape.y += piece.velocityY;
+      shape.rotation += piece.rotationSpeed;
+
+      if (shape.x < -30) {
+        shape.x = 1030;
+      } else if (shape.x > 1030) {
+        shape.x = -30;
+      }
+
+      if (shape.y < 1050) {
+        remaining++;
+      }
+    });
+
+    if (remaining === 0) {
+      confettiRunning = false;
+    }
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Final game dialog
+   * ----------------------------------------------------------------------
+   */
 
   function drawFinishedDialog() {
     removeRoundDialog();
+    startConfetti();
 
     const panel = new createjs.Shape();
+
     panel.graphics
       .beginFill("#f4f0d0")
       .drawRoundRect(
-        leftBound + 100,
-        topBound + 250,
-        800,
+        leftBound + 250,
+        topBound + 300,
         500,
-        25
+        300,
+        20
       );
 
     const title = new createjs.Text(
       "Game complete",
-      TEXT,
+      "bold 36px Arial",
       "#000000"
     );
+
     title.x = leftBound + 500;
-    title.y = topBound + 300;
+    title.y = topBound + 335;
     title.textAlign = "center";
 
     const result =
@@ -1673,9 +1950,10 @@ function drawOpponentHand(faceUp) {
 
     const resultText = new createjs.Text(
       result,
-      TEXT,
+      "bold 30px Arial",
       "#000000"
     );
+
     resultText.x = leftBound + 500;
     resultText.y = topBound + 410;
     resultText.textAlign = "center";
@@ -1686,25 +1964,34 @@ function drawOpponentHand(faceUp) {
       "\n" +
       PLAYER_TWO + ": " +
       (user === PLAYER_TWO ? playerScore : opponentScore),
-      SMALL_TEXT,
+      "bold 24px Arial",
       "#000000"
     );
 
     scores.x = leftBound + 500;
-    scores.y = topBound + 520;
+    scores.y = topBound + 470;
     scores.textAlign = "center";
-    scores.lineHeight = 60;
+    scores.lineHeight = 34;
 
-    container.addChild(panel);
-    container.addChild(title);
-    container.addChild(resultText);
-    container.addChild(scores);
+    container.addChild(
+      panel,
+      title,
+      resultText,
+      scores
+    );
+
+    confettiPieces.forEach(function(piece) {
+      if (piece && piece.shape) {
+        container.addChild(piece.shape);
+      }
+    });
+
     stage.update();
   }
 
   /*
    * ----------------------------------------------------------------------
-   * History / protocol
+   * WebSocket protocol
    * ----------------------------------------------------------------------
    */
 
@@ -1765,19 +2052,10 @@ function drawOpponentHand(faceUp) {
       );
     }
 
-    if (type === "round_complete") {
-      const roundNumber = Number(parts[1]);
-
-      return (
-        parts.length === 3 &&
-        Number.isInteger(roundNumber) &&
-        roundNumber >= 3 &&
-        roundNumber <= 13 &&
-        Boolean(parts[2])
-      );
-    }
-
-    if (type === "round_advance") {
+    if (
+      type === "round_complete" ||
+      type === "round_advance"
+    ) {
       const roundNumber = Number(parts[1]);
 
       return (
@@ -1834,11 +2112,9 @@ function drawOpponentHand(faceUp) {
         return;
       }
 
-      if (!roundScoreApplied) {
-        scoreCompletedRound();
-      }
-
+      scoreCompletedRound();
       advanceRound();
+
       return;
     }
 
@@ -1883,29 +2159,40 @@ function drawOpponentHand(faceUp) {
         return;
       }
 
+      /*
+       * The local click handler already applied the local discard.
+       * Only apply the action here when it came from the opponent.
+       */
       if (replayMode) {
         if (localActor) {
           discardPlayerDuringReplay(value, suit);
         } else {
           discardOpponentCard(value, suit);
         }
+      } else if (!localActor) {
+        discardOpponentCard(value, suit);
+      }
 
-        if (!roundSettlement) {
-          setTurnAfterAction("discard", actor);
-        }
+      if (
+        roundSettlement &&
+        actor === settlementTurnPlayer
+      ) {
+        loserFinalTurnComplete = true;
+        canDraw = false;
+        canDiscard = false;
+
+        scoreCompletedRound();
+        updateSettlementAdvanceButton();
+        stage.update();
 
         return;
       }
 
-      if (localActor) {
-        return;
+      if (!roundSettlement) {
+        setTurnAfterAction("discard", actor);
       }
 
-      if (discardOpponentCard(value, suit)) {
-        if (!roundSettlement) {
-          setTurnAfterAction("discard", actor);
-        }
-      }
+      return;
     }
   }
 
@@ -1918,35 +2205,24 @@ function drawOpponentHand(faceUp) {
     currentRound = 3;
     globalCurrentRound = 3;
     currentCard = 0;
-    deck = [];
-
-    playerCards = [];
-    playerSuits = [];
-    opponentCards = [];
-    opponentSuits = [];
-    discardCards = [];
-    discardSuits = [];
 
     playerScore = 0;
     opponentScore = 0;
     roundComplete = false;
     gameFinished = false;
     pendingWinner = null;
+    localRoundCompleteSent = false;
     roundKey = "";
+
     roundSettlement = false;
     roundWinner = null;
+    settlementTurnPlayer = null;
+    loserFinalTurnComplete = false;
     settlementActionSent = false;
     roundScoreApplied = false;
+    opponentHandRevealed = false;
 
     dealRound(3);
-
-    if (validActions.length === 0) {
-      history = [];
-      gameReady = true;
-      redrawAll();
-      stage.update();
-      return;
-    }
 
     validActions.forEach(function(action) {
       processAction(action, true);
@@ -1982,11 +2258,11 @@ function drawOpponentHand(faceUp) {
       return;
     }
 
-    const actions = Array.isArray(message.history)
-      ? message.history
-      : [];
-
-    rebuildFromHistory(actions);
+    rebuildFromHistory(
+      Array.isArray(message.history)
+        ? message.history
+        : []
+    );
   }
 
   function receiveAction(action) {
@@ -1997,9 +2273,9 @@ function drawOpponentHand(faceUp) {
     }
 
     processAction(action, false);
-
     history.push(action);
     gameReady = true;
+
     stage.update();
   }
 
@@ -2083,6 +2359,7 @@ function drawOpponentHand(faceUp) {
       stateReceived = false;
       gameReady = false;
       history = [];
+
       openSocket();
     }, 5000);
   }
@@ -2092,6 +2369,18 @@ function drawOpponentHand(faceUp) {
    * Startup
    * ----------------------------------------------------------------------
    */
+
+  function imageLoaded() {
+    imagesLoaded++;
+
+    if (
+      imagesLoaded >= 53 &&
+      !started
+    ) {
+      started = true;
+      beginGame();
+    }
+  }
 
   for (let suit = 0; suit < SUITS.length; suit++) {
     cardImages[suit] = [];
@@ -2121,7 +2410,9 @@ function drawOpponentHand(faceUp) {
     resetNewGame();
 
     createjs.Ticker.framerate = 60;
+
     createjs.Ticker.addEventListener("tick", function() {
+      updateConfetti();
       stage.update();
     });
 
