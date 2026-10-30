@@ -1,4 +1,3 @@
-/* 2026-10-28 */
 (function threeThirteenGame() {
   "use strict";
 
@@ -1489,7 +1488,7 @@
     );
   }
 
-  function updateSettlementAdvanceButton() {
+  function updateSettlementAdvanceButton(errorMessage) {
     if (
       !settlementAdvanceButton ||
       !settlementAdvanceButton.background ||
@@ -1501,11 +1500,11 @@
     const enabled = canAdvanceSettlement();
 
     if (settlementInstruction) {
-      settlementInstruction.text = loserFinalTurnComplete
+      settlementInstruction.text = errorMessage || (loserFinalTurnComplete
         ? "Both hands scored"
         : settlementTurnPlayer === user
           ? "Draw and discard your final card"
-          : "Waiting for the opposing player's final turn";
+          : "Waiting for the opposing player's final turn");
     }
 
     settlementAdvanceButton.enabled = enabled;
@@ -1530,9 +1529,6 @@
       return false;
     }
 
-    settlementActionSent = true;
-    updateSettlementAdvanceButton();
-
     const sent = sendAction(
       "round_advance," +
       currentRound +
@@ -1541,12 +1537,13 @@
     );
 
     if (!sent) {
-      settlementActionSent = false;
-      updateSettlementAdvanceButton();
+      updateSettlementAdvanceButton("Connection lost; please retry");
       return false;
     }
 
-    advanceRound();
+    settlementActionSent = true;
+    updateSettlementAdvanceButton();
+
     return true;
   }
 
@@ -1662,7 +1659,6 @@
     removeRoundDialog();
 
     roundDialog = new createjs.Container();
-    roundDialog.mouseEnabled = false;
     roundDialog.mouseChildren = true;
 
     const panel = new createjs.Shape();
@@ -2102,10 +2098,6 @@
         return;
       }
 
-      if (localActor && !replayMode) {
-        return;
-      }
-
       scoreCompletedRound();
       advanceRound();
 
@@ -2195,6 +2187,7 @@
 
     stateReceived = true;
     gameReady = false;
+    removeRoundDialog();
 
     currentRound = 3;
     globalCurrentRound = 3;
@@ -2288,6 +2281,17 @@
 
     if (message.type === "game_state") {
       receiveState(message);
+      return;
+    }
+
+    if (
+      message.type === "game_action_error" &&
+      message.action === "round_advance," + currentRound + "," + user &&
+      roundSettlement &&
+      settlementActionSent
+    ) {
+      settlementActionSent = false;
+      updateSettlementAdvanceButton("Could not advance; please retry");
       return;
     }
 

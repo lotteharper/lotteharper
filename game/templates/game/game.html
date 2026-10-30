@@ -3352,7 +3352,7 @@
     }
 
     // ---------------------------------------------------------------------
-    // Software 3D renderer
+    // 3D renderer
     // ---------------------------------------------------------------------
     const CUBE_VERTICES = [
       [-0.5, -0.5, -0.5], [0.5, -0.5, -0.5],
@@ -3391,7 +3391,9 @@
       return [x, y, z];
     }
 
-    function clipNear(polygon, near = 0.1) {
+    const NEAR_PLANE = 0.1;
+
+    function clipNear(polygon, near = NEAR_PLANE) {
       const result = [];
 
       for (let i = 0; i < polygon.length; i++) {
@@ -3432,82 +3434,6 @@
       ];
     }
 
-    function clipScreenPolygon(points) {
-      let polygon = points;
-
-      const edges = [
-        {
-          inside: point => point[0] >= 0,
-          intersect: (a, b) => {
-            const denominator = b[0] - a[0];
-            if (Math.abs(denominator) < 1e-12) return null;
-            const t = -a[0] / denominator;
-            return [0, a[1] + (b[1] - a[1]) * t];
-          }
-        },
-        {
-          inside: point => point[0] <= screenWidth,
-          intersect: (a, b) => {
-            const denominator = b[0] - a[0];
-            if (Math.abs(denominator) < 1e-12) return null;
-            const t = (screenWidth - a[0]) / denominator;
-            return [screenWidth, a[1] + (b[1] - a[1]) * t];
-          }
-        },
-        {
-          inside: point => point[1] >= 0,
-          intersect: (a, b) => {
-            const denominator = b[1] - a[1];
-            if (Math.abs(denominator) < 1e-12) return null;
-            const t = -a[1] / denominator;
-            return [a[0] + (b[0] - a[0]) * t, 0];
-          }
-        },
-        {
-          inside: point => point[1] <= screenHeight,
-          intersect: (a, b) => {
-            const denominator = b[1] - a[1];
-            if (Math.abs(denominator) < 1e-12) return null;
-            const t = (screenHeight - a[1]) / denominator;
-            return [
-              a[0] + (b[0] - a[0]) * t,
-              screenHeight
-            ];
-          }
-        }
-      ];
-
-      for (const edge of edges) {
-        if (polygon.length === 0) break;
-
-        const input = polygon;
-        polygon = [];
-
-        for (let i = 0; i < input.length; i++) {
-          const current = input[i];
-          const previous = input[(i + input.length - 1) % input.length];
-          const currentInside = edge.inside(current);
-          const previousInside = edge.inside(previous);
-
-          if (currentInside !== previousInside) {
-            const intersection = edge.intersect(previous, current);
-
-            if (
-              intersection &&
-              Number.isFinite(intersection[0]) &&
-              Number.isFinite(intersection[1])
-            ) {
-              polygon.push(intersection);
-            }
-          }
-
-          if (currentInside) polygon.push(current);
-        }
-      }
-
-      return polygon;
-    }
-
     function faceFacesCamera(center, normal, halfExtents = [0.5, 0.5, 0.5]) {
       const faceCenter = [
         center[0] + normal[0] * halfExtents[0],
@@ -3534,11 +3460,6 @@
     let frameDeltaMs = 16;
     let renderFrameId = 0;
     let worldLight = 1;
-    // Faces are painter-sorted rather than depth-tested. Keep door surfaces
-    // just in front of coplanar block faces so a door does not flicker with
-    // the block behind its hinge edge.
-    const DOOR_RENDER_DEPTH_BIAS = 0.01;
-
     function updateDayNight() {
       const cycle = 30 * 60 * 1000;
       const phase = (Date.now() % cycle) / cycle;
@@ -3613,10 +3534,6 @@
         if (polygon.length < 3) return;
 
         faces.push({
-          depth:
-            polygon.reduce((sum, v) => sum + v[2], 0) / polygon.length -
-            DOOR_RENDER_DEPTH_BIAS,
-          renderPriority: 1,
           points: polygon,
           color: shadeColor(
             ITEM_DEFINITIONS.door.color,
@@ -3680,7 +3597,6 @@
         if (polygon.length < 3) continue;
 
         faces.push({
-          depth: polygon.reduce((sum, vertex) => sum + vertex[2], 0) / polygon.length,
           points: polygon,
           color: shadeColor(
             block.color,
@@ -3709,7 +3625,6 @@
         const polygon = clipNear(points.map(worldToCamera));
         if (polygon.length >= 3) {
           faces.push({
-            depth: polygon.reduce((sum, vertex) => sum + vertex[2], 0) / polygon.length,
             points: polygon,
             color: shadeColor(color, worldLight)
           });
@@ -3769,13 +3684,7 @@
         const polygon = clipNear(face.ids.map(index => vertices[index]));
         if (polygon.length < 3) continue;
 
-        const depth = polygon.reduce(
-          (sum, vertex) => sum + vertex[2],
-          0
-        ) / polygon.length;
-
         faces.push({
-          depth,
           points: polygon,
           color: type === "water"
             ? shadeColor(block.color, face.shade * worldLight)
@@ -3828,13 +3737,7 @@
           const polygon = clipNear(face.ids.map(index => vertices[index]));
           if (polygon.length < 3) continue;
 
-          const depth = polygon.reduce(
-            (sum, vertex) => sum + vertex[2],
-            0
-          ) / polygon.length;
-
           faces.push({
-            depth,
             points: polygon,
             color: shadeColor(part.color, face.shade)
           });
@@ -3859,12 +3762,161 @@
     // Vertical half-height of the always-drawn band around the camera.
     const CAVE_RENDER_BAND = 10;
 
+    const depthCanvas = document.createElement("canvas");
+    const gl = depthCanvas.getContext("webgl", { alpha: false });
+    let depthProgram = null;
+    let depthBuffer = null;
+    let projectionLocation = null;
+
+    function initializeDepthRenderer() {
+      function compileShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          throw new Error(`Depth renderer shader: ${gl.getShaderInfoLog(shader)}`);
+        }
+        return shader;
+      }
+
+      // Infinite-far-plane projection maps camera-space depth into the depth buffer.
+      const vertex = compileShader(gl.VERTEX_SHADER, `
+        attribute vec3 position;
+        attribute vec3 color;
+        uniform vec2 projection;
+        varying vec3 faceColor;
+        void main() {
+          gl_Position = vec4(position.xy * projection, position.z - ${(2 * NEAR_PLANE).toFixed(6)}, position.z);
+          faceColor = color;
+        }
+      `);
+      const fragment = compileShader(gl.FRAGMENT_SHADER, `
+        precision mediump float;
+        varying vec3 faceColor;
+        void main() {
+          gl_FragColor = vec4(faceColor, 1.0);
+        }
+      `);
+      depthProgram = gl.createProgram();
+      gl.attachShader(depthProgram, vertex);
+      gl.attachShader(depthProgram, fragment);
+      gl.linkProgram(depthProgram);
+      if (!gl.getProgramParameter(depthProgram, gl.LINK_STATUS)) {
+        throw new Error(`Depth renderer program: ${gl.getProgramInfoLog(depthProgram)}`);
+      }
+      gl.deleteShader(vertex);
+      gl.deleteShader(fragment);
+      depthBuffer = gl.createBuffer();
+      projectionLocation = gl.getUniformLocation(depthProgram, "projection");
+    }
+
+    if (gl) {
+      initializeDepthRenderer();
+      depthCanvas.addEventListener("webglcontextlost", event => event.preventDefault());
+      depthCanvas.addEventListener("webglcontextrestored", initializeDepthRenderer);
+    }
+
+    function faceColorComponents(color) {
+      return color.match(/\d+/g).map(Number);
+    }
+
+    function renderDepthFaces(faces, skyColor) {
+      const width = canvas.width;
+      const height = canvas.height;
+      if (!gl || gl.isContextLost()) {
+        renderSoftwareDepthFaces(faces, skyColor, width, height);
+        return;
+      }
+
+      if (depthCanvas.width !== width || depthCanvas.height !== height) {
+        depthCanvas.width = width;
+        depthCanvas.height = height;
+      }
+
+      const vertices = [];
+      for (const face of faces) {
+        const color = faceColorComponents(face.color).map(channel => channel / 255);
+        for (let i = 1; i < face.points.length - 1; i++) {
+          for (const point of [face.points[0], face.points[i], face.points[i + 1]]) {
+            vertices.push(...point, ...color);
+          }
+        }
+      }
+
+      const focalLength = Math.max(1, Math.min(screenWidth, screenHeight) * 0.55);
+      gl.viewport(0, 0, width, height);
+      gl.clearColor(...skyColor.map(channel => channel / 255), 1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LESS);
+      gl.useProgram(depthProgram);
+      gl.uniform2f(projectionLocation, 2 * focalLength / screenWidth, 2 * focalLength / screenHeight);
+      gl.bindBuffer(gl.ARRAY_BUFFER, depthBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+      const position = gl.getAttribLocation(depthProgram, "position");
+      const color = gl.getAttribLocation(depthProgram, "color");
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 24, 0);
+      gl.enableVertexAttribArray(color);
+      gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 24, 12);
+      gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 6);
+      ctx.drawImage(depthCanvas, 0, 0, screenWidth, screenHeight);
+    }
+
+    // Keep correct occlusion on browsers without WebGL or during context loss.
+    function renderSoftwareDepthFaces(faces, skyColor, width, height) {
+      const image = ctx.createImageData(width, height);
+      const pixels = image.data;
+      const depths = new Float32Array(width * height);
+      for (let i = 0; i < pixels.length; i += 4) {
+        pixels[i] = skyColor[0];
+        pixels[i + 1] = skyColor[1];
+        pixels[i + 2] = skyColor[2];
+        pixels[i + 3] = 255;
+      }
+
+      for (const face of faces) {
+        const color = faceColorComponents(face.color);
+        const points = face.points.map(point => {
+          const [x, y] = project(point);
+          return [x * width / screenWidth, y * height / screenHeight, 1 / point[2]];
+        });
+        for (let i = 1; i < points.length - 1; i++) {
+          const a = points[0], b = points[i], c = points[i + 1];
+          const area = (b[0] - a[0]) * (c[1] - a[1]) -
+            (b[1] - a[1]) * (c[0] - a[0]);
+          if (Math.abs(area) < 1e-10) continue;
+          const minX = Math.max(0, Math.floor(Math.min(a[0], b[0], c[0])));
+          const maxX = Math.min(width - 1, Math.ceil(Math.max(a[0], b[0], c[0])));
+          const minY = Math.max(0, Math.floor(Math.min(a[1], b[1], c[1])));
+          const maxY = Math.min(height - 1, Math.ceil(Math.max(a[1], b[1], c[1])));
+          for (let y = minY; y <= maxY; y++) {
+            for (let x = minX; x <= maxX; x++) {
+              const px = x + 0.5, py = y + 0.5;
+              const wa = ((b[0] - px) * (c[1] - py) - (b[1] - py) * (c[0] - px)) / area;
+              const wb = ((c[0] - px) * (a[1] - py) - (c[1] - py) * (a[0] - px)) / area;
+              const wc = 1 - wa - wb;
+              if (wa < 0 || wb < 0 || wc < 0) continue;
+              const depth = wa * a[2] + wb * b[2] + wc * c[2];
+              const index = y * width + x;
+              if (depth <= depths[index]) continue;
+              depths[index] = depth;
+              const offset = index * 4;
+              pixels[offset] = color[0];
+              pixels[offset + 1] = color[1];
+              pixels[offset + 2] = color[2];
+            }
+          }
+        }
+      }
+      ctx.putImageData(image, 0, 0);
+    }
+
     function render() {
       renderFrameId++;
       updateDayNight();
       const sky = Math.round(20 + worldLight * 180);
-      ctx.fillStyle = `rgb(${Math.round(sky * 0.72)},${Math.round(sky * 0.84)},${sky})`;
-      ctx.fillRect(0, 0, screenWidth, screenHeight);
+      const skyColor = [Math.round(sky * 0.72), Math.round(sky * 0.84), sky];
 
       const faces = [];
       const cameraBandLow = Math.floor(camera.pos[1]) - CAVE_RENDER_BAND;
@@ -3933,33 +3985,7 @@
         if (swing.seen < renderFrameId - 1) doorSwing.delete(key);
       }
 
-      faces.sort((a, b) =>
-        b.depth - a.depth ||
-        (a.renderPriority || 0) - (b.renderPriority || 0)
-      );
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, 0, screenWidth, screenHeight);
-      ctx.clip();
-
-      for (const face of faces) {
-        const points = clipScreenPolygon(face.points.map(project));
-        if (points.length < 3) continue;
-
-        ctx.beginPath();
-        ctx.moveTo(points[0][0], points[0][1]);
-
-        for (let i = 1; i < points.length; i++) {
-          ctx.lineTo(points[i][0], points[i][1]);
-        }
-
-        ctx.closePath();
-        ctx.fillStyle = face.color;
-        ctx.fill();
-      }
-
-      ctx.restore();
+      renderDepthFaces(faces, skyColor);
     }
 
     // ---------------------------------------------------------------------
