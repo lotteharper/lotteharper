@@ -145,45 +145,65 @@ def append_turn(game_id, action):
 
         existing_actions = split_history(game.turns)
 
+        action_parts = action.split(",")
+
+        # Only the server may create an advance after both players are ready.
+        if action_parts[0] == "round_advance":
+            return None
+
+        if action_parts[0] == "round_ready":
+            completed_round = action_parts[1]
+            ready_prefix = "round_ready," + completed_round + ","
+            advance_prefix = "round_advance," + completed_round + ","
+            previous_advance = next(
+                (existing for existing in existing_actions
+                 if existing.startswith(advance_prefix)),
+                None,
+            )
+
+            if action in existing_actions:
+                return {
+                    "action": action,
+                    "advance": previous_advance,
+                    "history": existing_actions,
+                    "duplicate": True,
+                }
+
+            if previous_advance or not any(
+                existing.startswith("round_complete," + completed_round + ",")
+                for existing in existing_actions
+            ):
+                return None
+
+            existing_actions.append(action)
+            ready_players = {
+                existing.split(",")[2]
+                for existing in existing_actions
+                if existing.startswith(ready_prefix)
+                and len(existing.split(",")) == 3
+            }
+            advance = None
+            if {"Player 1", "Player 2"} <= ready_players:
+                advance = "round_advance," + completed_round + "," + action_parts[2]
+                existing_actions.append(advance)
+
+            game.turn = advance or action
+            game.turns = serialise_history(existing_actions)
+            game.begun = True
+            game.save(update_fields=["turn", "turns", "begun"])
+            return {
+                "action": action,
+                "advance": advance,
+                "history": existing_actions,
+                "duplicate": False,
+            }
+
         if existing_actions and existing_actions[-1] == action:
             return {
                 "action": action,
                 "history": existing_actions,
                 "duplicate": True,
             }
-
-        action_parts = action.split(",")
-
-        if action_parts[0] == "round_advance":
-            completed_round = action_parts[1]
-            round_advance_prefix = (
-                "round_advance," + completed_round + ","
-            )
-
-            previous_advance = next(
-                (
-                    existing for existing in existing_actions
-                    if existing.startswith(round_advance_prefix)
-                ),
-                None,
-            )
-
-            if previous_advance:
-                return {
-                    "action": previous_advance,
-                    "history": existing_actions,
-                    "duplicate": True,
-                }
-
-            round_complete_prefix = (
-                "round_complete," + completed_round + ","
-            )
-
-            if not any(
-                existing.startswith(round_complete_prefix)
-                for existing in existing_actions
-            ):
-                return None
 
         existing_actions.append(action)
 
@@ -348,7 +368,7 @@ def is_valid_game_action(action):
             and bool(parts[2])
         )
 
-    if action_type in {"round_complete", "round_advance"}:
+    if action_type in {"round_complete", "round_ready", "round_advance"}:
         if len(parts) != 3:
             return False
 
@@ -359,7 +379,11 @@ def is_valid_game_action(action):
 
         return (
             3 <= round_number <= 13
-            and bool(parts[2])
+            and (
+                parts[2] in {"Player 1", "Player 2"}
+                if action_type == "round_ready"
+                else bool(parts[2])
+            )
         )
 
     return False
@@ -508,7 +532,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
 
         if result is None:
-            if message.startswith("round_advance,"):
+            if message.startswith(("round_ready,", "round_advance,")):
                 await self.send(
                     text_data=json.dumps({
                         "type": "game_action_error",
@@ -518,34 +542,39 @@ class GameConsumer(AsyncWebsocketConsumer):
             return
 
         if result["duplicate"]:
-            if result["action"].startswith("round_advance,"):
+            if result["action"].startswith("round_ready,"):
                 await self.send(
                     text_data=json.dumps({
                         "type": "game_action",
                         "action": result["action"],
                     })
                 )
+                if result.get("advance"):
+                    await self.send(text_data=json.dumps({
+                        "type": "game_action",
+                        "action": result["advance"],
+                    }))
             return
 
-        await self.channel_layer.group_send(
-            self.group_name,
-            {
-                "type": "game.action",
-                "action": result["action"],
-                "sender": self.channel_name,
-            },
-        )
+        actions = [result["action"]]
+        if result.get("advance"):
+            actions.append(result["advance"])
 
-        # Draws and discards are already applied by their sender. Round
-        # advancement is server-confirmed, so echo it to the sender as well
-        # as notifying the other player.
-        if result["action"].startswith("round_advance,"):
-            await self.send(
-                text_data=json.dumps({
-                    "type": "game_action",
-                    "action": result["action"],
-                })
+        for action in actions:
+            await self.channel_layer.group_send(
+                self.group_name,
+                {
+                    "type": "game.action",
+                    "action": action,
+                    "sender": self.channel_name,
+                },
             )
+            # Readiness and advancement are server-confirmed for both clients.
+            if action.startswith(("round_ready,", "round_advance,")):
+                await self.send(text_data=json.dumps({
+                    "type": "game_action",
+                    "action": action,
+                }))
 
     async def game_action(self, event):
         if event.get("sender") == self.channel_name:
