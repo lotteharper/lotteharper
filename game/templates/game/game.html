@@ -483,6 +483,7 @@
       .slotColor { inset: 6px; }
     }
   </style>
+  <script src="/static/js/three.min.js"></script>
 </head>
 <body>
   <div class="hint">
@@ -541,6 +542,7 @@
     <p class="craftStatus">Click a slot to swap it with your selected hotbar slot. Press Escape to release the pointer.</p>
   </div>
 
+  <script src="/static/js/voxel-renderer.js"></script>
   <script>
     "use strict";
 
@@ -548,7 +550,7 @@
     // Canvas
     // ---------------------------------------------------------------------
     const canvas = document.getElementById("c");
-    const ctx = canvas.getContext("2d");
+    let rendererState = null;
     const hotbarElement = document.getElementById("hotbar");
     const inventoryPanel = document.getElementById("inventoryPanel");
     const chestPanel = document.getElementById("chestPanel");
@@ -568,20 +570,9 @@
       document.getElementById("inventorySelectionTooltip");
     const craftGuideElement = document.getElementById("craftGuide");
 
-    let screenWidth = 0;
-    let screenHeight = 0;
-    let centerX = 0;
-    let centerY = 0;
-
     function resizeCanvas() {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      screenWidth = window.innerWidth;
-      screenHeight = window.innerHeight;
-      canvas.width = Math.round(screenWidth * ratio);
-      canvas.height = Math.round(screenHeight * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      centerX = screenWidth / 2;
-      centerY = screenHeight / 2;
+      if (rendererState) rendererState.resize(window.innerWidth, window.innerHeight, ratio);
     }
 
     resizeCanvas();
@@ -1364,10 +1355,29 @@
     // ---------------------------------------------------------------------
     // World blocks and edits
     // ---------------------------------------------------------------------
-    const placedBlocks = new Map();
+    class WorldMap extends Map {
+      set(key, value) {
+        super.set(key, value);
+        if (rendererState) rendererState.invalidate(key);
+        return this;
+      }
+
+      delete(key) {
+        const deleted = super.delete(key);
+        if (deleted && rendererState) rendererState.invalidate(key);
+        return deleted;
+      }
+
+      clear() {
+        super.clear();
+        if (rendererState) rendererState.invalidateAll();
+      }
+    }
+
+    const placedBlocks = new WorldMap();
     // Null entries are tombstones for mined blocks.
-    const blockEdits = new Map();
-    const cropStates = new Map();
+    const blockEdits = new WorldMap();
+    const cropStates = new WorldMap();
     const saplingStates = new Map();
 
     function blockKey(x, y, z) {
@@ -1435,12 +1445,6 @@
     // ---------------------------------------------------------------------
     // Camera and player state
     // ---------------------------------------------------------------------
-    function rotate2d([x, y], radians) {
-      const sine = Math.sin(radians);
-      const cosine = Math.cos(radians);
-      return [x * cosine - y * sine, y * cosine + x * sine];
-    }
-
     class Camera {
       constructor(x, y, z) {
         this.pos = [x, y, z]; // Feet position
@@ -3352,398 +3356,9 @@
     }
 
     // ---------------------------------------------------------------------
-    // 3D renderer
+    // Three.js renderer
     // ---------------------------------------------------------------------
-    const CUBE_VERTICES = [
-      [-0.5, -0.5, -0.5], [0.5, -0.5, -0.5],
-      [0.5, 0.5, -0.5], [-0.5, 0.5, -0.5],
-      [-0.5, -0.5, 0.5], [0.5, -0.5, 0.5],
-      [0.5, 0.5, 0.5], [-0.5, 0.5, 0.5]
-    ];
-
-    const CUBE_FACES = [
-      { ids: [0, 1, 2, 3], neighbor: [0, 0, -1], shade: 0.78 },
-      { ids: [4, 5, 6, 7], neighbor: [0, 0, 1], shade: 1.00 },
-      { ids: [0, 1, 5, 4], neighbor: [0, -1, 0], shade: 0.62 },
-      { ids: [2, 3, 7, 6], neighbor: [0, 1, 0], shade: 1.12 },
-      { ids: [0, 3, 7, 4], neighbor: [-1, 0, 0], shade: 0.86 },
-      { ids: [1, 2, 6, 5], neighbor: [1, 0, 0], shade: 0.72 }
-    ];
-
-    function shadeColor(hex, amount) {
-      const value = hex.replace("#", "");
-      const red = parseInt(value.slice(0, 2), 16);
-      const green = parseInt(value.slice(2, 4), 16);
-      const blue = parseInt(value.slice(4, 6), 16);
-      const shade = channel =>
-        Math.max(0, Math.min(255, Math.round(channel * amount)));
-
-      return `rgb(${shade(red)},${shade(green)},${shade(blue)})`;
-    }
-
-    function worldToCamera(point) {
-      let x = point[0] - camera.pos[0];
-      let y = point[1] - (camera.pos[1] + EYE_HEIGHT);
-      let z = point[2] - camera.pos[2];
-
-      [x, z] = rotate2d([x, z], camera.rot[1]);
-      [y, z] = rotate2d([y, z], camera.rot[0]);
-      return [x, y, z];
-    }
-
-    const NEAR_PLANE = 0.1;
-
-    function clipNear(polygon, near = NEAR_PLANE) {
-      const result = [];
-
-      for (let i = 0; i < polygon.length; i++) {
-        const current = polygon[i];
-        const previous = polygon[(i + polygon.length - 1) % polygon.length];
-        const currentInside = current[2] >= near;
-        const previousInside = previous[2] >= near;
-
-        if (currentInside !== previousInside) {
-          const denominator = current[2] - previous[2];
-
-          if (Math.abs(denominator) > 1e-12) {
-            const t = (near - previous[2]) / denominator;
-            result.push([
-              previous[0] + (current[0] - previous[0]) * t,
-              previous[1] + (current[1] - previous[1]) * t,
-              near
-            ]);
-          }
-        }
-
-        if (currentInside) result.push(current);
-      }
-
-      return result;
-    }
-
-    function project(point) {
-      const focalLength = Math.max(
-        1,
-        Math.min(screenWidth, screenHeight) * 0.55
-      );
-      const scale = focalLength / point[2];
-
-      return [
-        centerX + point[0] * scale,
-        centerY - point[1] * scale
-      ];
-    }
-
-    function faceFacesCamera(center, normal, halfExtents = [0.5, 0.5, 0.5]) {
-      const faceCenter = [
-        center[0] + normal[0] * halfExtents[0],
-        center[1] + normal[1] * halfExtents[1],
-        center[2] + normal[2] * halfExtents[2]
-      ];
-
-      const toCamera = [
-        camera.pos[0] - faceCenter[0],
-        camera.pos[1] + EYE_HEIGHT - faceCenter[1],
-        camera.pos[2] - faceCenter[2]
-      ];
-
-      return (
-        normal[0] * toCamera[0] +
-        normal[1] * toCamera[1] +
-        normal[2] * toCamera[2]
-      ) > 0;
-    }
-
-    // Swing progress (0 closed .. 1 open) per door, animated toward the
-    // door's state. Remote players' door changes animate the same way.
-    const doorSwing = new Map();
     let frameDeltaMs = 16;
-    let renderFrameId = 0;
-    let worldLight = 1;
-    function updateDayNight() {
-      const cycle = 30 * 60 * 1000;
-      const phase = (Date.now() % cycle) / cycle;
-      const sun = (Math.sin(phase * Math.PI * 2 - Math.PI / 2) + 1) / 2;
-      worldLight = 0.28 + sun * 0.72;
-      const px = Math.floor(camera.pos[0]);
-      const py = Math.floor(camera.pos[1]);
-      const pz = Math.floor(camera.pos[2]);
-      for (let x = px - 8; x <= px + 8; x++) {
-        for (let y = py - 4; y <= py + 5; y++) {
-          for (let z = pz - 8; z <= pz + 8; z++) {
-            if (getBlock(x, y, z)?.type !== "torch") continue;
-            const distance = Math.hypot(x - camera.pos[0], y - camera.pos[1], z - camera.pos[2]);
-            worldLight = Math.min(1, worldLight + Math.max(0, 1 - distance / 10) * 0.55);
-          }
-        }
-      }
-      const minutes = Math.floor(phase * 24 * 60);
-      const hours = Math.floor(minutes / 60);
-      timeOfDayElement.textContent =
-        `${hours < 10 ? "0" : ""}${hours}:${String(minutes % 60).padStart(2, "0")}` +
-        (worldLight < 0.45 ? " · Night" : " · Day");
-    }
-
-    function addDoorFaces(faces, block) {
-      const state = doorStateFromColor(block.color);
-      if (!state || state.upper) return;
-
-      const key = blockKey(block.x, block.y, block.z);
-      const hasUpperHalf = Boolean(doorPartner(block.x, block.y, block.z));
-      const target = state.open ? 1 : 0;
-      let swing = doorSwing.get(key);
-
-      if (!swing) swing = { value: target, seen: 0 };
-      if (swing.seen !== renderFrameId - 1 && swing.seen !== renderFrameId) {
-        swing.value = target;
-      }
-
-      const step = frameDeltaMs / DOOR_SWING_MS;
-      if (swing.seen !== renderFrameId) {
-        swing.value += Math.max(-step, Math.min(step, target - swing.value));
-      }
-
-      swing.seen = renderFrameId;
-      doorSwing.set(key, swing);
-
-      const corners = doorFootprint(state, swing.value * Math.PI / 2)
-        .map(([cx, cz]) => [block.x + cx, block.z + cz]);
-      const centroid = [
-        corners.reduce((sum, c) => sum + c[0], 0) / 4,
-        corners.reduce((sum, c) => sum + c[1], 0) / 4
-      ];
-      const eye = [
-        camera.pos[0], camera.pos[1] + EYE_HEIGHT, camera.pos[2]
-      ];
-      const y0 = block.y;
-      const y1 = block.y + (hasUpperHalf ? 2 : 1);
-
-      const pushQuad = (points, normal, shade) => {
-        const center = points.reduce(
-          (sum, p) => [sum[0] + p[0] / 4, sum[1] + p[1] / 4, sum[2] + p[2] / 4],
-          [0, 0, 0]
-        );
-
-        const facing =
-          normal[0] * (eye[0] - center[0]) +
-          normal[1] * (eye[1] - center[1]) +
-          normal[2] * (eye[2] - center[2]);
-        if (facing <= 0) return;
-
-        const polygon = clipNear(points.map(worldToCamera));
-        if (polygon.length < 3) return;
-
-        faces.push({
-          points: polygon,
-          color: shadeColor(
-            ITEM_DEFINITIONS.door.color,
-            shade * worldLight
-          )
-        });
-      };
-
-      for (let i = 0; i < 4; i++) {
-        const a = corners[i];
-        const b = corners[(i + 1) % 4];
-        let nx = b[1] - a[1];
-        let nz = a[0] - b[0];
-        const length = Math.hypot(nx, nz) || 1;
-        nx /= length;
-        nz /= length;
-
-        // Make the normal point away from the panel's center.
-        if (nx * ((a[0] + b[0]) / 2 - centroid[0]) +
-            nz * ((a[1] + b[1]) / 2 - centroid[1]) < 0) {
-          nx = -nx;
-          nz = -nz;
-        }
-
-        const shade = Math.abs(nz) >= Math.abs(nx)
-          ? (nz < 0 ? 0.78 : 1.0)
-          : (nx < 0 ? 0.86 : 0.72);
-
-        pushQuad(
-          [[a[0], y0, a[1]], [b[0], y0, b[1]],
-           [b[0], y1, b[1]], [a[0], y1, a[1]]],
-          [nx, 0, nz],
-          shade
-        );
-      }
-
-      pushQuad(corners.map(c => [c[0], y1, c[1]]), [0, 1, 0], 1.12);
-      pushQuad(corners.map(c => [c[0], y0, c[1]]), [0, -1, 0], 0.62);
-    }
-
-    function addFenceFaces(faces, block) {
-      const type = blockType(block);
-      const center = [
-        block.x + 0.5,
-        block.y + 0.5,
-        block.z + 0.5
-      ];
-      const halfExtents = [0.25, 0.5, 0.25];
-      const vertices = CUBE_VERTICES.map(([x, y, z]) =>
-        worldToCamera([
-          center[0] + x * halfExtents[0] * 2,
-          center[1] + y * halfExtents[1] * 2,
-          center[2] + z * halfExtents[2] * 2
-        ])
-      );
-
-      for (const face of CUBE_FACES) {
-        if (!faceFacesCamera(center, face.neighbor, halfExtents)) continue;
-
-        const polygon = clipNear(face.ids.map(index => vertices[index]));
-        if (polygon.length < 3) continue;
-
-        faces.push({
-          points: polygon,
-          color: shadeColor(
-            block.color,
-            face.shade * (type === "torch" ? Math.max(worldLight, 0.85) : worldLight)
-          )
-        });
-      }
-    }
-
-    function addCrossFaces(faces, block) {
-      const type = blockType(block);
-      const stage = type === "crop" ? (cropStates.get(blockKey(block.x, block.y, block.z)) || 0) : 1;
-      const height = type === "crop" ? 0.25 + stage * 0.1 : 0.72;
-      const color = type === "crop"
-        ? (stage >= 7 ? "#d6b63e" : "#6c9f32")
-        : block.color;
-      const y0 = block.y;
-      const y1 = y0 + height;
-      const quads = [
-        [[block.x + 0.12, y0, block.z + 0.12], [block.x + 0.88, y0, block.z + 0.88],
-          [block.x + 0.88, y1, block.z + 0.88], [block.x + 0.12, y1, block.z + 0.12]],
-        [[block.x + 0.88, y0, block.z + 0.12], [block.x + 0.12, y0, block.z + 0.88],
-          [block.x + 0.12, y1, block.z + 0.88], [block.x + 0.88, y1, block.z + 0.12]]
-      ];
-      for (const points of quads) {
-        const polygon = clipNear(points.map(worldToCamera));
-        if (polygon.length >= 3) {
-          faces.push({
-            points: polygon,
-            color: shadeColor(color, worldLight)
-          });
-        }
-      }
-    }
-
-    function addCubeFaces(faces, block) {
-      const type = blockType(block);
-
-      if (type === "flower_red" || type === "flower_yellow" ||
-          type === "flower_blue" || type === "grass" ||
-          type === "sapling" || type === "crop") {
-        addCrossFaces(faces, block);
-        return;
-      }
-
-      if (type === "door" && doorStateFromColor(block.color)) {
-        addDoorFaces(faces, block);
-        return;
-      }
-
-      if (type === "fence" || type === "torch") {
-        addFenceFaces(faces, block);
-        return;
-      }
-
-      const center = [
-        block.x + 0.5,
-        block.y + 0.5,
-        block.z + 0.5
-      ];
-
-      const vertices = CUBE_VERTICES.map(([x, y, z]) =>
-        worldToCamera([
-          center[0] + x,
-          center[1] + y,
-          center[2] + z
-        ])
-      );
-
-      for (const face of CUBE_FACES) {
-        const [nx, ny, nz] = face.neighbor;
-
-        if (!faceFacesCamera(center, [nx, ny, nz])) continue;
-        if (isOpaqueCube(block.x + nx, block.y + ny, block.z + nz)) continue;
-        const neighbor = getBlock(
-          block.x + nx, block.y + ny, block.z + nz
-        );
-        if (
-          type === "water" &&
-          blockType(neighbor) === "water"
-        ) {
-          continue;
-        }
-
-        const polygon = clipNear(face.ids.map(index => vertices[index]));
-        if (polygon.length < 3) continue;
-
-        faces.push({
-          points: polygon,
-          color: type === "water"
-            ? shadeColor(block.color, face.shade * worldLight)
-            : shadeColor(
-                block.color,
-                face.shade * (type === "torch" ? Math.max(worldLight, 0.85) : worldLight)
-              )
-        });
-      }
-    }
-
-    function addRemoteAvatarFaces(faces, position, color) {
-      if (
-        !position ||
-        !Number.isFinite(position.x) ||
-        !Number.isFinite(position.y) ||
-        !Number.isFinite(position.z)
-      ) {
-        return;
-      }
-
-      const parts = [
-        {
-          center: [position.x, position.y + 0.85, position.z],
-          scale: [0.65, 0.85, 0.4],
-          color
-        },
-        {
-          center: [position.x, position.y + 1.5, position.z],
-          scale: [0.42, 0.42, 0.42],
-          color: "#e4bd96"
-        }
-      ];
-
-      for (const part of parts) {
-        const halfExtents = part.scale.map(value => value / 2);
-        const vertices = CUBE_VERTICES.map(([x, y, z]) =>
-          worldToCamera([
-            part.center[0] + x * part.scale[0],
-            part.center[1] + y * part.scale[1],
-            part.center[2] + z * part.scale[2]
-          ])
-        );
-
-        for (const face of CUBE_FACES) {
-          if (!faceFacesCamera(part.center, face.neighbor, halfExtents)) {
-            continue;
-          }
-
-          const polygon = clipNear(face.ids.map(index => vertices[index]));
-          if (polygon.length < 3) continue;
-
-          faces.push({
-            points: polygon,
-            color: shadeColor(part.color, face.shade)
-          });
-        }
-      }
-    }
 
     function playerColor(playerId) {
       const colors = [
@@ -3759,233 +3374,22 @@
       return colors[(hash >>> 0) % colors.length];
     }
 
-    // Vertical half-height of the always-drawn band around the camera.
-    const CAVE_RENDER_BAND = 10;
-
-    const depthCanvas = document.createElement("canvas");
-    const gl = depthCanvas.getContext("webgl", { alpha: false });
-    let depthProgram = null;
-    let depthBuffer = null;
-    let projectionLocation = null;
-
-    function initializeDepthRenderer() {
-      function compileShader(type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          throw new Error(`Depth renderer shader: ${gl.getShaderInfoLog(shader)}`);
-        }
-        return shader;
-      }
-
-      // Infinite-far-plane projection maps camera-space depth into the depth buffer.
-      const vertex = compileShader(gl.VERTEX_SHADER, `
-        attribute vec3 position;
-        attribute vec3 color;
-        uniform vec2 projection;
-        varying vec3 faceColor;
-        void main() {
-          gl_Position = vec4(position.xy * projection, position.z - ${(2 * NEAR_PLANE).toFixed(6)}, position.z);
-          faceColor = color;
-        }
-      `);
-      const fragment = compileShader(gl.FRAGMENT_SHADER, `
-        precision mediump float;
-        varying vec3 faceColor;
-        void main() {
-          gl_FragColor = vec4(faceColor, 1.0);
-        }
-      `);
-      depthProgram = gl.createProgram();
-      gl.attachShader(depthProgram, vertex);
-      gl.attachShader(depthProgram, fragment);
-      gl.linkProgram(depthProgram);
-      if (!gl.getProgramParameter(depthProgram, gl.LINK_STATUS)) {
-        throw new Error(`Depth renderer program: ${gl.getProgramInfoLog(depthProgram)}`);
-      }
-      gl.deleteShader(vertex);
-      gl.deleteShader(fragment);
-      depthBuffer = gl.createBuffer();
-      projectionLocation = gl.getUniformLocation(depthProgram, "projection");
+    try {
+      rendererState = createVoxelRenderer();
+    } catch (error) {
+      showToast("Unable to start the renderer. WebGL is required.", 30000);
+      throw error;
     }
-
-    if (gl) {
-      initializeDepthRenderer();
-      depthCanvas.addEventListener("webglcontextlost", event => event.preventDefault());
-      depthCanvas.addEventListener("webglcontextrestored", initializeDepthRenderer);
-    }
-
-    function faceColorComponents(color) {
-      return color.match(/\d+/g).map(Number);
-    }
-
-    function renderDepthFaces(faces, skyColor) {
-      const width = canvas.width;
-      const height = canvas.height;
-      if (!gl || gl.isContextLost()) {
-        renderSoftwareDepthFaces(faces, skyColor, width, height);
-        return;
-      }
-
-      if (depthCanvas.width !== width || depthCanvas.height !== height) {
-        depthCanvas.width = width;
-        depthCanvas.height = height;
-      }
-
-      const vertices = [];
-      for (const face of faces) {
-        const color = faceColorComponents(face.color).map(channel => channel / 255);
-        for (let i = 1; i < face.points.length - 1; i++) {
-          for (const point of [face.points[0], face.points[i], face.points[i + 1]]) {
-            vertices.push(...point, ...color);
-          }
-        }
-      }
-
-      const focalLength = Math.max(1, Math.min(screenWidth, screenHeight) * 0.55);
-      gl.viewport(0, 0, width, height);
-      gl.clearColor(...skyColor.map(channel => channel / 255), 1);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      gl.enable(gl.DEPTH_TEST);
-      gl.depthFunc(gl.LESS);
-      gl.useProgram(depthProgram);
-      gl.uniform2f(projectionLocation, 2 * focalLength / screenWidth, 2 * focalLength / screenHeight);
-      gl.bindBuffer(gl.ARRAY_BUFFER, depthBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
-      const position = gl.getAttribLocation(depthProgram, "position");
-      const color = gl.getAttribLocation(depthProgram, "color");
-      gl.enableVertexAttribArray(position);
-      gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 24, 0);
-      gl.enableVertexAttribArray(color);
-      gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 24, 12);
-      gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 6);
-      ctx.drawImage(depthCanvas, 0, 0, screenWidth, screenHeight);
-    }
-
-    // Keep correct occlusion on browsers without WebGL or during context loss.
-    function renderSoftwareDepthFaces(faces, skyColor, width, height) {
-      const image = ctx.createImageData(width, height);
-      const pixels = image.data;
-      const depths = new Float32Array(width * height);
-      for (let i = 0; i < pixels.length; i += 4) {
-        pixels[i] = skyColor[0];
-        pixels[i + 1] = skyColor[1];
-        pixels[i + 2] = skyColor[2];
-        pixels[i + 3] = 255;
-      }
-
-      for (const face of faces) {
-        const color = faceColorComponents(face.color);
-        const points = face.points.map(point => {
-          const [x, y] = project(point);
-          return [x * width / screenWidth, y * height / screenHeight, 1 / point[2]];
-        });
-        for (let i = 1; i < points.length - 1; i++) {
-          const a = points[0], b = points[i], c = points[i + 1];
-          const area = (b[0] - a[0]) * (c[1] - a[1]) -
-            (b[1] - a[1]) * (c[0] - a[0]);
-          if (Math.abs(area) < 1e-10) continue;
-          const minX = Math.max(0, Math.floor(Math.min(a[0], b[0], c[0])));
-          const maxX = Math.min(width - 1, Math.ceil(Math.max(a[0], b[0], c[0])));
-          const minY = Math.max(0, Math.floor(Math.min(a[1], b[1], c[1])));
-          const maxY = Math.min(height - 1, Math.ceil(Math.max(a[1], b[1], c[1])));
-          for (let y = minY; y <= maxY; y++) {
-            for (let x = minX; x <= maxX; x++) {
-              const px = x + 0.5, py = y + 0.5;
-              const wa = ((b[0] - px) * (c[1] - py) - (b[1] - py) * (c[0] - px)) / area;
-              const wb = ((c[0] - px) * (a[1] - py) - (c[1] - py) * (a[0] - px)) / area;
-              const wc = 1 - wa - wb;
-              if (wa < 0 || wb < 0 || wc < 0) continue;
-              const depth = wa * a[2] + wb * b[2] + wc * c[2];
-              const index = y * width + x;
-              if (depth <= depths[index]) continue;
-              depths[index] = depth;
-              const offset = index * 4;
-              pixels[offset] = color[0];
-              pixels[offset + 1] = color[1];
-              pixels[offset + 2] = color[2];
-            }
-          }
-        }
-      }
-      ctx.putImageData(image, 0, 0);
-    }
+    canvas.addEventListener("webglcontextlost", () => {
+      showToast("Graphics context lost. Waiting for the browser to restore it.", 30000);
+    });
+    canvas.addEventListener("webglcontextrestored", () => {
+      showToast("Graphics context restored.");
+    });
+    resizeCanvas();
 
     function render() {
-      renderFrameId++;
-      updateDayNight();
-      const sky = Math.round(20 + worldLight * 180);
-      const skyColor = [Math.round(sky * 0.72), Math.round(sky * 0.84), sky];
-
-      const faces = [];
-      const cameraBandLow = Math.floor(camera.pos[1]) - CAVE_RENDER_BAND;
-      const cameraBandHigh = Math.floor(camera.pos[1]) + CAVE_RENDER_BAND;
-      const startX = Math.floor(camera.pos[0]) - RENDER_RADIUS;
-      const endX = Math.floor(camera.pos[0]) + RENDER_RADIUS;
-      const startZ = Math.floor(camera.pos[2]) - RENDER_RADIUS;
-      const endZ = Math.floor(camera.pos[2]) + RENDER_RADIUS;
-
-      for (let x = startX; x <= endX; x++) {
-        for (let z = startZ; z <= endZ; z++) {
-          const top = terrainHeight(x, z);
-
-          // Only draw what can be seen: the surface skin down to the lowest
-          // neighboring column (so cliff faces stay filled in), plus a band
-          // around the camera so caves and tunnels render when underground.
-          const lowestNeighbor = Math.min(
-            top,
-            terrainHeight(x - 1, z), terrainHeight(x + 1, z),
-            terrainHeight(x, z - 1), terrainHeight(x, z + 1)
-          );
-          const surfaceLow = Math.max(WORLD_MIN_Y, lowestNeighbor - 1);
-          const bandHigh = Math.min(cameraBandHigh, surfaceLow - 1);
-
-          for (let y = Math.max(WORLD_MIN_Y, cameraBandLow); y <= bandHigh; y++) {
-            const block = getBlock(x, y, z);
-            if (block) addCubeFaces(faces, block);
-          }
-
-          for (let y = surfaceLow; y < top + 7; y++) {
-            const block = getBlock(x, y, z);
-            if (block) addCubeFaces(faces, block);
-          }
-        }
-      }
-
-      for (const [key, block] of placedBlocks) {
-        if (blockEdits.has(key)) continue;
-
-        if (
-          block.x >= startX - 1 && block.x <= endX &&
-          block.z >= startZ - 1 && block.z <= endZ &&
-          block.y >= terrainHeight(block.x, block.z) + 7
-        ) {
-          addCubeFaces(faces, block);
-        }
-      }
-
-      for (const [key, block] of blockEdits) {
-        if (!block || placedBlocks.has(key)) continue;
-
-        if (
-          block.x >= startX - 1 && block.x <= endX &&
-          block.z >= startZ - 1 && block.z <= endZ &&
-          block.y >= terrainHeight(block.x, block.z) + 7
-        ) {
-          addCubeFaces(faces, block);
-        }
-      }
-
-      for (const [playerId, position] of remotePlayers) {
-        addRemoteAvatarFaces(faces, position, playerColor(playerId));
-      }
-
-      for (const [key, swing] of doorSwing) {
-        if (swing.seen < renderFrameId - 1) doorSwing.delete(key);
-      }
-
-      renderDepthFaces(faces, skyColor);
+      rendererState.render();
     }
 
     // ---------------------------------------------------------------------
