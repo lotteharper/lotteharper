@@ -1,5 +1,6 @@
 import datetime
 import json
+from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -10,6 +11,10 @@ from games.models import Game
 
 
 GAME_MAX_AGE = datetime.timedelta(hours=48)
+
+# Game.players stores occupied player slots as bits, not a socket count.
+PLAYER_SLOTS = {"Player 1": 1, "Player 2": 2}
+BOTH_PLAYERS = 3
 
 
 def normalise_action(value):
@@ -85,7 +90,30 @@ def get_game_by_primary_key(game_id):
 
 
 @database_sync_to_async
-def increment_connected_players(game_id):
+def claim_player_slot(game_id, player):
+    with transaction.atomic():
+        game = (
+            Game.objects
+            .select_for_update()
+            .filter(id=game_id)
+            .first()
+        )
+
+        if game is None:
+            return False
+
+        slots = game.players or 0
+        slot = PLAYER_SLOTS[player]
+        if slots & slot:
+            return False
+        game.players = slots | slot
+        game.save(update_fields=["players"])
+
+        return True
+
+
+@database_sync_to_async
+def release_player_slot(game_id, player):
     with transaction.atomic():
         game = (
             Game.objects
@@ -97,33 +125,14 @@ def increment_connected_players(game_id):
         if game is None:
             return 0
 
-        game.players = max(0, game.players or 0) + 1
+        game.players = (game.players or 0) & ~PLAYER_SLOTS[player]
         game.save(update_fields=["players"])
 
         return game.players
 
 
 @database_sync_to_async
-def decrement_connected_players(game_id):
-    with transaction.atomic():
-        game = (
-            Game.objects
-            .select_for_update()
-            .filter(id=game_id)
-            .first()
-        )
-
-        if game is None:
-            return 0
-
-        game.players = max(0, (game.players or 0) - 1)
-        game.save(update_fields=["players"])
-
-        return game.players
-
-
-@database_sync_to_async
-def append_turn(game_id, action):
+def append_turn(game_id, action, player):
     """
     Append an action atomically and return the updated history.
     """
@@ -140,7 +149,11 @@ def append_turn(game_id, action):
             .first()
         )
 
-        if game is None:
+        if (
+            game is None
+            or game.players != BOTH_PLAYERS
+            or action.split(",")[-1] != player
+        ):
             return None
 
         existing_actions = split_history(game.turns)
@@ -241,6 +254,7 @@ def get_persisted_state(game_id):
         "player2_score": game.player2_score,
         "scored": bool(game.scored),
         "begun": bool(game.begun),
+        "players_connected": game.players == BOTH_PLAYERS,
     }
 
 
@@ -272,7 +286,7 @@ def save_scores(post_id, code, player1_score, player2_score):
             .first()
         )
 
-        if game is None:
+        if game is None or game.players != BOTH_PLAYERS:
             return False
 
         game.player1_score = score1
@@ -410,11 +424,30 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.close(code=4004)
             return
 
+        query = parse_qs(
+            self.scope.get("query_string", b"").decode("utf-8", errors="replace"),
+            keep_blank_values=True,
+        )
+        players = query.get("player")
+        if players is None:
+            # Older clients identify the host by uid and the guest by code.
+            players = [
+                player for player, player_code in (
+                    ("Player 1", game.uid),
+                    ("Player 2", game.code),
+                )
+                if code == player_code
+            ]
+        if len(players) != 1 or players[0] not in PLAYER_SLOTS:
+            await self.close(code=4000)
+            return
+
         self.game_id = game.id
         self.post_id = post_id
         self.code = code
         self.group_name = f"game_{game.id}"
         self.player_counted = False
+        self.player = players[0]
 
         await self.channel_layer.group_add(
             self.group_name,
@@ -423,38 +456,38 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        await increment_connected_players(self.game_id)
+        if not await claim_player_slot(self.game_id, self.player):
+            await self.channel_layer.group_discard(self.group_name, self.channel_name)
+            self.group_name = None
+            await self.close(code=4009)
+            return
         self.player_counted = True
 
         state = await get_persisted_state(self.game_id)
 
         if state is None:
-            state = {
-                "type": "game_state",
-                "game_id": self.game_id,
-                "history": [],
-                "player1_score": None,
-                "player2_score": None,
-                "scored": False,
-                "begun": False,
-            }
+            await self.close(code=4004)
+            return
 
         await self.send(
             text_data=json.dumps(state)
         )
+        await self.broadcast_presence()
 
     async def disconnect(self, close_code):
+        if (
+            getattr(self, "player_counted", False)
+            and getattr(self, "game_id", None) is not None
+        ):
+            await release_player_slot(self.game_id, self.player)
+            self.player_counted = False
+            await self.broadcast_presence()
+
         if getattr(self, "group_name", None):
             await self.channel_layer.group_discard(
                 self.group_name,
                 self.channel_name,
             )
-
-        if (
-            getattr(self, "player_counted", False)
-            and getattr(self, "game_id", None) is not None
-        ):
-            await decrement_connected_players(self.game_id)
 
         self.player_counted = False
 
@@ -468,15 +501,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             state = await get_persisted_state(self.game_id)
 
             if state is None:
-                state = {
-                    "type": "game_state",
-                    "game_id": self.game_id,
-                    "history": [],
-                    "player1_score": None,
-                    "player2_score": None,
-                    "scored": False,
-                    "begun": False,
-                }
+                await self.close(code=4004)
+                return
 
             await self.send(
                 text_data=json.dumps(state)
@@ -505,7 +531,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             parts = message.split(",")
 
             if len(parts) == 4:
-                if parts[1] == "Player 1":
+                if parts[1] == "Player 1" and self.player == "Player 1":
                     await save_scores(
                         self.post_id,
                         self.code,
@@ -513,7 +539,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                         parts[3],
                     )
 
-                elif parts[1] == "Player 2":
+                elif parts[1] == "Player 2" and self.player == "Player 2":
                     await save_scores(
                         self.post_id,
                         self.code,
@@ -529,31 +555,21 @@ class GameConsumer(AsyncWebsocketConsumer):
         result = await append_turn(
             self.game_id,
             message,
+            self.player,
         )
 
         if result is None:
-            if message.startswith(("round_ready,", "round_advance,")):
-                await self.send(
-                    text_data=json.dumps({
-                        "type": "game_action_error",
-                        "action": message,
-                    })
-                )
+            state = await get_persisted_state(self.game_id)
+            await self.send(text_data=json.dumps({
+                "type": "game_action_error",
+                "action": message,
+                "state": state,
+            }))
             return
 
         if result["duplicate"]:
-            if result["action"].startswith("round_ready,"):
-                await self.send(
-                    text_data=json.dumps({
-                        "type": "game_action",
-                        "action": result["action"],
-                    })
-                )
-                if result.get("advance"):
-                    await self.send(text_data=json.dumps({
-                        "type": "game_action",
-                        "action": result["advance"],
-                    }))
+            state = await get_persisted_state(self.game_id)
+            await self.send(text_data=json.dumps(state))
             return
 
         actions = [result["action"]]
@@ -569,12 +585,23 @@ class GameConsumer(AsyncWebsocketConsumer):
                     "sender": self.channel_name,
                 },
             )
-            # Readiness and advancement are server-confirmed for both clients.
-            if action.startswith(("round_ready,", "round_advance,")):
-                await self.send(text_data=json.dumps({
-                    "type": "game_action",
-                    "action": action,
-                }))
+            await self.send(text_data=json.dumps({
+                "type": "game_action",
+                "action": action,
+            }))
+
+    async def broadcast_presence(self):
+        await self.channel_layer.group_send(
+            self.group_name, {"type": "game.presence"}
+        )
+
+    async def game_presence(self, event):
+        state = await get_persisted_state(self.game_id)
+        if state is not None:
+            await self.send(text_data=json.dumps({
+                "type": "game_presence",
+                "players_connected": state["players_connected"],
+            }))
 
     async def game_action(self, event):
         if event.get("sender") == self.channel_name:

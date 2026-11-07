@@ -431,6 +431,8 @@
 
   let stateReceived = false;
   let gameReady = false;
+  let playersConnected = false;
+  let pendingAction = null;
 
   let playerCards = [];
   let opponentCards = [];
@@ -444,8 +446,6 @@
   let canDiscard = false;
   let roundComplete = false;
   let gameFinished = false;
-  let pendingWinner = null;
-  let localRoundCompleteSent = false;
   let roundKey = "";
 
   let playerScore = 0;
@@ -480,9 +480,30 @@
   const stage = new createjs.Stage(canvas);
   const background = new createjs.Shape();
   const container = new createjs.Container();
+  const connectionText = new createjs.Text("", SMALL_TEXT, "#000000");
+  connectionText.x = 500;
+  connectionText.y = 25;
+  connectionText.textAlign = "center";
 
   stage.addChild(background);
   stage.addChild(container);
+  container.addChild(connectionText);
+
+  function canInteract() {
+    return gameReady && stateReceived && playersConnected && !pendingAction &&
+      socket && socket.readyState === WebSocket.OPEN;
+  }
+
+  function updateConnectionStatus() {
+    connectionText.text = !stateReceived
+      ? "Connecting to game..."
+      : !playersConnected
+        ? "Waiting for both players to connect"
+        : "";
+    container.addChild(connectionText);
+    updateSettlementAdvanceButton();
+    stage.update();
+  }
 
   let leftBound = 0;
   let topBound = 0;
@@ -574,8 +595,6 @@
     currentCard = 0;
     roundComplete = false;
     roundKey = "";
-    pendingWinner = null;
-    localRoundCompleteSent = false;
 
     roundSettlement = false;
     roundWinner = null;
@@ -605,8 +624,6 @@
     canDiscard = false;
     roundComplete = false;
     gameFinished = false;
-    pendingWinner = null;
-    localRoundCompleteSent = false;
     roundKey = "";
 
     roundSettlement = false;
@@ -711,7 +728,7 @@
 
       bitmap.on("mousedown", function(event) {
         if (
-          !gameReady ||
+          !canInteract() ||
           gameFinished ||
           !canDiscard ||
           playerCards.length !== currentRound + 1
@@ -736,43 +753,14 @@
           return;
         }
 
-        if (!discardPlayerCard(value, suit)) {
-          return;
-        }
-
-        if (!sendAction(
+        sendAction(
           "discard," +
           value +
           "." +
           suit +
           "," +
           user
-        )) {
-          return;
-        }
-
-        if (roundSettlement) {
-          updateSettlementAdvanceButton();
-          return;
-        }
-
-        if (pendingWinner === user && !localRoundCompleteSent) {
-          if (sendAction(
-            "round_complete," +
-            currentRound +
-            "," +
-            user
-          )) {
-            localRoundCompleteSent = true;
-            pendingWinner = null;
-
-            /*
-             * The server may not echo our own action, so the
-             * winning client enters settlement immediately.
-             */
-            finishRound(user);
-          }
-        }
+        );
       });
     }
 
@@ -854,7 +842,7 @@
 
     deckBitmap.on("mousedown", function() {
       if (
-        !gameReady ||
+        !canInteract() ||
         gameFinished ||
         !canDraw ||
         playerCards.length !== currentRound
@@ -869,7 +857,7 @@
         return;
       }
 
-      if (drawPlayerFromDeck(false)) {
+      if (currentCard < deck.length || discardCards.length > 1) {
         sendAction("draw,deck," + user);
       }
     });
@@ -908,7 +896,7 @@
 
     discardBitmap.on("mousedown", function() {
       if (
-        !gameReady ||
+        !canInteract() ||
         gameFinished ||
         !canDraw ||
         playerCards.length !== currentRound
@@ -923,9 +911,7 @@
         return;
       }
 
-      if (drawPlayerFromDiscard(false)) {
-        sendAction("draw,discard," + user);
-      }
+      sendAction("draw,discard," + user);
     });
   }
 
@@ -1331,65 +1317,6 @@
     return true;
   }
 
-  function discardPlayerCard(value, suit) {
-    if (
-      !gameReady ||
-      gameFinished ||
-      !canDiscard ||
-      playerCards.length !== currentRound + 1
-    ) {
-      return false;
-    }
-
-    if (
-      roundSettlement &&
-      settlementTurnPlayer !== user
-    ) {
-      return false;
-    }
-
-    const match = playerCards.findIndex(function(card) {
-      return (
-        Number(card.getValue()) === Number(value) &&
-        Number(card.getSuit()) === Number(suit)
-      );
-    });
-
-    if (match < 0) {
-      return false;
-    }
-
-    const card = playerCards.splice(match, 1)[0];
-
-    discardCards.push(card.clone());
-    discardSuits.push(card.getSuit());
-
-    canDraw = false;
-    canDiscard = false;
-
-    drawPlayerHand();
-    drawDiscard();
-
-    if (roundSettlement) {
-      loserFinalTurnComplete = true;
-      scoreCompletedRound();
-      updateSettlementAdvanceButton();
-      stage.update();
-
-      return true;
-    }
-
-    setCurrentPlayer(false);
-
-    pendingWinner =
-      playerCards.length === currentRound &&
-      calculateScore(playerCards, currentRound) === 0
-        ? user
-        : null;
-
-    return true;
-  }
-
   function discardPlayerDuringReplay(value, suit) {
     const match = playerCards.findIndex(function(card) {
       return (
@@ -1478,6 +1405,7 @@
   function canAdvanceSettlement() {
     return (
       roundSettlement &&
+      canInteract() &&
       !gameFinished &&
       !settlementActionSent &&
       loserFinalTurnComplete &&
@@ -1637,8 +1565,6 @@
     roundScoreApplied = false;
     roundComplete = false;
     roundKey = "";
-    pendingWinner = null;
-    localRoundCompleteSent = false;
     opponentHandRevealed = false;
 
     canDraw = getRoundStarter(currentRound) === user;
@@ -2214,8 +2140,6 @@
     opponentScore = 0;
     roundComplete = false;
     gameFinished = false;
-    pendingWinner = null;
-    localRoundCompleteSent = false;
     roundKey = "";
 
     roundSettlement = false;
@@ -2236,18 +2160,6 @@
     history = validActions.slice();
     gameReady = true;
 
-    if (!roundComplete && !gameFinished) {
-      if (playerCards.length === currentRound) {
-        canDraw = getRoundStarter(currentRound) === user;
-        canDiscard = false;
-      } else if (playerCards.length === currentRound + 1) {
-        canDraw = false;
-        canDiscard = true;
-      }
-
-      setCurrentPlayer(canDraw);
-    }
-
     setRoundText();
     redrawAll();
     stage.update();
@@ -2257,17 +2169,22 @@
     if (
       !message ||
       message.type !== "game_state" ||
-      String(message.game_id) !== gameId
+      String(message.game_id) !== gameId ||
+      !Array.isArray(message.history) ||
+      typeof message.players_connected !== "boolean"
     ) {
-      rebuildFromHistory([]);
+      stateReceived = false;
+      gameReady = false;
+      playersConnected = false;
+      updateConnectionStatus();
       return;
     }
 
-    rebuildFromHistory(
-      Array.isArray(message.history)
-        ? message.history
-        : []
-    );
+    pendingAction = null;
+    playersConnected = message.players_connected === true;
+    rebuildFromHistory(message.history);
+    updateConnectionStatus();
+    maybeCompleteRound();
   }
 
   function receiveAction(action) {
@@ -2277,11 +2194,28 @@
       return;
     }
 
-    processAction(action, false);
+    const confirmedLocalAction = action === pendingAction;
+    if (confirmedLocalAction) {
+      pendingAction = null;
+    }
+    processAction(action, confirmedLocalAction);
     history.push(action);
-    gameReady = true;
-
+    updateConnectionStatus();
+    maybeCompleteRound();
     stage.update();
+  }
+
+  function maybeCompleteRound() {
+    const lastAction = history[history.length - 1];
+    if (
+      canInteract() && !roundComplete && !gameFinished &&
+      lastAction && lastAction.startsWith("discard,") &&
+      lastAction.split(",")[2] === user &&
+      playerCards.length === currentRound &&
+      calculateScore(playerCards, currentRound) === 0
+    ) {
+      sendAction("round_complete," + currentRound + "," + user);
+    }
   }
 
   function receiveMessage(text) {
@@ -2290,10 +2224,6 @@
     try {
       message = JSON.parse(text);
     } catch (error) {
-      if (!stateReceived) {
-        rebuildFromHistory([]);
-      }
-
       return;
     }
 
@@ -2302,14 +2232,25 @@
       return;
     }
 
-    if (
-      message.type === "game_action_error" &&
-      message.action === "round_ready," + currentRound + "," + user &&
-      roundSettlement &&
-      settlementActionSent
-    ) {
-      settlementActionSent = false;
-      updateSettlementAdvanceButton("Could not advance; please retry");
+    if (message.type === "game_presence") {
+      playersConnected = message.players_connected === true;
+      updateConnectionStatus();
+      maybeCompleteRound();
+      return;
+    }
+
+    if (message.type === "game_action_error") {
+      pendingAction = null;
+      if (message.state) {
+        receiveState(message.state);
+      } else {
+        gameReady = false;
+        stateReceived = false;
+        updateConnectionStatus();
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.send("x/");
+        }
+      }
       return;
     }
 
@@ -2323,13 +2264,21 @@
 
   function sendAction(action) {
     if (
-      !socket ||
-      socket.readyState !== WebSocket.OPEN
+      !canInteract()
     ) {
       return false;
     }
 
-    socket.send(normaliseAction(action) + "/");
+    pendingAction = normaliseAction(action);
+    try {
+      socket.send(pendingAction + "/");
+    } catch (error) {
+      console.error("Could not send game action:", error);
+      scheduleReconnect();
+      socket.close();
+      return false;
+    }
+    updateConnectionStatus();
     return true;
   }
 
@@ -2340,40 +2289,55 @@
     }
 
     socket = new WebSocket(
-      "wss://" +
-      window.location.hostname +
+      (window.location.protocol === "https:" ? "wss://" : "ws://") +
+      window.location.host +
       "/ws/games/" +
       postUuid +
       "/" +
       gameCode +
-      "/"
+      "/?player=" +
+      encodeURIComponent(user)
     );
 
+    const activeSocket = socket;
     socket.addEventListener("open", function() {
+      if (socket !== activeSocket) return;
       stateReceived = false;
       gameReady = false;
+      playersConnected = false;
+      pendingAction = null;
       history = [];
-
-      sendAction("x");
+      updateConnectionStatus();
     });
 
     socket.addEventListener("message", function(event) {
-      receiveMessage(event.data);
+      if (socket === activeSocket) receiveMessage(event.data);
     });
 
-    socket.addEventListener("close", scheduleReconnect);
-    socket.addEventListener("error", scheduleReconnect);
+    socket.addEventListener("close", function() {
+      if (socket === activeSocket) scheduleReconnect();
+    });
+    socket.addEventListener("error", function() {
+      if (socket === activeSocket) {
+        scheduleReconnect();
+        activeSocket.close();
+      }
+    });
   }
 
   function scheduleReconnect() {
+    stateReceived = false;
+    gameReady = false;
+    playersConnected = false;
+    pendingAction = null;
+    updateConnectionStatus();
+
     if (reconnectTimer) {
       return;
     }
 
     reconnectTimer = setTimeout(function() {
       reconnectTimer = null;
-      stateReceived = false;
-      gameReady = false;
       history = [];
 
       openSocket();
@@ -2432,7 +2396,7 @@
       stage.update();
     });
 
-    gameReady = true;
+    updateConnectionStatus();
     openSocket();
     stage.update();
   }

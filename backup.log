@@ -1,4 +1,4 @@
-5
+6
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -17,10 +17,9 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 71149b4] open source
- 23 files changed, 439 insertions(+), 654 deletions(-)
- create mode 100644 static/js/three.min.js
- create mode 100644 static/js/voxel-renderer.js
+[main 4549e57] open source
+ 30 files changed, 297 insertions(+), 240 deletions(-)
+ create mode 100644 data/game.json.aa
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./
