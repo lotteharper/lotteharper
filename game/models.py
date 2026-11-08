@@ -74,6 +74,18 @@ class WorldPlayer(models.Model):
         return f"{self.user_id} in {self.room}"
 
 
+class WorldArrow(models.Model):
+    """A fired arrow, retained after landing until a player picks it up."""
+
+    arrow_id = models.UUIDField(primary_key=True)
+    room = models.CharField(max_length=48, db_index=True)
+    owner_id = models.UUIDField()
+    position = models.JSONField()
+    direction = models.JSONField()
+    landed = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 def default_chest_data():
     return {"slots": [None for _ in range(27)]}
 

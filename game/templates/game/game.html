@@ -483,7 +483,6 @@
       .slotColor { inset: 6px; }
     }
   </style>
-  <script src="/static/js/three.min.js"></script>
 </head>
 <body>
   <div class="hint">
@@ -542,6 +541,7 @@
     <p class="craftStatus">Click a slot to swap it with your selected hotbar slot. Press Escape to release the pointer.</p>
   </div>
 
+  <script src="/static/js/three.min.js"></script>
   <script src="/static/js/voxel-renderer.js"></script>
   <script>
     "use strict";
@@ -712,7 +712,7 @@
         ridgeShape * 12 +
         broadShape * 5;
 
-      return Math.floor(rollingHeight + mountainMask * mountainRelief);
+      return Math.max(WORLD_MIN_Y + 1, Math.floor(rollingHeight + mountainMask * mountainRelief));
     }
 
     // The world is deep enough to hold a full ore progression below the
@@ -720,6 +720,7 @@
     const WORLD_MIN_Y = -24;
     const STONE_LINE_Y = -4;
     const RENDER_RADIUS = 64;
+    const BASE_COLOR = "#25252b";
 
     const PLAYER_HALF_WIDTH = 0.28;
     const PLAYER_HEIGHT = 1.7;
@@ -1308,6 +1309,7 @@
     // Natural terrain block (or null for air/caves) at a position.
     function generatedTerrainBlock(x, y, z) {
       if (y < WORLD_MIN_Y) return null;
+      if (y === WORLD_MIN_Y) return { x, y, z, color: BASE_COLOR, type: "bedrock" };
 
       const top = terrainHeight(x, z);
       if (y >= top) return null;
@@ -1389,6 +1391,7 @@
     }
 
     function getBlock(x, y, z) {
+      if (y === WORLD_MIN_Y) return generatedTerrainBlock(x, y, z);
       const key = blockKey(x, y, z);
 
       if (blockEdits.has(key)) return blockEdits.get(key);
@@ -1482,6 +1485,7 @@
     const keys = Object.create(null);
     const remotePlayers = new Map();
     const pendingWorldEdits = new Map();
+    const arrows = [];
 
     let selectedSlot = 0;
     const MAX_HEALTH = 20;
@@ -1605,6 +1609,8 @@
     let lastNetworkUpdate = 0;
     let hasLoadedServerState = false;
     let inventoryDirty = false;
+    let pendingArrowPickup = null;
+    let pendingArrowCredits = 0;
 
     const previousPadActions = {
       jump: false,
@@ -1638,6 +1644,8 @@
       inventoryDirty = true;
 
       if (
+        pendingArrowPickup ||
+        pendingArrowCredits > 0 ||
         !hasLoadedServerState ||
         !worldSocket ||
         worldSocket.readyState !== WebSocket.OPEN
@@ -2386,6 +2394,7 @@
     }
 
     function removeBlock(x, y, z) {
+      if (y <= WORLD_MIN_Y) return;
       const key = blockKey(x, y, z);
       blockEdits.set(key, null);
       placedBlocks.delete(key);
@@ -2394,7 +2403,28 @@
 
     function applyWelcome(message) {
       localPlayerId = message.player_id;
+      if (pendingArrowPickup) {
+        if (inventoryDirty && Array.isArray(message.inventory)) {
+          const countArrows = items => items.reduce((total, item) =>
+            total + (item?.type === "arrows" ? item.count : 0), 0);
+          if (countArrows(message.inventory) >
+              countArrows(JSON.parse(pendingArrowPickup.inventory))) pendingArrowCredits++;
+        }
+        pendingArrowPickup = null;
+      }
       remotePlayers.clear();
+      for (let i = arrows.length - 1; i >= 0; i--) {
+        if (arrows[i].networked) arrows.splice(i, 1);
+      }
+      if (Array.isArray(message.arrows)) {
+        for (const arrow of message.arrows) {
+          if (validNetworkArrow(arrow)) {
+            arrows.push({ id: arrow.arrow_id, position: arrow.position,
+              direction: arrow.direction, velocity: [0, 0, 0], stuck: true,
+              networked: true, confirmed: true, age: 1 });
+          }
+        }
+      }
 
       for (const player of message.players || []) {
         if (player.id !== localPlayerId && player.position) {
@@ -2448,10 +2478,7 @@
       flushPendingContainerUpdates();
 
       if (inventoryDirty) {
-        worldSocket.send(JSON.stringify({
-          type: "inventory",
-          inventory: inventoryPayload()
-        }));
+        syncInventory();
       }
 
       sendPlayerPosition();
@@ -2475,7 +2502,7 @@
         }
 
         if (message.type === "inventory_saved") {
-          inventoryDirty = false;
+          if (!pendingArrowPickup && pendingArrowCredits === 0) inventoryDirty = false;
           return;
         }
 
@@ -2500,6 +2527,8 @@
           takeDamage(Math.max(0, Math.min(20, message.amount)));
           return;
         }
+
+        if (handleArrowMessage(message)) return;
 
         if (message.type === "world_edit" && message.edit) {
           const edit = message.edit;
@@ -2755,6 +2784,13 @@
         ? targetBlock.type || itemTypeFromColor(targetBlock.color)
         : null;
 
+      if (y === WORLD_MIN_Y) {
+        miningTargetKey = null;
+        mineProgressElement.style.display = "none";
+        if (lastToastText !== "The base cannot be mined.") showToast("The base cannot be mined.");
+        return;
+      }
+
       // Ore tier gate: the block is left untouched if the held pickaxe is too
       // weak, and no mining progress is made.
       const requiredTier = ORE_REQUIRED_TIER[targetType] || 0;
@@ -2923,14 +2959,34 @@
           entry && (entry.type || itemTypeFromColor(entry.color)) === "arrows");
         inventory[arrow].count--;
         if (!inventory[arrow].count) inventory[arrow] = null;
+        renderInventory();
         syncInventory();
       }
       const yaw = camera.rot[1];
       const pitch = camera.rot[0];
       const direction = [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch),
         Math.cos(yaw) * Math.cos(pitch)];
+      if (isBow) {
+        const networked = hasLoadedServerState && worldSocket?.readyState === WebSocket.OPEN;
+        const arrow = {
+          position: [camera.pos[0], camera.pos[1] + EYE_HEIGHT, camera.pos[2]],
+          velocity: direction.map(component => component * 22),
+          direction,
+          stuck: false,
+          networked,
+          owned: true,
+          id: networked ? newArrowId() : null,
+          age: 0
+        };
+        arrows.push(arrow);
+        if (networked) {
+          worldSocket.send(JSON.stringify({ type: "arrow_spawn", arrow_id: arrow.id,
+            position: arrow.position, direction: arrow.direction }));
+        }
+        return true;
+      }
       let target = null;
-      let best = isBow ? 18 : 3.2;
+      let best = 3.2;
       for (const [id, position] of remotePlayers) {
         const delta = [position.x - camera.pos[0], position.y + 0.9 -
           (camera.pos[1] + EYE_HEIGHT), position.z - camera.pos[2]];
@@ -2943,16 +2999,160 @@
         }
       }
       if (target) {
-        const damage = isBow ? 5 : type === "hand" ? 1 :
+        const damage = type === "hand" ? 1 :
           2 + (TOOL_TIERS[type] || 1);
         if (worldSocket?.readyState === WebSocket.OPEN) {
           worldSocket.send(JSON.stringify({
             type: "combat", target_id: target, damage
           }));
         }
-        showToast(`${isBow ? "Arrow" : "Hit"} struck ${target}.`);
+        showToast(`Hit struck ${target}.`);
       }
       return true;
+    }
+
+    function newArrowId() {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      bytes[6] = (bytes[6] & 15) | 64;
+      bytes[8] = (bytes[8] & 63) | 128;
+      const hex = Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join("");
+      return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+    }
+
+    function validNetworkArrow(arrow) {
+      return arrow && typeof arrow.arrow_id === "string" &&
+        Array.isArray(arrow.position) && arrow.position.length === 3 &&
+        arrow.position.every(Number.isFinite) && Array.isArray(arrow.direction) &&
+        arrow.direction.length === 3 && arrow.direction.every(Number.isFinite);
+    }
+
+    function handleArrowMessage(message) {
+      if (!["arrow_spawn", "arrow_land", "arrow_remove", "arrow_picked_up",
+        "arrow_pickup_failed"].includes(message.type)) return false;
+      const index = arrows.findIndex(arrow => arrow.networked && arrow.id === message.arrow_id);
+      const arrow = index < 0 ? null : arrows[index];
+      if (message.type === "arrow_spawn" && validNetworkArrow(message) && !arrow) {
+        arrows.push({ id: message.arrow_id, position: message.position,
+          direction: message.direction, velocity: message.direction.map(value => value * 22),
+          stuck: false, networked: true, owned: false, age: 0 });
+      } else if (message.type === "arrow_land" && validNetworkArrow(message)) {
+        if (arrow) {
+          arrow.position = message.position;
+          arrow.direction = message.direction;
+          arrow.stuck = true;
+          arrow.confirmed = true;
+        } else {
+          arrows.push({ id: message.arrow_id, position: message.position,
+            direction: message.direction, velocity: [0, 0, 0], stuck: true,
+            networked: true, confirmed: true, age: 1 });
+        }
+      } else if (message.type === "arrow_remove" && arrow) {
+        arrows.splice(index, 1);
+      } else if (message.type === "arrow_pickup_failed" &&
+                 pendingArrowPickup?.id === message.arrow_id) {
+        pendingArrowPickup = null;
+        if (arrow) {
+          arrow.pickupPending = false;
+          arrow.nextPickupAt = performance.now() + 1000;
+        }
+        if (inventoryDirty) syncInventory();
+      } else if (message.type === "arrow_picked_up" &&
+                 pendingArrowPickup?.id === message.arrow_id) {
+        const unchanged = pendingArrowPickup.inventory === JSON.stringify(inventoryPayload());
+        pendingArrowPickup = null;
+        if (unchanged) {
+          applyServerInventory(message.inventory);
+          if (inventoryDirty) syncInventory();
+        } else if (!addToInventory(ITEM_DEFINITIONS.arrows.color, "arrows")) {
+          pendingArrowCredits++;
+          showToast("Make room in your inventory to collect the arrow.");
+        }
+        if (arrow) arrows.splice(index, 1);
+        if (!pendingArrowCredits) showToast("Arrow picked up.");
+      }
+      return true;
+    }
+
+    function updateArrows(dt) {
+      if (pendingArrowCredits > 0 && inventory.some(item => !item ||
+          ((item.type || itemTypeFromColor(item.color)) === "arrows" && item.count < 64))) {
+        pendingArrowCredits--;
+        addToInventory(ITEM_DEFINITIONS.arrows.color, "arrows");
+        showToast("Arrow picked up.");
+      }
+      for (let i = arrows.length - 1; i >= 0; i--) {
+        const arrow = arrows[i];
+        arrow.age += dt;
+        if (!arrow.stuck) {
+          arrow.velocity[1] -= 9 * dt;
+          const speed = Math.hypot(...arrow.velocity);
+          const distance = speed * dt;
+          const steps = Math.max(1, Math.ceil(distance / 0.1));
+          const step = arrow.velocity.map(component => component * dt / steps);
+          arrow.direction = arrow.velocity.map(component => component / (speed || 1));
+          for (let j = 0; j < steps; j++) {
+            const next = arrow.position.map((value, axis) => value + step[axis]);
+            const block = arrow.owned ? getBlock(...next.map(Math.floor)) : null;
+            if (isCollidableBlock(block)) {
+              const bounds = blockBounds(block);
+              if (next[0] >= bounds.minX && next[0] <= bounds.maxX &&
+                  next[2] >= bounds.minZ && next[2] <= bounds.maxZ) {
+                arrow.stuck = true;
+                if (arrow.networked && worldSocket?.readyState === WebSocket.OPEN) {
+                  worldSocket.send(JSON.stringify({ type: "arrow_land", arrow_id: arrow.id,
+                    position: arrow.position, direction: arrow.direction }));
+                }
+                break;
+              }
+            }
+            let target = null;
+            for (const [id, position] of arrow.owned ? remotePlayers : []) {
+              if (position && Math.abs(next[0] - position.x) <= 0.325 &&
+                  Math.abs(next[2] - position.z) <= 0.325 &&
+                  next[1] >= position.y && next[1] <= position.y + PLAYER_HEIGHT) {
+                target = id;
+                break;
+              }
+            }
+            if (target !== null) {
+              if (worldSocket?.readyState === WebSocket.OPEN) {
+                worldSocket.send(JSON.stringify({ type: "combat", target_id: target, damage: 5 }));
+                showToast(`Arrow struck ${target}.`);
+              } else {
+                showToast("Arrow hit, but the world connection is unavailable.");
+              }
+              if (arrow.networked && worldSocket?.readyState === WebSocket.OPEN) {
+                worldSocket.send(JSON.stringify({ type: "arrow_remove", arrow_id: arrow.id }));
+              }
+              arrows.splice(i, 1);
+              break;
+            }
+            arrow.position = next;
+          }
+        }
+        if (arrow.stuck && arrow.age >= 0.5 &&
+            Math.hypot(arrow.position[0] - camera.pos[0],
+              arrow.position[1] - (camera.pos[1] + PLAYER_HEIGHT / 2),
+              arrow.position[2] - camera.pos[2]) < 1.25) {
+          if (arrow.networked) {
+            const hasSpace = inventory.some(item => !item ||
+              ((item.type || itemTypeFromColor(item.color)) === "arrows" && item.count < 64));
+            if (arrow.confirmed && !arrow.pickupPending && !pendingArrowPickup &&
+                pendingArrowCredits === 0 && hasSpace &&
+                performance.now() >= (arrow.nextPickupAt || 0) &&
+                hasLoadedServerState && worldSocket?.readyState === WebSocket.OPEN) {
+              arrow.pickupPending = true;
+              pendingArrowPickup = { id: arrow.id, inventory: JSON.stringify(inventoryPayload()) };
+              sendPlayerPosition();
+              worldSocket.send(JSON.stringify({ type: "arrow_pickup", arrow_id: arrow.id }));
+            }
+          } else if (addToInventory(ITEM_DEFINITIONS.arrows.color, "arrows")) {
+            arrows.splice(i, 1);
+            showToast("Arrow picked up.");
+          }
+        }
+      }
     }
 
     function useHeldFood() {
@@ -3036,7 +3236,7 @@
           } else if (type === "water_bucket") {
             const [wx, wy, wz] = hitBlock?.type === "water"
               ? [hx, hy, hz] : result.previous;
-            if (wx !== undefined) {
+            if (wx !== undefined && wy > WORLD_MIN_Y) {
               blockEdits.set(blockKey(wx, wy, wz),
                 { x: wx, y: wy, z: wz, color: ITEM_DEFINITIONS.water.color, type: "water" });
               sendWorldEdit(wx, wy, wz, ITEM_DEFINITIONS.water.color);
@@ -3054,6 +3254,7 @@
 
       const hit = getBlock(...result.hit);
       const [x, y, z] = hit?.type === "water" ? result.hit : result.previous;
+      if (y <= WORLD_MIN_Y) return;
       if (isSolid(x, y, z) && blockType(getBlock(x, y, z)) !== "water") return;
       if (type === "door" && isSolid(x, y + 1, z)) return;
 
@@ -3828,7 +4029,7 @@
         }
 
         if (message.type === "inventory_saved") {
-          inventoryDirty = false;
+          if (!pendingArrowPickup && pendingArrowCredits === 0) inventoryDirty = false;
           return;
         }
 
@@ -3853,6 +4054,8 @@
           takeDamage(Math.max(0, Math.min(20, message.amount)));
           return;
         }
+
+        if (handleArrowMessage(message)) return;
 
         if (message.type === "world_edit" && message.edit) {
           const edit = message.edit;
@@ -3923,6 +4126,7 @@
       }
 
       updatePhysics(dt);
+      updateArrows(dt);
       if (now - lastDamageAt > 4000 && now - lastHealthRegenAt > 1000 &&
           playerHealth < MAX_HEALTH) {
         lastHealthRegenAt = now;

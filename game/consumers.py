@@ -2,19 +2,21 @@ import json
 import math
 import re
 import time
+import uuid
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db import transaction
 from django.utils import timezone
 
-from .models import WorldBlockEdit, WorldContainer, WorldPlayer
+from .models import WorldArrow, WorldBlockEdit, WorldContainer, WorldPlayer
 
 
 ROOM_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,48}$")
 COLOR_PATTERN = re.compile(r"^#[0-9a-fA-F]{6}$")
 EMPTY_INVENTORY = [None] * 27
 MAX_WORLD_COORDINATE = 1_000_000
+WORLD_MIN_Y = -24
 
 # Keep these item type names in sync with the game's JavaScript.
 ITEM_TYPES = {
@@ -24,8 +26,36 @@ ITEM_TYPES = {
     "wood_pickaxe", "stone_pickaxe", "iron_pickaxe",
     "gold_pickaxe", "crystal_pickaxe",
     "wood_axe", "stone_axe", "iron_axe", "gold_axe", "crystal_axe",
-    "door", "fence", "chest", "furnace",
+    "door", "fence", "chest", "furnace", "bow", "arrows",
+    "copper_ore", "diamond_ore", "copper_pickaxe", "diamond_pickaxe",
+    "torch", "water", "bucket", "water_bucket", "grass", "seeds",
+    "sapling", "wheat", "bread", "crop", "flower_red", "flower_yellow",
+    "flower_blue",
 }
+ITEM_TYPES.update(
+    f"{tier}_{tool}"
+    for tier in ("wood", "stone", "copper", "iron", "gold", "diamond")
+    for tool in ("shovel", "sword")
+)
+
+
+def clean_vector(value):
+    if not isinstance(value, list) or len(value) != 3:
+        return None
+    result = []
+    for number in value:
+        if (isinstance(number, bool) or not isinstance(number, (int, float))
+                or not math.isfinite(number) or abs(number) > MAX_WORLD_COORDINATE):
+            return None
+        result.append(float(number))
+    return result
+
+
+def clean_arrow_id(value):
+    try:
+        return str(uuid.UUID(value))
+    except (ValueError, TypeError, AttributeError):
+        return None
 
 LEGACY_TYPES_BY_COLOR = {
     "#76502e": "log",
@@ -180,10 +210,12 @@ class WorldConsumer(AsyncWebsocketConsumer):
         self.room_group = f"world_{room}"
         self.last_position = None
         self.last_position_saved_at = None
+        self.flying_arrows = set()
 
         state = await self.load_player_state()
         self.player_id = state["player_id"]
         self.last_position = state["position"]
+        await self.clear_stale_arrows()
 
         await self.channel_layer.group_add(self.room_group, self.channel_name)
         await self.accept()
@@ -196,6 +228,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             "players": state["players"],
             "edits": await self.load_room_edits(),
             "containers": await self.load_room_containers(),
+            "arrows": await self.load_landed_arrows(),
         })
 
         if state["position"] is not None:
@@ -216,6 +249,9 @@ class WorldConsumer(AsyncWebsocketConsumer):
             return
 
         if hasattr(self, "player_id"):
+            for arrow_id in self.flying_arrows:
+                if await self.remove_flying_arrow(arrow_id):
+                    await self.broadcast_arrow({"type": "arrow_remove", "arrow_id": arrow_id})
             await self.set_player_offline(self.last_position)
             await self.channel_layer.group_send(
                 self.room_group,
@@ -253,6 +289,16 @@ class WorldConsumer(AsyncWebsocketConsumer):
             await self.receive_container_get(message)
         elif message_type == "container_update":
             await self.receive_container_update(message)
+        elif message_type == "combat":
+            await self.receive_combat(message)
+        elif message_type == "arrow_spawn":
+            await self.receive_arrow_spawn(message)
+        elif message_type == "arrow_land":
+            await self.receive_arrow_land(message)
+        elif message_type == "arrow_remove":
+            await self.receive_arrow_remove(message)
+        elif message_type == "arrow_pickup":
+            await self.receive_arrow_pickup(message)
 
     async def receive_position(self, raw_position):
         position = clean_position(raw_position)
@@ -302,6 +348,8 @@ class WorldConsumer(AsyncWebsocketConsumer):
             return
 
         x, y, z = coordinates
+        if y <= WORLD_MIN_Y:
+            return
         edit = {
             "x": x,
             "y": y,
@@ -317,6 +365,74 @@ class WorldConsumer(AsyncWebsocketConsumer):
                 "message": {"type": "world_edit", "edit": edit},
             },
         )
+
+    async def receive_combat(self, message):
+        target = clean_arrow_id(message.get("target_id"))
+        damage = message.get("damage")
+        if (target is None or target == self.player_id or
+                isinstance(damage, bool) or not isinstance(damage, (int, float)) or
+                not math.isfinite(damage) or not 0 < damage <= 20 or
+                not await self.player_is_online(target)):
+            return
+        await self.channel_layer.group_send(self.room_group, {
+            "type": "targeted.damage", "target_id": target, "amount": damage,
+        })
+
+    async def targeted_damage(self, event):
+        if self.player_id == event["target_id"]:
+            await self.send_json({"type": "damage", "amount": event["amount"]})
+
+    async def broadcast_arrow(self, message):
+        await self.channel_layer.group_send(self.room_group, {
+            "type": "room.message", "message": message,
+        })
+
+    async def receive_arrow_spawn(self, message):
+        arrow_id = clean_arrow_id(message.get("arrow_id"))
+        position = clean_vector(message.get("position"))
+        direction = clean_vector(message.get("direction"))
+        if (arrow_id is None or position is None or direction is None or
+                not 0.99 <= math.hypot(*direction) <= 1.01):
+            return
+        if not await self.create_arrow(arrow_id, position, direction):
+            return
+        self.flying_arrows.add(arrow_id)
+        await self.broadcast_arrow({
+            "type": "arrow_spawn", "arrow_id": arrow_id, "owner_id": self.player_id,
+            "position": position, "direction": direction,
+        })
+
+    async def receive_arrow_land(self, message):
+        arrow_id = clean_arrow_id(message.get("arrow_id"))
+        position = clean_vector(message.get("position"))
+        direction = clean_vector(message.get("direction"))
+        if (arrow_id is None or position is None or direction is None or
+                not 0.99 <= math.hypot(*direction) <= 1.01):
+            return
+        if await self.land_arrow(arrow_id, position, direction):
+            self.flying_arrows.discard(arrow_id)
+            await self.broadcast_arrow({
+                "type": "arrow_land", "arrow_id": arrow_id,
+                "position": position, "direction": direction,
+            })
+
+    async def receive_arrow_remove(self, message):
+        arrow_id = clean_arrow_id(message.get("arrow_id"))
+        if arrow_id and await self.remove_flying_arrow(arrow_id):
+            self.flying_arrows.discard(arrow_id)
+            await self.broadcast_arrow({"type": "arrow_remove", "arrow_id": arrow_id})
+
+    async def receive_arrow_pickup(self, message):
+        arrow_id = clean_arrow_id(message.get("arrow_id"))
+        if arrow_id is None:
+            return
+        inventory = await self.pick_up_arrow(arrow_id)
+        if inventory is None:
+            await self.send_json({"type": "arrow_pickup_failed", "arrow_id": arrow_id})
+            return
+        await self.send_json({"type": "arrow_picked_up", "arrow_id": arrow_id,
+                              "inventory": inventory})
+        await self.broadcast_arrow({"type": "arrow_remove", "arrow_id": arrow_id})
 
     async def receive_container_get(self, message):
         coordinates = self.clean_coordinates(message)
@@ -385,6 +501,82 @@ class WorldConsumer(AsyncWebsocketConsumer):
 
     async def send_json(self, data):
         await self.send(text_data=json.dumps(data))
+
+    @database_sync_to_async
+    def player_is_online(self, player_id):
+        return WorldPlayer.objects.filter(
+            room=self.room, player_id=player_id, is_online=True,
+        ).exists()
+
+    @database_sync_to_async
+    def clear_stale_arrows(self):
+        WorldArrow.objects.filter(
+            room=self.room, owner_id=self.player_id, landed=False,
+        ).delete()
+
+    @database_sync_to_async
+    def create_arrow(self, arrow_id, position, direction):
+        _, created = WorldArrow.objects.get_or_create(
+            arrow_id=arrow_id,
+            defaults={"room": self.room, "owner_id": self.player_id,
+                      "position": position, "direction": direction},
+        )
+        return created
+
+    @database_sync_to_async
+    def land_arrow(self, arrow_id, position, direction):
+        return bool(WorldArrow.objects.filter(
+            arrow_id=arrow_id, room=self.room, owner_id=self.player_id, landed=False,
+        ).update(position=position, direction=direction, landed=True, updated_at=timezone.now()))
+
+    @database_sync_to_async
+    def remove_flying_arrow(self, arrow_id):
+        deleted, _ = WorldArrow.objects.filter(
+            arrow_id=arrow_id, room=self.room, owner_id=self.player_id, landed=False,
+        ).delete()
+        return deleted > 0
+
+    @database_sync_to_async
+    def load_landed_arrows(self):
+        return [
+            {"arrow_id": str(row["arrow_id"]), "position": row["position"],
+             "direction": row["direction"]}
+            for row in WorldArrow.objects.filter(room=self.room, landed=True)
+            .values("arrow_id", "position", "direction")
+        ]
+
+    @database_sync_to_async
+    def pick_up_arrow(self, arrow_id):
+        with transaction.atomic():
+            arrow = WorldArrow.objects.select_for_update().filter(
+                arrow_id=arrow_id, room=self.room, landed=True,
+            ).first()
+            if arrow is None or self.last_position is None:
+                return None
+            position = self.last_position
+            if math.dist(arrow.position, [position["x"], position["y"] + 0.85, position["z"]]) > 1.75:
+                return None
+            player = WorldPlayer.objects.select_for_update().filter(
+                user_id=self.user_id, room=self.room,
+            ).first()
+            if player is None:
+                return None
+            inventory = clean_inventory(player.inventory)
+            if inventory is None:
+                return None
+            slot = next((item for item in inventory
+                         if item and item["type"] == "arrows" and item["count"] < 64), None)
+            if slot is None:
+                index = next((i for i, item in enumerate(inventory) if item is None), None)
+                if index is None:
+                    return None
+                inventory[index] = {"type": "arrows", "color": "#d5d5d5", "count": 1}
+            else:
+                slot["count"] += 1
+            player.inventory = inventory
+            player.save(update_fields=("inventory", "updated_at"))
+            arrow.delete()
+            return inventory
 
     @database_sync_to_async
     def load_player_state(self):
