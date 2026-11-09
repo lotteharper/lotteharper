@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Voxel Terrain Game</title>
+  <title>{{ title }}</title>
   <style>
     :root { --slot-size: 48px; }
 
@@ -482,9 +482,154 @@
       .touch-actions { right: 14px; bottom: 144px; }
       .slotColor { inset: 6px; }
     }
+    .hide {
+        opacity: 0;
+        display: none;
+        visibility: hidden;
+        pointer-events: none;
+        height: 0px !important;
+    }
+    #loader-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 120vh;
+        z-index: 2000;
+    }
+    #loader-wrapper-init {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 120vh;
+        z-index: 2001;
+    }
+    #loader {
+        z-index: 5000;
+        display: block;
+        position: relative;
+        left: 50%;
+        top: 40%;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #ffcccb;
+        -webkit-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+        animation: spin 2s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+
+    #loader:before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #ff0000;
+        -webkit-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+          animation: spin 3s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+
+    #loader:after {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: lightblue;
+        -webkit-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+          animation: spin 1.5s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+
+    @-webkit-keyframes spin {
+        0%   {
+            -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(0deg);  /* IE 9 */
+            transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+        100% {
+            -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(360deg);  /* IE 9 */
+            transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+    }
+    @keyframes spin {
+        0%   {
+            -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(0deg);  /* IE 9 */
+            transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+        100% {
+            -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+            -ms-transform: rotate(360deg);  /* IE 9 */
+            transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+        }
+    }
+    #loader-wrapper .loader-section.section-left {
+        left: 0;
+    }
+
+    #loader-wrapper .loader-section.section-right {
+        right: 0;
+    }
+    #loader {
+        z-index: 5000;
+    }
+    .loaded #loader-wrapper .loader-section.section-left {
+        -webkit-transform: translateX(-100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: translateX(-100%);  /* IE 9 */
+        transform: translateX(-100%);  /* Firefox 16+, IE 10+, Opera */
+    }
+    .loaded #loader-wrapper .loader-section.section-right {
+        -webkit-transform: translateX(100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: translateX(100%);  /* IE 9 */
+        transform: translateX(100%);  /* Firefox 16+, IE 10+, Opera */
+    }
+    .loaded #loader {
+        opacity: 0;
+    }
+    .loaded #loader-wrapper {
+        visibility: hidden;
+    }
+    .loaded #loader {
+        opacity: 0;
+        -webkit-transition: all 0.3s ease-out;
+                transition: all 0.3s ease-out;
+    }
+    .loaded #loader-wrapper .loader-section.section-right,
+    .loaded #loader-wrapper .loader-section.section-left {
+
+        -webkit-transition: all 0.3s 0.3s ease-out;
+                transition: all 0.3s 0.3s ease-out;
+    }
+    .loaded #loader-wrapper {
+            -webkit-transform: translateY(-100%);
+                -ms-transform: translateY(-100%);
+                    transform: translateY(-100%);
+
+            -webkit-transition: all 0.3s 0.6s ease-out;
+                    transition: all 0.3s 0.6s ease-out;
+    }
+    #loader-wrapper .loader-section {
+        position: fixed;
+        top: 0;
+        width: 51%;
+        height: 120vh;
+        background: {% if darkmode %}#bb7777{% else %}#ffaaaa{% endif %};
+        z-index: 2000;
+    }
   </style>
 </head>
 <body>
+  {% include 'preload.html' %}
   <div class="hint">
     WASD move · Space jump · Right-click mine (hold) · Left-click place / open chests &amp; doors (or F) · E inventory
     <span id="controllerStatus"> · Controller: not connected</span>
@@ -765,6 +910,7 @@
       grass:         { name: "Grass",          color: "#5e9e43" },
       seeds:         { name: "Seeds",          color: "#d6b548" },
       sapling:        { name: "Sapling",        color: "#4d9a3a" },
+      apple:          { name: "Apple",          color: "#d83930" },
       wheat:          { name: "Wheat",          color: "#e3c14d" },
       bread:         { name: "Bread",          color: "#d69b4a" },
       arrows:        { name: "Arrows",         color: "#d5d5d5" },
@@ -837,6 +983,9 @@
     }
 
     function itemIcon(type) {
+      if (type === "sapling") return "🌱";
+      if (type === "apple") return "🍎";
+      if (type === "arrows") return "➶";
       if (!isToolType(type)) return type === "bow" ? "🏹" : "";
       if (/_axe$/.test(type)) return "🪓";
       if (/_shovel$/.test(type)) return "🛠";
@@ -964,6 +1113,7 @@
 
       // Placed doors carry their state in the color (see door section).
       if (DOOR_COLOR_PATTERN.test(normalized)) return "door";
+      if (TORCH_COLOR_PATTERN.test(normalized)) return "torch";
 
       for (const [type, definition] of Object.entries(ITEM_DEFINITIONS)) {
         if (definition.color.toLowerCase() === normalized) return type;
@@ -997,6 +1147,18 @@
     const DOOR_THICKNESS = 0.2;
     const DOOR_SWING_MS = 220;
     const DOOR_COLOR_PATTERN = /^#9a68[45][0-9a-f]$/;
+    const TORCH_COLOR_PATTERN = /^#ffb52[0-3]$/;
+    const TORCH_DIRECTIONS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+    function torchDirection(color) {
+      return TORCH_COLOR_PATTERN.test(color) ? TORCH_DIRECTIONS[Number(color[6])] : null;
+    }
+
+    function torchColorForFace(hit, placed) {
+      const direction = [placed[0] - hit[0], placed[2] - hit[2]];
+      const index = TORCH_DIRECTIONS.findIndex(([x, z]) => x === direction[0] && z === direction[1]);
+      return index < 0 ? ITEM_DEFINITIONS.torch.color : `#ffb52${index}`;
+    }
 
     function doorStateFromColor(color) {
       const normalized = String(color || "").toLowerCase();
@@ -1486,6 +1648,9 @@
     const remotePlayers = new Map();
     const pendingWorldEdits = new Map();
     const arrows = [];
+    const drops = [];
+    const leafDecayTimers = new Map();
+    const pendingLeafDecay = new Map();
 
     let selectedSlot = 0;
     const MAX_HEALTH = 20;
@@ -1582,6 +1747,228 @@
       }
     }
 
+    const LEAF_NEIGHBORS = [[1, 0, 0], [-1, 0, 0], [0, 1, 0],
+      [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+
+    function leafHasWood(x, y, z) {
+      const queue = [[x, y, z, 0]];
+      const visited = new Set([blockKey(x, y, z)]);
+      for (let i = 0; i < queue.length; i++) {
+        const [cx, cy, cz, distance] = queue[i];
+        for (let below = 1; below <= 8; below++) {
+          if (blockType(getBlock(cx, cy - below, cz)) === "log") return true;
+        }
+        if (distance === 6) continue;
+        for (const [dx, dy, dz] of LEAF_NEIGHBORS) {
+          const nx = cx + dx, ny = cy + dy, nz = cz + dz;
+          const key = blockKey(nx, ny, nz);
+          if (visited.has(key)) continue;
+          visited.add(key);
+          const type = blockType(getBlock(nx, ny, nz));
+          if (type === "log") return true;
+          if (type === "leaves") queue.push([nx, ny, nz, distance + 1]);
+        }
+      }
+      return false;
+    }
+
+    function dropGroundPosition(x, y, z) {
+      for (let ground = y - 1; ground >= WORLD_MIN_Y; ground--) {
+        const block = getBlock(x, ground, z);
+        if (blockType(block) !== "leaves" && isCollidableBlock(block)) {
+          return [x + 0.5, ground + 1.325, z + 0.5];
+        }
+      }
+      return [x + 0.5, WORLD_MIN_Y + 1.325, z + 0.5];
+    }
+
+    function leafDropType(x, z) {
+      const lane = ((x + z) % 4 + 4) % 4;
+      return lane === 0 ? "sapling" : lane === 1 ? "apple" : null;
+    }
+
+    function makeDrop(type, position, sourceY, id = null) {
+      return { id, type, position: position.slice(), groundY: position[1],
+        fallY: Math.max(position[1], sourceY), networked: id !== null };
+    }
+
+    const ITEM_ATTRACTION_RANGE = 5;
+    const ITEM_PICKUP_RANGE = 1.25;
+    const ITEM_ATTRACTION_SPEED = 6;
+
+    function attractItem(item, position, dt) {
+      const target = [camera.pos[0], camera.pos[1] + PLAYER_HEIGHT / 2, camera.pos[2]];
+      const distanceFrom = point => Math.hypot(...point.map((value, i) => value - target[i]));
+      if ((item.networked && distanceFrom(item.position) > ITEM_ATTRACTION_RANGE) ||
+          distanceFrom(item.pickupPosition || position) > ITEM_ATTRACTION_RANGE) {
+        item.pickupPosition = null;
+        return false;
+      }
+      const current = item.pickupPosition || position;
+      const distance = distanceFrom(current);
+      const step = Math.min(distance, ITEM_ATTRACTION_SPEED * dt);
+      item.pickupPosition = current.map((value, i) =>
+        value + (target[i] - value) * step / (distance || 1));
+      return distanceFrom(item.pickupPosition) <= ITEM_PICKUP_RANGE;
+    }
+
+    let lastLeafScanAt = -Infinity;
+    function updateLeafDecay(now) {
+      if (now - lastLeafScanAt < 2000) return;
+      lastLeafScanAt = now;
+      const candidates = new Set();
+      const centerX = Math.floor(camera.pos[0] / 12);
+      const centerZ = Math.floor(camera.pos[2] / 12);
+      for (let gx = centerX - 2; gx <= centerX + 2; gx++) {
+        for (let gz = centerZ - 2; gz <= centerZ + 2; gz++) {
+          const tree = getTreeAnchor(gx, gz);
+          if (!tree) continue;
+          const ground = terrainHeight(tree.x, tree.z);
+          if (Array.from({ length: tree.height }, (_, i) =>
+              blockType(getBlock(tree.x, ground + i, tree.z))).includes("log")) continue;
+          const top = ground + tree.height;
+          for (let dx = -2; dx <= 2; dx++) for (let dz = -2; dz <= 2; dz++) {
+            for (let dy = 0; dy <= 2; dy++) {
+              if (Math.abs(dx) + Math.abs(dz) + Math.max(0, dy - 1) <= 3) {
+                candidates.add(blockKey(tree.x + dx, top + dy, tree.z + dz));
+              }
+            }
+          }
+        }
+      }
+      for (const [key, block] of blockEdits) {
+        if (blockType(block) === "leaves" &&
+            Math.abs(block.x - camera.pos[0]) <= 30 && Math.abs(block.z - camera.pos[2]) <= 30) {
+          candidates.add(key);
+        }
+      }
+      for (const key of leafDecayTimers.keys()) {
+        if (!candidates.has(key)) leafDecayTimers.delete(key);
+      }
+      for (const key of candidates) {
+        const [x, y, z] = key.split(",").map(Number);
+        if (blockType(getBlock(x, y, z)) !== "leaves" || leafHasWood(x, y, z)) {
+          leafDecayTimers.delete(key);
+          continue;
+        }
+        if (!leafDecayTimers.has(key)) {
+          leafDecayTimers.set(key, now + 3000 + Math.random() * 5000);
+          continue;
+        }
+        if (now < leafDecayTimers.get(key) || pendingLeafDecay.has(key)) continue;
+        const type = leafDropType(x, z);
+        const position = dropGroundPosition(x, y, z);
+        leafDecayTimers.delete(key);
+        if (hasLoadedServerState && worldSocket?.readyState === WebSocket.OPEN) {
+          pendingLeafDecay.set(key, now);
+          worldSocket.send(JSON.stringify({ type: "leaf_decay", x, y, z, item_type: type, position }));
+        } else {
+          removeBlock(x, y, z);
+          if (type) drops.push(makeDrop(type, position, y + 0.5));
+        }
+      }
+    }
+
+    function addNetworkDrop(drop, sourceY = drop?.position?.[1]) {
+      if (!drop || typeof drop.drop_id !== "string" ||
+          !["sapling", "apple"].includes(drop.item_type) ||
+          !Array.isArray(drop.position) || drop.position.length !== 3 ||
+          !drop.position.every(Number.isFinite) ||
+          drops.some(item => item.networked && item.id === drop.drop_id)) return;
+      drops.push(makeDrop(drop.item_type, drop.position, sourceY, drop.drop_id));
+    }
+
+    function handleDropMessage(message) {
+      if (message.type === "leaf_decay_failed") {
+        const key = blockKey(message.x, message.y, message.z);
+        pendingLeafDecay.delete(key);
+        if (message.edit?.color === null) {
+          blockEdits.set(key, null);
+          placedBlocks.delete(key);
+        } else if (typeof message.edit?.color === "string" &&
+                   /^#[0-9a-f]{6}$/.test(message.edit.color)) {
+          const color = message.edit.color;
+          blockEdits.set(key, { x: message.x, y: message.y, z: message.z,
+            color, type: itemTypeFromColor(color) });
+        }
+        return true;
+      }
+      if (message.type === "leaf_decayed" && message.edit) {
+        const { x, y, z } = message.edit;
+        if (![x, y, z].every(Number.isInteger)) return true;
+        const key = blockKey(x, y, z);
+        pendingLeafDecay.delete(key);
+        leafDecayTimers.delete(key);
+        blockEdits.set(key, null);
+        placedBlocks.delete(key);
+        addNetworkDrop(message.drop, y + 0.5);
+        return true;
+      }
+      if (!["drop_remove", "drop_picked_up", "drop_pickup_failed"].includes(message.type)) return false;
+      const index = drops.findIndex(drop => drop.networked && drop.id === message.drop_id);
+      const drop = index < 0 ? null : drops[index];
+      if (message.type === "drop_pickup_failed" && pendingDropPickup?.id === message.drop_id) {
+        pendingDropPickup = null;
+        if (drop) {
+          drop.pickupPending = false;
+          drop.pickupPosition = null;
+          drop.nextPickupAt = performance.now() + 1000;
+        }
+        if (inventoryDirty) syncInventory();
+      } else if (message.type === "drop_picked_up" && pendingDropPickup?.id === message.drop_id) {
+        const { type, inventory: before } = pendingDropPickup;
+        pendingDropPickup = null;
+        if (before === JSON.stringify(inventoryPayload())) {
+          applyServerInventory(message.inventory);
+          if (inventoryDirty) syncInventory();
+        } else if (!addToInventory(ITEM_DEFINITIONS[type].color, type)) {
+          pendingDropCredits[type]++;
+          showToast("Make room in your inventory to collect the item.");
+        }
+        if (drop) drops.splice(index, 1);
+      } else if (message.type === "drop_remove" && drop) {
+        drops.splice(index, 1);
+      }
+      return true;
+    }
+
+    function updateDrops(dt = 0) {
+      for (const type of Object.keys(pendingDropCredits)) {
+        if (pendingDropCredits[type] && !pendingArrowPickup && !pendingDropPickup &&
+            inventory.some(item => !item || (item.type === type && item.count < 64))) {
+          pendingDropCredits[type]--;
+          addToInventory(ITEM_DEFINITIONS[type].color, type);
+        }
+      }
+      for (let i = drops.length - 1; i >= 0; i--) {
+        const drop = drops[i];
+        if (!drop.pickupPosition && drop.fallY > drop.groundY) {
+          drop.fallY = Math.max(drop.groundY, drop.fallY - 5 * dt);
+        }
+        if (drop.pickupPending) continue;
+        const hasSpace = inventory.some(item => !item ||
+          ((item.type || itemTypeFromColor(item.color)) === drop.type && item.count < 64));
+        if (!hasSpace || (drop.networked &&
+            (!hasLoadedServerState || worldSocket?.readyState !== WebSocket.OPEN))) {
+          drop.pickupPosition = null;
+          continue;
+        }
+        const visiblePosition = [drop.position[0], drop.fallY ?? drop.position[1], drop.position[2]];
+        if (!attractItem(drop, visiblePosition, dt)) continue;
+        if (!drop.networked) {
+          if (addToInventory(ITEM_DEFINITIONS[drop.type].color, drop.type)) drops.splice(i, 1);
+        } else if (!drop.pickupPending && !pendingDropPickup && !pendingArrowPickup &&
+            pendingArrowCredits === 0 && !Object.values(pendingDropCredits).some(Boolean) &&
+            performance.now() >= (drop.nextPickupAt || 0) &&
+            hasLoadedServerState && worldSocket?.readyState === WebSocket.OPEN) {
+          drop.pickupPending = true;
+          pendingDropPickup = { id: drop.id, type: drop.type, inventory: JSON.stringify(inventoryPayload()) };
+          sendPlayerPosition();
+          worldSocket.send(JSON.stringify({ type: "drop_pickup", drop_id: drop.id }));
+        }
+      }
+    }
+
     let gamepadMoveX = 0;
     let gamepadMoveY = 0;
     let gamepadLookX = 0;
@@ -1611,6 +1998,8 @@
     let inventoryDirty = false;
     let pendingArrowPickup = null;
     let pendingArrowCredits = 0;
+    let pendingDropPickup = null;
+    const pendingDropCredits = { sapling: 0, apple: 0 };
 
     const previousPadActions = {
       jump: false,
@@ -1646,6 +2035,8 @@
       if (
         pendingArrowPickup ||
         pendingArrowCredits > 0 ||
+        pendingDropPickup ||
+        Object.values(pendingDropCredits).some(Boolean) ||
         !hasLoadedServerState ||
         !worldSocket ||
         worldSocket.readyState !== WebSocket.OPEN
@@ -2403,6 +2794,19 @@
 
     function applyWelcome(message) {
       localPlayerId = message.player_id;
+      if (pendingDropPickup) {
+        const { type, inventory: before } = pendingDropPickup;
+        const count = items => items.reduce((sum, item) =>
+          sum + (item?.type === type ? item.count : 0), 0);
+        if (inventoryDirty && Array.isArray(message.inventory) &&
+            count(message.inventory) > count(JSON.parse(before))) pendingDropCredits[type]++;
+        pendingDropPickup = null;
+      }
+      pendingLeafDecay.clear();
+      for (let i = drops.length - 1; i >= 0; i--) {
+        if (drops[i].networked) drops.splice(i, 1);
+      }
+      for (const drop of message.drops || []) addNetworkDrop(drop);
       if (pendingArrowPickup) {
         if (inventoryDirty && Array.isArray(message.inventory)) {
           const countArrows = items => items.reduce((total, item) =>
@@ -2502,7 +2906,8 @@
         }
 
         if (message.type === "inventory_saved") {
-          if (!pendingArrowPickup && pendingArrowCredits === 0) inventoryDirty = false;
+          if (!pendingArrowPickup && pendingArrowCredits === 0 && !pendingDropPickup &&
+              !Object.values(pendingDropCredits).some(Boolean)) inventoryDirty = false;
           return;
         }
 
@@ -2529,6 +2934,7 @@
         }
 
         if (handleArrowMessage(message)) return;
+        if (handleDropMessage(message)) return;
 
         if (message.type === "world_edit" && message.edit) {
           const edit = message.edit;
@@ -3054,6 +3460,7 @@
         pendingArrowPickup = null;
         if (arrow) {
           arrow.pickupPending = false;
+          arrow.pickupPosition = null;
           arrow.nextPickupAt = performance.now() + 1000;
         }
         if (inventoryDirty) syncInventory();
@@ -3075,7 +3482,7 @@
     }
 
     function updateArrows(dt) {
-      if (pendingArrowCredits > 0 && inventory.some(item => !item ||
+      if (pendingArrowCredits > 0 && !pendingDropPickup && inventory.some(item => !item ||
           ((item.type || itemTypeFromColor(item.color)) === "arrows" && item.count < 64))) {
         pendingArrowCredits--;
         addToInventory(ITEM_DEFINITIONS.arrows.color, "arrows");
@@ -3131,14 +3538,18 @@
             arrow.position = next;
           }
         }
-        if (arrow.stuck && arrow.age >= 0.5 &&
-            Math.hypot(arrow.position[0] - camera.pos[0],
-              arrow.position[1] - (camera.pos[1] + PLAYER_HEIGHT / 2),
-              arrow.position[2] - camera.pos[2]) < 1.25) {
+        if (arrow.stuck && arrow.age >= 0.5 && !arrow.pickupPending) {
+          const hasSpace = inventory.some(item => !item ||
+            ((item.type || itemTypeFromColor(item.color)) === "arrows" && item.count < 64));
+          if (!hasSpace || (arrow.networked && (!arrow.confirmed || !hasLoadedServerState ||
+              worldSocket?.readyState !== WebSocket.OPEN))) {
+            arrow.pickupPosition = null;
+            continue;
+          }
+          if (!attractItem(arrow, arrow.position, dt)) continue;
           if (arrow.networked) {
-            const hasSpace = inventory.some(item => !item ||
-              ((item.type || itemTypeFromColor(item.color)) === "arrows" && item.count < 64));
-            if (arrow.confirmed && !arrow.pickupPending && !pendingArrowPickup &&
+            if (arrow.confirmed && !arrow.pickupPending && !pendingArrowPickup && !pendingDropPickup &&
+                !Object.values(pendingDropCredits).some(Boolean) &&
                 pendingArrowCredits === 0 && hasSpace &&
                 performance.now() >= (arrow.nextPickupAt || 0) &&
                 hasLoadedServerState && worldSocket?.readyState === WebSocket.OPEN) {
@@ -3159,9 +3570,9 @@
       const item = inventory[selectedSlot];
       if (!item) return false;
       let type = item.type || itemTypeFromColor(item.color);
-      if (type !== "bread") return false;
+      if (type !== "bread" && type !== "apple") return false;
       if (playerHealth >= MAX_HEALTH) return true;
-      heal(6);
+      heal(type === "apple" ? 4 : 6);
       item.count--;
       if (!item.count) inventory[selectedSlot] = null;
       renderInventory();
@@ -3280,7 +3691,10 @@
         };
         color = doorColorFromState(state);
         bounds = doorBounds({ x, y, z, color, type });
-      } else if (type === "fence" || type === "torch") {
+      } else if (type === "torch") {
+        color = torchColorForFace(result.hit, [x, y, z]);
+        bounds = blockBounds({ x, y, z, color, type });
+      } else if (type === "fence") {
         bounds = blockBounds({ x, y, z, color, type });
       }
 
@@ -4029,7 +4443,8 @@
         }
 
         if (message.type === "inventory_saved") {
-          if (!pendingArrowPickup && pendingArrowCredits === 0) inventoryDirty = false;
+          if (!pendingArrowPickup && pendingArrowCredits === 0 && !pendingDropPickup &&
+              !Object.values(pendingDropCredits).some(Boolean)) inventoryDirty = false;
           return;
         }
 
@@ -4056,6 +4471,7 @@
         }
 
         if (handleArrowMessage(message)) return;
+        if (handleDropMessage(message)) return;
 
         if (message.type === "world_edit" && message.edit) {
           const edit = message.edit;
@@ -4127,6 +4543,7 @@
 
       updatePhysics(dt);
       updateArrows(dt);
+      updateDrops(dt);
       if (now - lastDamageAt > 4000 && now - lastHealthRegenAt > 1000 &&
           playerHealth < MAX_HEALTH) {
         lastHealthRegenAt = now;
@@ -4134,6 +4551,7 @@
       }
       updateCrops(now);
       growSaplings(now);
+      updateLeafDecay(now);
       updateMining(now);
       syncPlayerPosition(now);
       updateCoordinates();
@@ -4177,6 +4595,10 @@
       document.addEventListener("fullscreenchange", updateButton);
       document.addEventListener("webkitfullscreenchange", updateButton);
       updateButton();
+      setTimeout(function(){
+          document.body.classList.add('loaded');
+          document.getElementById('loader-wrapper-init').classList.add('hide');
+      }, 1000);
     })();
   </script>
 </body>

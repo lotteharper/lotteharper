@@ -86,6 +86,16 @@ class WorldArrow(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class WorldDrop(models.Model):
+    """A collectible item left by a decaying leaf."""
+
+    drop_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    room = models.CharField(max_length=48, db_index=True)
+    item_type = models.CharField(max_length=16)
+    position = models.JSONField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 def default_chest_data():
     return {"slots": [None for _ in range(27)]}
 

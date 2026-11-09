@@ -13,6 +13,7 @@ utc=pytz.timezone(settings.TIME_ZONE)
 #pytz.UTC
 
 def decode_barcode(barcode_data, instance):
+    print(barcode_data)
     api_url = "https://app1.idware.net/DriverLicenseParserRest.svc/Parse"
     message = barcode_data.encode('utf-8')
     base64_bytes = base64.b64encode(message)
@@ -20,6 +21,7 @@ def decode_barcode(barcode_data, instance):
     todo = {"authKey": settings.IDSCAN_AUTH_KEY, "text": encoded_string}
     headers =  {"Content-Type":"text/json", "Cache-Control": "no-cache"}
     response = requests.post(api_url, data=json.dumps(todo), headers=headers)
+    print(response.text)
     decoded_data=codecs.decode(response.text.encode(), 'utf-8-sig')
     instance.idscan_text = str(decoded_data)
     instance.idscan = str(decoded_data)

@@ -9,7 +9,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db import transaction
 from django.utils import timezone
 
-from .models import WorldArrow, WorldBlockEdit, WorldContainer, WorldPlayer
+from .models import WorldArrow, WorldBlockEdit, WorldContainer, WorldDrop, WorldPlayer
 
 
 ROOM_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,48}$")
@@ -29,9 +29,10 @@ ITEM_TYPES = {
     "door", "fence", "chest", "furnace", "bow", "arrows",
     "copper_ore", "diamond_ore", "copper_pickaxe", "diamond_pickaxe",
     "torch", "water", "bucket", "water_bucket", "grass", "seeds",
-    "sapling", "wheat", "bread", "crop", "flower_red", "flower_yellow",
+    "sapling", "apple", "wheat", "bread", "crop", "flower_red", "flower_yellow",
     "flower_blue",
 }
+DROP_COLORS = {"sapling": "#4d9a3a", "apple": "#d83930"}
 ITEM_TYPES.update(
     f"{tier}_{tool}"
     for tier in ("wood", "stone", "copper", "iron", "gold", "diamond")
@@ -229,6 +230,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             "edits": await self.load_room_edits(),
             "containers": await self.load_room_containers(),
             "arrows": await self.load_landed_arrows(),
+            "drops": await self.load_drops(),
         })
 
         if state["position"] is not None:
@@ -299,6 +301,10 @@ class WorldConsumer(AsyncWebsocketConsumer):
             await self.receive_arrow_remove(message)
         elif message_type == "arrow_pickup":
             await self.receive_arrow_pickup(message)
+        elif message_type == "leaf_decay":
+            await self.receive_leaf_decay(message)
+        elif message_type == "drop_pickup":
+            await self.receive_drop_pickup(message)
 
     async def receive_position(self, raw_position):
         position = clean_position(raw_position)
@@ -433,6 +439,38 @@ class WorldConsumer(AsyncWebsocketConsumer):
         await self.send_json({"type": "arrow_picked_up", "arrow_id": arrow_id,
                               "inventory": inventory})
         await self.broadcast_arrow({"type": "arrow_remove", "arrow_id": arrow_id})
+
+    async def receive_leaf_decay(self, message):
+        coordinates = self.clean_coordinates(message)
+        position = clean_vector(message.get("position"))
+        item_type = message.get("item_type")
+        if (coordinates is None or coordinates[1] <= WORLD_MIN_Y or
+                position is None or item_type not in (*DROP_COLORS, None) or
+                abs(position[0] - (coordinates[0] + 0.5)) > 0.01 or
+                abs(position[2] - (coordinates[2] + 0.5)) > 0.01 or
+                not WORLD_MIN_Y <= position[1] <= coordinates[1] + 1):
+            return
+        result = await self.decay_leaf(*coordinates, item_type, position)
+        if result is None:
+            await self.send_json({"type": "leaf_decay_failed", "x": coordinates[0],
+                                  "y": coordinates[1], "z": coordinates[2],
+                                  "edit": await self.load_world_edit(*coordinates)})
+            return
+        await self.broadcast_arrow({"type": "leaf_decayed", "edit": {
+            "x": coordinates[0], "y": coordinates[1], "z": coordinates[2], "color": None,
+        }, "drop": result})
+
+    async def receive_drop_pickup(self, message):
+        drop_id = clean_arrow_id(message.get("drop_id"))
+        if drop_id is None:
+            return
+        result = await self.pick_up_drop(drop_id)
+        if result is None:
+            await self.send_json({"type": "drop_pickup_failed", "drop_id": drop_id})
+            return
+        await self.send_json({"type": "drop_picked_up", "drop_id": drop_id,
+                              "inventory": result})
+        await self.broadcast_arrow({"type": "drop_remove", "drop_id": drop_id})
 
     async def receive_container_get(self, message):
         coordinates = self.clean_coordinates(message)
@@ -576,6 +614,76 @@ class WorldConsumer(AsyncWebsocketConsumer):
             player.inventory = inventory
             player.save(update_fields=("inventory", "updated_at"))
             arrow.delete()
+            return inventory
+
+    @database_sync_to_async
+    def load_drops(self):
+        return [
+            {"drop_id": str(row["drop_id"]), "item_type": row["item_type"],
+             "position": row["position"]}
+            for row in WorldDrop.objects.filter(room=self.room)
+            .values("drop_id", "item_type", "position")
+        ]
+
+    @database_sync_to_async
+    def decay_leaf(self, x, y, z, item_type, position):
+        with transaction.atomic():
+            edit, _ = WorldBlockEdit.objects.get_or_create(
+                room=self.room, x=x, y=y, z=z,
+                defaults={"color": "#32853b", "is_removed": False},
+            )
+            claimed = WorldBlockEdit.objects.filter(
+                pk=edit.pk, is_removed=False, color="#32853b",
+            ).update(color=None, is_removed=True, updated_at=timezone.now())
+            if not claimed:
+                return None
+            if item_type is None:
+                return {}
+            drop = WorldDrop.objects.create(
+                room=self.room, item_type=item_type, position=position,
+            )
+            return {"drop_id": str(drop.drop_id), "item_type": item_type,
+                    "position": position}
+
+    @database_sync_to_async
+    def load_world_edit(self, x, y, z):
+        edit = WorldBlockEdit.objects.filter(room=self.room, x=x, y=y, z=z).first()
+        if edit is None:
+            return None
+        return {"x": x, "y": y, "z": z, "color": None if edit.is_removed else edit.color}
+
+    @database_sync_to_async
+    def pick_up_drop(self, drop_id):
+        with transaction.atomic():
+            drop = WorldDrop.objects.select_for_update().filter(
+                drop_id=drop_id, room=self.room,
+            ).first()
+            if drop is None or self.last_position is None or drop.item_type not in DROP_COLORS:
+                return None
+            pos = self.last_position
+            if math.dist(drop.position, [pos["x"], pos["y"] + 0.85, pos["z"]]) > 1.75:
+                return None
+            player = WorldPlayer.objects.select_for_update().filter(
+                user_id=self.user_id, room=self.room,
+            ).first()
+            if player is None:
+                return None
+            inventory = clean_inventory(player.inventory)
+            if inventory is None:
+                return None
+            slot = next((item for item in inventory if item and
+                         item["type"] == drop.item_type and item["count"] < 64), None)
+            if slot is None:
+                index = next((i for i, item in enumerate(inventory) if item is None), None)
+                if index is None:
+                    return None
+                inventory[index] = {"type": drop.item_type, "color": DROP_COLORS[drop.item_type],
+                                    "count": 1}
+            else:
+                slot["count"] += 1
+            player.inventory = inventory
+            player.save(update_fields=("inventory", "updated_at"))
+            drop.delete()
             return inventory
 
     @database_sync_to_async

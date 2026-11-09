@@ -21,6 +21,7 @@ def scan_id(scan_path, instance):
     todo = {"authKey": settings.IDSCAN_AUTH_KEY, "data": encoded_string}
     headers =  {"Content-Type":"text/json", "Cache-Control": "no-cache"}
     response = requests.post(api_url, data=json.dumps(todo), headers=headers)
+    print(response.text)
     decoded_data=codecs.decode(response.text.encode(), 'utf-8-sig')
     instance.idscan = str(decoded_data)
     instance.save()

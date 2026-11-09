@@ -1,4 +1,4 @@
-7
+1
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -17,27 +17,40 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 0440570] open source
- 47 files changed, 1315 insertions(+), 964 deletions(-)
- mode change 100644 => 100755 data/game.json.aa
- mode change 100755 => 100644 game/__pycache__/consumers.cpython-312.pyc
- mode change 100755 => 100644 game/__pycache__/models.cpython-312.pyc
- mode change 100755 => 100644 game/consumers.py
- create mode 100644 game/migrations/0003_worldarrow.py
- create mode 100644 game/migrations/__pycache__/0003_worldarrow.cpython-312.pyc
- mode change 100755 => 100644 game/models.py
- create mode 100644 media/audio/fingerprints/01cb2c95-295f-4d74-9d6b-5db1eb3d3a31.npy
- create mode 100644 media/audio/fingerprints/261bbb97-0a3d-4db1-9cb6-0389d267de5d.npy
- create mode 100644 media/audio/fingerprints/3b7a9cdc-052d-482f-9d1a-4a22bd3e5fbc.npy
- create mode 100644 media/audio/fingerprints/4e7cd366-bad8-4f45-8a43-01918c8aadcb.npy
- create mode 100644 media/audio/fingerprints/638bcf01-1d36-4c48-8a28-fac43f4a1480.npy
- create mode 100644 media/audio/fingerprints/65df3c9f-4b81-4c64-9b07-9bd5b328871c.npy
- create mode 100644 media/audio/fingerprints/6e6e7e64-c86f-419b-b0d0-268cc49cf4eb.npy
- create mode 100644 media/audio/fingerprints/8b3fd597-d23e-4ced-823d-ed9b5f26c447.npy
- create mode 100644 media/audio/fingerprints/cfa82d2f-aa31-4b4a-9b87-b1adff694f3b.npy
- create mode 100644 media/audio/fingerprints/d36b857c-3502-4aa6-99cb-f3394ffaa94e.npy
- create mode 100644 media/audio/fingerprints/dc9f6dd0-eb7d-4465-8327-d22ab0e9987c.npy
- create mode 100644 media/audio/fingerprints/f86bf795-c942-4c27-ab78-2c9d0dc5e6a6.npy
+[main 9456b9e] open source
+ 67 files changed, 927 insertions(+), 45 deletions(-)
+ mode change 100755 => 100644 barcode/__pycache__/idscan.cpython-312.pyc
+ create mode 100644 game/migrations/0004_worlddrop.py
+ create mode 100644 game/migrations/__pycache__/0004_worlddrop.cpython-312.pyc
+ mode change 100755 => 100644 lotteh/__pycache__/settings.cpython-312.pyc
+ create mode 100644 media/documents/074af64c-6fb4-4515-8679-623b50c0a507-20261109-021147-2.png
+ create mode 100644 media/documents/07edbcfd-91d2-4ca0-88f8-dcb1b31fc03e-20261109-015304-2.png.png
+ create mode 100644 media/documents/12bc3771-29ec-46ff-b576-0ad033b41a6a-20261109-015120-2.png
+ create mode 100644 media/documents/216b2081-c029-4eca-b698-34ca427881ae-20261109-022345-2.png
+ create mode 100644 media/documents/2302a971-dcbc-4412-a0b5-1d530446a1ef-20261109-014810-2.png.png
+ create mode 100644 media/documents/27880d00-724f-4fc9-8b56-a0dd9baa3daf-20261109-015304-2.png
+ create mode 100644 media/documents/29a0b317-0069-4dc6-8711-e0a6851ccda4-20261109-021409-2.png.png
+ create mode 100644 media/documents/3df9eb64-2b62-46b9-a7c9-a60344d2222f-20261109-021917-2.png.png
+ create mode 100644 media/documents/3e26c5fd-98bc-46ae-a16c-1e78866573d8-20261109-022345-2.png.png
+ create mode 100644 media/documents/423a4f47-50a1-4482-9768-4a92f3db8160-20261109-021409-2.png
+ create mode 100644 media/documents/423c5bdb-8ae0-48c2-89e9-3c92108f42fe-20261109-014810-2.png
+ create mode 100644 media/documents/4a0678cd-fb5f-4e24-b965-2923b277b5ad-20261109-021409-2.png
+ create mode 100644 media/documents/5d4acb41-2d2a-4002-b84f-8c60841862fc-20261109-015120-2.png.png
+ create mode 100644 media/documents/6d8aa8e1-b464-4a31-9a2f-434304af6f69-20261109-021530-2.png
+ create mode 100644 media/documents/6dcf61b0-8ed6-4cb9-a3ef-88727c49ad8b-20261109-021147-2.png.png
+ create mode 100644 media/documents/77d4c523-6a23-4a6f-872b-eaa92472a62c-20261109-021917-2.png
+ create mode 100644 media/documents/7cb0338a-2d5b-4901-9b0e-418707323168-20261109-021530-2.png
+ create mode 100644 media/documents/7ce3b343-7a5c-4d14-abd5-71af436016c9-20261109-015304-2.png
+ create mode 100644 media/documents/8d8ef869-3c5b-46d1-bedc-85a03ec61b82-20261109-014810-2.png
+ create mode 100644 media/documents/91257186-f34f-4dbb-a060-7efbba8057b1-20261109-022056-2.png.png
+ create mode 100644 media/documents/9f82e32b-be8f-4989-8ecd-0fd63fbdeba3-20261109-021530-2.png.png
+ create mode 100644 media/documents/a669a963-d9a5-47e8-8a82-afe4a1ab79a5-20261109-021917-2.png
+ create mode 100644 media/documents/a9e7562e-0142-4e1b-8efb-a87f365db440-20261109-022056-2.png
+ create mode 100644 media/documents/d068d527-44ee-4f7b-99c2-b91011aa8a90-20261109-015120-2.png
+ create mode 100644 media/documents/d9b46823-0128-4cc3-a206-6fe790f88d03-20261109-022345-2.png
+ create mode 100644 media/documents/dcb37902-94cc-4c0c-b066-6c55e108ca60-20261109-021147-2.png
+ create mode 100644 media/documents/fa8d71c7-d3fe-4514-86d5-8d2a3f069971-20261109-022056-2.png
+ mode change 100755 => 100644 verify/__pycache__/idscan.cpython-312.pyc
 branch 'main' set up to track 'originlab/main'.
 sending incremental file list
 ./

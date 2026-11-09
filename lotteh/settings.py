@@ -386,6 +386,12 @@ DEFENDER_LOCKOUT_URL = 'https://glamgirlx.com'
 ACTIVATE_MINING = False
 MONERO_ADDRESS = config['MONERO_ADDRESS']
 
+# Veriff ID Verification API key
+VERIFF_KEY = config['VERIFF_KEY']
+VERIFF_SECRET = config['VERIFF_SECRET']
+
+
+
 # Programmanble SMS keys
 TWILIO_ACCOUNT_SID = keys['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = keys['TWILIO_AUTH_TOKEN']
@@ -862,9 +868,9 @@ UPLOAD_INTERVAL = 4000
 MIN_CONFIDENCE = 90
 BANNED_ID_TYPES = ['SexOffenderCard', 'ViolentOffenderCard', 'OffenderCard']
 ENABLE_AGECHECKER = False
-USE_IDWARE = True
+USE_IDWARE = False
 BARCODE_SIZE = 300
-REQUIRE_SUBJECTION = True
+REQUIRE_SUBJECTION = False
 OCR_LANG = 'eng'
 
 # Interval to assess kick
@@ -893,7 +899,7 @@ EMAIL_ICON_URL = '/email/static/logo.png'
 SESSION_UPDATE_SECONDS = 15
 
 # Minimum crypto payment percentage
-MIN_CRYPTO_PERCENTAGE = 90
+MIN_CRYPTO_PERCENTAGE = 95
 
 # Programmable voice blog feed
 VOICE_FEED = 'blog'
