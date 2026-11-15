@@ -17,10 +17,12 @@ COLOR_PATTERN = re.compile(r"^#[0-9a-fA-F]{6}$")
 EMPTY_INVENTORY = [None] * 27
 MAX_WORLD_COORDINATE = 1_000_000
 WORLD_MIN_Y = -24
+ITEM_PICKUP_RANGE = 5
 
 # Keep these item type names in sync with the game's JavaScript.
 ITEM_TYPES = {
     "log", "planks", "sticks", "stone", "dirt", "leaves",
+    "wood_slab", "stone_slab", "wood_stairs", "stone_stairs",
     "coal", "iron_ore", "gold_ore", "crystal_ore",
     "iron_ingot", "gold_ingot", "crystal",
     "wood_pickaxe", "stone_pickaxe", "iron_pickaxe",
@@ -192,6 +194,13 @@ def clean_container_data(kind, value):
 
     return None
 
+from asgiref.sync import sync_to_async
+
+@sync_to_async
+def get_name(user_id):
+    from django.contrib.auth.models import User
+    return User.objects.get(id=user_id).profile.name
+
 
 class WorldConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -207,6 +216,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             return
 
         self.user_id = user.pk
+        self.username = await get_name(self.user_id)
         self.room = room
         self.room_group = f"world_{room}"
         self.last_position = None
@@ -241,6 +251,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
                     "message": {
                         "type": "player_state",
                         "player_id": self.player_id,
+                        "username": self.username,
                         "position": state["position"],
                     },
                 },
@@ -328,6 +339,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
                 "message": {
                     "type": "player_state",
                     "player_id": self.player_id,
+                    "username": self.username,
                     "position": position,
                 },
             },
@@ -592,7 +604,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             if arrow is None or self.last_position is None:
                 return None
             position = self.last_position
-            if math.dist(arrow.position, [position["x"], position["y"] + 0.85, position["z"]]) > 1.75:
+            if math.dist(arrow.position, [position["x"], position["y"] + 0.85, position["z"]]) > ITEM_PICKUP_RANGE:
                 return None
             player = WorldPlayer.objects.select_for_update().filter(
                 user_id=self.user_id, room=self.room,
@@ -661,7 +673,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             if drop is None or self.last_position is None or drop.item_type not in DROP_COLORS:
                 return None
             pos = self.last_position
-            if math.dist(drop.position, [pos["x"], pos["y"] + 0.85, pos["z"]]) > 1.75:
+            if math.dist(drop.position, [pos["x"], pos["y"] + 0.85, pos["z"]]) > ITEM_PICKUP_RANGE:
                 return None
             player = WorldPlayer.objects.select_for_update().filter(
                 user_id=self.user_id, room=self.room,
@@ -699,7 +711,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             others = list(
                 WorldPlayer.objects.filter(room=self.room, is_online=True)
                 .exclude(pk=player.pk)
-                .values("player_id", "position")
+                .values("player_id", "position", "user__username")
             )
 
             position = None if created else clean_position(player.position)
@@ -710,7 +722,8 @@ class WorldConsumer(AsyncWebsocketConsumer):
                 "position": position,
                 "inventory": inventory if inventory is not None else EMPTY_INVENTORY,
                 "players": [
-                    {"id": str(row["player_id"]), "position": row["position"]}
+                    {"id": str(row["player_id"]), "position": row["position"],
+                     "username": row["user__username"]}
                     for row in others
                 ],
             }

@@ -5,6 +5,7 @@
 function createVoxelRenderer() {
   const CHUNK_SIZE = 8;
   const CAVE_RENDER_BAND = 10;
+  const NAMETAG_RANGE = 16;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.shadowMap.enabled = true;
@@ -41,11 +42,7 @@ function createVoxelRenderer() {
   scene.add(sunDisc, moonDisc);
   const skyDirection = new THREE.Vector3();
 
-  const torchLights = Array.from({ length: 6 }, () => {
-    const light = new THREE.PointLight(0xffa044, 0, 10, 2);
-    scene.add(light);
-    return light;
-  });
+  const torchLights = new Map();
   const terrainMaterial = new THREE.MeshLambertMaterial({
     vertexColors: true, side: THREE.DoubleSide, shadowSide: THREE.FrontSide
   });
@@ -53,6 +50,11 @@ function createVoxelRenderer() {
     vertexColors: true, side: THREE.DoubleSide, shadowSide: THREE.FrontSide, emissive: 0x8b3c05
   });
   const doorMaterial = new THREE.MeshLambertMaterial({ color: ITEM_DEFINITIONS.door.color });
+  const chestMaterial = new THREE.MeshLambertMaterial({ color: ITEM_DEFINITIONS.chest.color });
+  const chestSeamMaterial = new THREE.MeshLambertMaterial({ color: 0x4c2b17 });
+  const chestBodyGeometry = new THREE.BoxGeometry(1, 0.73, 1);
+  const chestSeamGeometry = new THREE.BoxGeometry(1, 0.02, 1);
+  const chestLidGeometry = new THREE.BoxGeometry(1, 0.25, 1);
   const avatarBodyGeometry = new THREE.BoxGeometry(0.65, 0.85, 0.4);
   const avatarHeadGeometry = new THREE.BoxGeometry(0.42, 0.42, 0.42);
   const doorGeometry = new THREE.BoxGeometry(1, 1, DOOR_THICKNESS);
@@ -60,6 +62,7 @@ function createVoxelRenderer() {
   const arrowShaftGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.7);
   const arrowTipGeometry = new THREE.ConeGeometry(0.09, 0.18, 4);
   const arrowFletchingGeometry = new THREE.BoxGeometry(0.18, 0.18, 0.12);
+  const dropGeometry = new THREE.PlaneGeometry(1, 1);
   const arrowShaftMaterial = new THREE.MeshLambertMaterial({ color: 0x9b6738 });
   const arrowTipMaterial = new THREE.MeshLambertMaterial({ color: 0xc7cbd0 });
   const arrowFletchingMaterial = new THREE.MeshLambertMaterial({ color: 0xf3eee2 });
@@ -70,6 +73,7 @@ function createVoxelRenderer() {
   const dropMeshes = new Map();
   const dropTextures = new Map();
   const doorSwings = new Map();
+  const chestSwings = new Map();
   let band = null;
 
   const keyForChunk = (x, z) => `${x},${z}`;
@@ -95,6 +99,7 @@ function createVoxelRenderer() {
       mesh.geometry.dispose();
     }
     for (const door of chunk.doors) world.remove(door.mesh);
+    for (const chest of chunk.chests) world.remove(chest.group);
     chunks.delete(key);
   }
 
@@ -104,6 +109,7 @@ function createVoxelRenderer() {
       torch: { positions: [], normals: [], colors: [] }
     };
     const doors = [];
+    const chests = [];
     const torches = [];
     const startX = cx * CHUNK_SIZE;
     const startZ = cz * CHUNK_SIZE;
@@ -126,6 +132,24 @@ function createVoxelRenderer() {
     function addBlock(block) {
       const type = blockType(block);
       const { x, y, z } = block;
+      if (type === "chest") {
+        const group = new THREE.Group();
+        group.position.set(x, y, z);
+        const body = new THREE.Mesh(chestBodyGeometry, chestMaterial);
+        body.position.set(0.5, 0.365, 0.5);
+        const seam = new THREE.Mesh(chestSeamGeometry, chestSeamMaterial);
+        seam.position.set(0.5, 0.74, 0.5);
+        const hinge = new THREE.Group();
+        hinge.position.set(0.5, 0.75, 1);
+        const lid = new THREE.Mesh(chestLidGeometry, chestMaterial);
+        lid.position.set(0, 0.125, -0.5);
+        for (const mesh of [body, seam, lid]) mesh.castShadow = mesh.receiveShadow = true;
+        hinge.add(lid);
+        group.add(body, seam, hinge);
+        world.add(group);
+        chests.push({ block, group, hinge });
+        return;
+      }
       if (type === "door" && doorStateFromColor(block.color)) {
         const state = doorStateFromColor(block.color);
         if (!state.upper) {
@@ -150,11 +174,31 @@ function createVoxelRenderer() {
         return;
       }
 
+      if (isPartialBlock(type)) {
+        const color = ITEM_DEFINITIONS[type.startsWith("wood_") ? "planks" : "stone"].color;
+        for (const [index, box] of blockBoxes(block).entries()) {
+          const { minX, maxX, minY, maxY, minZ, maxZ } = box;
+          const faces = [
+            [[0, 0, -1], [[minX, minY, minZ], [maxX, minY, minZ], [maxX, maxY, minZ], [minX, maxY, minZ]]],
+            [[0, 0, 1], [[maxX, minY, maxZ], [minX, minY, maxZ], [minX, maxY, maxZ], [maxX, maxY, maxZ]]],
+            [[0, 1, 0], [[minX, maxY, minZ], [maxX, maxY, minZ], [maxX, maxY, maxZ], [minX, maxY, maxZ]]],
+            [[-1, 0, 0], [[minX, minY, maxZ], [minX, minY, minZ], [minX, maxY, minZ], [minX, maxY, maxZ]]],
+            [[1, 0, 0], [[maxX, minY, minZ], [maxX, minY, maxZ], [maxX, maxY, maxZ], [maxX, maxY, minZ]]]
+          ];
+          if (index === 0) faces.push(
+            [[0, -1, 0], [[minX, minY, maxZ], [maxX, minY, maxZ], [maxX, minY, minZ], [minX, minY, minZ]]]
+          );
+          for (const [normal, points] of faces) quad(arrays.terrain, points, normal, color);
+        }
+        return;
+      }
+
       const direction = type === "torch" ? torchDirection(block.color) : null;
       if (direction) {
         const [dx, dz] = direction;
         const sine = Math.sin(Math.PI / 6), cosine = Math.cos(Math.PI / 6);
-        const offset = 0.09 * cosine;
+        const halfWidth = 0.09;
+        const offset = halfWidth * cosine;
         const baseX = x + 0.5 - dx * (0.5 - offset);
         const baseZ = z + 0.5 - dz * (0.5 - offset);
         const transform = (u, v, w, point) => {
@@ -164,12 +208,12 @@ function createVoxelRenderer() {
             dz * along + dx * w + (point ? baseZ : 0)];
         };
         const faces = [
-          [[0, 0, -1], [[-0.09, 0, -0.09], [0.09, 0, -0.09], [0.09, 0.72, -0.09], [-0.09, 0.72, -0.09]]],
-          [[0, 0, 1], [[0.09, 0, 0.09], [-0.09, 0, 0.09], [-0.09, 0.72, 0.09], [0.09, 0.72, 0.09]]],
-          [[0, -1, 0], [[-0.09, 0, 0.09], [0.09, 0, 0.09], [0.09, 0, -0.09], [-0.09, 0, -0.09]]],
-          [[0, 1, 0], [[-0.09, 0.72, -0.09], [0.09, 0.72, -0.09], [0.09, 0.72, 0.09], [-0.09, 0.72, 0.09]]],
-          [[-1, 0, 0], [[-0.09, 0, 0.09], [-0.09, 0, -0.09], [-0.09, 0.72, -0.09], [-0.09, 0.72, 0.09]]],
-          [[1, 0, 0], [[0.09, 0, -0.09], [0.09, 0, 0.09], [0.09, 0.72, 0.09], [0.09, 0.72, -0.09]]]
+          [[0, 0, -1], [[-halfWidth, 0, -halfWidth], [halfWidth, 0, -halfWidth], [halfWidth, 0.72, -halfWidth], [-halfWidth, 0.72, -halfWidth]]],
+          [[0, 0, 1], [[halfWidth, 0, halfWidth], [-halfWidth, 0, halfWidth], [-halfWidth, 0.72, halfWidth], [halfWidth, 0.72, halfWidth]]],
+          [[0, -1, 0], [[-halfWidth, 0, halfWidth], [halfWidth, 0, halfWidth], [halfWidth, 0, -halfWidth], [-halfWidth, 0, -halfWidth]]],
+          [[0, 1, 0], [[-halfWidth, 0.72, -halfWidth], [halfWidth, 0.72, -halfWidth], [halfWidth, 0.72, halfWidth], [-halfWidth, 0.72, halfWidth]]],
+          [[-1, 0, 0], [[-halfWidth, 0, halfWidth], [-halfWidth, 0, -halfWidth], [-halfWidth, 0.72, -halfWidth], [-halfWidth, 0.72, halfWidth]]],
+          [[1, 0, 0], [[halfWidth, 0, -halfWidth], [halfWidth, 0, halfWidth], [halfWidth, 0.72, halfWidth], [halfWidth, 0.72, -halfWidth]]]
         ];
         for (const [normal, points] of faces) {
           quad(arrays.torch, points.map(p => transform(...p, true)),
@@ -182,10 +226,11 @@ function createVoxelRenderer() {
       const thin = type === "fence" || type === "torch";
       if (type === "torch") torches.push([x + 0.5, y + 0.7, z + 0.5]);
       const target = type === "torch" ? arrays.torch : arrays.terrain;
-      const minX = x + (thin ? 0.25 : 0);
-      const maxX = x + (thin ? 0.75 : 1);
-      const minZ = z + (thin ? 0.25 : 0);
-      const maxZ = z + (thin ? 0.75 : 1);
+      const inset = type === "torch" ? 0.375 : thin ? 0.25 : 0;
+      const minX = x + inset;
+      const maxX = x + 1 - inset;
+      const minZ = z + inset;
+      const maxZ = z + 1 - inset;
       const faces = [
         [[0, 0, -1], [[minX, y, minZ], [maxX, y, minZ], [maxX, y + 1, minZ], [minX, y + 1, minZ]]],
         [[0, 0, 1], [[maxX, y, maxZ], [minX, y, maxZ], [minX, y + 1, maxZ], [maxX, y + 1, maxZ]]],
@@ -244,7 +289,7 @@ function createVoxelRenderer() {
       world.add(mesh);
       meshes.push(mesh);
     }
-    chunks.set(keyForChunk(cx, cz), { meshes, doors, torches });
+    chunks.set(keyForChunk(cx, cz), { meshes, doors, chests, torches });
   }
 
   function updateDoors(dt) {
@@ -269,11 +314,32 @@ function createVoxelRenderer() {
     for (const key of doorSwings.keys()) if (!visible.has(key)) doorSwings.delete(key);
   }
 
+  function updateChests(dt) {
+    const visible = new Set();
+    for (const chunk of chunks.values()) {
+      for (const { block, hinge } of chunk.chests) {
+        const key = blockKey(block.x, block.y, block.z);
+        visible.add(key);
+        const target = chestOpen && activeChestKey === key ? 1 : 0;
+        let value = chestSwings.get(key) || 0;
+        value += Math.max(-dt / DOOR_SWING_MS, Math.min(dt / DOOR_SWING_MS, target - value));
+        chestSwings.set(key, value);
+        hinge.rotation.x = value * Math.PI / 2;
+      }
+    }
+    for (const key of chestSwings.keys()) if (!visible.has(key)) chestSwings.delete(key);
+  }
+
   function updateAvatars() {
     for (const [id, avatar] of avatars) {
       if (!remotePlayers.has(id)) {
         world.remove(avatar.group);
         avatar.material.dispose();
+        if (avatar.nametag) {
+          scene.remove(avatar.nametag);
+          avatar.nametag.material.map.dispose();
+          avatar.nametag.material.dispose();
+        }
         avatars.delete(id);
       }
     }
@@ -295,6 +361,42 @@ function createVoxelRenderer() {
         avatars.set(id, avatar);
       }
       avatar.group.position.set(position.x, position.y, position.z);
+      const username = remotePlayerNames.get(id);
+      if (avatar.username !== username) {
+        if (avatar.nametag) {
+          scene.remove(avatar.nametag);
+          avatar.nametag.material.map.dispose();
+          avatar.nametag.material.dispose();
+          avatar.nametag = null;
+        }
+        avatar.username = username;
+        if (username) {
+          const image = document.createElement("canvas");
+          const context = image.getContext("2d");
+          context.font = "bold 32px sans-serif";
+          image.width = Math.min(1024, Math.ceil(context.measureText(username).width) + 24);
+          image.height = 48;
+          context.font = "bold 32px sans-serif";
+          context.textAlign = "center";
+          context.textBaseline = "middle";
+          context.fillStyle = "rgba(0, 0, 0, 0.65)";
+          context.fillRect(0, 0, image.width, image.height);
+          context.fillStyle = "#ffffff";
+          context.fillText(username, image.width / 2, image.height / 2, image.width - 24);
+          const texture = new THREE.CanvasTexture(image);
+          texture.colorSpace = THREE.SRGBColorSpace;
+          avatar.nametag = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: texture, transparent: true, depthWrite: false, toneMapped: false
+          }));
+          avatar.nametag.scale.set(image.width / image.height * 0.35, 0.35, 1);
+          scene.add(avatar.nametag);
+        }
+      }
+      if (avatar.nametag) {
+        avatar.nametag.position.set(-position.x, position.y + 1.95, position.z);
+        avatar.nametag.visible = Math.hypot(position.x - camera.pos[0],
+          position.y - camera.pos[1], position.z - camera.pos[2]) <= NAMETAG_RANGE;
+      }
     }
   }
 
@@ -339,8 +441,8 @@ function createVoxelRenderer() {
       }
     }
     for (const drop of drops) {
-      let sprite = dropMeshes.get(drop);
-      if (!sprite) {
+      let mesh = dropMeshes.get(drop);
+      if (!mesh) {
         let texture = dropTextures.get(drop.type);
         if (!texture) {
           const image = document.createElement("canvas");
@@ -354,14 +456,17 @@ function createVoxelRenderer() {
           texture.colorSpace = THREE.SRGBColorSpace;
           dropTextures.set(drop.type, texture);
         }
-        sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
-        sprite.scale.set(0.65, 0.65, 1);
-        scene.add(sprite);
-        dropMeshes.set(drop, sprite);
+        mesh = new THREE.Mesh(dropGeometry, new THREE.MeshLambertMaterial({
+          map: texture, transparent: true, side: THREE.DoubleSide
+        }));
+        mesh.scale.set(0.65, 0.65, 1);
+        scene.add(mesh);
+        dropMeshes.set(drop, mesh);
       }
       const position = drop.pickupPosition ||
         [drop.position[0], drop.fallY ?? drop.position[1], drop.position[2]];
-      sprite.position.set(-position[0], position[1], position[2]);
+      mesh.position.set(-position[0], position[1], position[2]);
+      mesh.quaternion.copy(view.quaternion);
     }
   }
 
@@ -372,15 +477,15 @@ function createVoxelRenderer() {
     const daylight = Math.max(0, Math.sin(angle));
     const moonAmount = Math.max(0, -Math.sin(angle));
     const twilight = Math.max(0, Math.min(1, (Math.sin(angle) + 0.15) / 0.3));
-    ambient.intensity = 0.28 + daylight * 0.4;
-    fill.intensity = 0.3 + daylight * 0.2;
-    sun.intensity = twilight * (0.25 + daylight * 1.55);
+    ambient.intensity = 0.4 + daylight * 0.5;
+    fill.intensity = 0.4 + daylight * 0.25;
+    sun.intensity = twilight * (0.35 + daylight * 1.75);
     sun.color.setHSL(0.09 + daylight * 0.04, 0.65 - daylight * 0.35, 0.68 + daylight * 0.25);
     sun.target.position.set(-camera.pos[0], camera.pos[1], camera.pos[2]);
     sun.position.set(-camera.pos[0] - Math.cos(angle) * 40,
       camera.pos[1] + Math.max(0.05, Math.sin(angle)) * 40,
       camera.pos[2] + 20);
-    moonlight.intensity = moonAmount * 0.32;
+    moonlight.intensity = moonAmount * 0.5;
     moonlight.target.position.copy(sun.target.position);
     moonlight.position.set(-camera.pos[0] + Math.cos(angle) * 40,
       camera.pos[1] + moonAmount * 40, camera.pos[2] - 20);
@@ -391,24 +496,31 @@ function createVoxelRenderer() {
     moonDisc.visible = Math.sin(angle) < 0;
     sunDisc.lookAt(view.position);
     moonDisc.lookAt(view.position);
-    const sky = new THREE.Color(0x101b34).lerp(new THREE.Color(0x9ec8eb), twilight * (0.35 + daylight * 0.65));
+    const sky = new THREE.Color(0x263957).lerp(new THREE.Color(0xadd5f2), twilight * (0.35 + daylight * 0.65));
     scene.background = sky;
     const minutes = Math.floor(phase * 24 * 60);
     timeOfDayElement.textContent = `${String(Math.floor(minutes / 60)).padStart(2, "0")}:` +
       `${String(minutes % 60).padStart(2, "0")}` + (Math.sin(angle) < 0 ? " · Night" : " · Day");
-    const nearby = [];
+    const activeTorches = new Set();
     for (const chunk of chunks.values()) {
       for (const position of chunk.torches) {
-        const distance = Math.hypot(position[0] - camera.pos[0], position[1] - camera.pos[1], position[2] - camera.pos[2]);
-        if (distance < 18) nearby.push({ position, distance });
+        const key = position.join(",");
+        activeTorches.add(key);
+        if (!torchLights.has(key)) {
+          const light = new THREE.PointLight(0xffa044, 18, 10, 2);
+          light.position.set(-position[0], position[1], position[2]);
+          scene.add(light);
+          torchLights.set(key, light);
+        }
       }
     }
-    nearby.sort((a, b) => a.distance - b.distance);
-    torchLights.forEach((light, index) => {
-      const torch = nearby[index];
-      light.intensity = torch ? 18 : 0;
-      if (torch) light.position.set(-torch.position[0], torch.position[1], torch.position[2]);
-    });
+    for (const [key, light] of torchLights) {
+      if (!activeTorches.has(key)) {
+        scene.remove(light);
+        light.dispose();
+        torchLights.delete(key);
+      }
+    }
   }
 
   function render() {
@@ -451,6 +563,7 @@ function createVoxelRenderer() {
       view.position.y + Math.sin(pitch),
       view.position.z + Math.cos(yaw) * Math.cos(pitch));
     updateDoors(frameDeltaMs);
+    updateChests(frameDeltaMs);
     updateAvatars();
     updateArrowMeshes();
     updateDropMeshes();

@@ -862,7 +862,7 @@
 
     // The world is deep enough to hold a full ore progression below the
     // stone line (y < -4). The bottom layer is never carved by caves.
-    const WORLD_MIN_Y = -24;
+    const WORLD_MIN_Y = -48;
     const STONE_LINE_Y = -4;
     const RENDER_RADIUS = 64;
     const BASE_COLOR = "#25252b";
@@ -892,6 +892,10 @@
     const ITEM_DEFINITIONS = {
       log:           { name: "Wood",          color: "#76502e" },
       planks:        { name: "Planks",        color: "#b9824a" },
+      wood_slab:     { name: "Wood Slab",     color: "#b98240" },
+      stone_slab:    { name: "Stone Slab",    color: "#777b80" },
+      wood_stairs:   { name: "Wood Stairs",   color: "#b98250" },
+      stone_stairs:  { name: "Stone Stairs",  color: "#777b90" },
       sticks:        { name: "Sticks",        color: "#c99355" },
       stone:         { name: "Stone",         color: "#777b82" },
       dirt:          { name: "Dirt",          color: "#826344" },
@@ -1022,6 +1026,12 @@
         ingredients: { planks: 2 },
         output: { type: "sticks", count: 4 }
       },
+      ...[["wood", "planks"], ["stone", "stone"]].flatMap(([material, ingredient]) => [
+        { id: `${material}_slab`, label: `2 ${material === "wood" ? "Wood" : "Stone"} Slabs`,
+          ingredients: { [ingredient]: 1 }, output: { type: `${material}_slab`, count: 2 } },
+        { id: `${material}_stairs`, label: `4 ${material === "wood" ? "Wood" : "Stone"} Stairs`,
+          ingredients: { [ingredient]: 3 }, output: { type: `${material}_stairs`, count: 4 } }
+      ]),
       {
         id: "wood_pickaxe",
         label: "Wood Pickaxe",
@@ -1114,6 +1124,8 @@
       // Placed doors carry their state in the color (see door section).
       if (DOOR_COLOR_PATTERN.test(normalized)) return "door";
       if (TORCH_COLOR_PATTERN.test(normalized)) return "torch";
+      if (/^#b9825[0-3]$/.test(normalized)) return "wood_stairs";
+      if (/^#777b9[0-3]$/.test(normalized)) return "stone_stairs";
 
       for (const [type, definition] of Object.entries(ITEM_DEFINITIONS)) {
         if (definition.color.toLowerCase() === normalized) return type;
@@ -1244,6 +1256,30 @@
         minX: block.x, maxX: block.x + 1,
         minZ: block.z, maxZ: block.z + 1
       };
+    }
+
+    function isPartialBlock(type) {
+      return type === "wood_slab" || type === "stone_slab" ||
+        type === "wood_stairs" || type === "stone_stairs";
+    }
+
+    // Stairs rise in the direction the player faced when placing them.
+    function blockBoxes(block) {
+      const { x, y, z } = block;
+      const type = blockType(block);
+      const bounds = blockBounds(block);
+      if (!isPartialBlock(type)) return [{ ...bounds, minY: y, maxY: y + 1 }];
+      const boxes = [{ ...bounds, minY: y, maxY: y + 0.5 }];
+      if (type.endsWith("_stairs")) {
+        const facing = parseInt(block.color.slice(-1), 16);
+        const upper = { ...bounds, minY: y + 0.5, maxY: y + 1 };
+        if (facing === 0) upper.maxZ = z + 0.5;
+        if (facing === 1) upper.minX = x + 0.5;
+        if (facing === 2) upper.minZ = z + 0.5;
+        if (facing === 3) upper.maxX = x + 0.5;
+        boxes.push(upper);
+      }
+      return boxes;
     }
 
     // ---------------------------------------------------------------------
@@ -1597,10 +1633,11 @@
         type === "sapling";
     }
 
-    // Doors are thin, so they do not hide the faces of neighboring blocks.
+    // Doors are thin and chest lids move, so neither hides neighboring faces.
     function isOpaqueCube(x, y, z) {
       const block = getBlock(x, y, z);
-      return block !== null && !isThinBlock(block);
+      return block !== null && blockType(block) !== "chest" &&
+        !isThinBlock(block) && !isPartialBlock(blockType(block));
     }
 
     addPlacedBlock(-3, terrainHeight(-3, 0), 0, "#d84838");
@@ -1646,6 +1683,7 @@
     const pendingContainerUpdates = new Map();
     const keys = Object.create(null);
     const remotePlayers = new Map();
+    const remotePlayerNames = new Map();
     const pendingWorldEdits = new Map();
     const arrows = [];
     const drops = [];
@@ -1776,7 +1814,10 @@
       for (let ground = y - 1; ground >= WORLD_MIN_Y; ground--) {
         const block = getBlock(x, ground, z);
         if (blockType(block) !== "leaves" && isCollidableBlock(block)) {
-          return [x + 0.5, ground + 1.325, z + 0.5];
+          const height = isPartialBlock(blockType(block))
+            ? columnSupportHeight(x + 0.5, z + 0.5, ground + 0.5)
+            : ground + 1;
+          return [x + 0.5, height + 0.325, z + 0.5];
         }
       }
       return [x + 0.5, WORLD_MIN_Y + 1.325, z + 0.5];
@@ -2792,6 +2833,12 @@
       sendWorldEdit(x, y, z, null);
     }
 
+    function setRemotePlayer(id, position, username) {
+      if (id === localPlayerId || !position) return;
+      remotePlayers.set(id, position);
+      if (typeof username === "string") remotePlayerNames.set(id, username);
+    }
+
     function applyWelcome(message) {
       localPlayerId = message.player_id;
       if (pendingDropPickup) {
@@ -2817,6 +2864,7 @@
         pendingArrowPickup = null;
       }
       remotePlayers.clear();
+      remotePlayerNames.clear();
       for (let i = arrows.length - 1; i >= 0; i--) {
         if (arrows[i].networked) arrows.splice(i, 1);
       }
@@ -2831,9 +2879,7 @@
       }
 
       for (const player of message.players || []) {
-        if (player.id !== localPlayerId && player.position) {
-          remotePlayers.set(player.id, player.position);
-        }
+        setRemotePlayer(player.id, player.position, player.username);
       }
 
       const saved = message.position;
@@ -2917,14 +2963,13 @@
         }
 
         if (message.type === "player_state") {
-          if (message.player_id !== localPlayerId && message.position) {
-            remotePlayers.set(message.player_id, message.position);
-          }
+          setRemotePlayer(message.player_id, message.position, message.username);
           return;
         }
 
         if (message.type === "player_left") {
           remotePlayers.delete(message.player_id);
+          remotePlayerNames.delete(message.player_id);
           return;
         }
 
@@ -2982,11 +3027,9 @@
     // ---------------------------------------------------------------------
     // Voxel-grid raycast from the center crosshair
     // ---------------------------------------------------------------------
-    // Slab test of a ray against the door's current (open/closed) box.
-    function rayHitsDoor(origin, direction, block, maxDistance) {
-      const bounds = doorBounds(block);
-      const min = [bounds.minX, block.y, bounds.minZ];
-      const max = [bounds.maxX, block.y + 1, bounds.maxZ];
+    function rayHitsBox(origin, direction, bounds, maxDistance) {
+      const min = [bounds.minX, bounds.minY, bounds.minZ];
+      const max = [bounds.maxX, bounds.maxY, bounds.maxZ];
       let near = 0;
       let far = maxDistance;
 
@@ -3066,12 +3109,10 @@
       while (distance <= maxDistance) {
         const cellBlock = getBlock(cell[0], cell[1], cell[2]);
 
-        // Thin doors are only hit where the panel actually is, so the ray
-        // passes through the empty part of a cell (e.g. an open doorway).
         if (
           cellBlock &&
-          (cellBlock.type !== "door" ||
-            rayHitsDoor(origin, direction, cellBlock, maxDistance))
+          (!(cellBlock.type === "door" || isPartialBlock(blockType(cellBlock))) ||
+            blockBoxes(cellBlock).some(box => rayHitsBox(origin, direction, box, maxDistance)))
         ) {
           return { hit: [...cell], previous };
         }
@@ -3161,7 +3202,8 @@
     // speeds up stone and ore.
     function miningDuration(blockType, tier) {
       const isOre = blockType in ORE_REQUIRED_TIER;
-      const isRock = isOre || blockType === "stone";
+      const isRock = isOre || blockType === "stone" ||
+        (blockType.startsWith("stone_") && isPartialBlock(blockType));
       const hardness = isOre ? 1.5 : 1;
       const speed = isRock ? 1 + 0.25 * tier : 1;
       return MINE_DURATION_MS * hardness / speed;
@@ -3502,9 +3544,10 @@
             const next = arrow.position.map((value, axis) => value + step[axis]);
             const block = arrow.owned ? getBlock(...next.map(Math.floor)) : null;
             if (isCollidableBlock(block)) {
-              const bounds = blockBounds(block);
-              if (next[0] >= bounds.minX && next[0] <= bounds.maxX &&
-                  next[2] >= bounds.minZ && next[2] <= bounds.maxZ) {
+              if (blockBoxes(block).some(bounds =>
+                next[0] >= bounds.minX && next[0] <= bounds.maxX &&
+                next[1] >= bounds.minY && next[1] <= bounds.maxY &&
+                next[2] >= bounds.minZ && next[2] <= bounds.maxZ)) {
                 arrow.stuck = true;
                 if (arrow.networked && worldSocket?.readyState === WebSocket.OPEN) {
                   worldSocket.send(JSON.stringify({ type: "arrow_land", arrow_id: arrow.id,
@@ -3696,15 +3739,18 @@
         bounds = blockBounds({ x, y, z, color, type });
       } else if (type === "fence") {
         bounds = blockBounds({ x, y, z, color, type });
+      } else if (type.endsWith("_stairs") && isPartialBlock(type)) {
+        color = `${ITEM_DEFINITIONS[type].color.slice(0, -1)}${doorFacingFromYaw(camera.rot[1])}`;
       }
 
-      const overlapsPlayer =
-        camera.pos[0] + PLAYER_HALF_WIDTH > bounds.minX &&
-        camera.pos[0] - PLAYER_HALF_WIDTH < bounds.maxX &&
-        camera.pos[1] + PLAYER_HEIGHT > y &&
-        camera.pos[1] < y + (type === "door" ? 2 : 1) &&
-        camera.pos[2] + PLAYER_HALF_WIDTH > bounds.minZ &&
-        camera.pos[2] - PLAYER_HALF_WIDTH < bounds.maxZ;
+      const overlapsPlayer = isPartialBlock(type)
+        ? playerOverlapsBlock(camera.pos[0], camera.pos[1], camera.pos[2], { x, y, z, color, type })
+        : camera.pos[0] + PLAYER_HALF_WIDTH > bounds.minX &&
+          camera.pos[0] - PLAYER_HALF_WIDTH < bounds.maxX &&
+          camera.pos[1] + PLAYER_HEIGHT > y &&
+          camera.pos[1] < y + (type === "door" ? 2 : 1) &&
+          camera.pos[2] + PLAYER_HALF_WIDTH > bounds.minZ &&
+          camera.pos[2] - PLAYER_HALF_WIDTH < bounds.maxZ;
 
       if (overlapsPlayer) return;
 
@@ -3735,15 +3781,13 @@
     // Collision and physics
     // ---------------------------------------------------------------------
     function playerOverlapsBlock(x, feetY, z, block) {
-      const bounds = blockBounds(block);
-
-      return (
+      return blockBoxes(block).some(bounds =>
         x + PLAYER_HALF_WIDTH > bounds.minX &&
         x - PLAYER_HALF_WIDTH < bounds.maxX &&
         z + PLAYER_HALF_WIDTH > bounds.minZ &&
         z - PLAYER_HALF_WIDTH < bounds.maxZ &&
-        feetY + PLAYER_HEIGHT > block.y &&
-        feetY < block.y + 1
+        feetY + PLAYER_HEIGHT > bounds.minY &&
+        feetY < bounds.maxY
       );
     }
 
@@ -3781,33 +3825,22 @@
         const block = getBlock(bx, y, bz);
         if (!isCollidableBlock(block)) continue;
 
-        // Thin blocks only support weight where their geometry actually is.
-        if (block.type === "door" || block.type === "fence") {
-          const bounds = block.type === "door"
-            ? doorBounds(block)
-            : blockBounds(block);
-          if (
-            x < bounds.minX || x > bounds.maxX ||
-            z < bounds.minZ || z > bounds.maxZ
-          ) {
-            continue;
-          }
-        }
-
-        return y + 1;
+        const heights = blockBoxes(block)
+          .filter(box => x >= box.minX && x <= box.maxX && z >= box.minZ && z <= box.maxZ)
+          .map(box => box.maxY);
+        if (heights.length) return Math.max(...heights);
       }
 
       return WORLD_MIN_Y;
     }
 
     function playerSupportHeight(x, z, feetY) {
-      const inset = 0.02;
       const samples = [
         [x, z],
-        [x - PLAYER_HALF_WIDTH + inset, z - PLAYER_HALF_WIDTH + inset],
-        [x + PLAYER_HALF_WIDTH - inset, z - PLAYER_HALF_WIDTH + inset],
-        [x - PLAYER_HALF_WIDTH + inset, z + PLAYER_HALF_WIDTH - inset],
-        [x + PLAYER_HALF_WIDTH - inset, z + PLAYER_HALF_WIDTH - inset]
+        [x - PLAYER_HALF_WIDTH, z - PLAYER_HALF_WIDTH],
+        [x + PLAYER_HALF_WIDTH, z - PLAYER_HALF_WIDTH],
+        [x - PLAYER_HALF_WIDTH, z + PLAYER_HALF_WIDTH],
+        [x + PLAYER_HALF_WIDTH, z + PLAYER_HALF_WIDTH]
       ];
 
       let support = WORLD_MIN_Y;
@@ -3846,6 +3879,7 @@
       const nextZ = camera.pos[2] + dz;
       const support = playerSupportHeight(nextX, nextZ, camera.pos[1]);
       let nextY = camera.pos[1];
+      let grounded = camera.grounded;
 
       if (camera.grounded) {
         const rise = support - camera.pos[1];
@@ -3855,8 +3889,8 @@
 
         if (rise > 0.001) {
           nextY = support;
-        } else if (rise < -0.001) {
-          camera.grounded = false;
+        } else if (rise < -0.5 - 1e-9) {
+          grounded = false;
         } else {
           nextY = support;
         }
@@ -3867,6 +3901,7 @@
       camera.pos[0] = nextX;
       camera.pos[1] = nextY;
       camera.pos[2] = nextZ;
+      camera.grounded = grounded;
     }
 
     function updatePhysics(dt) {
@@ -3945,25 +3980,20 @@
             const block = getBlock(x, y, z);
             if (!isCollidableBlock(block)) continue;
 
-            const bounds = blockBounds(block);
-            const horizontalOverlap =
-              camera.pos[0] + PLAYER_HALF_WIDTH > bounds.minX &&
-              camera.pos[0] - PLAYER_HALF_WIDTH < bounds.maxX &&
-              camera.pos[2] + PLAYER_HALF_WIDTH > bounds.minZ &&
-              camera.pos[2] - PLAYER_HALF_WIDTH < bounds.maxZ;
-
-            if (!horizontalOverlap) continue;
-
-            const previousHead = previousFeet + PLAYER_HEIGHT;
-            const currentHead = camera.pos[1] + PLAYER_HEIGHT;
-
-            if (
-              camera.velocityY > 0 &&
-              previousHead <= block.y + 0.02 &&
-              currentHead > block.y
-            ) {
-              camera.pos[1] = block.y - PLAYER_HEIGHT;
-              camera.velocityY = 0;
+            for (const bounds of blockBoxes(block)) {
+              const horizontalOverlap =
+                camera.pos[0] + PLAYER_HALF_WIDTH > bounds.minX &&
+                camera.pos[0] - PLAYER_HALF_WIDTH < bounds.maxX &&
+                camera.pos[2] + PLAYER_HALF_WIDTH > bounds.minZ &&
+                camera.pos[2] - PLAYER_HALF_WIDTH < bounds.maxZ;
+              if (!horizontalOverlap) continue;
+              const previousHead = previousFeet + PLAYER_HEIGHT;
+              const currentHead = camera.pos[1] + PLAYER_HEIGHT;
+              if (camera.velocityY > 0 && previousHead <= bounds.minY + 0.02 &&
+                  currentHead > bounds.minY) {
+                camera.pos[1] = bounds.minY - PLAYER_HEIGHT;
+                camera.velocityY = 0;
+              }
             }
           }
         }
@@ -4454,14 +4484,13 @@
         }
 
         if (message.type === "player_state") {
-          if (message.player_id !== localPlayerId && message.position) {
-            remotePlayers.set(message.player_id, message.position);
-          }
+          setRemotePlayer(message.player_id, message.position, message.username);
           return;
         }
 
         if (message.type === "player_left") {
           remotePlayers.delete(message.player_id);
+          remotePlayerNames.delete(message.player_id);
           return;
         }
 
@@ -4598,7 +4627,7 @@
       setTimeout(function(){
           document.body.classList.add('loaded');
           document.getElementById('loader-wrapper-init').classList.add('hide');
-      }, 1000);
+      }, 3000);
     })();
   </script>
 </body>
