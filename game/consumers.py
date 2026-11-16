@@ -711,7 +711,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             others = list(
                 WorldPlayer.objects.filter(room=self.room, is_online=True)
                 .exclude(pk=player.pk)
-                .values("player_id", "position", "user__username")
+                .values("player_id", "position", "user__profile__name")
             )
 
             position = None if created else clean_position(player.position)
@@ -723,7 +723,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
                 "inventory": inventory if inventory is not None else EMPTY_INVENTORY,
                 "players": [
                     {"id": str(row["player_id"]), "position": row["position"],
-                     "username": row["user__username"]}
+                     "username": row["user__profile__name"]}
                     for row in others
                 ],
             }
