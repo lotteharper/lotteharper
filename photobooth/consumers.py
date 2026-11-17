@@ -1,132 +1,123 @@
-import json, threading
+import asyncio
+import hashlib
+import json
+import logging
+from contextlib import suppress
+from datetime import timedelta
+
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.conf import settings
-from django.contrib.auth.models import User
-from asgiref.sync import sync_to_async
-from .models import Camera
-import pytz, datetime
+from django.db import transaction
 from django.utils import timezone
-from django.conf import settings
-import base64
-import urllib.parse
 
-cameras = {}
+from .models import Camera
+from security.models import UserSession
 
-#@sync_to_async
-#def get_camera_status(camera_user, camera_name):
-#    return Camera.objects.get_or_create(name=camera_name, user__profile__name=camera_user).data
-
-#@sync_to_async
-#def update_camera(camera_user, camera_name, camera_data):
-#    camera, created = Camera.objects.get_or_create(name=camera_name, user__profile__name=camera_user)
-#    camera.connected = timezone.now()
-#    camera.data = camera_data
-#    camera.save()
-
-@sync_to_async
-def get_user(id):
-    user = User.objects.get(id=int(id))
-#    if not (user.profile.vendor or user.is_superuser): return False
-    return True
+logger = logging.getLogger(__name__)
 
 
-@sync_to_async
-def get_auth(user_id, session_key):
-    user = User.objects.get(id=int(user_id)) if user_id else None
-    from django.contrib.auth.models import User
-    from security.models import UserSession
-    from django.utils import timezone
-    for u in UserSession.objects.filter(user__id=user_id, session_key=session_key).order_by('-timestamp'):
-        if u.expires > timezone.now() and (u.authorized and u.bypass) and not u.deauth:
-            return True
-    return False
-
-@sync_to_async
-def get_camera_data(camera_user, camera_name):
-    camera = Camera.objects.filter(user__profile__name=camera_user, name=camera_name).order_by('-connected').first()
-    data = camera.data
-    camera.data = ''
-    camera.save()
-    return data
-
-remotes = {}
+def camera_group(username, name):
+    # Hash arbitrary names into a valid, bounded channel-layer group name.
+    key = json.dumps([username, name], ensure_ascii=True).encode("utf-8")
+    return "camera." + hashlib.sha256(key).hexdigest()
 
 
-last_updated = {}
+@database_sync_to_async
+def is_authorized(user_id, session_key):
+    if not user_id or not session_key:
+        return False
 
-async def photobooth_task(self, camera_user, camera_name):
-    global remotes
-    from django.utils import timezone
-    import datetime
-    if (not last_update) or last_update < timezone.now() - datetime.timedelta(seconds=5):
-        for uid, s in remotes.items():
-            data = await get_camera_data(s.camera_user, s.camera_name)
-            if data:
-                await self.send(text_data=data)
-        last_update = timezone.now()
+    return UserSession.objects.filter(
+        user_id=user_id,
+        session_key=session_key,
+        expires__gt=timezone.now(),
+        authorized=True,
+        bypass=True,
+        deauth=False,
+    ).exists()
 
-async def photobooth_tasks(self, camera_user, camera_name):
-    import asyncio
-    while self.connected:
-        await photobooth_task(self, camera_user, camera_name)
-        await asyncio.sleep(5)
-    return
+
+@database_sync_to_async
+def take_camera_data(username, name):
+    with transaction.atomic():
+        camera = (
+            Camera.objects.select_for_update()
+            .filter(user__profile__name=username, name=name)
+            .order_by("-connected")
+            .first()
+        )
+        if camera is None or not camera.data:
+            return None
+
+        data = camera.data
+        camera.data = ""
+        camera.save(update_fields=["data"])
+        return data
 
 
 class PhotoboothConsumer(AsyncWebsocketConsumer):
-    camera_user = None
-    camera_name = None
-    connected = False
-    uid = None
     async def connect(self):
-        self.camera_user = self.scope['url_route']['kwargs']['username']
-        self.camera_name = self.scope['url_route']['kwargs']['name']
-        auth = await get_user(self.scope['user'].id)
-        auth2 = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
-        if not (auth and auth2): return
-        await self.accept()
-        global cameras
-        if not self.camera_user in cameras: cameras[self.camera_user] = {}
-        cameras[self.camera_user][self.camera_name] = self
-        self.connected = True
-        import uuid
-        self.uid = str(uuid.uuid4())
-        global remotes
-        remotes[self.uid] = self
-        await photobooth_tasks(self, self.camera_user, self.camera_name)
+        self.group_name = None
+        self.poll_task = None
 
+        user = self.scope["user"]
+        session_key = self.scope["session"].session_key
+        if not user.is_authenticated or not await is_authorized(user.id, session_key):
+            await self.close()
+            return
+
+        self.camera_user = self.scope["url_route"]["kwargs"]["username"]
+        self.camera_name = self.scope["url_route"]["kwargs"]["name"]
+        self.group_name = camera_group(self.camera_user, self.camera_name)
+
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+        await self.accept()
+        self.poll_task = asyncio.create_task(self.poll_camera())
+
+    async def poll_camera(self):
+        try:
+            while True:
+                data = await take_camera_data(self.camera_user, self.camera_name)
+                if data:
+                    await self.send(text_data=data)
+                await asyncio.sleep(5)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            logger.exception("Camera polling failed")
+            await self.close(code=1011)
+
+    async def camera_message(self, event):
+        await self.send(text_data=event["text"])
 
     async def disconnect(self, close_code):
-        self.connected = False
-        try:
-            del cameras[self.camera_user][self.camera_name]
-        except: pass
+        if self.poll_task is not None:
+            self.poll_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await self.poll_task
+
+        if self.group_name is not None:
+            await self.channel_layer.group_discard(
+                self.group_name, self.channel_name
+            )
+
+    async def receive(self, text_data=None, bytes_data=None):
         pass
 
-    async def receive(self, text_data):
-#        text = await update_camera(self.camera_user, self.camera_name, text_data)
-#        await self.send(text_data=text)
-        pass
-    pass
 
 class PhotoboothRemoteConsumer(AsyncWebsocketConsumer):
-    camera_user = None
-    camera_name = None
     async def connect(self):
-        self.camera_user = self.scope['url_route']['kwargs']['username']
-        self.camera_name = self.scope['url_route']['kwargs']['name']
+        username = self.scope["url_route"]["kwargs"]["username"]
+        name = self.scope["url_route"]["kwargs"]["name"]
+        self.group_name = camera_group(username, name)
         await self.accept()
 
-    async def disconnect(self, close_code):
-        pass
+    async def receive(self, text_data=None, bytes_data=None):
+        if text_data is None:
+            await self.close(code=1003)
+            return
 
-    async def receive(self, text_data):
-        global cameras
-        print(cameras)
-        if self.camera_user in cameras and self.camera_name in cameras[self.camera_user]:
-            print('relaying data {}'.format(text_data))
-            await cameras[self.camera_user][self.camera_name].send(text_data=text_data)
-#        text = await get_camera_status(self.camera_user, self.camera_name)
-#        await self.send(text_data=text)
-        pass
-    pass
+        await self.channel_layer.group_send(
+            self.group_name,
+            {"type": "camera.message", "text": text_data},
+        )

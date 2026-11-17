@@ -1,107 +1,101 @@
-import json
+from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.conf import settings
-from django.contrib.auth.models import User
-from asgiref.sync import sync_to_async
-from django.template.loader import render_to_string
-from .models import Message
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
-from users.models import Profile
-import datetime
+from channels.layers import get_channel_layer
+from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
+from django.db import transaction
+from django.db.models import Q
+from django.template.loader import render_to_string
 
-chats = {}
-remote_chats = {}
+from .models import Message
 
-def get_chat(user_id, recipient_id, lang='en'):
-    user = User.objects.get(id=int(user_id))
-    recipient = User.objects.get(id=int(recipient_id))
-    page = 1
-    msgs = None
-    new = False
-    if recipient == user:
-        msgs = Message.objects.filter(recipient=recipient).order_by('-sent_at')
-    else:
-        msgs = Message.objects.filter(sender=recipient).union(Message.objects.filter(sender=user)).order_by('-sent_at')
-    p = Paginator(msgs, 10)
-    for m in p.get_page(page):
-        if (m.sender == user and m.senderseen == False) or m.seen == False:
-            new = True
-    if new:
-        page = 1
-        p = Paginator(msgs, 10)
-        for message in p.page(page):
-            message.lang = lang
-            if message.recipient == user:
-                message.seen = True
-                message.save()
-            if message.sender == user:
-                message.senderseen = True
-                message.save()
-        context = {
-            'messages': p.page(page),
-            'count': p.count,
-            'page_obj': p.get_page(page),
-        }
-        text = render_to_string('chat/messages_raw.html', context)
-        return text
-    return False
+User = get_user_model()
 
-@sync_to_async
-def get_chat_user(name):
-    return User.objects.get(profile__name=name)
 
-@sync_to_async
-def get_user(user_id):
-    return User.objects.get(id=user_id)
+def chat_group(user_id, recipient_id):
+    first, second = sorted((int(user_id), int(recipient_id)))
+    return f"chat.{first}.{second}"
 
-from django.utils import timezone
 
-last_update = None
+@database_sync_to_async
+def get_chat_user_id(name):
+    return User.objects.filter(profile__name=name).values_list("id", flat=True).first()
 
-import datetime
 
-@sync_to_async
-def chat_event(self):
-    global last_update
-    global chats
-    if not last_update or last_update < timezone.now() - datetime.timedelta(seconds=15):
-        for uid, chat in chats.items():
-            c = get_chat(chat.scope['user'].id, chat.chat_user.id)
-            chat.send(text_data=c)
-        last_update = timezone.now()
+@database_sync_to_async
+def render_chat(user_id, recipient_id, lang="en"):
+    messages = Message.objects.filter(
+        Q(sender_id=user_id, recipient_id=recipient_id)
+        | Q(sender_id=recipient_id, recipient_id=user_id)
+    ).order_by("-sent_at", "-pk")
 
-async def chat_thread(self):
-    import asyncio
-    while self.connected:
-        try:
-            await chat_event(self)
-        except: pass
-        await asyncio.sleep(15)
+    paginator = Paginator(messages, 10)
+    page = paginator.get_page(1)
 
-import uuid
+    for message in page:
+        message.lang = lang
+        changed = []
 
-# Send the setting to the server from foreign user
+        if message.recipient_id == user_id and not message.seen:
+            message.seen = True
+            changed.append("seen")
+        if message.sender_id == user_id and not message.senderseen:
+            message.senderseen = True
+            changed.append("senderseen")
+        if changed:
+            message.save(update_fields=changed)
+
+    return render_to_string(
+        "chat/messages_raw.html",
+        {"messages": page, "count": paginator.count, "page_obj": page},
+    )
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
-    chat_user = None
-    connected = False
-    uid = None
     async def connect(self):
-        self.chat_user = await get_chat_user(self.scope['url_route']['kwargs']['username'])
+        user = self.scope["user"]
+        if not user.is_authenticated:
+            await self.close(code=4401)
+            return
+
+        self.user_id = user.id
+        self.chat_user_id = await get_chat_user_id(
+            self.scope["url_route"]["kwargs"]["username"]
+        )
+        if self.chat_user_id is None:
+            await self.close(code=4404)
+            return
+
+        self.group_name = chat_group(self.user_id, self.chat_user_id)
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
-        self.connected = True
-        user = await get_user(self.scope['user'].id)
-        await chat_thread(self)
-        self.uid = str(uuid.uuid4())
-        global chats
-        chats[self.uid] = self
+        await self.send_chat()
 
     async def disconnect(self, close_code):
-        self.connected = False
-        pass
+        if hasattr(self, "group_name"):
+            await self.channel_layer.group_discard(
+                self.group_name, self.channel_name
+            )
 
-    # This function receive messages from WebSocket.
-    async def receive(self, text_data):
-        pass
-    pass
+    async def chat_refresh(self, event):
+        await self.send_chat()
+
+    async def send_chat(self):
+        html = await render_chat(self.user_id, self.chat_user_id)
+        await self.send(text_data=html)
+
+
+def notify_chat_changed(message):
+    """Call after saving a message, inside the same transaction."""
+    group = chat_group(message.sender_id, message.recipient_id)
+
+    def notify():
+        channel_layer = get_channel_layer()
+        if channel_layer is None:
+            raise RuntimeError("A channel layer must be configured")
+        async_to_sync(channel_layer.group_send)(
+            group, {"type": "chat.refresh"}
+        )
+
+    transaction.on_commit(notify)

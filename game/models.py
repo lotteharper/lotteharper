@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 
+from simple_history.models import HistoricalRecords
 
 class WorldBlockEdit(models.Model):
     """Persistent override for a generated or player-placed world block."""
@@ -14,6 +15,7 @@ class WorldBlockEdit(models.Model):
     color = models.CharField(max_length=7, null=True, blank=True)
     is_removed = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         constraints = [
@@ -58,6 +60,7 @@ class WorldPlayer(models.Model):
     inventory = models.JSONField(default=default_inventory)
     is_online = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         constraints = [
@@ -84,6 +87,7 @@ class WorldArrow(models.Model):
     direction = models.JSONField()
     landed = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
 
 class WorldDrop(models.Model):
@@ -94,6 +98,7 @@ class WorldDrop(models.Model):
     item_type = models.CharField(max_length=16)
     position = models.JSONField()
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
 
 def default_chest_data():
@@ -125,6 +130,7 @@ class WorldContainer(models.Model):
     kind = models.CharField(max_length=16, choices=KIND_CHOICES)
     data = models.JSONField(default=dict)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         constraints = [

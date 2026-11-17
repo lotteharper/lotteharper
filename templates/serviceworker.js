@@ -1,4 +1,4 @@
-var staticCacheName = "lotteh-v0.1.166{{ timestamp }}-" + new Date().getTime();
+var staticCacheName = "lotteh-v0.1.166{{ timestamp }}-";
 var filesToCache = [
     '/static/main.css',
     '/static/main.js',
@@ -8,6 +8,10 @@ var filesToCache = [
     '/static/css/darkmode.css',
     '/static/head.js',
     '/static/fonts/bootstrap-icons.css',
+    '/static/js/three.min.js',
+    '/static/js/voxel-renderer.js',
+    {% for url in all_urls %}'{{ url }}',
+    {% endfor %}
 ];
 
 // Cache on install

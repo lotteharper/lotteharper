@@ -94,16 +94,36 @@ def adstxt(request):
     from django.shortcuts import render
     return render(request, 'ads.txt')
 
+from django.urls import URLPattern, URLResolver, get_resolver
+
+
+def list_urls(patterns=None, prefix=""):
+    if patterns is None:
+        patterns = get_resolver().url_patterns
+
+    urls = []
+    for entry in patterns:
+        if isinstance(entry, URLPattern):
+            urls.append(prefix + str(entry.pattern))
+        elif isinstance(entry, URLResolver):
+            urls.extend(
+                list_urls(entry.url_patterns, prefix + str(entry.pattern))
+            )
+    return urls
+
+
+#@never_cache
 @cache_page(60*60*24*30)
 def service_worker(request):
     from django.http import HttpResponse
     from django.conf import settings
     import os
+    all_urls = list_urls()
     sw_path = os.path.join(settings.BASE_DIR, 'templates', 'serviceworker.js')
     try:
         from django.template.loader import render_to_string
         from datetime import datetime
-        context = {'timestamp': str(datetime.now().timestamp()).split('.')[0]}
+        context = {'timestamp': str(datetime.now().timestamp()).split('.')[0], 'all_urls': all_urls}
         sw_js = render_to_string('serviceworker.js', context)
         return HttpResponse(sw_js, content_type='application/javascript')
     except FileNotFoundError:

@@ -186,7 +186,9 @@
       box-sizing: border-box;
       width: max-content;
       max-width: calc(100vw - 16px);
+      max-height: calc(100vh - 24px);
       padding: 14px;
+      overflow: auto;
       border: 2px solid #594c3c;
       border-radius: 8px;
       background: rgba(37, 34, 30, 0.96);
@@ -197,10 +199,16 @@
 
     #chestPanel.open { display: block; }
 
-    #chestGrid {
+    #chestGrid, #chestInventoryGrid, #chestHotbar {
       display: grid;
       grid-template-columns: repeat(9, var(--slot-size));
       gap: 4px;
+    }
+
+    #chestPanel h3 {
+      margin: 14px 0 8px;
+      font-size: 14px;
+      font-weight: normal;
     }
 
     #inventoryTitle {
@@ -683,6 +691,10 @@
   <div id="chestPanel" class="inventoryPanel">
     <h2 id="chestTitle">Chest</h2>
     <div id="chestGrid"></div>
+    <h3>Inventory</h3>
+    <div id="chestInventoryGrid"></div>
+    <h3>Hotbar</h3>
+    <div id="chestHotbar"></div>
     <p class="craftStatus">Click a slot to swap it with your selected hotbar slot. Press Escape to release the pointer.</p>
   </div>
 
@@ -700,6 +712,8 @@
     const inventoryPanel = document.getElementById("inventoryPanel");
     const chestPanel = document.getElementById("chestPanel");
     const chestGrid = document.getElementById("chestGrid");
+    const chestInventoryGrid = document.getElementById("chestInventoryGrid");
+    const chestHotbar = document.getElementById("chestHotbar");
     const chestTitle = document.getElementById("chestTitle");
     const timeOfDayElement = document.getElementById("timeOfDay");
     const healthBarElement = document.getElementById("healthBar");
@@ -862,7 +876,7 @@
 
     // The world is deep enough to hold a full ore progression below the
     // stone line (y < -4). The bottom layer is never carved by caves.
-    const WORLD_MIN_Y = -48;
+    const WORLD_MIN_Y = -24;
     const STONE_LINE_Y = -4;
     const RENDER_RADIUS = 64;
     const BASE_COLOR = "#25252b";
@@ -1263,6 +1277,8 @@
         type === "wood_stairs" || type === "stone_stairs";
     }
 
+    const STAIR_DIRECTIONS = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+
     // Stairs rise in the direction the player faced when placing them.
     function blockBoxes(block) {
       const { x, y, z } = block;
@@ -1277,6 +1293,25 @@
         if (facing === 1) upper.minX = x + 0.5;
         if (facing === 2) upper.minZ = z + 0.5;
         if (facing === 3) upper.maxX = x + 0.5;
+
+        const [dx, dz] = STAIR_DIRECTIONS[facing];
+        const neighbor = getBlock(x + dx, y, z + dz);
+        if (isPartialBlock(blockType(neighbor)) && blockType(neighbor).endsWith("_stairs")) {
+          const neighborFacing = parseInt(neighbor.color.slice(-1), 16);
+          if ((facing + neighborFacing) % 2 === 1) {
+            const [sideX, sideZ] = STAIR_DIRECTIONS[neighborFacing];
+            const side = getBlock(x - sideX, y, z - sideZ);
+            const continues = isPartialBlock(blockType(side)) &&
+              blockType(side).endsWith("_stairs") &&
+              parseInt(side.color.slice(-1), 16) === facing;
+            if (!continues) {
+              if (sideX === 1) upper.minX = x + 0.5;
+              if (sideX === -1) upper.maxX = x + 0.5;
+              if (sideZ === 1) upper.minZ = z + 0.5;
+              if (sideZ === -1) upper.maxZ = z + 0.5;
+            }
+          }
+        }
         boxes.push(upper);
       }
       return boxes;
@@ -2377,7 +2412,7 @@
           selectedSlot = index;
           gamepadInventoryCursor = index;
           renderInventory();
-        } else if (inventoryOpen && inventory[index]) {
+        } else if ((inventoryOpen || chestOpen) && inventory[index]) {
           [inventory[selectedSlot], inventory[index]] =
             [inventory[index], inventory[selectedSlot]];
           renderInventory();
@@ -2433,10 +2468,15 @@
 
       hotbarElement.replaceChildren();
       inventoryGrid.replaceChildren();
+      chestInventoryGrid.replaceChildren();
+      chestHotbar.replaceChildren();
 
       for (let i = 0; i < inventory.length; i++) {
         if (i < 9) hotbarElement.appendChild(makeSlot(i));
         inventoryGrid.appendChild(makeSlot(i));
+        if (chestOpen) {
+          (i < 9 ? chestHotbar : chestInventoryGrid).appendChild(makeSlot(i));
+        }
       }
 
       renderCraftingRecipes();
@@ -2606,6 +2646,7 @@
         inventoryOpen = false;
         inventoryPanel.classList.remove("open");
         chestTitle.textContent = "Chest at " + key;
+        renderInventory();
         renderChest();
         requestChest(key);
         document.pointerLockElement && document.exitPointerLock?.();
@@ -4627,7 +4668,7 @@
       setTimeout(function(){
           document.body.classList.add('loaded');
           document.getElementById('loader-wrapper-init').classList.add('hide');
-      }, 3000);
+      }, 1500);
     })();
   </script>
 </body>
