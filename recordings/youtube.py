@@ -309,7 +309,7 @@ def bind_broadcast_to_stream(youtube, broadcast_id, stream_id):
 def get_stream_key(user_id, email, camera):
     from googleapiclient.discovery import build
     youtube = get_authenticated_service(user_id, email)
-    stream_id, url = create_stream(youtube, camera.title, camera.description, camera.privacy_status, camera.framerate)
+    stream_id, url = create_stream(youtube, camera.title, camera.description, camera.privacy_status)
     broadcast_id = create_broadcast(youtube, camera.title, camera.description, camera.privacy_status)
     return url
 

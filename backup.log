@@ -1,4 +1,4 @@
-3
+4
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -17,8 +17,11 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 2f53580] open source
- 23 files changed, 23 insertions(+), 23 deletions(-)
+[main 6195838] open source
+ 39 files changed, 126 insertions(+), 68 deletions(-)
+ mode change 100755 => 100644 live/__pycache__/consumers.cpython-312.pyc
+ create mode 100644 media/audio/fingerprints/cb236878-b747-4e76-bcd9-2afb45bbb9d7.npy
+ mode change 100755 => 100644 recordings/__pycache__/youtube.cpython-312.pyc
 sending incremental file list
 ./
 .gitignore

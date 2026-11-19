@@ -164,6 +164,7 @@ let localCamStream,
   audioContext,
   audioDestination,
   delayedVideo;
+var liveSignalingSocketReconnectTimeout = 10000;
 var stream;
 var updateCameraToggle = document.getElementById('update-camera-toggle');
 var cameraSettings = document.getElementById('camera-settings');
@@ -486,9 +487,6 @@ async function mergeStreamsFn() {
     {% if camera.broadcast_youtube %}
     const liveMediaRecorder = new MediaRecorder(fullOverlayStream, { mimeType: 'video/webm; codecs=vp8,opus' });
     let liveMediaChunks = [];
-    var liveSignalingSocket;
-    var liveSignalingSocketReconnectTimeout;
-    var liveCaptureInterval;
     function liveCapture() {
         if(liveMediaRecorder.state == 'recording') liveMediaRecorder.stop();
         liveMediaRecorder.start();
@@ -508,31 +506,6 @@ async function mergeStreamsFn() {
   }
 }
 {% if camera.broadcast %}
-function openLiveSignalingSocket() {
-    liveSignalingSocket = new WebSocket("wss://" + window.location.host + "/ws/live/signaling/{{ request.user.profile.name }}/{{ camera.name }}/");
-    liveSignalingSocket.binaryType = "arraybuffer";
-    liveSignalingSocket.onopen = (event) => {
-        liveMediaRecorder.start();
-        if(liveCaptureInterval) clearInterval(liveCaptureInterval);
-        liveCaptureInterval = setInterval(liveCapture, 2000);
-    };
-    liveSignalingSocket.onerror = (event) => {
-        if(liveSignalingSocketReconnectTimeout) clearTimeout(liveSignalingSocketReconnectTimeout);
-        liveSignalingSocketReconnectTimeout = setTimeout(function() {
-            openLiveSignalingSocket();
-        }, {{ reload_time }});
-    };
-    liveSignalingSocket.onclose = (event) => {
-        if(liveSignalingSocketReconnectTimeout) clearTimeout(liveSignalingSocketReconnectTimeout);
-        liveSignalingSocketReconnectTimeout = setTimeout(function() {
-            openLiveSignalingSocket();
-        }, {{ reload_time }});
-    };
-    liveSignalingSocket.onmessage = async (event) => {
-
-    };
-}
-openLiveSignalingSocket();
 var signalingSocketReconnectTimeout;
 function openSignalingSocket() {
     signalingSocket = new WebSocket("wss://" + window.location.host + "/ws/signaling/{{ request.user.profile.name }}/{{ camera.name }}/?broadcast=true");

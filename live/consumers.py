@@ -223,7 +223,7 @@ def get_auth(user_id, session_key):
     from django.utils import timezone
     user = User.objects.get(id=int(user_id)) if user_id else None
     from security.models import UserSession
-    if not pediatric_identity_verified(user): return False #raise PermissionDenied()
+#    if not pediatric_identity_verified(user): return False #raise PermissionDenied()
     for u in UserSession.objects.filter(user__id=user_id, session_key=session_key).order_by('-timestamp'):
         if u.expires > timezone.now() and (u.authorized and u.bypass) and not u.deauth:
             return True
@@ -236,7 +236,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 def initiate_stream(self):
     from live.models import VideoCamera
     from verify.tests import pediatric_identity_verified
-    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     from django.core.exceptions import PermissionDenied
     user_id = self.user_id
     camera_name = self.camera_name
@@ -246,6 +245,7 @@ def initiate_stream(self):
         if camera and camera.user.profile.vendor != True: raise PermissionDenied()
     if not camera: raise PermissionDenied()
     from recordings.youtube import get_stream_key
+#    if not pediatric_identity_verified(camera.user): raise PermissionDenied()
     try:
         self.stream_key = get_stream_key(self.user_id, camera.upload_email, camera)
         print(self.stream_key)
@@ -355,8 +355,10 @@ class CameraConsumer(AsyncWebsocketConsumer):
         if 'key' in query_params and query_params['key']: self.key = query_params['key'][0]
         self.user_id = self.scope['user'].id
         authorized = await get_auth(self.scope['user'].id, self.scope['session'].session_key)
-        if not authorized: return
-        broadcast, upload = await get_camera_upload(self)
+        if not authorized:
+            print('Camera not authorized')
+            return
+#        broadcast, upload = await get_camera_upload(self)
 #        if broadcast and not upload: await initiate_stream(self)
         await self.accept()
 
