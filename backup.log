@@ -1,4 +1,4 @@
-4
+5
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -17,11 +17,32 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 6195838] open source
- 39 files changed, 126 insertions(+), 68 deletions(-)
- mode change 100755 => 100644 live/__pycache__/consumers.cpython-312.pyc
- create mode 100644 media/audio/fingerprints/cb236878-b747-4e76-bcd9-2afb45bbb9d7.npy
- mode change 100755 => 100644 recordings/__pycache__/youtube.cpython-312.pyc
+[main 7eee9e4] open source
+ 56 files changed, 2326 insertions(+), 2166 deletions(-)
+ mode change 100755 => 100644 live/__pycache__/forms.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/process.cpython-312.pyc
+ create mode 100644 live/__pycache__/video_upload.cpython-312.pyc
+ mode change 100755 => 100644 live/__pycache__/views.cpython-312.pyc
+ mode change 100755 => 100644 live/consumers.py
+ mode change 100755 => 100644 live/forms.py
+ mode change 100755 => 100644 live/process.py
+ mode change 100755 => 100644 live/templates/live/golivevideo.html
+ mode change 100755 => 100644 live/templates/live/screencast.html
+ create mode 100644 live/video_upload.py
+ mode change 100755 => 100644 live/views.py
+ create mode 100644 media/audio/fingerprints/0096fc60-cfe0-4cf7-a47a-51dfbe77409f.npy
+ create mode 100644 media/audio/fingerprints/0b664fa0-20a0-40d3-b3c7-ccef4aaf167b.npy
+ create mode 100644 media/audio/fingerprints/2420b29c-6e62-49ad-b495-45ca68677f85.npy
+ create mode 100644 media/audio/fingerprints/2a891372-87c5-43a8-a30f-f1b9506d9334.npy
+ create mode 100644 media/audio/fingerprints/7257d830-5a06-4308-b706-abdc0991c4a7.npy
+ create mode 100644 media/audio/fingerprints/89177819-4af8-4ee9-b5f7-f4860f4e9903.npy
+ create mode 100644 media/audio/fingerprints/94d509b4-2e45-4297-ba27-f59b9d21cb56.npy
+ create mode 100644 media/audio/fingerprints/bcdc5576-75e5-4980-9879-b92471dca3bb.npy
+ create mode 100644 media/audio/fingerprints/dc3ca24a-7a16-4375-b135-534527bc788e.npy
+ create mode 100644 media/audio/fingerprints/f05f6c58-c2cd-4446-add4-2ca2b6c3e940.npy
+ create mode 100644 media/audio/fingerprints/f144b529-d788-4e92-a948-41dc4cd0ee4b.npy
+ create mode 100644 media/audio/fingerprints/f3652a49-c786-482e-a95f-95064c93ec34.npy
+ mode change 100755 => 100644 verify/__pycache__/verify.cpython-312.pyc
 sending incremental file list
 ./
 .gitignore

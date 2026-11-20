@@ -74,7 +74,7 @@ class NameCameraForm(forms.ModelForm):
         super(NameCameraForm, self).__init__(*args, **kwargs)
 #        self.fields['echo_cancellation'].initial = self.instance.echo_cancellation
         self.fields['use_websocket'].initial = self.instance.use_websocket
-        self.fields['compress_video'].initial = self.instance.use_websocket
+        self.fields['compress_video'].initial = self.instance.compress_video
         from feed.middleware import get_current_request
         r = get_current_request()
         pl_email = user.email

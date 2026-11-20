@@ -328,74 +328,25 @@ def confirm(request, id):
 @user_passes_test(pediatric_identity_verified, login_url='/verify/', redirect_field_name='next')
 @user_passes_test(is_vendor)
 def golivevideo(request):
-    from .models import VideoCamera, VideoFrame, VideoRecording
-    from django.core.exceptions import PermissionDenied
+    from .models import VideoCamera
     from .forms import CameraForm
-    import datetime
-    import pytz
-    from django.utils import timezone
     from django.http import HttpResponse
     from django.conf import settings
-    from lotteh.celery import delay_remove_frame
+    from django.shortcuts import get_object_or_404
     name = request.GET.get('camera')
     if not name:
         name = 'private'
-    camera = None
-    if request.user.is_authenticated:
-        camera = VideoCamera.objects.filter(user=request.user, name=name).order_by('-last_frame').first()
+    camera = get_object_or_404(VideoCamera.objects.filter(user=request.user, name=name).order_by('-last_frame'))
     if request.method == 'POST':
-        import shutil, os
-        from .still import get_still, is_still
+        from .video_upload import save_video_segment
+        form = CameraForm(request.POST, request.FILES)
+        if not form.is_valid() or not request.FILES.get('frame'):
+            return HttpResponse('Invalid video segment', status=400)
         try:
-            form = CameraForm(request.POST, request.FILES)
-            if not form.is_valid(): print(form.errors)
-            camera.last_frame = timezone.now()
-            camera.confirmation_id = form.cleaned_data.get('confirmation_id', '')
-            camera.save()
-            timestamp = datetime.datetime.fromtimestamp(int(form.cleaned_data.get('timestamp')) / 1000, tz=pytz.UTC)
-            form.instance.user = camera.user
-            form.instance.compressed = camera.compress_video
-            form.instance.time_captured = timestamp
-            form.instance.confirmation_id = form.cleaned_data.get('confirmation_id', '')
-            recording = None
-            if camera.recording:
-                # Find the most recent active recording for this camera/user
-                recording = VideoRecording.objects.filter(
-                    user=camera.user,
-                    camera=camera.name,
-                    camera_id=videouid,
-                    processing=False
-                ).order_by('-last_frame').first()
-                # Decide if you need to start a new recording
-                should_start_new = (
-                    not recording or
-                    ((recording.frames.count() * (settings.LIVE_INTERVAL/1000.0)) > (camera.video_length_minutes * 60.0))
-                )
-
-                is_a_short = (camera.short_mode and (recording.frames.count() * (settings.LIVE_INTERVAL/1000.0) > settings.LIVE_SHORT_SECONDS))
-
-                if should_start_new or is_a_short:
-                    recording = VideoRecording.objects.create(
-                        user=camera.user,
-                        camera=camera.name,
-                        last_frame=timestamp,
-                        camera_id=videouid
-                    )
-            is_frame_still, error = is_still(camera.frame.path)
-            form.instance.difference = error
-            frame = form.save()
-            if recording:
-                recording.frames.add(frame)
-                recording.last_frame = timestamp
-                recording.save()
-                process_recording.apply_async([recording.id], countdown=(settings.LIVE_INTERVAL/1000) * 5)
-            else: print('Not saving frame')
-            process_live.delay(camera.id, frame.id)
-            print('5 second video uploaded')
-            return HttpResponse(status=200)
-        except:
-            import traceback
-            print(traceback.format_exc())
+            save_video_segment(camera, form.cleaned_data['timestamp'], request.POST.get('viduid', ''),
+                               form.cleaned_data['confirmation_id'], request.FILES['frame'].read())
+        except ValueError:
+            return HttpResponse('Invalid video segment', status=400)
         return HttpResponse(status=200)
     from django.shortcuts import redirect
     from django.utils.crypto import get_random_string
@@ -405,7 +356,7 @@ def golivevideo(request):
     from django.urls import reverse
     if not request.user.is_authenticated: return redirect(reverse('users:login'))
     from django.shortcuts import render
-    return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': request.user.vendor_profile.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha, 'nudity_censor_scale': settings.NUDITY_CENSOR_FRONTEND_SCALE, 'nudity_censor': camera.censor_video if minor_identity_verified(request.user) else True, 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX, 'fps': camera.framerate})
+    return render(request, 'live/golivevideo.html', {'title': 'Go Live', 'camera': camera, 'full': True, 'form': CameraForm(), 'preload': False, 'load_timeout': 0, 'should_compress_live': camera.compress_video, 'key': camera_key, 'use_websocket': camera.use_websocket, 'logo_alpha': camera.user.vendor_profile.logo_alpha, 'nudity_censor_scale': settings.NUDITY_CENSOR_FRONTEND_SCALE, 'nudity_censor': camera.censor_video if minor_identity_verified(request.user) else True, 'nudity_censor_px': settings.NUDITY_CENSOR_FRONTEND_PX, 'fps': camera.framerate, 'video_interval': settings.LIVE_INTERVAL})
 
 @never_cache
 @csrf_exempt
@@ -539,4 +490,3 @@ def last_frame_video(request, username):
     profile = get_object_or_404(Profile, name=username, identity_verified=True, vendor=True)
     cameras = VideoCamera.objects.filter(user=profile.user, name=request.GET.get('camera'))
     return render(request, 'live/lastframe.html', {'profile': profile, 'camera': cameras.first(), 'frame': camera.frames.all().last()})
-

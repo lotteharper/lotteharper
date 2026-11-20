@@ -88,6 +88,7 @@ video {
 <div style="z-index: 1; position: absolute;">
 {% endif %}
 <p id="errormessage" class="hide" style="text-color: red;">{{ 'Please enable your camera in your web browser and device settings to continue. Reload to continue.'|etrans }} <button onclick="window.location.reload();" title="{{ 'Reload page'|etrans }}" class="btn btn-outline-primary">{{ 'Reload'|etrans }}</button></p>
+<p id="upload-error" class="hide" role="alert"></p>
 <div id="video-container">
 <div id="mediaWrapper"></div>
 <div style="text-align: center;" id="rec-status"></div>
@@ -107,7 +108,7 @@ video {
 {% if request.GET.with %}
 </div>
 {% endif %}
-<form method="POST" enctype="multipart/form-data" id="live-form" style="position: absolute; display: none; visibility: hidden;" action="{{ request.path }}?camera={% if request.GET.camera %}{{ request.GET.camera }}{% else %}private{% endif %}&key={{ key }}">
+<form method="POST" enctype="multipart/form-data" id="live-form" style="position: absolute; display: none; visibility: hidden;" action="{{ request.path }}?camera={{ camera.name|urlencode }}&amp;key={{ key|urlencode }}">
 {{ form }}
 </form>
 {% if request.GET.with %}
@@ -153,9 +154,7 @@ video {
 {% block javascript %}
 var localVideo;
 var localScreen;
-{% if nudity_censor %}
 var overlay;
-{% endif %}
 var updateCameraToggle = document.getElementById('update-camera-toggle');
 var cameraSettings = document.getElementById('camera-settings');
 var cameraUpdateOpen = false;
@@ -181,6 +180,7 @@ var recordButton = document.getElementById('recordbutton');
 var muteButton = document.getElementById('mutebutton');
 var muted = false;
 var mediaRecorder;
+var recorderStopping = false;
 function reportWindowSize() {
         var iFrame = document.getElementById('live');
         resizeIFrameToFitContent(iFrame);
@@ -197,51 +197,48 @@ window.onmessage = function(event){
 };
 var live = false;
 var recording = false;
-var unconfirmedFrames = [];
-var videoFrames = {};
-var retryCount = {};
 var mediaSocket;
 var mediaSocketReconnectTimeout;
+var mediaSocketRejected = false;
 function openMediaSocket() {
-        {% if use_websocket %}
-        if(mediaSocketReconnectTimeout) {
-            clearTimeout(mediaSocketReconnectTimeout);
-            mediaSocketReconnectTimeout = null;
+    {% if use_websocket %}
+    if(mediaSocketReconnectTimeout) {
+        clearTimeout(mediaSocketReconnectTimeout);
+        mediaSocketReconnectTimeout = null;
+    }
+    if(mediaSocket && (mediaSocket.readyState == WebSocket.OPEN || mediaSocket.readyState == WebSocket.CONNECTING)) return;
+    mediaSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.host + '/ws/live/camera/' + encodeURIComponent('{{ camera.user.profile.name|escapejs }}') + '/' + encodeURIComponent('{{ camera.name|escapejs }}') + '/?key=' + encodeURIComponent('{{ key|escapejs }}'));
+    mediaSocket.addEventListener("open", (event) => {
+        mediaSocketRejected = false;
+        console.log('Media socket open.');
+    });
+    mediaSocket.addEventListener("close", (event) => {
+        console.error('Media socket closed:', event.code, event.reason);
+        if (event.code === 4403) {
+            mediaSocketRejected = true;
+            return;
         }
-        if(mediaSocket && mediaSocket.readyState == WebSocket.OPEN) mediaSocket.close();
-        mediaSocket = new WebSocket((window.location.protocol == 'https:' ? "wss://" : "ws://") + window.location.hostname + '/ws/live/camera/{{ camera.user.profile.name }}/{{ camera.name }}/?key={% if request.GET.key %}{{ request.GET.key }}{% else %}{{ camera.key }}{% endif %}');
-        mediaSocket.addEventListener("open", (event) => {
-                console.log('Media socket open.');
-        });
-        mediaSocket.addEventListener("close", (event) => {
-                console.log('Socket closed.');
-                mediaSocketReconnectTimeout = setTimeout(function() {
-                        openMediaSocket();
-                }, {{ reload_time }});
-        });
-        mediaSocket.addEventListener("message", (event) => {
-                return;
-                /*if(unconfirmedFrames.includes(event.data)) {
-                        var index = unconfirmedFrames.indexOf(event.data);
-                        console.log('Frame posted');
-                        unconfirmedFrames.splice(index, 1);
-                        videoFrames.splice(index, 1);
-                        videoFrames[event.data] = null;
-                } else {
-                        if(retryCount[event.data] < 5) {
-                                console.log('Sending capture again');
-                        } else {
-                                console.log('Forfeiting capture');
-                                videoFrames[event.data] = null;
-                                return;
-                        }
-                        if(!(event.data in retryCount)) retryCount[event.data] = 0;
-                        retryCount[event.data] = retryCount[event.data] + 1;
-                }*/
-        });
-        {% endif %}
+        if(mediaSocketReconnectTimeout) clearTimeout(mediaSocketReconnectTimeout);
+        mediaSocketReconnectTimeout = setTimeout(function() {
+            openMediaSocket();
+        }, {{ reload_time|default:10000 }});
+    });
+    mediaSocket.addEventListener("error", (event) => {
+        console.log('Socket error.');
+    });
+    {% endif %}
 }
 openMediaSocket();
+async function waitForMediaSocket() {
+    const deadline = Date.now() + 30000;
+    while (Date.now() < deadline) {
+        if (mediaSocketRejected) throw new Error('Video connection was not authorized');
+        if (mediaSocket && mediaSocket.readyState === WebSocket.OPEN) return mediaSocket;
+        if ((!mediaSocket || mediaSocket.readyState === WebSocket.CLOSED) && !mediaSocketReconnectTimeout) openMediaSocket();
+        await new Promise(resolve => setTimeout(resolve, 250));
+    }
+    throw new Error('Video connection did not reconnect');
+}
 var form = document.getElementById('live-form');
 var video = document.getElementById('video-element');
 var data;
@@ -300,8 +297,11 @@ function detectVideo() {
         }
     });
 }
-function capture (){
-    mediaRecorder.stop();
+function capture() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        recorderStopping = true;
+        mediaRecorder.stop();
+    }
 }
 var signalingSocket;
 var captureInterval;
@@ -326,8 +326,7 @@ let stopRecordingBtn = document.getElementById("stopRecording");
 let stopAllStreamsBtn = document.getElementById("stopAllStreams");
 let canvasElement = document.createElement("canvas");
 let canvasCtx = canvasElement.getContext("2d");
-/* "video/webm; codecs=vp9", mimeType: 'video/' + {% autoescape off %}'{{ camera.mimetype }}'.split(',')[0].replace('"', ''){% endautoescape %},*/
-var mimeType = 'video/' + {% autoescape off %}'{{ camera.mimetype }}'.split(',')[0].replace('"', ''){% endautoescape %};
+var mimeType = 'video/{{ camera.mimetype|escapejs }}';
 
 let encoderOptions = {
     mimeType: mimeType,
@@ -367,9 +366,17 @@ async function startScreenShareFn() {
   if (localScreenStream) {
     screen = await attachToDOM("justScreenShare", localScreenStream);
   }
-    setTimeout(async function() {
-      await mergeStreamsFn();
-    }, 6000);
+    if (localScreenStream) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      try {
+        await mergeStreamsFn();
+      } catch (error) {
+        console.error('Unable to start the configured recorder', error);
+        const message = document.getElementById('upload-error');
+        message.textContent = 'Unable to start recording with the configured video format.';
+        message.classList.remove('hide');
+      }
+    }
   }
 }
 
@@ -378,7 +385,7 @@ async function startWebcamFn() {
     CAMERA_ID = generateRandomString(8);
     localCamStream = await navigator.mediaDevices.getUserMedia({
         video: { {% if request.GET.back %}facingMode: "environment", {% endif %}width: { ideal: 320 },  frameRate: { ideal: {{ fps }} } },
-        audio: { {% if not camera.muted %}deviceId: { ideal: "communications" }{% else %}false{% endif %} },
+        audio: {% if not camera.muted %}{ deviceId: { ideal: "communications" } }{% else %}false{% endif %},
     }).catch((error) => {
         console.log(error);
         $('#errormessage').removeClass('hide');
@@ -386,11 +393,19 @@ async function startWebcamFn() {
     if (localCamStream && !document.getElementById("justWebcam")) {
         cam = await attachToDOM("justWebcam", localCamStream);
     }
-    await startScreenShareFn();
   }
+  if (localCamStream && !localScreenStream) await startScreenShareFn();
 }
 
 async function stopAllStreamsFn() {
+  stopRecordingFn();
+  {% if camera.broadcast_youtube %}
+  liveBroadcastActive = false;
+  if (liveCaptureInterval) clearInterval(liveCaptureInterval);
+  if (liveSignalingSocketReconnectTimeout) clearTimeout(liveSignalingSocketReconnectTimeout);
+  if (liveMediaRecorder && liveMediaRecorder.state === 'recording') liveMediaRecorder.stop();
+  if (liveSignalingSocket) liveSignalingSocket.close();
+  {% endif %}
   [
     ...(localCamStream ? localCamStream.getTracks() : []),
     ...(localScreenStream ? localScreenStream.getTracks() : []),
@@ -406,8 +421,7 @@ async function stopAllStreamsFn() {
   audioTracks = [];
   cancelVideoFrame(rafId);
   mediaWrapperDiv.innerHTML = "";
-  document.getElementById("pipOverlayStream").style.border = "none";
-  signalingSocket.close();
+  {% if camera.broadcast %}if (signalingSocket) signalingSocket.close();{% endif %}
 }
 const baseAlpha = {{ logo_alpha }};
 var logo = new Image();
@@ -491,15 +505,10 @@ async function mergeStreamsFn() {
     ...(localCamStream ? localCamStream.getAudioTracks() : []),
     ...(localScreenStream ? localScreenStream.getAudioTracks() : [])
   ];
-  audioTracks.push(
-    audioContext.createMediaStreamSource(
-      new MediaStream([existingAudioStreams[0]])
-    )
-  );
-  if (existingAudioStreams.length > 1) {
+  for (const track of existingAudioStreams) {
     audioTracks.push(
       audioContext.createMediaStreamSource(
-        new MediaStream([existingAudioStreams[1]])
+        new MediaStream([track])
       )
     );
   }
@@ -516,6 +525,29 @@ async function mergeStreamsFn() {
     overlay = await attachToDOM("pipOverlayStream", localOverlayStream);
     mediaRecorder = new MediaRecorder(fullOverlayStream, encoderOptions);
     mediaRecorder.ondataavailable = handleDataAvailable;
+    mediaRecorder.onstop = function() {
+        recorderStopping = false;
+        if (recordedChunks.length) download();
+        if (live && mediaRecorder.state === 'inactive') mediaRecorder.start();
+    };
+    {% if camera.broadcast_youtube %}
+    liveBroadcastActive = true;
+    liveMediaRecorder = new MediaRecorder(fullOverlayStream, { mimeType: 'video/webm; codecs=vp8,opus' });
+    liveMediaRecorder.ondataavailable = (event) => liveMediaChunks.push(event.data);
+    liveMediaRecorder.onstop = function() {
+        const blob = new Blob(liveMediaChunks, { type: 'video/webm' });
+        liveMediaChunks = [];
+        const reader = new FileReader();
+        reader.onload = function() {
+            if (liveBroadcastActive && liveSignalingSocket && liveSignalingSocket.readyState === WebSocket.OPEN) {
+                liveSignalingSocket.send(reader.result);
+            }
+        };
+        reader.readAsArrayBuffer(blob);
+        if (liveBroadcastActive && liveSignalingSocket && liveSignalingSocket.readyState === WebSocket.OPEN) liveMediaRecorder.start();
+    };
+    openLiveSignalingSocket();
+    {% endif %}
     overlay.volume = 0;
     cam.volume = 0;
     try {
@@ -534,51 +566,41 @@ async function mergeStreamsFn() {
   }
 }
 {% if camera.broadcast_youtube %}
-const liveMediaRecorder = new MediaRecorder(fullOverlayStream, { mimeType: 'video/webm; codecs=vp8,opus' });
+let liveMediaRecorder;
 let liveMediaChunks = [];
 var liveSignalingSocket;
 var liveSignalingSocketReconnectTimeout;
 var liveCaptureInterval;
+var liveBroadcastActive = false;
 function liveCapture() {
     if(liveMediaRecorder.state == 'recording') liveMediaRecorder.stop();
-    liveMediaRecorder.start();
 }
-liveMediaRecorder.ondataavailable = async (event) => liveMediaChunks.push(event.data);
-liveMediaRecorder.onstop = async (event) => {
-  const blob = new Blob(liveMediaChunks, { type: 'video/webm' });
-  const reader = new FileReader();
-  reader.onload = function() {
-    liveSignalingSocket.send(reader.result);
-  };
-  reader.readAsArrayBuffer(blob);
-  liveMediaChunks = [];
-  console.log('Sending data to live');
-};
 function openLiveSignalingSocket() {
     liveSignalingSocket = new WebSocket("wss://" + window.location.host + "/ws/live/signaling/{{ request.user.profile.name }}/{{ camera.name }}/");
     liveSignalingSocket.binaryType = "arraybuffer";
     liveSignalingSocket.onopen = (event) => {
-        liveMediaRecorder.start();
+        if (liveMediaRecorder.state === 'inactive') liveMediaRecorder.start();
         if(liveCaptureInterval) clearInterval(liveCaptureInterval);
         liveCaptureInterval = setInterval(liveCapture, 2000);
     };
     liveSignalingSocket.onerror = (event) => {
+        if (!liveBroadcastActive) return;
         if(liveSignalingSocketReconnectTimeout) clearTimeout(liveSignalingSocketReconnectTimeout);
         liveSignalingSocketReconnectTimeout = setTimeout(function() {
             openLiveSignalingSocket();
-        }, {{ reload_time }});
+        }, {{ reload_time|default:10000 }});
     };
     liveSignalingSocket.onclose = (event) => {
+        if (!liveBroadcastActive) return;
         if(liveSignalingSocketReconnectTimeout) clearTimeout(liveSignalingSocketReconnectTimeout);
         liveSignalingSocketReconnectTimeout = setTimeout(function() {
             openLiveSignalingSocket();
-        }, {{ reload_time }});
+        }, {{ reload_time|default:10000 }});
     };
     liveSignalingSocket.onmessage = async (event) => {
 
     };
 }
-openLiveSignalingSocket();
 {% endif %}
 {% if camera.broadcast %}
 var signalingSocketReconnectTimeout;
@@ -588,13 +610,13 @@ function openSignalingSocket() {
         if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
         signalingSocketReconnectTimeout = setTimeout(function() {
             openSignalingSocket();
-        }, {{ reload_time }});
+        }, {{ reload_time|default:10000 }});
     };
     signalingSocket.onclose = (event) => {
         if(signalingSocketReconnectTimeout) clearTimeout(signalingSocketReconnectTimeout);
         signalingSocketReconnectTimeout = setTimeout(function() {
             openSignalingSocket();
-        }, {{ reload_time }});
+        }, {{ reload_time|default:10000 }});
     };
     signalingSocket.onmessage = async (event) => {
         let data = JSON.parse(event.data);
@@ -637,20 +659,20 @@ function handleViewer(id) {
 {% endif %}
 var recordingStartTime;
 async function startRecordingFn() {
-  if(!live) {
-    if(!localCamStream) {
-      await startWebcamFn();
-      await new Promise(r => setTimeout(r, 4000));
-    }
+  if(!localCamStream || !localScreenStream) {
+    await startWebcamFn();
+  }
+  if(!live && mediaRecorder && !recorderStopping && mediaRecorder.state === 'inactive') {
     recordingStartTime = new Date().getTime()/1000;
     live = true;
     mediaRecorder.start();
     console.log(mediaRecorder.state);
     console.log("recorder started");
+    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle-fill color-red"></i>';
     document.getElementById("pipOverlayStream").style.border = "4px solid red";
     captureInterval = setInterval(capture, {{ video_interval }});
     CAMERA_ID = generateRandomString(8);
-    if(signalingSocket.readyState != WebSocket.OPEN) { openSignalingSocket(); }
+    {% if camera.broadcast %}if (!signalingSocket || signalingSocket.readyState === WebSocket.CLOSED) openSignalingSocket();{% endif %}
   }
 }
 async function attachToDOM(id, stream) {
@@ -667,13 +689,9 @@ async function attachToDOM(id, stream) {
   return videoElem;
 }
 function handleDataAvailable(event) {
-  if(live && mediaRecorder.state != 'recording') { mediaRecorder.start(); }
-  console.log("data-available");
   if (event.data.size > 0) {
     recordedChunks.push(event.data);
-    console.log(recordedChunks);
-    download();
-  } else {}
+  }
 }
 var audioEnabled = {% if camera.muted %}false{% else %}true{% endif %};
 document.getElementById("audioBtn").onclick = () => {
@@ -692,7 +710,7 @@ function openRemoteSocket() {
             console.log('Remote socket closed.');
             setTimeout(function() {
                 openRemoteSocket();
-            }, {{ reload_time }});
+            }, {{ reload_time|default:10000 }});
         });
         remoteSocket.addEventListener("message", (event) => {
             var instructions = event.data.split(',');
@@ -724,135 +742,108 @@ function openRemoteSocket() {
         });
 }
 openRemoteSocket();
+let uploadQueue = Promise.resolve();
 function download() {
-        if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-fill"></i>';
-        } else {
-            document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle"></i>';
-        }
-        var file = new Blob(recordedChunks, {'type': 'video/' + '{% autoescape off %}{{ camera.mimetype }}{% endautoescape %}'.split(';')[0]});
-            recordedChunks = [];
-        var formdata = new FormData(form);
-                var utc_timestamp = String(new Date().toISOString());
-        formdata.append('confirmation_id', String(Math.floor(Math.random() * 1000000000)));
-        formdata.append('timestamp', utc_timestamp);
-        formdata.append('viduid', CAMERA_ID);
-        var id = formdata.get('confirmation_id');
-        {% if use_websocket %}
+    const blob = new Blob(recordedChunks, {type: mimeType.split(';')[0]});
+    recordedChunks = [];
+    const timestamp = new Date().toISOString();
+    const videoId = CAMERA_ID;
+    const confirmationId = crypto.randomUUID();
+    uploadQueue = uploadQueue.then(async () => {
+        let file = blob;
+        const extension = mimeType.split('/')[1].split(';')[0];
         {% if should_compress_live %}
-        var zip = new JSZip();
-        {% autoescape off %}
-        zip.file('frame.' + '{{ camera.mimetype }}'.split(';')[0], new File([file], 'frame.' + '{{ camera.mimetype }}'.split(';')[0]));
-        {% endautoescape %}
-        zip.generateAsync({type:"blob"}).then(function (file) {
-                var zipfile = new File([file], 'frame.zip');
-                var reader = new FileReader();
-        reader.readAsDataURL(zipfile);
-            reader.onload = function () {
-                formdata.append("frame", reader.result);
-                var data = new URLSearchParams(formdata).toString();
-                if(mediaSocket.readyState == WebSocket.OPEN) mediaSocket.send(data);
-                        };
-                        reader.onerror = function (error) {
-                                console.log('Error: ', error);
-                        };
-                });
-        {% else %}
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                        formdata.append("frame", reader.result);
-            var data = new URLSearchParams(formdata).toString();
-                if(mediaSocket.readyState == WebSocket.OPEN) mediaSocket.send(data);
-                };
-                reader.onerror = function (error) {
-                        console.log('Error: ', error);
-                };
+        const zip = new JSZip();
+        zip.file('frame.' + extension, file);
+        file = await zip.generateAsync({type: 'blob'});
         {% endif %}
+        const formdata = new FormData();
+        formdata.append('timestamp', timestamp);
+        formdata.append('viduid', videoId);
+        formdata.append('confirmation_id', confirmationId);
+        {% if use_websocket %}
+        const socket = await waitForMediaSocket();
+        await new Promise((resolve, reject) => {
+            let timeout;
+            let finished = false;
+            let sending = false;
+            function resetTimeout() {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => finish(new Error('Video upload timed out')), 30000);
+            }
+            function finish(error) {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timeout);
+                socket.removeEventListener('message', onMessage);
+                socket.removeEventListener('close', onClose);
+                if (error) reject(error); else resolve();
+            }
+            function onClose(event) {
+                finish(new Error('Video connection closed during upload (code ' + event.code +
+                    (event.reason ? ': ' + event.reason : '') + ')'));
+            }
+            async function sendChunks() {
+                try {
+                    for (let offset = 0; offset < file.size; offset += 65536) {
+                        while (!finished && socket.bufferedAmount > 1024 * 1024) {
+                            await new Promise(resolve => setTimeout(resolve, 20));
+                        }
+                        if (finished) return;
+                        socket.send(file.slice(offset, offset + 65536));
+                        resetTimeout();
+                    }
+                    socket.send(JSON.stringify({type: 'segment_end'}));
+                    resetTimeout();
+                } catch (error) {
+                    finish(error);
+                }
+            }
+            function onMessage(event) {
+                try {
+                    const response = JSON.parse(event.data);
+                    if (response.error) finish(new Error(response.error));
+                    else if (response.ready === confirmationId && !sending) {
+                        sending = true;
+                        sendChunks();
+                    }
+                    else if (response.confirmation_id === confirmationId) finish();
+                } catch (error) { finish(error); }
+            }
+            socket.addEventListener('message', onMessage);
+            socket.addEventListener('close', onClose);
+            resetTimeout();
+            try {
+                socket.send(JSON.stringify({
+                    type: 'segment_start', timestamp: timestamp, viduid: videoId,
+                    confirmation_id: confirmationId, size: file.size
+                }));
+            }
+            catch (error) { finish(error); }
+        });
+        document.getElementById('upload-error').classList.add('hide');
         {% else %}
-            {% if should_compress_live %}
-            var zip = new JSZip();
-        {% autoescape off %}
-            zip.file("frame." + '{{ camera.mimetype }}'.split(';')[0], new File([file], 'frame.' + '{{ camera.mimetype }}'.split(';')[0]));
-        {% endautoescape %}
-            zip.generateAsync({type:"blob"}).then(function (file) { // 1) generate the zip file
-                formdata.append('frame', new File([file], 'frame.zip'));
-                $.ajax({
-                   url: window.location.href,
-                   type: "POST",
-                   data: formdata,
-                   processData: false,
-                   contentType: false,
-                   timeout: {{ request_timeout }},
-                   tryCount: 0,
-                   retryLimit: 5,
-                   error: (xhr, textStatus, errorThrown) => {
-                        this.tryCount++;
-                        if(this.tryCount >= this.retryLimit) return;
-                        $.ajax(this);
-                   },
-                   success: (data) => {
-                        $.ajax({
-                                url: '/live/confirm/' + id + '/',
-                                method: 'POST',
-                                success: function(data) {
-                                        if(data != 'y') {
-                                                $.ajax(this);
-                                        }
-                                },
-                        });
-                   },
-                }).done(function(respond){
-                        console.log(respond);
-                });
-            }, function (err) {
-                    console.log("Error zipping file");
-            });
-    {% else %}
-        formdata.append('frame', new File([file], 'frame.webm'));
-            $.ajax({
-               url: window.location.href,
-               type: "POST",
-               data: formdata,
-               processData: false,
-               contentType: false,
-               timeout: {{ request_timeout }},
-               tryCount: 0,
-               retryLimit: 5,
-               error: (xhr, textStatus, errorThrown) => {
-                    console.log('Error uploading');
-                    this.tryCount++;
-                    if(this.tryCount >= this.retryLimit) return;
-                    $.ajax(this);
-               },
-               success: (data) => {
-                   $.ajax({
-                       url: '/live/confirm/' + id + '/',
-                            method: 'POST',
-                            success: function(data) {
-                                    if(data != 'y') {
-                                            $.ajax(this);
-                                    }
-                            },
-                    });
-               },
-            }).done(function(respond){
-                    console.log(respond);
-            });
+        formdata.append('frame', file, 'frame.' + {% if should_compress_live %}'zip'{% else %}extension{% endif %});
+        const response = await fetch(form.action, {method: 'POST', body: formdata});
+        if (!response.ok) throw new Error('Video upload failed: ' + response.status);
         {% endif %}
-    {% endif %}
+    }).catch(error => {
+        console.error('Video segment upload failed', error);
+        const message = document.getElementById('upload-error');
+        message.textContent = 'A video segment could not be uploaded: ' + error.message + '. Check your connection and restart the recording.';
+        message.classList.remove('hide');
+        stopRecordingFn();
+    });
 }
-
 function stopRecordingFn() {
-  live = false;
-  if(live && mediaSocket && mediaSocket.readyState === WebSocket.OPEN) {
-    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle-fill color-red"></i>';
-  } else {
-    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px; color: red !important;" class="bi bi-circle"></i>';
+  if (live) {
+    live = false;
+    document.getElementById("rec-status").innerHTML = '<i style="font-size: 20px;" class="bi bi-circle"></i>';
+    if(captureInterval) clearInterval(captureInterval);
+    const preview = document.getElementById("pipOverlayStream");
+    if (preview) preview.style.border = "none";
+    capture();
   }
-  if(captureInterval) clearInterval(captureInterval);
-  document.getElementById("pipOverlayStream").style.border = "none";
-  mediaRecorder.stop();
 }
 startWebcamBtn.addEventListener("click", startWebcamFn);
 stopAllStreamsBtn.addEventListener("click", stopAllStreamsFn);
@@ -897,11 +888,11 @@ function openChatSocket() {
     );
     chatSocket.onerror = function() {
         if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
-        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time|default:10000 }});
     };
     chatSocket.onclose = function() {
         if(chatSocketReconnectTimeout) clearTimeout(chatSocketReconnectTimeout);
-        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time }});
+        chatSocketReconnectTimeout = setTimeout(openChatSocket, {{ reload_time|default:10000 }});
     };
     chatSocket.onmessage = function(event) {
         let data = JSON.parse(event.data);

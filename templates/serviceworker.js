@@ -10,8 +10,6 @@ var filesToCache = [
     '/static/fonts/bootstrap-icons.css',
     '/static/js/three.min.js',
     '/static/js/voxel-renderer.js',
-    {% for url in all_urls %}'{{ url }}',
-    {% endfor %}
 ];
 
 // Cache on install
