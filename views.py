@@ -246,7 +246,7 @@ def monthly_checkout_profile(request):
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
-                payment_method_types= ["card", "us_bank_account"],
+                allowed_payment_method_types= ["card", "us_bank_account"],
                 mode = "subscription",
                 line_items=[
                     {
@@ -283,7 +283,7 @@ def monthly_checkout(request):
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
-                payment_method_types= ["card", "us_bank_account"],
+                allowed_payment_method_types= ["card", "us_bank_account"],
                 mode = "subscription",
                 line_items=[
                     {
@@ -321,7 +321,7 @@ def onetime_checkout_photo(request):
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
-                payment_method_types= ["card", "us_bank_account"],
+                allowed_payment_method_types= ["card", "us_bank_account"],
                 mode = "payment",
                 line_items=[
                     {
@@ -359,7 +359,7 @@ def onetime_checkout(request):
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
-                payment_method_types= ["card", "us_bank_account"],
+                allowed_payment_method_types= ["card", "us_bank_account"],
                 mode = "payment" if not monthly else "subscription",
                 line_items=[
                     {
@@ -393,7 +393,7 @@ def onetime_checkout_surrogacy(request):
                 client_reference_id = request.user.id if hasattr(request, 'user') and request.user.is_authenticated else random.randint(111111,999999),
                 success_url=domain_url + "/payments/success/?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=domain_url + "/payments/cancel/",
-                payment_method_types= ["card", "us_bank_account"],
+                allowed_payment_method_types= ["card", "us_bank_account"],
                 mode = "payment",
                 line_items=[
                     {
