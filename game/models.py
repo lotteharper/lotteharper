@@ -100,6 +100,14 @@ class WorldDrop(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
+class WorldConnection(models.Model):
+    """Lease for the user's active game connection across all rooms."""
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    token = models.UUIDField(null=True)
+    expires_at = models.DateTimeField(null=True)
+    history = HistoricalRecords()
+
 
 def default_chest_data():
     return {"slots": [None for _ in range(27)]}

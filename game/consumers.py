@@ -1,15 +1,19 @@
+import asyncio
 import json
+import logging
 import math
 import re
 import time
 import uuid
+from datetime import timedelta
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db import transaction
+from django.db.models import Q
 from django.utils import timezone
 
-from .models import WorldArrow, WorldBlockEdit, WorldContainer, WorldDrop, WorldPlayer
+from .models import WorldArrow, WorldBlockEdit, WorldConnection, WorldContainer, WorldDrop, WorldPlayer
 
 
 ROOM_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,48}$")
@@ -18,6 +22,9 @@ EMPTY_INVENTORY = [None] * 27
 MAX_WORLD_COORDINATE = 1_000_000
 WORLD_MIN_Y = -24
 ITEM_PICKUP_RANGE = 5
+CONNECTION_LEASE_SECONDS = 60
+CONNECTION_RENEW_SECONDS = 15
+logger = logging.getLogger(__name__)
 
 # Keep these item type names in sync with the game's JavaScript.
 ITEM_TYPES = {
@@ -216,9 +223,41 @@ class WorldConsumer(AsyncWebsocketConsumer):
             return
 
         self.user_id = user.pk
-        self.username = await get_name(self.user_id)
         self.room = room
-        self.room_group = f"world_{room}"
+        self.connection_token = uuid.uuid4()
+        lease_started = time.monotonic()
+        stale_players = await self.claim_connection()
+        if stale_players is None:
+            await self.accept()
+            await self.send_json({"type": "connection_blocked"})
+            await self.close(code=4409)
+            return
+        self.connection_claimed = True
+        self.lease_deadline = lease_started + CONNECTION_LEASE_SECONDS
+        self.lease_task = asyncio.create_task(self.renew_connection_loop())
+        try:
+            await self.start_connection(stale_players)
+        except BaseException:
+            try:
+                await self.disconnect(1011)
+            except Exception:
+                logger.exception("Could not release game connection for user %s", self.user_id)
+            raise
+
+    async def start_connection(self, stale_players):
+        for stale in stale_players:
+            group = f"world_{stale['room']}"
+            for arrow_id in stale["arrows"]:
+                await self.channel_layer.group_send(group, {
+                    "type": "room.message",
+                    "message": {"type": "arrow_remove", "arrow_id": arrow_id},
+                })
+            await self.channel_layer.group_send(group, {
+                "type": "room.message",
+                "message": {"type": "player_left", "player_id": stale["player_id"]},
+            })
+        self.username = await get_name(self.user_id)
+        self.room_group = f"world_{self.room}"
         self.last_position = None
         self.last_position_saved_at = None
         self.flying_arrows = set()
@@ -258,14 +297,19 @@ class WorldConsumer(AsyncWebsocketConsumer):
             )
 
     async def disconnect(self, close_code):
-        if not hasattr(self, "room_group"):
+        if not getattr(self, "connection_claimed", False):
             return
 
-        if hasattr(self, "player_id"):
-            for arrow_id in self.flying_arrows:
-                if await self.remove_flying_arrow(arrow_id):
-                    await self.broadcast_arrow({"type": "arrow_remove", "arrow_id": arrow_id})
-            await self.set_player_offline(self.last_position)
+        self.lease_task.cancel()
+        try:
+            await self.lease_task
+        except asyncio.CancelledError:
+            pass
+        released, arrows = await self.release_connection()
+        self.connection_claimed = False
+        if released and hasattr(self, "player_id") and hasattr(self, "room_group"):
+            for arrow_id in arrows:
+                await self.broadcast_arrow({"type": "arrow_remove", "arrow_id": arrow_id})
             await self.channel_layer.group_send(
                 self.room_group,
                 {
@@ -277,12 +321,29 @@ class WorldConsumer(AsyncWebsocketConsumer):
                 },
             )
 
-        await self.channel_layer.group_discard(
-            self.room_group,
-            self.channel_name,
-        )
+        if hasattr(self, "room_group"):
+            await self.channel_layer.group_discard(self.room_group, self.channel_name)
+
+    async def renew_connection_loop(self):
+        try:
+            while True:
+                await asyncio.sleep(CONNECTION_RENEW_SECONDS)
+                started = time.monotonic()
+                if started >= self.lease_deadline or not await self.renew_connection():
+                    self.lease_deadline = 0
+                    await self.close(code=4410)
+                    return
+                self.lease_deadline = started + CONNECTION_LEASE_SECONDS
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            logger.exception("Could not renew game connection lease for user %s", self.user_id)
+            self.lease_deadline = 0
+            await self.close(code=1011)
 
     async def receive(self, text_data=None, bytes_data=None):
+        if not await self.connection_is_active():
+            return
         try:
             message = json.loads(text_data or "")
         except (json.JSONDecodeError, TypeError):
@@ -397,6 +458,8 @@ class WorldConsumer(AsyncWebsocketConsumer):
         })
 
     async def targeted_damage(self, event):
+        if not await self.connection_is_active():
+            return
         if self.player_id == event["target_id"]:
             await self.send_json({"type": "damage", "amount": event["amount"]})
 
@@ -547,10 +610,76 @@ class WorldConsumer(AsyncWebsocketConsumer):
         return tuple(coordinates)
 
     async def room_message(self, event):
+        if not await self.connection_is_active():
+            return
         await self.send_json(event["message"])
+
+    async def connection_is_active(self):
+        if not getattr(self, "connection_claimed", False) or time.monotonic() >= self.lease_deadline:
+            await self.close(code=4410)
+            return False
+        return True
 
     async def send_json(self, data):
         await self.send(text_data=json.dumps(data))
+
+    @database_sync_to_async
+    def claim_connection(self):
+        WorldConnection.objects.get_or_create(user_id=self.user_id)
+        with transaction.atomic():
+            now = timezone.now()
+            claimed = WorldConnection.objects.filter(user_id=self.user_id).filter(
+                Q(token__isnull=True) | Q(expires_at__lte=now),
+            ).update(token=self.connection_token,
+                     expires_at=now + timedelta(seconds=CONNECTION_LEASE_SECONDS))
+            if not claimed:
+                return None
+            stale_players = []
+            for player in WorldPlayer.objects.filter(user_id=self.user_id, is_online=True):
+                arrows = WorldArrow.objects.filter(
+                    room=player.room, owner_id=player.player_id, landed=False,
+                )
+                arrow_ids = [str(arrow_id) for arrow_id in arrows.values_list("arrow_id", flat=True)]
+                arrows.delete()
+                stale_players.append({
+                    "room": player.room, "player_id": str(player.player_id), "arrows": arrow_ids,
+                })
+            WorldPlayer.objects.filter(user_id=self.user_id, is_online=True).update(
+                is_online=False, updated_at=now,
+            )
+            return stale_players
+
+    @database_sync_to_async
+    def renew_connection(self):
+        now = timezone.now()
+        return bool(WorldConnection.objects.filter(
+            user_id=self.user_id, token=self.connection_token, expires_at__gt=now,
+        ).update(expires_at=now + timedelta(seconds=CONNECTION_LEASE_SECONDS)))
+
+    @database_sync_to_async
+    def release_connection(self):
+        with transaction.atomic():
+            connection = WorldConnection.objects.select_for_update().filter(
+                user_id=self.user_id, token=self.connection_token,
+            ).first()
+            if connection is None:
+                return False, []
+            arrows = []
+            if hasattr(self, "player_id"):
+                arrows = list(WorldArrow.objects.filter(
+                    room=self.room, owner_id=self.player_id, landed=False,
+                ).values_list("arrow_id", flat=True))
+                WorldArrow.objects.filter(
+                    room=self.room, owner_id=self.player_id, landed=False,
+                ).delete()
+                updates = {"is_online": False, "updated_at": timezone.now()}
+                if self.last_position is not None:
+                    updates["position"] = self.last_position
+                WorldPlayer.objects.filter(user_id=self.user_id, room=self.room).update(**updates)
+            connection.token = None
+            connection.expires_at = None
+            connection.save(update_fields=("token", "expires_at"))
+            return True, [str(arrow) for arrow in arrows]
 
     @database_sync_to_async
     def player_is_online(self, player_id):
@@ -741,17 +870,6 @@ class WorldConsumer(AsyncWebsocketConsumer):
             user_id=self.user_id,
             room=self.room,
         ).update(inventory=inventory, updated_at=timezone.now())
-
-    @database_sync_to_async
-    def set_player_offline(self, last_position):
-        updates = {"is_online": False, "updated_at": timezone.now()}
-        if last_position is not None:
-            updates["position"] = last_position
-
-        WorldPlayer.objects.filter(
-            user_id=self.user_id,
-            room=self.room,
-        ).update(**updates)
 
     @database_sync_to_async
     def load_room_edits(self):

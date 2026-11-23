@@ -7,6 +7,20 @@
   <style>
     :root { --slot-size: 48px; }
 
+    #connectionOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(15, 20, 30, 0.94);
+      color: white;
+      text-align: center;
+      font: bold 20px sans-serif;
+    }
+    #connectionOverlay[hidden] { display: none; }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -638,6 +652,7 @@
 </head>
 <body>
   {% include 'preload.html' %}
+  <div id="connectionOverlay" role="status" aria-live="assertive">Connecting to game server...</div>
   <div class="hint">
     WASD move · Space jump · Right-click mine (hold) · Left-click place / open chests &amp; doors (or F) · E inventory
     <span id="controllerStatus"> · Controller: not connected</span>
@@ -2068,6 +2083,7 @@
 
     let lastSuccessfulPlacementAt = -Infinity;
     let worldSocket = null;
+    let connectionBlocked = false;
     let localPlayerId = null;
     let lastNetworkUpdate = 0;
     let hasLoadedServerState = false;
@@ -2973,96 +2989,6 @@
       }
 
       sendPlayerPosition();
-    }
-
-    function connectWorldSocket() {
-      worldSocket = new WebSocket(socketUrl);
-
-      worldSocket.addEventListener("message", event => {
-        let message;
-
-        try {
-          message = JSON.parse(event.data);
-        } catch {
-          return;
-        }
-
-        if (message.type === "welcome") {
-          applyWelcome(message);
-          return;
-        }
-
-        if (message.type === "inventory_saved") {
-          if (!pendingArrowPickup && pendingArrowCredits === 0 && !pendingDropPickup &&
-              !Object.values(pendingDropCredits).some(Boolean)) inventoryDirty = false;
-          return;
-        }
-
-        if (message.type === "container_state") {
-          applyContainerState(message.container);
-          return;
-        }
-
-        if (message.type === "player_state") {
-          setRemotePlayer(message.player_id, message.position, message.username);
-          return;
-        }
-
-        if (message.type === "player_left") {
-          remotePlayers.delete(message.player_id);
-          remotePlayerNames.delete(message.player_id);
-          return;
-        }
-
-        if (message.type === "damage" && Number.isFinite(message.amount)) {
-          takeDamage(Math.max(0, Math.min(20, message.amount)));
-          return;
-        }
-
-        if (handleArrowMessage(message)) return;
-        if (handleDropMessage(message)) return;
-
-        if (message.type === "world_edit" && message.edit) {
-          const edit = message.edit;
-
-          if (
-            !Number.isInteger(edit.x) ||
-            !Number.isInteger(edit.y) ||
-            !Number.isInteger(edit.z)
-          ) {
-            return;
-          }
-
-          const key = blockKey(edit.x, edit.y, edit.z);
-
-          if (edit.color === null) {
-            blockEdits.set(key, null);
-            placedBlocks.delete(key);
-          } else if (
-            typeof edit.color === "string" &&
-            /^#[0-9a-fA-F]{6}$/.test(edit.color)
-          ) {
-            const color = edit.color.toLowerCase();
-            blockEdits.set(key, {
-              x: edit.x,
-              y: edit.y,
-              z: edit.z,
-              color,
-              type: itemTypeFromColor(color)
-            });
-          }
-        }
-      });
-
-      worldSocket.addEventListener("close", () => {
-        hasLoadedServerState = false;
-        stopMining();
-        window.setTimeout(connectWorldSocket, 2000);
-      });
-
-      worldSocket.addEventListener("error", () => {
-        worldSocket.close();
-      });
     }
 
     // ---------------------------------------------------------------------
@@ -4082,6 +4008,11 @@
     // Keyboard and desktop controls
     // ---------------------------------------------------------------------
     document.addEventListener("keydown", event => {
+      if (!hasLoadedServerState) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return;
+      }
       if (event.code === "KeyE" && !event.repeat) {
         event.preventDefault();
         setInventoryOpen(!inventoryOpen);
@@ -4497,9 +4428,11 @@
     // WebSocket startup and world updates
     // ---------------------------------------------------------------------
     function connectWorldSocket() {
+      if (connectionBlocked) return;
       worldSocket = new WebSocket(socketUrl);
 
       worldSocket.addEventListener("message", event => {
+        if (connectionBlocked) return;
         let message;
 
         try {
@@ -4508,8 +4441,14 @@
           return;
         }
 
+        if (message.type === "connection_blocked") {
+          blockGameConnection();
+          return;
+        }
+
         if (message.type === "welcome") {
           applyWelcome(message);
+          setGameAvailable(true);
           return;
         }
 
@@ -4575,10 +4514,14 @@
         }
       });
 
-      worldSocket.addEventListener("close", () => {
+      worldSocket.addEventListener("close", event => {
         hasLoadedServerState = false;
         stopMining();
-        window.setTimeout(connectWorldSocket, 2000);
+        if (event.code === 4409) blockGameConnection();
+        if (!connectionBlocked) {
+          setGameAvailable(false);
+          window.setTimeout(connectWorldSocket, 2000);
+        }
       });
 
       worldSocket.addEventListener("error", () => {
@@ -4589,6 +4532,33 @@
     // ---------------------------------------------------------------------
     // Initialize
     // ---------------------------------------------------------------------
+    function setGameAvailable(available) {
+      const overlay = document.getElementById("connectionOverlay");
+      overlay.hidden = available;
+      if (!available) {
+        overlay.textContent = connectionBlocked
+          ? "You are already connected on another device"
+          : "Connecting to game server...";
+        for (const code of Object.keys(keys)) keys[code] = false;
+        jumpRequested = false;
+        stopMining();
+        resetTouchJoysticks();
+        setInventoryOpen(false);
+        setChestOpen(false);
+        if (document.pointerLockElement) document.exitPointerLock?.();
+      }
+      for (const id of ["c", "hotbar", "touchControls", "inventoryPanel", "chestPanel", "fullscreenButton"]) {
+        document.getElementById(id).inert = !available;
+      }
+    }
+
+    function blockGameConnection() {
+      connectionBlocked = true;
+      hasLoadedServerState = false;
+      setGameAvailable(false);
+    }
+
+    setGameAvailable(false);
     renderInventory();
     updateHealthBar();
     updateCoordinates();
@@ -4600,6 +4570,11 @@
       const dt = Math.min(0.05, (now - previousTime) / 1000);
       frameDeltaMs = dt * 1000;
       previousTime = now;
+
+      if (!hasLoadedServerState) {
+        requestAnimationFrame(frame);
+        return;
+      }
 
       updateGamepad();
 

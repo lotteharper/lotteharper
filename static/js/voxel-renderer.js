@@ -57,8 +57,10 @@ function createVoxelRenderer() {
   const chestLidGeometry = new THREE.BoxGeometry(1, 0.25, 1);
   const avatarBodyGeometry = new THREE.BoxGeometry(0.65, 0.85, 0.4);
   const avatarHeadGeometry = new THREE.BoxGeometry(0.42, 0.42, 0.42);
+  const avatarEyeGeometry = new THREE.BoxGeometry(0.055, 0.065, 0.01);
   const doorGeometry = new THREE.BoxGeometry(1, 1, DOOR_THICKNESS);
   const avatarHeadMaterial = new THREE.MeshLambertMaterial({ color: 0xe4bd96 });
+  const avatarEyeMaterial = new THREE.MeshLambertMaterial({ color: 0x29211e });
   const arrowShaftGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.7);
   const arrowTipGeometry = new THREE.ConeGeometry(0.09, 0.18, 4);
   const arrowFletchingGeometry = new THREE.BoxGeometry(0.18, 0.18, 0.12);
@@ -330,7 +332,7 @@ function createVoxelRenderer() {
     for (const key of chestSwings.keys()) if (!visible.has(key)) chestSwings.delete(key);
   }
 
-  function updateAvatars() {
+  function updateAvatars(dt) {
     for (const [id, avatar] of avatars) {
       if (!remotePlayers.has(id)) {
         world.remove(avatar.group);
@@ -346,21 +348,38 @@ function createVoxelRenderer() {
     for (const [id, position] of remotePlayers) {
       if (!position || !Number.isFinite(position.x) || !Number.isFinite(position.y) ||
           !Number.isFinite(position.z)) continue;
+      const yaw = Number.isFinite(position.yaw) ? position.yaw : 0;
+      const pitch = Number.isFinite(position.pitch)
+        ? Math.max(-Math.PI / 2, Math.min(Math.PI / 2, position.pitch)) : 0;
       let avatar = avatars.get(id);
       if (!avatar) {
         const group = new THREE.Group();
         const material = new THREE.MeshLambertMaterial({ color: playerColor(id) });
         const body = new THREE.Mesh(avatarBodyGeometry, material);
+        const neck = new THREE.Group();
         const head = new THREE.Mesh(avatarHeadGeometry, avatarHeadMaterial);
         body.position.y = 0.85;
-        head.position.y = 1.5;
+        neck.position.y = 1.29;
+        head.position.y = 0.21;
+        for (const x of [-0.1, 0.1]) {
+          const eye = new THREE.Mesh(avatarEyeGeometry, avatarEyeMaterial);
+          eye.position.set(x, 0.04, 0.215);
+          head.add(eye);
+        }
         body.castShadow = head.castShadow = true;
-        group.add(body, head);
+        neck.add(head);
+        group.add(body, neck);
         world.add(group);
-        avatar = { group, material };
+        group.rotation.y = Math.atan2(Math.sin(yaw), Math.cos(yaw));
+        neck.rotation.x = -pitch;
+        avatar = { group, neck, material };
         avatars.set(id, avatar);
       }
       avatar.group.position.set(position.x, position.y, position.z);
+      const blend = 1 - Math.exp(-Math.max(0, dt) / 100);
+      const yawDelta = yaw - avatar.group.rotation.y;
+      avatar.group.rotation.y += Math.atan2(Math.sin(yawDelta), Math.cos(yawDelta)) * blend;
+      avatar.neck.rotation.x += (-pitch - avatar.neck.rotation.x) * blend;
       const username = remotePlayerNames.get(id);
       if (avatar.username !== username) {
         if (avatar.nametag) {
@@ -564,7 +583,7 @@ function createVoxelRenderer() {
       view.position.z + Math.cos(yaw) * Math.cos(pitch));
     updateDoors(frameDeltaMs);
     updateChests(frameDeltaMs);
-    updateAvatars();
+    updateAvatars(frameDeltaMs);
     updateArrowMeshes();
     updateDropMeshes();
     updateLighting();
