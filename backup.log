@@ -1,4 +1,4 @@
-2
+3
 12
 https://github.com/lotteharper/lotteharper.git
 6s/GIT_REPO.*/GIT_REPO="https:\/\/github.com\/lotteharper\/lotteharper.git"/g
@@ -65,7 +65,8 @@ Traceback (most recent call last):
   File "/home/team/lotteh/venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  the database system is in recovery mode
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  the database system is not yet accepting connections
+DETAIL:  Consistent recovery state has not been yet reached.
 
 
 The above exception was the direct cause of the following exception:
@@ -159,7 +160,8 @@ Traceback (most recent call last):
   File "/home/team/lotteh/venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  the database system is in recovery mode
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  the database system is not yet accepting connections
+DETAIL:  Consistent recovery state has not been yet reached.
 
 
 setuptools==58.2.0
@@ -175,10 +177,8 @@ tensorrt-cu12
 tensorrt-cu12-bindings
 tensorrt-cu12-libs
 Reinitialized existing Git repository in /home/team/lotteh/.git/
-[main 2c5b142] open source
- 52 files changed, 7489 insertions(+), 48 deletions(-)
- create mode 100644 media/audio/fingerprints/9db1c7a4-656a-4da5-baf8-929c53ebca3b.npy
- create mode 100644 media/audio/fingerprints/a9bfbb38-ec8a-4e00-bbe0-2dd75f1fbedb.npy
+[main 50d8ad1] open source
+ 15 files changed, 50 insertions(+), 30 deletions(-)
 sending incremental file list
 ./
 .gitignore
